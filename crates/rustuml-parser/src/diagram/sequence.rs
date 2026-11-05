@@ -7,7 +7,7 @@ use super::DiagramMeta;
 use serde::{Deserialize, Serialize};
 
 /// A complete sequence diagram.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SequenceDiagram {
     pub meta: DiagramMeta,
     pub participants: Vec<Participant>,
@@ -16,6 +16,9 @@ pub struct SequenceDiagram {
     /// Whether `hide footbox` was specified — suppresses tail participant boxes.
     #[serde(default)]
     pub hide_footbox: bool,
+    /// SequenceDiagram#hiddenPortions: final diagram-wide stereotype visibility.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub hide_stereotypes: bool,
     /// Whether `!pragma teoz true` was specified.
     #[serde(default)]
     pub teoz: bool,
@@ -45,6 +48,9 @@ pub struct Participant {
     pub order: Option<usize>,
     /// Optional UML stereotype text, e.g. `<<service>>` → `"service"`.
     pub stereotype: Option<String>,
+    /// CommandParticipant captures SkinParam#stereotypePositionTop at declaration.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub stereotype_position_bottom: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
     /// Optional background color (e.g., "#red", "#FF0000").
@@ -70,7 +76,7 @@ pub enum ParticipantKind {
 }
 
 /// A sequence diagram event (message, note, group boundary, etc.).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub enum Event {
     Message(Message),
     Note(Note),
@@ -113,8 +119,11 @@ pub enum AutonumberCmd {
 }
 
 /// A message arrow between participants.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Message {
+    /// CommandArrow PARALLEL, retained for Teoz tile and history identity.
+    #[serde(default)]
+    pub parallel: bool,
     pub from: String,
     pub to: String,
     pub label: String,
@@ -138,7 +147,9 @@ pub struct Arrow {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
     /// Half-arrowhead modifier from `/` (bottom half) or `\` (top half).
-    /// `None` for a normal full arrowhead.
+    /// Destination dressing only: CommandArrow starts with dressing2 present,
+    /// so ArrowConfiguration#withPart leaves the source head FULL.
+    /// `None` for a normal full destination arrowhead.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub head_half: Option<ArrowHalf>,
     /// True when the arrowhead is drawn as a thin open stroke rather than a
@@ -153,6 +164,13 @@ pub struct Arrow {
     /// source side while keeping the normal target arrowhead.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub source_circle: bool,
+    /// ArrowConfiguration keeps decoration2 independent of its head dressing.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub target_circle: bool,
+    /// Independent source head from CommandArrow/ArrowConfiguration. Missing
+    /// values retain the historical bidirectional-head fallback for old models.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub source_dressing: Option<ArrowHead>,
 }
 
 /// Which half of the arrowhead is drawn when a `/` or `\` modifier is present.
@@ -199,7 +217,7 @@ pub enum ActivationChange {
 }
 
 /// A note attached to one or more participants.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Note {
     pub position: NotePosition,
     pub participants: Vec<String>,
@@ -240,7 +258,7 @@ pub enum NoteShape {
 }
 
 /// Start of a grouping construct (alt, opt, loop, etc.).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GroupStart {
     pub kind: GroupKind,
     pub label: Option<String>,
@@ -261,7 +279,7 @@ pub enum GroupKind {
 }
 
 /// An "else" branch within a group.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GroupElse {
     pub label: Option<String>,
     /// 1-based line number within the `@startuml` block.
@@ -270,7 +288,7 @@ pub struct GroupElse {
 }
 
 /// A reference to another diagram.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Ref {
     pub participants: Vec<String>,
     pub text: String,
@@ -280,18 +298,172 @@ pub struct Ref {
 }
 
 /// A return message (shorthand for dotted reply).
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ReturnMessage {
+    /// CommandReturn PARALLEL, applied to internal reverse messages.
+    #[serde(default)]
+    pub parallel: bool,
     pub label: String,
+    /// Optional CommandReturn arrow-configuration color override.
+    #[serde(default)]
+    pub color: Option<String>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
 }
 
 /// Auto-numbering configuration.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AutoNumber {
     pub start: u32,
     pub step: u32,
     pub format: Option<String>,
+}
+
+/// Resolve command-generated messages before drawing. Source activation ownership
+/// is independent of accepted graphical life variations (account ea313c62).
+/// Java SequenceDiagram#activate pushes on ACTIVATE, pops on DEACTIVATE, and
+/// leaves the stack intact on DESTROY. CommandReturn reads that exact stack.
+pub fn resolve_sequence_returns(events: &[Event]) -> Result<Vec<Event>, (usize, String)> {
+    use std::collections::{HashMap, HashSet};
+    let mut result: Vec<Event> = Vec::with_capacity(events.len());
+    let mut owner = None;
+    let mut stack: Vec<usize> = Vec::new();
+    let mut closed: HashMap<usize, HashSet<String>> = HashMap::new();
+    for event in events {
+        let event = if let Event::Return(ret) = event {
+            let context = stack.last().copied().or_else(|| {
+                owner.filter(|&index| {
+                    matches!(&result[index], Event::Message(m)
+                    if !matches!(m.from.as_str(), "[" | "]") && !matches!(m.to.as_str(), "[" | "]"))
+                })
+            });
+            let Some(context) = context else {
+                return Err((ret.source_line, "Nowhere to return to.".to_owned()));
+            };
+            let Event::Message(call) = &result[context] else {
+                unreachable!()
+            };
+            let mut arrow = call.arrow.clone();
+            arrow.line = LineStyle::Dotted;
+            if let Some(color) = &ret.color {
+                arrow.color = Some(color.clone());
+            }
+            Event::Message(Message {
+                // CommandReturn does not apply PARALLEL to MessageExo.
+                parallel: ret.parallel
+                    && !matches!(call.from.as_str(), "[" | "]")
+                    && !matches!(call.to.as_str(), "[" | "]"),
+                from: call.to.clone(),
+                to: call.from.clone(),
+                label: ret.label.clone(),
+                arrow,
+                activation: (!stack.is_empty()).then_some(ActivationChange::Deactivate),
+                activation_color: None,
+                source_line: ret.source_line,
+            })
+        } else {
+            event.clone()
+        };
+        let life = match &event {
+            Event::Message(m) => {
+                owner = Some(result.len());
+                m.activation.map(|change| {
+                    let id = if matches!(m.from.as_str(), "[" | "]") {
+                        &m.to
+                    } else if matches!(m.to.as_str(), "[" | "]")
+                        || change == ActivationChange::Deactivate
+                    {
+                        &m.from
+                    } else {
+                        &m.to
+                    };
+                    (id.clone(), change)
+                })
+            }
+            Event::Activate(id, _) => Some((id.clone(), ActivationChange::Activate)),
+            Event::Deactivate(id) => Some((id.clone(), ActivationChange::Deactivate)),
+            Event::Destroy(id) => Some((id.clone(), ActivationChange::Destroy)),
+            // SequenceDiagram#grouping replaces lastEventWithDeactivate with END.
+            Event::GroupEnd => {
+                owner = None;
+                None
+            }
+            _ => None,
+        };
+        result.push(event);
+        if let Some((id, change)) = life {
+            if change == ActivationChange::Activate {
+                if let Some(index) = owner {
+                    stack.push(index);
+                }
+            } else if change == ActivationChange::Deactivate {
+                stack.pop();
+            }
+            if let Some(index) = owner {
+                let Event::Message(message) = &result[index] else {
+                    unreachable!()
+                };
+                // AbstractMessage#addLifeEvent excludes another participant's
+                // transition only for a self message; notes do not reset owner.
+                if message.from == message.to && message.from != id {
+                    continue;
+                }
+                let forbidden = closed.entry(index).or_default();
+                if change == ActivationChange::Activate && forbidden.contains(&id) {
+                    return Err((
+                        message.source_line,
+                        format!("Activate/Deactivate already done on {id}"),
+                    ));
+                }
+                if matches!(
+                    change,
+                    ActivationChange::Deactivate | ActivationChange::Destroy
+                ) {
+                    forbidden.insert(id);
+                }
+            }
+        }
+    }
+    Ok(result)
+}
+
+/// Java SequenceDiagram#activate overwrites one pending CREATE. addMessage
+/// consumes that exact raw event, keeping earlier attached creations intact.
+/// Owners are indexed by raw event, so overwritten CREATEs stay unowned.
+pub fn sequence_create_attachments(
+    events: &[Event],
+) -> Result<Vec<Option<usize>>, (usize, String)> {
+    let mut owners = vec![None; events.len()];
+    let mut pending: Option<(usize, &str)> = None;
+    for (index, event) in events.iter().enumerate() {
+        match event {
+            Event::Create(id) => pending = Some((index, id)),
+            Event::Message(message) => {
+                if let Some((create, participant)) = pending {
+                    // Message#compatibleForCreate excludes self/source;
+                    // MessageExo accepts its sole real participant in either direction.
+                    let compatible = if matches!(message.from.as_str(), "[" | "]") {
+                        message.to == participant
+                    } else if matches!(message.to.as_str(), "[" | "]") {
+                        message.from == participant
+                    } else {
+                        message.from != participant && message.to == participant
+                    };
+                    if !compatible {
+                        return Err((
+                            message.source_line,
+                            format!(
+                                "After create command, you have to send a message to \"{participant}\""
+                            ),
+                        ));
+                    }
+                    owners[create] = Some(index);
+                    pending = None;
+                }
+            }
+            _ => {}
+        }
+    }
+    Ok(owners)
 }

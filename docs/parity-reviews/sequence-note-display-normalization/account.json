@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "checker_evidence": "68c8b95ef1087b5daa83d16b7e8e83670d5ca10f",
+  "baseline": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "mechanism": "sequence-note-display-normalization",
+  "java_locations": [
+    "command.note.sequence.FactorySequenceNoteOnArrowCommand#createSingleLine/#executeArg",
+    "klimt.creole.Display#getWithNewlines",
+    "skin.rose.ComponentRoseNote#getPreferredWidth/#getPreferredHeight"
+  ],
+  "invariant": "Sequence note measurement and paint consume the same Display lines, after escaped newline normalization with raw math/link escape boundaries.",
+  "causal_divergence": "Inline note text is stored verbatim and physical-line-only measurement treats escaped newlines as text, while block-form controls pass.",
+  "planned_change": "Normalize sequence note display semantics once before geometry and paint; preserve escaped backslashes and raw math/link regions rather than applying a global replace or canvas correction.",
+  "perturbation_axes": [
+    "inline escaped versus physical block lines",
+    "note attachment/side and escape/raw text boundaries"
+  ]
+}

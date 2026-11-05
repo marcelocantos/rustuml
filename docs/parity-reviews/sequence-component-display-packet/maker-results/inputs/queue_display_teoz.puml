@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+skinparam participantFontSize 17
+participant Gate
+create queue "Long\nShort\nLast" as Mail
+Gate -> Mail: enqueue
+Mail --> Gate: reply
+@enduml

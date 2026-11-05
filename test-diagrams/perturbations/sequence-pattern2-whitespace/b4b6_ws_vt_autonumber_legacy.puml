@@ -1,0 +1,7 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+autonumber137
+Juniper -> Kestrel: numbered
+@enduml

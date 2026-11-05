@@ -1,0 +1,201 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-endpoint-dressing-composition",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7cbc0aef-f6c2-4036-bc37-086ae22f4e23%3Adelegate-task%3Ac792f275-d5e8-406c-bb85-740990ccfb83",
+    "model": "OpenAI gpt-6-astra, high reasoning, Codex harness in T3 Code",
+    "role": "Independent checker; no production implementation, no children"
+  },
+  "account_commit": "5b45a17258268b0aba71a1a7d35b02a169e3a088",
+  "implementation_commit": "96716b8b9595abf437a26b6bd6af914411cef44a",
+  "implementation_commits": [
+    "96716b8b9595abf437a26b6bd6af914411cef44a"
+  ],
+  "reviewed_candidate": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "reviewed_production": "b4f37ab5840b8d70bf1246e3659f1902c0952a51",
+  "before_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "Parent existing Monkey Man runner only: /Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg; actual argv/cwd/status/raw bytes in captures.tar.gz reference-results.json and supplement-reference-results.json",
+    "uv run --no-project python PRIVATE_CACHE/checks.py candidate (private target, jobs4): parser572/render791/CLI13 pass; main library11181/11251 and10497/11251, guards4/6; original golden-submodule outage preserved and unresolved tiers rerun after exact9efdc12f initialization",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/reference-measure-manifest.json PRIVATE_CACHE/candidate/bin PRIVATE_CACHE/fresh-candidate",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/supplement-reference-measure-manifest.json PRIVATE_CACHE/candidate/bin PRIVATE_CACHE/supplement-candidate",
+    "uv run --no-project python PRIVATE_CACHE/checks.py before; replay_before.py; checks.py intermediate; queue_replay.py; all exact commands, exits, bindings and raw streams in support archive"
+  ],
+  "perturbations": [
+    {
+      "name": "endpoint_half_legacy",
+      "source": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_half_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_half_legacy.svg",
+      "axes": [
+        "independent half and async dressings",
+        "reverse order and activation",
+        "legacy"
+      ],
+      "result": "fail",
+      "claim": "sequence-endpoint-dressing-composition",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "7bf9ba7368d4d430ace1ea4ada8012ef51c6affafb9d4fb8c0da1ef7a4962714",
+      "golden_sha256": "655da1ae3b1e8a6bdc432ef19b9510b31da1f28286f67350c1496ab4b3b57ba4"
+    },
+    {
+      "name": "endpoint_self_legacy",
+      "source": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_self_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_self_legacy.svg",
+      "axes": [
+        "mixed self heads",
+        "half and circles",
+        "legacy"
+      ],
+      "result": "pass",
+      "claim": "sequence-endpoint-dressing-composition",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 0,
+      "before_comparison_exit": 1,
+      "source_sha256": "e085f4a8c4de1df4b28aaf7a0c2c547c2f2c0f760fc635b8b24385778db0f859",
+      "golden_sha256": "b22cff7cfd08ebc6408ecdeb0bda4665ee6c4a7b8c00fca0b56722df15e0dde1"
+    },
+    {
+      "name": "endpoint_external_legacy",
+      "source": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_external_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_external_legacy.svg",
+      "axes": [
+        "external endpoints",
+        "direction and circles",
+        "legacy"
+      ],
+      "result": "pass",
+      "claim": "sequence-endpoint-dressing-composition",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 0,
+      "before_comparison_exit": 0,
+      "source_sha256": "0d97a698cf3c5234dc2b6225df1b037049b540330a020ceb90963c486169e3aa",
+      "golden_sha256": "21507f809dca9b5ebc0a3a2981d37ef47cadef943568bafbb661bde5f56ba8fb"
+    },
+    {
+      "name": "endpoint_negative_legacy",
+      "source": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_negative_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_negative_legacy.svg",
+      "axes": [
+        "invalid decoration placement",
+        "legacy"
+      ],
+      "result": "fail",
+      "claim": "sequence-endpoint-dressing-composition",
+      "intended_valid": false,
+      "observed_java_valid": false,
+      "java_exit": 200,
+      "rust_cli_exit": 1,
+      "comparison_exit": 2,
+      "before_comparison_exit": 2,
+      "source_sha256": "61615bc1d32cd0a84eaa6154c2d5ade97dc0847541023fb963512941f4e8170f",
+      "golden_sha256": "3d3f2c734a1c090b20efa6d300df608127dc0745dd30bde639a8b585e2299cc7"
+    },
+    {
+      "name": "endpoint_half_teoz",
+      "source": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_half_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_half_teoz.svg",
+      "axes": [
+        "independent half and async dressings",
+        "reverse order and activation",
+        "teoz"
+      ],
+      "result": "fail",
+      "claim": "sequence-endpoint-dressing-composition",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 1,
+      "before_comparison_exit": 1,
+      "source_sha256": "61b2a69852ccb7df308a14da9aece596608a6b5bc182273084953dead47befc1",
+      "golden_sha256": "eb676d66165bca5e8513ab4606489b16abffed5319c9a5b7cc78afa4a4ec4d6c"
+    },
+    {
+      "name": "endpoint_self_teoz",
+      "source": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_self_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_self_teoz.svg",
+      "axes": [
+        "mixed self heads",
+        "half and circles",
+        "teoz"
+      ],
+      "result": "pass",
+      "claim": "sequence-endpoint-dressing-composition",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 0,
+      "before_comparison_exit": 1,
+      "source_sha256": "345f655e8f001fa294720dde2842512aac800a414531b907a576e9c4117f8dd8",
+      "golden_sha256": "95e1343f2646f5ddc0f64f11fb2c111f18e0f9a7c5255c62b14f65c5c31c0f42"
+    },
+    {
+      "name": "endpoint_external_teoz",
+      "source": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_external_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_external_teoz.svg",
+      "axes": [
+        "external endpoints",
+        "direction and circles",
+        "teoz"
+      ],
+      "result": "pass",
+      "claim": "sequence-endpoint-dressing-composition",
+      "intended_valid": true,
+      "observed_java_valid": true,
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparison_exit": 0,
+      "before_comparison_exit": 0,
+      "source_sha256": "23e2423a8be0efd5f614fe731d7919a67f645cca0035ff671cfebae71b3575f9",
+      "golden_sha256": "52e0bdf424d1469244328df06283bcf542c21f8798ee27c71f605475e0ba4214"
+    },
+    {
+      "name": "endpoint_negative_teoz",
+      "source": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_negative_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-endpoint-dressing-composition/checker_672_endpoint_negative_teoz.svg",
+      "axes": [
+        "invalid decoration placement",
+        "teoz"
+      ],
+      "result": "fail",
+      "claim": "sequence-endpoint-dressing-composition",
+      "intended_valid": false,
+      "observed_java_valid": false,
+      "java_exit": 200,
+      "rust_cli_exit": 1,
+      "comparison_exit": 2,
+      "before_comparison_exit": 2,
+      "source_sha256": "6cef8fb1f4aa1164283bf52aa79e81e0e9b83538ecc296ec6fe69b166de4b2fb",
+      "golden_sha256": "6d11b7e4b87731e9ac16eb00f95f08f453453c51c9e73b418ce03507248edac4"
+    }
+  ],
+  "findings": [
+    "Independent source head and circle fields are retained and serde-default compatibility passes existing test. Exact ASCII diff is two source_dressing: None constructor fields; no ASCII rendering edit.",
+    "DISPROVED: Java ArrowConfiguration.withPart updates dressing2 when present, otherwise dressing1. Rust parse_arrow comment incorrectly says both dressings, and message_endpoint_pair applies single head_half to both. Fresh mixed half/async controls omit one source-head line in each of two messages, in both engines.",
+    "For FULL head controls, physical dressing1 then dressing2 then stroke ordering and circle/head reservations trace directly to ComponentRoseArrow. Each full NORMAL end shortens half arrowDeltaX; this is source derived rather than coordinate fitting.",
+    "Fresh mixed full self-head and external direction/circle controls match in both engines. These passes do not certify other half-head combinations or ASCII parity.",
+    "Rejected under whole-output/fresh-counterexample gate. Passing subsets are bounded observations, not extracted acceptance. Earlier accounts/reviews/counterexamples and all failures remain unchanged.",
+    "Account chronology and precise Java/Rust source hashes/line locations independently checked in checker-672-astra/integrity.json and source-audit.json. Exact Java local source blobs agree with pinned revision."
+  ],
+  "verdict": "rejected",
+  "support": "docs/parity-reviews/sequence-composed-components-packet/checker-672-astra/README.md",
+  "standing_registration": "Every fresh pair is registered under test-diagrams/perturbations and automatically collected by the unchanged standing harness. Last executed candidate standing suite714/1310 before these42 additions; no broad rerun after evidence-only registration. All42 checked through real CLI and unchanged library diagnostics.",
+  "residue": [
+    "Historical frozen failures, factory_component/factory_quoted, shared tabs/URL second Display/natural alignment/logical fonts, themed self Real/padder/envelope, other component/style/page/ASCII contracts, welcome-factory TIM handoff remain unresolved.",
+    "No native/layout/fault review retry, production/account/baseline/comparator/skip/target/reader changes, shared style/font fixes, unrelated production imports, shipping, or self-acceptance."
+  ]
+}

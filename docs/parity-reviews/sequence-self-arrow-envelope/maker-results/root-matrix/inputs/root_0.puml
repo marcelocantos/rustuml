@@ -1,0 +1,4 @@
+@startuml
+participant S
+S -> S : q
+@enduml

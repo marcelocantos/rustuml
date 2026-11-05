@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "t3-d382aba6 independent sequence rejection-repair checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "implementation_commit": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "tested_candidate_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/sequence-repair-d382aba6 0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "Remote existing runner: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs --timezone GMT+11:00 -- -pipe -tsvg (one source on stdin per invocation; exact argv/status/streams in remote-captures.json.gz)",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/import_relay.py",
+    "python3 docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py docs/parity-reviews/sequence-rejection-repair/checker-support/fresh-manifest.json /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/final-bin /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/fresh",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py evidence",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/audit_evidence.py"
+  ],
+  "input_frontend": {
+    "fresh": "raw -pipe -tsvg on stdin through pinned remote wrapper, GMT+11:00",
+    "transport": "temporary T3 relay, exact input and result bundle hashes verified",
+    "preserved": "original reference bytes and per-reference provenance unchanged",
+    "local_java": false
+  },
+  "evidence": "docs/parity-reviews/sequence-rejection-repair/checker-support/README.md",
+  "mechanism": "sequence-preferred-component-flow",
+  "account_commit": "11c4e6354cd2029fad6463db0c14a023e422a6d6",
+  "account_normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow0.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow0.svg",
+      "source_sha256": "7bf3dc68c749e626faa53753c5d649c3012e9a52b856eee663e72c3157a5482b",
+      "golden_sha256": "0bc9e815a0632b6b014149da6435e4757f360a3d4e4a08edf9b04f9d980e3314",
+      "axes": [
+        "engine",
+        "shadow on spanning preferred dimensions",
+        "padding and delay composition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow1.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow1.svg",
+      "source_sha256": "963b10cf90daedabfd05b2b65376b48861d9413e88509bbd57fd0020a3210ece",
+      "golden_sha256": "2756d65b794e3ec0a4239d8902df382000ee4f41a4135c78588c8d08fbcba085",
+      "axes": [
+        "engine",
+        "shadow on spanning preferred dimensions",
+        "padding and delay composition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow0.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow0.svg",
+      "source_sha256": "9256a66b365b82dfb1217eba55a3c3c882a532d730acf41f54ea8639f964fd9d",
+      "golden_sha256": "52d9b44395171fc0a3b19bd7286e363ced9633452460ab3537d350c40944eaf4",
+      "axes": [
+        "engine",
+        "shadow on spanning preferred dimensions",
+        "padding and delay composition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow1.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow1.svg",
+      "source_sha256": "84db093ef3977d950db7fbab4fdaa1d4483ad3f2cb0edf9f6d651d4af9ba5506",
+      "golden_sha256": "fce162a60657060de739e00dc65f5c43cbf1beb9d257bf32980864b0b8ecdaea",
+      "axes": [
+        "engine",
+        "shadow on spanning preferred dimensions",
+        "padding and delay composition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_actor_shadow.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_actor_shadow.svg",
+      "source_sha256": "5b8ad138536aeabc88a2f91c965d40d5f616f827922fe7fddbd21be34cf6a645",
+      "golden_sha256": "2a6297669c5b7b5bf5e88927851bd86c72137177a637fdc23f10a9fe23a2e8fe",
+      "axes": [
+        "source-guided edge control",
+        "actor_shadow"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ],
+  "source_audit": {
+    "mechanism": "sequence-preferred-component-flow",
+    "java_files": [
+      "sequencediagram/graphic/ParticipantBox.java",
+      "sequencediagram/graphic/NoteBox.java",
+      "skin/rose/ComponentRoseParticipant.java",
+      "skin/rose/ComponentRoseNote.java",
+      "skin/rose/ComponentRoseDelayText.java",
+      "skin/rose/ComponentRoseGroupingHeader.java",
+      "skin/rose/ComponentRoseGroupingElse.java"
+    ],
+    "rust_locations": [
+      "sequence.rs:2856-2867",
+      "sequence.rs:7320-7332",
+      "sequence.rs:9553-9632",
+      "sequence.rs:14239-14260"
+    ],
+    "source_supported": "preferred_width separates head allocation from visible shape. Folded-note shadow participates in preferred width and span allocation, and group membership reuses it. Java NoteBox quantization is distinct from Rose polygon truncation. Padded note text shift follows SheetBlock drawing, not a final global translation.",
+    "adversarial_boundary": "Several other participant kinds still receive the same shadow-width increment; actor/database probe challenges that generalization. Non-folded notes use older reconstruction paths, which are not established by folded-note evidence."
+  },
+  "findings": [
+    "preferred_width separates head allocation from visible shape. Folded-note shadow participates in preferred width and span allocation, and group membership reuses it. Java NoteBox quantization is distinct from Rose polygon truncation. Padded note text shift follows SheetBlock drawing, not a final global translation.",
+    "Four folded-note/ordinary-participant engine/shadow/padding controls match. Actor/database shadow control fails: canvas151px Java versus154px Rust, centers shift1.5px and actor label y differs3px. Preferred versus painted dimensions must come from each participant component; a uniform shadow increment cannot represent all kinds. Attached right-note shadow failures also bound the purported shared note flow.",
+    "No new fixture label predicates, golden reads, branch-count constant ladders or coordinate string surgery found. See source-audit.json for Java provenance and semantic constant reuse concerns. Every valid failure is binding; no dependency waiver."
+  ],
+  "verdict": "rejected"
+}

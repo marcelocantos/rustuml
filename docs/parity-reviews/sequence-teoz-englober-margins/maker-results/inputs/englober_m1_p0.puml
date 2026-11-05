@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+skinparam padding 0
+box "Boundary" #lightyellow
+participant Kite as K
+end box
+participant Nuthatch as N
+K -> N : cross boundary
+footer ledger
+@enduml

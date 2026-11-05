@@ -1,0 +1,344 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "t3-d382aba6 independent sequence rejection-repair checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "implementation_commit": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "tested_candidate_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/sequence-repair-d382aba6 0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "Remote existing runner: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs --timezone GMT+11:00 -- -pipe -tsvg (one source on stdin per invocation; exact argv/status/streams in remote-captures.json.gz)",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/import_relay.py",
+    "python3 docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py docs/parity-reviews/sequence-rejection-repair/checker-support/fresh-manifest.json /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/final-bin /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/fresh",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py evidence",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/audit_evidence.py"
+  ],
+  "input_frontend": {
+    "fresh": "raw -pipe -tsvg on stdin through pinned remote wrapper, GMT+11:00",
+    "transport": "temporary T3 relay, exact input and result bundle hashes verified",
+    "preserved": "original reference bytes and per-reference provenance unchanged",
+    "local_java": false
+  },
+  "evidence": "docs/parity-reviews/sequence-rejection-repair/checker-support/README.md",
+  "mechanism": "sequence-participant-shadow-envelope",
+  "account_commit": "dec729705b3cfc9b905cfd6030d03d61e1c20875",
+  "previous_review": "docs/parity-reviews/sequence-participant-shadow-envelope/review.json",
+  "previous_review_commit": "704b80d0c31def61e0ccd6ff78565b017fd675a0",
+  "previous_implementation_commit": "9c988764885240bd2615dca3f5f2af3f45d2eb69",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w0.svg",
+      "source_sha256": "84428fc4da1bc3813c45dfeedcf6ab3d64bc4661389605f6cc00d463c449947c",
+      "golden_sha256": "3be4ba93c46cdaeb45b0cbfe4ca09ca9a6d6399bf90ebc29845eb5fc008516bf",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "participant shadow on/off",
+        "nested group and spanning note"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r0_w1.svg",
+      "source_sha256": "ed352548bf037991209362dbdf2f8c6b8a0d3cc3654079b09467806bb8fb0288",
+      "golden_sha256": "d1c835bb5c13451b9ca0735db96167bb26556cf4cce8aa594c70c30544c6e67a",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "participant shadow on/off",
+        "nested group and spanning note"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w0.svg",
+      "source_sha256": "570ec4897c57d2ac32c3447482da183860455350fbca705c7059222600828623",
+      "golden_sha256": "ca49ea502437edd5d4a3294d9add607dbf500989ed6acb2a499964f9cf3f90bf",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "participant shadow on/off",
+        "nested group and spanning note"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_legacy_r1_w1.svg",
+      "source_sha256": "ba289c53de5502c86b1b1652d3d1909156e3bb16e2c4e151f557c82aba957a0c",
+      "golden_sha256": "ee9bff52cc5f5b721eca4e0ad13b295f62a6bc0b652b457fb7a5e0a95b1fd0bc",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "participant shadow on/off",
+        "nested group and spanning note"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w0.svg",
+      "source_sha256": "e0705551d7b230915e1b235e321401e8610449da42e6710eced3bbd4f31df5f0",
+      "golden_sha256": "25ca6bdc2205d86c2491285437a250f1c6884bbe430ae8fd08180c4bbf1a1702",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "participant shadow on/off",
+        "nested group and spanning note"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r0_w1.svg",
+      "source_sha256": "c7414dd78af92437262990e2a7bb7ff3a0df5fc2a4992b5eb0314c1a84e66530",
+      "golden_sha256": "fcace9af8f85ad4e6972b104384faf27654cd3e867808b99a4f5d94f08219bbd",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "participant shadow on/off",
+        "nested group and spanning note"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w0.svg",
+      "source_sha256": "1709f062cb2041a5bb15f2b5e4c0187cc0c59b053222a16f0d5dc3565b514bca",
+      "golden_sha256": "81852c4ce5a77c01310c3393d7e7080809495ec00d1d4b7cb0312e6ab2755f2c",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "participant shadow on/off",
+        "nested group and spanning note"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_recovery_teoz_r1_w1.svg",
+      "source_sha256": "4205722a1374ebd6e2546ad3a91db866435638a4892f94d40ca8e196ceb5aa96",
+      "golden_sha256": "f6a9b235799f4c1e79e56c444b6312c369166188f7a7e85e5d5f01353fc255f3",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "participant shadow on/off",
+        "nested group and spanning note"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e0.svg",
+      "source_sha256": "dccaa111ce4161b58af0dd5c349794554b73eefb3258c32dfae82d23d5e47d11",
+      "golden_sha256": "20ebad148194f22a9d4d5e2c240fd1412c0189818ecad5bc0abede5b60261965",
+      "axes": [
+        "spanning note presence",
+        "shadowed participant envelope",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e0.svg",
+      "source_sha256": "e01c2704c302d9822db5bb4747c14882f233acc6e648722890c3b5112d11909f",
+      "golden_sha256": "c5b00d0921e7aec897ac33afcb94c51225db523ff4d0f9aa605f1ffdfc1ee23e",
+      "axes": [
+        "spanning note presence",
+        "shadowed participant envelope",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e1.svg",
+      "source_sha256": "ebfc50673d8b8ada858e7a602aebfa115eb7d7102a69e994c34e21f8ea16d1d2",
+      "golden_sha256": "a725555be7bf1017313d9c338e27d7943d637be7a3ca33f6c62b501e765b61fb",
+      "axes": [
+        "spanning note presence",
+        "shadowed participant envelope",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e1.svg",
+      "source_sha256": "3b1c460c5aca073ed30ed8dd49574c3301d62c2e36dbebf7711e84602023461c",
+      "golden_sha256": "9b0629b3acdeaedd39f68a3341c9fa5c273552d97b3ea0879441feb66344490b",
+      "axes": [
+        "spanning note presence",
+        "shadowed participant envelope",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz"
+    }
+  ],
+  "fresh_cross_mechanism_evidence": [
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow0.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow0.svg",
+      "source_sha256": "7bf3dc68c749e626faa53753c5d649c3012e9a52b856eee663e72c3157a5482b",
+      "golden_sha256": "0bc9e815a0632b6b014149da6435e4757f360a3d4e4a08edf9b04f9d980e3314",
+      "axes": [
+        "engine",
+        "shadow on spanning preferred dimensions",
+        "padding and delay composition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow1.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e0_shadow1.svg",
+      "source_sha256": "963b10cf90daedabfd05b2b65376b48861d9413e88509bbd57fd0020a3210ece",
+      "golden_sha256": "2756d65b794e3ec0a4239d8902df382000ee4f41a4135c78588c8d08fbcba085",
+      "axes": [
+        "engine",
+        "shadow on spanning preferred dimensions",
+        "padding and delay composition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow0.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow0.svg",
+      "source_sha256": "9256a66b365b82dfb1217eba55a3c3c882a532d730acf41f54ea8639f964fd9d",
+      "golden_sha256": "52d9b44395171fc0a3b19bd7286e363ced9633452460ab3537d350c40944eaf4",
+      "axes": [
+        "engine",
+        "shadow on spanning preferred dimensions",
+        "padding and delay composition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow1.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_e1_shadow1.svg",
+      "source_sha256": "84db093ef3977d950db7fbab4fdaa1d4483ad3f2cb0edf9f6d651d4af9ba5506",
+      "golden_sha256": "fce162a60657060de739e00dc65f5c43cbf1beb9d257bf32980864b0b8ecdaea",
+      "axes": [
+        "engine",
+        "shadow on spanning preferred dimensions",
+        "padding and delay composition"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_actor_shadow.puml",
+      "golden": "test-diagrams/perturbations/sequence-preferred-component-flow/checker_d382_actor_shadow.svg",
+      "source_sha256": "5b8ad138536aeabc88a2f91c965d40d5f616f827922fe7fddbd21be34cf6a645",
+      "golden_sha256": "2a6297669c5b7b5bf5e88927851bd86c72137177a637fdc23f10a9fe23a2e8fe",
+      "axes": [
+        "source-guided edge control",
+        "actor_shadow"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ],
+  "findings": [
+    "The original primary valid inputs now match. New cross-mechanism controls exercise the changed consumers on at least two independent axes; linked valid failures remain binding to whole-source closure. This does not imply every isolated equation is wrong.",
+    "Four folded-note/ordinary-participant engine/shadow/padding controls match. Actor/database shadow control fails: canvas151px Java versus154px Rust, centers shift1.5px and actor label y differs3px. Preferred versus painted dimensions must come from each participant component; a uniform shadow increment cannot represent all kinds. Attached right-note shadow failures also bound the purported shared note flow.",
+    "Historic review.json and every retained input/reference are unchanged. New record describes candidate0fb4e14b only. Cross-linked sources are counted once in the68-case fresh matrix, not copied into additional directories."
+  ],
+  "verdict": "rejected"
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "checker_evidence": "68c8b95ef1087b5daa83d16b7e8e83670d5ca10f",
+  "baseline": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "mechanism": "sequence-teoz-parallel-tile-ordinates",
+  "java_locations": [
+    "sequencediagram.teoz.TileParallel#getContactPointRelative/#getZZZ/#drawU",
+    "sequencediagram.teoz.GroupingTile#mergeParallel/#moveRecentParallelTilesToPending",
+    "sequencediagram.teoz.CommunicationTileSelf#getContactPointRelative/#callbackY_internal",
+    "sequencediagram.teoz.LiveBoxes#drawBoxes/#drawOneLevel"
+  ],
+  "invariant": "Parallel composition aligns component contacts while preserving each tile drawing origin, lifecycle callbacks and tail; it captures the immediate graphical predecessor plus trailing life tiles. Paint order is level bar then closing decoration.",
+  "causal_divergence": "The Rust common event ordinate conflates contact and callback; standalone notes clear the predecessor, and separate bar/cross vectors reorder paint.",
+  "planned_change": "Represent parallel contacts independently of stored draw/callback ordinates, retain graphical predecessors and life suffixes, and emit ordered per-level paint operations rather than separate bar/cross passes.",
+  "perturbation_axes": [
+    "self/ordinary parallel chains and multiline labels",
+    "standalone note predecessor/trailing life events and nested creation/destruction"
+  ]
+}

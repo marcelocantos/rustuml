@@ -1,0 +1,34 @@
+{
+  "inherited_record": "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/dependencies.json",
+  "all_valid_failures": 593,
+  "invalid_references": 77,
+  "checker_failures": [
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_group_scope_legacy.puml",
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_group_scope_teoz.puml",
+    "test-diagrams/perturbations/sequence-single-pending-create/ind78_box_scope_teoz.puml",
+    "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_heading_legacy.puml",
+    "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_heading_teoz.puml",
+    "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_note_divider_legacy.puml",
+    "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_note_divider_teoz.puml"
+  ],
+  "headings": {
+    "target": "T14.13",
+    "owner": "Concurrent shared Creole/text owner; parent accepted this handoff",
+    "java": "CreoleParser#createSheetSlow/createStripes -> CreoleStripeSimpleParser constructor -> StripeSimple#analyzeAndAdd/fontConfigurationForHeading",
+    "precedence": "NO_CREOLE bypass; section/rule patterns before equals heading; ^(=+)(.+)$ trims group2 and assigns order=count(equals)-1. Heading order0:+4bold;1:+2bold;2:+1bold;otherwise italic. Both measure and paint must consume the resulting stripe atoms.",
+    "rust": "Sequence emit_message_label delegates inline text/metrics to shared text/creole; it does not own heading grammar. Notes and dividers have separate consumers and remain failures. Do not strip markers in sequence as a local fix.",
+    "sources": [
+      "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_heading_legacy.puml",
+      "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_heading_teoz.puml",
+      "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_note_divider_legacy.puml",
+      "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_note_divider_teoz.puml"
+    ]
+  },
+  "other": [
+    "Both group_scope creation controls retain group height differences; box_scope_teoz retains horizontal envelope failure. No group/Dolls/englober rewrite in this packet.",
+    "All586 frozen whole failures remain unchanged, including shared present_bold_empty/style_parameter_contrast and nested/multiline englobers, reverse-created queue canvas, fonts T14.11, tabs, URL Display, theme Real/padder, shadows/hexnote/multiline delay/page chrome and factory cases.",
+    "TIM welcome remains an independent nonpositive factory dependency, not positive parity credit.",
+    "77 invalid references:57 rejected20 accepted, unchanged. Two empty references still panic in diff_one comparison helper; all CLI/library render panics are repaired.",
+    "Standing gate875/1512, guards4/6, main unlocked ratchets and754 assisted failures remain red. Workspacefmt class paths, parser dead code and19 renderer Clippy findings remain. No baseline/comparator/skip changes."
+  ]
+}

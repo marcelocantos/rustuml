@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+skinparam noteFontSize 11
+skinparam noteTextAlignment center
+Wagtail -> Thrush : go
+note right : iii\nWWWWWW\n<size:16>tall</size>
+Thrush -> Wagtail : after
+@enduml

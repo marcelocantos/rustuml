@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Cedar
+actor Finch
+create Finch
+[<- Finch: leave
+Finch -> Cedar: later
+@enduml

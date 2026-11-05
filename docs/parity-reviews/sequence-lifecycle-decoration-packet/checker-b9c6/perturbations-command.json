@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "cargo",
+    "test",
+    "--release",
+    "-p",
+    "rustuml-oracle",
+    "--test",
+    "parity_perturbations",
+    "--",
+    "--nocapture"
+  ],
+  "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b9c6cf04",
+  "exit": 101
+}

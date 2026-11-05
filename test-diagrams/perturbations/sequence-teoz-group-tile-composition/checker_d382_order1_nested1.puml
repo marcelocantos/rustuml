@@ -1,0 +1,17 @@
+@startuml
+!pragma teoz true
+skinparam padding 2
+participant "Very wide back office" as B
+participant A
+group outer [ready]
+alt inner
+A <- A : reverse
+note left: attached
+note over B,A: x
+...  wait   ...
+else much longer alternate branch annotation
+B -> A : branch
+end
+end
+A -> B : follow
+@enduml

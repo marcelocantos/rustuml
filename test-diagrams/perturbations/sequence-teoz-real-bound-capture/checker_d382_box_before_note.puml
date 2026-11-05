@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+box Title extending initial bounds
+participant A
+end box
+participant "Wide worker" as B
+group bounds
+note over A,B: x
+A -> B : a very wide later constraint from this message
+end
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+!pragma teoz true
+hide stereotype
+skinparam stereotypePosition bottom
+collections "Hazel\nbranch" as H <<bundle>>
+skinparam stereotypePosition top
+boundary Reed <<perimeter>>
+skinparam stereotypePosition bottom
+queue Cove <<dispatch>>
+show stereotype
+Cove -> H: arrange
+H -> Reed: relay
+@enduml

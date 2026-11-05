@@ -1,0 +1,7 @@
+@startuml
+participant Kite
+create queue Q <<volatile>>
+Kite -> Q: create
+Q -> Kite: ready
+destroy Q
+@enduml

@@ -1,0 +1,124 @@
+{
+  "before": {
+    "cli": {
+      "0": 1870,
+      "1": 31
+    },
+    "cli_comparison": {
+      "1": 599,
+      "0": 1259,
+      "2": 43
+    },
+    "product_library": {
+      "1": 599,
+      "0": 1259,
+      "2": 42,
+      "101": 1
+    },
+    "assisted_library": {
+      "1": 642,
+      "0": 1216,
+      "2": 42,
+      "101": 1
+    },
+    "valid_errors": [],
+    "panics": [],
+    "invalid_accepts": [
+      "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+      "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+      "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+      "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+      "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+      "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+      "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+      "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+      "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.puml"
+    ]
+  },
+  "after": {
+    "cli": {
+      "0": 1870,
+      "1": 31
+    },
+    "cli_comparison": {
+      "1": 559,
+      "0": 1299,
+      "2": 43
+    },
+    "product_library": {
+      "1": 559,
+      "0": 1299,
+      "2": 42,
+      "101": 1
+    },
+    "assisted_library": {
+      "1": 602,
+      "0": 1256,
+      "2": 42,
+      "101": 1
+    },
+    "valid_errors": [],
+    "panics": [],
+    "invalid_accepts": [
+      "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+      "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+      "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+      "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+      "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+      "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+      "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+      "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+      "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.puml"
+    ]
+  },
+  "gains": [
+    "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e0.puml",
+    "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e0.puml",
+    "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e0.puml",
+    "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e0.puml",
+    "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e1.puml",
+    "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e1.puml",
+    "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e1.puml",
+    "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e1.puml",
+    "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_note.puml",
+    "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_multiline.puml",
+    "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_reverse.puml",
+    "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0.puml",
+    "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1.puml",
+    "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2.puml",
+    "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3.puml",
+    "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4.puml",
+    "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k5.puml",
+    "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0_single.puml",
+    "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1_single.puml",
+    "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3_single.puml",
+    "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4_single.puml",
+    "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_escaped.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_self_0.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_external_0.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_escaped_0.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_0_center.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_0_right.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_self_1.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/color_external_1.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/display_escaped_1.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_1_center.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/style_1_right.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_message_0.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_message_1.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_note_0.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/parallel_note_1.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_numeric_0.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_fallback_0.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_numeric_1.puml",
+    "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_fallback_1.puml"
+  ],
+  "losses": [],
+  "maker_status_differences": []
+}

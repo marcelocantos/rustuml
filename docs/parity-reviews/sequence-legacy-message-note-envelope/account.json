@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-legacy-message-note-envelope",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.graphic.ArrowAndNoteBox#getPreferredWidth/#getStartingX",
+    "sequencediagram.graphic.MessageArrow#getActualWidth/#getStartingX",
+    "sequencediagram.graphic.NoteBox#getRightShift",
+    "skin.rose.ComponentRoseArrow#getYPoint"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "invariant": "An ordinary message/right-note composite uses max(preferred arrow width, actual live endpoint width) plus note preferred width and its live right shift sampled at the arrow component start.",
+  "causal_divergence": "The legacy ordinary right attached note canvas is reconstructed from center plus note text/padding, ignoring the arrow live endpoints; a closed activation and repeated returns reveal five excess pixels despite matching paint.",
+  "planned_change": "Evaluate the composite envelope from the shared actual endpoint model and component dimensions, preserving note painter/group raw-winner phases and keeping Teoz right-note padding residue separate.",
+  "perturbation_axes": [
+    "activation state and direction",
+    "note width and nested versus ordinary return"
+  ]
+}

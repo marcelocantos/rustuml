@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-note-rule-title-height",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "skin.rose.ComponentRoseNote constructor enhanced=true",
+    "cucadiagram.BodyFactory#create3",
+    "cucadiagram.BodyEnhanced2#getArea",
+    "cucadiagram.BodyEnhancedAbstract#decorate",
+    "klimt.shape.TextBlockLineBefore#calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::note_line_metrics_with_family"
+  ],
+  "invariant": "A labeled note separator composes its title and empty body using BodyEnhancedAbstract margins and TextBlockLineBefore minimum title height, rather than a default-font pixel addition.",
+  "causal_divergence": "Sequence note_line_metrics_with_family adds a fixed7.6553 to every labeled separator regardless of font. Returned underline4 captures all remain valid mismatches after removing duplicate message flow, with the note-font-dependent height difference. The note uses enhanced BodyEnhanced2, not the ordinary CreoleHorizontalLine component alone. Historical account54fb67fc correctly identified message-flow duplication but its note path needed this refinement; no historical account is rewritten.",
+  "planned_change": "Replace the fixed default-font separator extra with the title-height-derived wrapper composition: max(titleHeight, titleHeight/2+4)+titleHeight/2 for the empty body. Existing rendered line minimum10 means this simplifies to1.5*titleHeight. Retain existing paint ascent and validate the full captured output, including differing note/arrow font sizes and engines.",
+  "perturbation_axes": [
+    "note font11/18 versus arrow font13/20",
+    "legacy/Teoz and rule-note versus following plain message"
+  ],
+  "reference_manifest": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-manifest.json",
+  "scope": "Owned sequence component materialization only; no shared text_render/creole or parser dispatch edits"
+}

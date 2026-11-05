@@ -1,0 +1,10 @@
+@startuml
+participant Birch
+Birch -> Birch: self
+rnote left
+<size:17>first</size>
+second
+third
+end note
+Birch -> Elm: next
+@enduml

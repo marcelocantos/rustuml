@@ -1,0 +1,562 @@
+[
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e0.puml",
+    "reference": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e0.svg",
+    "source_sha256": "465bbadd39eb080fe3df6c40dcfaca52a8fb42d2a71d184c4fa60c3835f9b896",
+    "reference_sha256": "52094ec5eb61ccf528752065a2b9676da68c5b41998aea06490339fd5ae85a4e",
+    "provenance": "docs/parity-reviews/sequence-return-configuration/maker-results/manifest.json",
+    "local_or_remote": "Previously captured before local Java pause; not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e1.puml",
+    "reference": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e1.svg",
+    "source_sha256": "fee8ffdd30d197b2035c6adb2b877b429499ee60b41db6418146736c541c2b73",
+    "reference_sha256": "4e8756ab4c8837f0d2507ee5a2fc52bb4c4626b4070f7caf9480dd80d7d152e6",
+    "provenance": "docs/parity-reviews/sequence-return-configuration/maker-results/manifest.json",
+    "local_or_remote": "Previously captured before local Java pause; not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/external_e0.puml",
+    "reference": "docs/parity-reviews/sequence-return-configuration/maker-results/external_e0.svg",
+    "source_sha256": "380e22d1ceb7d4d920f0d4334f4455dac9a7cf8e31c19f8ce19026ac90f67f59",
+    "reference_sha256": "38ba0d266756dbf91e34fb5c409245f236013e5461522b97a46027e8da98f7cc",
+    "provenance": "docs/parity-reviews/sequence-return-configuration/maker-results/manifest.json",
+    "local_or_remote": "Previously captured before local Java pause; not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/external_e1.puml",
+    "reference": "docs/parity-reviews/sequence-return-configuration/maker-results/external_e1.svg",
+    "source_sha256": "8160f288fc74ef8ae249ea558587bbe653a658ae0e905cd36d12d4036fd91664",
+    "reference_sha256": "b96eb244eff9e4a28be4644a8a80312770aa4aa57c850c959ada34065782e1c9",
+    "provenance": "docs/parity-reviews/sequence-return-configuration/maker-results/manifest.json",
+    "local_or_remote": "Previously captured before local Java pause; not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/internal_e0.puml",
+    "reference": "docs/parity-reviews/sequence-return-configuration/maker-results/internal_e0.svg",
+    "source_sha256": "9cdfd23f9863e181650e17a75bf9dd699391c0dfbcd964266354abc12d4e6f43",
+    "reference_sha256": "85884f827dcfad597caa52e786fbf3405a6c9d916ac6c781479b12a2e357f18f",
+    "provenance": "docs/parity-reviews/sequence-return-configuration/maker-results/manifest.json",
+    "local_or_remote": "Previously captured before local Java pause; not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/internal_e1.puml",
+    "reference": "docs/parity-reviews/sequence-return-configuration/maker-results/internal_e1.svg",
+    "source_sha256": "afaaff516234e123130492bdb78fdc59339020357d7aa21502f8f18e18cdf093",
+    "reference_sha256": "ceeb0a4e6d1c9fb325aa9d57b669c7a90eb05c2290366b2b085966574cf288e0",
+    "provenance": "docs/parity-reviews/sequence-return-configuration/maker-results/manifest.json",
+    "local_or_remote": "Previously captured before local Java pause; not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e0.puml",
+    "reference": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e0.svg",
+    "source_sha256": "c5616fb1e5e6491bca636b53461f87b5048e2d98a2eb7452575fb7765a66c3a7",
+    "reference_sha256": "3527f3c7d9651d834e1a454a741f3a5dcb8ad761325f943a62910b32e428c2dc",
+    "provenance": "docs/parity-reviews/sequence-return-configuration/maker-results/manifest.json",
+    "local_or_remote": "Previously captured before local Java pause; not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e1.puml",
+    "reference": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e1.svg",
+    "source_sha256": "a0f00e67e30a4399c88f34532abf136ae8a3c039fe5d3d99f044944958a15cb1",
+    "reference_sha256": "779eeb22035282efbbb55235582788ae1e51524833be6ecb54c61be7609a8836",
+    "provenance": "docs/parity-reviews/sequence-return-configuration/maker-results/manifest.json",
+    "local_or_remote": "Previously captured before local Java pause; not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/self_e0.puml",
+    "reference": "docs/parity-reviews/sequence-return-configuration/maker-results/self_e0.svg",
+    "source_sha256": "f37a0e4b9f9705074223ccfeb2d73d4ca2d0755edaeac57e19c1a59bfd50a03d",
+    "reference_sha256": "da5e1a0e0c21c1c659d1fedb5250b8936eb5d4fddce92a30aee9cc8cb943acc1",
+    "provenance": "docs/parity-reviews/sequence-return-configuration/maker-results/manifest.json",
+    "local_or_remote": "Previously captured before local Java pause; not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/self_e1.puml",
+    "reference": "docs/parity-reviews/sequence-return-configuration/maker-results/self_e1.svg",
+    "source_sha256": "e136de6f507c76a863685e80199b07254bd7eab930a695eaee08540a1cea035c",
+    "reference_sha256": "c522005de3907a37aed64cb967a491fa8c6924f43d9c39c4bf3a7663caa3f36e",
+    "provenance": "docs/parity-reviews/sequence-return-configuration/maker-results/manifest.json",
+    "local_or_remote": "Previously captured before local Java pause; not regenerated"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_0.puml",
+    "reference": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_0.svg",
+    "source_sha256": "bbebeccc2b7b904124c63fe62ccc9a2400299fc18b96c024c47c6737eeac88d6",
+    "reference_sha256": "d463c27d82cac1b1f975c0f9044d19bb347476bc99e1f1cbccdedfbfb28f8344",
+    "provenance": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_1.puml",
+    "reference": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_1.svg",
+    "source_sha256": "76f1eda026346fdfba2e539dba495055c75892d3436cf3dd92dc1ae18aa5b6a3",
+    "reference_sha256": "cab093b48d86777e26d882368b83e8cd0f1aa6240fa8f4a75e1e1082f7d796b3",
+    "provenance": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_2.puml",
+    "reference": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_2.svg",
+    "source_sha256": "787e6d1325ca5c118b1fcc1d09126bdc5c7389a3b28dfc7541cd8aa81d97f9a1",
+    "reference_sha256": "1924449abf16f18886c4f1baaf6a71dc73ab7171c899de8961ccf046ccec3399",
+    "provenance": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_2.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_3.puml",
+    "reference": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_3.svg",
+    "source_sha256": "fcecc749e4b6eac39a20c0fa78f404ab3eacc905bf5f8cf7a548e16be9741d31",
+    "reference_sha256": "c8a1eb3a443009b95ce04518988c08758c0841a873d938664b3befd49fc43af0",
+    "provenance": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_3.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_4.puml",
+    "reference": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_4.svg",
+    "source_sha256": "f2468d79608610b6c1013ee4de64f60d70cd8a2a72d4dd93153c05b575e81057",
+    "reference_sha256": "e63b330a586768b42dd7de755886c7202dec4f5a9155a09fab4e0098df4571de",
+    "provenance": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_4.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_5.puml",
+    "reference": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_5.svg",
+    "source_sha256": "0774a57fc1cad05be72bb9b4b1f273b49095620f0841759131aea07400ca4456",
+    "reference_sha256": "8bdc38f73526005dac4d46f58c98b17e26ec0bbca8dc8e42629183a87e6d4353",
+    "provenance": "docs/parity-reviews/sequence-reverse-self-component/maker-results/inputs/directional_5.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-preferred-component-flow/maker-results/inputs/composition_0.puml",
+    "reference": "docs/parity-reviews/sequence-preferred-component-flow/maker-results/inputs/composition_0.svg",
+    "source_sha256": "45dce04cafe7109a99bf4e87ccb896c28b6f2f15c706550e68a822e814d63ac4",
+    "reference_sha256": "e3fc065aff1b2b3e1a3e5947c73a7fdfecb0e3849ecfa3f20e8ce1bb7c4f3bf3",
+    "provenance": "docs/parity-reviews/sequence-preferred-component-flow/maker-results/inputs/composition_0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-preferred-component-flow/maker-results/inputs/composition_1.puml",
+    "reference": "docs/parity-reviews/sequence-preferred-component-flow/maker-results/inputs/composition_1.svg",
+    "source_sha256": "68d31e075c63bb82d049f426454d600950ad5b9ce130f9feba92dc63cc900d42",
+    "reference_sha256": "45865829e7a0d41390c92487b14da5ca164c1b36b20cd9c28efabe8651c830a3",
+    "provenance": "docs/parity-reviews/sequence-preferred-component-flow/maker-results/inputs/composition_1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-preferred-component-flow/maker-results/inputs/composition_2.puml",
+    "reference": "docs/parity-reviews/sequence-preferred-component-flow/maker-results/inputs/composition_2.svg",
+    "source_sha256": "8e20853118da5e6f604bea7a96b0eb6b37a3090d45d07b9ef3f8ae6a0e3fa84a",
+    "reference_sha256": "9298370fb10684a26d6fc3455faf3483af886232320bcf7c3fc33f41f1066079",
+    "provenance": "docs/parity-reviews/sequence-preferred-component-flow/maker-results/inputs/composition_2.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-preferred-component-flow/maker-results/inputs/composition_3.puml",
+    "reference": "docs/parity-reviews/sequence-preferred-component-flow/maker-results/inputs/composition_3.svg",
+    "source_sha256": "6693d9e1d19ec57d5f2003b1af7753d14941ad0d722fd65a54c63c0d799be399",
+    "reference_sha256": "079f455e498045d39e7c24b6706481475b4a54b6dc536d2d267ca862f437fe7d",
+    "provenance": "docs/parity-reviews/sequence-preferred-component-flow/maker-results/inputs/composition_3.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/composition_0.puml",
+    "reference": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/composition_0.svg",
+    "source_sha256": "511752905ba085da87ab2ae987760deb8c243ee0a12306a75aa70f096fcb901e",
+    "reference_sha256": "29c835e060eaa2ef699cf9593e825d76150a517327689db928c23dd74682d6cf",
+    "provenance": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/composition_0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/composition_1.puml",
+    "reference": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/composition_1.svg",
+    "source_sha256": "ea079209fad292a6eb2d483eb7003c38434dc4db43324c279d1f047d39bc03cf",
+    "reference_sha256": "5c11d48b0948be3b075dffc79c1fc91ce876fe4b6a06ec686a9be7cd35eddb86",
+    "provenance": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/composition_1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/composition_2.puml",
+    "reference": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/composition_2.svg",
+    "source_sha256": "986ada75244ed21f0323bb827c387760fb95dbc4d16ae0322d69c26e9ea1121e",
+    "reference_sha256": "398a60dacb5e5d0db28a2050c5ef392763a08da7efe12e5024c4790310aabf98",
+    "provenance": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/composition_2.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/composition_3.puml",
+    "reference": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/composition_3.svg",
+    "source_sha256": "788510e8f887bff3c78f16919eb00ddcaf57d0b96a225a8c774e7c8165576c2b",
+    "reference_sha256": "0f6d93b38739ea97fe40ed4db9e7c1894660dc4de2ef65a1d41dbfd10d13764c",
+    "provenance": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/composition_3.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e0_h0_b1.puml",
+    "reference": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e0_h0_b1.svg",
+    "source_sha256": "c49452c21c2613f8ccbb26058ab0b707c340c2fb6abfb61d08b70c0b8c25225f",
+    "reference_sha256": "681c77a5af0f2ccc8312c8f38fa13c768144183a5c97ae06398a428c5f415ecc",
+    "provenance": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e0_h0_b1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e0_h1_b0.puml",
+    "reference": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e0_h1_b0.svg",
+    "source_sha256": "4e0d26720e9955c0734c662510e0c96080fec101430a6ed76a8c87f94d614e70",
+    "reference_sha256": "e1c2413d3557e6f3ff379cef331c7c6b8d229b19d00aa64329a7b2028a292327",
+    "provenance": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e0_h1_b0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e0_h1_b1.puml",
+    "reference": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e0_h1_b1.svg",
+    "source_sha256": "bc9ac6932d0dfce97947ee7fef92136f93453e0e555505cd220536e2b42c7a17",
+    "reference_sha256": "3bdb2b46b2cd86112f8576555970109ee678f454e2e5cafdc7cb59eabe69d557",
+    "provenance": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e0_h1_b1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e1_h0_b1.puml",
+    "reference": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e1_h0_b1.svg",
+    "source_sha256": "20e363d28ed972e584545e791e218a904538916029ff6d041b18502d3d785c18",
+    "reference_sha256": "df52a5c5c65c6e2da118a51973afbee662f290284cd07643bffd1416bf70907a",
+    "provenance": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e1_h0_b1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e1_h1_b0.puml",
+    "reference": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e1_h1_b0.svg",
+    "source_sha256": "c28baef10113def62246590e8555189c1c55b16546d52805a1b1ac6a665e5e84",
+    "reference_sha256": "230ab5357d711b1a5c84ae9b0e1ec1d3e9a165051bba3bd05e79be87e5c8340e",
+    "provenance": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e1_h1_b0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e1_h1_b1.puml",
+    "reference": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e1_h1_b1.svg",
+    "source_sha256": "36aa9ecb9d8440a1cd4cc401deedbe176505f4f4786a2552104b3a20fa335349",
+    "reference_sha256": "4a6cea92d65f5637ec634c8ef00d2a4374d0987ff0b85755cdf62e8dce85fc72",
+    "provenance": "docs/parity-reviews/sequence-page-wrapper-hierarchy/maker-results/inputs/footer_e1_h1_b1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset0.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset0.svg",
+    "source_sha256": "b842715aae16ab703afcb8514db1375a69fb38c11000da5f511fd20171010705",
+    "reference_sha256": "cd74f21866960d2b7e3044c433718e77c7af2b34ad7c855b0c9b56c66de0fa4f",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset1.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset1.svg",
+    "source_sha256": "08e04ed2e19c2bd216108c6589259a3fb57c5e905d848e1354c4df85122b3841",
+    "reference_sha256": "7aa6068babe657f16319df1b990b35091567ba5418ba9935508002a087327f14",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_0_reset1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset0.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset0.svg",
+    "source_sha256": "137f00e4dfd6e9c8437a92c1f77b021ab6cbb7573e2d62042f4bf9006fbc7348",
+    "reference_sha256": "e74d55d6d289f57944c97735c14f3ade68a697803bc9f501c73f299cd4f22460",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset1.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset1.svg",
+    "source_sha256": "085fbc299fe5eb3f88106e6697051dcbf2c7e4b96922ac995bb2690c7b8e349c",
+    "reference_sha256": "ee72bd138bcb1d44994d2943facc9e2fcbeda56c3fea57aca3283bc3e69661af",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_1_reset1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset0.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset0.svg",
+    "source_sha256": "75ea2ef2813dc501b4e9ac40be5fb901148954c25c6120fddb512e6784f638e3",
+    "reference_sha256": "8437657fef860cb4fd13fb5428aef2a3ed99f9bab6266dedab9c125d36579118",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset1.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset1.svg",
+    "source_sha256": "3640807699c61a1087c69209b2569fa1802e5331a8aa9de8425a93828869f4e3",
+    "reference_sha256": "83d6de6bef2eede4f4e1b47bf8aee7be0586e4cc66f3fbd6306cae6656e718ea",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_2_reset1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset0.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset0.svg",
+    "source_sha256": "dee174cfcd0e4bebeaf7937c2fe8aaa5d4530fbd49d0625654c250a55df70a0a",
+    "reference_sha256": "7391e4c4dce734fba3469b5690daee43d1eef1871caf8d3ee1c7107812b59833",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset1.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset1.svg",
+    "source_sha256": "69d10ae38e0b1e7f73397f049cd887a0cce26837a38f44a50c2d4e76cd75c959",
+    "reference_sha256": "d87b19c152cebbe578c7a2695d13cd01dd8d0631be3b6bd1189e8612db9943b7",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/history_3_reset1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_0_reset0.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_0_reset0.svg",
+    "source_sha256": "6284c06eb8a64d7930d7aeec39a2f7eb8ba5df803f298d603db0c980444ae8db",
+    "reference_sha256": "a7e2ce9953e5cbdc01f9a61dfeebfad82618cddadff29e934a419d209735a6ae",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_0_reset0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_0_reset1.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_0_reset1.svg",
+    "source_sha256": "143575f0945ac66d0408d675ddb9d25ff8d35bfc35bf15178f21ffb5bf22358f",
+    "reference_sha256": "d11b0cc380b3b1466af836132bb23ccc78c99e697a9310eec2e5f735e5734b66",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_0_reset1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_1_reset0.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_1_reset0.svg",
+    "source_sha256": "f3a9906c87db0fd12436436ebe0d66a530433d84a11ef2354c0ad69706ecb1e0",
+    "reference_sha256": "7bfa78cf3e8b3c375c1705b057f9aa1538d350a6ca743b2997ad18712583b05d",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_1_reset0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_1_reset1.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_1_reset1.svg",
+    "source_sha256": "02e8cb2edadae1685db60458912ec4404e77f74731d587354fa33a19e91e5353",
+    "reference_sha256": "2e87fa09abd4b37fb8bf4ec82c66eb6ca6d659b35c8dc7e663abf51139e495b5",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_1_reset1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.svg",
+    "source_sha256": "ca187f5a0759def9b58b65c0aef65812caa85f65fc2db2ae87141138e684d8a0",
+    "reference_sha256": "43e8e4fd00f22bc322a53ad446a8e7619ac08ea8bdd20ab1ddec8bec96477b59",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.svg",
+    "source_sha256": "23f5f72e76a5e313cd30af94258b63fe4343023522b6ed43786d051cac9de9b8",
+    "reference_sha256": "8103dddc303742187bb5430e95c188d2142a67b789430ee48e8cbbfd34619391",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_3_reset0.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_3_reset0.svg",
+    "source_sha256": "2547069e5301396bfb5f6a5497a834594e14f5a325c4b67792634ab9f18b90f5",
+    "reference_sha256": "737aca5f8fd34ac7dcc85e138db69cd12533eb0a257dc6eb76accaa8b05c805b",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_3_reset0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_3_reset1.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_3_reset1.svg",
+    "source_sha256": "640bc9fcf77932e7a028cb76891b0baa126698f3dec59cddfb542216963cf89c",
+    "reference_sha256": "73f506b30b5009a7ab9a03f61a2ac130019744d14eb9b9f0787cc0f3bf63ceeb",
+    "provenance": "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_3_reset1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-real-bound-capture/maker-results/inputs/capture_0.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-real-bound-capture/maker-results/inputs/capture_0.svg",
+    "source_sha256": "805a75b8a5277c34b605ad5692f00f1d55700bf54fa2ad3429b54893cd8d2c3a",
+    "reference_sha256": "48b06b5d4ca74afbdf597eb3505136a4e49ff72f42bffa99cb0c19a0c6c5782c",
+    "provenance": "docs/parity-reviews/sequence-teoz-real-bound-capture/maker-results/inputs/capture_0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-real-bound-capture/maker-results/inputs/capture_1.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-real-bound-capture/maker-results/inputs/capture_1.svg",
+    "source_sha256": "e06a0677f100b05c6fc960d105e7e8018308af18b762897649126c69eae5f300",
+    "reference_sha256": "657161a2fb3cf9af5f2e91a5ba8a384a8622bd01901167dd212448749165d9b3",
+    "provenance": "docs/parity-reviews/sequence-teoz-real-bound-capture/maker-results/inputs/capture_1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-real-bound-capture/maker-results/inputs/capture_2.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-real-bound-capture/maker-results/inputs/capture_2.svg",
+    "source_sha256": "66717c9b9a769b083cd3c02a09b57d849b39dbd46172d8eb326c475acbf02fd4",
+    "reference_sha256": "5b87323784a17d4a5bc1bf4189cb59ee9c6ae62b274e0c93c510559d9c6a1493",
+    "provenance": "docs/parity-reviews/sequence-teoz-real-bound-capture/maker-results/inputs/capture_2.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-real-bound-capture/maker-results/inputs/capture_3.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-real-bound-capture/maker-results/inputs/capture_3.svg",
+    "source_sha256": "db11f7ed3ed2bc698cbc27c75940ca8a640b9e76de1b97635145ad1b6513dca7",
+    "reference_sha256": "2ffcc2f1598488278ae85c45706e37ba5f1fda216ef1d6f9a8693b6f724a7ede",
+    "provenance": "docs/parity-reviews/sequence-teoz-real-bound-capture/maker-results/inputs/capture_3.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/inputs/whitespace_e0_0.puml",
+    "reference": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/inputs/whitespace_e0_0.svg",
+    "source_sha256": "21bf8b51e170dc6128f2b0f6ebdd2d6b469cb268d8a2a09115bf92a1db834ce4",
+    "reference_sha256": "e738beea823833edf35141e4ed0426bfd60ad10ff72e4581cd3918dd77dbc276",
+    "provenance": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/inputs/whitespace_e0_0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/inputs/whitespace_e0_1.puml",
+    "reference": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/inputs/whitespace_e0_1.svg",
+    "source_sha256": "8497d6754e37669beade7f5f35e979003e4cb60e4ceb659b0b8733811a42dd1b",
+    "reference_sha256": "747660ee6e91db38fca42917acba3842617b1209bfe1e02b3191d15b897dc27c",
+    "provenance": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/inputs/whitespace_e0_1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/inputs/whitespace_e1_0.puml",
+    "reference": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/inputs/whitespace_e1_0.svg",
+    "source_sha256": "1091ee73c41ae8696bde8dc1d0f1985722f93587c4b15c8398bb3fcce7171cd1",
+    "reference_sha256": "3eb46996a48e566360deebf7b210e1f5d46b02c75352f086f2cdefc2f867378e",
+    "provenance": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/inputs/whitespace_e1_0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/inputs/whitespace_e1_1.puml",
+    "reference": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/inputs/whitespace_e1_1.svg",
+    "source_sha256": "47ac5bc55636c9fee92ed954d17e83739e328765f31216d130e5f3c964b960b1",
+    "reference_sha256": "d8b90b336353203b937ed9c08a105d4cc70855e8f27a1aaaa3b4c2f2a7dd9700",
+    "provenance": "docs/parity-reviews/sequence-delay-label-allocation/maker-results/inputs/whitespace_e1_1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i0_end_d2.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i0_end_d2.svg",
+    "source_sha256": "d10c02df3b9c89c2f6c42109df332a9255a8776e7ad4a0194c88e3761542604c",
+    "reference_sha256": "3566c574cf5f04e5eeb15c3778c2890ffdba449fc69a071e577b0cce27340794",
+    "provenance": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i0_end_d2.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i0_end_d4.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i0_end_d4.svg",
+    "source_sha256": "a86fa42c940e3a74e26130a9129c0fe8ecda7b08e3dd91652b35114b272e4a3c",
+    "reference_sha256": "b4aa48ce28cc4eaadaed700b1aabd5cf650a3f150676543b60ac3b5987839eed",
+    "provenance": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i0_end_d4.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i0_note_d2.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i0_note_d2.svg",
+    "source_sha256": "03f093e04c747e3215a64078790b3a4fdb2478c2afa12e9bf6d0266ba02242e1",
+    "reference_sha256": "49976e4cf82cb676391974fdcffff8f610bb7c03763e46d2624193d5cc027a8f",
+    "provenance": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i0_note_d2.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i0_note_d4.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i0_note_d4.svg",
+    "source_sha256": "c8707dc3e0861937a4f99e315c0c070c7679df7138101d57cea5ea169dfea237",
+    "reference_sha256": "f52a86bde42b31512e1a75948a42be0abc5319b8350bd7ca21431f2cec3bfcc4",
+    "provenance": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i0_note_d4.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i1_end_d2.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i1_end_d2.svg",
+    "source_sha256": "f41cc8945487da4ac5b4e34a86f149ea9aa70bca96e0d285b54a1bb37ed44e1a",
+    "reference_sha256": "d4bdb1d52d01c5e510f5f2c9195c72f5d4e4de70c770eb370a00918e8e5eb33c",
+    "provenance": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i1_end_d2.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i1_end_d4.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i1_end_d4.svg",
+    "source_sha256": "beb017276cfada17ec144961940af47af35ad3a38a61eea55480bfa68cf092ec",
+    "reference_sha256": "e0a30fc056e8f44755b9c5c55574a3d22b8d1b28a0ad866b540450180d5502aa",
+    "provenance": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i1_end_d4.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i1_note_d2.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i1_note_d2.svg",
+    "source_sha256": "3f2fd9492c27817e62584e937a928aa66ceacf41cb4767b8f3f7d4d1e8fcd91d",
+    "reference_sha256": "28a42b44952c5fdd62c3d828b84eab27f3011e14a245853c808472ada20e3a5b",
+    "provenance": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i1_note_d2.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i1_note_d4.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i1_note_d4.svg",
+    "source_sha256": "ef1dd05fddf7dcdb43addede534338aaf4c56685997f9c57981e81e28b4fe2cd",
+    "reference_sha256": "597f02c8f8bd0ceaee83c847600dd4523f37b1cf8c84bf332d44e9fcc0b16f4d",
+    "provenance": "docs/parity-reviews/sequence-teoz-callback-lifecycle/maker-results/inputs/callbacks_i1_note_d4.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-box-title-grammar/maker-results/inputs/title_e0_q0.puml",
+    "reference": "docs/parity-reviews/sequence-box-title-grammar/maker-results/inputs/title_e0_q0.svg",
+    "source_sha256": "5e1ba4a5e4239319b82f526ed8424277d2689ccea62a99008d2c3d71b3f4cd44",
+    "reference_sha256": "5072c368a030010fc2aeddf611ddb1ecabe29c4cfb8a65b2da3d7ab9f9a06899",
+    "provenance": "docs/parity-reviews/sequence-box-title-grammar/maker-results/inputs/title_e0_q0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-box-title-grammar/maker-results/inputs/title_e0_q1.puml",
+    "reference": "docs/parity-reviews/sequence-box-title-grammar/maker-results/inputs/title_e0_q1.svg",
+    "source_sha256": "0b06e98dfd7468e478aa5f491e0b691d9e549413b2b4e8147ca183215fb32672",
+    "reference_sha256": "67588e90025c2db11648b6a341364efe9115b3b32ebd006c57dc3d97395c4b2c",
+    "provenance": "docs/parity-reviews/sequence-box-title-grammar/maker-results/inputs/title_e0_q1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-box-title-grammar/maker-results/inputs/title_e1_q0.puml",
+    "reference": "docs/parity-reviews/sequence-box-title-grammar/maker-results/inputs/title_e1_q0.svg",
+    "source_sha256": "28a03724f5e4c3aa06b60f707bc7b123d04a3007d788ff995c21e16322cf2620",
+    "reference_sha256": "51c81bdbc937683d26ab39b391186280ffae12ba4bc125d9c2430512c1185708",
+    "provenance": "docs/parity-reviews/sequence-box-title-grammar/maker-results/inputs/title_e1_q0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-box-title-grammar/maker-results/inputs/title_e1_q1.puml",
+    "reference": "docs/parity-reviews/sequence-box-title-grammar/maker-results/inputs/title_e1_q1.svg",
+    "source_sha256": "d43dfe8de51570b5777f870eb9a95d0b411562f8bb1461722df3692c079ac70b",
+    "reference_sha256": "0c8822adb0b5e7be58dbc470aac15da587783b652164b6a7122ce7987e4d5fec",
+    "provenance": "docs/parity-reviews/sequence-box-title-grammar/maker-results/inputs/title_e1_q1.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-englober-margins/maker-results/inputs/englober_m1_p0.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-englober-margins/maker-results/inputs/englober_m1_p0.svg",
+    "source_sha256": "43d39be906a3c3e482a3e3300eacb99046b4ce45bdf3209783c2ab60d9360fe3",
+    "reference_sha256": "d00ea549621981044f247edcc3776df0ba0b810d6048f1c66c14421afac38997",
+    "provenance": "docs/parity-reviews/sequence-teoz-englober-margins/maker-results/inputs/englober_m1_p0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-englober-margins/maker-results/inputs/englober_m1_p3.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-englober-margins/maker-results/inputs/englober_m1_p3.svg",
+    "source_sha256": "8002a484734aa1079b8642f9be1f08d79b6a897d94ffb7cd62d293cafd0d95a3",
+    "reference_sha256": "019f7505205b39d6746f8a3e25af848c361c636bf8a19fea9699fdad7dc0f142",
+    "provenance": "docs/parity-reviews/sequence-teoz-englober-margins/maker-results/inputs/englober_m1_p3.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-englober-margins/maker-results/inputs/englober_m2_p0.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-englober-margins/maker-results/inputs/englober_m2_p0.svg",
+    "source_sha256": "6944ac5852f8d2104de9b55396654a20e8798d9629cc2ca89565347cdf38cc38",
+    "reference_sha256": "f5e2a041b4f278ee4d54e5fc25d53a49d002a9126256b7295e470a98542cc982",
+    "provenance": "docs/parity-reviews/sequence-teoz-englober-margins/maker-results/inputs/englober_m2_p0.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  },
+  {
+    "source": "docs/parity-reviews/sequence-teoz-englober-margins/maker-results/inputs/englober_m2_p3.puml",
+    "reference": "docs/parity-reviews/sequence-teoz-englober-margins/maker-results/inputs/englober_m2_p3.svg",
+    "source_sha256": "934ab6bebf234287b7a0f71b113f3c944839552e0d7b5c1052decb312e0f6f54",
+    "reference_sha256": "bbf25e384098c2e7cc312d8533b75bc23d0f84f95d516a3e8db11ca74f8ee7b4",
+    "provenance": "docs/parity-reviews/sequence-teoz-englober-margins/maker-results/inputs/englober_m2_p3.provenance.json",
+    "local_or_remote": "Monkey Man pinned wrapper"
+  }
+]

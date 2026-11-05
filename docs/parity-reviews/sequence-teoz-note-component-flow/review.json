@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "t3-d382aba6 independent sequence rejection-repair checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "implementation_commit": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "tested_candidate_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/sequence-repair-d382aba6 0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "Remote existing runner: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs --timezone GMT+11:00 -- -pipe -tsvg (one source on stdin per invocation; exact argv/status/streams in remote-captures.json.gz)",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/import_relay.py",
+    "python3 docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py docs/parity-reviews/sequence-rejection-repair/checker-support/fresh-manifest.json /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/final-bin /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/fresh",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py evidence",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/audit_evidence.py"
+  ],
+  "input_frontend": {
+    "fresh": "raw -pipe -tsvg on stdin through pinned remote wrapper, GMT+11:00",
+    "transport": "temporary T3 relay, exact input and result bundle hashes verified",
+    "preserved": "original reference bytes and per-reference provenance unchanged",
+    "local_java": false
+  },
+  "evidence": "docs/parity-reviews/sequence-rejection-repair/checker-support/README.md",
+  "mechanism": "sequence-teoz-note-component-flow",
+  "account_commit": "81acbf505408497b108442bab5371fa9e78f9a5e",
+  "account_normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_left.svg",
+      "source_sha256": "f2d23c68e13b63bfba5a1aa0d846dc7a057e60be69441e155243823189296ad1",
+      "golden_sha256": "560716f74e91c3735954fc870ca94ac3ab01545d719524f904923486947e39ae",
+      "axes": [
+        "self direction",
+        "attached note side",
+        "asymmetric span endpoint order and shadow"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse0_right.svg",
+      "source_sha256": "f4656160710518c72e76b7882a9c4b16b09f0579eccb56c08c0c10df62bfaeb8",
+      "golden_sha256": "bbfd601685b02bc3fd214b9a14553e81e06ed637478812de5d1a1a465966f233",
+      "axes": [
+        "self direction",
+        "attached note side",
+        "asymmetric span endpoint order and shadow"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_left.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_left.svg",
+      "source_sha256": "b95c19ebedfdca92e5ba45831203677fb4626cf02df71d0bd00613111a5e019a",
+      "golden_sha256": "e5a9b356dd79e54eed5b7012ef8d37214b5c4b2aef44535853ddeace25cf2188",
+      "axes": [
+        "self direction",
+        "attached note side",
+        "asymmetric span endpoint order and shadow"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_right.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-note-component-flow/checker_d382_reverse1_right.svg",
+      "source_sha256": "7f502b0f32a28961f22a36e330c2c3cc141facf68ac34fecba2eab2dd3255c3f",
+      "golden_sha256": "5c9741594d2f3d115b457f105117a1d304a2f44c3b00820b2ebc9df2a1485987",
+      "axes": [
+        "self direction",
+        "attached note side",
+        "asymmetric span endpoint order and shadow"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ],
+  "source_audit": {
+    "mechanism": "sequence-teoz-note-component-flow",
+    "java_files": [
+      "sequencediagram/teoz/NoteTile.java",
+      "sequencediagram/teoz/CommunicationTileSelfNoteLeft.java",
+      "sequencediagram/teoz/CommunicationTileSelfNoteRight.java",
+      "sequencediagram/teoz/CommunicationTileNoteLeft.java",
+      "sequencediagram/teoz/CommunicationTileNoteRight.java",
+      "skin/rose/ComponentRoseNote.java"
+    ],
+    "rust_locations": [
+      "sequence.rs:9166-9326",
+      "sequence.rs:13707-13735",
+      "sequence.rs:14181-14203"
+    ],
+    "source_supported": "One helper returns fractional origin, allocation, and envelope for folded notes; group/canvas and painter select named phases. Left/right self wrappers anchor to self tile min/max, and ordinary wrappers retain endpoint/history mode. Legacy reverse-left displacement is applied after NoteBox truncation.",
+    "adversarial_boundary": "Geometry sharing does not establish scheduler or styled text equivalence. New active reverse direction/left-right attachments use multiline notes, padding, shadow and reversed span endpoints; failures must reject the relevant whole-source claim."
+  },
+  "findings": [
+    "One helper returns fractional origin, allocation, and envelope for folded notes; group/canvas and painter select named phases. Left/right self wrappers anchor to self tile min/max, and ordinary wrappers retain endpoint/history mode. Legacy reverse-left displacement is applied after NoteBox truncation.",
+    "Both left attachments match; both right attachments with padding3/shadow and opposite self directions fail. Java canvas390/328px versus Rust393/331px while inner elements otherwise compare equal, identifying residual envelope propagation rather than general text metrics. Audit right-wrapper preferred width versus painted shadow and canvas maximum. Source inspection also finds CommunicationTileNoteRight creation-specific posD branch absent from the ordinary-right helper; that branch is source-only residue, not an invented fresh test.",
+    "No new fixture label predicates, golden reads, branch-count constant ladders or coordinate string surgery found. See source-audit.json for Java provenance and semantic constant reuse concerns. Every valid failure is binding; no dependency waiver."
+  ],
+  "verdict": "rejected"
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "bce6bea405d8b5efd55136f4768117115e7f634f",
+  "evidence_import": "f3913f3cb7094d8aedd5618f1ba27830a2804713",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-pattern2-whitespace",
+  "java_locations": [
+    "regex.Pattern2#QUOTED_REPLACEMENTS/#transform/#compileInternal",
+    "sequencediagram.command.CommandArrow#getRegexConcat",
+    "sequencediagram.command.CommandParticipant#getRegexConcat",
+    "command.note.sequence.FactorySequenceNoteCommand#END",
+    "command.note.sequence.FactorySequenceNoteOnArrowCommand#getRegexConcatSingleLine/#END",
+    "regex.RegexLeaf#spaceOneOrMore/#spaceZeroOrMore"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::sequence command regexes"
+  ],
+  "invariant": "Java %s means ASCII whitespace (TAB through CR and SPACE) plus NBSP; no other Unicode separator is part of the regex character class. Use the same class at every owned Pattern2 whitespace port, including negation; keep case behavior and non-whitespace grammar separate.",
+  "causal_divergence": "Rust Unicode \\s admitted EM SPACE and narrow NBSP inside end-rnote, losing four rejection passes; other sequence regexes use the same divergent whitespace class.",
+  "planned_change": "Add one sequence-local Pattern2 whitespace compiler/constant with explicit positive and negative classes. Route owned command regexes through it; retain literals used as text/style matching without whitespace. Audit every sequence regex and map it to Java command methods. Do not change global parsing or shared regex utilities. Measure every nonpositive retained input by raw CLI exit separately from comparator invalid status.",
+  "perturbation_axes": [
+    "ASCII whitespace/NBSP versus EM SPACE/narrow NBSP across end command and participant/message command boundaries",
+    "both engines, standalone/attached notes and negative/positive retention"
+  ]
+}

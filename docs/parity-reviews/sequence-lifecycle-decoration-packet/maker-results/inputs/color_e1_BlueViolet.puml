@@ -1,0 +1,5 @@
+@startuml
+!pragma teoz true
+One -> Two ++ : enter
+return #BlueViolet response
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+queue Q <<first\nsecond>>
+actor Kite
+queue R <<wide dispatch category>>
+Kite -> Q: enqueue
+Q -> R: relay
+@enduml

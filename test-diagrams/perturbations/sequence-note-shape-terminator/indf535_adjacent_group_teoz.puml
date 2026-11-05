@@ -1,0 +1,13 @@
+@startuml
+!pragma teoz true
+participant Sedge
+group Marsh
+rnote left of Sedge
+first
+end hnote
+hnote right of Sedge
+second
+END NOTE
+end
+Sedge -> Sedge: outside
+@enduml

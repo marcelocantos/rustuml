@@ -1,0 +1,7 @@
+@startuml
+participant Uno
+participant Dos
+Uno -> Dos: begin
+note over Uno, Dos
+unclosed
+@enduml

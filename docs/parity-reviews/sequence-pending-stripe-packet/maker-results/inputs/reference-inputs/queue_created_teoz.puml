@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Gate
+create queue "<size:9>Small</size>\n<size:21>Second</size>" as Mail
+Gate -> Mail: enqueue
+@enduml

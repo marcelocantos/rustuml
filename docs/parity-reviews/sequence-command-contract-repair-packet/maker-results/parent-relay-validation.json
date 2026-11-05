@@ -1,0 +1,38 @@
+{
+  "validated": true,
+  "cases": 24,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.BK4oza3T",
+  "hashes": {
+    "reference-results.json.gz": "d07b542c77ce1c4849942bfd5d78f9b3226db6cda30b273d3f99ca5591b60d49",
+    "reference-transport.json": "84e2e8bf8967e3897e08887073bad94a0600c7cb8762ea053af94e61dbbed2f7"
+  },
+  "remote_names": {
+    "reference-results.json.gz": "reference-results.json.gz",
+    "reference-transport.json": "reference-transport.json"
+  },
+  "exit_statuses": {
+    "0": 18,
+    "200": 6
+  },
+  "intended_invalid": [
+    "accross_negative_legacy",
+    "accross_negative_teoz",
+    "resume_vt_legacy",
+    "resume_vt_teoz",
+    "vt_required_legacy",
+    "vt_required_teoz"
+  ],
+  "intended_invalid_exit0": [],
+  "intended_valid_nonzero": [],
+  "nonempty_stderr": [
+    "accross_negative_legacy",
+    "accross_negative_teoz",
+    "resume_vt_legacy",
+    "resume_vt_teoz",
+    "vt_required_legacy",
+    "vt_required_teoz"
+  ],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "classification": "Validity not inferred from exit status."
+}

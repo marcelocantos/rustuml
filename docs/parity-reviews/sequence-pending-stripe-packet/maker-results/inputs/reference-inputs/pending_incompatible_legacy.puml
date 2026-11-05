@@ -1,0 +1,6 @@
+@startuml
+participant Cedar
+participant Elm
+create Elm
+Elm -> Cedar: wrong receiver
+@enduml

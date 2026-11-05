@@ -1,0 +1,22 @@
+{
+  "command": [
+    "ssh",
+    "-T",
+    "-o",
+    "BatchMode=yes",
+    "marcelo@192.168.1.112",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.gKRm76Fl --timezone GMT+11:00 -- -pipe -tsvg"
+  ],
+  "exit": 0,
+  "source_sha256": "787e6d1325ca5c118b1fcc1d09126bdc5c7389a3b28dfc7541cd8aa81d97f9a1",
+  "svg_sha256": "1924449abf16f18886c4f1baaf6a71dc73ab7171c899de8961ccf046ccec3399",
+  "java": "Homebrew OpenJDK 21.0.5",
+  "graphviz": "12.2.0",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "java_source_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "host": "Monkey Man 192.168.1.112",
+  "timezone": "GMT+11:00",
+  "headless": "forced by reference wrapper",
+  "local_java_launched": false,
+  "environment_limit": "Seven calibration pairs agree; no universal equivalence claimed"
+}

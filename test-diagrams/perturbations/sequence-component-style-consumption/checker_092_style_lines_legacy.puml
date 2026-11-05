@@ -1,0 +1,18 @@
+@startuml
+<style>
+root {
+LineColor #476D83
+}
+sequenceDiagram {
+lifeLine {
+LineColor #AB6723
+}
+activationBox {
+LineColor #394BA2
+}
+}
+</style>
+Quartz -> Finch ++ : inherit
+note left : envelope
+return finish
+@enduml

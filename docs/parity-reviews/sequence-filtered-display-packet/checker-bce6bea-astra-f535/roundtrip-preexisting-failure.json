@@ -1,0 +1,9 @@
+{
+  "source": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_control_minty_skinparam_order_tb.puml",
+  "argv": [
+    "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/roundtrip-before"
+  ],
+  "exit": 101,
+  "stdout": "",
+  "stderr": "\nthread 'main' (24185753) panicked at /Users/marcelo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/libyml-0.0.5/src/scanner.rs:2798:17:\nString join would overflow memory bounds\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/Participant.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "b805f43d700c8453e6b837f3f272bc189f5eec1d10bc6df6f7b958ef202a28be"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/DrawableSetInitializer.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "db8c1bd54e44ea2e86802952936032c9db59c00dcf858b0987314cfaa2d2c897"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/Step1MessageExo.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "afb53e97b66ece723aaf1641e8763167c4ba062ea816a9ac83c214bf9e977463"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/Step1Message.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "9be5a4dcc57f391c80bdec8618031d285bb31cc6181b90bfe3e19774edf81baa"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationExoTile.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "00ef2282efada9f1a69f46c0b457a3c97a4f43d623ae8f8b56fb73cd6101d44e"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTile.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "4078e44762bff6f2959a0870ecb0501cb17f6a3e57faa272d82baf1c601f0274"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseQueue.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "60d53361642742332622c335437748c8a200853108250e288c4c6429d5ad5f08"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/skin/AbstractTextualComponent.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "3b34cd97df5bd5fcea39e132bffb8d42390842f21cfc7a92163f6e6200c59862"
+  },
+  {
+    "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockVertical.java",
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sha256": "014854542402e48736723a3b89a28a0e26832330da295dee4e8b85c5b87c6ac9"
+  }
+]

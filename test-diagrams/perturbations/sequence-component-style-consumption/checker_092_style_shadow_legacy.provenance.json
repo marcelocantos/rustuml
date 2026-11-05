@@ -1,0 +1,196 @@
+{
+  "reference": {
+    "env_overrides": {},
+    "source_bytes": 224,
+    "name": "style_shadow_legacy",
+    "remote_name": "style_shadow_legacy.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/style_shadow_legacy.puml",
+    "source_sha256": "f85fa266826574ed4459da69da104a0157d1a8086505b281afdcb2d8c07138e8",
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 1.125627125002211,
+    "stdout_sha256": "edf8cc10fcfafb8fdaa466f9e024772666fe86d953ba613958f5854ca5491952",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+    "requested_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/style_shadow_legacy.puml",
+    "execution_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/style_shadow_legacy.puml",
+    "actual_wrapper_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "actual_java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "environment_overrides": {},
+    "mapping": {
+      "reason": "Existing wrapper requires an isolated cwd below scratch/; preserve unchanged wrapper and immutable manifest.",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/style_shadow_legacy.puml",
+      "requested_remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/style_shadow_legacy.puml",
+      "actual_remote_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/style_shadow_legacy.puml"
+    }
+  },
+  "request": {
+    "name": "style_shadow_legacy",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/style_shadow_legacy.puml",
+    "remote_name": "style_shadow_legacy.puml",
+    "remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/style_shadow_legacy.puml",
+    "source_sha256": "f85fa266826574ed4459da69da104a0157d1a8086505b281afdcb2d8c07138e8",
+    "bytes": 224,
+    "axes": [
+      "numeric participant/root shadow",
+      "activation/note override",
+      "legacy"
+    ],
+    "intended_reference": "valid sequence",
+    "source_validation": [
+      "skin.ComponentType#getStyleSignature; Rose#createComponentParticipant/#createComponent; Style#getShadowing"
+    ],
+    "invocation": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "classification": {
+    "name": "style_shadow_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 224,
+    "stdout_bytes": 5075,
+    "stderr_bytes": 0
+  },
+  "source": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_shadow_legacy.svg",
+  "before": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/style_shadow_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/style_shadow_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_shadow_legacy",
+    "axes": [
+      "numeric participant/root shadow",
+      "activation/note override",
+      "legacy"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "f85fa266826574ed4459da69da104a0157d1a8086505b281afdcb2d8c07138e8",
+    "golden_sha256": "edf8cc10fcfafb8fdaa466f9e024772666fe86d953ba613958f5854ca5491952",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "641cf619e38eddf7c02aa31d2934bffdab0a452a95444aa24d1cbc1b36aeea4f",
+      "svg": "b2126e7fdf00565b37a3.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 43, got 38\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"172px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:247px;height:172px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 247 172\"), (\"width\", \"247px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"158px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:244px;height:158px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 244 158\"), (\"width\", \"244px\"), (\"zoomAndPan\", \"magnify\")]\n  [2] tag mismatch: expected <filter>, got <g>\n  [3] tag mismatch: expected <feGaussianBlur>, got <g>\n  [4] tag mismatch: expected <feColorMatrix>, got <rect>\n  [5] tag mismatch: expected <feOffset>, got <g>\n  [6] tag mismatch: expected <feBlend>, got <g>\n  [7] tag mismatch: expected <g>, got <rect>\n  [8] tag mismatch: expected <g>, got <line>\n  [9] tag mismatch: expected <rect>, got <g>\n  [10] <g> depth mismatch: expected 3, got 4\n  [10] <g> attr mismatch:\n    expected: [(\"class\", \"participant-lifeline\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"Quartz\"), (\"data-source-line\", \"17\"), (\"id\", \"part1-lifeline\")]\n    actual:   []\n  [11] tag mismatch: expected <g>, got <rect>\n  [12] tag mismatch: expected <rect>, got <line>\n  [13] tag mismatch: expected <line>, got <g>\n  [14] tag mismatch: expected <g>, got <rect>\n  [15] tag mismatch: expected <g>, got <text>\n  [16] tag mismatch: expected <rect>, got <g>\n  [17] tag mismatch: expected <line>, got <rect>\n  [18] tag mismatch: expected <g>, got <text>\n  [19] tag mismatch: expected <rect>, got <g>\n  [20] tag mismatch: expected <text>, got <rect>\n  [21] tag mismatch: expected <g>, got <text>\n  [22] tag mismatch: expected <rect>, got <g>\n  [23] tag mismatch: expected <text>, got <rect>\n  [24] tag mismatch: expected <g>, got <text>\n  [25] tag mismatch: expected <rect>, got <g>\n  [26] tag mismatch: expected <text>, got <rect>\n  [27] <g> attr mismatch:\n    expected: [(\"class\", \"participant participant-tail\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"Finch\"), (\"data-source-line\", \"17\"), (\"id\", \"part2-tail\")]\n    actual:   [(\"class\", \"message\"), (\"data-entity-1\", \"part1\"), (\"data-entity-2\", \"part2\"), (\"data-source-line\", \"17\"), (\"id\", \"msg1\")]\n  [28] tag mismatch: expected <rect>, got <polygon>\n  [29] tag mismatch: expected <text>, got <line>\n  [30] tag mismatch: expected <g>, got <text>\n  [31] tag mismatch: expected <rect>, got <path>\n  [32] tag mismatch: expected <g>, got <path>\n  [33] tag mismatch: expected <polygon>, got <text>\n  [34] tag mismatch: expected <line>, got <g>\n  [35] tag mismatch: expected <text>, got <polygon>\n  [36] tag mismatch: expected <path>, got <line>\n  [37] tag mismatch: expected <path>, got <text>\n\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 43, got 38\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"172px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:247px;height:172px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 247 172\"), (\"width\", \"247px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"158px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:244px;height:158px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 244 158\"), (\"width\", \"244px\"), (\"zoomAndPan\", \"magnify\")]\n  [2] tag mismatch: expected <filter>, got <g>\n  [3] tag mismatch: expected <feGaussianBlur>, got <g>\n  [4] tag mismatch: expected <feColorMatrix>, got <rect>\n  [5] tag mismatch: expected <feOffset>, got <g>\n  [6] tag mismatch: expected <feBlend>, got <g>\n  [7] tag mismatch: expected <g>, got <rect>\n  [8] tag mismatch: expected <g>, got <line>\n  [9] tag mismatch: expected <rect>, got <g>\n  [10] <g> depth mismatch: expected 3, got 4\n  [10] <g> attr mismatch:\n    expected: [(\"class\", \"participant-lifeline\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"Quartz\"), (\"data-source-line\", \"17\"), (\"id\", \"part1-lifeline\")]\n    actual:   []\n  [11] tag mismatch: expected <g>, got <rect>\n  [12] tag mismatch: expected <rect>, got <line>\n  [13] tag mismatch: expected <line>, got <g>\n  [14] tag mismatch: expected <g>, got <rect>\n  [15] tag mismatch: expected <g>, got <text>\n  [16] tag mismatch: expected <rect>, got <g>\n  [17] tag mismatch: expected <line>, got <rect>\n  [18] tag mismatch: expected <g>, got <text>\n  [19] tag mismatch: expected <rect>, got <g>\n  [20] tag mismatch: expected <text>, got <rect>\n  [21] tag mismatch: expected <g>, got <text>\n  [22] tag mismatch: expected <rect>, got <g>\n  [23] tag mismatch: expected <text>, got <rect>\n  [24] tag mismatch: expected <g>, got <text>\n  [25] tag mismatch: expected <rect>, got <g>\n  [26] tag mismatch: expected <text>, got <rect>\n  [27] <g> attr mismatch:\n    expected: [(\"class\", \"participant participant-tail\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"Finch\"), (\"data-source-line\", \"17\"), (\"id\", \"part2-tail\")]\n    actual:   [(\"class\", \"message\"), (\"data-entity-1\", \"part1\"), (\"data-entity-2\", \"part2\"), (\"data-source-line\", \"17\"), (\"id\", \"msg1\")]\n  [28] tag mismatch: expected <rect>, got <polygon>\n  [29] tag mismatch: expected <text>, got <line>\n  [30] tag mismatch: expected <g>, got <text>\n  [31] tag mismatch: expected <rect>, got <path>\n  [32] tag mismatch: expected <g>, got <path>\n  [33] tag mismatch: expected <polygon>, got <text>\n  [34] tag mismatch: expected <line>, got <g>\n  [35] tag mismatch: expected <text>, got <polygon>\n  [36] tag mismatch: expected <path>, got <line>\n  [37] tag mismatch: expected <path>, got <text>\n\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 43, got 38\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"172px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:247px;height:172px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 247 172\"), (\"width\", \"247px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"158px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:244px;height:158px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 244 158\"), (\"width\", \"244px\"), (\"zoomAndPan\", \"magnify\")]\n  [2] tag mismatch: expected <filter>, got <g>\n  [3] tag mismatch: expected <feGaussianBlur>, got <g>\n  [4] tag mismatch: expected <feColorMatrix>, got <rect>\n  [5] tag mismatch: expected <feOffset>, got <g>\n  [6] tag mismatch: expected <feBlend>, got <g>\n  [7] tag mismatch: expected <g>, got <rect>\n  [8] tag mismatch: expected <g>, got <line>\n  [9] tag mismatch: expected <rect>, got <g>\n  [10] <g> depth mismatch: expected 3, got 4\n  [10] <g> attr mismatch:\n    expected: [(\"class\", \"participant-lifeline\"), (\"data-entity-uid\", \"part1\"), (\"data-qualified-name\", \"Quartz\"), (\"data-source-line\", \"17\"), (\"id\", \"part1-lifeline\")]\n    actual:   []\n  [11] tag mismatch: expected <g>, got <rect>\n  [12] tag mismatch: expected <rect>, got <line>\n  [13] tag mismatch: expected <line>, got <g>\n  [14] tag mismatch: expected <g>, got <rect>\n  [15] tag mismatch: expected <g>, got <text>\n  [16] tag mismatch: expected <rect>, got <g>\n  [17] tag mismatch: expected <line>, got <rect>\n  [18] tag mismatch: expected <g>, got <text>\n  [19] tag mismatch: expected <rect>, got <g>\n  [20] tag mismatch: expected <text>, got <rect>\n  [21] tag mismatch: expected <g>, got <text>\n  [22] tag mismatch: expected <rect>, got <g>\n  [23] tag mismatch: expected <text>, got <rect>\n  [24] tag mismatch: expected <g>, got <text>\n  [25] tag mismatch: expected <rect>, got <g>\n  [26] tag mismatch: expected <text>, got <rect>\n  [27] <g> attr mismatch:\n    expected: [(\"class\", \"participant participant-tail\"), (\"data-entity-uid\", \"part2\"), (\"data-qualified-name\", \"Finch\"), (\"data-source-line\", \"17\"), (\"id\", \"part2-tail\")]\n    actual:   [(\"class\", \"message\"), (\"data-entity-1\", \"part1\"), (\"data-entity-2\", \"part2\"), (\"data-source-line\", \"17\"), (\"id\", \"msg1\")]\n  [28] tag mismatch: expected <rect>, got <polygon>\n  [29] tag mismatch: expected <text>, got <line>\n  [30] tag mismatch: expected <g>, got <text>\n  [31] tag mismatch: expected <rect>, got <path>\n  [32] tag mismatch: expected <g>, got <path>\n  [33] tag mismatch: expected <polygon>, got <text>\n  [34] tag mismatch: expected <line>, got <g>\n  [35] tag mismatch: expected <text>, got <polygon>\n  [36] tag mismatch: expected <path>, got <line>\n  [37] tag mismatch: expected <path>, got <text>\n\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  },
+  "after": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/style_shadow_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/style_shadow_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "style_shadow_legacy",
+    "axes": [
+      "numeric participant/root shadow",
+      "activation/note override",
+      "legacy"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "f85fa266826574ed4459da69da104a0157d1a8086505b281afdcb2d8c07138e8",
+    "golden_sha256": "edf8cc10fcfafb8fdaa466f9e024772666fe86d953ba613958f5854ca5491952",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "ffe443739df4fa1fc72f4eaea48282bc6fbe1fd0774e303e7f4070fbe02f1db3",
+      "svg": "b2126e7fdf00565b37a3.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  }
+}

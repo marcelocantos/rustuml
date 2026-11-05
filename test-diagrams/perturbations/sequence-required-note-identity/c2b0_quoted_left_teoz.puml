@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+participant Remote
+participant "Harbour 2" as left
+Remote -> left: inbound
+hnote right of "left"
+line one
+line two
+end note
+@enduml

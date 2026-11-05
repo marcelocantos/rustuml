@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Before
+participant Center
+Center x-- Center : reverse crossed
+Center --x Center : forward crossed
+Center x-> Center : source crossed
+Center ->x Center : target crossed
+@enduml

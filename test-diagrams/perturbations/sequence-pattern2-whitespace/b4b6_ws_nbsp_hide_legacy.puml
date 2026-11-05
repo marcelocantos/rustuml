@@ -1,0 +1,8 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+hide stereotype
+actor F <<wide role>>
+F -> Juniper: call
+@enduml

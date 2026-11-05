@@ -315,6 +315,13 @@ fn detect_type(input: &str) -> &str {
 /// `UmlSource.getDiagramTypes` and their dedicated `JsonDiagramFactory` or
 /// `YamlDiagramFactory`.
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
+    // PSystemBuilder#createPSystem tries SequenceDiagramFactory before Class.
+    // Require complete command consumption, not a higher keyword score: raw
+    // aggregation markers can belong to a valid decorated sequence arrow.
+    // This bounded viability path leaves all other factory competition intact.
+    if sequence::consumes_decorated_sequence(lines) {
+        return UmlSubtype::Sequence;
+    }
     let mut scores = [0i32; 10]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
 
     // `allowmixing` is a class-diagram directive: it permits mixing other
@@ -2566,5 +2573,31 @@ mod link_url_tests {
         let (url, rest) = extract_link_url("class Foo [[]]");
         assert_eq!(url, None);
         assert_eq!(rest, "class Foo");
+    }
+    #[test]
+    fn decorated_sequence_factory_requires_complete_consumption() {
+        for source in [
+            "participant Fir\nparticipant Oak\nFir o-->>o Oak: first\nOak o-->>o Fir: second",
+            "\"Fir o--\" o-->>o Oak: text",
+        ] {
+            let diagram = super::parse(&format!("@startuml\n{source}\n@enduml")).unwrap();
+            assert!(
+                matches!(diagram, crate::diagram::Diagram::Sequence(_)),
+                "{source}"
+            );
+        }
+        for source in [
+            "class Fir\nclass Oak\nFir o-- Oak",
+            "object Fir\nobject Oak\nFir o-- Oak",
+            "component Fir\ncomponent Oak\nFir o-- Oak",
+            "class Fir\nparticipant Oak\nFir o-->>o Oak",
+            "header\nFir o-->>o Oak\nendheader\nclass Fir\nclass Oak\nFir o-- Oak",
+        ] {
+            let lines = source.lines().map(str::to_owned).collect::<Vec<_>>();
+            assert!(
+                !super::sequence::consumes_decorated_sequence(&lines),
+                "{source}"
+            );
+        }
     }
 }

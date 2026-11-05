@@ -1,0 +1,4 @@
+@startuml
+participant S
+S -> S : WWW thick label WWW
+@enduml

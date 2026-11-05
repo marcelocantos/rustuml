@@ -1,0 +1,14 @@
+@startuml
+!pragma teoz true
+box Outer
+actor Kite <<pilot>>
+box Inner
+queue Q <<long delivery category>>
+database Store <<archive>>
+end box
+collections Pages <<batch>>
+end box
+Kite -> Q: enqueue
+Q -> Store: persist
+Store -> Pages: publish
+@enduml

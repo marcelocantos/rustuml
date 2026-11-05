@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+Ash -> Elm ++ : begin
+note over Ash : independent note
+& Ash -> Elm ++ : parallel\nsecond line
+& return inner
+Elm -> Ash : after
+deactivate Elm
+@enduml

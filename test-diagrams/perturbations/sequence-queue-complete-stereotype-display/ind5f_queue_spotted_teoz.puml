@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Kite
+queue Q <<(S,#99CCFF)storage>>
+Kite -> Q: deliver
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant A
+[-> A ++ : external
+return #pink first
+return second
+@enduml

@@ -1,0 +1,9 @@
+{
+  "revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "source": "/Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden",
+  "method": "git archive exact revision, tar extraction into existing missing submodule directory; no fetch and no Java generation",
+  "entries": 25106,
+  "changed_files": [],
+  "archive_sha256": "64a7715807717f9a464919993a6570ca778fab1bfc023e51730d57e55cd69ee6",
+  "setup": "Golden directory initially empty. Hydrated before any tier ran; no green-from-missing-corpus claim."
+}

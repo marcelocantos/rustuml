@@ -1,0 +1,14 @@
+{
+  "no_oracle_failure_names.txt": {
+    "newly_failing": [
+      "sequence/seq_box_with_queue"
+    ],
+    "recovered": []
+  },
+  "golden_failure_names.txt": {
+    "newly_failing": [
+      "sequence/seq_box_with_queue"
+    ],
+    "recovered": []
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "import_commit": "96e2561122e70ffe53dfa3f102cf18d199cc464f",
+  "local_import": "2766d2c5425786df05cf62fed538003a6d2a52d3",
+  "prior_evidence_paths": 8462,
+  "imported_paths": 183,
+  "prior_and_imported_byte_unchanged": true,
+  "modified_existing_files": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "ascii": "No ASCII file changes or expanded ownership. Actual output changes from parser rejection retained.",
+  "comparator_sha256": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701",
+  "measure_sha256": "966d34c58c2025580eb887907cac11ef753a4b02920a0a5bc56d600f22f092c9"
+}

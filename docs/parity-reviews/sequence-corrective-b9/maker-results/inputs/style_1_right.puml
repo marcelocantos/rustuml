@@ -1,0 +1,14 @@
+@startuml
+!pragma teoz true
+skinparam noteTextAlignment right
+<style>
+sequenceDiagram {
+ note {
+ Shadowing 6
+ }
+}
+</style>
+North -> South ++ : contact
+note right : narrow\na deliberately wider line
+return end
+@enduml

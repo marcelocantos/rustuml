@@ -1,0 +1,9 @@
+{
+  "cases": 20,
+  "manifest_sha256": "0aa40292fe2eb910a2ed30651cdf859127e067a6759b9d8296f9cd245ae68907",
+  "gzip_sha256": "fea5c30e9ab500514ac22273e1ca2b4e70f3b2548c03c805943c7c068e664b8e",
+  "wrapper_sha256": "6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e",
+  "recorded_argv_and_environment_verified": true,
+  "streams_and_membership": "import_references.py verifies exact hashes and XML classification; no current Java execution",
+  "limitations": "Recorded Java argv is derived from pinned wrapper construction, not a separate process trace. Remote OpenJDK21.0.5/dot12.2 differ from origin; scoped conformance is not global equivalence."
+}

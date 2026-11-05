@@ -1,0 +1,17 @@
+{
+  "import_commit": "bd40c0f16838359779e406592edb51f32be2e9bd",
+  "local_import": "7dcfb706517ed2a4af4601352e43471f45ae4973",
+  "prior_evidence_paths": 9145,
+  "imported_paths": 205,
+  "prior_and_imported_byte_unchanged": true,
+  "modified_existing_files": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/ascii.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "ascii_authorization": "User explicitly authorized hide_stereotypes:false in exactly two SequenceDiagram test fixtures and stereotype_position_bottom:false in exactly one Participant test fixture, no renderer edits/no behavior claim.",
+  "ascii_diff": "ascii-authorized.diff",
+  "comparator_sha256": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701",
+  "measure_sha256": "966d34c58c2025580eb887907cac11ef753a4b02920a0a5bc56d600f22f092c9"
+}

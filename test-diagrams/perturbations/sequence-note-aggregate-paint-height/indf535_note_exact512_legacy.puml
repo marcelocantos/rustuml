@@ -1,0 +1,11 @@
+@startuml
+participant Viburnum
+note over Viburnum
+<size:100>v</size>
+<size:101>v</size>
+<size:102>v</size>
+<size:103>v</size>
+<size:106>v</size>
+end note
+Viburnum -> Viburnum: grow
+@enduml

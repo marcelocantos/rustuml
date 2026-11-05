@@ -1,0 +1,7 @@
+@startuml
+participant S
+participant Tail as T
+S -> S ++ : recursive
+S -> S : q
+return unwind
+@enduml

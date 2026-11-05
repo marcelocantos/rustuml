@@ -1,0 +1,364 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-queue-stripe-origin",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A432882cd-4556-4e95-862f-31b54103f709",
+    "model": "gpt-6-astra",
+    "tool": "T3 Code / Codex harness",
+    "independence": "New checker; no maker involvement; no children; production unchanged",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "branch": "review/sequence-pending-stripe-independent-20261105"
+  },
+  "account_commit": "4aaab169442b1e8a1d9e896d0cd3f019de6803d4",
+  "implementation_commit": "653b1ed7a49784e6e6205f3aebf69a16278f8d78",
+  "tested_production": "653b1ed7a49784e6e6205f3aebf69a16278f8d78",
+  "evidence_tip": "ae1e0de4d39840dd58074d89d40aa97304c6ca9f",
+  "before_revision": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "before_production": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/build_gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py docs/parity-reviews/sequence-pending-stripe-packet/maker-results/all-inputs.json replay2169",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/fresh86.json fresh86",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/followup10.json followup10",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent existing relay; exact substituted argv retained per result)"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_rich_stereo_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_rich_stereo_legacy.svg",
+      "axes": [
+        "first/late/blank stripe",
+        "rich_stereo",
+        "tails",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "964e7760e9a27490d0971bae289c5b51d756e8aba483423d9ce6910c5315378a",
+      "reference_sha256": "1eb2e727433ed7e1d50aca3b7eff946deb48db2d87522aea696c199d98595a68",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 38
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_rich_stereo_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_rich_stereo_teoz.svg",
+      "axes": [
+        "first/late/blank stripe",
+        "rich_stereo",
+        "tails",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "ca844fbdf3ec2ace63d18f1c87e43e84a636dee233448041b80cd84ee080e4f5",
+      "reference_sha256": "657b9760895e8205b38d447c64a13bf00b4832f2cfcb3a4a9e5f2e53e5e7ddaf",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 39
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_plain_no_stereo_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_plain_no_stereo_legacy.svg",
+      "axes": [
+        "first/late/blank stripe",
+        "plain_no_stereo",
+        "tails",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "06d544d5f198c1164973f21c8302d119ddcbd94abd17172151d333f8af3e91cf",
+      "reference_sha256": "532e7fcdf848225d7a1042e095c8c3346e588047c6346558a98914c2b2af4411",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 40
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_plain_no_stereo_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_plain_no_stereo_teoz.svg",
+      "axes": [
+        "first/late/blank stripe",
+        "plain_no_stereo",
+        "tails",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "7f089ca959fb4944d0952759b46778fea24c0e0c965048525ae3b7efcb3671d9",
+      "reference_sha256": "dbf05595ab9543b257ed603883ce954f4adf1be18c975bea01aaf7007e831bf2",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 41
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_blank_first_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_blank_first_legacy.svg",
+      "axes": [
+        "first/late/blank stripe",
+        "blank_first",
+        "tails",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "9f730e183f0c5665b9535ab759c9eeefb17e39de069352c2da3bfc33d6df071e",
+      "reference_sha256": "1fb57541e519a33ed732af5f93318572afd57871b8323028ce0577319c008e36",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 42
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_blank_first_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_blank_first_teoz.svg",
+      "axes": [
+        "first/late/blank stripe",
+        "blank_first",
+        "tails",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "fc49103df688c85db7a1ff85fe56e8944cedf500cb253de3d0cc3cbc22be7b6e",
+      "reference_sha256": "b5b88a09d28d94bd857e0edd1df27b58d68ca362d56c88458fbae6592a882967",
+      "before_comparison_exit": 0,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 43
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_blank_stereo_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_blank_stereo_legacy.svg",
+      "axes": [
+        "first/late/blank stripe",
+        "blank_stereo",
+        "tails",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "c0535dcaf0e3d9dc931e1540efa8adcd9a6814ce16260e4dd555795727c36921",
+      "reference_sha256": "f08df806135effe8ac5b164b7262df72a97ff9c8afd081287365cbee10713b31",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 44
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_blank_stereo_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_blank_stereo_teoz.svg",
+      "axes": [
+        "first/late/blank stripe",
+        "blank_stereo",
+        "tails",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "993ae05ca85d638462ce7d9b16f90d34a3ae57fad3339ec7c02a205fb1956cea",
+      "reference_sha256": "7922e00f4d2235548fbad9c48d11c915944b67894dc115e2cf67a5e227b6c2b3",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 45
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_created_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_created_legacy.svg",
+      "axes": [
+        "created queue",
+        "stereotype",
+        "three lines",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "ff2dd710ba975a4066b1a6f84c5f6798780b9ccaca0ad6ffdaa63586101e8cdc",
+      "reference_sha256": "95f720c3f8b2a116f4df3ac43ad9c46af43ea8ed375a72dfb89f633aa9258b5d",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 46
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_created_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_created_teoz.svg",
+      "axes": [
+        "created queue",
+        "stereotype",
+        "three lines",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "8822af3ea113f6fac3bb43e3e044796d56974d32bbf4b9972240f6d26e1dbfdf",
+      "reference_sha256": "b966ce2d94b397228d2b073cb92080c716fa79014859f6142d6c3acb58c90959",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 47
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_box_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_box_legacy.svg",
+      "axes": [
+        "queue box",
+        "actor sibling",
+        "rich label",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "a67b83d06be7a7d28895d6fa707b020f888ef19c9c75e290faffaa4b1dd14945",
+      "reference_sha256": "d3b92b789f6f6adce8432abcd1c6abd2ac7d852a191b355c0e676731d85ba92b",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 48
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_box_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_box_teoz.svg",
+      "axes": [
+        "queue box",
+        "actor sibling",
+        "rich label",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "c6e85b9fb5e26c2cdec257ef514f34ce5bf0d25a2482c7824e89a4f8c88fee68",
+      "reference_sha256": "54de9af663123a91c2ce5982f04802a47e3438600bd0e121b80872b8726c18bb",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 49
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_order_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_order_legacy.svg",
+      "axes": [
+        "three participants",
+        "small-large-small",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "37f9612f67f1b636084b9a49b665e87bb3b243f393f851cd80cca1bb811cbec0",
+      "reference_sha256": "d5d4f4a9ea2e1a24af23793ac3e9705565e89e8ea2254b1158b23653086c68c8",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 50
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_order_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-queue-stripe-origin/ind78_queue_order_teoz.svg",
+      "axes": [
+        "three participants",
+        "small-large-small",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "c32c52e2596a6c4e07bad18e6a30b6f76b850f6d6d9fced579b303257bf346d1",
+      "reference_sha256": "25534162d627125434bab8aa48f0bd751413d83734306f1bce6e3ac096787f1a",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 51
+    }
+  ],
+  "findings": [
+    "USymbolQueue.getMargin returns Margin(5,15,5,5); asSmall translates the composed block by margin. SheetBlock1 positions each Sea at cumulative preceding height. The new first-ascent origin repair is source-backed and passes rich no-stereotype, blank-first, order/mixed-kind and boxed controls.",
+    "The sequence consumer needs more precise provenance than the generic symbol alone: ComponentRoseQueue passes getTextBlock() as label and an EMPTY stereotype to USymbolQueue.asSmall. Participant.getDisplay composes the stereotype into the Display, then AbstractTextualComponent creates the complete creole block. The Rust sequence path instead gates stereo_ref and stereotype height on ParticipantLayout.in_box.",
+    "Six fresh valid bare/created stereotyped queue cases remain whole failures. Their real AST contains stereotype Some(dispatch), but Rust paints zero dispatch labels versus Java two (head and tail), with missing text elements and wrong dimensions. These deficits exist before and after; they are not introduced regressions, but they disprove whole queue/stereotype composition. Existing failures do not become acceptance by correcting the ascent."
+  ],
+  "verdict": "rejected",
+  "next_obligations": [
+    "Carry the complete participant Display/stereotype into queue measurement and paint independent of box membership, following ComponentRoseQueue and Participant.getDisplay.",
+    "Preserve and pass bare/created/stereotyped queue pairs, including blank-first and mixed-size tails, before acceptance."
+  ],
+  "evidence_directory": "docs/parity-reviews/sequence-pending-stripe-packet/checker-ae1e0de4-astra",
+  "counts": {
+    "entries": 14,
+    "valid": 14,
+    "before": {
+      "1": 10,
+      "0": 4
+    },
+    "after": {
+      "1": 6,
+      "0": 8
+    },
+    "verdict": "rejected"
+  },
+  "limitations": [
+    "Whole failure rejects; bounded support never waives any failed counterexample or imports historical acceptance.",
+    "Stable broad gates ran once per exact revision before evidence registration; no repeated broad run for evidence-only files. Existing gates remain red.",
+    "Java argv derived from pinned wrapper, not process traced. Remote OpenJDK21.0.5/Graphviz12.2 historical font/Graphviz equivalence is unproved.",
+    "No combined correctness with concurrent creole/text_render/WBS packet."
+  ]
+}

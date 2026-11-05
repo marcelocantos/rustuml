@@ -1,0 +1,6 @@
+@startuml
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+|||
+@enduml

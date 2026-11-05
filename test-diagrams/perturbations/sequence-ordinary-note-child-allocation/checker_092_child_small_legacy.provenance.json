@@ -1,0 +1,196 @@
+{
+  "reference": {
+    "env_overrides": {},
+    "source_bytes": 173,
+    "name": "child_small_legacy",
+    "remote_name": "child_small_legacy.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_legacy.puml",
+    "source_sha256": "e195cdf75e7c1c4b0d98d22e49d34203773f6fcac4c1b8dcb07c4b25c88888b0",
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 1.1127056250115857,
+    "stdout_sha256": "2fb55671a41c8207c551fe276ffee0c294c7befbd3b97a7ed8026ae79fa6fdef",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+    "requested_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/child_small_legacy.puml",
+    "execution_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/child_small_legacy.puml",
+    "actual_wrapper_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "actual_java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "environment_overrides": {},
+    "mapping": {
+      "reason": "Existing wrapper requires an isolated cwd below scratch/; preserve unchanged wrapper and immutable manifest.",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_legacy.puml",
+      "requested_remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/child_small_legacy.puml",
+      "actual_remote_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/child_small_legacy.puml"
+    }
+  },
+  "request": {
+    "name": "child_small_legacy",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_legacy.puml",
+    "remote_name": "child_small_legacy.puml",
+    "remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/child_small_legacy.puml",
+    "source_sha256": "e195cdf75e7c1c4b0d98d22e49d34203773f6fcac4c1b8dcb07c4b25c88888b0",
+    "bytes": 173,
+    "axes": [
+      "note below message font",
+      "activation/next row",
+      "legacy"
+    ],
+    "intended_reference": "valid sequence",
+    "source_validation": [
+      "sequencediagram.command.CommandNoteOnArrow; graphic.ArrowAndNoteBox constructor; Rose#createComponentNote"
+    ],
+    "invocation": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "classification": {
+    "name": "child_small_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 173,
+    "stdout_bytes": 4533,
+    "stderr_bytes": 0
+  },
+  "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_legacy.svg",
+  "before": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_small_legacy",
+    "axes": [
+      "note below message font",
+      "activation/next row",
+      "legacy"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "e195cdf75e7c1c4b0d98d22e49d34203773f6fcac4c1b8dcb07c4b25c88888b0",
+    "golden_sha256": "2fb55671a41c8207c551fe276ffee0c294c7befbd3b97a7ed8026ae79fa6fdef",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "d89d250b8a3dba404ce10c03d274ae55c7e4114afe885f6f88952f0d5165601a",
+      "svg": "5badb6a6aabc3d541939.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"153px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:212px;height:153px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 212 153\"), (\"width\", \"212px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"158px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:212px;height:158px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 212 158\"), (\"width\", \"212px\"), (\"zoomAndPan\", \"magnify\")]\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.9551\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"142.6167\"), (\"y\", \"68.4434\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"32.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"142.6167\"), (\"y\", \"70.7988\")]\n  [7] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"79.9102\"), (\"width\", \"8\"), (\"x\", \"31.1431\"), (\"y\", \"36.4883\")]\n    actual:   [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"84.6211\"), (\"width\", \"8\"), (\"x\", \"31.1431\"), (\"y\", \"36.4883\")]\n  [8] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"35\"), (\"x2\", \"35\"), (\"y1\", \"36.4883\"), (\"y2\", \"116.3984\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"35\"), (\"x2\", \"35\"), (\"y1\", \"36.4883\"), (\"y2\", \"121.1094\")]\n  [11] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"79.9102\"), (\"width\", \"8\"), (\"x\", \"143.6167\"), (\"y\", \"36.4883\")]\n    actual:   [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"84.6211\"), (\"width\", \"8\"), (\"x\", \"143.6167\"), (\"y\", \"36.4883\")]\n  [12] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"147.5664\"), (\"x2\", \"147.5664\"), (\"y1\", \"36.4883\"), (\"y2\", \"116.3984\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"147.5664\"), (\"x2\", \"147.5664\"), (\"y1\", \"36.4883\"), (\"y2\", \"121.1094\")]\n  [17] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"60.2861\"), (\"x\", \"5\"), (\"y\", \"115.3984\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"60.2861\"), (\"x\", \"5\"), (\"y\", \"120.1094\")]\n  [18] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"12\"), (\"y\", \"135.9336\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"12\"), (\"y\", \"140.6445\")]\n  [23] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"122.5664\"), (\"y\", \"115.3984\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"122.5664\"), (\"y\", \"120.1094\")]\n  [24] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"129.5664\"), (\"y\", \"135.9336\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"129.5664\"), (\"y\", \"140.6445\")]\n  [26] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.9551\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"142.6167\"), (\"y\", \"68.4434\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"32.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"142.6167\"), (\"y\", \"70.7988\")]\n  [28] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"130.6167,64.4434,140.6167,68.4434,130.6167,72.4434,134.6167,68.4434\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"130.6167,66.7988,140.6167,70.7988,130.6167,74.7988,134.6167,70.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [29] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"35.1431\"), (\"x2\", \"136.6167\"), (\"y1\", \"68.4434\"), (\"y2\", \"68.4434\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"35.1431\"), (\"x2\", \"136.6167\"), (\"y1\", \"70.7988\"), (\"y2\", \"70.7988\")]\n  [30] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"88.4736\"), (\"x\", \"42.1431\"), (\"y\", \"63.7012\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"88.4736\"), (\"x\", \"42.1431\"), (\"y\", \"66.0566\")]\n  [31] <path> attr mismatch:\n    expected: [(\"d\", \"M157,51.4883 L157,71.4883 L200,71.4883 L200,61.4883 L190,51.4883 L157,51.4883\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M157,56.1992 L157,76.1992 L200,76.1992 L200,66.1992 L190,56.1992 L157,56.1992\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [32] <path> attr mismatch:\n    expected: [(\"d\", \"M190,51.4883 L190,61.4883 L200,61.4883 L190,51.4883\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M190,56.1992 L190,66.1992 L200,66.1992 L190,56.1992\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [33] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"9\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"22.7505\"), (\"x\", \"163\"), (\"y\", \"65.1895\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"9\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"22.7505\"), (\"x\", \"163\"), (\"y\", \"69.9004\")]\n  [35] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"46.1431,94.3984,36.1431,98.3984,46.1431,102.3984,42.1431,98.3984\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"46.1431,99.1094,36.1431,103.1094,46.1431,107.1094,42.1431,103.1094\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [36] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"40.1431\"), (\"x2\", \"146.6167\"), (\"y1\", \"98.3984\"), (\"y2\", \"98.3984\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"40.1431\"), (\"x2\", \"146.6167\"), (\"y1\", \"103.1094\"), (\"y2\", \"103.1094\")]\n  [37] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"28.1455\"), (\"x\", \"52.1431\"), (\"y\", \"93.6563\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"28.1455\"), (\"x\", \"52.1431\"), (\"y\", \"98.3672\")]\n\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"153px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:212px;height:153px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 212 153\"), (\"width\", \"212px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"158px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:212px;height:158px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 212 158\"), (\"width\", \"212px\"), (\"zoomAndPan\", \"magnify\")]\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.9551\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"142.6167\"), (\"y\", \"68.4434\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"32.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"142.6167\"), (\"y\", \"70.7988\")]\n  [7] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"79.9102\"), (\"width\", \"8\"), (\"x\", \"31.1431\"), (\"y\", \"36.4883\")]\n    actual:   [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"84.6211\"), (\"width\", \"8\"), (\"x\", \"31.1431\"), (\"y\", \"36.4883\")]\n  [8] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"35\"), (\"x2\", \"35\"), (\"y1\", \"36.4883\"), (\"y2\", \"116.3984\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"35\"), (\"x2\", \"35\"), (\"y1\", \"36.4883\"), (\"y2\", \"121.1094\")]\n  [11] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"79.9102\"), (\"width\", \"8\"), (\"x\", \"143.6167\"), (\"y\", \"36.4883\")]\n    actual:   [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"84.6211\"), (\"width\", \"8\"), (\"x\", \"143.6167\"), (\"y\", \"36.4883\")]\n  [12] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"147.5664\"), (\"x2\", \"147.5664\"), (\"y1\", \"36.4883\"), (\"y2\", \"116.3984\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"147.5664\"), (\"x2\", \"147.5664\"), (\"y1\", \"36.4883\"), (\"y2\", \"121.1094\")]\n  [17] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"60.2861\"), (\"x\", \"5\"), (\"y\", \"115.3984\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"60.2861\"), (\"x\", \"5\"), (\"y\", \"120.1094\")]\n  [18] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"12\"), (\"y\", \"135.9336\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"12\"), (\"y\", \"140.6445\")]\n  [23] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"122.5664\"), (\"y\", \"115.3984\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"122.5664\"), (\"y\", \"120.1094\")]\n  [24] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"129.5664\"), (\"y\", \"135.9336\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"129.5664\"), (\"y\", \"140.6445\")]\n  [26] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.9551\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"142.6167\"), (\"y\", \"68.4434\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"32.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"142.6167\"), (\"y\", \"70.7988\")]\n  [28] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"130.6167,64.4434,140.6167,68.4434,130.6167,72.4434,134.6167,68.4434\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"130.6167,66.7988,140.6167,70.7988,130.6167,74.7988,134.6167,70.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [29] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"35.1431\"), (\"x2\", \"136.6167\"), (\"y1\", \"68.4434\"), (\"y2\", \"68.4434\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"35.1431\"), (\"x2\", \"136.6167\"), (\"y1\", \"70.7988\"), (\"y2\", \"70.7988\")]\n  [30] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"88.4736\"), (\"x\", \"42.1431\"), (\"y\", \"63.7012\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"88.4736\"), (\"x\", \"42.1431\"), (\"y\", \"66.0566\")]\n  [31] <path> attr mismatch:\n    expected: [(\"d\", \"M157,51.4883 L157,71.4883 L200,71.4883 L200,61.4883 L190,51.4883 L157,51.4883\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M157,56.1992 L157,76.1992 L200,76.1992 L200,66.1992 L190,56.1992 L157,56.1992\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [32] <path> attr mismatch:\n    expected: [(\"d\", \"M190,51.4883 L190,61.4883 L200,61.4883 L190,51.4883\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M190,56.1992 L190,66.1992 L200,66.1992 L190,56.1992\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [33] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"9\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"22.7505\"), (\"x\", \"163\"), (\"y\", \"65.1895\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"9\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"22.7505\"), (\"x\", \"163\"), (\"y\", \"69.9004\")]\n  [35] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"46.1431,94.3984,36.1431,98.3984,46.1431,102.3984,42.1431,98.3984\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"46.1431,99.1094,36.1431,103.1094,46.1431,107.1094,42.1431,103.1094\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [36] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"40.1431\"), (\"x2\", \"146.6167\"), (\"y1\", \"98.3984\"), (\"y2\", \"98.3984\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"40.1431\"), (\"x2\", \"146.6167\"), (\"y1\", \"103.1094\"), (\"y2\", \"103.1094\")]\n  [37] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"28.1455\"), (\"x\", \"52.1431\"), (\"y\", \"93.6563\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"28.1455\"), (\"x\", \"52.1431\"), (\"y\", \"98.3672\")]\n\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"153px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:212px;height:153px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 212 153\"), (\"width\", \"212px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"158px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:212px;height:158px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 212 158\"), (\"width\", \"212px\"), (\"zoomAndPan\", \"magnify\")]\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.9551\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"142.6167\"), (\"y\", \"68.4434\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"32.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"142.6167\"), (\"y\", \"70.7988\")]\n  [7] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"79.9102\"), (\"width\", \"8\"), (\"x\", \"31.1431\"), (\"y\", \"36.4883\")]\n    actual:   [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"84.6211\"), (\"width\", \"8\"), (\"x\", \"31.1431\"), (\"y\", \"36.4883\")]\n  [8] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"35\"), (\"x2\", \"35\"), (\"y1\", \"36.4883\"), (\"y2\", \"116.3984\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"35\"), (\"x2\", \"35\"), (\"y1\", \"36.4883\"), (\"y2\", \"121.1094\")]\n  [11] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"79.9102\"), (\"width\", \"8\"), (\"x\", \"143.6167\"), (\"y\", \"36.4883\")]\n    actual:   [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"84.6211\"), (\"width\", \"8\"), (\"x\", \"143.6167\"), (\"y\", \"36.4883\")]\n  [12] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"147.5664\"), (\"x2\", \"147.5664\"), (\"y1\", \"36.4883\"), (\"y2\", \"116.3984\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"147.5664\"), (\"x2\", \"147.5664\"), (\"y1\", \"36.4883\"), (\"y2\", \"121.1094\")]\n  [17] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"60.2861\"), (\"x\", \"5\"), (\"y\", \"115.3984\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"60.2861\"), (\"x\", \"5\"), (\"y\", \"120.1094\")]\n  [18] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"12\"), (\"y\", \"135.9336\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"12\"), (\"y\", \"140.6445\")]\n  [23] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"122.5664\"), (\"y\", \"115.3984\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"122.5664\"), (\"y\", \"120.1094\")]\n  [24] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"129.5664\"), (\"y\", \"135.9336\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"129.5664\"), (\"y\", \"140.6445\")]\n  [26] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.9551\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"142.6167\"), (\"y\", \"68.4434\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"32.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"142.6167\"), (\"y\", \"70.7988\")]\n  [28] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"130.6167,64.4434,140.6167,68.4434,130.6167,72.4434,134.6167,68.4434\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"130.6167,66.7988,140.6167,70.7988,130.6167,74.7988,134.6167,70.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [29] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"35.1431\"), (\"x2\", \"136.6167\"), (\"y1\", \"68.4434\"), (\"y2\", \"68.4434\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"35.1431\"), (\"x2\", \"136.6167\"), (\"y1\", \"70.7988\"), (\"y2\", \"70.7988\")]\n  [30] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"88.4736\"), (\"x\", \"42.1431\"), (\"y\", \"63.7012\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"88.4736\"), (\"x\", \"42.1431\"), (\"y\", \"66.0566\")]\n  [31] <path> attr mismatch:\n    expected: [(\"d\", \"M157,51.4883 L157,71.4883 L200,71.4883 L200,61.4883 L190,51.4883 L157,51.4883\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M157,56.1992 L157,76.1992 L200,76.1992 L200,66.1992 L190,56.1992 L157,56.1992\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [32] <path> attr mismatch:\n    expected: [(\"d\", \"M190,51.4883 L190,61.4883 L200,61.4883 L190,51.4883\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n    actual:   [(\"d\", \"M190,56.1992 L190,66.1992 L200,66.1992 L190,56.1992\"), (\"fill\", \"#FEFFDD\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")]\n  [33] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"9\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"22.7505\"), (\"x\", \"163\"), (\"y\", \"65.1895\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"9\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"22.7505\"), (\"x\", \"163\"), (\"y\", \"69.9004\")]\n  [35] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"46.1431,94.3984,36.1431,98.3984,46.1431,102.3984,42.1431,98.3984\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"46.1431,99.1094,36.1431,103.1094,46.1431,107.1094,42.1431,103.1094\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [36] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"40.1431\"), (\"x2\", \"146.6167\"), (\"y1\", \"98.3984\"), (\"y2\", \"98.3984\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"40.1431\"), (\"x2\", \"146.6167\"), (\"y1\", \"103.1094\"), (\"y2\", \"103.1094\")]\n  [37] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"28.1455\"), (\"x\", \"52.1431\"), (\"y\", \"93.6563\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"28.1455\"), (\"x\", \"52.1431\"), (\"y\", \"98.3672\")]\n\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  },
+  "after": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/child_small_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "child_small_legacy",
+    "axes": [
+      "note below message font",
+      "activation/next row",
+      "legacy"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "e195cdf75e7c1c4b0d98d22e49d34203773f6fcac4c1b8dcb07c4b25c88888b0",
+    "golden_sha256": "2fb55671a41c8207c551fe276ffee0c294c7befbd3b97a7ed8026ae79fa6fdef",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "ef76eedf9acb9ef4b8c4c1bfbe174dbec5690452343c7537e01839febfc2613f",
+      "svg": "5badb6a6aabc3d541939.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  }
+}

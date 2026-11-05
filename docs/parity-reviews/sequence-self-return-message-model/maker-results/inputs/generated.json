@@ -1,0 +1,271 @@
+[
+  {
+    "source": "order_SRT_depth_1_long_0.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_SRT_depth_1_long_1.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_SRT_depth_2_long_0.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_SRT_depth_2_long_1.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_SRT_depth_4_long_0.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_SRT_depth_4_long_1.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_RST_depth_1_long_0.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_RST_depth_1_long_1.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_RST_depth_2_long_0.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_RST_depth_2_long_1.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_RST_depth_4_long_0.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_RST_depth_4_long_1.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_RTS_depth_1_long_0.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_RTS_depth_1_long_1.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_RTS_depth_2_long_0.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_RTS_depth_2_long_1.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_RTS_depth_4_long_0.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "order_RTS_depth_4_long_1.puml",
+    "axes": [
+      "participant order",
+      "self recursion depth",
+      "return label width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "single_18.puml",
+    "axes": [
+      "one participant",
+      "activation versus fallback",
+      "inherited arrow style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "single_19.puml",
+    "axes": [
+      "one participant",
+      "activation versus fallback",
+      "inherited arrow style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "single_20.puml",
+    "axes": [
+      "one participant",
+      "activation versus fallback",
+      "inherited arrow style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "single_21.puml",
+    "axes": [
+      "one participant",
+      "activation versus fallback",
+      "inherited arrow style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "single_22.puml",
+    "axes": [
+      "one participant",
+      "activation versus fallback",
+      "inherited arrow style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "single_23.puml",
+    "axes": [
+      "one participant",
+      "activation versus fallback",
+      "inherited arrow style"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "delegated_24.puml",
+    "axes": [
+      "participant order",
+      "return ownership",
+      "nested delegation"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "delegated_25.puml",
+    "axes": [
+      "participant order",
+      "return ownership",
+      "nested delegation"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  },
+  {
+    "source": "later_page.puml",
+    "axes": [
+      "page boundary",
+      "self return width"
+    ],
+    "java_exit": 0,
+    "java_stderr": ""
+  }
+]

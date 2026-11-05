@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Wren
+participant Lark
+Wren -[#34567880]>o Lark ++ : forward
+Wren o<-[#678934fe]- Lark : reverse
+Lark -->>o Wren : open
+deactivate Lark
+@enduml

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-legacy-message-note-alignment",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "skin.rose.Rose#createComponentNote",
+    "skin.rose.ComponentRoseNote#ComponentRoseNote/#getPreferredWidth",
+    "skin.AbstractTextualComponent#getTextWidth",
+    "sequencediagram.graphic.ArrowAndNoteBox#getPreferredWidth"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::render_sequence legacy ordinary message/right-note envelope"
+  ],
+  "invariant": "The note component preferred width includes the text-alignment-selected left margin: CENTER uses 15, other alignments 6, with the right margin remaining 15. The composite must consume that same preferred dimension.",
+  "causal_divergence": "The new ordinary message-note envelope at 07aa1611 uses folded_note_component_width, whose left margin is always 6. Existing centered theme controls reveal a canvas regression. Prior placement and paint already account for alignment; the new composite caller omitted it.",
+  "planned_change": "Include the constructor-selected left-margin difference in the new composite width only; leave existing note placement, paint, and other component geometry unchanged. Preserve existing themed-unit expected width and replay all frozen references.",
+  "perturbation_axes": [
+    "note alignment via existing themes and explicit styling",
+    "activation state and arrow direction across the new legacy-note controls"
+  ],
+  "discovery": "Final validation at 19074587 found themed_attached_note_competes_with_padded_participant_envelope and three skinparam main-tier losses; this account precedes the corrective implementation."
+}

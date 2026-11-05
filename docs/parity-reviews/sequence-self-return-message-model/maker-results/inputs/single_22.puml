@@ -1,0 +1,4 @@
+@startuml
+S -[#purple]> S : start
+return settled
+@enduml

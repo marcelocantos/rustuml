@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-note-body-composition",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "cucadiagram.BodyEnhanced2#getArea",
+    "cucadiagram.BodyEnhancedAbstract#decorate/#getTitle/#isBlockSeparator",
+    "klimt.shape.TextBlockLineBefore#calculateDimension/#drawU",
+    "klimt.shape.UHorizontalLine#drawTitleInternal"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::note_text_metrics_with_family",
+    "crates/rustuml-render/src/sequence.rs::emit_note_line"
+  ],
+  "invariant": "A separator starts a body block. Preferred dimensions and paint use the same composed block: body with margins, title minimum dimensions, then outer margin. Body paints before titled separator.",
+  "causal_divergence": "Rust measures a titled separator as an empty-body wrapper, then sums independent following lines; fixed title origin and per-line paint omit right body margin and block centering.",
+  "planned_change": "Represent segmented note body blocks with measured body/title and margins; share preferred width/height and positioned painting. Source composition is max(B+H/2+4,H)+H/2 vertically and max(bodyWidth+6,titleWidth+8) horizontally. Preserve complete ordinary child allocation and message underline removal; do not change shared text.",
+  "perturbation_axes": [
+    "empty/nonempty/multiple body sections",
+    "title wider/narrower than body and font-size variation",
+    "attached/standalone and both engines"
+  ],
+  "before_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "evidence_import": "9d81627b",
+  "account_date": "2026-11-04",
+  "status": "preimplementation hypothesis; independent review required"
+}

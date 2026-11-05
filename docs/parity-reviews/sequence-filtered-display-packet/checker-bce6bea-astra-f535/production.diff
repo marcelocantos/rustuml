@@ -1,0 +1,539 @@
+diff --git a/crates/rustuml-parser/src/diagram/sequence.rs b/crates/rustuml-parser/src/diagram/sequence.rs
+index f629f4aee..48ed74f54 100644
+--- a/crates/rustuml-parser/src/diagram/sequence.rs
++++ b/crates/rustuml-parser/src/diagram/sequence.rs
+@@ -16,6 +16,9 @@ pub struct SequenceDiagram {
+     /// Whether `hide footbox` was specified — suppresses tail participant boxes.
+     #[serde(default)]
+     pub hide_footbox: bool,
++    /// SequenceDiagram#hiddenPortions: final diagram-wide stereotype visibility.
++    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
++    pub hide_stereotypes: bool,
+     /// Whether `!pragma teoz true` was specified.
+     #[serde(default)]
+     pub teoz: bool,
+@@ -45,6 +48,9 @@ pub struct Participant {
+     pub order: Option<usize>,
+     /// Optional UML stereotype text, e.g. `<<service>>` → `"service"`.
+     pub stereotype: Option<String>,
++    /// CommandParticipant captures SkinParam#stereotypePositionTop at declaration.
++    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
++    pub stereotype_position_bottom: bool,
+     #[serde(default, skip_serializing_if = "Option::is_none")]
+     pub url: Option<String>,
+     /// Optional background color (e.g., "#red", "#FF0000").
+diff --git a/crates/rustuml-parser/src/parse/sequence.rs b/crates/rustuml-parser/src/parse/sequence.rs
+index a1448fdac..954cdccaf 100644
+--- a/crates/rustuml-parser/src/parse/sequence.rs
++++ b/crates/rustuml-parser/src/parse/sequence.rs
+@@ -364,6 +364,7 @@ struct SeqParser {
+     in_legend: bool,
+     /// Whether `hide footbox` was specified.
+     hide_footbox: bool,
++    hide_stereotypes: bool,
+     /// Whether `!pragma teoz true` was specified.
+     teoz: bool,
+     /// Whether `autoactivate on` is active for subsequent messages.
+@@ -409,6 +410,7 @@ impl SeqParser {
+             last_message: None,
+             in_legend: false,
+             hide_footbox: false,
++            hide_stereotypes: false,
+             teoz: false,
+             autoactivate: false,
+             current_line: 0,
+@@ -426,6 +428,7 @@ impl SeqParser {
+             events: self.events,
+             autonumber: self.autonumber,
+             hide_footbox: self.hide_footbox,
++            hide_stereotypes: self.hide_stereotypes,
+             teoz: self.teoz,
+             boxes: self.boxes,
+         }
+@@ -445,6 +448,7 @@ impl SeqParser {
+                 kind: ParticipantKind::default(),
+                 order: Some(self.participants.len()),
+                 stereotype: None,
++                stereotype_position_bottom: false,
+                 url: None,
+                 color: None,
+                 source_line,
+@@ -489,9 +493,16 @@ impl SeqParser {
+         }
+ 
+         // Handle multiline note buffering.
+-        if self.note_buffer.is_some() {
++        if let Some(note) = &self.note_buffer {
+             let trimmed = line.trim();
+-            if trimmed == "endnote" || trimmed == "end note" {
++            // FactorySequenceNote{,Across,OverSeveral}Command#END accepts all
++            // three shape names; FactorySequenceNoteOnArrowCommand#END only note.
++            static NOTE_END: LazyLock<Regex> =
++                LazyLock::new(|| Regex::new(r"(?i)^end\s?(note|hnote|rnote)$").unwrap());
++            let closes = NOTE_END
++                .captures(trimmed)
++                .is_some_and(|caps| !note.on_message || caps[1].eq_ignore_ascii_case("note"));
++            if closes {
+                 let buf = self.note_buffer.take().unwrap();
+                 let text = note_text_from_lines(&buf.lines);
+                 self.events.push(Event::Note(Note {
+@@ -664,6 +675,17 @@ impl SeqParser {
+                 .map(|m| m.as_str().to_string())
+                 .or(label_stereotype);
+ 
++            // CommandParticipant#executeArg calls setStereotype only when the
++            // declaration has one; SkinParam#stereotypePositionTop is captured.
++            let stereotype_position_bottom = stereotype.is_some()
++                && self
++                    .meta
++                    .skinparams
++                    .iter()
++                    .rev()
++                    .find(|param| param.key.eq_ignore_ascii_case("stereotypePosition"))
++                    .is_some_and(|param| param.value.eq_ignore_ascii_case("bottom"));
++
+             let color = caps.get(11).map(|m| m.as_str().to_string());
+ 
+             // Explicit `order N` sets the layout sort key; otherwise it defaults
+@@ -682,6 +704,7 @@ impl SeqParser {
+                     kind,
+                     order: Some(explicit_order.unwrap_or(idx)),
+                     stereotype,
++                    stereotype_position_bottom,
+                     url,
+                     color,
+                     source_line: self.current_line,
+@@ -779,6 +802,10 @@ impl SeqParser {
+             .get(4)
+             .map(|m| parse_activation(m.as_str()))
+             .or_else(|| self.autoactivation_for(&arrow));
++        // SequenceDiagram#getLastEventWithNote sees AbstractMessage, including
++        // MessageExo. FactorySequenceNoteOnArrowCommand attaches a bare note to
++        // that event, using its normalized endpoints just like an ordinary arrow.
++        self.last_message = Some((from.clone(), to.clone()));
+         self.events.push(Event::Message(Message {
+             parallel: false,
+             from,
+@@ -1380,6 +1407,19 @@ impl SeqParser {
+             self.hide_footbox = true;
+             return true;
+         }
++        // CommandHideShowByGender#executeSequenceDiagram ignores the gender
++        // selector and updates SequenceDiagram#hiddenPortions, shared by every
++        // Participant#getDisplay. Its PORTION accepts singular and plural.
++        static STEREOTYPE_VISIBILITY: LazyLock<Regex> = LazyLock::new(|| {
++            Regex::new(
++                r#"(?i)^(hide|show)\s+(?:(?:[\p{L}\p{N}_.]+|"[^"]+"|<<.*>>)\s+)*?stereotypes?$"#,
++            )
++            .unwrap()
++        });
++        if let Some(caps) = STEREOTYPE_VISIBILITY.captures(line) {
++            self.hide_stereotypes = caps[1].eq_ignore_ascii_case("hide");
++            return true;
++        }
+         line.starts_with("hide ")
+     }
+ }
+@@ -2598,4 +2638,89 @@ Gate -> Mail: enqueue"#
+         assert_eq!(d.participants[0].url, None);
+         assert_eq!(d.participants[1].url, None);
+     }
++    #[test]
++    fn participant_display_visibility_and_declaration_order() {
++        let d = parse(
++            "skinparam stereotypePosition bottom\nqueue Mail <<work>>\nskinparam stereotypePosition top\nqueue Other <<role>>\nMail -> Other\nhide stereotypes",
++        );
++        assert!(d.hide_stereotypes);
++        assert!(d.participants[0].stereotype_position_bottom);
++        assert!(!d.participants[1].stereotype_position_bottom);
++        assert_eq!(d.participants[0].stereotype.as_deref(), Some("work"));
++        let d = parse(
++            "hide stereotype\nactor Gate <<role>>\nparticipant Hub <<service>>\nHub -> Gate\nshow stereotypes",
++        );
++        assert!(!d.hide_stereotypes);
++    }
++
++    #[test]
++    fn participant_display_default_serialization_is_backward_compatible() {
++        let d = parse("queue Mail <<work>>\nHub -> Mail");
++        let yaml = serde_yml::to_string(&d).unwrap();
++        assert!(!yaml.contains("hide_stereotypes"));
++        assert!(!yaml.contains("stereotype_position_bottom"));
++        // An old model has neither key. Defaults must not change its full YAML.
++        let legacy: SequenceDiagram = serde_yml::from_str(&yaml).unwrap();
++        assert!(!legacy.hide_stereotypes);
++        assert!(
++            legacy
++                .participants
++                .iter()
++                .all(|p| !p.stereotype_position_bottom)
++        );
++        assert_eq!(serde_yml::to_string(&legacy).unwrap(), yaml);
++        let d = parse(
++            "skinparam stereotypePosition bottom\nqueue Mail <<work>>\nHub -> Mail\nhide stereotype",
++        );
++        let yaml = serde_yml::to_string(&d).unwrap();
++        let restored: SequenceDiagram = serde_yml::from_str(&yaml).unwrap();
++        assert!(restored.hide_stereotypes);
++        assert!(restored.participants[0].stereotype_position_bottom);
++        assert_eq!(serde_yml::to_string(&restored).unwrap(), yaml);
++    }
++    #[test]
++    fn external_message_owns_bare_note_after_direction_normalization() {
++        for (arrow, from, to) in [
++            ("[-> Hub", "[", "Hub"),
++            ("[<- Hub", "Hub", "["),
++            ("Hub ->]", "Hub", "]"),
++            ("Hub <-]", "]", "Hub"),
++        ] {
++            for body in ["note right: current", "note left\ncurrent\nend note"] {
++                let d = parse(&format!("Birch -> Hub: prior\n{arrow}: external\n{body}"));
++                let Some(Event::Note(note)) = d.events.last() else {
++                    panic!("missing note: {arrow}")
++                };
++                assert!(note.on_message);
++                assert_eq!(note.participants, [from, to]);
++                assert_eq!(note.text, "current");
++                assert_eq!(d.participants.len(), 2, "border is not a participant");
++            }
++        }
++    }
++    #[test]
++    fn standalone_note_terminators_consume_the_complete_command() {
++        for shape in ["note", "rnote", "hnote"] {
++            for ending in [
++                "endnote",
++                "end note",
++                "endrnote",
++                "end rnote",
++                "endhnote",
++                "end hnote",
++            ] {
++                let d = parse(&format!(
++                    "participant Hub\n{shape} over Hub\none\ntwo\n{ending}\nHub -> Hub: after"
++                ));
++                assert_eq!(d.events.len(), 2);
++                let Event::Note(note) = &d.events[0] else {
++                    panic!("missing note")
++                };
++                assert_eq!(note.text, "one\ntwo");
++                assert!(
++                    matches!(&d.events[1], Event::Message(message) if message.label == "after")
++                );
++            }
++        }
++    }
+ }
+diff --git a/crates/rustuml-render/src/ascii.rs b/crates/rustuml-render/src/ascii.rs
+index a529de75f..62b2fd68e 100644
+--- a/crates/rustuml-render/src/ascii.rs
++++ b/crates/rustuml-render/src/ascii.rs
+@@ -508,6 +508,7 @@ mod tests {
+                     kind: ParticipantKind::Participant,
+                     order: Some(i),
+                     stereotype: None,
++                    stereotype_position_bottom: false,
+                     url: None,
+                     color: None,
+                     source_line: i + 1,
+@@ -516,6 +517,7 @@ mod tests {
+             events,
+             autonumber: None,
+             hide_footbox: false,
++            hide_stereotypes: false,
+             teoz: false,
+             boxes: Vec::new(),
+         }
+@@ -690,6 +692,7 @@ mod tests {
+             events: vec![],
+             autonumber: None,
+             hide_footbox: false,
++            hide_stereotypes: false,
+             teoz: false,
+             boxes: Vec::new(),
+         };
+diff --git a/crates/rustuml-render/src/sequence.rs b/crates/rustuml-render/src/sequence.rs
+index ad292edb3..35cacc1f2 100644
+--- a/crates/rustuml-render/src/sequence.rs
++++ b/crates/rustuml-render/src/sequence.rs
+@@ -2007,28 +2007,16 @@ fn emit_note_table(
+     }
+ }
+ 
+-fn note_base_height(shape: NoteShape, first_line_height: f64) -> f64 {
+-    let base = (first_line_height + 10.0).floor();
+-    match shape {
+-        NoteShape::Note => base,
+-        NoteShape::Hexagonal | NoteShape::Rectangular => base - 2.0,
+-    }
+-}
+-
+ fn note_rendered_height(shape: NoteShape, metrics: &NoteTextMetrics) -> f64 {
+-    if shape == NoteShape::Note {
+-        // ComponentRoseNote#drawInternalU casts getTextHeight (whole block plus
+-        // marginY*2), not individual lines. Account 2dab3648.
+-        return (metrics.total_height + 2.0 * ROSE_NOTE_PADDING_Y).floor();
+-    }
+-
+-    note_base_height(shape, metrics.first_height)
+-        + metrics
+-            .line_heights
+-            .iter()
+-            .skip(1)
+-            .map(|height| height.floor())
+-            .sum::<f64>()
++    // AbstractTextualComponent#getTextHeight sums the entire block and marginY*2;
++    // ComponentRoseNote{,Box,Hexagonal}#drawInternalU then casts that total once.
++    // Their constructors use marginY5 for folded notes and marginY4 for box/hex.
++    // Folded aggregation is retained from account 2dab3648; box/hex account ca2aae93f.
++    let margin_y = match shape {
++        NoteShape::Note => ROSE_NOTE_PADDING_Y,
++        NoteShape::Rectangular | NoteShape::Hexagonal => 4.0,
++    };
++    (metrics.total_height + 2.0 * margin_y).floor()
+ }
+ 
+ /// Vertical offset from a message-attached note's top edge to the message arrow
+@@ -3186,6 +3174,8 @@ struct ParticipantLayout {
+     kind: ParticipantKind,
+     /// Optional stereotype text
+     stereotype: Option<String>,
++    /// Participant#getDisplay after visibility filtering and declaration order.
++    display: Vec<(String, bool)>,
+     /// Text width at the participant label font size.
+     text_width: f64,
+     /// Participant#getUsedStyles resolves this kind's font before measure/paint.
+@@ -5891,38 +5881,29 @@ impl PlantUmlSvg {
+         box_x: f64,
+         base_y: f64,
+         box_w: f64,
+-        text_x: f64,
+         text_top: f64,
+-        text_content: &str,
+-        text_len: f64,
++        display: &[(String, bool)],
+         fill_color: &str,
+         border_color: &str,
+         queue_head_offset: f64,
+-        stereo: Option<(&str, f64)>,
+-        line_h: f64,
+     ) {
+         self.participant_group_open(part_uid, qualified_name, source_line, position);
+-        // Participant#getDisplay supplies stereotype and name as one text block;
+-        // ComponentRoseQueue passes it to USymbolQueue as the label.
+-        let stereo_shift = stereo
+-            .map(|(text, _)| {
+-                ParticipantTextBlock::new(
+-                    &format!("«{text}»"),
+-                    self.participant_font_size as f64,
+-                    &self.participant_font_family,
+-                    false,
++        // ComponentRoseQueue passes Participant#getDisplay as one ordered label.
++        // Reuse that filtered structure for the pill and every painted stripe.
++        let blocks: Vec<_> = display
++            .iter()
++            .map(|(text, stereotype)| {
++                (
++                    ParticipantTextBlock::new(
++                        text,
++                        self.participant_font_size as f64,
++                        &self.participant_font_family,
++                        !stereotype && self.participant_font_bold,
++                    ),
++                    *stereotype,
+                 )
+-                .height
+             })
+-            .unwrap_or(0.0);
+-        let label = ParticipantTextBlock::new(
+-            text_content,
+-            self.participant_font_size as f64,
+-            &self.participant_font_family,
+-            self.participant_font_bold,
+-        );
+-        let _ = line_h;
+-
++            .collect();
+         // Pill shape: rounded left side, right side with inner curve
+         // From golden SVG for queue "Alice":
+         // Main body: M10,10 L52.7236,10 C57.7236,10 57.7236,23.2441 57.7236,23.2441
+@@ -5939,7 +5920,7 @@ impl PlantUmlSvg {
+         let inner_left = left + cap_r;
+         let inner_right = right - cap_r;
+         // ComponentRoseQueue -> USymbolQueue uses Display height + margins5/5.
+-        let pill_h = label.height + stereo_shift + 5.0 + 5.0;
++        let pill_h = blocks.iter().map(|(block, _)| block.height).sum::<f64>() + 5.0 + 5.0;
+         let top = if position == "tail" {
+             base_y
+         } else {
+@@ -5981,37 +5962,30 @@ impl PlantUmlSvg {
+             &format!("stroke:{border_color};stroke-width:0.5;"),
+         );
+ 
+-        // ComponentRoseQueue supplies the complete Display label to USymbolQueue;
+-        // its margin translates both stripes, each with its own ascent.
+-        let text_y = text_top + stereo_shift + label.lines[0].2.ascent;
+-        if let Some((st_text, st_width)) = stereo {
+-            let inner_w = box_w - QUEUE_TEXT_H_PAD;
+-            let st_display = format!("\u{ab}{st_text}\u{bb}");
+-            let st_x = box_x + QUEUE_TEXT_X_PAD + (inner_w - st_width) / 2.0;
+-            let stereotype = ParticipantTextBlock::new(
+-                &st_display,
+-                self.participant_font_size as f64,
+-                &self.participant_font_family,
+-                false,
+-            );
+-            stereotype.draw(
++        // USymbolQueue#asSmall translates the complete label by its margin;
++        // each child starts at its accumulated top and uses its own ascent.
++        let inner_w = box_w - QUEUE_TEXT_H_PAD;
++        let mut stripe_top = text_top;
++        for (block, stereotype) in &blocks {
++            block.draw(
+                 &mut self.buf,
+                 &TextBase {
+-                    x: st_x,
+-                    y: text_top + stereotype.lines[0].2.ascent,
++                    x: box_x + QUEUE_TEXT_X_PAD + (inner_w - block.width) / 2.0,
++                    y: stripe_top + block.lines[0].2.ascent,
+                     font_size: self.participant_font_size,
+                     font_family: &self.participant_font_family,
+-                    fill: "#000000",
+-                    bold: false,
+-                    italic: true,
++                    fill: if *stereotype {
++                        "#000000"
++                    } else {
++                        &self.participant_font_color
++                    },
++                    bold: !stereotype && self.participant_font_bold,
++                    italic: *stereotype,
+                     underline: false,
+                     skip_underline: false,
+                 },
+             );
+-            let name_x = box_x + QUEUE_TEXT_X_PAD + (inner_w - text_len) / 2.0;
+-            self.participant_text(name_x, text_y, text_content, text_len);
+-        } else {
+-            self.participant_text(text_x, text_y, text_content, text_len);
++            stripe_top += block.height;
+         }
+ 
+         self.participant_group_close();
+@@ -7107,7 +7081,6 @@ fn render_participant_shape(
+             );
+         }
+         ParticipantKind::Queue => {
+-            let text_x = p.box_x + QUEUE_TEXT_X_PAD;
+             // Queue pill is shorter and offset; text baseline tracks the pill mid.
+             let pill_top = if position == "tail" {
+                 base_y
+@@ -7124,19 +7097,11 @@ fn render_participant_shape(
+                 p.box_x,
+                 base_y,
+                 p.box_width,
+-                text_x,
+                 text_top,
+-                &p.label,
+-                p.text_width,
++                &p.display,
+                 fill_color,
+                 border_color,
+                 queue_head_offset,
+-                // Participant#getDisplay includes stereotype regardless of box;
+-                // ComponentRoseQueue passes that complete block as its label.
+-                p.stereotype
+-                    .as_ref()
+-                    .map(|s| (s.as_str(), p.stereotype_width)),
+-                figure_line_h,
+             );
+         }
+         ParticipantKind::Participant => {
+@@ -8073,7 +8038,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
+                 .unwrap_or(PARTICIPANT_FONT_SIZE as u32);
+             let participant_font_size_f = font_size as f64;
+ 
+-            let st = p.stereotype.clone();
++            // Participant#getDisplay filters the shared hiddenPortions before
++            // any component measures or paints the Display (all participant kinds).
++            let st = p.stereotype.clone().filter(|_| !diagram.hide_stereotypes);
+             let st_display = st.as_ref().map(|s| format!("\u{ab}{s}\u{bb}"));
+             let st_w = st_display
+                 .as_ref()
+@@ -8109,6 +8076,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
+                     .height
+                 })
+                 .unwrap_or(0.0);
++            let mut display = vec![(label.clone(), false)];
++            if let Some(text) = &st_display {
++                // Participant#getDisplay: addFirst for top, add for bottom.
++                let index = usize::from(p.stereotype_position_bottom);
++                display.insert(index, (text.clone(), true));
++            }
+             // Box width must accommodate the display label (and stereotype if separate)
+             let max_text_w = tw.max(st_w);
+ 
+@@ -8197,6 +8170,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
+                 label,
+                 kind: p.kind,
+                 stereotype: st,
++                display,
+                 text_width: tw,
+                 font_size,
+                 // ComponentRoseParticipant applies marginY7 before its text block.
+@@ -17250,6 +17224,31 @@ mod tests {
+         assert_eq!(resolve_color("PaleVioletRed"), "#D87093");
+     }
+ 
++    #[test]
++    fn note_paint_height_casts_complete_text_block() {
++        for text in [
++            "one\ntwo\nthree\nfour",
++            "<size:17>one</size>\ntwo\nthree\nfour\nfive",
++        ] {
++            let metrics = note_text_metrics_with_family(text, 13.0, "sans-serif");
++            for (shape, margin) in [
++                (NoteShape::Note, 5.0),
++                (NoteShape::Rectangular, 4.0),
++                (NoteShape::Hexagonal, 4.0),
++            ] {
++                let whole = (metrics.total_height + 2.0 * margin).floor();
++                let per_line = metrics
++                    .line_heights
++                    .iter()
++                    .map(|height| height.floor())
++                    .sum::<f64>()
++                    + 2.0 * margin;
++                assert!(whole > per_line);
++                assert_eq!(note_rendered_height(shape, &metrics), whole);
++            }
++        }
++    }
++
+     fn simple_diagram() -> SequenceDiagram {
+         SequenceDiagram {
+             meta: DiagramMeta::default(),
+@@ -17260,6 +17259,7 @@ mod tests {
+                     kind: ParticipantKind::Participant,
+                     order: Some(0),
+                     stereotype: None,
++                    stereotype_position_bottom: false,
+                     url: None,
+                     color: None,
+                     source_line: 1,
+@@ -17270,6 +17270,7 @@ mod tests {
+                     kind: ParticipantKind::Participant,
+                     order: Some(1),
+                     stereotype: None,
++                    stereotype_position_bottom: false,
+                     url: None,
+                     color: None,
+                     source_line: 1,
+@@ -17298,6 +17299,7 @@ mod tests {
+             })],
+             autonumber: None,
+             hide_footbox: false,
++            hide_stereotypes: false,
+             teoz: false,
+             boxes: Vec::new(),
+         }

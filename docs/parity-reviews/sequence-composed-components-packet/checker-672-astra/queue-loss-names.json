@@ -1,0 +1,6 @@
+[
+  "sequence/seq_create_activate_destroy_queue",
+  "sequence/seq_create_destroy_queue",
+  "sequence/seq_create_loop_queue",
+  "sequence/seq_destroy_queue"
+]

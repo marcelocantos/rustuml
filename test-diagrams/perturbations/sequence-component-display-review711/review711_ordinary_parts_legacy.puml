@@ -1,0 +1,10 @@
+@startuml
+participant Quartz
+participant Larch
+Quartz <-> Larch: full
+Quartz <-/ Larch: lower
+Quartz <-\\ Larch: upper open
+Larch <</- Quartz: reversed open
+Quartz o<-/o Larch: rings
+Larch o<\\-o Quartz: reversed rings
+@enduml

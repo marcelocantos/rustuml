@@ -1,0 +1,147 @@
+{
+  "failure_snapshots": [
+    {
+      "tier": "no_oracle_failure_names.txt",
+      "phase": "candidate1",
+      "new_losses": [
+        "sequence/seq_hnote_left_of_A_clightblue",
+        "sequence/seq_hnote_left_of_A_cred",
+        "sequence/seq_hnote_over_A_B_clightblue",
+        "sequence/seq_hnote_over_A_B_cred",
+        "sequence/seq_hnote_over_A_clightblue",
+        "sequence/seq_hnote_over_A_cred",
+        "sequence/seq_hnote_over_B_clightblue",
+        "sequence/seq_hnote_over_B_cred",
+        "sequence/seq_hnote_right_of_B_clightblue",
+        "sequence/seq_hnote_right_of_B_cred",
+        "sequence/seq_note_color_EEFFEE",
+        "sequence/seq_note_color_FFEEAA",
+        "sequence/seq_note_color_blue",
+        "sequence/seq_note_color_green",
+        "sequence/seq_note_color_lightblue",
+        "sequence/seq_note_color_pink",
+        "sequence/seq_note_color_red",
+        "sequence/seq_note_color_yellow",
+        "sequence/seq_note_colored",
+        "sequence/seq_rnote_left_of_A_clightblue",
+        "sequence/seq_rnote_left_of_A_cred",
+        "sequence/seq_rnote_over_A_B_clightblue",
+        "sequence/seq_rnote_over_A_B_cred",
+        "sequence/seq_rnote_over_A_clightblue",
+        "sequence/seq_rnote_over_A_cred",
+        "sequence/seq_rnote_over_B_clightblue",
+        "sequence/seq_rnote_over_B_cred",
+        "sequence/seq_rnote_right_of_B_clightblue",
+        "sequence/seq_rnote_right_of_B_cred"
+      ],
+      "recovered": [],
+      "baseline_sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+      "phase_sha256": "d32cd7ee617bd75c9030220c5ed9f66e92f5d5cb52834a73c57adc8b9304581d",
+      "byte_equal": false
+    },
+    {
+      "tier": "no_oracle_failure_names.txt",
+      "phase": "candidate2",
+      "new_losses": [],
+      "recovered": [],
+      "baseline_sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+      "phase_sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+      "byte_equal": true
+    },
+    {
+      "tier": "no_oracle_failure_names.txt",
+      "phase": "final",
+      "new_losses": [],
+      "recovered": [],
+      "baseline_sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+      "phase_sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+      "byte_equal": true
+    },
+    {
+      "tier": "golden_failure_names.txt",
+      "phase": "candidate1",
+      "new_losses": [
+        "sequence/seq_hnote_left_of_A_clightblue",
+        "sequence/seq_hnote_left_of_A_cred",
+        "sequence/seq_hnote_over_A_B_clightblue",
+        "sequence/seq_hnote_over_A_B_cred",
+        "sequence/seq_hnote_over_A_clightblue",
+        "sequence/seq_hnote_over_A_cred",
+        "sequence/seq_hnote_over_B_clightblue",
+        "sequence/seq_hnote_over_B_cred",
+        "sequence/seq_hnote_right_of_B_clightblue",
+        "sequence/seq_hnote_right_of_B_cred",
+        "sequence/seq_note_color_EEFFEE",
+        "sequence/seq_note_color_FFEEAA",
+        "sequence/seq_note_color_blue",
+        "sequence/seq_note_color_green",
+        "sequence/seq_note_color_lightblue",
+        "sequence/seq_note_color_pink",
+        "sequence/seq_note_color_red",
+        "sequence/seq_note_color_yellow",
+        "sequence/seq_note_colored",
+        "sequence/seq_rnote_left_of_A_clightblue",
+        "sequence/seq_rnote_left_of_A_cred",
+        "sequence/seq_rnote_over_A_B_clightblue",
+        "sequence/seq_rnote_over_A_B_cred",
+        "sequence/seq_rnote_over_A_clightblue",
+        "sequence/seq_rnote_over_A_cred",
+        "sequence/seq_rnote_over_B_clightblue",
+        "sequence/seq_rnote_over_B_cred",
+        "sequence/seq_rnote_right_of_B_clightblue",
+        "sequence/seq_rnote_right_of_B_cred"
+      ],
+      "recovered": [],
+      "baseline_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+      "phase_sha256": "258ac6244f80e94892f9eb260f0a41864628d1e46cdf4226634546eea0722f97",
+      "byte_equal": false
+    },
+    {
+      "tier": "golden_failure_names.txt",
+      "phase": "candidate2",
+      "new_losses": [],
+      "recovered": [],
+      "baseline_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+      "phase_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+      "byte_equal": true
+    },
+    {
+      "tier": "golden_failure_names.txt",
+      "phase": "final",
+      "new_losses": [],
+      "recovered": [],
+      "baseline_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+      "phase_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+      "byte_equal": true
+    }
+  ],
+  "signature_captures": {
+    "candidate2-signature4/measurements.json": [
+      {
+        "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/signature-inputs/create_outer_bit_legacy.puml",
+        "before": 0,
+        "intermediate": 1,
+        "final": 0
+      },
+      {
+        "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/signature-inputs/create_outer_bit_teoz.puml",
+        "before": 0,
+        "intermediate": 1,
+        "final": 0
+      },
+      {
+        "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/signature-inputs/create_inner_bit_legacy.puml",
+        "before": 0,
+        "intermediate": 0,
+        "final": 0
+      },
+      {
+        "source": "/Users/marcelo/Library/Caches/rustuml-sequence-command-9784/signature-inputs/create_inner_bit_teoz.puml",
+        "before": 0,
+        "intermediate": 0,
+        "final": 0
+      }
+    ]
+  },
+  "capture_archive_sha256": "5b98deb9098b45d6c61955bfbf3a90609fc9a4f3bfc35d21b39eefc88dd236bd"
+}

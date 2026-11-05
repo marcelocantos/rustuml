@@ -1,0 +1,1200 @@
+{
+  "ast": {
+    "changed": 14,
+    "frozen_stdout_equal": 2371,
+    "before_panics": [],
+    "after_panics": [],
+    "changes": [
+      {
+        "source": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\nparticipant Thistle\\n[-> Thistle: frost\\nnote over: ice\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Thistle\",\n                label: \"Thistle\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 1,\n            },\n        ],\n        events: [\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"[\",\n                    to: \"Thistle\",\n                    label: \"frost\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 2,\n                },\n            ),\n            Note(\n                Note {\n                    position: Over,\n                    participants: [],\n                    text: \"ice\",\n                    shape: Note,\n                    color: None,\n                    on_message: false,\n                    source_line: 3,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: false,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "3a0690dddc84432709f315a37b709b9e43b1dac004d830a886e34b11a0fdd11c"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\n!pragma teoz true\\nparticipant Thistle\\n[-> Thistle: frost\\nnote over: ice\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Thistle\",\n                label: \"Thistle\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 2,\n            },\n        ],\n        events: [\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"[\",\n                    to: \"Thistle\",\n                    label: \"frost\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 3,\n                },\n            ),\n            Note(\n                Note {\n                    position: Over,\n                    participants: [],\n                    text: \"ice\",\n                    shape: Note,\n                    color: None,\n                    on_message: false,\n                    source_line: 4,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: true,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "4625c92e07a3043b8e5bff5976d8c0fa92229324136104504da69002b3a1dfd3"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 4: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\nparticipant Tamarisk\\nrnote over Tamarisk\\npollen\\nend\\u{2003}rnote\\nTamarisk -> Tamarisk: after\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Tamarisk\",\n                label: \"Tamarisk\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 1,\n            },\n        ],\n        events: [\n            Note(\n                Note {\n                    position: Over,\n                    participants: [\n                        \"Tamarisk\",\n                    ],\n                    text: \"pollen\",\n                    shape: Rectangular,\n                    color: None,\n                    on_message: false,\n                    source_line: 2,\n                },\n            ),\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"Tamarisk\",\n                    to: \"Tamarisk\",\n                    label: \"after\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 5,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: false,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "30bd0da07f43f661080b73f7c23815d7b53dff2bc8a2fcc528ba84984e209b1b"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 2: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\n!pragma teoz true\\nparticipant Tamarisk\\nrnote over Tamarisk\\npollen\\nend\\u{2003}rnote\\nTamarisk -> Tamarisk: after\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Tamarisk\",\n                label: \"Tamarisk\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 2,\n            },\n        ],\n        events: [\n            Note(\n                Note {\n                    position: Over,\n                    participants: [\n                        \"Tamarisk\",\n                    ],\n                    text: \"pollen\",\n                    shape: Rectangular,\n                    color: None,\n                    on_message: false,\n                    source_line: 3,\n                },\n            ),\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"Tamarisk\",\n                    to: \"Tamarisk\",\n                    label: \"after\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 6,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: true,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "5c211627938987d8af3cd458a908e06621945f8b91542baa7ba733a430e931b1"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\nparticipant Tamarisk\\nrnote over Tamarisk\\npollen\\nend\\u{202f}rnote\\nTamarisk -> Tamarisk: after\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Tamarisk\",\n                label: \"Tamarisk\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 1,\n            },\n        ],\n        events: [\n            Note(\n                Note {\n                    position: Over,\n                    participants: [\n                        \"Tamarisk\",\n                    ],\n                    text: \"pollen\",\n                    shape: Rectangular,\n                    color: None,\n                    on_message: false,\n                    source_line: 2,\n                },\n            ),\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"Tamarisk\",\n                    to: \"Tamarisk\",\n                    label: \"after\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 5,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: false,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "952971872bd5f1a506096cdec466511f8aa30eb091496f982044ec8ac8502920"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 2: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\n!pragma teoz true\\nparticipant Tamarisk\\nrnote over Tamarisk\\npollen\\nend\\u{202f}rnote\\nTamarisk -> Tamarisk: after\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Tamarisk\",\n                label: \"Tamarisk\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 2,\n            },\n        ],\n        events: [\n            Note(\n                Note {\n                    position: Over,\n                    participants: [\n                        \"Tamarisk\",\n                    ],\n                    text: \"pollen\",\n                    shape: Rectangular,\n                    color: None,\n                    on_message: false,\n                    source_line: 3,\n                },\n            ),\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"Tamarisk\",\n                    to: \"Tamarisk\",\n                    label: \"after\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 6,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: true,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "f340e29a5912752366a89c965ee92409606e5265d1bd3d10b98100b4068cd2e1"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/message_gap_em_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\nparticipant Birch\\nparticipant Elm\\nBirch -> Elm: initial\\nBirch\\u{2003}->\\u{2003}Elm: next\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Birch\",\n                label: \"Birch\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 1,\n            },\n            Participant {\n                id: \"Elm\",\n                label: \"Elm\",\n                kind: Participant,\n                order: Some(\n                    1,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 2,\n            },\n        ],\n        events: [\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"Birch\",\n                    to: \"Elm\",\n                    label: \"initial\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 3,\n                },\n            ),\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"Birch\",\n                    to: \"Elm\",\n                    label: \"next\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 4,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: false,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "c1a9069daf0ae4342e9d3123eb9b1102b8c81acec02a7fa431842a55e70b0f7e"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\nparticipant Birch\\nparticipant Elm\\nBirch -> Elm: initial\\nBirch\\u{2003}->\\u{2003}Elm: next\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Birch\",\n                label: \"Birch\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 1,\n            },\n            Participant {\n                id: \"Elm\",\n                label: \"Elm\",\n                kind: Participant,\n                order: Some(\n                    1,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 2,\n            },\n        ],\n        events: [\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"Birch\",\n                    to: \"Elm\",\n                    label: \"initial\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 3,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: false,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "21bb682a885a9f393edb28df1bc1fa6e5b0e602ec9f033e6ef838defecd50710"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/terminator_gap_em_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\n!pragma teoz true\\nparticipant Birch\\nhnote over Birch\\nfirst\\nsecond\\nend\\u{2003}hnote\\nBirch -> Birch: later\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Birch\",\n                label: \"Birch\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 2,\n            },\n        ],\n        events: [\n            Note(\n                Note {\n                    position: Over,\n                    participants: [\n                        \"Birch\",\n                    ],\n                    text: \"first\\nsecond\",\n                    shape: Hexagonal,\n                    color: None,\n                    on_message: false,\n                    source_line: 3,\n                },\n            ),\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"Birch\",\n                    to: \"Birch\",\n                    label: \"later\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 7,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: true,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "5e282b2edf843a1704ae0f0543ace2f6d19045c59fb30865910ebdeca0d0c529"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/message_gap_narrow_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\nparticipant Birch\\nparticipant Elm\\nBirch -> Elm: initial\\nBirch\\u{202f}->\\u{202f}Elm: next\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Birch\",\n                label: \"Birch\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 1,\n            },\n            Participant {\n                id: \"Elm\",\n                label: \"Elm\",\n                kind: Participant,\n                order: Some(\n                    1,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 2,\n            },\n        ],\n        events: [\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"Birch\",\n                    to: \"Elm\",\n                    label: \"initial\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 3,\n                },\n            ),\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"Birch\",\n                    to: \"Elm\",\n                    label: \"next\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 4,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: false,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "a44b05d7f4f213d795ac2d379f4cfe134d901b7522dd85406d78612eea548f39"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\nparticipant Birch\\nparticipant Elm\\nBirch -> Elm: initial\\nBirch\\u{202f}->\\u{202f}Elm: next\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Birch\",\n                label: \"Birch\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 1,\n            },\n            Participant {\n                id: \"Elm\",\n                label: \"Elm\",\n                kind: Participant,\n                order: Some(\n                    1,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 2,\n            },\n        ],\n        events: [\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"Birch\",\n                    to: \"Elm\",\n                    label: \"initial\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 3,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: false,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "68326b8144cc442d3efcf844cf7cae7b6c381723b07db5aeff0aaec1bab46dc6"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/terminator_gap_narrow_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\n!pragma teoz true\\nparticipant Birch\\nhnote over Birch\\nfirst\\nsecond\\nend\\u{202f}hnote\\nBirch -> Birch: later\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Birch\",\n                label: \"Birch\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 2,\n            },\n        ],\n        events: [\n            Note(\n                Note {\n                    position: Over,\n                    participants: [\n                        \"Birch\",\n                    ],\n                    text: \"first\\nsecond\",\n                    shape: Hexagonal,\n                    color: None,\n                    on_message: false,\n                    source_line: 3,\n                },\n            ),\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"Birch\",\n                    to: \"Birch\",\n                    label: \"later\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 7,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: true,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "7bf0db99b9d290a894af49325d19064d257e92df4093805764a4935c35c1c429"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_inline_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\nparticipant Birch\\n[-> Birch: arrive\\nnote over: forbidden\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Birch\",\n                label: \"Birch\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 1,\n            },\n        ],\n        events: [\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"[\",\n                    to: \"Birch\",\n                    label: \"arrive\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 2,\n                },\n            ),\n            Note(\n                Note {\n                    position: Over,\n                    participants: [],\n                    text: \"forbidden\",\n                    shape: Note,\n                    color: None,\n                    on_message: false,\n                    source_line: 3,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: false,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "b2d444049921e13e9bb898bcd19401cd35148f5a4f22fe927a26ed52c2767322"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_inline_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\n!pragma teoz true\\nparticipant Birch\\n[-> Birch: arrive\\nnote over: forbidden\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Birch\",\n                label: \"Birch\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 2,\n            },\n        ],\n        events: [\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"[\",\n                    to: \"Birch\",\n                    label: \"arrive\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 3,\n                },\n            ),\n            Note(\n                Note {\n                    position: Over,\n                    participants: [],\n                    text: \"forbidden\",\n                    shape: Note,\n                    color: None,\n                    on_message: false,\n                    source_line: 4,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: true,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "0d67b288ed06a5cfee1e65671f6d043338094f0191aeb9f3a878d9486bf0634c"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 4: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_multiline_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\nparticipant Birch\\n[-> Birch: arrive\\nnote over\\nforbidden\\nend note\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Birch\",\n                label: \"Birch\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 1,\n            },\n        ],\n        events: [\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"[\",\n                    to: \"Birch\",\n                    label: \"arrive\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 2,\n                },\n            ),\n            Note(\n                Note {\n                    position: Over,\n                    participants: [],\n                    text: \"forbidden\",\n                    shape: Note,\n                    color: None,\n                    on_message: false,\n                    source_line: 3,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: false,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "f39953c7cc8826a83660b9e519c28e722337bf23dbadf05593d235c413ea3e42"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_multiline_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "Sequence(\n    SequenceDiagram {\n        meta: DiagramMeta {\n            title: None,\n            title_line: None,\n            header: None,\n            header_line: None,\n            footer: None,\n            footer_line: None,\n            caption: None,\n            caption_line: None,\n            legend: None,\n            legend_line: None,\n            legend_horizontal_alignment: Center,\n            legend_vertical_alignment: Bottom,\n            skinparams: [],\n            style_program: StyleProgram {\n                declarations: [],\n            },\n            sprites: {},\n            source: Some(\n                \"@startuml\\n!pragma teoz true\\nparticipant Birch\\n[-> Birch: arrive\\nnote over\\nforbidden\\nend note\\n@enduml\\n\",\n            ),\n        },\n        participants: [\n            Participant {\n                id: \"Birch\",\n                label: \"Birch\",\n                kind: Participant,\n                order: Some(\n                    0,\n                ),\n                stereotype: None,\n                stereotype_position_bottom: false,\n                url: None,\n                color: None,\n                source_line: 2,\n            },\n        ],\n        events: [\n            Message(\n                Message {\n                    parallel: false,\n                    from: \"[\",\n                    to: \"Birch\",\n                    label: \"arrive\",\n                    arrow: Arrow {\n                        line: Solid,\n                        head: Filled,\n                        direction: LeftToRight,\n                        color: None,\n                        head_half: None,\n                        thin_head: false,\n                        source_cross: false,\n                        source_circle: false,\n                        target_circle: false,\n                        source_dressing: None,\n                    },\n                    activation: None,\n                    activation_color: None,\n                    source_line: 3,\n                },\n            ),\n            Note(\n                Note {\n                    position: Over,\n                    participants: [],\n                    text: \"forbidden\",\n                    shape: Note,\n                    color: None,\n                    on_message: false,\n                    source_line: 4,\n                },\n            ),\n        ],\n        autonumber: None,\n        hide_footbox: false,\n        hide_stereotypes: false,\n        teoz: true,\n        boxes: [],\n    },\n)\n",
+          "stderr": "",
+          "stdout_sha256": "13acd8bbd07239c61fcc6f0bcb293571633463906e9a57ca01d12101dca72115"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--ast",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 4: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    ]
+  },
+  "ascii": {
+    "changed": 14,
+    "frozen_stdout_equal": 2371,
+    "before_panics": [],
+    "after_panics": [],
+    "changes": [
+      {
+        "source": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Thistle \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2518\n frost\u2502\n \u2500\u2500\u2500\u2500\u2500>\n  \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2510\n  \u2502 ice  \u2502\n  \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2518\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2510\n \u2502 Thistle \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "786a15b9fc8e1b682d692c08c53143b46fd08b514ab4bff21c67d58eea00f2a6"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Thistle \u2502\n \u2514\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2518\n frost\u2502\n \u2500\u2500\u2500\u2500\u2500>\n  \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2510\n  \u2502 ice  \u2502\n  \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2518\n \u250c\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2510\n \u2502 Thistle \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "786a15b9fc8e1b682d692c08c53143b46fd08b514ab4bff21c67d58eea00f2a6"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 4: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Tamarisk \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2518\n  \u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2510\n  \u2502 pollen \u2502\n  \u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2518\n       \u2502\u2500\u2500\u2500\u2510er\n       \u2502<\u2500\u2500\u2518\n \u250c\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2510\n \u2502 Tamarisk \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "a055eb187ce0329d1e5c87618a341266d9c146d7c23b71a034248726de5f1da7"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 2: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Tamarisk \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2518\n  \u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2510\n  \u2502 pollen \u2502\n  \u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2518\n       \u2502\u2500\u2500\u2500\u2510er\n       \u2502<\u2500\u2500\u2518\n \u250c\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2510\n \u2502 Tamarisk \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "a055eb187ce0329d1e5c87618a341266d9c146d7c23b71a034248726de5f1da7"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Tamarisk \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2518\n  \u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2510\n  \u2502 pollen \u2502\n  \u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2518\n       \u2502\u2500\u2500\u2500\u2510er\n       \u2502<\u2500\u2500\u2518\n \u250c\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2510\n \u2502 Tamarisk \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "a055eb187ce0329d1e5c87618a341266d9c146d7c23b71a034248726de5f1da7"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 2: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Tamarisk \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2500\u2518\n  \u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2510\n  \u2502 pollen \u2502\n  \u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2518\n       \u2502\u2500\u2500\u2500\u2510er\n       \u2502<\u2500\u2500\u2518\n \u250c\u2500\u2500\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2500\u2510\n \u2502 Tamarisk \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "a055eb187ce0329d1e5c87618a341266d9c146d7c23b71a034248726de5f1da7"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/message_gap_em_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502          \u2502 Elm \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u252c\u2500\u2500\u2518\n     \u2502     initial     \u2502\n     \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n     \u2502       next      \u2502\n     \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2534\u2500\u2500\u2510\n \u2502 Birch \u2502          \u2502 Elm \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "73a101abefce8c66730254d930840652e6c019de53e4cc07a8f7d1570d73bc2b"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502          \u2502 Elm \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u252c\u2500\u2500\u2518\n     \u2502     initial     \u2502\n     \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2534\u2500\u2500\u2510\n \u2502 Birch \u2502          \u2502 Elm \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "c50668ae9c71959405bfccd28a6d84691a812512bfc719f64b8c9252b15b27bc"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/terminator_gap_em_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n\u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 first\nsecond \u2502\n\u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n     \u2502\u2500\u2500\u2500\u2510er\n     \u2502<\u2500\u2500\u2518\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "8bfeb5dd5cc25d423bb83a012b710e33f7e5762e59b0d3f503597bcdc4b46f4e"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/message_gap_narrow_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502          \u2502 Elm \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u252c\u2500\u2500\u2518\n     \u2502     initial     \u2502\n     \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n     \u2502       next      \u2502\n     \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2534\u2500\u2500\u2510\n \u2502 Birch \u2502          \u2502 Elm \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "73a101abefce8c66730254d930840652e6c019de53e4cc07a8f7d1570d73bc2b"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502          \u2502 Elm \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u252c\u2500\u2500\u2518\n     \u2502     initial     \u2502\n     \u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500>\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510          \u250c\u2500\u2500\u2534\u2500\u2500\u2510\n \u2502 Birch \u2502          \u2502 Elm \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518          \u2514\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "c50668ae9c71959405bfccd28a6d84691a812512bfc719f64b8c9252b15b27bc"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/terminator_gap_narrow_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n\u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 first\nsecond \u2502\n\u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n     \u2502\u2500\u2500\u2500\u2510er\n     \u2502<\u2500\u2500\u2518\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "8bfeb5dd5cc25d423bb83a012b710e33f7e5762e59b0d3f503597bcdc4b46f4e"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_inline_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n arrive\n \u2500\u2500\u2500\u2500>\n\u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 forbidden \u2502\n\u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "bd00be76a697e3e6be53f50431d5e7eb59b836ced980d537772544f2fb2a9b5b"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_inline_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n arrive\n \u2500\u2500\u2500\u2500>\n\u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 forbidden \u2502\n\u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "bd00be76a697e3e6be53f50431d5e7eb59b836ced980d537772544f2fb2a9b5b"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 4: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_multiline_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n arrive\n \u2500\u2500\u2500\u2500>\n\u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 forbidden \u2502\n\u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "bd00be76a697e3e6be53f50431d5e7eb59b836ced980d537772544f2fb2a9b5b"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_multiline_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": " \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502\n \u2514\u2500\u2500\u2500\u252c\u2500\u2500\u2500\u2518\n arrive\n \u2500\u2500\u2500\u2500>\n\u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2510\n\u2502 forbidden \u2502\n\u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n \u250c\u2500\u2500\u2500\u2534\u2500\u2500\u2500\u2510\n \u2502 Birch \u2502\n \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518\n\n",
+          "stderr": "",
+          "stdout_sha256": "bd00be76a697e3e6be53f50431d5e7eb59b836ced980d537772544f2fb2a9b5b"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-ttxt",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 4: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    ]
+  },
+  "yaml": {
+    "changed": 14,
+    "frozen_stdout_equal": 2371,
+    "before_panics": [
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review2_external_live_depth_autonumber.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_four_way_combined.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_from_left_isolated.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_from_right_isolated.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_to_left_isolated.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_to_right_isolated.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review4_autonumber_literal_angle_formats.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review4_external_shared_left_depth_repeat.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review4_external_shared_right_depth_repeat.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review5_autonumber_prefix_suffix_resume.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review5_autonumber_styled_hash_resume.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autonumber_mixed_required_field.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autonumber_spatial_reverse_order.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review6_owned_right_divider_intervening.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review_external_hidden_autonumber_activation.puml",
+      "test-diagrams/perturbations/sequence-single-pending-create/ind78_numbered_legacy.puml",
+      "test-diagrams/perturbations/sequence-single-pending-create/ind78_numbered_teoz.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_number_legacy.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_number_teoz.puml"
+    ],
+    "after_panics": [
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review2_external_live_depth_autonumber.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_four_way_combined.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_from_left_isolated.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_from_right_isolated.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_to_left_isolated.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_to_right_isolated.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review4_autonumber_literal_angle_formats.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review4_external_shared_left_depth_repeat.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review4_external_shared_right_depth_repeat.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review5_autonumber_prefix_suffix_resume.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review5_autonumber_styled_hash_resume.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autonumber_mixed_required_field.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autonumber_spatial_reverse_order.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review6_owned_right_divider_intervening.puml",
+      "test-diagrams/perturbations/sequence-inline-arrow-style/review_external_hidden_autonumber_activation.puml",
+      "test-diagrams/perturbations/sequence-single-pending-create/ind78_numbered_legacy.puml",
+      "test-diagrams/perturbations/sequence-single-pending-create/ind78_numbered_teoz.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_number_legacy.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_number_teoz.puml"
+    ],
+    "changes": [
+      {
+        "source": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      participant Thistle\n      [-> Thistle: frost\n      note over: ice\n      @enduml\n  participants:\n  - id: Thistle\n    label: Thistle\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 1\n  events:\n  - !Message\n    parallel: false\n    from: '['\n    to: Thistle\n    label: frost\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 2\n  - !Note\n    position: Over\n    participants: []\n    text: ice\n    shape: Note\n    source_line: 3\n  autonumber: null\n  hide_footbox: false\n  teoz: false\n",
+          "stderr": "",
+          "stdout_sha256": "fe5cf3cba9096d6cd9723a553a402708e9c8f004a8d25ca2e7bb2c64ee7197de"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      !pragma teoz true\n      participant Thistle\n      [-> Thistle: frost\n      note over: ice\n      @enduml\n  participants:\n  - id: Thistle\n    label: Thistle\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 2\n  events:\n  - !Message\n    parallel: false\n    from: '['\n    to: Thistle\n    label: frost\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 3\n  - !Note\n    position: Over\n    participants: []\n    text: ice\n    shape: Note\n    source_line: 4\n  autonumber: null\n  hide_footbox: false\n  teoz: true\n",
+          "stderr": "",
+          "stdout_sha256": "22edcc9da1bb79e17aafaa11c9cef5263ca8a8bae6e5a9e17d6aacc98467dafa"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 4: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      participant Tamarisk\n      rnote over Tamarisk\n      pollen\n      end\u2003rnote\n      Tamarisk -> Tamarisk: after\n      @enduml\n  participants:\n  - id: Tamarisk\n    label: Tamarisk\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 1\n  events:\n  - !Note\n    position: Over\n    participants:\n    - Tamarisk\n    text: pollen\n    shape: Rectangular\n    source_line: 2\n  - !Message\n    parallel: false\n    from: Tamarisk\n    to: Tamarisk\n    label: after\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 5\n  autonumber: null\n  hide_footbox: false\n  teoz: false\n",
+          "stderr": "",
+          "stdout_sha256": "335381c06c2942a38adecf24f3f6d8322830059b98c9d6a519ee3965177a32e1"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 2: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      !pragma teoz true\n      participant Tamarisk\n      rnote over Tamarisk\n      pollen\n      end\u2003rnote\n      Tamarisk -> Tamarisk: after\n      @enduml\n  participants:\n  - id: Tamarisk\n    label: Tamarisk\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 2\n  events:\n  - !Note\n    position: Over\n    participants:\n    - Tamarisk\n    text: pollen\n    shape: Rectangular\n    source_line: 3\n  - !Message\n    parallel: false\n    from: Tamarisk\n    to: Tamarisk\n    label: after\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 6\n  autonumber: null\n  hide_footbox: false\n  teoz: true\n",
+          "stderr": "",
+          "stdout_sha256": "5ae6505b55c53e1441037436a41da1ea092ace8e3966e7e8edc90afddbcc888e"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      participant Tamarisk\n      rnote over Tamarisk\n      pollen\n      end\u202frnote\n      Tamarisk -> Tamarisk: after\n      @enduml\n  participants:\n  - id: Tamarisk\n    label: Tamarisk\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 1\n  events:\n  - !Note\n    position: Over\n    participants:\n    - Tamarisk\n    text: pollen\n    shape: Rectangular\n    source_line: 2\n  - !Message\n    parallel: false\n    from: Tamarisk\n    to: Tamarisk\n    label: after\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 5\n  autonumber: null\n  hide_footbox: false\n  teoz: false\n",
+          "stderr": "",
+          "stdout_sha256": "b34d45d36ef13c79ab8715daf2f2c6429fde6ab865cc5be20e678f08a5e9c65b"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 2: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      !pragma teoz true\n      participant Tamarisk\n      rnote over Tamarisk\n      pollen\n      end\u202frnote\n      Tamarisk -> Tamarisk: after\n      @enduml\n  participants:\n  - id: Tamarisk\n    label: Tamarisk\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 2\n  events:\n  - !Note\n    position: Over\n    participants:\n    - Tamarisk\n    text: pollen\n    shape: Rectangular\n    source_line: 3\n  - !Message\n    parallel: false\n    from: Tamarisk\n    to: Tamarisk\n    label: after\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 6\n  autonumber: null\n  hide_footbox: false\n  teoz: true\n",
+          "stderr": "",
+          "stdout_sha256": "b63fdd73d2cc6aae470997437dd37175a215679df36552e4879dd5a7f4a6d5da"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/message_gap_em_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      participant Birch\n      participant Elm\n      Birch -> Elm: initial\n      Birch\u2003->\u2003Elm: next\n      @enduml\n  participants:\n  - id: Birch\n    label: Birch\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 1\n  - id: Elm\n    label: Elm\n    kind: Participant\n    order: 1\n    stereotype: null\n    source_line: 2\n  events:\n  - !Message\n    parallel: false\n    from: Birch\n    to: Elm\n    label: initial\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 3\n  - !Message\n    parallel: false\n    from: Birch\n    to: Elm\n    label: next\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 4\n  autonumber: null\n  hide_footbox: false\n  teoz: false\n",
+          "stderr": "",
+          "stdout_sha256": "325d5d8aeb7fc6019ac86386f3eb0290147bc1fab848f031bf0b63f4ed1e8435"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      participant Birch\n      participant Elm\n      Birch -> Elm: initial\n      Birch\u2003->\u2003Elm: next\n      @enduml\n  participants:\n  - id: Birch\n    label: Birch\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 1\n  - id: Elm\n    label: Elm\n    kind: Participant\n    order: 1\n    stereotype: null\n    source_line: 2\n  events:\n  - !Message\n    parallel: false\n    from: Birch\n    to: Elm\n    label: initial\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 3\n  autonumber: null\n  hide_footbox: false\n  teoz: false\n",
+          "stderr": "",
+          "stdout_sha256": "0ac6589a39d29e73f18f9d9e2dff044e7cac644fc2688ab0f01098e0ac98670b"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/terminator_gap_em_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      !pragma teoz true\n      participant Birch\n      hnote over Birch\n      first\n      second\n      end\u2003hnote\n      Birch -> Birch: later\n      @enduml\n  participants:\n  - id: Birch\n    label: Birch\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 2\n  events:\n  - !Note\n    position: Over\n    participants:\n    - Birch\n    text: |-\n      first\n      second\n    shape: Hexagonal\n    source_line: 3\n  - !Message\n    parallel: false\n    from: Birch\n    to: Birch\n    label: later\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 7\n  autonumber: null\n  hide_footbox: false\n  teoz: true\n",
+          "stderr": "",
+          "stdout_sha256": "4ddcb6622061a0c98fe7b9d83e751b7d18ece37970f89237b49a8eac7180dc6f"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/message_gap_narrow_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      participant Birch\n      participant Elm\n      Birch -> Elm: initial\n      Birch\u202f->\u202fElm: next\n      @enduml\n  participants:\n  - id: Birch\n    label: Birch\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 1\n  - id: Elm\n    label: Elm\n    kind: Participant\n    order: 1\n    stereotype: null\n    source_line: 2\n  events:\n  - !Message\n    parallel: false\n    from: Birch\n    to: Elm\n    label: initial\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 3\n  - !Message\n    parallel: false\n    from: Birch\n    to: Elm\n    label: next\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 4\n  autonumber: null\n  hide_footbox: false\n  teoz: false\n",
+          "stderr": "",
+          "stdout_sha256": "acde1e209742d3a5be38994bd585c65de73e1ee2badad9f3668dc8f2424ebb75"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      participant Birch\n      participant Elm\n      Birch -> Elm: initial\n      Birch\u202f->\u202fElm: next\n      @enduml\n  participants:\n  - id: Birch\n    label: Birch\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 1\n  - id: Elm\n    label: Elm\n    kind: Participant\n    order: 1\n    stereotype: null\n    source_line: 2\n  events:\n  - !Message\n    parallel: false\n    from: Birch\n    to: Elm\n    label: initial\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 3\n  autonumber: null\n  hide_footbox: false\n  teoz: false\n",
+          "stderr": "",
+          "stdout_sha256": "43270e6a21292c32f2a74321d741239055ee8cc415ae7ea57a051fb13d547c7d"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/terminator_gap_narrow_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      !pragma teoz true\n      participant Birch\n      hnote over Birch\n      first\n      second\n      end\u202fhnote\n      Birch -> Birch: later\n      @enduml\n  participants:\n  - id: Birch\n    label: Birch\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 2\n  events:\n  - !Note\n    position: Over\n    participants:\n    - Birch\n    text: |-\n      first\n      second\n    shape: Hexagonal\n    source_line: 3\n  - !Message\n    parallel: false\n    from: Birch\n    to: Birch\n    label: later\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 7\n  autonumber: null\n  hide_footbox: false\n  teoz: true\n",
+          "stderr": "",
+          "stdout_sha256": "71544336cd3747f9ef764fb606a6ae447e0e9dd2c3045b6dab4b47f8b3c173dd"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: Unclosed sequence note\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_inline_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      participant Birch\n      [-> Birch: arrive\n      note over: forbidden\n      @enduml\n  participants:\n  - id: Birch\n    label: Birch\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 1\n  events:\n  - !Message\n    parallel: false\n    from: '['\n    to: Birch\n    label: arrive\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 2\n  - !Note\n    position: Over\n    participants: []\n    text: forbidden\n    shape: Note\n    source_line: 3\n  autonumber: null\n  hide_footbox: false\n  teoz: false\n",
+          "stderr": "",
+          "stdout_sha256": "9bc732a5a21661726005164ed15ea15dda7c7450d2cc467944a04d23522c56a8"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_inline_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      !pragma teoz true\n      participant Birch\n      [-> Birch: arrive\n      note over: forbidden\n      @enduml\n  participants:\n  - id: Birch\n    label: Birch\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 2\n  events:\n  - !Message\n    parallel: false\n    from: '['\n    to: Birch\n    label: arrive\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 3\n  - !Note\n    position: Over\n    participants: []\n    text: forbidden\n    shape: Note\n    source_line: 4\n  autonumber: null\n  hide_footbox: false\n  teoz: true\n",
+          "stderr": "",
+          "stdout_sha256": "5961984c54fa153d7a05481f341c176ac05284b8d216205eec898d265f512bca"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 4: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_multiline_legacy.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      participant Birch\n      [-> Birch: arrive\n      note over\n      forbidden\n      end note\n      @enduml\n  participants:\n  - id: Birch\n    label: Birch\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 1\n  events:\n  - !Message\n    parallel: false\n    from: '['\n    to: Birch\n    label: arrive\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 2\n  - !Note\n    position: Over\n    participants: []\n    text: forbidden\n    shape: Note\n    source_line: 3\n  autonumber: null\n  hide_footbox: false\n  teoz: false\n",
+          "stderr": "",
+          "stdout_sha256": "75f09c970b77e9e386ad02013ebe682a422b0fe5b86ea2f5cde3596e7a1d1694"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 3: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      {
+        "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/docs/parity-reviews/sequence-consumer-contract-packet/maker-results/inputs/reference-inputs/bare_over_multiline_teoz.puml",
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 0,
+          "stdout": "type: Sequence\ndiagram:\n  meta:\n    source: |\n      @startuml\n      !pragma teoz true\n      participant Birch\n      [-> Birch: arrive\n      note over\n      forbidden\n      end note\n      @enduml\n  participants:\n  - id: Birch\n    label: Birch\n    kind: Participant\n    order: 0\n    stereotype: null\n    source_line: 2\n  events:\n  - !Message\n    parallel: false\n    from: '['\n    to: Birch\n    label: arrive\n    arrow:\n      line: Solid\n      head: Filled\n      direction: LeftToRight\n    activation: null\n    source_line: 3\n  - !Note\n    position: Over\n    participants: []\n    text: forbidden\n    shape: Note\n    source_line: 4\n  autonumber: null\n  hide_footbox: false\n  teoz: true\n",
+          "stderr": "",
+          "stdout_sha256": "7516a0192edea6d4750b1dc4378ec9de234cb4b3f51c2980c2ceb8ed5e5bddb2"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b4b6e1c6",
+          "exit": 1,
+          "stdout": "",
+          "stderr": "parse error: line 4: A note over command requires a participant\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    ]
+  }
+}

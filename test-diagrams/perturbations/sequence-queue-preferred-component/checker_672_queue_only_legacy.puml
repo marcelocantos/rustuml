@@ -1,0 +1,10 @@
+@startuml
+queue Cedar
+queue Maple
+create Cedar
+Maple -> Cedar: create
+loop work
+Cedar -> Maple: deliver
+end
+destroy Cedar
+@enduml

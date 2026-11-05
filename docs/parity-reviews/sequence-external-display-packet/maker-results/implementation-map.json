@@ -1,0 +1,31 @@
+{
+  "accounts": [
+    {
+      "mechanism": "sequence-external-create-consumer",
+      "account_commit": "6857e26f9b0e1fc4c96d34faca06f7fe3ce539f2",
+      "implementation_commits": [
+        "f3d8bf0cce9caecfcaee445eaa69226f68378047"
+      ],
+      "dependency_target": null
+    },
+    {
+      "mechanism": "sequence-queue-complete-stereotype-display",
+      "account_commit": "6857e26f9b0e1fc4c96d34faca06f7fe3ce539f2",
+      "implementation_commits": [
+        "d714bb55d40ca18590d15a5ffd57c7620b91b456"
+      ],
+      "dependency_target": null
+    },
+    {
+      "mechanism": "sequence-heading-shared-stripe-handoff",
+      "account_commit": "6857e26f9b0e1fc4c96d34faca06f7fe3ce539f2",
+      "implementation_commits": [],
+      "dependency_target": "T14.13"
+    }
+  ],
+  "files": [
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "full_tested_production": "d714bb55d40ca18590d15a5ffd57c7620b91b456",
+  "ownership": "Only sequence model/parser/renderer. No parse/mod, ASCII, class, TIM, shared text/style/fonts or targets."
+}

@@ -1,0 +1,5 @@
+@startuml
+!pragma teoz true
+Cedar -> Birch ++ : enter
+return #transparent vanish
+@enduml

@@ -1,0 +1,21 @@
+{
+  "revision": "71b465a98aa5c511588d87ee080088e8614d975e",
+  "binaries": {
+    "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+    "diff_one": "bc89d4d72af89c35191133e4582d3fee99b84578e33aa82f8e1db5cdb23adbf5",
+    "rustuml": "1d1487e633ab947962c95573feef8027be7a54720e362ec81e4a1863e00194c2"
+  },
+  "source_files": {
+    "crates/rustuml-parser/src/diagram/sequence.rs": "b719ad5f89387c530c1df78fff202a79fcc8aef183f16069f3a76a68d87a55cb",
+    "crates/rustuml-parser/src/parse/sequence.rs": "d371026dc588649d853d579c32d93ef84d9998aeff89b64faed7a974b967bd69",
+    "crates/rustuml-render/src/sequence.rs": "51fd6f50c11bebd385ac4f1a4d645f4635373bd2dd881eaf85630fb4fcc7956c",
+    "crates/rustuml-render/src/ascii.rs": "1302dd82b4248cff35d1868953099e918c984dc2d688effac127d40a1c161ba7"
+  },
+  "environment": {
+    "CARGO_BUILD_JOBS": "4",
+    "RAYON_NUM_THREADS": "4",
+    "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-repair/target",
+    "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+    "JAVA_TOOL_OPTIONS": "-Djava.awt.headless=true"
+  }
+}

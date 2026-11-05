@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-create-command-signature-scope",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "70bc20cf1",
+  "account_date": "2026-11-05",
+  "java_locations": [
+    "sequencediagram.command.CommandParticipantA#getRegexConcat",
+    "sequencediagram.command.CommandParticipant#getRegexType",
+    "regex.RegexConcat#match"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::SeqParser::try_participant_decl",
+    "crates/rustuml-parser/src/parse/sequence.rs::SeqParser::try_create_destroy"
+  ],
+  "invariant": "The FoxSignature is evaluated on the complete command string, even when the Rust parser reuses the declaration parser on the tail of a create command.",
+  "causal_divergence": "The new required-space guard on try_participant_decl sees only the create tail when invoked recursively. A valid create SPACE actor VT Name line has the global bit in the discarded prefix, so the tail check incorrectly falls back to a plain participant.",
+  "planned_change": "Pass full-command context alongside the declaration slice through the sequence-local declaration parser. Keep the public internal entry for ordinary declarations. Validate both placements of SPACE/VT and preserve actual actor kind, creation ownership and output.",
+  "perturbation_axes": [
+    "space bit in outer create prefix versus inner declaration tail",
+    "both engines and creation followed by ordinary messages"
+  ]
+}

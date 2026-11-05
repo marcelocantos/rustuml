@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Vega
+actor Lyra
+queue Draco
+participant Corvus
+create Draco
+Draco ->]: edge
+@enduml

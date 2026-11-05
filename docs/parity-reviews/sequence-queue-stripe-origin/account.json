@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "evidence_import": "96e2561122e70ffe53dfa3f102cf18d199cc464f",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-queue-stripe-origin",
+  "java_locations": [
+    "decoration.symbol.USymbolQueue#asSmall/#getMargin",
+    "klimt.shape.TextBlockUtils#mergeTB",
+    "klimt.creole.SheetBlock1#initMap"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::queue_shape/render_participant_shape/ParticipantTextBlock"
+  ],
+  "invariant": "The queue translates the whole composed stereotype/label block by margin5. Each stripe baseline is block origin plus preceding heights plus its own ascent.",
+  "causal_divergence": "The caller supplies base-font ascent, then ParticipantTextBlock subtracts actual first ascent. Rich first lines shift the entire label upward.",
+  "planned_change": "Derive queue label and stereotype baselines at the component paint origin from their own measured first ascent; use existing complete text blocks, not a correction added after painting.",
+  "perturbation_axes": [
+    "rich first versus later stripe with large/small sizes",
+    "initial/created/tail and engines"
+  ]
+}

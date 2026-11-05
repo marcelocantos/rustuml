@@ -1,0 +1,176 @@
+{
+  "yaml_change_categories": [
+    {
+      "index": 2281,
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_note_legacy.puml",
+      "category": "Note events/ownership"
+    },
+    {
+      "index": 2282,
+      "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_note_teoz.puml",
+      "category": "Note events/ownership"
+    },
+    {
+      "index": 2333,
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_hide_legacy.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2334,
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_hide_teoz.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2335,
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_below_legacy.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2336,
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_below_teoz.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2341,
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_bare_legacy.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2342,
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_bare_teoz.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2343,
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_created_legacy.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2344,
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_created_teoz.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2345,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/hide_kinds_legacy.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2346,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/hide_kinds_teoz.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2347,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/hide_created_legacy.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2348,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/hide_created_teoz.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2351,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/bottom_order_legacy.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2352,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/bottom_order_teoz.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2353,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/bottom_created_legacy.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2354,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/bottom_created_teoz.puml",
+      "category": "Display fields"
+    },
+    {
+      "index": 2355,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/rect_rows_legacy.puml",
+      "category": "parse recovery"
+    },
+    {
+      "index": 2356,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/rect_rows_teoz.puml",
+      "category": "parse recovery"
+    },
+    {
+      "index": 2357,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/hex_rows_legacy.puml",
+      "category": "parse recovery"
+    },
+    {
+      "index": 2358,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/hex_rows_teoz.puml",
+      "category": "parse recovery"
+    },
+    {
+      "index": 2361,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/exo_note_in_legacy.puml",
+      "category": "Note events/ownership"
+    },
+    {
+      "index": 2362,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/exo_note_in_teoz.puml",
+      "category": "Note events/ownership"
+    },
+    {
+      "index": 2363,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/exo_note_out_legacy.puml",
+      "category": "Note events/ownership"
+    },
+    {
+      "index": 2364,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/exo_note_out_teoz.puml",
+      "category": "Note events/ownership"
+    },
+    {
+      "index": 2365,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/exo_stale_owner_legacy.puml",
+      "category": "Note events/ownership"
+    },
+    {
+      "index": 2366,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/exo_stale_owner_teoz.puml",
+      "category": "Note events/ownership"
+    },
+    {
+      "index": 2367,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/exo_right_in_legacy.puml",
+      "category": "Note events/ownership"
+    },
+    {
+      "index": 2368,
+      "source": "docs/parity-reviews/sequence-filtered-display-packet/maker-results/inputs/reference-inputs/exo_right_in_teoz.puml",
+      "category": "Note events/ownership"
+    }
+  ],
+  "hidden_wide_recoveries": [
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_bare_legacy.puml",
+      "before": 1,
+      "after": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_bare_teoz.puml",
+      "before": 1,
+      "after": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_created_legacy.puml",
+      "before": 1,
+      "after": 0
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_hide_widename_created_teoz.puml",
+      "before": 1,
+      "after": 0
+    }
+  ]
+}

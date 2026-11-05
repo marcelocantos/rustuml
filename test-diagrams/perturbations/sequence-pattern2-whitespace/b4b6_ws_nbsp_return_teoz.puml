@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+Juniper -> Kestrel ++: invoke
+return #blue done
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant A
+participant B
+A -> B ++ : enter
+B x-- B : reverse cross
+note left: beside cross
+@enduml

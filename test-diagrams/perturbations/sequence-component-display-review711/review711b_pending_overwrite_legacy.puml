@@ -1,0 +1,9 @@
+@startuml
+participant Sender
+participant Lost
+participant Kept
+create Lost
+create Kept
+Sender -> Kept: attached
+Sender -> Lost: ordinary
+@enduml

@@ -1,0 +1,202 @@
+[
+  {
+    "name": "dressing_mixed_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "f77d8d165a626b8bd062f7b78e8876a6e25311633bf470ddb2445d3e4d1c5811",
+    "stdout_sha256": "f879c05073876d43b0c998d85cb0a098704cf713d3293fddfce7ef3c9ad7107d",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "dressing_mixed_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "f140215a34d494d5b8d6ee865656ec0c4a7c3b190606b87fab39e784b1815cb9",
+    "stdout_sha256": "cc37d36c7fc7c908cb00df4ccf587f4dc1554ef1be2696eb5b84255f9b6527d2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "dressing_self_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "52a6b2a835a370195f2c2d1892fa7d89b954584ae27ff7dc024adeb44333768b",
+    "stdout_sha256": "f7b472939cd305eab591378165f746f33d79a446d1053e57a51e484c4cf46f6e",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "dressing_self_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "286587b71dee9dcfcd12bf4355de39f0d25ed77aa0a12691035e7af5e44438b4",
+    "stdout_sha256": "c264bc17387c8de262e9de128a57eb03494483d3bc808a4fc5ef58f59a9d959d",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "dressing_external_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "743ddb69cb94f015ac09e43933d8a6fb694520a6de5a1b166c7d694cc5eeba84",
+    "stdout_sha256": "351d2fc431eea5e0867b97013ce67f310f910918dcc95c9082b7217fc9e158cd",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "dressing_external_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "4601751004fe69a266a65feaa1aca9d945a1f466afe7aa2046e77fa225d79760",
+    "stdout_sha256": "21878e2d273e78ec93fd5654ae9176dc707ca29aa0dd0094f153312cad1cede5",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "create_live_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "504fb937942e1fac20c781b59c0634c57056effefa1503397b3ebb3b33457158",
+    "stdout_sha256": "35530d824920aa17b27adcfab530af9a5452111eed0cbd20b40c36f2b01896d1",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "create_live_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "d1808f055d569c221472106288daea4c20b8e8deb63ace768bc21519bd2e7ea5",
+    "stdout_sha256": "dda56306fd2294d9210f8b9e67977bdc6a9456801b50d2b342b84a26c762b268",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "create_repeat_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "718a8185d9b07df2198d640eeb33bc2254e420d5af3e10f1821ef6dc5741ba16",
+    "stdout_sha256": "524785c9bc0f2cbb568249d27b244afbc4b346332be5242c1a1316ae5e477566",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "create_repeat_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "acaf0855270cbedadd18d7ae501539290f17215dc8b83a4de786d0d3ef8c8bfd",
+    "stdout_sha256": "9d1a2c89d775acc9b02cd3aeafd9c04218721a3a5aa2b83f225322dc7c7326d8",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "queue_display_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "73f16bf00ffcf14562d9d65cc70d95ac7c09c09855826f5b98e2df80766a3c40",
+    "stdout_sha256": "7195015050e2aed7c2f996a55b06879974a7e24ee94f10460650fb9ec197976e",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "queue_display_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "12ccc7ef08390bb0aa1cbd1c12fca867e57119647f5cee53aea5233588a82665",
+    "stdout_sha256": "202f50ddfa4114feffe52fda889300bc9696c3a868e258550d574765e4824161",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "queue_stereotype_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "a252b13304d13d01c0a2dd6caff1a5726751143221ea4071e253fd8dc7c3606f",
+    "stdout_sha256": "84ff9dfd4a9e7ca6ec25c2c4b86be0f8d785fe5ea67dd9f3e3cd11b4e1314a53",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "queue_stereotype_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "7bda25b376486350eaad73827556db72bb7484a1b06e195dbb9b0fd722205a09",
+    "stdout_sha256": "331a557ecba2b097fa37c72e0cff1e67339d944b287bb571174579a228bbb160",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "head_display_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "b4a1abb6fd54e93ae7368c3c76fae23dbdc2d25cecebc054d1e9529844dc94b9",
+    "stdout_sha256": "38c511f58bba8152aca234ecd458cd6f08c644fac74656d6449437a375a06cff",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "head_display_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "003ff4a247c78a1531a8f1d1407fb839c1ee0ddd94a84aa57e235bc6a8fe58d6",
+    "stdout_sha256": "df60cbe780950b924d872a591c19ddf18765f9b9b70e5b115fd1a1ca65d9b0cc",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "rule_space_legacy",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "0515e86b9a8b6e52b84b0ed2834bb65a5bf692d9117c71beac633719dc64ac68",
+    "stdout_sha256": "7eb8556a36307735b89440822e49447d5eda73f24ff7fbc4e17861cbb9b85a0a",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "rule_space_teoz",
+    "intended_valid": true,
+    "observed_valid": true,
+    "java_exit": 0,
+    "diagram_type": "SEQUENCE",
+    "source_sha256": "aeff2acbdfe2825a47ffc37e13da6492ea3f9fac2be125f4ea1f0399f205390e",
+    "stdout_sha256": "a731a0890e706cbb3f9df968e2365abc47ea7928afda285c0d03d86b4bc184ff",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "unclosed_note_legacy",
+    "intended_valid": false,
+    "observed_valid": false,
+    "java_exit": 200,
+    "diagram_type": null,
+    "source_sha256": "8a3e7e46741a6109c6671d33c6280c4da4d2de29b3fbc1e5c5bb5c330459cb41",
+    "stdout_sha256": "f6d7154783e0b16368c0a7ec751aff1000eb6586b1f94d48f0c4c7aca159280b",
+    "stderr_sha256": "1d7a04c314053625e8032b83c30cdfad8bc1b42ae26faf47334543fa1f97ba88"
+  },
+  {
+    "name": "unclosed_note_teoz",
+    "intended_valid": false,
+    "observed_valid": false,
+    "java_exit": 200,
+    "diagram_type": null,
+    "source_sha256": "23aad8d070137472519e5dda4778e299499513939eb7f20f508e953a40a07be0",
+    "stdout_sha256": "1351d1823ff11b7939c455ce1edb142111505c7db950f5a92b445e08fd851905",
+    "stderr_sha256": "2e9e331c945c11a7edb71b46f986135bd3bdd303c4ac5b2f4c535544294a40b2"
+  }
+]

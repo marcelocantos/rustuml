@@ -1,0 +1,16 @@
+@startuml
+<style>
+sequenceDiagram {
+ participant {
+ Shadowing 0
+ }
+ actor {
+ Shadowing 5
+ }
+}
+</style>
+participant Trunk
+create actor Branch
+Trunk -> Branch: grow
+Branch --> Trunk: green
+@enduml

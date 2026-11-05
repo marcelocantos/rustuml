@@ -1,0 +1,15 @@
+{
+  "imported_original": "fdf1154eb3a17ebb041fffb0c18710a38210f56b",
+  "local_import": "eaedee419da43b38fb91d8848cea39d325c55d1c",
+  "imported_paths": 378,
+  "immutable_import_verified": true,
+  "modified_existing_paths": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/ascii.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "comparator_sha256": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701",
+  "measure_sha256": "966d34c58c2025580eb887907cac11ef753a4b02920a0a5bc56d600f22f092c9",
+  "ascii_diff": "Exactly two target_circle: false additions beside source_circle; no other edits."
+}

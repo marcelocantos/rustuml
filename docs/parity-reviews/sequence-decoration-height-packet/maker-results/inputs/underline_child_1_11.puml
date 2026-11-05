@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+skinparam NoteFontSize 11
+skinparam ArrowFontSize 13
+Wren -> Lark : __underlined call__
+Lark --> Wren : __underlined answer__
+note right : __labeled rule__
+Wren -> Lark : following
+@enduml

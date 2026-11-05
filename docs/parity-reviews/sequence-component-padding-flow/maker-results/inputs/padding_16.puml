@@ -1,0 +1,18 @@
+@startuml
+skinparam Padding 2
+participant Seed as S
+participant Forge as F
+alt allowed
+S -> F ++ : acquire
+note left of F
+Wide Wi.f
+second line
+end note
+opt verify
+note left of S : MMM short
+return answer
+end
+else fallback\nmore
+S -> F : finish
+end
+@enduml

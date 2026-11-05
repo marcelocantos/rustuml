@@ -1,0 +1,33 @@
+{
+  "status": "maker causal account; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java": [
+    "sequencediagram/command/CommandBoxStart.java#getRegexConcat NAME1 quoted or NAME2 ([^#]+), optional color",
+    "CommandBoxStart#executeArg passes title to Display and SequenceDiagram.boxStart"
+  ],
+  "rust": [
+    "crates/rustuml-parser/src/parse/sequence.rs#try_box"
+  ],
+  "invariant": "Quoted and unquoted box titles both populate ParticipantBox.title before preferred dimensions and paint.",
+  "divergence": "Rust retains only quoted title; unquoted title is silently discarded, losing title ink and preferred header height.",
+  "change": "Parse unquoted title up to optional color; retain common downstream box component model. Verify plain and multiword titles with color and quote controls, both engines.",
+  "axes": [
+    "quoted versus unquoted and multiword with trailing color",
+    "both engines, visible versus hidden footbox and footer composition"
+  ],
+  "schema_version": 1,
+  "mechanism": "sequence-box-title-grammar",
+  "java_locations": [
+    "sequencediagram/command/CommandBoxStart.java#getRegexConcat NAME1 quoted or NAME2 ([^#]+), optional color",
+    "CommandBoxStart#executeArg passes title to Display and SequenceDiagram.boxStart"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs#try_box"
+  ],
+  "causal_divergence": "Rust retains only quoted title; unquoted title is silently discarded, losing title ink and preferred header height.",
+  "planned_change": "Parse unquoted title up to optional color; retain common downstream box component model. Verify plain and multiword titles with color and quote controls, both engines.",
+  "perturbation_axes": [
+    "quoted versus unquoted and multiword with trailing color",
+    "both engines, visible versus hidden footbox and footer composition"
+  ]
+}

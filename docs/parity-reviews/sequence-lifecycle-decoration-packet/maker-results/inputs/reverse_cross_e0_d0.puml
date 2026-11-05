@@ -1,0 +1,6 @@
+@startuml
+participant Before
+participant Worker
+Worker <-x Worker : reverse source cross
+return #blue inherited dressing
+@enduml

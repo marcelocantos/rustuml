@@ -1,0 +1,9 @@
+@startuml
+collections Ibis
+participant Lyra
+create Ibis
+Ibis <-]: awaken
+activate Ibis
+Ibis -> Lyra: notify
+deactivate Ibis
+@enduml

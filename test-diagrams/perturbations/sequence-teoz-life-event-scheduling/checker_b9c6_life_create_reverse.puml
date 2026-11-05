@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+participant Birch
+participant Cedar
+create Birch
+Cedar -> Birch ++ : new
+Birch -> Birch ++ : deeper
+return inner
+Birch -> Cedar : done
+destroy Birch
+@enduml

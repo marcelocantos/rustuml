@@ -1,0 +1,7 @@
+@startuml
+skinparam stereotypePosition bottom
+actor "Wide Birch\n<size:18>Second</size>" as B <<role>>
+skinparam stereotypePosition top
+actor "Elm" as E <<broad role>>
+B -> E: notify
+@enduml

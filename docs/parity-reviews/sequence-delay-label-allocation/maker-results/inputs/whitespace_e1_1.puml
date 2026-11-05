@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+skinparam Padding 3
+participant Birch
+participant Robin
+Birch -> Robin : start
+group delay
+...pause   ...
+Robin -> Birch : end
+end
+@enduml

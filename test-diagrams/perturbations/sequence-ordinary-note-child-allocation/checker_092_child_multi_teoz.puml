@@ -1,0 +1,10 @@
+@startuml
+!pragma teoz true
+skinparam noteFontSize 17
+skinparam sequenceMessageFontSize 11
+skinparam Padding 3
+Quartz <- Finch : delivery
+note left : tall\nsecond\nthird
+note right : tiny
+Finch -> Quartz : continue
+@enduml

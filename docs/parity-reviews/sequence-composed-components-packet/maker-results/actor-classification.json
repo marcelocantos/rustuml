@@ -1,0 +1,14 @@
+[
+  {
+    "name": "actor_scoped_forward",
+    "exit": 0,
+    "diagram_type": "SEQUENCE",
+    "syntax_error": false
+  },
+  {
+    "name": "actor_scoped_reverse",
+    "exit": 0,
+    "diagram_type": "SEQUENCE",
+    "syntax_error": false
+  }
+]

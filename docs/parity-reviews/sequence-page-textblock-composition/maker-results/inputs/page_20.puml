@@ -1,0 +1,12 @@
+@startuml
+title First line\nLong second heading WWWWWWWWWWWWWWWW
+caption Caption WWWWWWWWWWWWWW
+header Heading WWWWWWWWWWWWWWWWW
+footer Footer ffff
+participant Willow as W
+participant Fir as F
+group package
+W -> F : request
+F --> W : response
+end
+@enduml

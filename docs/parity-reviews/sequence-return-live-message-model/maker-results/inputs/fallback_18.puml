@@ -1,0 +1,8 @@
+@startuml
+participant C
+participant S
+participant D
+C ->> S : question
+return answer
+return reconsider
+@enduml

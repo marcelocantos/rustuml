@@ -1,0 +1,6 @@
+@startuml
+participant Lead as L
+create S
+L -> S : birth
+S -> S : WWW thick label WWW
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+participant Sedge as S
+participant Forge as F
+group package
+[-> S : incoming port
+note left of S : WWWW.fff
+loop cycle
+note left of S : MMMMM.i
+S -> F : transfer
+end
+end
+@enduml

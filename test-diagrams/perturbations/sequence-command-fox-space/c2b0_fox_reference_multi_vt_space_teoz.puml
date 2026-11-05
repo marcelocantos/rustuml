@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+ref over Quartz,Vale
+ledger
+end ref
+@enduml

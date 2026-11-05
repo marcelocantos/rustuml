@@ -1,0 +1,16 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/welcome-handoff/empty_false.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/welcome-handoff/empty_false.svg",
+    "cohort": "welcome-handoff2",
+    "reference_revision": "0f00130a26b2f300996d0bd427f9e70b4ef10e30",
+    "reference_classification": "welcome_truncation, not a positive diagram reference"
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/welcome-handoff/empty_loop.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/welcome-handoff/empty_loop.svg",
+    "cohort": "welcome-handoff2",
+    "reference_revision": "0f00130a26b2f300996d0bd427f9e70b4ef10e30",
+    "reference_classification": "welcome_truncation, not a positive diagram reference"
+  }
+]

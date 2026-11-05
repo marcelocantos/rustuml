@@ -1,0 +1,9 @@
+@startuml
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+box	"Depot terminal" #LightBlue
+participant Yard
+end box
+Yard -> Quartz: dock
+@enduml

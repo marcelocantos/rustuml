@@ -1,0 +1,453 @@
+{
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "findings": [
+    {
+      "mechanism": "sequence-factory-command-viability",
+      "java": [
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java",
+          "symbol": "factories.add(new SequenceDiagramFactory",
+          "lines": [
+            131
+          ],
+          "sha256": "1c679f6535e60079fc34f11bc31e9676e203b2ad1297b5313dce67be525527f1"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+          "symbol": "getCandidate(",
+          "lines": [
+            137,
+            173
+          ],
+          "sha256": "78b1734665d5764adbf390a7b57a594f25737df425bac033860a1448028bea4c"
+        }
+      ],
+      "rust": [
+        {
+          "path": "crates/rustuml-parser/src/parse/sequence.rs",
+          "symbol": "consumes_decorated_sequence",
+          "lines": [
+            70
+          ],
+          "sha256": "6a304f6579fc745d3a83a1122a650b1741a53326ae35f0d0eba42e4766b0022d"
+        },
+        {
+          "path": "crates/rustuml-parser/src/parse/sequence.rs",
+          "symbol": "fn try_meta",
+          "lines": [
+            1240
+          ],
+          "sha256": "6a304f6579fc745d3a83a1122a650b1741a53326ae35f0d0eba42e4766b0022d"
+        },
+        {
+          "path": "crates/rustuml-parser/src/parse/sequence.rs",
+          "symbol": "self.unconsumed = true",
+          "lines": [
+            595
+          ],
+          "sha256": "6a304f6579fc745d3a83a1122a650b1741a53326ae35f0d0eba42e4766b0022d"
+        }
+      ],
+      "findings": [
+        "New dispatch branch requires actual parsed Message circle decoration plus a recognized head/cross and no flagged unknown command. No new token scores or fixture text branches found; preexisting scored fallback is retained.",
+        "The probe reuses a permissive parser, not Java command execution/finalization. try_hide accepts arbitrary hide prefixes; group and box syntax are not generally validated. Java ACCEPTS the generated unclosed group/box, so those cannot substantiate a missing-finalization rejection.",
+        "The quoted-header valid Sequence source fails whole CLI output (blank Class). try_meta does not implement multiline header command consumption; this remains bounded coverage, not general dispatcher correctness.",
+        "Command-order fresh source retains two messages but participant UID/declaration order differs. Genuine class/object controls match; component aggregation, bare-circle Class, and header/quoted remain failures. Mixed and unknown syntax-negative sources are accepted by Rust; no positive parity credit."
+      ]
+    },
+    {
+      "mechanism": "sequence-endpoint-dressing-composition",
+      "java": [
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java",
+          "symbol": "final boolean reverseDefine",
+          "lines": [
+            218
+          ],
+          "sha256": "cf27c1c63a49f97c23606081adad93f6d42c64e41d3e204909fd05dd9d312c8b"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/skin/ArrowConfiguration.java",
+          "symbol": "public ArrowConfiguration withPart",
+          "lines": [
+            149
+          ],
+          "sha256": "08139b5d7fc69fa7ef9febcd01217607ea27c6edf6e5050872a8bbeddc58b3d1"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/skin/ArrowConfiguration.java",
+          "symbol": "public ArrowConfiguration reverse()",
+          "lines": [
+            110
+          ],
+          "sha256": "08139b5d7fc69fa7ef9febcd01217607ea27c6edf6e5050872a8bbeddc58b3d1"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseArrow.java",
+          "symbol": "private void drawDressing1",
+          "lines": [
+            199
+          ],
+          "sha256": "5c7592a11e5e1164362daf44ea8acfc1014e8f9895296b740c3eda2c10578060"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseArrow.java",
+          "symbol": "public void drawInternalU",
+          "lines": [
+            84
+          ],
+          "sha256": "5c7592a11e5e1164362daf44ea8acfc1014e8f9895296b740c3eda2c10578060"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseSelfArrow.java",
+          "symbol": "private void drawRightSide",
+          "lines": [
+            91
+          ],
+          "sha256": "ee42d78cfe425c46e76fb57f5040f16cd92513c058d016bb15d462cce616c7b0"
+        }
+      ],
+      "rust": [
+        {
+          "path": "crates/rustuml-parser/src/parse/sequence.rs",
+          "symbol": "// to both dressings",
+          "lines": [
+            1452
+          ],
+          "sha256": "6a304f6579fc745d3a83a1122a650b1741a53326ae35f0d0eba42e4766b0022d"
+        },
+        {
+          "path": "crates/rustuml-parser/src/parse/sequence.rs",
+          "symbol": "let source_dressing",
+          "lines": [
+            1461
+          ],
+          "sha256": "6a304f6579fc745d3a83a1122a650b1741a53326ae35f0d0eba42e4766b0022d"
+        },
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "fn message_endpoint_pair",
+          "lines": [
+            6059
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        },
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "if arrow.head_half.is_some_and",
+          "lines": [
+            6118
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        },
+        {
+          "path": "crates/rustuml-parser/src/diagram/sequence.rs",
+          "symbol": "pub source_dressing",
+          "lines": [
+            165
+          ],
+          "sha256": "6712e54a3193ff8107791f64ea306ce7ef24215cb430ed21e231774c20ca857a"
+        }
+      ],
+      "findings": [
+        "Independent source head and circle fields are retained and serde-default compatibility passes existing test. Exact ASCII diff is two source_dressing: None constructor fields; no ASCII rendering edit.",
+        "DISPROVED: Java ArrowConfiguration.withPart updates dressing2 when present, otherwise dressing1. Rust parse_arrow comment incorrectly says both dressings, and message_endpoint_pair applies single head_half to both. Fresh mixed half/async controls omit one source-head line in each of two messages, in both engines.",
+        "For FULL head controls, physical dressing1 then dressing2 then stroke ordering and circle/head reservations trace directly to ComponentRoseArrow. Each full NORMAL end shortens half arrowDeltaX; this is source derived rather than coordinate fitting.",
+        "Fresh mixed full self-head and external direction/circle controls match in both engines. These passes do not certify other half-head combinations or ASCII parity."
+      ]
+    },
+    {
+      "mechanism": "sequence-note-body-composition",
+      "java": [
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/cucadiagram/BodyEnhanced2.java",
+          "symbol": "protected TextBlock getArea",
+          "lines": [
+            78
+          ],
+          "sha256": "de686f1c360b7b04087ee9ee4fa906e1598422e0dec311c886d89c1ecd195222"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/cucadiagram/BodyEnhancedAbstract.java",
+          "symbol": "final protected TextBlock decorate",
+          "lines": [
+            106
+          ],
+          "sha256": "a1cd80997518b6c749ed1b88ca917eed709bb2a2bce7951ca79303c31f487d72"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockLineBefore.java",
+          "symbol": "public void drawU",
+          "lines": [
+            81
+          ],
+          "sha256": "28c9079d8503657a3ece94cf16eea4cc85900454da8198e9994d68147139bcf1"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/UHorizontalLine.java",
+          "symbol": "final double y1",
+          "lines": [
+            162
+          ],
+          "sha256": "dbd91d771f90d6b4d18984f5bd67b08e7120939fec965945e7b9fa45c08063e7"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/StripeSimple.java",
+          "symbol": "if (atoms.size() == 0)",
+          "lines": [
+            125
+          ],
+          "sha256": "5da5e0b2ec483a26ee58e63a58e79ab37f7a881f465701bfddac9ba1d8967eec"
+        }
+      ],
+      "rust": [
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "struct EnhancedNoteBody",
+          "lines": [
+            1332
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        },
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "fn note_text_metrics_with_family",
+          "lines": [
+            1556
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        },
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "fn note_max_line_width_with_family",
+          "lines": [
+            1677
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        },
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "// TextBlockLineBefore: untitled",
+          "lines": [
+            1501
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        }
+      ],
+      "findings": [
+        "Block segmentation, body margin(right6, topH/2, bottom4), title minimum(width+8,height), outer topH/2 and body-before-titled-rule painting trace to Java object composition. Measurement and painting reconstruct the same EnhancedNoteBody model; not a fitted independent height correction.",
+        "DISPROVED: empty titled separator .. .. creates empty Display whose Java StripeSimple.getAtoms inserts a space. Rust emits an empty title with zero width; fresh body_blocks fails both engines (Java textLength4.1133 at font13 versus0). The raw title, both rule gaps and whole-output failure remain.",
+        "Right-aligned font17 controls match both engines; centered body passes Teoz but fails legacy complete note geometry. Shared text/tables/tabs/URLs/natural alignment remain explicit dependencies; no extracted acceptance.",
+        "Prior complete ordinary-child allocation and underline-surcharge removal remain unchanged by this delta. Unclosed note negatives are Java200/Rust0 in both engines."
+      ]
+    },
+    {
+      "mechanism": "sequence-created-participant-component",
+      "java": [
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/ArrowAndParticipant.java",
+          "symbol": "public double getPreferredHeight",
+          "lines": [
+            140
+          ],
+          "sha256": "701cebe45070a2e96189060789ad61a0ee725b709a334bf213331b4d24c70db6"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/ParticipantBox.java",
+          "symbol": "public double getHeadHeight",
+          "lines": [
+            102,
+            106
+          ],
+          "sha256": "af5eac4cf63e26f18fd5599ff82ba556c24965b2810698914e449b64af7b268c"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTile.java",
+          "symbol": "public void drawU",
+          "lines": [
+            170
+          ],
+          "sha256": "4078e44762bff6f2959a0870ecb0501cb17f6a3e57faa272d82baf1c601f0274"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseActor.java",
+          "symbol": "public double getPreferredHeight",
+          "lines": [
+            87
+          ],
+          "sha256": "c6939f2876b59ff22a68e6d0bddb0517d760b05842ddcb6da5a5ca1c9ca4c06c"
+        }
+      ],
+      "rust": [
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "preferred_height: if p.kind",
+          "lines": [
+            8052
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        },
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "let head_height = head.preferred_height",
+          "lines": [
+            8455
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        },
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "let created_lifeline_top",
+          "lines": [
+            12256
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        },
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "shifted.box_x +=",
+          "lines": [
+            13085
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        },
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "let text_x = p.center_x",
+          "lines": [
+            6808
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        },
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "fn sequence_create_message_indices",
+          "lines": [
+            3884
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        }
+      ],
+      "findings": [
+        "Resolved component width reaches constraints and creation endpoint; height reaches schedule max, inline origin, and lifeline origin; actor sibling shadow is separately resolved and painted. Java line preferredHeight20/2 provenance accounts for removal of measured creation constants.",
+        "DISPROVED: Teoz create+activate adjusts only shifted.box_x, while actor paint/text reads center_x. Fresh scoped actor control paints all created actor elements5px to the right of Java. CommunicationTile applies the live level translation to the entire head. Legacy counterpart and nested reverse creation controls match.",
+        "Duplicate creation is valid Java in both engines (contrary to intended negative). Rust sequence_create_message_indices uses HashMap entry.or_insert retaining only first creation; second created head is missing. Preserve as failed valid controls.",
+        "Component styles beyond scoped actor/participant shadow remain bounded; this does not certify collections, all glyphs, multiline fonts, or global style composition."
+      ]
+    },
+    {
+      "mechanism": "sequence-queue-preferred-component",
+      "java": [
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseQueue.java",
+          "symbol": "public double getPreferredHeight",
+          "lines": [
+            81
+          ],
+          "sha256": "60d53361642742332622c335437748c8a200853108250e288c4c6429d5ad5f08"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolQueue.java",
+          "symbol": "return new Margin(5, 15, 5, 5)",
+          "lines": [
+            131
+          ],
+          "sha256": "04f5a9252f98391cae0fdea525d1e67bf5d839c177318eaa8cdd973b1953fbe6"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolQueue.java",
+          "symbol": "return getMargin().addDimension",
+          "lines": [
+            155
+          ],
+          "sha256": "04f5a9252f98391cae0fdea525d1e67bf5d839c177318eaa8cdd973b1953fbe6"
+        }
+      ],
+      "rust": [
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "let queue_layout_h",
+          "lines": [
+            7910
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        },
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "preferred_height: if p.kind == ParticipantKind::Queue",
+          "lines": [
+            8052
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        }
+      ],
+      "findings": [
+        "Source derivation for single-line queue component height is correct: merged text dimensions plus top5/bottom5, not mixed-kind row band. Four intermediate queue losses are reproduced separately, not erased.",
+        "DISPROVED full component claim: Rust uses line_h times one/two based on boxed stereotype, not the full Display height. Fresh multiline queue labels are valid and fail both engines; literal backslash-n text, fewer text elements and undersized canvas remain. Boxed stereotyped creation controls also fail; queue-only reverse loop/destroy controls pass.",
+        "No queue-specific scheduling offset has been reintroduced. Existing mixed-kind row bands and paint are still separate approximations; bounded recovery is not whole queue acceptance."
+      ]
+    },
+    {
+      "mechanism": "sequence-resolved-head-alignment",
+      "java": [
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/LivingSpaces.java",
+          "symbol": "public void drawHeads",
+          "lines": [
+            107
+          ],
+          "sha256": "3bfcabc4260ec6f7616b3e6ce56b8ddb719efce3c91e18505223a0860edc7467"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/LivingSpace.java",
+          "symbol": "public void drawHead",
+          "lines": [
+            154
+          ],
+          "sha256": "d23029368faa371190bf352abd7be065716cb11957c45318cc4c0ed043cadd7c"
+        },
+        {
+          "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/ParticipantBox.java",
+          "symbol": "public void drawHeadTailU",
+          "lines": [
+            122
+          ],
+          "sha256": "af5eac4cf63e26f18fd5599ff82ba556c24965b2810698914e449b64af7b268c"
+        }
+      ],
+      "rust": [
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "let participant_head_band",
+          "lines": [
+            8233
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        },
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "let max_head_band",
+          "lines": [
+            8245
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        },
+        {
+          "path": "crates/rustuml-render/src/sequence.rs",
+          "symbol": "let head_base_y =",
+          "lines": [
+            12995
+          ],
+          "sha256": "793683a3c3059513ebaa10fbbe9279a6ea71580bc28965c396e6c0002a564706"
+        }
+      ],
+      "findings": [
+        "Chronology is correct. Exact Teoz translation owner is LivingSpaces.drawHeads, which subtracts this head preferred height from the max before calling LivingSpace.drawHead. The original account names downstream consumer; this reviewer records the precise upstream owner without altering account.",
+        "Unequal actor7/participant2 scoped shadow controls match both engines. Reservation and ordinary paint share participant_head_band; no measured sibling offset added.",
+        "Full resolved preferred-dimension assertion remains unproved/false: band is derived from box_height plus selected shadow, not the actual complete Display component for multiline participants. Participant-only shadow plus multiline sibling fails both engines. No extracted acceptance of only the passing scoped controls."
+      ]
+    }
+  ],
+  "java_blob_mismatches": []
+}

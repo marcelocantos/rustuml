@@ -1,0 +1,7 @@
+@startuml
+participant Quartz
+participant Vale
+Quartz -> Vale: primer
+note across:
+Vale -> Quartz: after
+@enduml

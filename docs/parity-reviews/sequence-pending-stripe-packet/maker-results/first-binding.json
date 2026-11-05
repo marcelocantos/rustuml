@@ -1,0 +1,14 @@
+{
+  "head": "4aaab169442b1e8a1d9e896d0cd3f019de6803d4",
+  "dirty": true,
+  "binaries": {
+    "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+    "diff_one": "cb5ed5d17007514e4689c1178365fd446cf46dd5b08b745895c1533de44da3c7",
+    "rustuml": "ed6373b1c0426128f77382c40f37a1da10bc91f8520b5dab29e432adcc5795d4"
+  },
+  "source_files": {
+    "crates/rustuml-parser/src/diagram/sequence.rs": "100eb771f6d5e6a95228d753ec72039f73c042ec7fd799275de1be6632cb8461",
+    "crates/rustuml-parser/src/parse/sequence.rs": "dc5dcd55394c1aea7cf111076f0fab78c86c0671b3a446401708161a3d35c0fb",
+    "crates/rustuml-render/src/sequence.rs": "feb6acbbc25e3e31581b8d544cd02c4b3be7e4f49a0bbf9b3f12727d60fb0e33"
+  }
+}

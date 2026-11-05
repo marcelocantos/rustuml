@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-dressing-owned-parts",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7cbc0aef-f6c2-4036-bc37-086ae22f4e23%3Adelegate-task%3A3586e3c0-433f-4984-bdab-61d183d23ec6",
+    "model": "gpt-6-astra / Codex harness in T3 Code",
+    "role": "Independent checker; did not implement candidate; no children",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "branch": "review/sequence-711dbca7-5c023380"
+  },
+  "account_commit": "bf400d8455757a31123b51fd67b64e497514e223",
+  "implementation_commit": "83a496134c763817ce5898758f917fe5c754dadc",
+  "tested_packet_commit": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "tested_production_commit": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+  "before_revision": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "intermediate_revision": "cf3eafb293de2f01699399321d2220c4de9eb28c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "Parent's existing Monkey Man relay: /Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg; exact per-input actual wrapper argv/cwd/status/streams in checker evidence; Java argv derived from pinned wrapper, not process-traced",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE_CACHE/target-after cargo build --release -p rustuml --bin rustuml -p rustuml-oracle --example diff_one",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/fresh52.json PRIVATE_CACHE/after-bin PRIVATE_CACHE/after-fresh; separately followup12.json -> after-followup (same checkout cwd); before binaries likewise",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE_CACHE/target-after cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_legacy.svg",
+      "axes": [
+        "normal/open/half/circle",
+        "direction/label",
+        "engine=legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "163d18f3ac10842f250df0de752cab39b49c0341591734de9123b1bcd723e960",
+      "reference_sha256": "a581dd6be4d8af9ef7b0a6a3b1b435f66ec33ee752d27ff193b59042e62b9cd7",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "comparison_exit": 2,
+      "intended_validity": "valid",
+      "observed_validity": "invalid",
+      "negative_evidence": true
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_teoz.svg",
+      "axes": [
+        "normal/open/half/circle",
+        "direction/label",
+        "engine=teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "f7af73f489984114645b2fe190e8ed31d708d4af42b151d3cb8b72b0d8d82378",
+      "reference_sha256": "67c9117a2210022c139f033454058b6653a910f2a16eb38f741955c04ccf3734",
+      "java_exit": 200,
+      "rust_exit": 0,
+      "comparison_exit": 2,
+      "intended_validity": "valid",
+      "observed_validity": "invalid",
+      "negative_evidence": true
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_self_parts_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_self_parts_legacy.svg",
+      "axes": [
+        "self/dressing asymmetry",
+        "half/normal/open/circle",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "d8e68e2b1c35895d743ef326adf13ef8da0152d3337767cfe5aee64b9c9ec03f",
+      "reference_sha256": "d3b857e3aea17d2946161f77fde3e553d18f33950147ed696236359b2aac9f0c",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_self_parts_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_self_parts_teoz.svg",
+      "axes": [
+        "self/dressing asymmetry",
+        "half/normal/open/circle",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "a1c089d88ac04767c2b5b374853f66dec5387194de2208df05ba17488126f874",
+      "reference_sha256": "ee97257ff9a66d7e3ca20127e9d943d82c5e26ecb0f1231b1f239c881fa100be",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_legacy.svg",
+      "axes": [
+        "reversed self",
+        "activation/half/open/circle",
+        "engine=legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "d2336f957fd0d0675ff1ce0dbd28b970fd5f285e48c06dfe65dded5782b6293a",
+      "reference_sha256": "53e5c0b6e1674d6433dca07663293dac7f59a22043ebd9860adf05be79d9e6a5",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_teoz.svg",
+      "axes": [
+        "reversed self",
+        "activation/half/open/circle",
+        "engine=teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "142d5edd8cfbbdf60a4c586c1b9b9754abfa4ad3f67556a721d093a88560edcd",
+      "reference_sha256": "86ceed21c2ce55b7464956459a9fd5ec43649e1cb1ce923d22327f0864144889",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_external_parts_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_external_parts_legacy.svg",
+      "axes": [
+        "external topology",
+        "normal/open/circle/half",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "ae8d79be310a4a9214a3a2f5497dc3d04130165a807dea94cd6a231d926757e2",
+      "reference_sha256": "8c9aa621c57a81eb49ef88eead7d77c3aa6c66100726b86ed26c38b800c70f28",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_external_parts_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_external_parts_teoz.svg",
+      "axes": [
+        "external topology",
+        "normal/open/circle/half",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "668f1eee9ce9315d921dbca284065f2fd0658616293121621bb95b7999925953",
+      "reference_sha256": "6d4ee4db69ba79762b7c83ab85697c067894b6f23495a7fd46d57b375301b72e",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711b_ordinary_forward_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711b_ordinary_forward_legacy.svg",
+      "axes": [
+        "normal/open/circle/half",
+        "ordinary forward",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "4616042ac914734a841203ad13a4a293b0a3ff68587ab59d3fc830ed685511b8",
+      "reference_sha256": "ac3dfeb977b954d7daa1f1ad116389f4f2bc9128ee2d947a20145d7bff96f00d",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711b_ordinary_forward_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711b_ordinary_forward_teoz.svg",
+      "axes": [
+        "normal/open/circle/half",
+        "ordinary forward",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "e454f4dd24132d676ac4e294a260e8c81ae404257d7f3729d2a9c7c64203b6ff",
+      "reference_sha256": "d809d830d94e24c87c39200c6945eea7bd4880d0c0fc2a6febd5e1b5e96199ca",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711b_ordinary_reverse_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711b_ordinary_reverse_legacy.svg",
+      "axes": [
+        "normal/open/circle/half",
+        "declaration reversal",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "55d56e0c6fa0c1afb2bf145971c4977fdc863a45b1497090704c833228e68d8e",
+      "reference_sha256": "822840bb126dda2e299302beebc524d4e715f68024105bbc619c4cd9bfe63947",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711b_ordinary_reverse_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711b_ordinary_reverse_teoz.svg",
+      "axes": [
+        "normal/open/circle/half",
+        "declaration reversal",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "5b48b656a93f2f24e426b271f1b4befe108418def67341ff5c88b825591616c9",
+      "reference_sha256": "4915930ed1f84f4f32fb0b376fe9659512082a3f09704a2e2e5258f2d5d3d2a9",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    }
+  ],
+  "findings": [
+    "ArrowConfiguration.withPart mutates dressing2 when it has a head, otherwise dressing1; reverse swaps dressings. CommandArrow normalizes participants before configuring both/normal, async heads and withPart. Rust ordinary endpoint tuples now retain source FULL and destination head_half. Four new normalized ordinary forward/reversed combinations pass, as do external controls.",
+    "Whole reverse-self controls fail in both engines. Self is a distinct aggregate-part consumer; the triangle has identical vertex set but a different serialized point order from ComponentRoseSelfArrow.getPolygon for TOP_PART. Frozen comparator rejects it. No comparator relaxation or visual-equivalence waiver.",
+    "Original ordinary combined probes accidentally used invalid mixed endpoint syntax. Their Java exit200 pages and Rust accept0 remain preserved; the supplemental four valid inputs are new files, not edits or silent replacement."
+  ],
+  "verdict": "rejected",
+  "acceptance_policy": "Any failing whole case rejects. Mechanisms with green fresh cases only have bounded support, not acceptance: required standing perturbations and guards remain red. No prior acceptance transfers and no failure is waived.",
+  "evidence": "docs/parity-reviews/sequence-component-display-packet/checker-711-astra/README.md",
+  "fresh_outcomes": {
+    "entries": 12,
+    "outcomes": {
+      "2": 2,
+      "0": 8,
+      "1": 2
+    },
+    "cli_panics": []
+  }
+}

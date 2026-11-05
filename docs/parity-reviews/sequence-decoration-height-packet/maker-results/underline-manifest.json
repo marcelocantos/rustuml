@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "purpose": "Source-derived complete child allocation regression investigation: underline AtomText has no extra component height; labeled rule note uses its own complete height.",
+  "cases": [
+    {
+      "name": "underline_child_0_11",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-inputs/underline_child_0_11.puml",
+      "source_sha256": "259ad0f8b40b108adc9989c62384353a47f6453599766414ccc04b71391ecb95",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_UNDERLINE_CHILD_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_UNDERLINE_CHILD_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "legacy/Teoz",
+        "distinct note/message font sizes with underline/rule versus following plain label"
+      ]
+    },
+    {
+      "name": "underline_child_0_18",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-inputs/underline_child_0_18.puml",
+      "source_sha256": "de5a04a7c338eadbf310353b40acd9c163e592a3c023073604396503816ab26e",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_UNDERLINE_CHILD_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_UNDERLINE_CHILD_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "legacy/Teoz",
+        "distinct note/message font sizes with underline/rule versus following plain label"
+      ]
+    },
+    {
+      "name": "underline_child_1_11",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-inputs/underline_child_1_11.puml",
+      "source_sha256": "bc0ee34d50b4cee9c47ad9004a2f1c190af3679a35b44a6cea3f19faba980f92",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_UNDERLINE_CHILD_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_UNDERLINE_CHILD_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "legacy/Teoz",
+        "distinct note/message font sizes with underline/rule versus following plain label"
+      ]
+    },
+    {
+      "name": "underline_child_1_18",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-inputs/underline_child_1_18.puml",
+      "source_sha256": "7a4f569f882015918de7d045245b09e53b4d99d3d1091e94756bd3a506c1bd41",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_UNDERLINE_CHILD_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_UNDERLINE_CHILD_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "axes": [
+        "legacy/Teoz",
+        "distinct note/message font sizes with underline/rule versus following plain label"
+      ]
+    }
+  ]
+}

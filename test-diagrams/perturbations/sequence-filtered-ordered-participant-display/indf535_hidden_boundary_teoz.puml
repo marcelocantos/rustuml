@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+hide stereotype
+boundary "Fir" as Cedar2 <<ExtremelyWideTransportRole>>
+participant Wren
+show stereotypes
+Wren -> Cedar2: seed
+hide stereotypes
+@enduml

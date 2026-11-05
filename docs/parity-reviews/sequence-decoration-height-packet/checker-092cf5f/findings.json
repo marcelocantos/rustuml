@@ -1,0 +1,55 @@
+[
+  {
+    "mechanism": "sequence-target-circle-decoration",
+    "assessment": "rejected by fresh valid counterexamples",
+    "findings": [
+      "Fresh valid ordinary/live and both-border external circle controls match in both engines. Serde retains true target_circle on round-trip, omits false, defaults missing to false; direct model retains head independently. This direct diagnostic provides no factory-bypassing parity credit.",
+      "bidir_legacy/teoz are Java-valid Sequence sources but fail primitive ordering and source-head/stroke placement. CommandArrow reverseDefine=false for both dressings is correctly retained after the parser change. ComponentRoseArrow.drawInternalU/drawDressing1/2 emit each decoration before its own head and shift head/stroke by diamCircle/2+thinCircle. Rust sequence.rs:13662/13992 source heads and message_filled_arrow ordering do not consistently apply that model; the measured source stroke error is5.5, derived from8/2+1.5, not a proposed offset.",
+      "self_half_legacy/teoz fail the final o\\-- filled-half wing. parse_arrow computes direction from stripped dressing at1364 but still tests raw s.starts_with at1430 when flipping the half. The model reports Top whereas CommandArrow maps a left backslash dressing to BOTTOM_PART. Teoz also has a one-unit endpoint discrepancy; follow ComponentRoseSelfArrow.drawLeftSide full/half/async transitions, not a compensating constant.",
+      "Both fresh both_dispatch sources select Class despite Java Sequence; unlike the two older maker sources (blank Class), these draw Class entities from the following message. parse/mod.rs:642 class aggregation scoring is unchanged. Both are whole CLI failures.",
+      "Exactly2 added target_circle:false constructor fields are the entire ascii.rs diff. Nevertheless two o<->o ASCII outputs change direction because the parser now preserves P1->P2 instead of incorrectly reversing semantic endpoints. Java CommandArrow reverseDefine=false supports the new model. The unchanged ASCII renderer paints only one endpoint and does not express both heads. No claim of unchanged ASCII product behavior is made.",
+      "Two interior-circle grammar negatives return Java200 and Rust1; empty pipe returns Java50/no streams versus Rust0/empty. Invalid/empty comparisons are not matches. diff_one panics on empty golden data; the real CLI does not."
+    ],
+    "guidance": "Materialize both endpoint dressing/decoration transforms and paint order together; use normalized dressing consistently for direction and half selection. Resolve factory score ownership separately without fixture labels. Keep the corrected semantic ownership; assess ASCII bidirectional rendering explicitly rather than reverting that model."
+  },
+  {
+    "mechanism": "sequence-ordinary-note-child-allocation",
+    "assessment": "bounded support; acceptance withheld for combined complete-child invariant",
+    "findings": [
+      "All4 fresh family controls match: small note font9 versus message23, and unequal multiple note children with font17/message11, reverse direction and padding3, in both engines. Java ArrowAndNoteBox max child height and per-child arrow push explain Rust max extra plus (count-1)*extra; no branch-count lookup ladder was introduced.",
+      "This is support for allocation of the measured child components, not proof that those child dimensions are complete. Fresh rule_body_legacy/teoz under sequence-note-rule-title-height fail the owned note text-block model; retained themed self-note, fonts, tab and URL text paths also fail. The composed ordinary message/note invariant cannot be accepted by excluding those failing dimensions.",
+      "The first implementation exposes the real main creole_underline_in_sequence regression. Exact baseline/intermediate/final real CLIs independently reproduce pass/fail/pass, with baseline and final SVG bytes identical. No failure was removed or reclassified."
+    ],
+    "guidance": "Preserve the complete-child max/centering change. Supply preferred dimensions from an actual BodyEnhanced block composition and then recheck the same allocation on all retained inputs; do not restore the fixed3 or add font offsets."
+  },
+  {
+    "mechanism": "sequence-component-style-consumption",
+    "assessment": "rejected by creation-time consumers",
+    "findings": [
+      "Four fresh root/sibling line and numeric-shadow controls match. ComponentType separates participant/lifeLine/activationBox; Java ActiveLine has paint-only shadow1 and width10/height0. The shared cascade is unchanged. These samples do not prove per-kind/property/stereotype coverage.",
+      "style_create_legacy and style_create_teoz are valid failures even for plain participant Shadowing5. Both inline created heads omit the shadow filter while initial and tail heads carry it. draw_created_head at sequence.rs:12651 constructs a fresh PlantUmlSvg and copies only participant border/thickness, losing participant_shadow_filter and other resolved paint context.",
+      "Both creation controls place the target2.5 left of Java and narrow the canvas3 after integer rounding. sequence.rs:8771 reserves box_width/2, whereas ArrowAndParticipant.getArrowOnlyWidth/getPreferredWidth and CommunicationTile.getPoint2 use complete participant preferred dimensions (shadow5 contributes5/2). This is a source-derived missing preferred-width contribution.",
+      "Legacy creation additionally ends5 too early. create_msg_extra at7770 derives height from unshadowed box_height plus the old CREATE_EXTRA_ADVANCE (pre-existing reverse-engineered constant); Java ArrowAndParticipant.getPreferredHeight takes max(arrow preferred height, head height). Teoz candidate71b465a fixes the height in this fresh case, but not width or paint. No new numeric compensation is proposed."
+    ],
+    "guidance": "Carry one complete resolved plain-participant component through initial, inline-created and tail consumers. Use preferred width in creation constraints, Java composite preferred height for legacy flow, and inherited paint/shadow in created-head rendering. Audit other kinds separately; do not call these bounded samples full style parity."
+  },
+  {
+    "mechanism": "sequence-message-text-component-height",
+    "assessment": "bounded support; no extracted acceptance of the combined message/note change",
+    "findings": [
+      "Both fresh message-only controls match at font19 with whole-line, inline and multiline underline; both were mismatches before. AtomText.calculateDimensionSlow has no underline-only flow surcharge. Exact main baseline/intermediate/final reproduction confirms the recovered regression; all1966 retained entries have no lost pass.",
+      "No counterexample to removal of the synthetic message-only surcharge was found in this matrix. This is explicitly positive bounded evidence, not a fabricated defect. Acceptance of this production combination is withheld: its complete attached-note clause still depends on the failing nonempty BodyEnhanced title/body composition, and the unwaived standing gate is red."
+    ],
+    "guidance": "Keep the AtomText-derived message height and removal of duplicate folded-note tail flow. Repair the note block tree as a separate causal change without reinstating underline surcharges; rerun the held-out title/body pairs with the full CLI."
+  },
+  {
+    "mechanism": "sequence-note-rule-title-height",
+    "assessment": "rejected by nonempty body block",
+    "findings": [
+      "rule_alone matches in both engines at note font16/message11. Adding one ordinary body line after the exact same title makes both outputs fail. All4 source strings are fresh, immutable and Java-valid.",
+      "BodyEnhanced2.getArea groups the lines after a separator into one body before decorate. For title heightH and body heightB, BodyEnhancedAbstract.decorate and TextBlockLineBefore.calculateDimension yield max(B+H/2+4,H)+H/2. Rust note_line_metrics_with_family at1091 computes the B=0 case per separator line, then note_text_metrics adds the body independently. With B=H this overcounts byH/2-4 (5.4219 at this captured font), exactly the lifeline-height error. Formula provenance explains the divergence; it does not authorize subtracting the measured error.",
+      "Full output also exposes width, title alignment and paint order: Java applies the6-unit right body margin and max(titleWidth+8,bodyWidth+6), centers the title across the block and draws body before title. Rust emit_note_line keeps a fixed title origin and per-line order. The captured body baseline differs9.4219 and note width6; fixing only total height is insufficient."
+    ],
+    "guidance": "Port the BodyEnhanced2 segmentation and composed title/body TextBlock, including margins, width max, title centering and paint order. Derive preferred dimensions and painting from that same block tree; retain the empty-title controls and nonempty failures, with no coordinate patches."
+  }
+]

@@ -1,0 +1,34 @@
+java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xb) was found in the node's character data content.
+	at net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)
+	at net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:174)
+	at net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)
+	at net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)
+	at net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)
+	at net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)
+	at net.sourceforge.plantuml.Run.main(Run.java:183)
+Caused by: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xb) was found in the node's character data content.
+	at java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:793)
+	at java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:395)
+	at net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics.createXmlInternal(SvgGraphics.java:833)
+	at net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics.createXml(SvgGraphics.java:785)
+	at net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:136)
+	... 6 more
+Caused by: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xb) was found in the node's character data content.
+	at java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.accumDefaultEscape(ToStream.java:1749)
+	at java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.processDirty(ToStream.java:1644)
+	at java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.outputCharacters(ToStream.java:1504)
+	at java.xml/com.sun.org.apache.xml.internal.serializer.ToStream.characters(ToStream.java:1404)
+	at java.xml/com.sun.org.apache.xml.internal.serializer.ToUnknownStream.characters(ToUnknownStream.java:723)
+	at java.xml/com.sun.org.apache.xml.internal.serializer.ToUnknownStream.characters(ToUnknownStream.java:307)
+	at java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:243)
+	at java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:229)
+	at java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:229)
+	at java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:229)
+	at java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:134)
+	at java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.DOM2TO.parse(DOM2TO.java:96)
+	at java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transformIdentity(TransformerImpl.java:719)
+	at java.xml/com.sun.org.apache.xalan.internal.xsltc.trax.TransformerImpl.transform(TransformerImpl.java:781)
+	... 10 more
+ERROR
+5
+Syntax Error? (Assumed diagram type: sequence)

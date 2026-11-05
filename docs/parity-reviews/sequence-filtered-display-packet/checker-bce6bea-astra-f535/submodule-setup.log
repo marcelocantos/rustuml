@@ -1,0 +1,8 @@
+Cloning into '/Users/marcelo/.t3/worktrees/rustuml/t3-f535ce04/test-diagrams/golden'...
+fatal: transport 'file' not allowed
+fatal: clone of '/Users/marcelo/work/github.com/marcelocantos/rustuml/.git/modules/test-diagrams/golden' into submodule path '/Users/marcelo/.t3/worktrees/rustuml/t3-f535ce04/test-diagrams/golden' failed
+Failed to clone 'test-diagrams/golden'. Retry scheduled
+Cloning into '/Users/marcelo/.t3/worktrees/rustuml/t3-f535ce04/test-diagrams/golden'...
+fatal: transport 'file' not allowed
+fatal: clone of '/Users/marcelo/work/github.com/marcelocantos/rustuml/.git/modules/test-diagrams/golden' into submodule path '/Users/marcelo/.t3/worktrees/rustuml/t3-f535ce04/test-diagrams/golden' failed
+Failed to clone 'test-diagrams/golden' a second time, aborting

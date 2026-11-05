@@ -1,0 +1,11 @@
+@startuml
+participant Pavo
+participant Tucana
+participant Vela
+Pavo /- Pavo: first
+activate Vela
+activate Vela
+Vela /- Vela: last
+deactivate Vela
+deactivate Vela
+@enduml

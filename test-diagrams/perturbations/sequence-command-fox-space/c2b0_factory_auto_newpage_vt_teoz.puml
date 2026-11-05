@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Quartz
+participant Vale
+Quartz -> Vale: primer
+autonewpage90
+Vale -> Quartz: continued
+@enduml

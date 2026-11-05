@@ -1,0 +1,9 @@
+@startuml
+participant Lyra
+control Kestrel
+group enclosing
+create Kestrel
+[<- Kestrel: outside
+Kestrel -> Lyra: inside
+end
+@enduml

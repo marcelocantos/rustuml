@@ -1,0 +1,110 @@
+PHASE 0
+PARTICIPANT P
+0 LifeEvent callback=null level=0
+1 LifeEvent callback=null level=0
+2 LifeEvent callback=null level=0
+3 GroupingStart callback=null level=0
+4 Message callback=60.62109375 level=0
+5 Note callback=null level=0
+6 LifeEvent callback=null level=0
+7 LifeEvent callback=null level=0
+8 LifeEvent callback=null level=0
+9 Message callback=125.2421875 level=0
+10 GroupingLeaf callback=null level=0
+STAIR 60.62109375 0
+STAIR 125.2421875 0
+STAIR 1000.0 0
+PARTICIPANT C
+0 LifeEvent callback=8.0 level=1
+1 LifeEvent callback=8.0 level=2
+2 LifeEvent callback=8.0 level=3
+3 GroupingStart callback=null level=3
+4 Message callback=60.62109375 level=0
+5 Note callback=null level=3
+6 LifeEvent callback=103.931640625 level=2
+7 LifeEvent callback=108.931640625 level=1
+8 LifeEvent callback=108.931640625 level=0
+9 Message callback=125.2421875 level=0
+10 GroupingLeaf callback=null level=0
+STAIR 8.0 1
+STAIR 8.0 2
+STAIR 8.0 3
+STAIR 60.62109375 0
+STAIR 103.931640625 2
+STAIR 108.931640625 1
+STAIR 108.931640625 0
+STAIR 125.2421875 0
+STAIR 1000.0 0
+PHASE 1
+PARTICIPANT P
+0 LifeEvent callback=null level=0
+1 LifeEvent callback=null level=0
+2 LifeEvent callback=null level=0
+3 GroupingStart callback=null level=0
+4 Message callback=60.62109375 level=0
+5 Note callback=null level=0
+6 LifeEvent callback=null level=0
+7 LifeEvent callback=null level=0
+8 LifeEvent callback=null level=0
+9 Message callback=125.2421875 level=0
+10 GroupingLeaf callback=null level=0
+STAIR 60.62109375 0
+STAIR 125.2421875 0
+STAIR 1000.0 0
+PARTICIPANT C
+0 LifeEvent callback=8.0 level=1
+1 LifeEvent callback=8.0 level=2
+2 LifeEvent callback=8.0 level=3
+3 GroupingStart callback=null level=3
+4 Message callback=60.62109375 level=0
+5 Note callback=null level=3
+6 LifeEvent callback=108.931640625 level=2
+7 LifeEvent callback=108.931640625 level=1
+8 LifeEvent callback=108.931640625 level=0
+9 Message callback=125.2421875 level=0
+10 GroupingLeaf callback=null level=0
+STAIR 8.0 1
+STAIR 8.0 2
+STAIR 8.0 3
+STAIR 60.62109375 0
+STAIR 108.931640625 2
+STAIR 108.931640625 1
+STAIR 108.931640625 0
+STAIR 125.2421875 0
+STAIR 1000.0 0
+PHASE 2
+PARTICIPANT P
+0 LifeEvent callback=null level=0
+1 LifeEvent callback=null level=0
+2 LifeEvent callback=null level=0
+3 GroupingStart callback=null level=0
+4 Message callback=60.62109375 level=0
+5 Note callback=null level=0
+6 LifeEvent callback=null level=0
+7 LifeEvent callback=null level=0
+8 LifeEvent callback=null level=0
+9 Message callback=125.2421875 level=0
+10 GroupingLeaf callback=null level=0
+STAIR 60.62109375 0
+STAIR 125.2421875 0
+STAIR 1000.0 0
+PARTICIPANT C
+0 LifeEvent callback=8.0 level=1
+1 LifeEvent callback=8.0 level=2
+2 LifeEvent callback=8.0 level=3
+3 GroupingStart callback=null level=3
+4 Message callback=60.62109375 level=0
+5 Note callback=null level=3
+6 LifeEvent callback=108.931640625 level=2
+7 LifeEvent callback=108.931640625 level=1
+8 LifeEvent callback=103.931640625 level=0
+9 Message callback=125.2421875 level=0
+10 GroupingLeaf callback=null level=0
+STAIR 8.0 1
+STAIR 8.0 2
+STAIR 8.0 3
+STAIR 60.62109375 0
+STAIR 108.931640625 2
+STAIR 108.931640625 1
+STAIR 125.2421875 0
+STAIR 1000.0 0

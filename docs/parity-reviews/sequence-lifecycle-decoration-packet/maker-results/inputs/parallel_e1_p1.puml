@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+participant Source
+participant Sink
+participant Peer
+Source -> Sink ++ : call
+& Source -> Peer ++ : sibling with longer label
+Peer -> Peer : process
+return #blue result
+return outer
+@enduml

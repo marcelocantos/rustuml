@@ -1,0 +1,12 @@
+@startuml
+<style>
+sequenceDiagram {
+note {
+Shadowing -2.5px
+}
+}
+</style>
+Cedar -> Juniper ++ : enter
+note right : first\nshort
+return done
+@enduml

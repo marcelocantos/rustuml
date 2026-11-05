@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Tamarisk
+rnote over Tamarisk
+pollen
+end rnote
+Tamarisk -> Tamarisk: after
+@enduml

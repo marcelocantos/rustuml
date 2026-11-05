@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "bce6bea405d8b5efd55136f4768117115e7f634f",
+  "evidence_import": "f3913f3cb7094d8aedd5618f1ba27830a2804713",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-teoz-self-note-component",
+  "java_locations": [
+    "sequencediagram.teoz.CommunicationTileSelfNoteLeft#getComponent/#getPreferredHeight/#drawU",
+    "sequencediagram.teoz.CommunicationTileSelfNoteRight#getComponent/#getPreferredHeight/#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::render before component scheduling"
+  ],
+  "invariant": "Teoz left/right self-message note tiles request ComponentType.NOTE regardless of the requested NoteStyle; their preferred dimensions and paint use this same folded component. Legacy and nonself consumers retain requested style.",
+  "causal_divergence": "Rust carries requested rnote/hnote through all consumers, producing height70/requested shape where the self-note tile uses folded height72.",
+  "planned_change": "Resolve effective note component from Teoz self-message ownership before all measure/schedule/paint phases, in renderer-local event materialization after return lowering. Preserve requested Note.shape in parsed AST/YAML and preserve legacy/nonself selection. No coordinate adjustment or envelope rewrite.",
+  "perturbation_axes": [
+    "left/right and rectangle/hex/folded controls",
+    "self versus ordinary messages, return ownership and both engines"
+  ]
+}

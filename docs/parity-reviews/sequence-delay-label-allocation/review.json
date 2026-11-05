@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "t3-d382aba6 independent sequence rejection-repair checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "implementation_commit": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "tested_candidate_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/sequence-repair-d382aba6 0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "Remote existing runner: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs --timezone GMT+11:00 -- -pipe -tsvg (one source on stdin per invocation; exact argv/status/streams in remote-captures.json.gz)",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/import_relay.py",
+    "python3 docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py docs/parity-reviews/sequence-rejection-repair/checker-support/fresh-manifest.json /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/final-bin /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/fresh",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py evidence",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/audit_evidence.py"
+  ],
+  "input_frontend": {
+    "fresh": "raw -pipe -tsvg on stdin through pinned remote wrapper, GMT+11:00",
+    "transport": "temporary T3 relay, exact input and result bundle hashes verified",
+    "preserved": "original reference bytes and per-reference provenance unchanged",
+    "local_java": false
+  },
+  "evidence": "docs/parity-reviews/sequence-rejection-repair/checker-support/README.md",
+  "mechanism": "sequence-delay-label-allocation",
+  "account_commit": "a21a02753cc9abaeef64d7b75caacb253d4f4c7c",
+  "account_normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e0_leading.puml",
+      "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e0_leading.svg",
+      "source_sha256": "84137f8ea4a2a2978ec01d85842de9879bd4dc311dda26824d8b0c01ce057211",
+      "golden_sha256": "ce25dd3eceb6bc75ab7a7f35c063d0ca987bdd6d2481bec6c96544e2be73f1e1",
+      "axes": [
+        "engine",
+        "asymmetric leading versus trailing allocation whitespace",
+        "group and padding"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e0_trailing.puml",
+      "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e0_trailing.svg",
+      "source_sha256": "229b72cc6a732c2b90da32d151e10d54b188a0dc8fa6ea44234fcfbd9df4b9e5",
+      "golden_sha256": "1725613c29ac74f558d157cefbbf5628915eaec9ea9f839b847ea339c79f9fa1",
+      "axes": [
+        "engine",
+        "asymmetric leading versus trailing allocation whitespace",
+        "group and padding"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e1_leading.puml",
+      "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e1_leading.svg",
+      "source_sha256": "667cb578df024e26984d522bcf7a475c19e66cf8370608d8af7b90c9721a0345",
+      "golden_sha256": "ad77ad0447067447103820696cb96e7ee4d713bd0e26d00e7c9d765025dc5dbb",
+      "axes": [
+        "engine",
+        "asymmetric leading versus trailing allocation whitespace",
+        "group and padding"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e1_trailing.puml",
+      "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_e1_trailing.svg",
+      "source_sha256": "3c95fee1b26fd9f3ad327b5600bc897df178db99c7c7214ce5faaa6f504ce9f4",
+      "golden_sha256": "72e533260b880f35e4e6a876ceff2c2d8df170d00c8b3c4264cc78573006031b",
+      "axes": [
+        "engine",
+        "asymmetric leading versus trailing allocation whitespace",
+        "group and padding"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_multiline.puml",
+      "golden": "test-diagrams/perturbations/sequence-delay-label-allocation/checker_d382_multiline.svg",
+      "source_sha256": "ba516f0aed8972b096064d7a62df1dc6d6b8a95f48f985fecd22b262fb0b115c",
+      "golden_sha256": "d72afba110e538638653d132aadd5507fe85ff170f2b0cd4a7e7dd637e01c189",
+      "axes": [
+        "source-guided edge control",
+        "multiline"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ],
+  "source_audit": {
+    "mechanism": "sequence-delay-label-allocation",
+    "java_files": [
+      "sequencediagram/command/CommandDelay.java",
+      "skin/rose/ComponentRoseDelayText.java",
+      "sequencediagram/teoz/DelayTile.java"
+    ],
+    "rust_locations": [
+      "parse/sequence.rs:737-754",
+      "sequence.rs:10310-10334",
+      "sequence.rs:13602-13638"
+    ],
+    "source_supported": "Untrimmed LABEL now survives parsing. Leading/trailing spaces are measured for allocation while visible text is shifted past leading spacer width. Delimited empty label remains distinct from bare delay.",
+    "adversarial_boundary": "Paint still emits one scalar label text and group width uses one text-width measurement; Java Display can contain line breaks and markup. Fresh asymmetric spaces test the narrow repair; multiline delay challenges the full claimed allocation component."
+  },
+  "findings": [
+    "Untrimmed LABEL now survives parsing. Leading/trailing spaces are measured for allocation while visible text is shifted past leading spacer width. Delimited empty label remains distinct from bare delay.",
+    "Four asymmetric whitespace/engine/padding controls match. The fresh multiline grouped delay fails: one text element is lost and canvas259px Java versus246px Rust. Java LABEL becomes Display.getWithNewlines and preferred TextBlock dimensions; Rust still measures/paints one scalar label. Whitespace preservation is established for one line, but allocation and text flow do not generalize to the claimed component.",
+    "No new fixture label predicates, golden reads, branch-count constant ladders or coordinate string surgery found. See source-audit.json for Java provenance and semantic constant reuse concerns. Every valid failure is binding; no dependency waiver."
+  ],
+  "verdict": "rejected"
+}

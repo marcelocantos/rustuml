@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+participant Birch
+Cedar -> Birch ++ : enter
+Cedar -> Birch ++ : An extraordinarily long ordinary message label constrains the arrow
+note right : narrow
+return after
+@enduml

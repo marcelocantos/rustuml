@@ -1,0 +1,9 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+note over Juniper
+first
+second
+end note
+@enduml

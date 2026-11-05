@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+skinparam noteFontSize 10
+skinparam sequenceMessageFontSize 20
+Lark -> Wren ++ : call
+note right : compact\n<size:16>taller</size>
+Wren -> Lark : next
+deactivate Wren
+@enduml

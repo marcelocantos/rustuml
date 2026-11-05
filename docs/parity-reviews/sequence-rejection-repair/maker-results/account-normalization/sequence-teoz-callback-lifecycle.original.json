@@ -1,0 +1,23 @@
+{
+  "status": "maker causal account; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java": [
+    "LiveBoxes#addStep retains eventsStep across calls; deactivation collision checks the entire existing map including the current event from prior passes",
+    "PlayingSpaceWithParticipants#calculateDimensionSlow -> PlayingSpace#getPreferredHeight -> drawUInternal (callback measurement)",
+    "PlayingSpaceWithParticipants#drawU -> PlayingSpace#getPreferredHeight (callback measurement), drawBackground (callbacks), drawLifeLines, drawForeground (callbacks after livebox paint)",
+    "PlayingSpace startingY=8, LifeEventTile zero-height origin; CommunicationTile callback adds component start point",
+    "Stairs#addStep rejects decreasing y while LiveBoxes#getStairs retains indent from rejected steps"
+  ],
+  "rust": [
+    "TeozHistory#segments creates callbacks once and checks only earlier callbacks",
+    "sequence renderer initial life event uses message-oriented cursor shift before any message has advanced it"
+  ],
+  "invariant": "Activation stairs at life-line paint consume the persistent callback map after dimension measurement, draw height measurement and background traversal, in source tile order; initial zero-height tiles start at PlayingSpace.startingY.",
+  "divergence": "Single-pass collision map closes bars too early and omits reopenings after a discarded descending close. Universal paint shift lowers initial activation origin by two pixels.",
+  "change": "Represent callback traversal as named lifecycle passes using a retained map, rather than a fitted number of shifts. Distinguish initial tile origin from message endpoint cursor conversion. Keep final foreground callbacks outside the earlier life-line paint snapshot.",
+  "evidence": "Remote HistoryProbe.java under sequence-teoz-event-history/maker-results/probes shows retained callbacks evolving over measurement and drawing; exact outputs retained in new maker results.",
+  "axes": [
+    "repeated closes after group END versus after standalone note, initial activations versus message-owned activations",
+    "nested depths and source participant order, reopenings after discarded descending stairs"
+  ]
+}

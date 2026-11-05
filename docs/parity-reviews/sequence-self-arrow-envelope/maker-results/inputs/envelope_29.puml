@@ -1,0 +1,16 @@
+@startuml
+skinparam Padding 0
+participant L
+participant R
+participant S
+group scope
+L -> S : seed
+S -> S ++ : recursive
+S -> S ++ : recursive
+S -> S ++ : recursive
+S -> S : Wide nested WWWWWWWW.ff
+return unwind
+return unwind
+return unwind
+end
+@enduml

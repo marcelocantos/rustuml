@@ -1,0 +1,5 @@
+@startuml
+participant Cedar
+create Cedar
+Cedar -> Cedar: incompatible self
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Cedar
+Cedar o<<->o Cedar: open source
+Cedar o<-->>o Cedar: open target
+Cedar o\--o Cedar: half
+Cedar o//--o Cedar: thin half
+@enduml

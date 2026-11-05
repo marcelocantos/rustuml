@@ -1,0 +1,13 @@
+@startuml
+!pragma teoz true
+actor Vale
+participant Hill
+create Vale
+Hill -> Vale: first
+Vale -> Hill: work
+create Vale
+Hill -> Vale ++: second
+Vale -> Hill --: release
+create Vale
+Hill -> Vale: third
+@enduml

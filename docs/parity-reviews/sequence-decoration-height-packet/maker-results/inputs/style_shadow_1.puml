@@ -1,0 +1,19 @@
+@startuml
+!pragma teoz true
+<style>
+root {
+Shadowing 4
+}
+sequenceDiagram {
+participant {
+Shadowing 6
+}
+note {
+Shadowing 0
+}
+}
+</style>
+Lark -> Wren ++ : enter
+note right : no note shadow
+return complete
+@enduml

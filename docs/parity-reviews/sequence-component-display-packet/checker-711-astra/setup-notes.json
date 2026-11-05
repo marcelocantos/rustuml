@@ -1,0 +1,15 @@
+{
+  "golden": "Empty submodule hydrated from exact local archive before tier execution; hash-verified all blobs. No setup failure was counted as product pass.",
+  "tool_failures": [
+    "Sawmill single-file Java parse failed because it treated file as project directory; used read-only source inspection.",
+    "Exploratory queue regex produced88 substring,82 sequence-declaration,178 workspace-declaration candidates; no claim these equal the frozen70 member-focus controls. Frozen70 membership was preserved and reproduced.",
+    "Parent-overlap scratch inspection initially read candidate-only paths while checkout was temporarily at before; rerun after restoration. Another attempt tried parent-only absent paths; corrected to immutable original_source and recorded source_sha256, with overlapping current source hashes independently recomputed.",
+    "Historical first62 inspection initially keyed private absolute source paths against repository paths; corrected by exact source SHA256. Original captures remained untouched."
+  ],
+  "provenance_limits": [
+    "Java argv is wrapper-derived, not process traced.",
+    "Origin font and Graphviz equivalence remains unproved.",
+    "Historical display-bin captures remain unbound."
+  ],
+  "writes": "New checker evidence and fresh pairs only; production/accounts/old evidence/targets/baselines/comparators/skips/allowlists untouched; no local JVM/SSH/new runner/children/native-fault work/shipping."
+}

@@ -1,0 +1,96 @@
+{
+  "cases": [
+    {
+      "name": "legacy_note_a0_r0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/legacy_note_a0_r0.puml",
+      "source_sha256": "a5a1a16c1f84524709953ebe4c185a998b04e1226365e96fa0c5934944872bab",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "resources": [],
+      "axes": [
+        "legacy attached note with repeated returns",
+        "activation state and message direction",
+        "renamed/wider labels"
+      ]
+    },
+    {
+      "name": "legacy_note_a0_r1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/legacy_note_a0_r1.puml",
+      "source_sha256": "c8379caeaca9c3d2e232ca2729ab8ca886a220857b92d16df9a55e6990e59d87",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "resources": [],
+      "axes": [
+        "legacy attached note with repeated returns",
+        "activation state and message direction",
+        "renamed/wider labels"
+      ]
+    },
+    {
+      "name": "legacy_note_a1_r0",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/legacy_note_a1_r0.puml",
+      "source_sha256": "4db0098f71c96e5871cb4e17a13fd7a00f2d99c07ee64565cbbfca4f7083ef7e",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "resources": [],
+      "axes": [
+        "legacy attached note with repeated returns",
+        "activation state and message direction",
+        "renamed/wider labels"
+      ]
+    },
+    {
+      "name": "legacy_note_a1_r1",
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/reference-inputs/legacy_note_a1_r1.puml",
+      "source_sha256": "4c2f296de781258a5e76b190f6634aa6e0d5d66f076c390e95ac49a0c560369b",
+      "timezone": "GMT+11:00",
+      "cwd": "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+      "invocation": [
+        "/Users/marcelo/rustuml-reference/bin/reference",
+        "--cwd",
+        "PRIVATE_SEQUENCE_LIFECYCLE_RELAY_DIR",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "resources": [],
+      "axes": [
+        "legacy attached note with repeated returns",
+        "activation state and message direction",
+        "renamed/wider labels"
+      ]
+    }
+  ]
+}

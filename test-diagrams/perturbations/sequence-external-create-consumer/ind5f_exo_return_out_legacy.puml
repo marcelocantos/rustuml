@@ -1,0 +1,7 @@
+@startuml
+participant Lyra
+entity Robin
+create Robin
+Robin ->]: leave
+return reply
+@enduml

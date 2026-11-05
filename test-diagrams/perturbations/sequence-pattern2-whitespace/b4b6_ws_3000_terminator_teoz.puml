@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+rnote over Juniper
+opaque marker
+end　rnote
+@enduml

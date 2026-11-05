@@ -1,0 +1,13 @@
+@startuml
+participant Vega
+actor Lyra
+queue Draco
+participant Corvus
+autonumber 7 3
+create Lyra
+create Draco
+create Corvus
+Vega -> Corvus: hatch
+autonumber resume
+Corvus -> Lyra: next
+@enduml

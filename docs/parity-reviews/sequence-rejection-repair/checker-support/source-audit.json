@@ -1,0 +1,254 @@
+{
+  "reviewer": {
+    "task_id": "t3-d382aba6",
+    "model": "gpt-6-astra/high",
+    "tool": "Codex harness in T3 Code",
+    "children": []
+  },
+  "candidate": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "sections": [
+    {
+      "mechanism": "sequence-return-configuration",
+      "java_files": [
+        "sequencediagram/command/CommandReturn.java",
+        "sequencediagram/SequenceDiagram.java"
+      ],
+      "rust_locations": [
+        "parse/sequence.rs:66-107",
+        "sequence.rs:3347-3564"
+      ],
+      "source_supported": "Optional color, activating-stack versus internal-message fallback, END reset, and generated-message color propagation trace to CommandReturn and SequenceDiagram. Parser stores only an internal/external boolean for validation while renderer independently maintains return contexts; agreement is not guaranteed by that duplicate representation.",
+      "adversarial_boundary": "Unknown colors must fail HColorSet.getColor; parallel returns use PARALLEL and goParallel. Rust ReturnMessage has no parallel field and try_return only recognizes a leading return token. Fresh negative/color and parallel controls challenge those boundaries."
+    },
+    {
+      "mechanism": "sequence-reverse-self-component",
+      "java_files": [
+        "sequencediagram/graphic/MessageSelfArrow.java",
+        "sequencediagram/graphic/Step1Message.java",
+        "sequencediagram/graphic/ArrowAndNoteBox.java",
+        "sequencediagram/teoz/CommunicationTileSelf.java",
+        "skin/rose/ComponentRoseSelfArrow.java"
+      ],
+      "rust_locations": [
+        "sequence.rs:3109-3159",
+        "sequence.rs:8148-8224",
+        "sequence.rs:12392-12676"
+      ],
+      "source_supported": "Reverse origin pos2-preferredWidth, preceding constraint, current level, signed delta, and component direction are sourced. Teoz preceding constraint correctly uses previous participant max live depth. Standard normal/async reverse stroke arithmetic follows drawLeftSide, rather than label-specific offsets.",
+      "adversarial_boundary": "drawLeftSide independently handles source/target CROSSX and CIRCLE decorations before computing strokes. Rust reverse branch handles normal/async/half heads but does not port those decoration-specific x adjustments there. A fresh active reverse-cross input targets the omission."
+    },
+    {
+      "mechanism": "sequence-preferred-component-flow",
+      "java_files": [
+        "sequencediagram/graphic/ParticipantBox.java",
+        "sequencediagram/graphic/NoteBox.java",
+        "skin/rose/ComponentRoseParticipant.java",
+        "skin/rose/ComponentRoseNote.java",
+        "skin/rose/ComponentRoseDelayText.java",
+        "skin/rose/ComponentRoseGroupingHeader.java",
+        "skin/rose/ComponentRoseGroupingElse.java"
+      ],
+      "rust_locations": [
+        "sequence.rs:2856-2867",
+        "sequence.rs:7320-7332",
+        "sequence.rs:9553-9632",
+        "sequence.rs:14239-14260"
+      ],
+      "source_supported": "preferred_width separates head allocation from visible shape. Folded-note shadow participates in preferred width and span allocation, and group membership reuses it. Java NoteBox quantization is distinct from Rose polygon truncation. Padded note text shift follows SheetBlock drawing, not a final global translation.",
+      "adversarial_boundary": "Several other participant kinds still receive the same shadow-width increment; actor/database probe challenges that generalization. Non-folded notes use older reconstruction paths, which are not established by folded-note evidence."
+    },
+    {
+      "mechanism": "sequence-page-wrapper-hierarchy",
+      "java_files": [
+        "core/DiagramChromeFactory12026.java",
+        "svek/DecorateEntityImage.java",
+        "klimt/shape/TextBlockBordered.java",
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz.java",
+        "sequencediagram/teoz/PlayingSpaceWithParticipants.java"
+      ],
+      "rust_locations": [
+        "sequence.rs:7013-7039",
+        "sequence.rs:7435-7454",
+        "sequence.rs:11076-11155",
+        "sequence.rs:11369-11423",
+        "sequence.rs:14862-14937"
+      ],
+      "source_supported": "Factory order raw/legend/title/caption/header-footer is real; caption now measures all lines and bottom stacking uses complete blocks. Teoz newpage measures full body while clipping drawn tiles. The former actor/database title adjustment and midpoint heuristics were removed.",
+      "adversarial_boundary": "Factory addLegend honors vertical and horizontal placement, and caption uses resolved Style.createTextBlockBordered. Rust still constructs a bottom legend and fixed caption font/margin/padding geometry. Fresh top-legend and styled-caption probes challenge actual wrapper invariants, not unrelated dependencies. Raw multi-page stdout must also be preserved verbatim."
+    },
+    {
+      "mechanism": "sequence-teoz-event-history",
+      "java_files": [
+        "sequencediagram/teoz/LiveBoxes.java",
+        "sequencediagram/teoz/LifeEventTile.java",
+        "sequencediagram/teoz/CommunicationTile.java",
+        "sequencediagram/teoz/CommunicationExoTile.java",
+        "sequencediagram/teoz/CommunicationTileSelf.java",
+        "sequencediagram/teoz/TileBuilder.java"
+      ],
+      "rust_locations": [
+        "sequence.rs:3714-3891",
+        "sequence.rs:7960-8010",
+        "sequence.rs:12135-12305"
+      ],
+      "source_supported": "Raw lifecycle entries and mode-specific future scans replace accepted legacy variation depth. Signed max-depth scan differs intentionally from saturating current depth and matches Java. External tile bounds now separate real endpoint live shifts from preferred component envelope.",
+      "adversarial_boundary": "Java sameMessage includes isParallelWith; Rust compares exact owner indices and has no parallel message field. Java creates LifeEventTile for CREATE and gives standalone DESTROY preferred cross height; Rust does not include Event::Create as a life item and schedules Destroy in the same nonadvancing branch as activate/deactivate. Creation, standalone destruction, and parallel probes test these discrepancies."
+    },
+    {
+      "mechanism": "sequence-teoz-callback-lifecycle",
+      "java_files": [
+        "sequencediagram/teoz/PlayingSpace.java",
+        "sequencediagram/teoz/PlayingSpaceWithParticipants.java",
+        "sequencediagram/teoz/LiveBoxes.java",
+        "sequencediagram/teoz/Stairs.java"
+      ],
+      "rust_locations": [
+        "sequence.rs:3893-4033",
+        "sequence.rs:11183-11212"
+      ],
+      "source_supported": "Three named callback traversals correspond to memoized dimension measurement, draw-time preferred-height measurement, and background traversal before lifeline paint. LiveBoxes retains its map and collision checks include an event previous-pass entry. Stairs rejects descending y while the separately tracked indent survives. drawOneLevel begins on equality and can reopen a level.",
+      "adversarial_boundary": "A fixed replay count is supported for this ordinary render lifecycle, not a universal stage model. Full callback placement still depends on the shared y scheduler; standalone destruction has missing height, and Java clamps stairs to createY and carries destroy/style metadata while Rust segment tuples do not. Fresh initial-depth/group-note/destruction controls bound the claim."
+    },
+    {
+      "mechanism": "sequence-teoz-group-tile-composition",
+      "java_files": [
+        "sequencediagram/teoz/GroupingTile.java",
+        "sequencediagram/teoz/ElseTile.java",
+        "sequencediagram/teoz/TileBuilder.java",
+        "skin/rose/ComponentRoseGroupingHeader.java"
+      ],
+      "rust_locations": [
+        "sequence.rs:9667-9733",
+        "sequence.rs:9833-9920",
+        "sequence.rs:10036-10334"
+      ],
+      "source_supported": "Child bounds plus 16, nested external margins 3/9, and header floors have Java provenance. Head boxes are no longer implicit child members. Source endpoint order is retained for folded standalone spans. Null comment has commentMargin=0; header widths 45 and 15 derive from 15+30 margins and extra first margin.",
+      "adversarial_boundary": "Java merges parallel tiles and constructs all note styles through NoteTile. Rust geometry helper early-returns for non-folded notes and the shared group/event scheduler remains distinct. Fresh nested reversed spans and hexagonal-note control challenge that composition."
+    },
+    {
+      "mechanism": "sequence-teoz-note-component-flow",
+      "java_files": [
+        "sequencediagram/teoz/NoteTile.java",
+        "sequencediagram/teoz/CommunicationTileSelfNoteLeft.java",
+        "sequencediagram/teoz/CommunicationTileSelfNoteRight.java",
+        "sequencediagram/teoz/CommunicationTileNoteLeft.java",
+        "sequencediagram/teoz/CommunicationTileNoteRight.java",
+        "skin/rose/ComponentRoseNote.java"
+      ],
+      "rust_locations": [
+        "sequence.rs:9166-9326",
+        "sequence.rs:13707-13735",
+        "sequence.rs:14181-14203"
+      ],
+      "source_supported": "One helper returns fractional origin, allocation, and envelope for folded notes; group/canvas and painter select named phases. Left/right self wrappers anchor to self tile min/max, and ordinary wrappers retain endpoint/history mode. Legacy reverse-left displacement is applied after NoteBox truncation.",
+      "adversarial_boundary": "Geometry sharing does not establish scheduler or styled text equivalence. New active reverse direction/left-right attachments use multiline notes, padding, shadow and reversed span endpoints; failures must reject the relevant whole-source claim."
+    },
+    {
+      "mechanism": "sequence-teoz-real-bound-capture",
+      "java_files": [
+        "sequencediagram/teoz/SequenceDiagramFileMakerTeoz.java",
+        "sequencediagram/teoz/NoteTile.java",
+        "sequencediagram/teoz/GroupingTile.java",
+        "real/RealImpl.java",
+        "real/RealDelta.java"
+      ],
+      "rust_locations": [
+        "sequence.rs:9290-9326"
+      ],
+      "source_supported": "createMainTile constructs contiguous preferred heads before PlayingSpace captures Real bounds, then adds constraints and compiles. NoteTile converts currently sampled width into addFixed while centers remain Real references; drawU samples width again. Rust initial preferred-width prefix versus final head span is a plausible phase-preserving model.",
+      "adversarial_boundary": "This derivation is checked against asymmetric head order and wide later arrows, plus englober margin interaction. It does not validate arbitrary Real dependency graphs or all note shapes."
+    },
+    {
+      "mechanism": "sequence-delay-label-allocation",
+      "java_files": [
+        "sequencediagram/command/CommandDelay.java",
+        "skin/rose/ComponentRoseDelayText.java",
+        "sequencediagram/teoz/DelayTile.java"
+      ],
+      "rust_locations": [
+        "parse/sequence.rs:737-754",
+        "sequence.rs:10310-10334",
+        "sequence.rs:13602-13638"
+      ],
+      "source_supported": "Untrimmed LABEL now survives parsing. Leading/trailing spaces are measured for allocation while visible text is shifted past leading spacer width. Delimited empty label remains distinct from bare delay.",
+      "adversarial_boundary": "Paint still emits one scalar label text and group width uses one text-width measurement; Java Display can contain line breaks and markup. Fresh asymmetric spaces test the narrow repair; multiline delay challenges the full claimed allocation component."
+    },
+    {
+      "mechanism": "sequence-box-title-grammar",
+      "java_files": [
+        "sequencediagram/command/CommandBoxStart.java"
+      ],
+      "rust_locations": [
+        "parse/sequence.rs:1004-1065"
+      ],
+      "source_supported": "NAME2 captures unquoted text up to color and preserves trailing spaces. New parser branch follows that information flow. Original bytes and chronology were independently verified; this is not a retrospective account.",
+      "adversarial_boundary": "Quoted/unquoted title, engine and trailing-space matrix tests grammar independently. Nested englober representation and component style are separate consumers; no full nested/style claim follows from parsing a title."
+    },
+    {
+      "mechanism": "sequence-teoz-englober-margins",
+      "java_files": [
+        "sequencediagram/Doll.java",
+        "sequencediagram/teoz/Dolls.java",
+        "sequencediagram/teoz/LivingSpace.java",
+        "skin/rose/ComponentRoseEnglober.java"
+      ],
+      "rust_locations": [
+        "sequence.rs:8694-8738",
+        "sequence.rs:10951-10984",
+        "sequence.rs:11625-11695"
+      ],
+      "source_supported": "Captured positive margin=(preferredTitle+10-initialSpan)/2, head-before/after propagation and frame posA-4/posE+4 are sourced. Teoz skips legacy postsolve title expansion. Box padding enters interbox constraints.",
+      "adversarial_boundary": "Doll.drawMe walks parent englobers and subtracts ancestor title heights. Rust participant boxes have no parent representation in the new margin model and compute title with fixed bold_text_width. Nested and count/boxPadding controls target the incomplete hierarchy; no fitted coordinates are proposed."
+    }
+  ],
+  "source_sha256": {
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReturn.java": "bfa5dc9aaa7bdea74ec08ffbb081b7aab5049e043ee4ad45f4de8e2b702a6c53",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagram.java": "e929fbe92bf0c987c0e5f0f9f6ae1f87e20a099bffb1a4026a3e2a97b35e2f17",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/MessageSelfArrow.java": "c08a18f11cf0b2dbe6fc6436275aeca5717ab7d3d6900c9c32c8a0b3db7a0b3e",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/Step1Message.java": "9be5a4dcc57f391c80bdec8618031d285bb31cc6181b90bfe3e19774edf81baa",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/ArrowAndNoteBox.java": "843b8beb1b76bed07576f2c46e1564c28f0094263cab0ca42555ef69e4ea3668",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTileSelf.java": "b0d937e0df4352381839029be07569c65a0333de8ef629ad111a590a8276a8bf",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseSelfArrow.java": "ee42d78cfe425c46e76fb57f5040f16cd92513c058d016bb15d462cce616c7b0",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/ParticipantBox.java": "af5eac4cf63e26f18fd5599ff82ba556c24965b2810698914e449b64af7b268c",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/NoteBox.java": "0fc8ac9975aa0456be00ca1826e134d7654c854bcb336944f0e173ccc9735c6e",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseParticipant.java": "92d7d7d85bd53c2516064c42c9046dc8e3cff5ab0d34e8ea9e395a05fd2d80bc",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseNote.java": "78f64269ceccf430d3e31a6298acc35f2a563f5d699e5db1c86ab8239edf7d49",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseDelayText.java": "fbb79d2e35ce160cd9d8eeca77e4b8712b3691360afcf525b43c0d39c4faa88f",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseGroupingHeader.java": "f0d58e7078b32383d2a653acd2f38e2e8d949a0780026490a7bd3d50a6e30ae9",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseGroupingElse.java": "006eb787976cd4c5e681ace4186001673964ed7e2b88f6f14c44ec5e0891a25a",
+    "src/main/java/net/sourceforge/plantuml/core/DiagramChromeFactory12026.java": "228ba729cc991773d0f8e0f0abe2289d1557a90085eb82473cd0b0afb39fc9b3",
+    "src/main/java/net/sourceforge/plantuml/svek/DecorateEntityImage.java": "0091c3ecaaa77706d498bd6b364d8a0115f6253a99141f1775f1fbfdf94199ec",
+    "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockBordered.java": "aa6a51eaf76fb0e312b76bd1fe696c5fb21622e7a8f8b568a66aa4820942aea7",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/SequenceDiagramFileMakerTeoz.java": "ea10d1eab9d37506dae992c01f909a28a63aa90f3a58c9a7712b9e4dece006dc",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/PlayingSpaceWithParticipants.java": "d6181364a8d7f05e2de10d960dc23fa2135825467c1505aa5b04f7a3a8030b55",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/LiveBoxes.java": "0c1f7856008b04c90efbbf3addcc0b16deca3ade303a6f779cbc1481982c586d",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/LifeEventTile.java": "7b421df8dd2e2ce754425c1fe076ccd8da6c8acaaebf7930e8b72361acb3f503",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTile.java": "4078e44762bff6f2959a0870ecb0501cb17f6a3e57faa272d82baf1c601f0274",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationExoTile.java": "00ef2282efada9f1a69f46c0b457a3c97a4f43d623ae8f8b56fb73cd6101d44e",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/TileBuilder.java": "278a8849e4de76489ac1fa9c15ab24bcde4cd67203188cfe2b31a54286d3c012",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/PlayingSpace.java": "2748553f8e2a9e4b17e08b0501d0d3daac743c35452a0697b896c34951c849bf",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/Stairs.java": "f4ea83884dcfdc34662b0af69e01b89a7866e9436882ee5049c26a96386817b8",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/GroupingTile.java": "309f74ba94ff1b098a39cb17658d7a04612673d3e82b6a83e01e9c9e80ac39e1",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/ElseTile.java": "b08f2ca679ac6829aa4272003fd2460a3b07e49c7dc397554e8651f7581dbae4",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/NoteTile.java": "dae7ba8b898b8307d2ccb7512dfb11490d11662a758a6c542edcfdcb69a95c83",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTileSelfNoteLeft.java": "c77929b69f1c371988ae347c1d3f18313003f0e63662c6589b4bcee8b19ce876",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTileSelfNoteRight.java": "477afe4e7c52011fbfed7fa571a70efa8441931d103b72ed6e6a710b43012d81",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTileNoteLeft.java": "c2bc27810f30850931e996c8c291e98b21b19a7da05c5203a8ebc26bd4ea27c4",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/CommunicationTileNoteRight.java": "0d8734f217d627927e78d8c2f61b5704d6e5a2031afc53da9bdbef72e61d878f",
+    "src/main/java/net/sourceforge/plantuml/real/RealImpl.java": "a4780e766e64016d61157483ce0765b51e22ca69909731b1c5d56b012000c75d",
+    "src/main/java/net/sourceforge/plantuml/real/RealDelta.java": "42547d1aa28226568de1c775e09e2eb42a0033a5574bffaddd7c5ecf93137d5b",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandDelay.java": "56d490f356a65c30e581119ab8f826c823d9d4756f49a756379f6ce6747d603d",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/DelayTile.java": "e9b9af6cac56e26ffa9a7f0897256f04c8992b633dd2212c52fbb6e0a5212a5d",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandBoxStart.java": "67d06b20d6bae9f5a28275a9f82c1a4b4e8802b7b292cc86c6efcd457096f198",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/Doll.java": "bca80cc5bb64f57b89007de0163ff01b5cb3924bb91421a2d0d2e3dd7cd97a64",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/Dolls.java": "51cf5ce87ebcb0d81e0e836a5d77249da371959038dc950abebade524159fe04",
+    "src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/LivingSpace.java": "d23029368faa371190bf352abd7be065716cb11957c45318cc4c0ed043cadd7c",
+    "src/main/java/net/sourceforge/plantuml/skin/rose/ComponentRoseEnglober.java": "230ceedab9ffdf0ab43ff429e49d4790bff8fcaed0d52ec23014ac99f2d3c79e"
+  },
+  "method": "Read exact three-file production diff against 1800ac48, all twelve accounts, prior causal findings, named Java source and relevant data-flow consumers. Source hypotheses below require actual fresh differential evidence; they are not synthetic passing verdicts.",
+  "constant_provenance": "New 45=15+30 and 15 header margins; 3 englober horizontal margin; 10 Doll title allowance; 16/3/9 group margins; 5 callback stagger; raw Teoz 5px insets; normal self reverse delta/level branches all trace to named Java methods. Caption/legend default constants are derived from default style only and must not be generalized to overridden style. Reused ACTIVATION_HALF_W for Java callback 5 and HEAD_BOX_Y for Teoz inset have matching values but conflate distinct semantic constants.",
+  "fixture_logic": "No new golden reads, fixture label predicates, branch-count fitted ladders or post-hoc coordinate string surgery found in the reviewed diff. Old heuristics outside that diff remain reachable and are not certified.",
+  "sawmill": "Single-file parse failed: building scope classifier tried sequence.rs/.sawmill/scopes.yaml (not a directory). Used exact diffs/source reads; no AST audit success claimed.",
+  "verdict": "See per-mechanism records and fresh CLI evidence; source audit alone is not acceptance."
+}

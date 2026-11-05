@@ -1,0 +1,304 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-effective-arrow-color",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A253dfb72-0e49-40b9-b53c-b6160ecef3bf",
+    "model": "gpt-6-astra / high reasoning / Codex harness in T3 Code; independent checker, no children"
+  },
+  "account_commit": "8e1440fbfd454d49959c6a25a827072c02694a72",
+  "implementation_commit": "8d668d3fbc67101bb715662442d75aec3773dae9",
+  "implementation_commits": [
+    "ecd996a303ec94c7f180548328afe88967982c59",
+    "8d668d3fbc67101bb715662442d75aec3773dae9"
+  ],
+  "tested_revision": "efc2e922bbd093cf13d827501f5e53aa850a9e68",
+  "production_revision": "1b29d8c78d671649b0db6efcdc09e01391f6ce98",
+  "before_revision": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (exact substituted argv, source hashes, streams and environment preserved in checker-ef020 raw relay archives)",
+    "cargo build --locked --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one (fresh distinct private targets at exact before/candidate)",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST BIN_DIR PRIVATE_OUTPUT",
+    "cargo test --locked --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards -- --nocapture",
+    "See docs/parity-reviews/sequence-corrective-b9/checker-ef020/commands.json for all exact local commands, cwd, environment and exits."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.svg",
+      "axes": [
+        "alpha 01/80/fe/no-paint/grayscale",
+        "line/polygon/ellipse/path/self/cross"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "fresh": true,
+      "mechanism": "sequence-effective-arrow-color",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_0.puml",
+      "source_sha256": "25e641cec188dec27b03e7f2d0352b69339ce0ea6db36babac1b5855a944f307",
+      "golden_sha256": "581918a8bf242cb5ebce26d6e2e30999914278fb3f7c414b39f2c8d7e8b80ecd",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 2,
+          "product_library_exit": 2,
+          "assisted_library_exit": 2,
+          "cli_equals_library": false,
+          "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.before.rust.svg",
+          "svg_sha256": "046b94ce1d4c54841560d4ed9265696e53c53ab4c04f0e5a03c92f1a7375b6c6"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 2,
+          "product_library_exit": 2,
+          "assisted_library_exit": 2,
+          "cli_equals_library": false,
+          "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_0.after.rust.svg",
+          "svg_sha256": "af6635db3154e493863fbf53e6645f9361577fd28b84ca224989681cad47073c"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.svg",
+      "axes": [
+        "return/external/self",
+        "registered/alpha zero/opaque"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-effective-arrow-color",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_return_0.puml",
+      "source_sha256": "5cbc767edc78af51c79138fc36ff7f6bc29512695674ad166086e9a11e944d4f",
+      "golden_sha256": "51e06a29d1d3877d810763f401540feedf7c5fadd075aa0f0a4950e1534b40d2",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.before.rust.svg",
+          "svg_sha256": "a33fa74fff51609461c726373a63e3bba802b0cdd74fe1a3f89f7a2f542bba8e"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 0,
+          "product_library_exit": 0,
+          "assisted_library_exit": 0,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_0.after.rust.svg",
+          "svg_sha256": "30cfa4f2ae6e0b8c7d92da7b1f9da90cbf5c7fbabc055495456290c0ea1fe7f2"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.svg",
+      "axes": [
+        "alpha 01/80/fe/no-paint/grayscale",
+        "line/polygon/ellipse/path/self/cross"
+      ],
+      "result": "fail",
+      "reference_valid": false,
+      "fresh": true,
+      "mechanism": "sequence-effective-arrow-color",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_1.puml",
+      "source_sha256": "6f3820f5da23f35a288e229546c0c6663e69abed78ae1c29f96fe7f6a7c0fd33",
+      "golden_sha256": "7f0ece0b30813b3d24433a74dc82f5c3ea973ffb925aba00b6a52cba324b3f57",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 2,
+          "product_library_exit": 2,
+          "assisted_library_exit": 2,
+          "cli_equals_library": false,
+          "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.before.rust.svg",
+          "svg_sha256": "1762d4bb0861106284141912e15b44e953827fe56f5240c1bcb1ea4f424dbce3"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 2,
+          "product_library_exit": 2,
+          "assisted_library_exit": 2,
+          "cli_equals_library": false,
+          "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_1.after.rust.svg",
+          "svg_sha256": "970776bca20fd3e06b9a75a1ce322f0d79804d6e2bf3f8ff7dba83ad398c3332"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.svg",
+      "axes": [
+        "return/external/self",
+        "registered/alpha zero/opaque"
+      ],
+      "result": "pass",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-effective-arrow-color",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_return_1.puml",
+      "source_sha256": "6661d9871ffff9f5e61a7fd887789881e4a424a844d7199d028e96beadb72c0a",
+      "golden_sha256": "db83795dc488232e16ad4fec5ab0bcc2a2dca26052a983fa5bd84c235d566f0d",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.before.rust.svg",
+          "svg_sha256": "8921a942641b8db42206c7be09e4412ffd1ad73285c323209bec3891f51970a7"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 0,
+          "product_library_exit": 0,
+          "assisted_library_exit": 0,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_return_1.after.rust.svg",
+          "svg_sha256": "e5381ffb0a99c1d96e27efd1ccfcc9dbc4ccf8f0d41b946af931ac1fc6c96399"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.puml",
+      "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.svg",
+      "axes": [
+        "alpha 01/80/fe/no-paint/grayscale",
+        "line/polygon/ellipse/path/self/cross",
+        "CommandArrow ARROW_DRESSING2 orders head before o; original invalid input retained"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-effective-arrow-color",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_valid_0.puml",
+      "source_sha256": "9c71231256da076137c2434f9430b910649b84d6616d59cf32f5a49815a94887",
+      "golden_sha256": "71fb27c070420edeec188c5ef8efc03ae4e9f4a53523e61f3801805c35b75d9c",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.before.rust.svg",
+          "svg_sha256": "046b94ce1d4c54841560d4ed9265696e53c53ab4c04f0e5a03c92f1a7375b6c6"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_0.after.rust.svg",
+          "svg_sha256": "af6635db3154e493863fbf53e6645f9361577fd28b84ca224989681cad47073c"
+        }
+      }
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.puml",
+      "golden": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.svg",
+      "axes": [
+        "alpha 01/80/fe/no-paint/grayscale",
+        "line/polygon/ellipse/path/self/cross",
+        "CommandArrow ARROW_DRESSING2 orders head before o; original invalid input retained"
+      ],
+      "result": "fail",
+      "reference_valid": true,
+      "fresh": true,
+      "mechanism": "sequence-effective-arrow-color",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-sequence-check-ef020aa1/sources/color_primitives_valid_1.puml",
+      "source_sha256": "31029767868ac9dbf7ec0e45f78c6da4134cacb6200edc724d1e040da659df5f",
+      "golden_sha256": "cfffd59e02bc2cbf05b5bb0ca88ffec0f5db72102b3e7ca94a535b2882474ede",
+      "measurements": {
+        "before": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.before.rust.svg",
+          "svg_sha256": "1762d4bb0861106284141912e15b44e953827fe56f5240c1bcb1ea4f424dbce3"
+        },
+        "after": {
+          "cli_exit": 0,
+          "comparison_exit": 1,
+          "product_library_exit": 1,
+          "assisted_library_exit": 1,
+          "cli_equals_library": true,
+          "svg": "test-diagrams/perturbations/sequence-effective-arrow-color/checker_ef020_color_primitives_valid_1.after.rust.svg",
+          "svg_sha256": "970776bca20fd3e06b9a75a1ce322f0d79804d6e2bf3f8ff7dba83ad398c3332"
+        }
+      }
+    }
+  ],
+  "findings": [
+    "style-consumption-is-partial: The corrected activationBox fallback is source-supported: lifeLine is a sibling, not a parent. Archived intermediate captures show all three reported losses, and fixed captures restore181818; fresh activationBox blue and root purple bars agree. However the CSS lifeLine red/orange is discarded by the lifeline painter, and root purple is lost by participant and arrow painters even though activation bars inherit it. Fresh sibling controls differ only on lifeline stroke. Root controls expose the same sparse-style-versus-legacy-skinparam split across primitives. This is an in-scope style/color dependency; the sibling correction is not whole style closure. Causal next step: Consume the resolved appropriate component signatures consistently for lifelines, arrows and participants, retaining sibling isolation and per-event style ownership. Do not restore lifeLine-to-activation fallback.",
+    "primitive-decoration-ownership: The first two controls used invalid ]o> ordering; raw Java exit200/error SVGs are preserved, and Rust accepts both. Corrected ]>o controls are valid but miss the Java destination ellipse. Java decoration and normal head coexist, whereas Rust selects ArrowHead::Circle instead of retaining target decoration independently. Other structural/order differences remain in the multi-primitive control. RGB/alpha01/80/FE and none materialization on emitted primitives agree in inspected strokes/fills; this does not establish coverage for the missing ellipse. No color scalar repair is inferred from an element-count mismatch. Causal next step: Preserve target decoration separately from head dressing, then derive ellipse/head paint ownership from ComponentRoseArrow. Retain primitive ordering evidence and the original grammar negatives; do not patch output coordinates."
+  ],
+  "source_audit": [
+    {
+      "id": "style-consumption-is-partial",
+      "mechanisms": [
+        "sequence-effective-note-activation-style",
+        "sequence-effective-arrow-color"
+      ],
+      "sources": [
+        "style_siblings_0",
+        "style_siblings_1",
+        "style_root_0",
+        "style_root_1"
+      ],
+      "java": [
+        "skin.rose.Rose#createComponentNote",
+        "sequencediagram.graphic.LifeLine#drawU",
+        "skin.rose.ComponentRoseActiveLine#drawInternalU",
+        "skin.rose.ComponentRoseLine#drawInternalU",
+        "src/main/resources/skin/plantuml.skin root/sequenceDiagram/lifeLine/activationBox"
+      ],
+      "rust": [
+        "crates/rustuml-render/src/sequence.rs::render note_signature/activation_signature (7028-7071)",
+        "crates/rustuml-render/src/sequence.rs::render skinparam color loop and PlantUmlSvg lifeline/participant/arrow paint"
+      ],
+      "diagnosis": "The corrected activationBox fallback is source-supported: lifeLine is a sibling, not a parent. Archived intermediate captures show all three reported losses, and fixed captures restore181818; fresh activationBox blue and root purple bars agree. However the CSS lifeLine red/orange is discarded by the lifeline painter, and root purple is lost by participant and arrow painters even though activation bars inherit it. Fresh sibling controls differ only on lifeline stroke. Root controls expose the same sparse-style-versus-legacy-skinparam split across primitives. This is an in-scope style/color dependency; the sibling correction is not whole style closure.",
+      "next_repair": "Consume the resolved appropriate component signatures consistently for lifelines, arrows and participants, retaining sibling isolation and per-event style ownership. Do not restore lifeLine-to-activation fallback."
+    },
+    {
+      "id": "primitive-decoration-ownership",
+      "mechanisms": [
+        "sequence-effective-arrow-color"
+      ],
+      "sources": [
+        "color_primitives_valid_0",
+        "color_primitives_valid_1",
+        "color_primitives_0",
+        "color_primitives_1"
+      ],
+      "java": [
+        "sequencediagram.command.CommandArrow ARROW_DRESSING2",
+        "skin.rose.ComponentRoseArrow#drawDressing2 (235-275)",
+        "skin.ArrowConfiguration decoration and dressing fields"
+      ],
+      "rust": [
+        "crates/rustuml-parser/src/parse/sequence.rs::parse_arrow (1363-1394)",
+        "crates/rustuml-render/src/sequence.rs arrow head dispatch and primitive emitters"
+      ],
+      "diagnosis": "The first two controls used invalid ]o> ordering; raw Java exit200/error SVGs are preserved, and Rust accepts both. Corrected ]>o controls are valid but miss the Java destination ellipse. Java decoration and normal head coexist, whereas Rust selects ArrowHead::Circle instead of retaining target decoration independently. Other structural/order differences remain in the multi-primitive control. RGB/alpha01/80/FE and none materialization on emitted primitives agree in inspected strokes/fills; this does not establish coverage for the missing ellipse. No color scalar repair is inferred from an element-count mismatch.",
+      "next_repair": "Preserve target decoration separately from head dressing, then derive ellipse/head paint ownership from ComponentRoseArrow. Retain primitive ordering evidence and the original grammar negatives; do not patch output coordinates."
+    }
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "Independent bounded source/control observation on exact candidate only. This is not whole-sequence acceptance, a shipping recommendation, a waiver of dependencies or standing red gates, or transfer of old5358314a self-cross/destroy acceptance.",
+  "residue": [
+    "Existing557 retained mismatches, fonts/deferred layout and12 accepted negative references remain active.",
+    "Parent-only326 sources were not measured in this replay.",
+    "Remote font/dot equivalence is scoped to captured environment and these sequence cases.",
+    "Scoped shadow scalar conversion and activation sibling fallback are locally supported even where complete-output dependencies reject the requested mechanism acceptance."
+  ],
+  "evidence": "docs/parity-reviews/sequence-corrective-b9/checker-ef020/README.md"
+}

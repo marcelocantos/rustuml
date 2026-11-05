@@ -1,0 +1,572 @@
+{
+  "frozen": {
+    "entries": 2169,
+    "distinct_source_bytes": 2121,
+    "duplicates": 48,
+    "by_cohort": {
+      "checker64": {
+        "entries": 64,
+        "before": {
+          "2": 6,
+          "0": 42,
+          "1": 16
+        },
+        "after": {
+          "2": 6,
+          "0": 50,
+          "1": 8
+        }
+      },
+      "handoff2": {
+        "entries": 2,
+        "before": {
+          "1": 2
+        },
+        "after": {
+          "1": 2
+        }
+      },
+      "maker20": {
+        "entries": 20,
+        "before": {
+          "0": 18,
+          "1": 2
+        },
+        "after": {
+          "0": 18,
+          "1": 2
+        }
+      },
+      "preserved": {
+        "entries": 2083,
+        "before": {
+          "1": 590,
+          "0": 1430,
+          "2": 63
+        },
+        "after": {
+          "1": 574,
+          "0": 1446,
+          "2": 63
+        }
+      }
+    },
+    "losses": {
+      "cli_comparison": [],
+      "product_library": [],
+      "assisted_library": []
+    },
+    "recoveries": {
+      "cli_comparison": [
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_teoz.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_teoz.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711b_firststripe_size_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711b_firststripe_size_teoz.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_same_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_same_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_different_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_different_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/queue_first_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/queue_first_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/queue_created_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/queue_created_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/message_rise_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/message_rise_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/message_fall_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/message_fall_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/self_halves_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/self_halves_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/self_live_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/self_live_teoz.puml"
+      ],
+      "product_library": [
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_teoz.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_teoz.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711b_firststripe_size_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711b_firststripe_size_teoz.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_same_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_same_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_different_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_different_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/queue_first_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/queue_first_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/queue_created_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/queue_created_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/message_rise_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/message_rise_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/message_fall_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/message_fall_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/self_halves_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/self_halves_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/self_live_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/self_live_teoz.puml"
+      ],
+      "assisted_library": [
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_self_reverse_teoz.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_teoz.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711b_firststripe_size_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711b_firststripe_size_teoz.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_legacy.puml",
+        "test-diagrams/perturbations/sequence-component-display-review711/review711b_pending_overwrite_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_same_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_same_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_different_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_different_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/queue_first_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/queue_first_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/queue_created_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/queue_created_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/message_rise_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/message_rise_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/message_fall_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/message_fall_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/self_halves_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/self_halves_teoz.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/self_live_legacy.puml",
+        "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/self_live_teoz.puml"
+      ]
+    },
+    "new_valid_parse_errors": [],
+    "new_renderer_panics": [],
+    "ascii_changed": [
+      "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_incompatible_legacy.puml",
+      "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_incompatible_teoz.puml",
+      "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_self_legacy.puml",
+      "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_self_teoz.puml"
+    ],
+    "ast_changed": [
+      "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_incompatible_legacy.puml",
+      "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_incompatible_teoz.puml",
+      "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_self_legacy.puml",
+      "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_self_teoz.puml"
+    ],
+    "invalid_cli_status": {
+      "before": {
+        "0": 24,
+        "1": 45
+      },
+      "after": {
+        "0": 20,
+        "1": 49
+      }
+    },
+    "helper_panics": {
+      "before": {
+        "product_library": [
+          {
+            "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21346221) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          },
+          {
+            "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21408414) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          }
+        ],
+        "assisted_library": [
+          {
+            "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21346244) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          },
+          {
+            "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21408418) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          }
+        ]
+      },
+      "after": {
+        "product_library": [
+          {
+            "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21346344) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          },
+          {
+            "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21408453) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          }
+        ],
+        "assisted_library": [
+          {
+            "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21346368) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          },
+          {
+            "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21408457) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          }
+        ]
+      }
+    }
+  },
+  "fresh86": {
+    "entries": 86,
+    "distinct_source_bytes": 86,
+    "duplicates": 0,
+    "by_cohort": {
+      "preserved": {
+        "entries": 86,
+        "before": {
+          "1": 41,
+          "0": 37,
+          "2": 8
+        },
+        "after": {
+          "0": 57,
+          "2": 8,
+          "1": 17,
+          "3": 4
+        }
+      }
+    },
+    "losses": {
+      "cli_comparison": [
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_teoz.puml"
+      ],
+      "product_library": [
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_teoz.puml"
+      ],
+      "assisted_library": [
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_teoz.puml"
+      ]
+    },
+    "recoveries": {
+      "cli_comparison": [
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_triple_pending_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_triple_pending_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_numbered_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_numbered_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_box_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_box_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_order_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_order_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_forward_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_forward_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_self_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_self_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_self_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_self_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_external_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_external_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_styles_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_styles_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_bottom_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_bottom_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_top_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_top_teoz.puml"
+      ],
+      "product_library": [
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_triple_pending_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_triple_pending_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_numbered_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_numbered_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_box_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_box_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_order_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_order_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_forward_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_forward_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_self_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_self_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_self_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_self_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_external_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_external_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_styles_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_styles_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_bottom_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_bottom_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_top_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_top_teoz.puml"
+      ],
+      "assisted_library": [
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_triple_pending_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_triple_pending_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_numbered_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_numbered_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_box_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_box_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_order_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_queue_order_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_forward_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_forward_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_self_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_self_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_self_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_reverse_self_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_external_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_external_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_styles_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_stripe_styles_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_bottom_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_bottom_teoz.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_top_legacy.puml",
+        "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_self_reverse_top_teoz.puml"
+      ]
+    },
+    "new_valid_parse_errors": [],
+    "new_renderer_panics": [
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_teoz.puml"
+    ],
+    "ascii_changed": [
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_return_invalid_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_return_invalid_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_self_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_self_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_source_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_source_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_neither_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_neither_teoz.puml"
+    ],
+    "ast_changed": [
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_return_invalid_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_return_invalid_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_self_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_self_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_source_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_source_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_neither_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_invalid_neither_teoz.puml"
+    ],
+    "invalid_cli_status": {
+      "before": {
+        "0": 8
+      },
+      "after": {
+        "1": 8
+      }
+    },
+    "helper_panics": {
+      "before": {
+        "product_library": [],
+        "assisted_library": []
+      },
+      "after": {
+        "product_library": [
+          {
+            "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_legacy.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21400626) panicked at crates/rustuml-render/src/sequence.rs:14287:81:\ncalled `Option::unwrap()` on a `None` value\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          },
+          {
+            "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_teoz.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21400639) panicked at crates/rustuml-render/src/sequence.rs:14287:81:\ncalled `Option::unwrap()` on a `None` value\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          },
+          {
+            "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_legacy.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21400676) panicked at crates/rustuml-render/src/sequence.rs:14287:81:\ncalled `Option::unwrap()` on a `None` value\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          },
+          {
+            "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_teoz.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21400693) panicked at crates/rustuml-render/src/sequence.rs:14287:81:\ncalled `Option::unwrap()` on a `None` value\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          }
+        ],
+        "assisted_library": [
+          {
+            "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_legacy.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21400644) panicked at crates/rustuml-render/src/sequence.rs:14287:81:\ncalled `Option::unwrap()` on a `None` value\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          },
+          {
+            "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_left_teoz.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21400656) panicked at crates/rustuml-render/src/sequence.rs:14287:81:\ncalled `Option::unwrap()` on a `None` value\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          },
+          {
+            "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_legacy.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21400696) panicked at crates/rustuml-render/src/sequence.rs:14287:81:\ncalled `Option::unwrap()` on a `None` value\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          },
+          {
+            "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/reference-inputs/ind78_outgoing_right_teoz.puml",
+            "exit": 101,
+            "stderr": "\nthread 'main' (21400710) panicked at crates/rustuml-render/src/sequence.rs:14287:81:\ncalled `Option::unwrap()` on a `None` value\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          }
+        ]
+      }
+    }
+  },
+  "maker_reproduction_differences": {
+    "before": [],
+    "after": []
+  },
+  "maker148": {
+    "entries": 148,
+    "ascii_changes": [
+      "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_incompatible_legacy.puml",
+      "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_incompatible_teoz.puml",
+      "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_self_legacy.puml",
+      "docs/parity-reviews/sequence-pending-stripe-packet/maker-results/inputs/reference-inputs/pending_self_teoz.puml"
+    ],
+    "unchanged": 144
+  },
+  "parent1449": {
+    "entries": 1449,
+    "overlapping_paths": 1123,
+    "unreplayed_paths": 326,
+    "overlapping_unique_bytes": 1097,
+    "unreplayed_path_unique_bytes": 286,
+    "unreplayed_exclusive_unique_bytes": 278,
+    "not_additive": true
+  },
+  "fresh_mechanisms": {
+    "sequence-collections-source-clarification": {
+      "entries": 4,
+      "valid": 4,
+      "before": {
+        "0": 4
+      },
+      "after": {
+        "0": 4
+      }
+    },
+    "sequence-message-stripe-baselines": {
+      "entries": 16,
+      "valid": 16,
+      "before": {
+        "1": 16
+      },
+      "after": {
+        "0": 12,
+        "1": 4
+      }
+    },
+    "sequence-queue-stripe-origin": {
+      "entries": 14,
+      "valid": 14,
+      "before": {
+        "1": 10,
+        "0": 4
+      },
+      "after": {
+        "1": 6,
+        "0": 8
+      }
+    },
+    "sequence-self-half-polygon-order": {
+      "entries": 14,
+      "valid": 14,
+      "before": {
+        "0": 10,
+        "1": 4
+      },
+      "after": {
+        "0": 14
+      }
+    },
+    "sequence-single-pending-create": {
+      "entries": 38,
+      "valid": 30,
+      "before": {
+        "1": 11,
+        "0": 19,
+        "2": 8
+      },
+      "after": {
+        "0": 19,
+        "2": 8,
+        "1": 7,
+        "3": 4
+      }
+    }
+  },
+  "broad_gates": {
+    "before": {
+      "unit_counts": [
+        "574",
+        "793"
+      ],
+      "cli_counts": [
+        "13"
+      ],
+      "ascii_tests": 12,
+      "product": [
+        "11181/11251"
+      ],
+      "assisted": [
+        "12550 total, 10497 passed, 754 failed, 1299 skipped"
+      ],
+      "standing": {
+        "entries": 1352,
+        "failed": 608,
+        "matched": 744
+      },
+      "guards": "4/6",
+      "failure_names": {
+        "no_oracle_failure_names.txt": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+        "golden_failure_names.txt": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b"
+      },
+      "clippy_render_errors": 19
+    },
+    "after": {
+      "unit_counts": [
+        "575",
+        "795"
+      ],
+      "cli_counts": [
+        "13"
+      ],
+      "ascii_tests": 12,
+      "product": [
+        "11181/11251"
+      ],
+      "assisted": [
+        "12550 total, 10497 passed, 754 failed, 1299 skipped"
+      ],
+      "standing": {
+        "entries": 1416,
+        "failed": 622,
+        "matched": 794
+      },
+      "guards": "4/6",
+      "failure_names": {
+        "no_oracle_failure_names.txt": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+        "golden_failure_names.txt": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b"
+      },
+      "clippy_render_errors": 19
+    }
+  },
+  "failure_names_equal": {
+    "no_oracle_failure_names.txt": true,
+    "golden_failure_names.txt": true
+  },
+  "maker_artifact_hash_changes": [],
+  "fresh_sources_overlap_frozen": 0
+}

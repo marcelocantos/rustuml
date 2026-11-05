@@ -1,0 +1,204 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-self-cross-decoration",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A185d7cbb-70b4-4f24-9abb-f542386743b4",
+    "model": "gpt-6-astra / Codex harness in T3 Code; independent checker, no children"
+  },
+  "account_commit": "ea313c6203844a0087bc40261366f5bace617d43",
+  "implementation_commit": "a8d717ca3bc8733c9b1deb2e14dbb569e6e547bc",
+  "implementation_commits": [
+    "a8d717ca3bc8733c9b1deb2e14dbb569e6e547bc"
+  ],
+  "tested_revision": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "production_revision": "41e2ce88aec0c6856d57f0c2322ca097ecd55de4",
+  "before_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "cargo check -p rustuml-parser -p rustuml-render",
+    "cargo build --release -p rustuml --bin rustuml -p rustuml-oracle --example diff_one (separate private before/after source and target directories; checks.json)",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN PRIVATE_OUTPUT (exact invocations in replay-commands.json/fresh-commands.json/supplement-commands.json)",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent relay; per-case exact substituted argv in provenance and raw results)",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render",
+    "cargo test --release -p rustuml --test pipe_mode",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test harness_guards -- --nocapture",
+    "cargo test --release -p rustuml-oracle --test parity_perturbations -- --nocapture",
+    "rustfmt --check --edition 2024 crates/rustuml-parser/src/diagram/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-render/src/sequence.rs crates/rustuml-render/src/ascii.rs"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k0.svg",
+      "axes": [
+        "cross dressing=x--x",
+        "depth two with lifecycle=''",
+        "engine=0"
+      ],
+      "result": "pass",
+      "source_sha256": "6837fa2161ab07ff91773632e97a456619c87057eea06023c10b996d03ad3f4c",
+      "golden_sha256": "ba1f9c7b4b3b90551e8c27d8e2d1da6fc5191d7cee417590b6442af725b99da9",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k0.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k0.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k1.svg",
+      "axes": [
+        "cross dressing=<--x",
+        "depth two with lifecycle=' ++'",
+        "engine=0"
+      ],
+      "result": "pass",
+      "source_sha256": "66e97e26f520fe4ec59bf1f82f5846655b2815c4ffc3e47cb22ce77dda8a58a6",
+      "golden_sha256": "f8b3c30fd60f405cabda2dfdccad8d598109f8a77e3ce4ddfcf8f8a11de17426",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k1.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k1.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k2.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k2.svg",
+      "axes": [
+        "cross dressing=x-->",
+        "depth two with lifecycle=' --'",
+        "engine=0"
+      ],
+      "result": "pass",
+      "source_sha256": "e00b9a383e9bcbc304f80ae99c4a5c392b4efffd208f532bd0c58c2e5b2a0242",
+      "golden_sha256": "fe9bf711e1c530e94eeb65f0961798e9adaea7bb9e2cdf045ef2e442b9cc01b6",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k2.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k2.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k3.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k3.svg",
+      "axes": [
+        "cross dressing=--x",
+        "depth two with lifecycle=' --'",
+        "engine=0"
+      ],
+      "result": "pass",
+      "source_sha256": "5f8416ef06a3077d921b94510bd5c25c0d51c31c97e858a75a9714bc671c4712",
+      "golden_sha256": "bc631a3b3199c84708380a971588c4ce1ca89ec27a4baa8cbf5bde43f4cd5ef4",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k3.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k3.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k0.svg",
+      "axes": [
+        "cross dressing=x--x",
+        "depth two with lifecycle=''",
+        "engine=1"
+      ],
+      "result": "pass",
+      "source_sha256": "19bb368a9d24533a16b17d72641ecc7db8bbcfc0c12bd2fbaddb534da7390ce8",
+      "golden_sha256": "0796bc00e61f0b1a06be0b72bc6422140176a7003406e834842b42ab80c4a2e5",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k0.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k0.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k1.svg",
+      "axes": [
+        "cross dressing=<--x",
+        "depth two with lifecycle=' ++'",
+        "engine=1"
+      ],
+      "result": "pass",
+      "source_sha256": "47d0d803c04908961f5546470b2dab382cd4fef5879e8da62ef3e19fabd95d10",
+      "golden_sha256": "e4ed8d3e88f3046b8bf5cbca95ecad2946ec42a128a3c37f487971787d27681d",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k1.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k1.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k2.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k2.svg",
+      "axes": [
+        "cross dressing=x-->",
+        "depth two with lifecycle=' --'",
+        "engine=1"
+      ],
+      "result": "pass",
+      "source_sha256": "c6f097dc7da876f158477b70384cac6aad1c91ca3d27b6edb07595834a81811f",
+      "golden_sha256": "1793c90ab26dba215eb4946e36bf9268b16b1d2d506647ce229b7aef64718a3f",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k2.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k2.before.svg"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k3.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k3.svg",
+      "axes": [
+        "cross dressing=--x",
+        "depth two with lifecycle=' --'",
+        "engine=1"
+      ],
+      "result": "pass",
+      "source_sha256": "21bdf4538ff3e24611ca8e0a0daae6da94b5e64d3b6187a347f087b2464ff615",
+      "golden_sha256": "80800c0b6850e58e85559d2928dc4e567a2522485dd69245ebf15174050f1b3a",
+      "java_exit": 0,
+      "rust_cli_exit": 0,
+      "comparator_exit": 0,
+      "reference_validity": "valid Java SVG",
+      "negative_semantics": null,
+      "rust_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k3.rust.svg",
+      "before_output": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k3.before.svg"
+    }
+  ],
+  "findings": [
+    "Accepted only the CROSSX self-component endpoint/stroke equations at the full tested candidate: forward starting x--, both-end x--x, final --x, true reverse <-x/ <--x; two solid strokes per cross; active/closing depths in both engines. Does not accept all sequence lifecycle, all color serialization, or parallel tile composition.",
+    "The initial x-- reverse hypothesis is false; pre-edit refinement42ec7126 correctly pins x-- to reverseDefine=false and <-x to the reverse branch. No parse_arrow production change was made for this correction.",
+    "All source accounts and refinements precede their implementation commits; source audit found no fixture-label matching, golden reads in shipping additions, branch-count ladders, or coordinate-keyed output surgery. The moved generic created-head group unwrapping existed before this packet. Constants and remaining style provenance limitations are recorded in source-audit.json.",
+    "Independent1828 CLI replay: before1208 matches/581 valid mismatches/39 invalid; after1232/557/39;24 gains,0 lost passes,0 valid CLI errors/panics/timeouts. Both source/reference and before/after output hashes match archived evidence. Duplicate48 entries retained; frozen955=403 matches/542 mismatches/10 invalid. Nineteen corrected negative rejections are separate from positive matches.",
+    "Main library tiers:11181/11251 product and10497/11251 assisted, sequence1411/1411; units567 parser+783 renderer and13 CLI pass. Both main tiers exit101; guards4/6 exit101; changed-file formatting exits0. Initial main-tier invocation failed setup on the empty submodule before rendering; exact pinned golden archive restored and one populated-corpus run performed. All nonzero test exits retained.",
+    "Standing perturbations after49 fresh additions:637/1240 match,603 fail, exit101. Invalid Java references count as failures in that unchanged positive suite. The six new mechanism reviews do not supersede any historical rejection; fifteen deferred checker mismatches, prior542 failures, remaining negative semantics, shared fonts/styles/entities and cwd dependencies remain active. Parent1449 overlaps1123 paths;326 parent-only inputs remain unmeasured here."
+  ],
+  "verdict": "accepted",
+  "acceptance_scope": "Accepted only the CROSSX self-component endpoint/stroke equations at the full tested candidate: forward starting x--, both-end x--x, final --x, true reverse <-x/ <--x; two solid strokes per cross; active/closing depths in both engines. Does not accept all sequence lifecycle, all color serialization, or parallel tile composition.",
+  "evidence": "docs/parity-reviews/sequence-lifecycle-decoration-packet/checker-b9c6/README.md",
+  "reference_provenance": {
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "timezone": "GMT+11:00",
+    "frontend": "raw pipe; no GET or source normalization",
+    "runtime": "Remote Homebrew Java21.0.5 / Graphviz12.2.0, source-pinned jar differs from historical binary; font/Graphviz equivalence is not universal",
+    "raw_batches": [
+      "reference-results.json.gz",
+      "supplement-results.json.gz"
+    ]
+  },
+  "historical_reviews_unchanged": true
+}

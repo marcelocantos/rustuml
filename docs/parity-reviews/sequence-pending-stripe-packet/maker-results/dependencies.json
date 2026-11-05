@@ -1,0 +1,62 @@
+{
+  "inherited_record": "docs/parity-reviews/sequence-component-display-packet/maker-results/dependencies.json",
+  "status": "All inherited whole-case failures remain obligations, not waived. This packet does not replace any prior rejection.",
+  "remaining_valid_failures": 586,
+  "invalid_references": 69,
+  "new_checker_valid_failures": [
+    "test-diagrams/perturbations/sequence-component-display-review711/review711_create_reverse_queue_legacy.puml",
+    "test-diagrams/perturbations/sequence-component-display-review711/review711_group_unclosed_legacy.puml",
+    "test-diagrams/perturbations/sequence-component-display-review711/review711_group_unclosed_teoz.puml",
+    "test-diagrams/perturbations/sequence-component-display-review711/review711_box_queue_actor_teoz.puml",
+    "test-diagrams/perturbations/sequence-component-display-review711/review711_box_actor_queue_teoz.puml",
+    "test-diagrams/perturbations/sequence-component-display-review711/review711_box_multiline_title_legacy.puml",
+    "test-diagrams/perturbations/sequence-component-display-review711/review711_box_multiline_title_teoz.puml",
+    "test-diagrams/perturbations/sequence-component-display-review711/review711_box_nested_teoz.puml"
+  ],
+  "handoff_whole_failures": [
+    "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/handoff/present_bold_empty.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/handoff/style_parameter_contrast.puml"
+  ],
+  "items": [
+    {
+      "mechanism": "Creation/box/envelope",
+      "scope": "Deferred sequence follow-up, not changed",
+      "details": "Reverse-created queue legacy canvas; Java-valid unclosed group canvas both engines; mixed actor/queue Teoz boxes; multiline englober title height; Teoz Dolls ancestor sums and nested box envelope. Exact eight checker source paths above remain failures."
+    },
+    {
+      "mechanism": "Shared message stripes integration",
+      "scope": "Sequence baseline transition repaired; shared production absent",
+      "details": "present_bold_empty and style_parameter_contrast are both reproduced as whole failures on baseline and final. Shared maker reported only current-line ascent delta remaining on its separate tree, but this branch also differs in blank/markup parsing and dimensions. No shared text import, no combined correctness claim. Exact handoff sources/Java SVGs and before/after models/ASCII/CLI remain under inputs/handoff and captures."
+    },
+    {
+      "mechanism": "Shared sprite Display consumer",
+      "scope": "Unrepaired",
+      "details": "Java CreoleParser#createSheet invokes skinParam.guillemet().manageGuillemet before createStripes. Current sequence message consumer does not convert <<$\u679d>>; prior exact nested_unknown pair/provenance remains in immutable component-display maker dependency-handoff. Shared unknown-angle/blank-stripe fixes and note_undefined sprite-only omission remain separate, unintegrated dependencies."
+    },
+    {
+      "mechanism": "Display/fonts/styles/page geometry",
+      "scope": "Unowned shared files or explicitly deferred",
+      "details": "Per-atom tabs, URL second Display conversion, logical fonts T14.11, style signatures, theme Real/padder/envelope, enhanced/hex notes, page chrome/legend/styled caption, per-kind shadow, multiline delay, boxPadding/nested englober. Frozen542/deferred15 remain executable failures; no geometry compensation or scope waiver."
+    },
+    {
+      "mechanism": "Factory/declaration ordering and TIM welcome",
+      "scope": "Unowned in this packet",
+      "details": "Quoted header/quote/UID/declaration order, genuine component/bare-circle class comparisons, accepted invalid factory commands; evaluated UmlSource totalLineCount==2 welcome factory handoff unchanged. No parse/mod, class, preprocessing or reader edit."
+    },
+    {
+      "mechanism": "Negative semantics and diagnostics",
+      "scope": "Residual",
+      "details": "69 invalid references:49 reject20 accept, four additional rejects are pending CREATE invalid/self controls. Two original empty references still panic in diff_one comparison modes; CLI/library renderer do not panic. No SVG credit for invalids."
+    },
+    {
+      "mechanism": "Standing gates",
+      "scope": "Residual",
+      "details": "Main product unlocked ratchets,754 assisted failures,guards4/6,standing794/1416 with622 failures; Cargo package cwd remains distinct from real CLI repo cwd. Workspacefmt class paths, parser dead-code Clippy,19 renderer Clippy findings. No gate inputs modified."
+    },
+    {
+      "mechanism": "ASCII representation",
+      "scope": "Unrepaired general limitation",
+      "details": "Four negative controls now reject on -ttxt;82 other measured outputs unchanged. No ASCII edits. Historical one-endpoint rendering limitation remains; no global output-invariance or ASCII parity claim."
+    }
+  ]
+}

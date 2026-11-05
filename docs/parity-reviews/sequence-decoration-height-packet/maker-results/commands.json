@@ -1,0 +1,83 @@
+{
+  "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af",
+  "scratch": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height",
+  "helper": "docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py",
+  "unchanged_comparator": "docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs",
+  "replays": [
+    {
+      "manifest": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/all1962.json",
+      "binaries": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/before-bin",
+      "output": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/before1962"
+    },
+    {
+      "manifest": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/all1962.json",
+      "binaries": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/candidate-bin",
+      "output": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/candidate1962"
+    },
+    {
+      "manifest": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/all1962.json",
+      "binaries": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/bin",
+      "output": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/final1962"
+    },
+    {
+      "manifest": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/all1962.json",
+      "binaries": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/bin",
+      "output": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/final-rule1962"
+    },
+    {
+      "manifest": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline4.json",
+      "binaries": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/before-bin",
+      "output": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-before"
+    },
+    {
+      "manifest": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline4.json",
+      "binaries": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/bin",
+      "output": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-final"
+    },
+    {
+      "manifest": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline4.json",
+      "binaries": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/bin",
+      "output": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-rule-final"
+    },
+    {
+      "manifest": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline4.json",
+      "binaries": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/bin",
+      "output": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/underline-corrected"
+    },
+    {
+      "manifest": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/all1966.json",
+      "binaries": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/bin",
+      "output": "/Users/marcelo/Library/Caches/rustuml-sequence-decoration-height/final71"
+    }
+  ],
+  "cli_argv": [
+    "rustuml",
+    "-tsvg",
+    "-pipe"
+  ],
+  "model_argv": [
+    "rustuml",
+    "--ast",
+    "-pipe"
+  ],
+  "comparison_argv": [
+    "compare_cli",
+    "REFERENCE.svg",
+    "ACTUAL.svg"
+  ],
+  "environment": {
+    "CARGO_BUILD_JOBS": "4",
+    "RAYON_NUM_THREADS": "4",
+    "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-sequence-repair/target",
+    "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+    "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+  },
+  "local_java_launches": 0,
+  "local_javac_launches": 0,
+  "ssh_launches": 0,
+  "reference_request_manifests": [
+    "reference-manifest.json",
+    "underline-manifest.json"
+  ],
+  "replay_note": "Intermediate bin paths were reused deliberately after builds; immutable binary hashes and source bindings identify each measured revision. Each output directory is distinct and preserved."
+}

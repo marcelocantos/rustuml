@@ -1,0 +1,11 @@
+{
+  "kind": "Maker packaging integrity only; not independent acceptance",
+  "inputs_verified": 2281,
+  "final_svg_capture_hashes_verified": 2281,
+  "preimplementation_ancestry": true,
+  "git_production_revision": "d714bb55d40ca18590d15a5ffd57c7620b91b456",
+  "compiler": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)",
+  "cargo_lock_sha256": "edb7c2e47915e0f9033f0832309095104634620785d37bf25244d675fb5d22fd",
+  "crate_tree": "181ff806eb0ecf380eae805f24fd8915a654db4a",
+  "private_cache": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-ae1"
+}

@@ -1,0 +1,71 @@
+{
+  "status": "candidate, not accepted; independent checker required",
+  "account_commit": "9ef2acc9c72e614bfe4c8ab06147aab8fa80c45b",
+  "base_revision": "b15a5fedd84b42a913a4f1d2cdfd7747a0c4b094",
+  "main_product": {
+    "before": 11181,
+    "after": 11181,
+    "eligible": 11251
+  },
+  "main_assisted": {
+    "before": 10497,
+    "after": 10497,
+    "eligible": 11251
+  },
+  "main_sequence": {
+    "before": 1411,
+    "after": 1411,
+    "eligible": 1411
+  },
+  "initial_isolated_874": {
+    "before": {
+      "pass": 366,
+      "mismatch": 499,
+      "panic": 2,
+      "invalid_java": 7
+    },
+    "after": {
+      "pass": 379,
+      "mismatch": 486,
+      "panic": 2,
+      "invalid_java": 7
+    },
+    "recoveries": 13,
+    "regressions": 0,
+    "note": "Initial measurement preceded the open-group and later-page scope correction; those two main-corpus regressions were then repaired and both full tiers rerun. Final packet replay follows."
+  },
+  "fresh_inputs": {
+    "count": 31,
+    "pass": 28,
+    "mismatch": 3,
+    "panic": 0,
+    "cli_equal_to_compared_svg": 31
+  },
+  "dependencies": [
+    "Three fresh title-reservation probes remain mismatches, also failing the parent. Page-band width uses participant midpoint instead of full sequence area; separate causal work is required.",
+    "The two self-return panics remain pending the separate self-return mechanism.",
+    "Preserved independent Teoz, shadow, global padding, font control and reverse-boundary/return failures remain failures, not waived scope controls."
+  ],
+  "units": {
+    "parser_pass": 56,
+    "renderer_sequence_filter_pass": 44,
+    "failed": 0
+  },
+  "logs": {
+    "/tmp/rustuml-seq-recovery/group-main-2.log": {
+      "sha256": "a5d03154f9cd6e9ec5b76fab725368bcb6d18c38a388281c624f8dabce1ddf72"
+    },
+    "/tmp/rustuml-seq-recovery/group-units.log": {
+      "sha256": "cd65b39aa5bf49a913801ac28966f922b9a300777d088d5bc1988e017d7b5a81"
+    },
+    "/tmp/rustuml-seq-recovery/group-initial-isolated.log": {
+      "sha256": "59aa96f02232feb3dd0b0dda6a75ef786e6f59ea94c1fb4f1ab761bed59a09ce"
+    }
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-recovery/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --no-fail-fast -- --nocapture",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-recovery/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-render -p rustuml-parser --lib sequence -- --nocapture",
+    "uv run --no-project docs/parity-reviews/sequence-grouped-note-origin/checker.py measure /tmp/rustuml-seq-recovery/group-initial /tmp/rustuml-seq-recovery/group-bin",
+    "uv run --no-project python /tmp/rustuml-seq-recovery/fresh_groups.py"
+  ]
+}

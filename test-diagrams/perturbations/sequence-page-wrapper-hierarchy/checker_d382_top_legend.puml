@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+title Short
+legend top right
+top legend
+endlegend
+caption bottom
+A -> B : body
+@enduml

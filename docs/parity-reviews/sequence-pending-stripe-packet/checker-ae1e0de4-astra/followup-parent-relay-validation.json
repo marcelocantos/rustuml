@@ -1,0 +1,22 @@
+{
+  "validated": true,
+  "cases": 10,
+  "calls": 10,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.rWaHIBFO",
+  "hashes": {
+    "followup-reference-results.json.gz": "1890b45ff1d19c7fa25731ced0bad3a2d858b1284c827137689d94ac2e35859f",
+    "followup-reference-transport.json": "1a0a2edec31c4cf7c9d2e0c8541d56c4a1cace340cc0a7283aa4f278fca65e65"
+  },
+  "remote_names": {
+    "followup-reference-results.json.gz": "reference-results.json.gz",
+    "followup-reference-transport.json": "reference-transport.json"
+  },
+  "exit_statuses": {
+    "0": 10
+  },
+  "nonzero": [],
+  "nonempty_stderr": [],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "classification": "Validity not inferred from exit status."
+}

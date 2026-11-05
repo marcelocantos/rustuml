@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "evidence_import": "96e2561122e70ffe53dfa3f102cf18d199cc464f",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-message-stripe-baselines",
+  "java_locations": [
+    "skin.rose.ComponentRoseArrow#drawInternalU",
+    "klimt.creole.SheetBlock1#initMap",
+    "klimt.creole.Sea#doAlign/#translateMinYto"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::emit_message_label/rendered_label_y_drop_with_family"
+  ],
+  "invariant": "After a stripe advances the block origin by its height, the next baseline uses the next stripe ascent, not the prior ascent.",
+  "causal_divergence": "emit_message_label adds only prior height to baseline. Shared-maker present_bold_empty isolates this defect, but this branch also retains independent shared-text shape/height differences; before-handoff records both whole failures.",
+  "planned_change": "Preserve the caller first-stripe baseline contract and advance using stripe heights plus ascent transitions; retain math/specialized emission behavior and shared text APIs. No shared imports or combined correctness claim.",
+  "perturbation_axes": [
+    "first/middle/final rich size rises/falls",
+    "ordinary/self/external or lowered return across engines"
+  ]
+}

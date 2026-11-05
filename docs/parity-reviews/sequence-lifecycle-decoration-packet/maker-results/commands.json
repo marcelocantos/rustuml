@@ -1,0 +1,24 @@
+{
+  "replay": [
+    "python3",
+    "docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/all1828.json",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/bin",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-lifecycle-packet/final1828"
+  ],
+  "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af",
+  "reference": "No JVM invocation in this task environment. Parent-relayed exact manifests/bytes, raw streams/status and remote runtime metadata retained.",
+  "reference_requests": [
+    "reference-request.json",
+    "reverse-cross-request.json",
+    "legacy-note-request.json"
+  ],
+  "new_before": [
+    "before28/measurements.json",
+    "note4-before/measurements.json"
+  ],
+  "before_old": [
+    "docs/parity-reviews/sequence-rejection-repair/checker-support/replay1728.json.gz",
+    "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz"
+  ]
+}
