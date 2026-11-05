@@ -12986,6 +12986,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         if let Some((pi, fill_color, draw_control_glyph)) = created_inline.get(&ev_idx) {
             // The created participant's box occupies the next message-id slot.
             let mut shifted = participants[*pi].clone();
+            // ArrowAndParticipant#drawInternalU calls drawParticipantHead
+            // directly; only DrawableSet#drawHeadTailU opens the participant
+            // URL (UGraphic#startUrl), so the created head is not a link.
+            shifted.url = None;
+            shifted.url_tooltip = None;
             let p = if diagram.teoz {
                 let Event::Message(message) = &diagram.events[ev_idx] else {
                     unreachable!()
@@ -13011,7 +13016,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 shifted.center_x += shift;
                 &shifted
             } else {
-                &participants[*pi]
+                &shifted
             };
             let part_uid = format!("part{}", p.decl_idx + 1);
             let sl = p.source_line;
