@@ -20,9 +20,19 @@
 //!
 //! The coverage tables are an environment extraction
 //! (`tools/FontChainExtract.swift`, `tools/font_chain_coverage.py`) of the
-//! origin Mac's system fonts.
+//! reference host's fonts.
+//!
+//! HarfBuzz also zeroes the advance of an unmapped nonspacing mark when the
+//! primary face has no GDEF glyph classes: `hb_synthesize_glyph_classes`
+//! (hb-ot-shape.cc 879-899, HarfBuzz 8.2.2 in JDK 21.0.5) makes a general
+//! category Mn character a MARK, and the default shaper's
+//! `zero_mark_widths_by_gdef` (BY_GDEF_LATE, 1089-1100) zeroes it. The run's
+//! script comes from JDK's `ScriptRun` over `ScriptRunData` (Unicode 3.2);
+//! with morx, any shaper but the default one becomes `_hb_ot_shaper_dumber`,
+//! which zeroes nothing (94-96).
 
 use crate::font_chain_coverage as coverage;
+use crate::font_chain_unicode as unicode;
 
 /// One face's coverage, as generated into `font_chain_coverage.rs`.
 pub(crate) struct FaceCoverage {
@@ -32,6 +42,9 @@ pub(crate) struct FaceCoverage {
     pub(crate) simple_missing: &'static [(u32, u32)],
     /// Runs the complex path maps.
     pub(crate) complex_mapped: &'static [(u32, u32)],
+    /// HarfBuzz zeroes the `.notdef` of an unmapped nonspacing mark in a
+    /// default-shaped run (glyph 0 is a mark and the plan zeroes marks).
+    pub(crate) zeroes_unmapped_marks: bool,
 }
 
 /// The physical faces RustUML measures (`SansSerif` resolves to Lucida
@@ -58,8 +71,20 @@ pub(crate) enum ChainGlyph {
     Mapped,
     /// No font maps it: the primary font's `.notdef`.
     Missing,
-    /// HarfBuzz hides it in complex text (zero advance).
+    /// HarfBuzz gives it zero advance in complex text: a hidden
+    /// default-ignorable, or an unmapped nonspacing mark it zeroes.
     Hidden,
+}
+
+/// Which JDK measuring path a character takes, and for complex text whether
+/// HarfBuzz shapes its script run with the default shaper.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum Complexity {
+    /// `FontUtilities.isComplexText` is false for the measured string.
+    Simple,
+    /// `TextLayout` path; `default_shaped_run` is false when the run's script
+    /// selects a complex HarfBuzz shaper.
+    Complex { default_shaped_run: bool },
 }
 
 /// Units per em of the extracted advances.
@@ -87,15 +112,23 @@ impl ChainFace {
         f64::from(self.coverage().notdef_units) / UNITS_PER_EM
     }
 
-    /// How the chain draws `ch` inside text whose complexity is `complex_text`
-    /// (see [`is_complex_text`]).
-    pub(crate) fn resolve(self, ch: char, complex_text: bool) -> ChainGlyph {
+    /// How the chain draws `ch` at a position whose complexity is `complexity`
+    /// (see [`complexity_per_token`]).
+    pub(crate) fn resolve(self, ch: char, complexity: Complexity) -> ChainGlyph {
         let code = ch as u32;
         let coverage = self.coverage();
-        if code >= FIRST_SUPPLEMENTARY || complex_text {
+        let default_shaped_run = match complexity {
+            Complexity::Simple => true,
+            Complexity::Complex { default_shaped_run } => default_shaped_run,
+        };
+        if code >= FIRST_SUPPLEMENTARY || complexity != Complexity::Simple {
             return if in_runs(coverage.complex_mapped, code) {
                 ChainGlyph::Mapped
-            } else if is_hidden_default_ignorable(code) {
+            } else if is_hidden_default_ignorable(code)
+                || (coverage.zeroes_unmapped_marks
+                    && default_shaped_run
+                    && in_runs(unicode::NONSPACING_MARKS, code))
+            {
                 ChainGlyph::Hidden
             } else {
                 ChainGlyph::Missing
@@ -124,6 +157,121 @@ pub(crate) fn is_complex_text(text: &str) -> bool {
             ch as u32 >= FIRST_SUPPLEMENTARY || is_complex_char_code(ch as u32)
         }
     })
+}
+
+/// The [`Complexity`] of each Java token of `text` (one per
+/// `java_utf16::tokens` item): `Simple` throughout unless the string is
+/// complex, then each token's `ScriptRun` run decides its shaper.
+pub(crate) fn complexity_per_token(text: &str) -> Vec<Complexity> {
+    let codes: Vec<u32> = rustuml_parser::java_utf16::tokens(text)
+        .map(|token| match token {
+            rustuml_parser::java_utf16::Token::Unit(unit) => u32::from(unit),
+            rustuml_parser::java_utf16::Token::Char(ch) => ch as u32,
+        })
+        .collect();
+    if !is_complex_text(text) {
+        return vec![Complexity::Simple; codes.len()];
+    }
+    script_run_codes(&codes)
+        .into_iter()
+        .map(|script| Complexity::Complex {
+            default_shaped_run: !unicode::COMPLEX_SHAPED_SCRIPTS.contains(&script),
+        })
+        .collect()
+}
+
+/// ICU `UScriptCode` of a code point in JDK's `ScriptRunData` (Unicode 3.2):
+/// 0 (COMMON) for Common, Inherited and unassigned code points.
+fn script_code(code: u32) -> u8 {
+    let index = unicode::SCRIPTS.partition_point(|(start, _, _)| *start <= code);
+    match index.checked_sub(1).map(|i| unicode::SCRIPTS[i]) {
+        Some((_, end, script)) if code <= end => script,
+        _ => COMMON_SCRIPT,
+    }
+}
+
+const COMMON_SCRIPT: u8 = 0;
+/// ICU INHERITED; codes up to it are weak (`ScriptRun.sameScript`).
+const INHERITED_SCRIPT: u8 = 1;
+
+/// `ScriptRun.pairedChars` (JDK 21): open/close pairs at even/odd indices.
+const PAIRED_CHARS: [u32; 34] = [
+    0x0028, 0x0029, 0x003c, 0x003e, 0x005b, 0x005d, 0x007b, 0x007d, 0x00ab, 0x00bb, 0x2018, 0x2019,
+    0x201c, 0x201d, 0x2039, 0x203a, 0x3008, 0x3009, 0x300a, 0x300b, 0x300c, 0x300d, 0x300e, 0x300f,
+    0x3010, 0x3011, 0x3014, 0x3015, 0x3016, 0x3017, 0x3018, 0x3019, 0x301a, 0x301b,
+];
+
+/// Port of `sun.font.ScriptRun.next` (JDK 21, 150-232) over the whole string:
+/// the script code of the run holding each code point. Weak (COMMON and
+/// INHERITED) code points join the current run, and a run's script is its
+/// first strong script; a closing paired character takes the script recorded
+/// with its opener (popping the paren stack as the JDK does).
+fn script_run_codes(codes: &[u32]) -> Vec<u8> {
+    let mut result = vec![COMMON_SCRIPT; codes.len()];
+    let mut stack: Vec<i32> = Vec::new();
+    let mut paren_sp: i32 = 0;
+    let mut limit = 0;
+    while limit < codes.len() {
+        let start = limit;
+        let mut start_sp = paren_sp;
+        let mut run_script = i32::from(COMMON_SCRIPT);
+        while limit < codes.len() {
+            let ch = codes[limit];
+            let mut sc = i32::from(script_code(ch));
+            let pair_index = if sc == i32::from(COMMON_SCRIPT) {
+                PAIRED_CHARS
+                    .iter()
+                    .position(|&p| p == ch)
+                    .map_or(-1, |i| i as i32)
+            } else {
+                -1
+            };
+            if pair_index >= 0 {
+                if pair_index & 1 == 0 {
+                    stack.truncate(paren_sp as usize);
+                    stack.push(pair_index);
+                    stack.push(run_script);
+                    paren_sp += 2;
+                } else if paren_sp > 0 {
+                    let pi = pair_index & !1;
+                    loop {
+                        paren_sp -= 2;
+                        if paren_sp < 0 || stack[paren_sp as usize] == pi {
+                            break;
+                        }
+                    }
+                    if paren_sp >= 0 {
+                        sc = stack[paren_sp as usize + 1];
+                    } else {
+                        paren_sp = 0;
+                    }
+                    if paren_sp < start_sp {
+                        start_sp = paren_sp;
+                    }
+                }
+            }
+            let weak = |code: i32| code <= i32::from(INHERITED_SCRIPT);
+            if run_script == sc || weak(run_script) || weak(sc) {
+                if weak(run_script) && !weak(sc) {
+                    run_script = sc;
+                    while start_sp < paren_sp {
+                        stack[start_sp as usize + 1] = run_script;
+                        start_sp += 2;
+                    }
+                }
+                if pair_index > 0 && pair_index & 1 != 0 && paren_sp > 0 {
+                    paren_sp -= 2;
+                }
+                limit += 1;
+            } else {
+                break;
+            }
+        }
+        for slot in &mut result[start..limit] {
+            *slot = run_script as u8;
+        }
+    }
+    result
 }
 
 /// `sun.font.FontUtilities.isComplexCharCode` (JDK 21, 239-309).
@@ -167,6 +315,10 @@ fn is_hidden_default_ignorable(code: u32) -> bool {
 mod tests {
     use super::*;
 
+    const COMPLEX: Complexity = Complexity::Complex {
+        default_shaped_run: true,
+    };
+
     #[test]
     fn unmapped_scalars_take_the_primary_notdef_on_both_paths() {
         let lucida = ChainFace::LucidaGrande;
@@ -178,10 +330,13 @@ mod tests {
             '\u{0378}',
             '\u{F000}',
         ] {
-            assert_eq!(lucida.resolve(ch, true), ChainGlyph::Missing, "{ch:?}");
+            assert_eq!(lucida.resolve(ch, COMPLEX), ChainGlyph::Missing, "{ch:?}");
         }
-        assert_eq!(lucida.resolve('\u{0378}', false), ChainGlyph::Missing);
-        assert_eq!(lucida.resolve('a', false), ChainGlyph::Mapped);
+        assert_eq!(
+            lucida.resolve('\u{0378}', Complexity::Simple),
+            ChainGlyph::Missing
+        );
+        assert_eq!(lucida.resolve('a', Complexity::Simple), ChainGlyph::Mapped);
         assert_eq!(lucida.notdef_per_em(), 0.75);
         assert_eq!(ChainFace::Verdana.notdef_per_em(), 1.0);
     }
@@ -189,18 +344,176 @@ mod tests {
     #[test]
     fn harfbuzz_hides_unmapped_supplementary_format_characters() {
         assert_eq!(
-            ChainFace::LucidaGrande.resolve('\u{E0041}', true),
+            ChainFace::LucidaGrande.resolve('\u{E0041}', COMPLEX),
             ChainGlyph::Hidden
         );
         assert_eq!(
-            ChainFace::LucidaGrande.resolve('\u{1D173}', true),
+            ChainFace::LucidaGrande.resolve('\u{1D173}', COMPLEX),
             ChainGlyph::Hidden
         );
         // U+1BCA0 is excluded from HarfBuzz's set.
         assert_eq!(
-            ChainFace::LucidaGrande.resolve('\u{1BCA0}', true),
+            ChainFace::LucidaGrande.resolve('\u{1BCA0}', COMPLEX),
             ChainGlyph::Missing
         );
+    }
+
+    #[test]
+    fn harfbuzz_zeroes_unmapped_nonspacing_marks_of_default_shaped_runs() {
+        // Synthesized glyph classes (no GDEF): Mn U+180F, U+1D17B and U+16FE4
+        // are marks; the default shaper zeroes them.
+        for face in [
+            ChainFace::LucidaGrande,
+            ChainFace::LucidaGrandeBold,
+            ChainFace::Helvetica,
+            ChainFace::Menlo,
+        ] {
+            for ch in ['\u{180F}', '\u{1D17B}', '\u{16FE4}', '\u{1DFA}'] {
+                assert_eq!(
+                    face.resolve(ch, COMPLEX),
+                    ChainGlyph::Hidden,
+                    "{face:?} {ch:?}"
+                );
+            }
+            // The dumber shaper (morx and a complex script) zeroes nothing.
+            let dumber = Complexity::Complex {
+                default_shaped_run: false,
+            };
+            assert_eq!(face.resolve('\u{1D17B}', dumber), ChainGlyph::Missing);
+        }
+        // GDEF classes glyph 0 as a base glyph: never a mark.
+        for face in [ChainFace::Arial, ChainFace::Verdana, ChainFace::CourierNew] {
+            assert_eq!(
+                face.resolve('\u{1D17B}', COMPLEX),
+                ChainGlyph::Missing,
+                "{face:?}"
+            );
+        }
+        // Simple text never reaches HarfBuzz.
+        assert_eq!(
+            ChainFace::LucidaGrande.resolve('\u{1AB0}', Complexity::Simple),
+            ChainGlyph::Missing
+        );
+        // Mc (U+1D165) and an Mn unassigned in Unicode 15.1 (U+1E5EE) are not marks.
+        assert_eq!(
+            ChainFace::LucidaGrande.resolve('\u{1E5EE}', COMPLEX),
+            ChainGlyph::Missing
+        );
+    }
+
+    #[test]
+    fn script_runs_follow_jdk_script_run() {
+        let runs = |text: &str| {
+            complexity_per_token(text)
+                .into_iter()
+                .map(|c| match c {
+                    Complexity::Simple => 's',
+                    Complexity::Complex {
+                        default_shaped_run: true,
+                    } => 'd',
+                    Complexity::Complex {
+                        default_shaped_run: false,
+                    } => 'c',
+                })
+                .collect::<String>()
+        };
+        assert_eq!(runs("Vault"), "sssss");
+        // Weak characters (unassigned in Unicode 3.2) join the Latin run.
+        assert_eq!(runs("Vault \u{1D17B}"), "ddddddd");
+        // Hebrew is complex-shaped; the mark after it joins its run.
+        assert_eq!(runs("a \u{05D0}\u{1D17B}"), "ddcc");
+        // A leading mark takes the first strong script after it.
+        assert_eq!(runs("\u{1D17B}\u{05D0}"), "cc");
+        // A closing bracket takes its opener's run script.
+        assert_eq!(runs("\u{05D0}(\u{1D17B})"), "cccc");
+        // When that script ends the current run, the opener is already popped:
+        // the bracket starts a weak (COMMON, default-shaped) run.
+        assert_eq!(runs("\u{05D0}(a)\u{1D17B}"), "ccddd");
+    }
+
+    /// Drift gate (T14.6.8): the generated table is the stored reference-host
+    /// extraction. Its SHA256SUMS hashes to the recorded value, every stored
+    /// file matches SHA256SUMS, and each face's runs, `.notdef` advance and
+    /// HarfBuzz plan fact equal the stored TSV.
+    #[test]
+    fn coverage_table_is_the_stored_reference_host_extraction() {
+        use sha2::{Digest, Sha256};
+        let hex = |bytes: &[u8]| {
+            Sha256::digest(bytes)
+                .iter()
+                .map(|b| format!("{b:02x}"))
+                .collect::<String>()
+        };
+        let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../..")
+            .join(coverage::SOURCE_DIR);
+        let sums = std::fs::read(dir.join("SHA256SUMS")).expect("stored SHA256SUMS");
+        assert_eq!(hex(&sums), coverage::SOURCE_SHA256SUMS_SHA256);
+        for line in String::from_utf8(sums).unwrap().lines() {
+            let (hash, name) = line.split_once("  ").expect("shasum line");
+            let data = std::fs::read(dir.join(name)).unwrap_or_else(|e| panic!("{name}: {e}"));
+            assert_eq!(hex(&data), hash, "{name}");
+        }
+        let faces = [
+            (ChainFace::LucidaGrande, "LucidaGrande.tsv"),
+            (ChainFace::LucidaGrandeBold, "LucidaGrande-Bold.tsv"),
+            (ChainFace::Arial, "ArialMT.tsv"),
+            (ChainFace::ArialBold, "Arial-BoldMT.tsv"),
+            (ChainFace::Helvetica, "Helvetica.tsv"),
+            (ChainFace::HelveticaBold, "Helvetica-Bold.tsv"),
+            (ChainFace::Verdana, "Verdana.tsv"),
+            (ChainFace::VerdanaBold, "Verdana-Bold.tsv"),
+            (ChainFace::Menlo, "Menlo-Regular.tsv"),
+            (ChainFace::CourierNew, "CourierNewPSMT.tsv"),
+        ];
+        for (face, name) in faces {
+            let text = std::fs::read_to_string(dir.join(name)).unwrap();
+            let (mut simple, mut complex) = (Vec::new(), Vec::new());
+            for line in text.lines() {
+                let fields: Vec<&str> = line.split('\t').collect();
+                match fields[0] {
+                    "#notdef_advance_units" => assert_eq!(
+                        fields[1].parse::<f64>().unwrap(),
+                        f64::from(face.coverage().notdef_units),
+                        "{name}"
+                    ),
+                    "#hb_plan" => {
+                        let fact = |key: &str| {
+                            fields
+                                .iter()
+                                .find_map(|f| f.strip_prefix(key)?.strip_prefix('='))
+                                .unwrap()
+                        };
+                        let notdef_is_mark =
+                            fact("gdef_glyph_classes") == "0" || fact("notdef_gdef_class") == "3";
+                        let zero_marks = fact("kerx") == "0"
+                            && !(fact("kern") == "1" && fact("machine_kern") == "1");
+                        assert_eq!(
+                            notdef_is_mark && zero_marks,
+                            face.coverage().zeroes_unmapped_marks,
+                            "{name}"
+                        );
+                    }
+                    "S" | "C" => {
+                        let run = (
+                            u32::from_str_radix(fields[1], 16).unwrap(),
+                            u32::from_str_radix(fields[2], 16).unwrap(),
+                        );
+                        if fields[0] == "S" {
+                            &mut simple
+                        } else {
+                            &mut complex
+                        }
+                        .push(run);
+                    }
+                    _ => {}
+                }
+            }
+            simple.sort_unstable();
+            complex.sort_unstable();
+            assert_eq!(simple, face.coverage().simple_missing, "{name} simple");
+            assert_eq!(complex, face.coverage().complex_mapped, "{name} complex");
+        }
     }
 
     #[test]

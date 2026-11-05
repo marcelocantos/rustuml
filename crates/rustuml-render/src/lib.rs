@@ -41,6 +41,7 @@ pub mod eps;
 pub mod filter_registry;
 pub(crate) mod font_chain;
 mod font_chain_coverage;
+mod font_chain_unicode;
 pub mod font_metrics;
 pub mod ftile;
 pub mod gantt;

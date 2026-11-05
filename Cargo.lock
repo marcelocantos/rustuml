@@ -1224,6 +1224,7 @@ dependencies = [
  "rustuml-parser",
  "serde",
  "serde_yml",
+ "sha2",
  "svg2pdf",
 ]
 

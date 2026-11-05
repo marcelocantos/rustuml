@@ -13,7 +13,7 @@
 //! JVM's font metrics at full IEEE 754 precision (all values are exact
 //! multiples of powers of 2, so they round-trip perfectly through f64).
 
-use crate::font_chain::{ChainFace, ChainGlyph};
+use crate::font_chain::{ChainFace, ChainGlyph, Complexity};
 use rustuml_parser::java_utf16::{self, Token};
 
 /// Compute the width of `text` at the given `font_size` using
@@ -28,24 +28,27 @@ pub fn text_width(text: &str, font_size: f64, bold: bool) -> f64 {
     } else {
         ChainFace::LucidaGrande
     };
-    let complex = crate::font_chain::is_complex_text(text);
+    // One complexity per Java token; without an escape, tokens are chars.
+    let complexity = crate::font_chain::complexity_per_token(text);
     if text.contains(rustuml_parser::java_utf16::ESCAPE) {
         // Escaped legitimate scalars of the carrier range measure as
         // themselves; unpaired units keep their one-em advance.
         return rustuml_parser::java_utf16::tokens(text)
-            .map(|token| match token {
+            .zip(&complexity)
+            .map(|(token, &complexity)| match token {
                 rustuml_parser::java_utf16::Token::Char(c) => {
-                    literal_char_width(c, table, bold, font_size, face, complex)
+                    literal_char_width(c, table, bold, font_size, face, complexity)
                 }
                 rustuml_parser::java_utf16::Token::Unit(_) => font_size,
             })
             .sum();
     }
-    if let Some(width) = shaped_text_width(text, font_size, bold, face, complex) {
+    if let Some(width) = shaped_text_width(text, font_size, bold, face, &complexity) {
         return width;
     }
     text.chars()
-        .map(|c| char_width(c, table, bold, font_size, face, complex))
+        .zip(&complexity)
+        .map(|(c, &complexity)| char_width(c, table, bold, font_size, face, complexity))
         .sum()
 }
 
@@ -112,11 +115,12 @@ pub fn mono_text_width(text: &str, font_size: f64) -> f64 {
 /// unpaired unit and every scalar but a hidden default-ignorable (Menlo's and
 /// Courier New's `.notdef` advance equals their cell, 1233 and 1229 units).
 fn cell_count(text: &str, face: ChainFace) -> usize {
-    let complex = crate::font_chain::is_complex_text(text);
+    let complexity = crate::font_chain::complexity_per_token(text);
     java_utf16::tokens(text)
-        .filter(|token| match token {
+        .zip(complexity)
+        .filter(|(token, complexity)| match token {
             Token::Unit(_) => true,
-            Token::Char(c) => face.resolve(*c, complex) != ChainGlyph::Hidden,
+            Token::Char(c) => face.resolve(*c, *complexity) != ChainGlyph::Hidden,
         })
         .count()
 }
@@ -339,7 +343,7 @@ fn char_width(
     bold: bool,
     font_size: f64,
     face: ChainFace,
-    complex: bool,
+    complexity: Complexity,
 ) -> f64 {
     if rustuml_parser::java_utf16::carried_unit(c).is_some() {
         // An unpaired UTF-16 unit advances one em in Java's SansSerif: in AW
@@ -347,7 +351,7 @@ fn char_width(
         // at size 14 exceeds CHAR_WIDTHS_14's 'x' advance by exactly 14.
         return font_size;
     }
-    literal_char_width(c, table, bold, font_size, face, complex)
+    literal_char_width(c, table, bold, font_size, face, complexity)
 }
 
 /// Advance of a legitimate scalar (never an unpaired-unit carrier).
@@ -357,7 +361,7 @@ fn literal_char_width(
     bold: bool,
     font_size: f64,
     face: ChainFace,
-    complex: bool,
+    complexity: Complexity,
 ) -> f64 {
     let code = c as u32;
     if (32..=126).contains(&code) {
@@ -382,7 +386,7 @@ fn literal_char_width(
     // A scalar no font of SansSerif's chain maps is Lucida Grande's
     // .notdef (1536/2048 em, regular and bold); HarfBuzz hides unmapped
     // default-ignorables in complex text (font_chain).
-    match face.resolve(c, complex) {
+    match face.resolve(c, complexity) {
         ChainGlyph::Missing => return face.notdef_per_em() * font_size,
         ChainGlyph::Hidden => return 0.0,
         ChainGlyph::Mapped => {}
@@ -459,7 +463,7 @@ fn shaped_text_width(
     font_size: f64,
     bold: bool,
     face: ChainFace,
-    complex: bool,
+    complexity: &[Complexity],
 ) -> Option<f64> {
     let table = char_width_table(font_size, bold);
     let characters: Vec<(usize, char)> = text.char_indices().collect();
@@ -533,7 +537,7 @@ fn shaped_text_width(
             }
         }
 
-        width += char_width(current, table, bold, font_size, face, complex);
+        width += char_width(current, table, bold, font_size, face, complexity[index]);
         index += 1;
     }
 

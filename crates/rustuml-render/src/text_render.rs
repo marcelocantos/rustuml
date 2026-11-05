@@ -1391,17 +1391,18 @@ fn chain_text_width(
     face: ChainFace,
     own: impl Fn(char) -> Option<f64>,
 ) -> f64 {
-    let complex = font_chain::is_complex_text(text);
+    let complexity = font_chain::complexity_per_token(text);
     let mut buffer = [0_u8; 4];
     java_utf16::tokens(text)
-        .map(|token| match token {
+        .zip(complexity)
+        .map(|(token, complexity)| match token {
             java_utf16::Token::Unit(unit) => sans_text_width(
                 java_utf16::carrier(unit).encode_utf8(&mut buffer),
                 font_size,
                 bold,
             ),
             java_utf16::Token::Char(c) => {
-                own(c).unwrap_or_else(|| match face.resolve(c, complex) {
+                own(c).unwrap_or_else(|| match face.resolve(c, complexity) {
                     ChainGlyph::Missing => face.notdef_per_em() * font_size,
                     ChainGlyph::Hidden => 0.0,
                     ChainGlyph::Mapped => sans_text_width(
