@@ -1,0 +1,5 @@
+@startuml
+!$label = "tide " + \
+"pool"
+Shore -> Reef : $label
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+object Kettle \
+<<pot>>
+object Stove
+Kettle --> Stove
+@enduml

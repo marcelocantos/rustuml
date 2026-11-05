@@ -1,0 +1,438 @@
+[
+ {
+  "name": "tc1_inv_seq_long_comment_unterminated_tail",
+  "batch": "BU",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 100,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + No valid @start/@end found",
+  "axes": [
+   "sequence",
+   "long comment never ends (tail after '/)",
+   "swallows end"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "valid-error"
+  },
+  "source_sha256": "e52e7bc1f1b481b0e04a989e020228446b02b602a659704c8bd11a649979c27f",
+  "java_svg_sha256": "427c1ce502ccee9df59e92af20afe24a00adbfed3d693efd671f7a10a907f710",
+  "reason": "Java-invalid reference (raw SVG + stderr)"
+ },
+ {
+  "name": "tc1_inv_seq_quote_comment_then_end",
+  "batch": "BU",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 100,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + No valid @start/@end found",
+  "axes": [
+   "sequence",
+   "comment line then end swallowed"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "valid-error"
+  },
+  "source_sha256": "724a1bea7001352db35f4d3287a183b64c32af14f7aafaf353549c9466dcf26e",
+  "java_svg_sha256": "427c1ce502ccee9df59e92af20afe24a00adbfed3d693efd671f7a10a907f710",
+  "reason": "Java-invalid reference (raw SVG + stderr)"
+ },
+ {
+  "name": "tc1_seq_include_tail_before_end",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "!include last line backslash then @enduml",
+   "post-TIM pending tail"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "7317c15be8cec3a39754a7504691283bb574d0345f491e26e8787eef4862fe91",
+  "java_svg_sha256": "3d3f2071f71e041bd357a260a7d4d2c173b5f855ccff36ce9ef5125831e00afb",
+  "reason": "needs an include/theme resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "tc1_seq_include_then_directive",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "!include backslash then TIM directive (Rust placeholder)",
+   "post-TIM"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "747eec34c4486af9a0561343385b3e1675a847890d4f1f0d6f939424c2258bbf",
+  "java_svg_sha256": "c766798e9f5dfa7c64cf63e5d6c3f4c6fd7b2dba7f6e18ea667e88ef4465aad3",
+  "reason": "needs an include/theme resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "tc1_seq_include_then_define",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "!include backslash then !define (Rust placeholder)",
+   "post-TIM"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "9cfe9ef65509e0992dc79330ab0636e52f23cb2db508694dfb6bf2a24b71d10d",
+  "java_svg_sha256": "e91ef4f7bd04c4687b217f54259a9bedc0d2d6bd8c2a0171d4ec68992f5827bc",
+  "reason": "needs an include/theme resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "tc1_seq_include_then_main_line",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "!include backslash joined with main line",
+   "post-TIM numbering"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "5724b327a139f8e7d289c6c8977ca749785486481f6c316c670ed72cd6700acc",
+  "java_svg_sha256": "fff4a5e6f6c932f17d2b66b422ad6b5adddfbaf602e9c2b686f4911909f22820",
+  "reason": "needs an include/theme resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "tc1_class_include_three",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "!include three pieces",
+   "post-TIM last-line location"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "877524e9937f947a3e832f9c926bcb9789b3ea9a3decf188f8e2fe71ed4cc90e",
+  "java_svg_sha256": "24e9fa54f7c2d0c949a130167463aa4797d77d0f7b5021f4797b0733d80a4653",
+  "reason": "needs an include/theme resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "tc1_mindmap_include_no_postjoin",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "mindmap",
+   "!include backslash not joined (no SEQUENCE)"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "match",
+   "9834a7194": "match",
+   "2a9373aca": "match",
+   "594c2b3c5": "match"
+  },
+  "source_sha256": "1506e72ce4c199310bcffe5e1fa1be414efa83eed104d24f256d7f03032f0449",
+  "java_svg_sha256": "4aab824b80f13bf71e78c6f07cef612d91494566997c5a77151d8668d7d97c9a",
+  "reason": "needs an include/theme resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "tc1_seq_include_directive_continued",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "!include directive split by continuation"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "6b6e03343127aff62af453b2396b08bc4c2df4fbaeb11031c332105c905d996c",
+  "java_svg_sha256": "0d43af0fb5ca6245d861bc8037a4dd2f068a92e3e36a73b48cab7c051cd477b6",
+  "reason": "needs an include/theme resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "tc1_seq_theme_local_postjoin",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "local !theme file with backslash",
+   "post-TIM"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "abeb76111cd4e84c465b7e9fe9500ca7b44ee29ec68138202df20670043fc1cd",
+  "java_svg_sha256": "b71098c3e162c9e93df6b1e9d8de991f915a862f8ebc08b6a4da1ba71b81a519",
+  "reason": "needs an include/theme resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "tc1_seq_sprite_row_continued",
+  "batch": "BU",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 200,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + java.lang., Exception",
+  "axes": [
+   "sequence",
+   "sprite row continued",
+   "sprite ownership"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "2a9373aca": "nonpositive-accepted",
+   "594c2b3c5": "nonpositive-accepted"
+  },
+  "source_sha256": "ef8a3ba502dc206c871bacb80880ff81779efae6daec662ec039ac5eb0bfb763",
+  "java_svg_sha256": "ac8413231620e67d79698822581bd82a0f78cb48761b8672406ca5481c8340f4",
+  "reason": "Java-invalid reference (raw SVG + stderr)"
+ },
+ {
+  "name": "tc1_ctl_class_include_plain",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "control",
+   "class",
+   "!include without continuation",
+   "included data-source-line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "f9ced5d0809892111c8a2a34ac9616f9f871e41061ce8ac021813daf2314069f",
+  "java_svg_sha256": "b2f0ff724fd6c5450d90e8c40846ac27b75a27662bad8ecc375bbb38df948f80",
+  "reason": "needs an include/theme resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "tc1_ctl_seq_include_plain",
+  "batch": "BU",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "control",
+   "sequence",
+   "!include without continuation",
+   "included data-source-line"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "caf3c92563d6d7b48485b8baa0a6636d15a1583e3e81d396ba830aa44a94c8de",
+  "java_svg_sha256": "2d20cd048d3205bb6a8955f3feaa56d41019197b402d91c7962b9dd920477520",
+  "reason": "needs an include/theme resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "mc1_class_definelong",
+  "batch": "BD",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 200,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "!definelong body",
+   "stereotype via continuation"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-accepted",
+   "9834a7194": "nonpositive-accepted",
+   "2a9373aca": "nonpositive-accepted",
+   "594c2b3c5": "nonpositive-accepted"
+  },
+  "source_sha256": "a3fafcd38f7692bca55f28d8a24050f77459a98db66a7334fba68ef56c629626",
+  "java_svg_sha256": "347b2c76e30a7ee56760af3af43da8fc97631683b9fe7b87a0ea63675526ef1c",
+  "reason": "Java-invalid reference (raw SVG + stderr)"
+ },
+ {
+  "name": "mc1_seq_include_postjoin",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "!include file",
+   "post-TIM UmlSource join"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "7905ec7bbd1f681edc0607113c1b1f5c601f4ba20b6828770922241c495fbdc6",
+  "java_svg_sha256": "daaa6e2dce5a3e4247f847aa09a88fcafcbc0f5fe74446390164f31dc67ec63c",
+  "reason": "needs an include/theme resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "mc1_class_include_postjoin",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "class",
+   "!include file",
+   "post-TIM UmlSource join"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "80ca27f0ba0e816cce650bd22a4c42a0f5ad4c4e19b0bf7271d0014488123459",
+  "java_svg_sha256": "9645b482c71ca6f9b08a6daa3228d589d4b1dee0e363c24fd96a49ce09ffb3d5",
+  "reason": "needs an include/theme resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "mc1_seq_include_procedure",
+  "batch": "BD",
+  "java_valid": true,
+  "intended_valid": true,
+  "java_exit": 0,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + no extra invalid marker",
+  "axes": [
+   "sequence",
+   "procedure from !include",
+   "post-TIM join"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "valid-error",
+   "9834a7194": "mismatch",
+   "2a9373aca": "valid-error",
+   "594c2b3c5": "mismatch"
+  },
+  "source_sha256": "d92085e982c3e0ee7041f1ca52fcfd16bcb4529d1beaa41df533735ce218f13b",
+  "java_svg_sha256": "32a7df93d28c2f1633cf769c1fc5d29b4261baa5b2f0f2b11289b34ee101e82a",
+  "reason": "needs an include/theme resource beside the source; parity_perturbations parses with base dir None (T14.6.2)"
+ },
+ {
+  "name": "mc1_seq_before_enduml",
+  "batch": "BD",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 100,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + No valid @start/@end found",
+  "axes": [
+   "sequence",
+   "backslash before @enduml (swallows the end)"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "valid-error"
+  },
+  "source_sha256": "1d60c94c144c604db29bfb55955e2e93a43927b4ea8cd01fa920837ceaa8e6c0",
+  "java_svg_sha256": "427c1ce502ccee9df59e92af20afe24a00adbfed3d693efd671f7a10a907f710",
+  "reason": "Java-invalid reference (raw SVG + stderr)"
+ },
+ {
+  "name": "mc1_seq_at_eof",
+  "batch": "BD",
+  "java_valid": false,
+  "intended_valid": false,
+  "java_exit": 100,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + No valid @start/@end found",
+  "axes": [
+   "sequence",
+   "backslash at EOF without @enduml"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "mismatch",
+   "9834a7194": "mismatch",
+   "2a9373aca": "mismatch",
+   "594c2b3c5": "valid-error"
+  },
+  "source_sha256": "6982be51f3fba656ce82d7a855f7ea80ac83139fdcb162e7b653d9106e719f43",
+  "java_svg_sha256": "427c1ce502ccee9df59e92af20afe24a00adbfed3d693efd671f7a10a907f710",
+  "reason": "Java-invalid reference (raw SVG + stderr)"
+ },
+ {
+  "name": "mc1_seq_foreach_body",
+  "batch": "BD",
+  "java_valid": false,
+  "intended_valid": true,
+  "java_exit": 1,
+  "validity_basis": "raw Java SVG + stderr: prepare.py markers + Exception",
+  "axes": [
+   "sequence",
+   "!foreach body"
+  ],
+  "outcomes_compare_cli": {
+   "93bf53e18": "nonpositive-rejected",
+   "9834a7194": "nonpositive-accepted",
+   "2a9373aca": "nonpositive-rejected",
+   "594c2b3c5": "nonpositive-accepted"
+  },
+  "source_sha256": "60c86dbb12986c22b7a451d59d230257ae5f4aca0fb4c4137b8128ed1150121f",
+  "java_svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "reason": "Java-invalid reference (raw SVG + stderr)"
+ }
+]

@@ -1,0 +1,8 @@
+@startuml
+/'
+note \
+'/
+class Hidden
+'/
+class Shown
+@enduml

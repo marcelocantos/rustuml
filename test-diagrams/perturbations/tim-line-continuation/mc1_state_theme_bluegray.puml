@@ -1,0 +1,6 @@
+@startuml
+!theme bluegray
+[*] --> Thaw : warm \
+ing
+Thaw --> Melt
+@enduml

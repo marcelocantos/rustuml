@@ -1,0 +1,7 @@
+@startuml
+class Ash
+Ash --> Ash : one \
+' gap
+two
+class Birch
+@enduml

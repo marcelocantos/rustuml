@@ -1,0 +1,7 @@
+@startuml
+class Ash \
+<<s>>
+class Birch \
+<<t>>
+class Cedar
+@enduml

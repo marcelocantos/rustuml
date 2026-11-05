@@ -1,0 +1,8 @@
+@startuml
+!theme sketchy-outline
+class Anvil \
+<<iron>>
+class Forge
+Anvil --> Forge : heat \
+ed
+@enduml

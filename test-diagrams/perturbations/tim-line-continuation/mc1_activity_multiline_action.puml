@@ -1,0 +1,7 @@
+@startuml
+start
+:Brew \
+tea
+and cake;
+stop
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+/'
+text \
+'/
+Kea -> Tui : hidden
+'/
+Tui -> Kea : shown
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+!theme plain
+Gull -> Tern : over \
+the \
+bay
+Tern -> Gull : yes
+@enduml

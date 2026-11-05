@@ -1,0 +1,7 @@
+test-diagrams/perturbations/tim-line-continuation/mc1_class_theme_sketchy.puml
+test-diagrams/perturbations/tim-line-continuation/mc1_seq_theme_plain.puml
+test-diagrams/perturbations/tim-line-continuation/mc1_usecase_continued.puml
+test-diagrams/perturbations/tim-line-continuation/tc1_activity_legacy_label.puml
+test-diagrams/perturbations/tim-line-continuation/tc1_seq_indented_end_after_backslash.puml
+test-diagrams/perturbations/tim-line-continuation/tc1_seq_sprite_header_continued.puml
+test-diagrams/perturbations/tim-line-continuation/tc1_seq_sprite_svg_continued.puml

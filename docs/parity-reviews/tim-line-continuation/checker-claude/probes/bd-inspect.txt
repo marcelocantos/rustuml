@@ -1,0 +1,231 @@
+== mc1_activity_multiline_action java_exit 0 valid True intended True
+   src: @startuml⏎start⏎:Brew \⏎tea⏎and cake;⏎stop⏎@enduml⏎
+   java: lines=[] texts=['Brew tea', 'and cake']
+   93bf53e18 match                  exit=0 lines=[] texts=['Brew tea', 'and cake'] ''
+   9834a7194 match                  exit=0 lines=[] texts=['Brew tea', 'and cake'] ''
+   2a9373aca match                  exit=0 lines=[] texts=['Brew tea', 'and cake'] ''
+   594c2b3c5 match                  exit=0 lines=[] texts=['Brew tea', 'and cake'] ''
+== mc1_class_crlf_three java_exit 0 valid True intended True
+   src: @startuml⏎class Pebble \⏎<<stone>> \⏎#tan⏎class Sand⏎@enduml⏎
+   java: lines=['1', '4'] texts=['&#171;stone&#187;', 'Pebble', 'Sand']
+   93bf53e18 mismatch               exit=0 lines=['1', '4'] texts=['Pebble', 'Sand'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '4'] texts=['Pebble', 'Sand'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '4'] texts=['Pebble', 'Sand'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '4'] texts=['«stone»', 'Pebble', 'Sand'] ''
+== mc1_class_definelong java_exit 200 valid False intended True
+   src: @startuml⏎!definelong BOX(n)⏎class n \⏎<<crate>>⏎class n ## Lid⏎!enddefinelong⏎BOX(Cedar)⏎class Birch⏎@enduml⏎
+   java: lines=[] texts=['PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]', '[From string (line 5) ]', '&#160;', '@startuml', 'class Cedar &lt;&lt;crate&gt;&gt;', 'class Cedar ## Lid', 'Syntax Error? (Assumed diagram type: class)']
+   93bf53e18 nonpositive-accepted   exit=0 lines=['2', '7'] texts=['Cedar', 'Birch'] ''
+   9834a7194 nonpositive-accepted   exit=0 lines=['2', '7'] texts=['Cedar', 'Birch'] ''
+   2a9373aca nonpositive-accepted   exit=0 lines=['2', '7'] texts=['Cedar', 'Birch'] ''
+   594c2b3c5 nonpositive-accepted   exit=0 lines=['2', '7'] texts=['«crate»', 'Cedar', 'Birch'] ''
+== mc1_class_include_postjoin java_exit 0 valid True intended True
+   src: @startuml⏎!include mc1_class_inc.iuml⏎Lantern --> Wick⏎@enduml⏎
+   java: lines=['1', '2', '2'] texts=['&#171;lamp&#187;', 'Lantern', 'Wick']
+   93bf53e18 mismatch               exit=0 lines=['1', '3', '2'] texts=['Lantern', 'Wick'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '3', '2'] texts=['Lantern', 'Wick'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '3', '2'] texts=['Lantern', 'Wick'] ''
+   594c2b3c5 mismatch               exit=0 lines=['2', '3', '2'] texts=['«lamp»', 'Lantern', 'Wick'] ''
+== mc1_class_theme_sketchy java_exit 0 valid True intended True
+   src: @startuml⏎!theme sketchy-outline⏎class Anvil \⏎<<iron>>⏎class Forge⏎Anvil --> Forge : heat \⏎ed⏎@enduml⏎
+   java: lines=['2', '4', '5'] texts=['&#171;iron&#187;', 'Anvil', 'Forge', 'heat ed']
+   93bf53e18 mismatch               exit=0 lines=['2', '4', '5'] texts=['Anvil', 'Forge', 'heat \\'] ''
+   9834a7194 mismatch               exit=0 lines=['2', '4', '5'] texts=['Anvil', 'Forge', 'heat \\'] ''
+   2a9373aca mismatch               exit=0 lines=['2', '4', '5'] texts=['Anvil', 'Forge', 'heat \\'] ''
+   594c2b3c5 mismatch               exit=0 lines=['2', '4', '5'] texts=['«iron»', 'Anvil', 'Forge', 'heat ed'] ''
+== mc1_class_three_pieces_lines java_exit 0 valid True intended True
+   src: @startuml⏎class Quill \⏎<<pen>> \⏎#lightblue⏎class Ink⏎class Blotter⏎Quill --> Ink⏎@enduml⏎
+   java: lines=['1', '4', '5', '6'] texts=['&#171;pen&#187;', 'Quill', 'Ink', 'Blotter']
+   93bf53e18 mismatch               exit=0 lines=['1', '4', '5', '6'] texts=['Quill', 'Ink', 'Blotter'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '4', '5', '6'] texts=['Quill', 'Ink', 'Blotter'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '4', '5', '6'] texts=['Quill', 'Ink', 'Blotter'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '4', '5', '6'] texts=['«pen»', 'Quill', 'Ink', 'Blotter'] ''
+== mc1_component_comments_between java_exit 0 valid True intended True
+   src: @startuml⏎[Valve] --> [Gauge] : press \⏎' skipped line⏎/' long⏎ still '/⏎/' inline '/ ure⏎[Gauge] --> [Dial]⏎@enduml⏎
+   java: lines=['1', '1', '6', '1', '6'] texts=['Valve', 'Gauge', 'Dial', 'press  ure']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '6', '1', '6'] texts=['Valve', 'Gauge', 'Dial', 'press \\'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '6', '1', '6'] texts=['Valve', 'Gauge', 'Dial', 'press \\'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '6', '1', '6'] texts=['Valve', 'Gauge', 'Dial', 'press \\'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '1', '6', '1', '6'] texts=['Valve', 'Gauge', 'Dial', 'press  ure'] ''
+== mc1_json java_exit 0 valid True intended True
+   src: @startjson⏎{"crate": \⏎"apples", "count": 4}⏎@endjson⏎
+   java: lines=[] texts=['crate', 'apples', 'count', '4']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 1: JSON parse error: expected value at line 1 column 11'
+   9834a7194 valid-error            exit=1 lines=[] texts=[] 'parse error: line 1: JSON parse error: expected value at line 1 column 11'
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 1: JSON parse error: expected value at line 1 column 11'
+   594c2b3c5 match                  exit=0 lines=[] texts=['crate', 'apples', 'count', '4'] ''
+== mc1_mindmap java_exit 0 valid True intended True
+   src: @startmindmap⏎* Orchard \⏎rows⏎** Pear⏎** Plum \⏎tree⏎@endmindmap⏎
+   java: lines=[] texts=['Orchard rows', 'Pear', 'Plum tree']
+   93bf53e18 mismatch               exit=0 lines=[] texts=['Orchard \\', 'Pear', 'Plum \\'] ''
+   9834a7194 mismatch               exit=0 lines=[] texts=['Orchard \\', 'Pear', 'Plum \\'] ''
+   2a9373aca mismatch               exit=0 lines=[] texts=['Orchard \\', 'Pear', 'Plum \\'] ''
+   594c2b3c5 match                  exit=0 lines=[] texts=['Orchard rows', 'Pear', 'Plum tree'] ''
+== mc1_object_continued java_exit 0 valid True intended True
+   src: @startuml⏎object Kettle \⏎<<pot>>⏎object Stove⏎Kettle --> Stove⏎@enduml⏎
+   java: lines=['1', '3', '4'] texts=['&#171;pot&#187;', 'Kettle', 'Stove']
+   93bf53e18 mismatch               exit=0 lines=['3', '4', '4'] texts=['Stove', 'Kettle'] ''
+   9834a7194 mismatch               exit=0 lines=['3', '4', '4'] texts=['Stove', 'Kettle'] ''
+   2a9373aca mismatch               exit=0 lines=['3', '4', '4'] texts=['Stove', 'Kettle'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '3', '4'] texts=['«pot»', 'Kettle', 'Stove'] ''
+== mc1_seq_at_eof java_exit 100 valid False intended False
+   src: @startuml⏎Lynx -> Ibex : last \⏎
+   java: lines=[] texts=['No valid @start/@end found, please check the version']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Lynx', 'Lynx', 'Ibex', 'Ibex', 'last \\'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Lynx', 'Lynx', 'Ibex', 'Ibex', 'last \\'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Lynx', 'Lynx', 'Ibex', 'Ibex', 'last \\'] ''
+   594c2b3c5 valid-error            exit=1 lines=[] texts=[] 'parse error: line 1: No valid @start/@end found, please check the version'
+== mc1_seq_backslash_space java_exit 0 valid True intended True
+   src: @startuml⏎Raven -> Crow : spaced \ ⏎Crow -> Raven : next⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Raven', 'Raven', 'Crow', 'Crow', 'spaced \\', 'next']
+   93bf53e18 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Raven', 'Raven', 'Crow', 'Crow', 'spaced \\', 'next'] ''
+   9834a7194 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Raven', 'Raven', 'Crow', 'Crow', 'spaced \\', 'next'] ''
+   2a9373aca match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Raven', 'Raven', 'Crow', 'Crow', 'spaced \\', 'next'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Raven', 'Raven', 'Crow', 'Crow', 'spaced \\', 'next'] ''
+== mc1_seq_before_enduml java_exit 100 valid False intended False
+   src: @startuml⏎Lynx -> Ibex : last \⏎@enduml⏎
+   java: lines=[] texts=['No valid @start/@end found, please check the version']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Lynx', 'Lynx', 'Ibex', 'Ibex', 'last \\'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Lynx', 'Lynx', 'Ibex', 'Ibex', 'last \\'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1'] texts=['Lynx', 'Lynx', 'Ibex', 'Ibex', 'last \\'] ''
+   594c2b3c5 valid-error            exit=1 lines=[] texts=[] 'parse error: line 1: No valid @start/@end found, please check the version'
+== mc1_seq_block_comment_continued java_exit 0 valid True intended True
+   src: @startuml⏎Puffin -> Auk : wave \⏎/' a⏎b '/⏎  hello⏎Auk -> Puffin : hi⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '5'] texts=['Puffin', 'Puffin', 'Auk', 'Auk', 'wave   hello', 'hi']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 4: Syntax error: no registered sequence command accepts "hello"'
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '5'] texts=['Puffin', 'Puffin', 'Auk', 'Auk', 'wave \\', 'hi'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 4: Syntax error: no registered sequence command accepts "hello"'
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '5'] texts=['Puffin', 'Puffin', 'Auk', 'Auk', 'wave   hello', 'hi'] ''
+== mc1_seq_comment_only_continuation java_exit 0 valid True intended True
+   src: @startuml⏎Otter -> Mink : swim \⏎' quiet⏎  ' again⏎fast⏎Mink -> Otter : ok⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '5'] texts=['Otter', 'Otter', 'Mink', 'Mink', 'swim fast', 'ok']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 4: Syntax error: no registered sequence command accepts "fast"'
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '5'] texts=['Otter', 'Otter', 'Mink', 'Mink', 'swim \\', 'ok'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 4: Syntax error: no registered sequence command accepts "fast"'
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '5'] texts=['Otter', 'Otter', 'Mink', 'Mink', 'swim fast', 'ok'] ''
+== mc1_seq_continued_comment_line java_exit 0 valid True intended True
+   src: @startuml⏎' note \⏎Otter -> Mink : hidden⏎Mink -> Otter : shown⏎@enduml⏎
+   java: lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Mink', 'Mink', 'Otter', 'Otter', 'shown']
+   93bf53e18 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Otter', 'Otter', 'Mink', 'Mink', 'hidden', 'shown'] ''
+   9834a7194 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Otter', 'Otter', 'Mink', 'Mink', 'hidden', 'shown'] ''
+   2a9373aca mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Otter', 'Otter', 'Mink', 'Mink', 'hidden', 'shown'] ''
+   594c2b3c5 match                  exit=0 lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Mink', 'Mink', 'Otter', 'Otter', 'shown'] ''
+== mc1_seq_crlf java_exit 0 valid True intended True
+   src: @startuml⏎Heron -> Egret : wading \⏎slowly⏎Egret -> Heron : fine⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Heron', 'Heron', 'Egret', 'Egret', 'wading slowly', 'fine']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "slowly"'
+   9834a7194 mismatch               exit=0 lines=['1', '1', '2', '2', '1', '1', '1', '1', '2', '2'] texts=['Heron', 'Heron', 'Egret', 'Egret', 'sl', 'sl', 'wly', 'wly', 'wading \\', 'fine'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "slowly"'
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Heron', 'Heron', 'Egret', 'Egret', 'wading slowly', 'fine'] ''
+== mc1_seq_define_macro java_exit 0 valid True intended True
+   src: @startuml⏎!define SAY(a, b) a -> b : said \⏎  softly⏎SAY(Fern, Moss)⏎Moss -> Fern : ok⏎@enduml⏎
+   java: lines=['3', '3', '3', '3', '3', '3', '3', '4'] texts=['Fern', 'Fern', 'Moss', 'Moss', 'said   softly', 'ok']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "softly"'
+   9834a7194 mismatch               exit=0 lines=['2', '2', '3', '3', '2', '2', '2', '2', '3', '3'] texts=['s', 's', 'ftly', 'ftly', 'Fern', 'Fern', 'Moss', 'Moss', 'said \\', 'ok'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "softly"'
+   594c2b3c5 match                  exit=0 lines=['3', '3', '3', '3', '3', '3', '3', '4'] texts=['Fern', 'Fern', 'Moss', 'Moss', 'said   softly', 'ok'] ''
+== mc1_seq_escaped_backslash java_exit 0 valid True intended True
+   src: @startuml⏎Raven -> Crow : path C:\\⏎Crow -> Raven : got it⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Raven', 'Raven', 'Crow', 'Crow', 'path C:\\', 'got it']
+   93bf53e18 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Raven', 'Raven', 'Crow', 'Crow', 'path C:\\', 'got it'] ''
+   9834a7194 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Raven', 'Raven', 'Crow', 'Crow', 'path C:\\', 'got it'] ''
+   2a9373aca match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Raven', 'Raven', 'Crow', 'Crow', 'path C:\\', 'got it'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Raven', 'Raven', 'Crow', 'Crow', 'path C:\\', 'got it'] ''
+== mc1_seq_foreach_body java_exit 1 valid False intended True
+   src: @startuml⏎!foreach $n in [Ash, Elm]⏎Root -> $n : grow \⏎tall⏎!endfor⏎Root -> Ash : end⏎@enduml⏎
+   java: lines=[] texts=[]
+   93bf53e18 nonpositive-rejected   exit=1 lines=[] texts=[] 'parse error: line 3: Syntax error: no registered sequence command accepts "tall"'
+   9834a7194 nonpositive-accepted   exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '2', '2', '2'] texts=['Root', 'Root', 'Ash', 'Ash', 'Elm', 'Elm', 'grow \\', 'grow \\', 'end'] ''
+   2a9373aca nonpositive-rejected   exit=1 lines=[] texts=[] 'parse error: line 3: Syntax error: no registered sequence command accepts "tall"'
+   594c2b3c5 nonpositive-accepted   exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '2', '2', '2'] texts=['Root', 'Root', 'Ash', 'Ash', 'Elm', 'Elm', 'grow tall', 'grow tall', 'end'] ''
+== mc1_seq_if_condition java_exit 0 valid True intended True
+   src: @startuml⏎!$on = 1⏎!if $on == \⏎1⏎Cove -> Bight : on⏎!endif⏎Bight -> Cove : out⏎@enduml⏎
+   java: lines=['4', '4', '4', '4', '4', '4', '4', '6'] texts=['Cove', 'Cove', 'Bight', 'Bight', 'on', 'out']
+   93bf53e18 mismatch               exit=0 lines=['6', '6', '6', '6', '6', '6', '6'] texts=['Bight', 'Bight', 'Cove', 'Cove', 'out'] ''
+   9834a7194 mismatch               exit=0 lines=['6', '6', '6', '6', '6', '6', '6'] texts=['Bight', 'Bight', 'Cove', 'Cove', 'out'] ''
+   2a9373aca mismatch               exit=0 lines=['6', '6', '6', '6', '6', '6', '6'] texts=['Bight', 'Bight', 'Cove', 'Cove', 'out'] ''
+   594c2b3c5 match                  exit=0 lines=['4', '4', '4', '4', '4', '4', '4', '6'] texts=['Cove', 'Cove', 'Bight', 'Bight', 'on', 'out'] ''
+== mc1_seq_include_postjoin java_exit 0 valid True intended True
+   src: @startuml⏎!include mc1_seq_inc.iuml⏎Osprey -> Kestrel : calm⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Kestrel', 'Kestrel', 'Osprey', 'Osprey', 'north wind', 'calm']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "wind"'
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '2'] texts=['Kestrel', 'Kestrel', 'Osprey', 'Osprey', 'north \\', 'calm'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "wind"'
+   594c2b3c5 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '2'] texts=['Kestrel', 'Kestrel', 'Osprey', 'Osprey', 'north wind', 'calm'] ''
+== mc1_seq_include_procedure java_exit 0 valid True intended True
+   src: @startuml⏎!include mc1_proc_inc.iuml⏎$hail(Skiff)⏎Skiff -> Harbor : aye⏎@enduml⏎
+   java: lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Harbor', 'Harbor', 'Skiff', 'Skiff', 'ahoy mate', 'aye']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 3: Syntax error: no registered sequence command accepts "mate"'
+   9834a7194 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '3'] texts=['Harbor', 'Harbor', 'Skiff', 'Skiff', 'ahoy \\', 'aye'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 3: Syntax error: no registered sequence command accepts "mate"'
+   594c2b3c5 mismatch               exit=0 lines=['3', '3', '3', '3', '3', '3', '3', '3'] texts=['Harbor', 'Harbor', 'Skiff', 'Skiff', 'ahoy mate', 'aye'] ''
+== mc1_seq_leading_space_continuation java_exit 0 valid True intended True
+   src: @startuml⏎Finch -> Wren : a\⏎   b⏎Wren -> Finch : c⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Finch', 'Finch', 'Wren', 'Wren', 'a   b', 'c']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "b"'
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Finch', 'Finch', 'Wren', 'Wren', 'a\\', 'c'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "b"'
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '3'] texts=['Finch', 'Finch', 'Wren', 'Wren', 'a   b', 'c'] ''
+== mc1_seq_note_body java_exit 0 valid True intended True
+   src: @startuml⏎Marten -> Vole : hop⏎note right of Vole⏎first \⏎second⏎third⏎end note⏎Vole -> Marten : back⏎@enduml⏎
+   java: lines=['1', '1', '1', '1', '1', '1', '1', '7'] texts=['Marten', 'Marten', 'Vole', 'Vole', 'hop', 'first second', 'third', 'back']
+   93bf53e18 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '7'] texts=['Marten', 'Marten', 'Vole', 'Vole', 'hop', 'first \\', 'second', 'third', 'back'] ''
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '7'] texts=['Marten', 'Marten', 'Vole', 'Vole', 'hop', 'first \\', 'second', 'third', 'back'] ''
+   2a9373aca mismatch               exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '7'] texts=['Marten', 'Marten', 'Vole', 'Vole', 'hop', 'first \\', 'second', 'third', 'back'] ''
+   594c2b3c5 match                  exit=0 lines=['1', '1', '1', '1', '1', '1', '1', '7'] texts=['Marten', 'Marten', 'Vole', 'Vole', 'hop', 'first second', 'third', 'back'] ''
+== mc1_seq_procedure_body java_exit 0 valid True intended True
+   src: @startuml⏎!procedure $ping($to)⏎Dock -> $to : ping \⏎back⏎!endprocedure⏎$ping(Pier)⏎$ping(Quay)⏎Pier -> Quay : done⏎@enduml⏎
+   java: lines=['2', '2', '2', '2', '2', '2', '2', '2', '2', '2'] texts=['Dock', 'Dock', 'Pier', 'Pier', 'Quay', 'Quay', 'ping back', 'ping back', 'done']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 3: Syntax error: no registered sequence command accepts "back"'
+   9834a7194 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '2', '2', '2'] texts=['Dock', 'Dock', 'Pier', 'Pier', 'Quay', 'Quay', 'ping \\', 'ping \\', 'done'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 3: Syntax error: no registered sequence command accepts "back"'
+   594c2b3c5 match                  exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '2', '2', '2'] texts=['Dock', 'Dock', 'Pier', 'Pier', 'Quay', 'Quay', 'ping back', 'ping back', 'done'] ''
+== mc1_seq_theme_plain java_exit 0 valid True intended True
+   src: @startuml⏎!theme plain⏎Gull -> Tern : over \⏎the \⏎bay⏎Tern -> Gull : yes⏎@enduml⏎
+   java: lines=['2', '2', '2', '2', '2', '2', '2', '5'] texts=['Gull', 'Gull', 'Tern', 'Tern', 'over the bay', 'yes']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 3: Syntax error: no registered sequence command accepts "the \\\\"'
+   9834a7194 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '5'] texts=['Gull', 'Gull', 'Tern', 'Tern', 'over \\', 'yes'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 3: Syntax error: no registered sequence command accepts "the \\\\"'
+   594c2b3c5 mismatch               exit=0 lines=['2', '2', '2', '2', '2', '2', '2', '5'] texts=['Gull', 'Gull', 'Tern', 'Tern', 'over the bay', 'yes'] ''
+== mc1_seq_tim_assignment java_exit 0 valid True intended True
+   src: @startuml⏎!$label = "tide " + \⏎"pool"⏎Shore -> Reef : $label⏎@enduml⏎
+   java: lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Shore', 'Shore', 'Reef', 'Reef', 'tide pool']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "\\"pool\\""'
+   9834a7194 mismatch               exit=0 lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Shore', 'Shore', 'Reef', 'Reef', 'tide \\'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "\\"pool\\""'
+   594c2b3c5 match                  exit=0 lines=['3', '3', '3', '3', '3', '3', '3'] texts=['Shore', 'Shore', 'Reef', 'Reef', 'tide pool'] ''
+== mc1_skinparam_continued java_exit 0 valid True intended True
+   src: @startuml⏎skinparam class \⏎BackgroundColor PaleGreen⏎class Fennel⏎class Dill⏎@enduml⏎
+   java: lines=['3', '4'] texts=['Fennel', 'Dill']
+   93bf53e18 match                  exit=0 lines=['3', '4'] texts=['Fennel', 'Dill'] ''
+   9834a7194 match                  exit=0 lines=['3', '4'] texts=['Fennel', 'Dill'] ''
+   2a9373aca match                  exit=0 lines=['3', '4'] texts=['Fennel', 'Dill'] ''
+   594c2b3c5 match                  exit=0 lines=['3', '4'] texts=['Fennel', 'Dill'] ''
+== mc1_state_description java_exit 0 valid True intended True
+   src: @startuml⏎state Dormant : sleeps \⏎soundly⏎[*] --> Dormant⏎Dormant --> Awake⏎@enduml⏎
+   java: lines=['3', '3', '4'] texts=['Dormant', 'sleeps soundly', 'Awake']
+   93bf53e18 mismatch               exit=0 lines=['3', '3', '4'] texts=['Dormant', 'sleeps \\', 'Awake'] ''
+   9834a7194 mismatch               exit=0 lines=['3', '3', '4'] texts=['Dormant', 'sleeps \\', 'Awake'] ''
+   2a9373aca mismatch               exit=0 lines=['3', '3', '4'] texts=['Dormant', 'sleeps \\', 'Awake'] ''
+   594c2b3c5 match                  exit=0 lines=['3', '3', '4'] texts=['Dormant', 'sleeps soundly', 'Awake'] ''
+== mc1_state_theme_bluegray java_exit 0 valid True intended True
+   src: @startuml⏎!theme bluegray⏎[*] --> Thaw : warm \⏎ing⏎Thaw --> Melt⏎@enduml⏎
+   java: lines=['2', '2', '4'] texts=['Thaw', 'Melt', 'warm ing']
+   93bf53e18 mismatch               exit=0 lines=['2', '2', '4'] texts=['Thaw', 'Melt', 'warm \\'] ''
+   9834a7194 mismatch               exit=0 lines=['2', '2', '4'] texts=['Thaw', 'Melt', 'warm \\'] ''
+   2a9373aca mismatch               exit=0 lines=['2', '2', '4'] texts=['Thaw', 'Melt', 'warm \\'] ''
+   594c2b3c5 match                  exit=0 lines=['2', '2', '4'] texts=['Thaw', 'Melt', 'warm ing'] ''
+== mc1_style_block java_exit 0 valid True intended True
+   src: @startuml⏎<style>⏎classDiagram \⏎{⏎  class { BackgroundColor Wheat }⏎}⏎</style>⏎class Barley⏎@enduml⏎
+   java: lines=['7'] texts=['Barley']
+   93bf53e18 match                  exit=0 lines=['7'] texts=['Barley'] ''
+   9834a7194 match                  exit=0 lines=['7'] texts=['Barley'] ''
+   2a9373aca match                  exit=0 lines=['7'] texts=['Barley'] ''
+   594c2b3c5 match                  exit=0 lines=['7'] texts=['Barley'] ''
+== mc1_usecase_continued java_exit 0 valid True intended True
+   src: @startuml⏎actor Rowan⏎Rowan --> (Climb \⏎ridge)⏎@enduml⏎
+   java: lines=['1', '2', '2'] texts=['Rowan', 'Climb ridge']
+   93bf53e18 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "Rowan --> (Climb \\\\"'
+   9834a7194 mismatch               exit=0 lines=['1', '1', '1'] texts=['Rowan', 'Rowan'] ''
+   2a9373aca valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "Rowan --> (Climb \\\\"'
+   594c2b3c5 valid-error            exit=1 lines=[] texts=[] 'parse error: line 2: Syntax error: no registered sequence command accepts "Rowan --> (Climb ridge)"'

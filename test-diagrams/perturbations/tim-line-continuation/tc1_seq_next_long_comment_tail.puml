@@ -1,0 +1,7 @@
+@startuml
+Kea -> Tui : x \
+/' long
+end '/
+Tui -> Kea : after
+Kea -> Kea : more
+@enduml

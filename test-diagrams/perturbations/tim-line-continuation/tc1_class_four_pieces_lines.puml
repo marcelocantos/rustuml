@@ -1,0 +1,8 @@
+@startuml
+class Ash \
+<<one>> \
+#pink \
+##red
+class Birch
+class Cedar
+@enduml

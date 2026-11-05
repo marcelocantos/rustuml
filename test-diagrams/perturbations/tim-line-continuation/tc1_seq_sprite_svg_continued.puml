@@ -1,0 +1,5 @@
+@startuml
+sprite $sq <svg viewBox="0 0 4 4"><rect width="4" height="4" fill="#ff0000"/>\
+</svg>
+Kea -> Tui : <$sq> hi
+@enduml

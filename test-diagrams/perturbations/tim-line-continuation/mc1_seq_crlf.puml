@@ -1,0 +1,5 @@
+@startuml
+Heron -> Egret : wading \
+slowly
+Egret -> Heron : fine
+@enduml

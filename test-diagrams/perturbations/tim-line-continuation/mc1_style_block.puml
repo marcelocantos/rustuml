@@ -1,0 +1,9 @@
+@startuml
+<style>
+classDiagram \
+{
+  class { BackgroundColor Wheat }
+}
+</style>
+class Barley
+@enduml

@@ -1,0 +1,8 @@
+test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_comment_then_backslash.puml
+test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_continuation_next_leading.puml
+test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_component_comment_then_backslash.puml
+test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_comment_only_then_msg.puml
+test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_next_leading.puml
+test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_state_comment_then_backslash.puml
+test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.puml
+test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.puml

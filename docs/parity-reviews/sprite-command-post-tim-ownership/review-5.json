@@ -1,0 +1,105 @@
+{
+ "schema_version": 1,
+ "mechanism": "sprite-command-post-tim-ownership",
+ "account_commit": "ef52d5b323b4aad8b32ad98dcb6cbff757ffcbef",
+ "implementation_commit": "594c2b3c5e49fca3bd57cb9b44f6fafcd5f4e459",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "reviewer": {
+  "task_id": "T3 thread t3-a69f53d7, branch review/tim-continuation-claude-v2 (replaces the stalled checker)",
+  "model": "claude-opus-5-5"
+ },
+ "commands": [
+  "git switch -c review/tim-continuation-claude-v2 0a52663ac; submodule test-diagrams/golden hydrated with --reference at 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "checker-claude/support/build.sh: git archive 93bf53e18 / 9834a7194 / 2a9373aca / 594c2b3c5 into ~/Library/Caches/rustuml-tim-continuation-claude-checker-v2/src/<rev>, cargo build --release -p rustuml. The shared CARGO_TARGET_DIR build of 2a9373aca and 594c2b3c5 failed (E0609 in rustuml-render) and copied a stale binary, so all three non-first trees were rebuilt in isolated target dirs (target-2a, target-59, target-98); hashes in checker-claude/binaries.sha256. Stalled-checker binaries were not reused.",
+  "rustc --edition=2024 -O docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs (sha256 d1424469...) --extern rustuml_oracle=<target of 93bf53e18>/librustuml_oracle-*.rlib -> compare_cli sha256 bd01bdd1...; crates/rustuml-oracle unchanged 9834a7194..0a52663ac",
+  "checker-claude/support/verify_fresh.py: every row of the stalled checker's prepared fresh cohorts (AT 45, AV 63, AX 77, AY 48, AZ 8, BA 64, AS/AQ/790/28 915, BD 33) re-hashed against the immutable relay reference-results (source and Java SVG): 0 mismatches; validity recomputed from raw SVG+stderr (prepare.py markers + 'No valid @start/@end found' + exception text): only BD differs (3 cases), as the brief rules",
+  "unchanged prepare.py (a84a4e75) for BU (tim-continuation-tc1, reference-results sha256 2606b293...) and BD (tim-continuation-mc1); strict_validity.py rewrites observed_valid (BU 37/40 valid, BD 29/33 valid)",
+  "checker-claude/support/run_all.sh: unchanged replay.py (1bb2ed6e) through the actual CLI, 4 modes (-tsvg/--ast/-ttxt/--yaml, -pipe), each case from its recorded cwd, for BU, BD, BA, AY, AZ, AX, AV, AT, AS/AQ/790/28, retained 4,174 and golden 12,550, x 4 builds",
+  "checker-claude/support/summarize.py (unchanged classify.outcome, plus a validity-adjusted outcome for manifest-invalid fresh rows) -> checker-claude/summary.json",
+  "unchanged rejection_contract.py (09cd998b) for every fresh set against each before -> checker-claude/rejection/",
+  "checker-claude/support/gates.sh at the review branch (code 594c2b3c5 + registered pairs): workspace lib, pipe_mode, golden_no_oracle, golden_pairs, parity_perturbations, harness_guards once each; golden_no_oracle and golden_pairs also at a 9834a7194 export for the failure-name diff; parity_perturbations at a 2a9373aca export for the pre-existing-directory baseline; harness_guards rerun once after the review records were written"
+ ],
+ "findings": [
+  "WHOLE-LINE VERDICT REJECT (sprite round 5 = tim-line-continuation round 1, tip 0a52663ac / code 594c2b3c5). Record: ../tim-line-continuation/review.json and ../tim-line-continuation/checker-claude/. Earlier sprite reviews (review.json .. review-4.json) and the accepted participant mechanism are preserved; this addendum keeps all of review-4.json's findings.",
+  "Against pre-packet 93bf53e18, every remaining loss on the line, classified: (1) tc1_seq_indented_end_after_backslash (BU), mismatch -> valid-input error: PACKET-CAUSED REAL REGRESSION (Pipe#readSingleDiagram column-0 end rule, see the tim-line-continuation review). (2) ck4_procedure_sprite_end_comment_two (BA) and mk4_tim_sprite_in_procedure (AY), match -> mismatch: accidental-match residue, T14.33, unchanged since round 4. (3) ck3_svg_inline_quoted_apostrophe_seq (AX), lost rejection: accidental-rejection residue, T14.32, unchanged since round 3. (4) mc1_seq_foreach_body (BD), lost rejection introduced by this round: accidental-rejection residue (Java fails in JsonParser on '!foreach $n in [Ash, Elm]'; Rust accepts the list at every build); no target owns it, one is proposed. Nothing else: 0 other lost matches, 0 other lost rejections, 0 panics (beyond the unchanged --yaml set), 0 timeouts in BU, BD, BA, AY, AZ, AX, AV, AT, AS/AQ/790/28, retained 4,174 and golden 12,550.",
+  "Against parity-recovery code 9834a7194: 0 lost matches and 0 lost rejections in every cohort. New valid-input errors: BU tc1_seq_indented_end_after_backslash (packet regression, above); retained: exactly the 13 parent-approved T14.21 sources; fresh cohorts: 11 sources outside the approved 15-source set, all the T14.21 misdispatch class (usecase/description/class/deployment sources that Rust routes to Sequence and strict admission then rejects): ck4_usecase_leading_actor_line, mk4b_theme_trailing_comment_usecase, ck3_usecase_note_top_of_paren, ck3_class_enum_upper_body, mk3_usecase_right_header_body, mk3_deployment_archimate_body, ck_usecase_header_body, mk2_proc_uninvoked_svg_usecase, mk2_usecase_note_upper, mc1_usecase_continued; plus ck4_seq_divider_trailing, a real sequence source where 9834a7194 already cuts '== Part /' c '/ ==' to '== Part /' c ' (Rust-only comment truncation, T14.31) and strict admission turns the wrong render into an error. All 11 predate this packet (valid-error at 93bf53e18 already) and come from the sequence command-admission work on this line (ebbbe28c0); none is in the frozen approved set, so merging the line into parity-recovery needs owner sign-off for them.",
+  "Gains along the line vs 93bf53e18: BU 23, BD 18, BA 37, AY 21, AZ 3, AX 18, AV 10, AT 7, AS/AQ/790/28 59, retained 22; vs 9834a7194: BU 23, BD 18, BA 36, AY 20, AZ 3, AX 14, AV 8, AT 4, AS/AQ/790/28 53, retained 78, golden 0 (126 newly rejected). Goldens: no-oracle and golden_pairs failure names identical to 9834a7194.",
+  "The participant mechanism (accepted round 3) is untouched by 2a9373aca..0a52663ac (only preprocess/mod.rs and parse/mod.rs change) and its AX cases are byte-identical between 2a9373aca and 594c2b3c5."
+ ],
+ "verdict": "rejected",
+ "record": "docs/parity-reviews/tim-line-continuation/checker-claude/",
+ "perturbations": [
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_comment_only_then_msg.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_comment_only_then_msg.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 594c2b3c5",
+    "round-4 real new valid-input error, now match (T14.22 acceptance)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_next_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_next_leading.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 594c2b3c5",
+    "round-4 real new valid-input error, now match (T14.22 acceptance)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_comment_then_backslash.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_comment_then_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 594c2b3c5",
+    "mismatch -> match at 594c2b3c5"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_component_comment_then_backslash.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_component_comment_then_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 594c2b3c5",
+    "mismatch -> match at 594c2b3c5"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_state_comment_then_backslash.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_state_comment_then_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 594c2b3c5",
+    "mismatch -> match at 594c2b3c5"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_continuation_next_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_continuation_next_leading.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 594c2b3c5",
+    "mismatch -> match at 594c2b3c5"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_procedure_sprite_end_comment_two.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_procedure_sprite_end_comment_two.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 594c2b3c5",
+    "lost match vs 93bf53e18, accidental-match residue, T14.33"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_sprite_in_procedure.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_sprite_in_procedure.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 594c2b3c5",
+    "lost match vs 93bf53e18, accidental-match residue, T14.33"
+   ]
+  }
+ ]
+}

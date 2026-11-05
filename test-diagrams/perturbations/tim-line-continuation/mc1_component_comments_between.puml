@@ -1,0 +1,8 @@
+@startuml
+[Valve] --> [Gauge] : press \
+' skipped line
+/' long
+ still '/
+/' inline '/ ure
+[Gauge] --> [Dial]
+@enduml

@@ -1,0 +1,209 @@
+{
+  "entries": 7,
+  "before_rejections": 4,
+  "after_rejections": 4,
+  "introduced_losses": [],
+  "after_false_accepts": [
+    "ck4_nwdiag_trailing.puml",
+    "ck4_salt_trailing.puml",
+    "ck4_inv_include_missing_after_comment.puml"
+  ],
+  "results": [
+    {
+      "source": "ck4_seq_span_in_quotes_trailing.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-2a9373aca",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"a\"\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-594c2b3c5",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"a\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck4_seq_double_leading_top.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-2a9373aca",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"/' b\"\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-594c2b3c5",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"/' b\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck4_nwdiag_trailing.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-2a9373aca",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-594c2b3c5",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck4_salt_trailing.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-2a9373aca",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "6755ad72596433736d89668412f3b74511ad3a65e5a98230a44474fc0e719dcd",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-594c2b3c5",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "6755ad72596433736d89668412f3b74511ad3a65e5a98230a44474fc0e719dcd",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck4_inv_nbsp_leading_comment_seq.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-2a9373aca",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{a0}/' c\"\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-594c2b3c5",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{a0}/' c\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck4_inv_include_missing_after_comment.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-2a9373aca",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "1f5906f65634a99d80fdd8af1f91662c24e55d9560c8aed54e9a241c2c3aa966",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-594c2b3c5",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "1f5906f65634a99d80fdd8af1f91662c24e55d9560c8aed54e9a241c2c3aa966",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "ck4_inv_class_after_leading_two.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-2a9373aca",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"/' b\"\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-checker-v2/bin/rustuml-594c2b3c5",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"/' b\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    }
+  ]
+}

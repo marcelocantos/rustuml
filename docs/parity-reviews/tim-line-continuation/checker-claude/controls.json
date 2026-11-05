@@ -1,0 +1,23 @@
+{
+ "note": "Rust-only controls run by the checker with the fresh builds (RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100, -pipe). They attribute residual mismatches; none is a Java reference.",
+ "controls": [
+  {"question": "Is tc1_seq_theme_local_postjoin's mismatch (Java applies ArrowColor #DD0000 from a local theme file) caused by the continuation?",
+   "input": "@startuml / !theme tcz from . / Kea -> Tui : hi, with puml-theme-tcz.puml = 'skinparam ArrowColor #DD0000' (no continuation)",
+   "result": "2a9373aca and 594c2b3c5 both draw #181818: Rust never loads local '!theme NAME from DIR' files (preprocess/mod.rs strips ' from ...' and resolves only the embedded bundle). Pre-existing, unrelated to the join; proposed target."},
+  {"question": "Is mc1_seq_theme_plain's remaining mismatch continuation-related?",
+   "input": "594c2b3c5 on the BD source vs a hand-joined copy ('over the bay' on one line)",
+   "result": "SVGs identical once data-source-line and the plantuml-src PI are removed. Remaining diff is the unshipped 'plain' theme (Verdana vs sans-serif): T14.30."},
+  {"question": "Is mc1_class_theme_sketchy's remaining mismatch continuation-related?",
+   "input": "594c2b3c5 on the BD source vs a hand-joined copy",
+   "result": "Identical except the link codeLine (5 vs 4), which follows the source-line difference of the hand-joined copy. Remaining Java diff is sketchy geometry, present at all four builds."},
+  {"question": "What changed in the 12 act_color_*_ending_output goldens?",
+   "input": "--ast on test-diagrams/golden/activity/act_color_red_ending_output.puml",
+   "result": "2a9373aca: meta.source has '#red:Action with output\\' + 'stop'; model Start, Stop (the colored action line silently dropped). 594c2b3c5: meta.source '#red:Action with outputstop' (Java's ReadFilterMergeLines text, the line Java's golden reports as a syntax error at line 4); model Start only (merged line silently dropped). nonpositive-accepted before and after: T14.17 silent-drop residue."},
+  {"question": "Why is ck4_seq_divider_trailing a valid-input error against 9834a7194?",
+   "input": "--ast on '== Part /' c '/ ==' in a sequence diagram",
+   "result": "9834a7194 already truncates the line to '== Part /' c ' (uml_source), a Rust-only end-of-line comment cut; Java renders 'Part /' c '/'. The sequence command-admission work on the sprite line (ebbbe28c0, before 93bf53e18) turns that wrong render into a CLI error. Unchanged by this packet (valid-error at 93bf53e18, 2a9373aca, 594c2b3c5). Owner: T14.31 (comment classification)."},
+  {"question": "Does the included-line data-source-line defect predate the packet?",
+   "input": "BU controls tc1_ctl_class_include_plain and tc1_ctl_seq_include_plain (no continuation anywhere)",
+   "result": "Yes. Java numbers included lines by their 0-based location in the included file (Lantern 0, Wick 1; seq message 0). All four Rust builds give Lantern 1, Wick 2 and message 2. The packet's post-TIM join takes the last piece's Rust origin, so it inherits this (mc1_class_include_postjoin: Java Lantern 1 / Wick 2, 594c2b3c5 2 / 3). No target owns it; proposed."}
+ ]
+}
