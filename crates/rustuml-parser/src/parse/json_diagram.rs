@@ -45,7 +45,7 @@ pub fn parse_json_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
 /// Parse a `@startyaml` / `@endyaml` block.
 pub fn parse_yaml_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
     let (_highlights, content) = extract_body(lines);
-    let content = keep_block_line_breaks(&keep_quoted_backslashes(&content));
+    let content = java_yaml_lines(&content);
     let value: serde_yml::Value = crate::java_utf16::decode_carried(
         &content,
         |text| serde_yml::from_str(text),
@@ -63,20 +63,296 @@ pub fn parse_yaml_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
     })
 }
 
-/// PlantUML's `YamlParser.getBlockStyleString` (133-149) ends every line of
-/// a `key: |` block with a line break and keeps blank lines: YAML keep
-/// chomping (`|+`) over a body that ends with a line break. serde_yml's
-/// default clip would drop the block's final break.
-fn keep_block_line_breaks(content: &str) -> String {
-    let mut out = String::with_capacity(content.len() + 8);
-    for line in content.split('\n') {
-        out.push_str(line);
-        if line.trim_end().ends_with(": |") {
-            out.push('+');
+/// Java's `String.trim()`: characters up to U+0020 at both ends.
+fn java_trim(text: &str) -> &str {
+    text.trim_matches(|c: char| c <= ' ')
+}
+
+/// The `YamlLineType`s this port distinguishes.
+#[derive(Debug, PartialEq, Eq)]
+enum YamlLineKind {
+    /// `EMPTY_LINE`: nothing but a comment or whitespace.
+    Empty,
+    /// `NO_KEY_ONLY_TEXT`: no key, not a list item.
+    OnlyText,
+    /// `KEY_AND_BLOCK_STYLE`: the trimmed value is `|`.
+    BlockStyle,
+    /// `KEY_AND_FLOW_SEQUENCE`: the value is `[...]`, read by `toList`.
+    FlowSequence(Vec<String>),
+    /// Every other type (keys, values, list items, a plain dash).
+    Other,
+}
+
+/// What `YamlLine.build` (52-97) reads from one line whose TABs are already
+/// four spaces (54).
+struct YamlLine {
+    kind: YamlLineKind,
+    /// `getIndent()`: leading spaces, plus 2 for a `- ` list item, plus 1
+    /// for a plain dash.
+    indent: usize,
+    /// Leading spaces of the line.
+    spaces: usize,
+    list_item: bool,
+    /// `unquote(rawKey)` for the keyed kinds.
+    key: String,
+}
+
+impl YamlLine {
+    fn build(line: &str) -> Self {
+        let spaces = line.len() - line.trim_start_matches(' ').len();
+        let mut trimmed = remove_yaml_comment(java_trim(&line[spaces..]));
+        let mut line_info = YamlLine {
+            kind: YamlLineKind::Other,
+            indent: spaces,
+            spaces,
+            list_item: false,
+            key: String::new(),
+        };
+        if trimmed.is_empty() {
+            line_info.kind = YamlLineKind::Empty;
+            line_info.indent = 0;
+            return line_info;
         }
-        out.push('\n');
+        if trimmed == "-" {
+            line_info.indent = spaces + 1;
+            return line_info;
+        }
+        if let Some(rest) = trimmed.strip_prefix("- ") {
+            line_info.list_item = true;
+            line_info.indent = spaces + 2;
+            trimmed = rest;
+        }
+        let Some(colon) = find_colon_separator(trimmed) else {
+            if !line_info.list_item {
+                line_info.kind = YamlLineKind::OnlyText;
+            }
+            return line_info;
+        };
+        line_info.key = unquote(java_trim(&trimmed[..colon])).to_string();
+        let raw_value = java_trim(&trimmed[colon + 1..]);
+        if raw_value == "|" {
+            line_info.kind = YamlLineKind::BlockStyle;
+        } else if raw_value.starts_with('[') && raw_value.ends_with(']') && raw_value.len() >= 2 {
+            line_info.kind = YamlLineKind::FlowSequence(flow_sequence_values(
+                &raw_value[1..raw_value.len() - 1],
+            ));
+        }
+        line_info
     }
+
+    /// The line's indentation and list prefix, rebuilt for serde.
+    fn prefix(&self) -> String {
+        format!(
+            "{}{}",
+            " ".repeat(self.spaces),
+            if self.list_item { "- " } else { "" }
+        )
+    }
+}
+
+/// `YamlLine.removeYamlComment` (199-221): a leading `#`, or ` #` outside
+/// quotes, starts a comment.
+fn remove_yaml_comment(text: &str) -> &str {
+    if text.starts_with('#') {
+        return "";
+    }
+    let bytes = text.as_bytes();
+    let mut quote = None;
+    for (at, ch) in text.char_indices() {
+        if ch == '\'' || ch == '"' {
+            match quote {
+                None => quote = Some(ch),
+                Some(open) if open == ch => quote = None,
+                Some(_) => {}
+            }
+        }
+        if quote.is_none() && ch == ' ' && bytes.get(at + 1) == Some(&b'#') {
+            return &text[..at];
+        }
+    }
+    text
+}
+
+/// `YamlLine.findColonSeparator` (101-115): the first `:` outside quotes.
+fn find_colon_separator(text: &str) -> Option<usize> {
+    let mut quote = None;
+    for (at, ch) in text.char_indices() {
+        match quote {
+            Some(open) if ch == open => quote = None,
+            Some(_) => {}
+            None if ch == '"' || ch == '\'' => quote = Some(ch),
+            None if ch == ':' => return Some(at),
+            None => {}
+        }
+    }
+    None
+}
+
+/// `YamlLine.unquote` (180-191): one pair of matching quotes.
+fn unquote(text: &str) -> &str {
+    let bytes = text.as_bytes();
+    if bytes.len() >= 2
+        && ((bytes[0] == b'"' && bytes[bytes.len() - 1] == b'"')
+            || (bytes[0] == b'\'' && bytes[bytes.len() - 1] == b'\''))
+    {
+        &text[1..text.len() - 1]
+    } else {
+        text
+    }
+}
+
+/// `YamlLine.toList` (117-170): the fields of a flow sequence's inside.
+/// Commas outside quotes separate fields; a field that starts (after
+/// spaces) with a quote keeps its quoted text, other fields are trimmed; a
+/// backslash appends the next character literally, inside or outside
+/// quotes; the last field is always added.
+fn flow_sequence_values(inner: &str) -> Vec<String> {
+    let mut result = Vec::new();
+    let mut current = String::new();
+    let mut quote = None;
+    let mut quoted_field = false;
+    let mut chars = inner.chars();
+    while let Some(ch) = chars.next() {
+        if let Some(open) = quote {
+            if ch == '\\' {
+                if let Some(next) = chars.next() {
+                    current.push(next);
+                }
+            } else if ch == open {
+                quote = None;
+            } else {
+                current.push(ch);
+            }
+        } else if !quoted_field && java_trim(&current).is_empty() && (ch == '\'' || ch == '"') {
+            quote = Some(ch);
+            quoted_field = true;
+            current.clear();
+        } else if ch == ',' {
+            result.push(field_text(&current, quoted_field));
+            current.clear();
+            quoted_field = false;
+        } else if ch == '\\' {
+            if let Some(next) = chars.next() {
+                current.push(next);
+            }
+        } else {
+            current.push(ch);
+        }
+    }
+    result.push(field_text(&current, quoted_field));
+    result
+}
+
+fn field_text(field: &str, quoted: bool) -> String {
+    if quoted { field } else { java_trim(field) }.to_string()
+}
+
+/// A YAML single-quoted scalar holding `text` literally.
+fn single_quoted(text: &str) -> String {
+    format!("'{}'", text.replace('\'', "''"))
+}
+
+/// A YAML double-quoted scalar holding `text` literally (a block value may
+/// hold line breaks, TABs and backslashes).
+fn double_quoted(text: &str) -> String {
+    let mut out = String::with_capacity(text.len() + 2);
+    out.push('"');
+    for ch in text.chars() {
+        match ch {
+            '\\' => out.push_str("\\\\"),
+            '"' => out.push_str("\\\""),
+            '\n' => out.push_str("\\n"),
+            '\t' => out.push_str("\\t"),
+            '\r' => out.push_str("\\r"),
+            c if (c as u32) < 0x20 || (0x7F..=0x9F).contains(&(c as u32)) => {
+                out.push_str(&format!("\\x{:02X}", c as u32));
+            }
+            c => out.push(c),
+        }
+    }
+    out.push('"');
     out
+}
+
+/// PlantUML reads YAML with its own parser (`yaml/parser/YamlParser`,
+/// `YamlLine`); serde_yml reads what this pass hands it. The lines Java
+/// reads differently from YAML are rewritten so that serde builds Java's
+/// value:
+///
+/// * every line's TABs are four spaces (`YamlLine.build` 54) before it is
+///   read, except the raw body lines of a block;
+/// * a `key: |` line and its body become `key: "<value>"`, the value being
+///   `YamlParser.getBlockStyleString` (132-149): the body runs until a line
+///   that is neither text without a key nor empty and is indented at most
+///   as the key; each body line is `cleanBlockStyle`'s trim (151-154) of the
+///   raw line followed by a line break;
+/// * a `key: [...]` line takes `toList`'s fields as strings (all YAML
+///   values are strings in Java, `MonomorphToJson`);
+/// * a backslash in a quoted key or value is literal (`unquote` strips one
+///   pair of quotes; see [`keep_quoted_backslashes_in_line`]).
+///
+/// Folded `key: >` blocks are left to serde (Java throws `wip4` there).
+fn java_yaml_lines(content: &str) -> String {
+    let lines: Vec<&str> = content.split('\n').collect();
+    let mut out: Vec<String> = Vec::with_capacity(lines.len());
+    let mut folded_indent: Option<usize> = None;
+    let mut index = 0;
+    while index < lines.len() {
+        let raw = lines[index];
+        index += 1;
+        if let Some(block) = folded_indent {
+            let indent = raw.len() - raw.trim_start().len();
+            if raw.trim().is_empty() || indent > block {
+                out.push(raw.to_string());
+                continue;
+            }
+            folded_indent = None;
+        }
+        let line = raw.replace('\t', "    ");
+        let yaml = YamlLine::build(&line);
+        match yaml.kind {
+            YamlLineKind::BlockStyle => {
+                let mut value = String::new();
+                while index < lines.len() {
+                    let body = YamlLine::build(&lines[index].replace('\t', "    "));
+                    if !matches!(body.kind, YamlLineKind::OnlyText | YamlLineKind::Empty)
+                        && body.indent <= yaml.indent
+                    {
+                        break;
+                    }
+                    value.push_str(java_trim(lines[index]));
+                    value.push('\n');
+                    index += 1;
+                }
+                out.push(format!(
+                    "{}{}: {}",
+                    yaml.prefix(),
+                    single_quoted(&yaml.key),
+                    double_quoted(&value)
+                ));
+            }
+            YamlLineKind::FlowSequence(ref values) => {
+                let items: Vec<String> = values.iter().map(|v| single_quoted(v)).collect();
+                out.push(format!(
+                    "{}{}: [{}]",
+                    yaml.prefix(),
+                    single_quoted(&yaml.key),
+                    items.join(", ")
+                ));
+            }
+            _ => {
+                if line.trim().ends_with(": >") {
+                    folded_indent = Some(line.len() - line.trim_start().len());
+                }
+                if line.trim_start().starts_with('#') {
+                    out.push(line);
+                } else {
+                    out.push(keep_quoted_backslashes_in_line(&line));
+                }
+            }
+        }
+    }
+    out.join("\n")
 }
 
 /// PlantUML's YAML parser (`yaml/parser/YamlLine.build`) splits a line's key
@@ -84,39 +360,6 @@ fn keep_block_line_breaks(content: &str) -> String {
 /// surrounding quotes (`unquote`): a backslash in a quoted key or value is
 /// literal. serde_yml would decode it in a double-quoted scalar, so such a
 /// scalar is handed to serde single-quoted with the same characters.
-/// Flow sequences (`[...]`) are left to serde.
-fn keep_quoted_backslashes(content: &str) -> std::borrow::Cow<'_, str> {
-    if !content.contains('\\') {
-        return std::borrow::Cow::Borrowed(content);
-    }
-    let mut out = String::with_capacity(content.len() + 8);
-    // Lines of a block scalar ('key: |' / 'key: >') are text, not scalars.
-    let mut block_indent: Option<usize> = None;
-    for (index, line) in content.split('\n').enumerate() {
-        if index > 0 {
-            out.push('\n');
-        }
-        let indent = line.len() - line.trim_start().len();
-        if let Some(block) = block_indent {
-            if line.trim().is_empty() || indent > block {
-                out.push_str(line);
-                continue;
-            }
-            block_indent = None;
-        }
-        let trimmed = line.trim();
-        if trimmed.ends_with(": |") || trimmed.ends_with(": >") {
-            block_indent = Some(indent);
-        }
-        if trimmed.starts_with('#') {
-            out.push_str(line);
-        } else {
-            out.push_str(&keep_quoted_backslashes_in_line(line));
-        }
-    }
-    std::borrow::Cow::Owned(out)
-}
-
 fn keep_quoted_backslashes_in_line(line: &str) -> String {
     let mut start = line.len() - line.trim_start().len();
     if line[start..].starts_with("- ") {
@@ -234,17 +477,46 @@ fn insert_missing_commas(content: &str) -> String {
 ///
 /// The caller passes lines that have already been through the TIM preprocessor,
 /// which means `@start*` / `@end*` markers have already been stripped.
-/// This function separates `#highlight` directives from the data content.
+/// This function separates `#highlight` directives from the data content and
+/// applies `StyleExtractor` (59-98): lines Java's `trim()` empties are
+/// skipped, and before the first data line a `skinparam` line (with its
+/// `{` ... `}` block), `!assume`, `!pragma` and `hide` lines are consumed.
+/// Neither diagram factory applies such a skinparam (only `handwritten` is
+/// read, and not ported here).
 fn extract_body(lines: &[String]) -> (Vec<Vec<String>>, String) {
     let mut highlights: Vec<Vec<String>> = Vec::new();
     let mut body: Vec<&str> = Vec::new();
+    // `list.size() <= 1`: only the @start line is in StyleExtractor's list.
+    let mut data_seen = false;
 
-    for line in lines {
+    let mut iter = lines.iter();
+    while let Some(line) = iter.next() {
         let trimmed = line.trim();
-        // `StyleExtractor` (59-64) skips every line Java's `trim()` empties.
-        if line.chars().all(|c| c <= ' ') {
+        let java = java_trim(line);
+        if java.is_empty() {
             continue;
         }
+        if !data_seen {
+            if java.starts_with("skinparam ") {
+                if java.contains('{') {
+                    let mut current = line;
+                    while java_trim(current) != "}" {
+                        match iter.next() {
+                            Some(next) => current = next,
+                            None => break,
+                        }
+                    }
+                }
+                continue;
+            }
+            if ["!assume ", "!pragma ", "hide "]
+                .iter()
+                .any(|prefix| java.starts_with(prefix))
+            {
+                continue;
+            }
+        }
+        data_seen = true;
         if let Some(rest) = trimmed.strip_prefix("#highlight") {
             let parts: Vec<String> = rest
                 .split('/')
@@ -370,6 +642,58 @@ mod tests {
         let shown = format!("{:?}", diagram.root);
         assert!(shown.contains(r#"Moss\nFern\n""#), "{shown}");
         assert!(shown.contains(r#"Reed\n""#), "{shown}");
+    }
+
+    #[test]
+    fn yaml_block_body_is_get_block_style_string_with_trimmed_lines() {
+        let lines = |text: &str| text.lines().map(str::to_string).collect::<Vec<_>>();
+        // A body line ending ': |' is body text (getBlockStyleString), and
+        // every body line is trimmed (cleanBlockStyle).
+        let diagram = parse_yaml_diagram(&lines(
+            "tide: |\n  Kelp: |\n    Moss\n  Reed\nwrack:\n  deep: |\n      a: |\n      b\n  ebb: q",
+        ))
+        .unwrap();
+        let shown = format!("{:?}", diagram.root);
+        assert!(shown.contains(r#"Kelp: |\nMoss\nReed\n""#), "{shown}");
+        assert!(shown.contains(r#"a: |\nb\n""#), "{shown}");
+        assert!(!shown.contains("|+"), "{shown}");
+        assert!(shown.contains(r#"key: Some("ebb")"#), "{shown}");
+        // Text lines at any indent stay in the block; a key line at the
+        // block's indent ends it. Raw TABs inside a body line are kept.
+        let diagram =
+            parse_yaml_diagram(&lines("note: |\n  one\tx\nloose text\nafter: x")).unwrap();
+        let shown = format!("{:?}", diagram.root);
+        assert!(shown.contains(r#"one\tx\nloose text\n""#), "{shown}");
+    }
+
+    #[test]
+    fn yaml_line_tabs_are_four_spaces_and_flow_sequences_follow_to_list() {
+        let lines = |text: &str| text.lines().map(str::to_string).collect::<Vec<_>>();
+        let diagram = parse_yaml_diagram(&lines(
+            "k: a\tb\nm: \tlead\nf: [a\\nb, \"c\\\\d\", e\\tf, 1.50, 'x, y']",
+        ))
+        .unwrap();
+        let shown = format!("{:?}", diagram.root);
+        assert!(shown.contains(r#"val: "a    b""#), "{shown}");
+        assert!(shown.contains(r#"val: "lead""#), "{shown}");
+        for item in ["anb", r"c\\d", "etf", "1.50", "x, y"] {
+            assert!(
+                shown.contains(&format!("val: \"{item}\"")),
+                "{item}: {shown}"
+            );
+        }
+    }
+
+    #[test]
+    fn style_extractor_consumes_preamble_skinparams() {
+        let lines = |text: &str| text.lines().map(str::to_string).collect::<Vec<_>>();
+        let yaml = parse_yaml_diagram(&lines("skinparam tabSize 4\nskinparam x {\n  y z\n}\nk: v"));
+        assert!(format!("{:?}", yaml.unwrap().root).contains(r#"val: "v""#));
+        let json = parse_json_diagram(&lines("hide empty\nskinparam tabSize 4\n{\"k\": 1}"));
+        assert!(json.is_ok(), "{json:?}");
+        // After the first data line, a skinparam line is data (Java: a
+        // syntax error).
+        assert!(parse_yaml_diagram(&lines("k: v\nskinparam tabSize 4")).is_err());
     }
 
     #[test]
