@@ -1,0 +1,558 @@
+{
+ "schema_version": 1,
+ "cases": [
+  {
+   "name": "m8b_lucida_arabic_digit",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN"
+   ]
+  },
+  {
+   "name": "m8b_lucida_arabic_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_verdana_arabic_digit",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN"
+   ]
+  },
+  {
+   "name": "m8b_verdana_arabic_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_verdana_heb_alm_digit",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN",
+    "ALM"
+   ]
+  },
+  {
+   "name": "m8b_verdana_heb_alm_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN",
+    "ALM",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_lucida_thai_alm_digit",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN",
+    "ALM"
+   ]
+  },
+  {
+   "name": "m8b_lucida_thai_alm_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN",
+    "ALM",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_lucida_thai_arabic_digit",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN"
+   ]
+  },
+  {
+   "name": "m8b_lucida_thai_arabic_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_verdana_heb_alm_es",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN",
+    "W4"
+   ]
+  },
+  {
+   "name": "m8b_verdana_heb_alm_es_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN",
+    "W4",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_helv_arabic_digit",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN"
+   ]
+  },
+  {
+   "name": "m8b_helv_arabic_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "AL+EN",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_lucida_rle_digit",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLE"
+   ]
+  },
+  {
+   "name": "m8b_lucida_rle_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLE",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_lucida_rlo_digit",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLO"
+   ]
+  },
+  {
+   "name": "m8b_lucida_rlo_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLO",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_verdana_lro_space",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "LRO"
+   ]
+  },
+  {
+   "name": "m8b_verdana_lro_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "LRO",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_verdana_lre_hebrew",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "LRE"
+   ]
+  },
+  {
+   "name": "m8b_verdana_lre_hebrew_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "LRE",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_lucida_rli_with_hebrew",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLI"
+   ]
+  },
+  {
+   "name": "m8b_lucida_rli_with_hebrew_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLI",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_lucida_rli_alone",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLI",
+    "requiresBidi"
+   ]
+  },
+  {
+   "name": "m8b_lucida_rli_alone_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLI",
+    "requiresBidi",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_lucida_fsi_hebrew",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "FSI"
+   ]
+  },
+  {
+   "name": "m8b_lucida_fsi_hebrew_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "FSI",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_verdana_rlm_deva",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLM"
+   ]
+  },
+  {
+   "name": "m8b_verdana_rlm_deva_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "RLM",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_verdana_heb_bracket_nsm",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "NSM-after-bracket"
+   ]
+  },
+  {
+   "name": "m8b_verdana_heb_bracket_nsm_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "NSM-after-bracket",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_verdana_heb_bracket_latin",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0"
+   ]
+  },
+  {
+   "name": "m8b_verdana_heb_bracket_latin_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "N0",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_verdanabold_heb_tail_comma",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "CS"
+   ]
+  },
+  {
+   "name": "m8b_verdanabold_heb_tail_comma_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "CS",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_verdana_heb_digits_tail",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "EN"
+   ]
+  },
+  {
+   "name": "m8b_verdana_heb_digits_tail_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "EN",
+    "control"
+   ]
+  },
+  {
+   "name": "m8b_arial_heb_tail_space",
+   "intended_valid": true,
+   "axes": [
+    "bidi"
+   ]
+  },
+  {
+   "name": "m8b_arial_heb_tail_space_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "bidi",
+    "control"
+   ]
+  },
+  {
+   "name": "m8g_cnew_deva",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "gsub-latn",
+    "indic"
+   ]
+  },
+  {
+   "name": "m8g_cnew_deva_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "gsub-latn",
+    "indic",
+    "control"
+   ]
+  },
+  {
+   "name": "m8g_cnew_mymr",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "gsub-latn",
+    "myanmar"
+   ]
+  },
+  {
+   "name": "m8g_cnew_mymr_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "gsub-latn",
+    "myanmar",
+    "control"
+   ]
+  },
+  {
+   "name": "m8g_cnew_tibt",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "gsub-latn",
+    "use"
+   ]
+  },
+  {
+   "name": "m8g_cnew_tibt_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "gsub-latn",
+    "use",
+    "control"
+   ]
+  },
+  {
+   "name": "m8g_cnew_khmer",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "khmer"
+   ]
+  },
+  {
+   "name": "m8g_cnew_khmer_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "khmer",
+    "control"
+   ]
+  },
+  {
+   "name": "m8g_cnew_hangul",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "hangul"
+   ]
+  },
+  {
+   "name": "m8g_cnew_hangul_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "hangul",
+    "control"
+   ]
+  },
+  {
+   "name": "m8g_cnew_arabic",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "arabic",
+    "bidi"
+   ]
+  },
+  {
+   "name": "m8g_cnew_arabic_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "arabic",
+    "bidi",
+    "control"
+   ]
+  },
+  {
+   "name": "m8g_cnew_syriac",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "syriac",
+    "bidi"
+   ]
+  },
+  {
+   "name": "m8g_cnew_syriac_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "syriac",
+    "bidi",
+    "control"
+   ]
+  },
+  {
+   "name": "m8g_cnew_mc_after_mark",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "Mc"
+   ]
+  },
+  {
+   "name": "m8g_cnew_mc_after_mark_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "Mc",
+    "control"
+   ]
+  },
+  {
+   "name": "m8g_cnewbold_deva",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "bold"
+   ]
+  },
+  {
+   "name": "m8g_cnewbold_deva_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "bold",
+    "control"
+   ]
+  },
+  {
+   "name": "m8g_cnew_size13",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "size"
+   ]
+  },
+  {
+   "name": "m8g_cnew_size13_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "size",
+    "control"
+   ]
+  },
+  {
+   "name": "m8g_arial_deva",
+   "intended_valid": true,
+   "axes": [
+    "gdef-classes",
+    "control-face"
+   ]
+  },
+  {
+   "name": "m8g_arial_deva_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "gdef-classes",
+    "control-face",
+    "control"
+   ]
+  },
+  {
+   "name": "m8g_cnew_sequence",
+   "intended_valid": true,
+   "axes": [
+    "gdef-blocklist",
+    "sequence"
+   ]
+  }
+ ]
+}

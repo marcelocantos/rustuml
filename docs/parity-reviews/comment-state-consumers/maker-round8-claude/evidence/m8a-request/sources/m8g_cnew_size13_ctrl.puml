@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName "Courier New"
+skinparam defaultFontSize 13
+class "Pier k" as K
+@enduml

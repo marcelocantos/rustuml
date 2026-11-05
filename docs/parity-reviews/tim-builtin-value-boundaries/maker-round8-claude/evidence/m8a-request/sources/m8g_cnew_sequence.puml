@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Courier New
+participant "Dock x𝅧" as A
+A -> A : ok
+@enduml
