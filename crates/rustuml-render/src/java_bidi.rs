@@ -130,7 +130,8 @@ pub(crate) struct Paragraph {
     pub(crate) direction: Direction,
     /// The (first) paragraph level, resolved when contextual.
     pub(crate) para_level: u8,
-    /// The level of each UTF-16 unit as `BidiUtils.getLevels` returns it.
+    /// The level of each UTF-16 unit as `getLevelAt` returns it
+    /// (`BidiLine.getLevelAt` 266-273: per paragraph when not MIXED).
     pub(crate) levels: Vec<u8>,
 }
 
@@ -138,6 +139,18 @@ impl Paragraph {
     /// `BidiBase.isLeftToRight` (4354-4358).
     pub(crate) fn is_left_to_right(&self) -> bool {
         self.direction == Direction::Ltr && self.para_level & 1 == 0
+    }
+
+    /// `BidiUtils.getLevels` (54-82): each logical run filled with its run
+    /// level. `BidiLine.getRuns` (475-575) makes one run at the first
+    /// paragraph's `paraLevel` when the direction is not MIXED, even over
+    /// several paragraphs; a MIXED paragraph object has `trailingWSStart ==
+    /// length` (`setPara` 3593), so its runs are its levels (559-566).
+    pub(crate) fn run_levels(&self) -> Vec<u8> {
+        match self.direction {
+            Direction::Mixed => self.levels.clone(),
+            Direction::Ltr | Direction::Rtl => vec![self.para_level; self.levels.len()],
+        }
     }
 }
 
@@ -178,7 +191,7 @@ pub(crate) fn text_line_levels(units: &[u16]) -> Option<Vec<u8>> {
         return None;
     }
     let paragraph = set_para(units, LEVEL_DEFAULT_LTR);
-    (!paragraph.is_left_to_right()).then_some(paragraph.levels)
+    (!paragraph.is_left_to_right()).then(|| paragraph.run_levels())
 }
 
 /// `BidiBase.Opening`.
@@ -1473,5 +1486,89 @@ mod tests {
         // The 31 lines where JDK's BidiBase departs from UAX #9 (see
         // conformance_sample).
         assert_eq!(failed, 31);
+    }
+
+    /// SHA256 of `tools/font-chain-reference/java-bidi-oracle/SHA256SUMS`.
+    const JAVA_BIDI_ORACLE_SHA256SUMS_SHA256: &str =
+        "550486611b44c6a2af7c92137e7e1847f2b747d1286e7b471f72c414b0866d5e";
+
+    /// Oracle: `java.text.Bidi` of the reference JVM (OpenJDK 21.0.5 on
+    /// Monkey Man) over 93,786 stored inputs (see the directory's README):
+    /// `requiresBidi`, `isLeftToRight`, `getBaseLevel`, every `getLevelAt`
+    /// and the run levels `BidiUtils.getLevels` returns, which
+    /// [`text_line_levels`] must equal for `DIRECTION_DEFAULT_LEFT_TO_RIGHT`
+    /// whenever `TextLine` uses them.
+    #[test]
+    fn java_bidi_oracle() {
+        use sha2::{Digest, Sha256};
+        use std::io::Read;
+        let hex = |bytes: &[u8]| -> String {
+            Sha256::digest(bytes)
+                .iter()
+                .map(|b| format!("{b:02x}"))
+                .collect()
+        };
+        let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../../tools/font-chain-reference/java-bidi-oracle");
+        let sums = std::fs::read(dir.join("SHA256SUMS")).unwrap();
+        assert_eq!(hex(&sums), JAVA_BIDI_ORACLE_SHA256SUMS_SHA256);
+        let data = std::fs::read(dir.join("java-bidi-levels.txt.gz")).unwrap();
+        assert!(
+            String::from_utf8(sums)
+                .unwrap()
+                .contains(&format!("{}  java-bidi-levels.txt.gz\n", hex(&data)))
+        );
+        let mut text = String::new();
+        flate2::read::GzDecoder::new(&data[..])
+            .read_to_string(&mut text)
+            .unwrap();
+        let joined = |levels: &[u8]| {
+            levels
+                .iter()
+                .map(u8::to_string)
+                .collect::<Vec<_>>()
+                .join(" ")
+        };
+        let (mut total, mut failures) = (0, Vec::new());
+        for line in text.lines().filter(|line| !line.starts_with('#')) {
+            let (input, java) = line.split_once('|').unwrap();
+            let (direction, hexes) = input.split_once(';').unwrap();
+            let units: Vec<u16> = hexes
+                .split_whitespace()
+                .map(|h| u16::from_str_radix(h, 16).unwrap())
+                .collect();
+            let paragraph = set_para(
+                &units,
+                match direction {
+                    "0" => 0,
+                    "1" => 1,
+                    _ => LEVEL_DEFAULT_LTR,
+                },
+            );
+            let required = requires_bidi(&units);
+            let ltr = paragraph.is_left_to_right();
+            let runs = paragraph.run_levels();
+            let rust = format!(
+                "{};{};{};{};{}",
+                u8::from(required),
+                u8::from(ltr),
+                paragraph.para_level,
+                joined(&paragraph.levels),
+                joined(&runs)
+            );
+            let text_line_ok =
+                direction != "D" || text_line_levels(&units) == (required && !ltr).then_some(runs);
+            total += 1;
+            if rust != java || !text_line_ok {
+                failures.push(format!("{input}\n  java {java}\n  rust {rust}"));
+            }
+        }
+        assert_eq!(total, 93_786);
+        assert!(
+            failures.is_empty(),
+            "{} of {total} differ from Java:\n{}",
+            failures.len(),
+            failures[..failures.len().min(8)].join("\n")
+        );
     }
 }
