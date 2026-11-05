@@ -1,0 +1,292 @@
+{
+ "schema_version": 1,
+ "packet": "shared-SVG / comment-state / TIM round 3 (maker; not a review)",
+ "maker": "Claude Code (claude-opus-5-5) in T3 Code; no subagents; Java never run locally",
+ "branch": "maker/shared-svg-round3-claude",
+ "start": "dc9d6136b13b51fc859a8366daededf44b9fe9fb (round-2 review on maker tip 6c52f2cfd)",
+ "merge": "89fb6e93eff0577887251a66224492dcf028734e (git merge --no-ff parity-recovery-2026-11-03, tip 6617e48b8; code identical to 9834a7194)",
+ "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "binaries": {
+  "base": "release build of git archive 6617e48b8 (CARGO_TARGET_DIR private, -j 6)",
+  "round2_tip": "6c52f2cfd release binary from the round-2 checker cache",
+  "tip": "release build of 09e3c5257; c90791130 changes only a comment and two unit-test strings"
+ },
+ "commits": {
+  "obligation 1 (surrogate at SVG export)": {
+   "account": "5330078db29a335612d8f41f706bcffd54330cfe",
+   "draft": "ed3d6ed933946eefc957cb66cb3735d25656b75f",
+   "cleanup": "c9079113043bc2a800cee55b30a8604ec7d6dedf (decimal-literal-free comment and tests)",
+   "account_file": "docs/parity-reviews/tim-builtin-value-boundaries/maker-round3-claude/serializer-surrogate-account.json"
+  },
+  "obligations 2 and 3 (image notes; image leaf corners and printGroups paint order)": {
+   "account": "e9baaa59191d0175798002c31282e8513d61d76b",
+   "draft": "4daea42ecc9518f9ff021ed867fc1e910598eb7c",
+   "addendum": "888a16bd0a1cbf281834bfdb76162629281c1b5a",
+   "follow_up_draft": "09e3c52570d1db81e3752e1cbee8b13dae9e7f79 (border points keep the rounded circle center)"
+  },
+  "obligation 4 (Basin/Lock and rh_deep_depth3 node order)": {
+   "account": "5cb1c89bc14e06186a5ac0f5a1a6579322d07262",
+   "draft": "1f610870894483876299340058a6c4ae7d7e812d"
+  },
+  "obligation 5 (cluster account amendment)": {
+   "amendment": "9c4d4e420b4004f36d769c63943350a635358e8b"
+  }
+ },
+ "process_disclosure": [
+  "Every account commit precedes its draft commit and is docs-only.",
+  "Obligation 4: the one-line with_plantuml_svek_node_order change was first tried in the working tree (rh_deep_depth3 and history_depth2_crossing matched) before its account was written; the account was then committed ahead of the code (one second apart).",
+  "The border-point addendum follows a measurement of 4daea42ec. An experimental switch of render_non_autarkic_root_clusters to corner positions (draft 4, never committed) moved 26 outputs away from Java's exact positions and was reverted; only the border-point rule was committed."
+ ],
+ "obligations": {
+  "1_lone_surrogate": {
+   "status": "implemented; AW cases match Java; fresh probes relayed (pending)",
+   "java_trace": "SvgGraphics.getTransformer (us-ascii) -> TransformerImpl.transformIdentity -> DOM2TO.parse (characters per text node, attributes by name, comment) -> ToStream.outputCharacters/writeAttrString -> accumDefaultEscape 1693-1781 with m_highSurrogate (held at end of node, joined by the next checked low unit, throwIOE otherwise, XMLChar.isInvalid for a lone low unit, never flushed); comments through StreamEncoder '?'; UgDiagram.exportDiagram crash (T14.20).",
+   "aw": {
+    "surrogate_high_class": "MATCH (exit 0, was exit 1)",
+    "surrogate_upper_sequence": "exit 1 'An invalid XML character (Unicode: 0xdc9c) ...' (Java crash, same message)",
+    "surrogate_activity_label": "exit 1 'Invalid UTF-16 surrogate detected: d83d 74 ?' (Java crash, same message)",
+    "surrogate_unused_variable": "MATCH",
+    "surrogate_rejoined_pair": "MATCH",
+    "surrogate_in_comment_line": "MATCH"
+   },
+   "standing_crash_cases": {
+    "tim-builtin-typed-contracts/checker4_surrogate_projection": "exit 1 'Invalid UTF-16 surrogate detected: d83e 20 ?' (the Java golden's message)",
+    "tim-builtin-value-boundaries/checker5/surrogate_display_residue": "exit 1 'An invalid XML character (Unicode: 0xde80) ...'"
+   },
+   "unit_test": "unpaired_surrogate_in_diagram_text_is_an_export_failure replaced by preprocess unpaired_units_reach_the_line_as_java_utf16 and svg_export::tests (six serializer cases, including surrogate_high_class's drop)",
+   "residue": [
+    "user literals in U+10F800..U+10FFFF are read as carried units",
+    "one-em width rule rests on one Java datum (size 14 plain); probe sur_class_high_bold18 relayed",
+    "PNG/PDF/EPS unchanged",
+    "class link titles do not decode <U+XXXX> at all (pre-existing; probe sur_link_title_escape relayed)"
+   ]
+  },
+  "2_image_notes": {
+   "status": "AW rc_inner_note_autarkic MATCH (was DIFF 28); notes painted after the region's leaves (creation-order residue, probe relayed)",
+   "java_trace": "GroupMakerState.getImage/createGeneralImageBuilder (leafs incl. the note, getPureInnerLinks) -> GraphvizImageBuilder.isOpalisable/onlyOneLink -> EntityImageNote.setOpaleLine"
+  },
+  "3_nested_clusters_in_image": {
+   "status": "AW rc_entry_inside_autarkic_depth3 MATCH (was DIFF 11)",
+   "java_trace": "SvekResult.drawU (clusters, then Bibliotekon.allNodes at SvekNode.getMinX two-decimal corners, then edges); GraphvizImageBuilder.printGroups/printGroup preorder then getUnpackagedEntities",
+   "residue": [
+    "root canvas 1px (173x386 vs 174x385; 171x319 vs 171x318) not compared by the strict comparator and present before this round"
+   ]
+  },
+  "4_basin_lock_order": {
+   "status": "fixed: AR/registered history_depth2_crossing and AW rh_deep_depth3 MATCH (were DIFF 23 and 27)",
+   "java_trace": "DotStringFactory.createDotString -> Cluster.printCluster2 (own nodes before child clusters) -> Graphviz node creation order"
+  },
+  "5_cluster_account": {
+   "status": "amended in 9c4d4e420: ClusterDotString.printInternal/isThereALinkFromOrToGroup (special point) and printRanks (source/sink ranks), with the untested note-link gap (probe note_link_only_to_group relayed)"
+  }
+ },
+ "measurement": {
+  "sweep": {
+   "sources": 16441,
+   "goldens": 12550,
+   "perturbations": 3891,
+   "note": "16,441 = the 16,402-source set plus 39 sources the round-2 checker registered; every case run from its recorded cwd with RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 and PLANTUML_STDLIB set"
+  },
+  "base_to_tip": {
+   "strict_matches": [
+    12909,
+    13486
+   ],
+   "events": {
+    "bytes_changed": 1508,
+    "error_now_renders_valid_ref": 3,
+    "gained_match": 580,
+    "lost_match_get_provenance": 3,
+    "panic_removed": 4,
+    "rejection_gained": 71
+   },
+   "lost_match": 0,
+   "lost_rejection": 0,
+   "new_valid_input_error": 0,
+   "new_panic": 0,
+   "lost_match_get_provenance": [
+    "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+   ],
+   "golden_strict_matches": [
+    11181,
+    11180
+   ],
+   "golden_gains": [
+    "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+    "test-diagrams/golden/state/state_history_shallow.puml"
+   ]
+  },
+  "round2_tip_to_tip": {
+   "strict_matches": [
+    13479,
+    13486
+   ],
+   "events": {
+    "bytes_changed": 177,
+    "error_now_renders_valid_ref": 1,
+    "gained_match": 7
+   },
+   "gained": [
+    "test-diagrams/golden/state/state_history_shallow.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_entry_inside_autarkic_depth3.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_inner_note_autarkic.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rh_deep_depth3.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/history_depth2_crossing.puml",
+    "test-diagrams/perturbations/state-recursive-group-simplification/review3_nested_live_cluster_leaves_around_multiple_solved_images.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+   ],
+   "lost_match": 0,
+   "lost_rejection": 0,
+   "new_valid_input_error": 0,
+   "new_panic": 0,
+   "bytes_changed_families": "176 STATE outputs plus surrogate_high_class (CLASS)",
+   "exact_position_agreement_over_changed_java_valid_outputs": "2319 -> 4327 of 4748; 163 closer, 2 farther (quark_reuse_crossing, rc_quark_reuse_renamed: inherit a pre-existing sub-pixel cluster drift; both still strict MATCH), 11 same"
+  },
+  "comment_lists": {
+   "base_to_tip": {
+    "exact": [
+     14328,
+     15051
+    ],
+    "gained": 725,
+    "lost": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+     "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+    ],
+    "lost_note": "both inherited from earlier rounds (round-2 review)"
+   },
+   "round2_tip_to_tip": {
+    "exact": [
+     15050,
+     15051
+    ],
+    "gained": [
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+    ],
+    "lost": []
+   }
+  },
+  "cohorts": {
+   "AW": {
+    "cases": 45,
+    "java_valid": 39,
+    "before": {
+     "strict_match_valid": 6,
+     "comments_exact_valid": 20,
+     "rejected_invalid": 1,
+     "errors_on_valid": [],
+     "panics": [
+      "surrogate_upper_sequence"
+     ]
+    },
+    "prev": {
+     "strict_match_valid": 26,
+     "comments_exact_valid": 36,
+     "rejected_invalid": 6,
+     "errors_on_valid": [
+      "surrogate_high_class"
+     ],
+     "panics": []
+    },
+    "tip": {
+     "strict_match_valid": 30,
+     "comments_exact_valid": 37,
+     "rejected_invalid": 6,
+     "errors_on_valid": [],
+     "panics": []
+    }
+   },
+   "AU": {
+    "cases": 32,
+    "java_valid": 29,
+    "before": {
+     "strict_match_valid": 6,
+     "comments_exact_valid": 22,
+     "rejected_invalid": 0,
+     "errors_on_valid": [],
+     "panics": []
+    },
+    "prev": {
+     "strict_match_valid": 21,
+     "comments_exact_valid": 29,
+     "rejected_invalid": 0,
+     "errors_on_valid": [],
+     "panics": []
+    },
+    "tip": {
+     "strict_match_valid": 21,
+     "comments_exact_valid": 29,
+     "rejected_invalid": 0,
+     "errors_on_valid": [],
+     "panics": []
+    }
+   },
+   "AR": {
+    "cases": 20,
+    "java_valid": 20,
+    "before": {
+     "strict_match_valid": 6,
+     "comments_exact_valid": 13,
+     "rejected_invalid": 0,
+     "errors_on_valid": [],
+     "panics": []
+    },
+    "prev": {
+     "strict_match_valid": 16,
+     "comments_exact_valid": 19,
+     "rejected_invalid": 0,
+     "errors_on_valid": [],
+     "panics": []
+    },
+    "tip": {
+     "strict_match_valid": 17,
+     "comments_exact_valid": 19,
+     "rejected_invalid": 0,
+     "errors_on_valid": [],
+     "panics": []
+    }
+   }
+  },
+  "golden_no_oracle": {
+   "base": "11181/11251",
+   "tip": "11180/11251",
+   "newly_failing_vs_9834a7194_code": [
+    "activity/act_skinparam2_shadowing_true",
+    "activity/act_skinparam_shadowing",
+    "edge-cases/edge_whitespace_multiple_blank_lines"
+   ],
+   "newly_passing": [
+    "preprocessing/preproc_complex_theme_override",
+    "state/state_history_shallow"
+   ],
+   "base_names_identical_to_round2_9834a7194_names": true,
+   "ratchet": "tip fails on the 3 GET goldens (activity 1299->1297, edge-cases 760->759); base fails on unlocked progress; no baseline changed"
+  },
+  "golden_pairs": {
+   "base": "10497 passed / 754 failed / 1299 skipped of 12550",
+   "tip": "10497 / 754 / 1299",
+   "failure_names_identical": true,
+   "failure_names_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b"
+  },
+  "parity_perturbations": {
+   "corpus": "the tip's 3,891 perturbation sources for both binaries",
+   "base_failing": 2164,
+   "tip_failing": 1615,
+   "newly_failing": 0,
+   "newly_failing_in_pre_existing_directories": 0,
+   "newly_passing": 549
+  },
+  "harness_guards": {
+   "tip": "4 passed / 2 failed (decimal_literal_ratchet, parity_review_records_are_complete) as base",
+   "records_by_category": "identical to the pre-round-3 merge 89fb6e93e in every category (measurements/*harness_guards_categories.txt); no violation names a maker-round3-claude file; T14.6.7 escape categories 98/98 unchanged",
+   "decimal_ratchet": "identical to the merge: only round-2 svg.rs 0->1 differs from base"
+  },
+  "pipe_mode": "17/17",
+  "workspace_lib": "1569 passed / 0 failed (base 1468)"
+ },
+ "frozen_items": "comparator slack, syntax markers, park list, error census, guard allow-lists and the strict-XML malformed list unchanged (no file under crates/rustuml-oracle or test-diagrams changed)",
+ "pending_relay": "relay-request-r3a.json: 36 probes; manifest and bundle SHA256 recorded there"
+}

@@ -1,0 +1,9 @@
+{
+ "pairs": 16441,
+ "exact_before": 15050,
+ "exact_after": 15051,
+ "gained": [
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+ ],
+ "lost": []
+}
