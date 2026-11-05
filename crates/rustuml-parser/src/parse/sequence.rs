@@ -1894,8 +1894,18 @@ impl SeqParser {
             return false;
         }
         let (url, clean_line) = super::extract_link_url(line);
-        // Url#getTooltip: the {tooltip} part, else the URL itself.
-        let url_tooltip = url.as_ref().and_then(|_| super::extract_link_tooltip(line));
+        // CommandParticipant#executeArg builds the participant Url with
+        // UrlBuilder#getUrl (UrlMode.STRICT) from the whole [[...]] link;
+        // Url#getTooltip is its explicit tooltip, else the URL itself. A
+        // tooltip-only link (empty URL) keeps the existing no-anchor model.
+        let built = line.find("[[").and_then(|start| {
+            let end = line[start..].find("]]")? + start + 2;
+            super::url_builder_url(&line[start..end])
+        });
+        let (url, url_tooltip) = match (url, built) {
+            (Some(_), Some(built)) if !built.url.is_empty() => (Some(built.url), built.tooltip),
+            (url, _) => (url, None),
+        };
         // A [[link]] inside the quoted FULL display is creole display text in
         // Java (no participant URL); this parser lifts it to the participant.
         let link_in_display = line.find("[[").is_some_and(|link| {
@@ -3199,6 +3209,41 @@ mod tests {
         assert_eq!(d.participants[0].url_tooltip.as_deref(), Some("rings"));
         let d = parse("participant Cedar [[https://example.org/ring]]\nA -> Cedar");
         assert_eq!(d.participants[0].url_tooltip, None);
+        // UrlBuilder#getUrl alternatives, in order, untrimmed.
+        for (link, url, tooltip) in [
+            // LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL: the label owns {x}.
+            (
+                "[[https://example.org/ring ring{x}]]",
+                "https://example.org/ring",
+                None,
+            ),
+            (
+                "[[https://example.org/ring{ rings }]]",
+                "https://example.org/ring",
+                Some(" rings "),
+            ),
+            (
+                "[[https://example.org/ring{}]]",
+                "https://example.org/ring",
+                Some(""),
+            ),
+            // LINK_TOOLTIP_NOLABEL: greedy (.+).
+            (
+                "[[https://example.org/ring{a{b}c}]]",
+                "https://example.org/ring",
+                Some("a{b}c"),
+            ),
+            // QUOTED: Url strips the quotes.
+            (
+                "[[\"https://example.org/q\"{ q } label]]",
+                "https://example.org/q",
+                Some(" q "),
+            ),
+        ] {
+            let d = parse(&format!("participant Cedar {link}\nA -> Cedar"));
+            assert_eq!(d.participants[0].url.as_deref(), Some(url), "{link}");
+            assert_eq!(d.participants[0].url_tooltip.as_deref(), tooltip, "{link}");
+        }
     }
 
     #[test]

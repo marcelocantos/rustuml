@@ -204,6 +204,73 @@ pub fn extract_link_tooltip(line: &str) -> Option<String> {
     }
 }
 
+/// `url.Url` as `UrlBuilder#getUrl` builds it in `UrlMode.STRICT`.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub(crate) struct BuiltUrl {
+    /// `Url#getUrl` (`StringUtils#eventuallyRemoveStartingAndEndingDoubleQuote`
+    /// applied; `topurl` is not modelled).
+    pub url: String,
+    /// The explicit tooltip, untrimmed and possibly empty; `None` when the
+    /// link has none, so `Url#getTooltip` is the URL.
+    pub tooltip: Option<String>,
+}
+
+/// `UrlBuilder#getUrl` in `UrlMode.STRICT` (`Matcher#matches`) on a whole
+/// `[[...]]` link: QUOTED, ONLY_TOOLTIP, ONLY_TOOLTIP_AND_LABEL,
+/// LINK_TOOLTIP_NOLABEL, LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL, in
+/// that order. Each entry is the pattern and its (url, tooltip) groups.
+pub(crate) fn url_builder_url(link: &str) -> Option<BuiltUrl> {
+    static ALTERNATIVES: std::sync::LazyLock<Vec<(regex::Regex, Option<usize>, usize)>> =
+        std::sync::LazyLock::new(|| {
+            [
+            (
+                r"\[\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]",
+                Some(1),
+                2,
+            ),
+            (r"\[\[[%s]*\{(.*)\}[%s]*\]\]", None, 1),
+            (
+                r"\[\[[%s]*\{([^{}]*)\}[%s]*([^\[%s\{\}\[\]][^\[\]]*)[%s]*\]\]",
+                None,
+                1,
+            ),
+            (
+                r"\[\[[%s]*([^\s%g{}\[\]]+?)[%s]*\{(.+)\}[%s]*\]\]",
+                Some(1),
+                2,
+            ),
+            (
+                r"\[\[[%s]*([^%s%g\[\]]+?)(?:[%s]*\{([^{}]*)\})?(?:[%s]([^%s\{\}\[\]][^\[\]]*))?[%s]*\]\]",
+                Some(1),
+                2,
+            ),
+        ]
+        .into_iter()
+        .map(|(pattern, url, tooltip)| (sequence::registered_regex(pattern), url, tooltip))
+        .collect()
+        });
+    // Pattern2's ASCII case folding keeps byte offsets.
+    let folded = link.to_ascii_lowercase();
+    ALTERNATIVES.iter().find_map(|(pattern, url, tooltip)| {
+        let caps = pattern.captures(&folded)?;
+        let group = |index: usize| caps.get(index).map(|m| link[m.range()].to_string());
+        let url = url.and_then(|index| group(index)).unwrap_or_default();
+        // Url#<init>: eventuallyRemoveStartingAndEndingDoubleQuote(url, "\"").
+        let is_quote = |c: char| matches!(c, '"' | '\u{201c}' | '\u{201d}' | '\u{ab}' | '\u{bb}');
+        let mut chars = url.chars();
+        let url = match (chars.next(), chars.next_back()) {
+            (Some(first), Some(last)) if is_quote(first) && is_quote(last) => {
+                url[first.len_utf8()..url.len() - last.len_utf8()].to_string()
+            }
+            _ => url,
+        };
+        Some(BuiltUrl {
+            url,
+            tooltip: group(*tooltip),
+        })
+    })
+}
+
 /// Strip surrounding double-quotes from a title string, then trim whitespace.
 pub fn strip_title_quotes(s: &str) -> &str {
     let s = s.trim();
