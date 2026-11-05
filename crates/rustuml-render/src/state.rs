@@ -549,6 +549,16 @@ impl StateEntityPosition {
     }
 }
 
+/// Entry/exit points, whose SVEK node may be a shielded HTML table
+/// (`SvekNode.appendLabelHtmlSpecialForPort`).
+fn is_state_border_point(diagram: &StateDiagram, id: &str) -> bool {
+    diagram
+        .states
+        .iter()
+        .find(|state| state.id == id)
+        .is_some_and(|state| StateEntityPosition::of(state).uses_port_p())
+}
+
 fn state_position_image_offset_x(state: &State) -> f64 {
     if StateEntityPosition::of(state).uses_port_p() {
         svek_state_border_geometry(text_render::measure(&state.label, STATE_FONT_SIZE, false))
@@ -2937,8 +2947,24 @@ fn autonomous_scope_painted_bounds(
             continue;
         }
         let (_, width, height, shape) = node_sizes.iter().find(|entry| &entry.0 == id)?;
-        let x = quantize_svek_coord(position.x);
-        let y = quantize_svek_coord(position.y);
+        let (x, y) = if *shape == StateLayoutShape::Port && is_state_border_point(diagram, id) {
+            // The drawn 12 px image is centred on the SVEK node centre plus
+            // the shielded table's P-cell offset (see layout_autonomous_scope).
+            let state = diagram.states.iter().find(|state| state.id == *id);
+            (
+                quantize_svek_coord(
+                    position.x
+                        + position.width / 2.0
+                        + state.map(state_position_image_offset_x).unwrap_or(0.0),
+                ) - width / 2.0,
+                quantize_svek_coord(position.y + position.height / 2.0) - height / 2.0,
+            )
+        } else {
+            (
+                quantize_svek_coord(position.x),
+                quantize_svek_coord(position.y),
+            )
+        };
         match shape {
             StateLayoutShape::Circle | StateLayoutShape::Port => {
                 bounds.include(x, y);
@@ -3359,16 +3385,21 @@ fn layout_autonomous_scope(
     let mut max_x = 0.0_f64;
     let mut max_y = 0.0_f64;
     for (id, position) in ids.iter().zip(&result.node_positions) {
-        let (_, width, height, _) = node_sizes.iter().find(|entry| &entry.0 == id)?;
+        let (_, width, height, shape) = node_sizes.iter().find(|entry| &entry.0 == id)?;
         let x = quantize_svek_coord(position.x);
         let y = quantize_svek_coord(position.y);
-        positions.push((
-            id.clone(),
-            x + origin_x + width / 2.0,
-            y + origin_y + height / 2.0,
-            *width,
-            *height,
-        ));
+        // A border point's drawn centre is its SVEK node centre
+        // (Cluster.manageEntryExitPoint, SvekResult.drawU); for a shielded
+        // port the solved node is the whole HTML table, not the 12 px image.
+        let (cx, cy) = if *shape == StateLayoutShape::Port && is_state_border_point(diagram, id) {
+            (
+                position.x + position.width / 2.0,
+                quantize_svek_coord(position.y + position.height / 2.0),
+            )
+        } else {
+            (x + width / 2.0, y + height / 2.0)
+        };
+        positions.push((id.clone(), cx + origin_x, cy + origin_y, *width, *height));
         max_x = max_x.max(x + width);
         max_y = max_y.max(y + height);
     }
