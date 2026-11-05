@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "mechanism": "comment-state-consumers",
+  "sub_mechanism": "StateSkin stroke-scope boundary (rejection 7ed71f3e5, finding 3)",
+  "status": "maker causal account before draft; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "style/ValueImpl.java#asColor (lines 90-103): one resolution for every color-valued style property, BACK and LINE alike, through HColorSet.getColorOrWhite (unknown and CSS4-only names such as RebeccaPurple become white).",
+    "svek/image/EntityImageStateCommon.java#applyColor / EntityImageState: state border LineColor and BackGroundColor both come from Style.value(...).asColor.",
+    "svek/image/EntityImageCircleStart.java, EntityImageCircleEnd.java: circle.start / circle.end LineColor and BackgroundColor via the same asColor.",
+    "svek/SvekEdge.java#drawU: the arrow LineColor via the merged arrow style's asColor; style/FromSkinparamToStyle.java maps stateBorderColor, stateArrowColor and ArrowColor into those style properties first.",
+    "klimt/color/HColor.java#toSvg (lines 75-80) and klimt/drawing/svg/SvgGraphics.java#setStrokeColor/fixColor (lines 531-540): a stroke is written as the 8-digit uppercase toSvg value, and #00000000 (transparent) as none."
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs#resolve_pseudo_state_color (circle start/end line and back roles)",
+    "crates/rustuml-render/src/state.rs#StateSkin::from_diagram (stroke, arrow_color, start_stroke, end_stroke)",
+    "crates/rustuml-render/src/state.rs: new resolve_state_line_color"
+  ],
+  "invariant": "Every StateSkin line-role color resolves through the same Java asColor rule as the fill role and is serialized with the SvgGraphics stroke rule. The boundary is the StateSkin defaults; explicit per-state (`##color`), per-arrow (`-[#color]->`) and stereotype style strokes are outside it.",
+  "causal_divergence": "The predraft account 42344228e declared strokes unchanged, but the packet made resolve_pseudo_state_color delegate to the fill resolver while it still serves start_stroke and end_stroke. Pseudo-state circle strokes therefore moved to the Java rule (circle_root_rebecca: #663399 to Java #FFFFFF; circle_root_alpha: lowercase to Java uppercase 8-digit) while the state border and arrow strokes in the same diagram stayed on sequence::resolve_color (#663399, lowercase). The delegation also lost the old transparent-to-none stroke mapping: a transparent circle LineColor would now be written as #00000000 where SvgGraphics.fixColor writes none.",
+  "planned_change": "Keep the Java-traced pseudo-stroke resolution and own it explicitly: add resolve_state_line_color = resolve_state_fill_color followed by the fixColor zero-alpha-to-none rule; use it for start_stroke, end_stroke, and the StateSkin border (stateBorderColor, root LineColor, state style lineColor) and arrow (stateArrowColor/ArrowColor, arrow style lineColor) defaults. Fill roles keep resolve_pseudo_state_color/resolve_state_fill_color. Stereotype, per-state and per-arrow strokes remain residual.",
+  "perturbation_axes": [
+    "palette name, CSS4-only name, lowercase 8-digit alpha and transparent LineColor",
+    "line color through <style> root, state, arrow and circle selectors and through skinparams",
+    "with and without composites and pseudo-states"
+  ],
+  "precommitted_measurement": {
+    "oracle": "whole-output hashes (maker-results/tools/output_hashes.py) over golden and perturbations versus the previous draft, then golden_no_oracle and parity_perturbations",
+    "expect_fixed": [
+      "perturbations/comment-state-consumers/checker-independent-astra-20261105/circle_root_rebecca (state border and arrow strokes become #FFFFFF)",
+      "perturbations/comment-state-consumers/checker-independent-astra-20261105/circle_root_alpha (border and arrow strokes become uppercase)"
+    ],
+    "expect": "every changed output is a line-role stroke change only; zero lost no-oracle or perturbation passes; any loss narrows or reverts the draft"
+  }
+}
