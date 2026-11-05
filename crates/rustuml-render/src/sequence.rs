@@ -7136,9 +7136,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             }
             "participantfontstyle" | "sequenceparticipantfontstyle" => {
-                let style = val.to_ascii_lowercase();
-                participant_font_bold = style.contains("bold");
-                participant_font_italic = style.contains("italic");
+                // FromSkinparamToStyle keeps the value; `ValueImpl.asFontFace` reads it.
+                (participant_font_bold, participant_font_italic) =
+                    crate::style_cascade::font_face(val);
             }
             "participantpadding" => {
                 if let Ok(v) = val.parse::<f64>() {

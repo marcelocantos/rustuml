@@ -962,8 +962,8 @@ impl Palette {
                 }
                 "activitydiamondfontstyle" => {
                     let lower = val.to_ascii_lowercase();
-                    p.diamond_text_bold = lower.contains("bold");
-                    p.diamond_text_italic = lower.contains("italic");
+                    (p.diamond_text_bold, p.diamond_text_italic) =
+                        crate::style_cascade::font_face(&lower);
                 }
                 "activityarrowcolor" | "arrowcolor" => p.arrow_color = resolved,
                 "activityarrowthickness" | "arrowthickness" => {
@@ -1028,8 +1028,9 @@ impl Palette {
                 }
                 "activityfontstyle" => {
                     let lower = val.to_ascii_lowercase();
-                    p.action_text_bold = lower.contains("bold");
-                    p.action_text_italic = lower.contains("italic");
+                    // FromSkinparamToStyle keeps the value; `ValueImpl.asFontFace` reads it.
+                    (p.action_text_bold, p.action_text_italic) =
+                        crate::style_cascade::font_face(&lower);
                     p.diamond_text_bold = p.action_text_bold;
                     p.diamond_text_italic = p.action_text_italic;
                 }

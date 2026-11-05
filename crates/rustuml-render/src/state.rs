@@ -2505,28 +2505,7 @@ fn apply_resolved_state_text_style(
         text.size = value;
     }
     if let Some(value) = resolved.property("fontStyle") {
-        let value = value.trim().to_ascii_lowercase();
-        match value.as_str() {
-            "bold" | "bolder" => {
-                text.bold = true;
-                text.italic = false;
-            }
-            "italic" => {
-                text.bold = false;
-                text.italic = true;
-            }
-            "plain" | "normal" | "lighter" => {
-                text.bold = false;
-                text.italic = false;
-            }
-            _ => {
-                text.bold = value
-                    .parse::<u16>()
-                    .ok()
-                    .is_some_and(|weight| weight >= 700);
-                text.italic = false;
-            }
-        }
+        (text.bold, text.italic) = crate::style_cascade::font_face(value);
     }
 }
 
@@ -6438,8 +6417,9 @@ pub fn render_with_oracle(
         .find(|sp| sp.key.eq_ignore_ascii_case("stateFontStyle"))
         .map(|sp| sp.value.to_ascii_lowercase())
         .unwrap_or_default();
-    let state_font_bold = state_font_style.contains("bold");
-    let state_font_italic = state_font_style.contains("italic");
+    // The face emission draws (`apply_resolved_state_text_style`):
+    // `Style.getUFont` -> `ValueImpl.asFontFace`.
+    let (state_font_bold, state_font_italic) = crate::style_cascade::font_face(&state_font_style);
 
     let (has_start, _has_end) = classify_star_nodes(&diagram.transitions);
 

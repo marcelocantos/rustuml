@@ -187,9 +187,8 @@ fn apply_component_entity_style(
         target.font_size = value;
     }
     if let Some(value) = resolved.property("fontStyle") {
-        let value = value.to_ascii_lowercase();
-        target.font_bold = value.contains("bold");
-        target.font_italic = value.contains("italic");
+        // `Style.getUFont` -> `ValueImpl.asFontFace`.
+        (target.font_bold, target.font_italic) = crate::style_cascade::font_face(value);
     }
 }
 
@@ -1316,9 +1315,8 @@ pub fn render_with_oracle(
                 component_font_color_sp = Some(crate::sequence::resolve_color(val));
             }
             "componentfontstyle" => {
-                let style = val.to_ascii_lowercase();
-                component_font_bold = style.contains("bold");
-                component_font_italic = style.contains("italic");
+                // FromSkinparamToStyle keeps the value; `ValueImpl.asFontFace` reads it.
+                (component_font_bold, component_font_italic) = crate::style_cascade::font_face(val);
             }
             "arrowfontname" | "componentarrowfontname" => {
                 component_arrow_font_family_sp = Some(canonical_font_family(val));
@@ -1386,9 +1384,7 @@ pub fn render_with_oracle(
         component_font_size_sp = value.parse::<f64>().ok();
     }
     if let Some(value) = component_style.property("fontStyle") {
-        let value = value.to_ascii_lowercase();
-        component_font_bold = value.contains("bold");
-        component_font_italic = value.contains("italic");
+        (component_font_bold, component_font_italic) = crate::style_cascade::font_face(value);
     }
     if let Some(value) = arrow_style.property("lineColor") {
         component_arrow_stroke = crate::sequence::resolve_color(value);

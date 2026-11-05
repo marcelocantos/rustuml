@@ -176,11 +176,10 @@ fn skin_thickness(
         .unwrap_or_else(|| fc(default))
 }
 
-/// The (bold, italic) face a style `FontStyle` value selects, read as the
-/// component renderer reads it (`apply_component_entity_style`).
+/// The (bold, italic) face a style `FontStyle` value selects
+/// (`ValueImpl.asFontFace`, [`crate::style_cascade::font_face`]).
 fn usecase_font_face(value: &str) -> (bool, bool) {
-    let value = value.to_ascii_lowercase();
-    (value.contains("bold"), value.contains("italic"))
+    crate::style_cascade::font_face(value)
 }
 
 fn canonical_usecase_font_family(value: &str) -> String {
