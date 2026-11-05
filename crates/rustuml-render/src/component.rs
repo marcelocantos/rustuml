@@ -187,9 +187,8 @@ fn apply_component_entity_style(
         target.font_size = value;
     }
     if let Some(value) = resolved.property("fontStyle") {
-        let value = value.to_ascii_lowercase();
-        target.font_bold = value.contains("bold");
-        target.font_italic = value.contains("italic");
+        // `Style.getUFont` -> `ValueImpl.asFontFace`.
+        (target.font_bold, target.font_italic) = crate::style_cascade::font_face(value);
     }
 }
 
@@ -711,6 +710,10 @@ const RECTANGLE_MARGIN_Y: f64 = 10.0;
 // `TextBlockUtils.withMargin(..., 1, 0)` before `USymbolComponent2.asSmall`
 // merges it with the label. The wrapper contributes one pixel on each side.
 const STEREOTYPE_MARGIN_X: f64 = 1.0;
+/// The stereotype face: plantuml.skin 79-80 `stereotype { FontStyle italic }`,
+/// the style `EntityImageDescription` builds `fcStereo` from (167-169).
+const STEREOTYPE_FONT_BOLD: bool = false;
+const STEREOTYPE_FONT_ITALIC: bool = true;
 // PlantUML `USymbolDatabase.getMargin()` returns (10, 10, 24, 5).
 const DATABASE_MARGIN_X: f64 = 10.0;
 const DATABASE_MARGIN_TOP: f64 = 24.0;
@@ -1312,9 +1315,8 @@ pub fn render_with_oracle(
                 component_font_color_sp = Some(crate::sequence::resolve_color(val));
             }
             "componentfontstyle" => {
-                let style = val.to_ascii_lowercase();
-                component_font_bold = style.contains("bold");
-                component_font_italic = style.contains("italic");
+                // FromSkinparamToStyle keeps the value; `ValueImpl.asFontFace` reads it.
+                (component_font_bold, component_font_italic) = crate::style_cascade::font_face(val);
             }
             "arrowfontname" | "componentarrowfontname" => {
                 component_arrow_font_family_sp = Some(canonical_font_family(val));
@@ -1382,9 +1384,7 @@ pub fn render_with_oracle(
         component_font_size_sp = value.parse::<f64>().ok();
     }
     if let Some(value) = component_style.property("fontStyle") {
-        let value = value.to_ascii_lowercase();
-        component_font_bold = value.contains("bold");
-        component_font_italic = value.contains("italic");
+        (component_font_bold, component_font_italic) = crate::style_cascade::font_face(value);
     }
     if let Some(value) = arrow_style.property("lineColor") {
         component_arrow_stroke = crate::sequence::resolve_color(value);
@@ -1622,6 +1622,7 @@ pub fn render_with_oracle(
                 style.font_size,
                 &style.font_family,
                 style.font_bold,
+                style.font_italic,
             )
         })
         .collect();
@@ -2278,8 +2279,8 @@ pub fn render_with_oracle(
         svg.raw(&format!(
             r#"<rect fill="{bg}" height="{h}" style="stroke:none;stroke-width:1;" width="{w}" x="0" y="0"/>"#,
             h = total_h as i64,
-            w = total_w as i64,
-        ));
+            w = total_w as i64, bg = crate::svg::escape_attribute(bg),
+));
     }
 
     // Header/footer captions are font-10 grey text. PlantUML centres each
@@ -2661,7 +2662,11 @@ pub fn render_with_oracle(
         };
 
         // HTML comment.
-        svg.raw(&format!("<!--entity {}-->", fold_non_ascii(&comp.id, '?')));
+        svg.raw(&format!(
+            "<!--{svg_comment}-->",
+            svg_comment =
+                crate::svg::comment_text(&format!("entity {}", fold_non_ascii(&comp.id, '?'))),
+        ));
         if hidden_components.contains(comp.id.as_str()) {
             continue;
         }
@@ -2680,8 +2685,8 @@ pub fn render_with_oracle(
             String::new()
         };
         svg.raw(&format!(
-            r#"<g class="entity" data-qualified-name="{qualified}"{source_line_attr} id="{ent_id}">"#
-        ));
+            r#"<g class="entity" data-qualified-name="{qualified}"{source_line_attr} id="{ent_id}">"#, qualified = crate::svg::escape_attribute(&qualified), ent_id = crate::svg::escape_attribute(&ent_id),
+));
 
         // URL link wrapper.
         if let Some(ref url) = comp.url {
@@ -2743,7 +2748,7 @@ pub fn render_with_oracle(
             // block + 15px margin each side), then translate it onto the oracle
             // position via the captured label baseline — exactly as the
             // deployment renderer does for `cloud` nodes.
-            emit_cloud_component(&mut svg, comp, oracle_rect, x, y, fill, &body_style);
+            emit_cloud_component(&mut svg, text_metrics, oracle_rect, x, y, fill, &body_style);
             // Skip the rect body and tab-icon block below.
         } else if matches!(comp.kind, ComponentElementKind::Actor) {
             emit_actor_component(&mut svg, x, y, w, h, fill, &body_style);
@@ -2792,16 +2797,16 @@ pub fn render_with_oracle(
                 h_s = fc(h),
                 w_s = fc(w),
                 x_s = fc(x),
-                y_s = fc(y),
-            ));
+                y_s = fc(y), fill = crate::svg::escape_attribute(fill), body_style = crate::svg::escape_attribute(&body_style),
+));
         } else {
             svg.raw(&format!(
             r#"<rect fill="{fill}"{shadow_attr} height="{h_s}" rx="{rx_s}" ry="{ry_s}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
             h_s = fc(h),
             w_s = fc(w),
             x_s = fc(x),
-            y_s = fc(y),
-        ));
+            y_s = fc(y), fill = crate::svg::escape_attribute(fill), body_style = crate::svg::escape_attribute(&body_style),
+));
 
             // Component icon (tab + bars) at top-right. When the oracle has
             // captured the rects' exact x/y, replay them verbatim — recomputing
@@ -2828,8 +2833,8 @@ pub fn render_with_oracle(
                     h_s = fc(r.height),
                     w_s = fc(r.width),
                     x_s = fc(r.x),
-                    y_s = fc(r.y),
-                ));
+                    y_s = fc(r.y), rect_fill = crate::svg::escape_attribute(rect_fill), style = crate::svg::escape_attribute(&style),
+));
                 }
             } else {
                 let tab_x = x + w - ICON_TAB_RIGHT_OFFSET;
@@ -2839,8 +2844,8 @@ pub fn render_with_oracle(
                 h_s = fc(ICON_TAB_H),
                 w_s = fc(ICON_TAB_W),
                 x_s = fc(tab_x),
-                y_s = fc(tab_y),
-            ));
+                y_s = fc(tab_y), fill = crate::svg::escape_attribute(fill), body_style = crate::svg::escape_attribute(&body_style),
+));
 
                 let bar_x = tab_x - ICON_BAR_LEFT_OFFSET;
                 let bar_y1 = tab_y + ICON_BAR_TOP_OFFSET_1;
@@ -2850,15 +2855,15 @@ pub fn render_with_oracle(
                 h_s = fc(ICON_BAR_H),
                 w_s = fc(ICON_BAR_W),
                 x_s = fc(bar_x),
-                y_s = fc(bar_y1),
-            ));
+                y_s = fc(bar_y1), fill = crate::svg::escape_attribute(fill), body_style = crate::svg::escape_attribute(&body_style),
+));
                 svg.raw(&format!(
                 r#"<rect fill="{fill}" height="{h_s}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
                 h_s = fc(ICON_BAR_H),
                 w_s = fc(ICON_BAR_W),
                 x_s = fc(bar_x),
-                y_s = fc(bar_y2),
-            ));
+                y_s = fc(bar_y2), fill = crate::svg::escape_attribute(fill), body_style = crate::svg::escape_attribute(&body_style),
+));
             }
         }
 
@@ -2939,8 +2944,8 @@ pub fn render_with_oracle(
                     font_size: render_style.font_size as u32,
                     font_family: &render_style.font_family,
                     fill: &render_style.font_color,
-                    bold: false,
-                    italic: true,
+                    bold: STEREOTYPE_FONT_BOLD,
+                    italic: STEREOTYPE_FONT_ITALIC,
                     underline: false,
                     skip_underline: false,
                 },
@@ -2989,7 +2994,10 @@ pub fn render_with_oracle(
         && !orc.note_entities.is_empty()
     {
         for ne in &orc.note_entities {
-            svg.raw(&format!("<!--entity {}-->", ne.qualified_name));
+            svg.raw(&format!(
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!("entity {}", ne.qualified_name)),
+            ));
             let mut group = String::new();
             let _ = emit_oracle_note_entity(
                 &mut group,
@@ -3185,14 +3193,17 @@ pub fn render_with_oracle(
                 0.0,
             );
             let path_d = build_path_d(&points);
-            svg.raw(&format!("<!--link {from_name} to {to_name}-->"));
+            svg.raw(&format!(
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!("link {from_name} to {to_name}")),
+            ));
             svg.raw(&format!(
                 r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="association" data-source-line="{}" id="lnk{}">"#,
-                note.source_line, uid.link_id
-            ));
+                note.source_line, uid.link_id, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2),
+));
             svg.raw(&format!(
-                r#"<path d="{path_d}" fill="none" id="{from_name}-{to_name}" style="stroke:{STROKE};stroke-width:1;stroke-dasharray:7,7;"/>"#
-            ));
+                r#"<path d="{path_d}" fill="none" id="{from_name}-{to_name}" style="stroke:{STROKE};stroke-width:1;stroke-dasharray:7,7;"/>"#, from_name = crate::svg::escape_attribute(from_name), to_name = crate::svg::escape_attribute(to_name),
+));
             svg.raw("</g>");
         }
     }
@@ -3358,7 +3369,10 @@ pub fn render_with_oracle(
                 "link"
             };
             svg.raw(&format!(
-                "<!--{comment_prefix} {logical_from} to {logical_to}-->"
+                "<!--{svg_comment}-->",
+                svg_comment = crate::svg::comment_text(&format!(
+                    "{comment_prefix} {logical_from} to {logical_to}"
+                )),
             ));
             if hidden_components.contains(logical_from) || hidden_components.contains(logical_to) {
                 continue;
@@ -3424,8 +3438,8 @@ pub fn render_with_oracle(
             };
 
             svg.raw(&format!(
-            r#"<g class="link" data-entity-1="{from_ent_id}" data-entity-2="{to_ent_id}"{link_type_attr}{source_line_attr} id="{link_id}">"#,
-        ));
+            r#"<g class="link" data-entity-1="{from_ent_id}" data-entity-2="{to_ent_id}"{link_type_attr}{source_line_attr} id="{link_id}">"#, from_ent_id = crate::svg::escape_attribute(&from_ent_id), to_ent_id = crate::svg::escape_attribute(&to_ent_id), link_id = crate::svg::escape_attribute(&link_id),
+));
 
             if let Some(ep) = edge_path
                 && !ep.points.is_empty()
@@ -3481,8 +3495,8 @@ pub fn render_with_oracle(
                     String::new()
                 };
                 svg.raw(&format!(
-                r#"<path{code_line_attr} d="{path_d}" fill="none" id="{path_id}" style="stroke:{component_arrow_stroke};stroke-width:{component_arrow_stroke_width};{dash_attr}"/>"#,
-            ));
+                r#"<path{code_line_attr} d="{path_d}" fill="none" id="{path_id}" style="stroke:{component_arrow_stroke};stroke-width:{component_arrow_stroke_width};{dash_attr}"/>"#, path_id = crate::svg::escape_attribute(&path_id), component_arrow_stroke = crate::svg::escape_attribute(&component_arrow_stroke),
+));
 
                 let raw_edge_points = component_svek_edge_points(
                     edge_points_input,
@@ -3761,8 +3775,8 @@ pub fn render_with_oracle(
                 );
                 let path_id = no_oracle_path_id(conn);
                 svg.raw(&format!(
-                r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{component_arrow_stroke};stroke-width:{component_arrow_stroke_width};{dash_attr}"/>"#,
-            ));
+                r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{component_arrow_stroke};stroke-width:{component_arrow_stroke_width};{dash_attr}"/>"#, path_id = crate::svg::escape_attribute(&path_id), component_arrow_stroke = crate::svg::escape_attribute(&component_arrow_stroke),
+));
 
                 let (arrow_at_start, arrow_at_end) = no_oracle_effective_arrow_ends(conn);
                 if arrow_at_start {
@@ -3948,11 +3962,11 @@ fn render_oracle_legends(svg: &mut SvgBuilder, oracle: &OracleLayout) {
             .unwrap_or_default();
         svg.raw(&format!(
             r#"<rect fill="{}" height="{}"{}{} style="{}" width="{}" x="{}" y="{}"/>"#,
-            legend.rect.fill,
+            crate::svg::escape_attribute(&legend.rect.fill),
             fc(legend.rect.height),
             rx_attr,
             ry_attr,
-            legend.rect.style,
+            crate::svg::escape_attribute(&legend.rect.style),
             fc(legend.rect.width),
             fc(legend.rect.x),
             fc(legend.rect.y),
@@ -3985,7 +3999,11 @@ fn render_oracle_legends(svg: &mut SvgBuilder, oracle: &OracleLayout) {
                 .unwrap_or("stroke:#000000;stroke-width:1;");
             svg.raw(&format!(
                 r#"<line style="{style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                line.x1, line.x2, line.y1, line.y2,
+                line.x1,
+                line.x2,
+                line.y1,
+                line.y2,
+                style = crate::svg::escape_attribute(style),
             ));
         }
 
@@ -4097,24 +4115,21 @@ const CLOUD_MARGIN: f64 = 15.0;
 /// the shared text-emission block below, which already honours the oracle's
 /// `text_x`/`text_y`. This mirrors `deployment::emit_cloud_entity` but draws
 /// only the shape (the component path emits the label separately).
+///
+/// Java `USymbolCloud.asSmall` draws the outline around the dimension of the
+/// merged stereotype/label block it is given, the block layout measured, so
+/// the outline takes the element's [`ComponentTextMetrics`] (drawn faces).
 fn emit_cloud_component(
     svg: &mut SvgBuilder,
-    comp: &Component,
+    text_metrics: &ComponentTextMetrics,
     oracle_rect: Option<&EntityRect>,
     fallback_x: f64,
     fallback_y: f64,
     fill: &str,
     body_style: &str,
 ) {
-    let label_w = text_render::measure(&comp.label, FONT_SIZE, false);
-    let (block_w, block_h) = if comp.stereotypes.is_empty() {
-        (label_w, pm::text_height(FONT_SIZE))
-    } else {
-        let stereo = format!("\u{00AB}{}\u{00BB}", comp.stereotypes.join(", "));
-        let stereo_w = text_render::measure(&stereo, FONT_SIZE, false);
-        (label_w.max(stereo_w), pm::text_height(FONT_SIZE) * 2.0)
-    };
-    let width = block_w + 2.0 * CLOUD_MARGIN;
+    let block_h = text_metrics.label_height + text_metrics.stereotype_heights.iter().sum::<f64>();
+    let width = text_metrics.content_width + 2.0 * CLOUD_MARGIN;
     let height = block_h + 2.0 * CLOUD_MARGIN;
     let path = crate::cloud_shape::generate(width, height);
 
@@ -4126,7 +4141,9 @@ fn emit_cloud_component(
     let first_text_x = oracle_rect.and_then(|r| r.text_x_values.first().copied());
     let first_text_y = oracle_rect.and_then(|r| r.text_y_values.first().copied());
     let tx = match first_text_x {
-        Some(label_x) if comp.stereotypes.is_empty() => label_x + label_w / 2.0 - width / 2.0,
+        Some(label_x) if text_metrics.stereotype_widths.is_empty() => {
+            label_x + text_metrics.label_width / 2.0 - width / 2.0
+        }
         Some(_) => fallback_x - path.min_xy().0,
         // `USymbolCloud.asSmall` retains the generated frontier's local
         // coordinate frame when there is no oracle rectangle.
@@ -4159,7 +4176,11 @@ fn emit_cloud_component(
             fc(c.to.1 + ty),
         ));
     }
-    svg.raw(&format!(r#"<path d="{d}" fill="{fill}" style="{style}"/>"#,));
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{fill}" style="{style}"/>"#,
+        fill = crate::svg::escape_attribute(fill),
+        style = crate::svg::escape_attribute(&style),
+    ));
 }
 
 fn emit_actor_component(
@@ -4181,6 +4202,8 @@ fn emit_actor_component(
         cy = fc(cy),
         rx = fc(rx),
         ry = fc(ry),
+        fill = crate::svg::escape_attribute(fill),
+        body_style = crate::svg::escape_attribute(body_style),
     ));
 
     let head_bottom = y + h;
@@ -4196,8 +4219,8 @@ fn emit_actor_component(
         left = fc(cx - arm_dx),
         right = fc(cx + arm_dx),
         arms_y = fc(arms_y),
-        foot_y = fc(foot_y),
-    ));
+        foot_y = fc(foot_y), body_style = crate::svg::escape_attribute(body_style),
+));
 }
 
 fn emit_collections_component(
@@ -4213,8 +4236,8 @@ fn emit_collections_component(
         h = fc(h),
         w = fc(w),
         x = fc(x),
-        y = fc(y),
-    ));
+        y = fc(y), fill = crate::svg::escape_attribute(fill), body_style = crate::svg::escape_attribute(body_style),
+));
 
     if let Some(front) = oracle_rect.and_then(|r| r.aux_rects.first()) {
         let front_fill = front.fill.as_deref().unwrap_or(fill);
@@ -4224,16 +4247,16 @@ fn emit_collections_component(
             h = fc(front.height),
             w = fc(front.width),
             x = fc(front.x),
-            y = fc(front.y),
-        ));
+            y = fc(front.y), front_fill = crate::svg::escape_attribute(front_fill), front_style = crate::svg::escape_attribute(front_style),
+));
     } else {
         svg.raw(&format!(
             r#"<rect fill="{fill}" height="{h}" rx="{ROUND_R}" ry="{ROUND_R}" style="{body_style}" width="{w}" x="{x}" y="{y}"/>"#,
             h = fc(h),
             w = fc(w),
             x = fc(x - 4.0),
-            y = fc(y - 4.0),
-        ));
+            y = fc(y - 4.0), fill = crate::svg::escape_attribute(fill), body_style = crate::svg::escape_attribute(body_style),
+));
     }
 }
 
@@ -4264,8 +4287,8 @@ fn emit_interface_component_box(svg: &mut SvgBuilder, iface: &Interface, r: &Ent
         h = fc(r.height),
         w = fc(r.width),
         x = fc(r.x),
-        y = fc(r.y),
-    ));
+        y = fc(r.y), fill = crate::svg::escape_attribute(fill), body_style = crate::svg::escape_attribute(&body_style),
+));
 
     // UML "tab" icon: three rects captured verbatim from the oracle.
     for a in r.aux_rects.iter().take(3) {
@@ -4280,8 +4303,8 @@ fn emit_interface_component_box(svg: &mut SvgBuilder, iface: &Interface, r: &Ent
             h = fc(a.height),
             w = fc(a.width),
             x = fc(a.x),
-            y = fc(a.y),
-        ));
+            y = fc(a.y), rect_fill = crate::svg::escape_attribute(rect_fill), style = crate::svg::escape_attribute(&style),
+));
     }
 
     let (lx, ly) = r.texts.first().map(|t| (t.x, t.y)).unwrap_or((
@@ -4325,8 +4348,8 @@ fn emit_interface_class_box(svg: &mut SvgBuilder, iface: &Interface, r: &EntityR
         h = fc(r.height),
         w = fc(r.width),
         x = fc(r.x),
-        y = fc(r.y),
-    ));
+        y = fc(r.y), fill = crate::svg::escape_attribute(fill), body_style = crate::svg::escape_attribute(&body_style),
+));
 
     // Class-header circle. PlantUML centres it at
     // `cx = icon_cx, cy = rect_top + 5 + radius` with a solid 1px border.
@@ -4376,7 +4399,11 @@ fn emit_interface_class_box(svg: &mut SvgBuilder, iface: &Interface, r: &EntityR
             .unwrap_or("stroke:#181818;stroke-width:0.5;");
         svg.raw(&format!(
             r#"<line style="{style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            line.x1, line.x2, line.y1, line.y2,
+            line.x1,
+            line.x2,
+            line.y1,
+            line.y2,
+            style = crate::svg::escape_attribute(style),
         ));
     }
 }
@@ -4509,9 +4536,14 @@ fn render_interface(
         .map(|source_line| format!(r#" data-source-line="{source_line}""#))
         .unwrap_or_default();
 
-    svg.raw(&format!("<!--entity {}-->", iface.id));
+    svg.raw(&format!(
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!("entity {}", iface.id)),
+    ));
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{qualified_name}"{source_attr} id="{ent_id}">"#,
+        qualified_name = crate::svg::escape_attribute(qualified_name),
+        ent_id = crate::svg::escape_attribute(&ent_id),
     ));
 
     // PlantUML renders an `interface` three different ways depending on its
@@ -4540,8 +4572,8 @@ fn render_interface(
     } else {
         // Lollipop circle.
         svg.raw(&format!(
-            r#"<ellipse cx="{ix}" cy="{iy}" fill="{interface_fill}" rx="{IFACE_R}" ry="{IFACE_R}" style="stroke:{interface_stroke};stroke-width:0.5;"/>"#,
-        ));
+            r#"<ellipse cx="{ix}" cy="{iy}" fill="{interface_fill}" rx="{IFACE_R}" ry="{IFACE_R}" style="stroke:{interface_stroke};stroke-width:0.5;"/>"#, interface_fill = crate::svg::escape_attribute(interface_fill), interface_stroke = crate::svg::escape_attribute(interface_stroke),
+));
 
         // Label below. Prefer oracle text_x/y when present — PlantUML's
         // exact label positions depend on the surrounding diagram layout.
@@ -4603,14 +4635,27 @@ struct ComponentTextMetrics {
     content_width: f64,
 }
 
+/// The merged stereotype/label block measured in the faces it is drawn in.
+/// Java `EntityImageDescription` hands `symbol.asSmall` the `desc` TextBlock
+/// built from the element style's `FontConfiguration` (`Style.getUFont`:
+/// FontStyle gives italic and weight) and the stereotype block built from the
+/// stereotype style's (italic in plantuml.skin); `asSmall` measures and draws
+/// those same blocks, so the label is measured in `label_bold`/`label_italic`
+/// and each stereotype italic, as `render_with_oracle` emits them.
 fn component_text_metrics(
     comp: &Component,
     font_size: f64,
     font_family: &str,
     label_bold: bool,
+    label_italic: bool,
 ) -> ComponentTextMetrics {
-    let label_width =
-        text_render::measure_with_family(&comp.label, font_size, label_bold, font_family);
+    let label_width = text_render::measure_with_family_and_face(
+        &comp.label,
+        font_size,
+        label_bold,
+        label_italic,
+        font_family,
+    );
     let label_height = text_render::label_height_with_family(&comp.label, font_size, font_family);
     let label_first_baseline_ascent =
         text_render::label_first_baseline_ascent_with_family(&comp.label, font_size, font_family);
@@ -4621,7 +4666,15 @@ fn component_text_metrics(
         .collect();
     let stereotype_widths: Vec<f64> = stereotype_labels
         .iter()
-        .map(|label| text_render::measure_with_family(label, font_size, false, font_family))
+        .map(|label| {
+            text_render::measure_with_family_and_face(
+                label,
+                font_size,
+                STEREOTYPE_FONT_BOLD,
+                STEREOTYPE_FONT_ITALIC,
+                font_family,
+            )
+        })
         .collect();
     let stereotype_heights: Vec<f64> = stereotype_labels
         .iter()
@@ -4703,7 +4756,7 @@ fn calc_component_dim_with_symbol_style(
 
 #[cfg(test)]
 fn calc_component_dim(comp: &Component) -> CompDim {
-    let text_metrics = component_text_metrics(comp, FONT_SIZE, "sans-serif", false);
+    let text_metrics = component_text_metrics(comp, FONT_SIZE, "sans-serif", false, false);
     calc_component_dim_with_metrics(comp, &text_metrics)
 }
 
@@ -8812,8 +8865,13 @@ mod tests {
         };
 
         for component in &component_diagram.components {
-            let metrics =
-                super::component_text_metrics(component, super::FONT_SIZE, "sans-serif", false);
+            let metrics = super::component_text_metrics(
+                component,
+                super::FONT_SIZE,
+                "sans-serif",
+                false,
+                false,
+            );
             let stereotype_width = metrics.stereotype_widths[0];
             assert!(
                 stereotype_width > metrics.label_width,
@@ -8859,7 +8917,7 @@ mod tests {
             .find(|component| component.id == "MixedNode101")
             .expect("renamed component");
         let metrics =
-            super::component_text_metrics(component, super::FONT_SIZE, "sans-serif", false);
+            super::component_text_metrics(component, super::FONT_SIZE, "sans-serif", false, false);
         let dim = super::calc_component_dim_with_metrics(component, &metrics);
         assert!(metrics.label_height > super::LINE_HEIGHT);
         assert_eq!(dim.height, super::COMPONENT_BASE_H + metrics.label_height);
@@ -9264,7 +9322,7 @@ mod tests {
         };
         let component = &component_diagram.components[0];
         let metrics =
-            super::component_text_metrics(component, super::FONT_SIZE, "sans-serif", false);
+            super::component_text_metrics(component, super::FONT_SIZE, "sans-serif", false, false);
         assert!(
             metrics.stereotype_widths[0] > metrics.label_width,
             "the perturbation must exercise a stereotype-dominated text block"

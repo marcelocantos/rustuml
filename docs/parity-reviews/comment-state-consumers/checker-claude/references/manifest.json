@@ -1,0 +1,34 @@
+{
+ "ar-parent-relay-validation.json": {
+  "origin": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-claude-batch1/parent-relay-validation.json",
+  "sha256": "53b7bf44c363caa99bc5684395992a4d242d5cbd099eff846dc3aff510e7d3d9"
+ },
+ "ar-reference-manifest.json": {
+  "origin": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-claude-batch1/reference-manifest.json",
+  "sha256": "6eea649b63312e20a90d0aebce55bb6f61d3f167a6b0c49263f187cf4c29017b"
+ },
+ "ar-reference-results.json.gz": {
+  "origin": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-claude-batch1/reference-results.json.gz",
+  "sha256": "5fad7db6b4aa8f90c21640270d8c679ff7480e44eec063bf348451254e1b7778"
+ },
+ "ar-reference-transport.json": {
+  "origin": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-claude-batch1/reference-transport.json",
+  "sha256": "e8033df28d9788bf03ae69a6111ff699b082dc989ef1a72cc6be22bdd8ac8076"
+ },
+ "au-checker-c1-parent-relay-validation.json": {
+  "origin": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-checker-c1/parent-relay-validation.json",
+  "sha256": "60ea24c4445509dc1769d5a7a03b49f5e217fe8bdd00511d8921770fbfe98bde"
+ },
+ "au-checker-c1-reference-manifest.json": {
+  "origin": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-checker-c1/reference-manifest.json",
+  "sha256": "5fb2a75d21602a69b83d9fab1e843444dbd7d7b1032b31d2b933a1402f001e48"
+ },
+ "au-checker-c1-reference-results.json.gz": {
+  "origin": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-checker-c1/reference-results.json.gz",
+  "sha256": "ed6704270c9d4238a018a15cc83b05636c5ba2272e1cb57343b5698d91711948"
+ },
+ "au-checker-c1-reference-transport.json": {
+  "origin": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-checker-c1/reference-transport.json",
+  "sha256": "72a286049c9f9bdf305a0d3c86027344cee95bb790010364d9a89a9c71a3a068"
+ }
+}

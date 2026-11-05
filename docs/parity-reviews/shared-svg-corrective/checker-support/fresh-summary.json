@@ -1,0 +1,71 @@
+{
+  "all": {
+    "entries": 54,
+    "valid": 46,
+    "phases": {
+      "before": {
+        "passes": 5,
+        "errors": 4,
+        "panics": 4,
+        "emitted": 50,
+        "malformed": 17
+      },
+      "after": {
+        "passes": 16,
+        "errors": 4,
+        "panics": 4,
+        "emitted": 50,
+        "malformed": 7
+      }
+    },
+    "lost_passes": [],
+    "new_errors": [],
+    "new_panics": []
+  },
+  "comments": {
+    "entries": 30,
+    "valid": 22,
+    "phases": {
+      "before": {
+        "passes": 4,
+        "errors": 4,
+        "panics": 4,
+        "emitted": 26,
+        "malformed": 17
+      },
+      "after": {
+        "passes": 8,
+        "errors": 4,
+        "panics": 4,
+        "emitted": 26,
+        "malformed": 7
+      }
+    },
+    "lost_passes": [],
+    "new_errors": [],
+    "new_panics": []
+  },
+  "state-fill": {
+    "entries": 24,
+    "valid": 24,
+    "phases": {
+      "before": {
+        "passes": 1,
+        "errors": 0,
+        "panics": 0,
+        "emitted": 24,
+        "malformed": 0
+      },
+      "after": {
+        "passes": 8,
+        "errors": 0,
+        "panics": 0,
+        "emitted": 24,
+        "malformed": 0
+      }
+    },
+    "lost_passes": [],
+    "new_errors": [],
+    "new_panics": []
+  }
+}

@@ -1,0 +1,3 @@
+@startyaml
+k: "a\n\tb\n\t\tc"
+@endyaml

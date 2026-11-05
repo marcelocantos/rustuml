@@ -1,0 +1,5 @@
+@startuml
+!theme mono
+actor Farmer
+Farmer --> (Thresh)
+@enduml

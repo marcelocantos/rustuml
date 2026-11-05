@@ -1,0 +1,11 @@
+@startuml
+skinparam defaultFontName Times New Roman
+<style>
+usecaseDiagram {
+  usecase {
+    FontStyle italic
+  }
+}
+</style>
+usecase "Kiln wq vista" as E1 <<Dock>>
+@enduml

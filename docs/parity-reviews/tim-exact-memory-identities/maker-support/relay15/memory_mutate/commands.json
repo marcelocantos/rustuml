@@ -1,0 +1,73 @@
+{
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.cGSCHgP6/new",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "java_argv": [
+    "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "-Djava.awt.headless=true",
+    "-Dfile.encoding=UTF-8",
+    "-Duser.language=en",
+    "-Duser.country=AU",
+    "-Duser.timezone=GMT+11:00",
+    "-jar",
+    "/Users/marcelo/rustuml-reference/reference.jar",
+    "-pipe",
+    "-tsvg"
+  ],
+  "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.cGSCHgP6/new",
+  "env_overrides": {},
+  "timed_out": false,
+  "elapsed_seconds": 1.1445043749990873,
+  "stdout_sha256": "a129fc2b5c9aef7e1bc4b3a0d529c8e217ecc2e7d55b19ab3a959cda31c127a5",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "id": "memory_mutate",
+  "timezone": "GMT+11:00",
+  "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/memory_mutate.puml",
+  "source_sha256": "ffa04b138482ec5eb99383402f1a144370ca19e77f9cd7034c66aca7b6d18952",
+  "remote_source": "/Users/marcelo/rustuml-reference/scratch/worker.cGSCHgP6/new/memory_mutate.puml",
+  "probe": {
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/worker.cGSCHgP6/new",
+      "--timezone",
+      "GMT+11:00",
+      "--probe",
+      "/Users/marcelo/rustuml-reference/scratch/worker.cGSCHgP6/SourceProbe.java",
+      "--classpath",
+      "/Users/marcelo/rustuml-reference/scratch/worker.cGSCHgP6",
+      "--",
+      "/Users/marcelo/rustuml-reference/scratch/worker.cGSCHgP6/new/memory_mutate.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.cGSCHgP6/new"
+    ],
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "--class-path",
+      "/Users/marcelo/rustuml-reference/reference.jar:/Users/marcelo/rustuml-reference/scratch/worker.cGSCHgP6",
+      "/Users/marcelo/rustuml-reference/scratch/worker.cGSCHgP6/SourceProbe.java",
+      "/Users/marcelo/rustuml-reference/scratch/worker.cGSCHgP6/new/memory_mutate.puml",
+      "/Users/marcelo/rustuml-reference/scratch/worker.cGSCHgP6/new"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.cGSCHgP6/new",
+    "env_overrides": {},
+    "timed_out": false,
+    "elapsed_seconds": 0.5455097920057597,
+    "stdout_sha256": "54275a64ceaf354692706c970d51a2b6a0d3f9a4fbf0b4880dce1df5fabeb742",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "timezone": "GMT+11:00"
+  }
+}

@@ -1,0 +1,10 @@
+@startuml
+state Works {
+  state Shed {
+    state gate <<entryPoint>>
+    gate --> Saw
+    note right of Saw : sharp
+  }
+  Saw --> Stack
+}
+@enduml

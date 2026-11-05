@@ -1,0 +1,488 @@
+[
+  {
+    "cohort": "retained",
+    "entries": 1730,
+    "valid": 1609,
+    "before": 709,
+    "after": 709,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 32,
+    "panics_after": 32,
+    "svg_exits_before": {
+      "0": 1605,
+      "1": 93,
+      "101": 32
+    },
+    "svg_exits_after": {
+      "0": 1605,
+      "1": 93,
+      "101": 32
+    },
+    "yaml_exits_before": {
+      "0": 1622,
+      "1": 93,
+      "101": 15
+    },
+    "yaml_exits_after": {
+      "0": 1622,
+      "1": 93,
+      "101": 15
+    },
+    "yaml_byte_equal": 1730,
+    "yaml_semantic_equal": 1730,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "maker18",
+    "entries": 18,
+    "valid": 17,
+    "before": 13,
+    "after": 13,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 18
+    },
+    "svg_exits_after": {
+      "0": 18
+    },
+    "yaml_exits_before": {
+      "0": 18
+    },
+    "yaml_exits_after": {
+      "0": 18
+    },
+    "yaml_byte_equal": 18,
+    "yaml_semantic_equal": 18,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "sprites50",
+    "entries": 50,
+    "valid": 49,
+    "before": 49,
+    "after": 49,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 50
+    },
+    "svg_exits_after": {
+      "0": 50
+    },
+    "yaml_exits_before": {
+      "0": 50
+    },
+    "yaml_exits_after": {
+      "0": 50
+    },
+    "yaml_byte_equal": 50,
+    "yaml_semantic_equal": 50,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "checker38",
+    "entries": 38,
+    "valid": 34,
+    "before": 26,
+    "after": 26,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 38
+    },
+    "svg_exits_after": {
+      "0": 38
+    },
+    "yaml_exits_before": {
+      "0": 38
+    },
+    "yaml_exits_after": {
+      "0": 38
+    },
+    "yaml_byte_equal": 38,
+    "yaml_semantic_equal": 38,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "fresh15",
+    "entries": 15,
+    "valid": 15,
+    "before": 13,
+    "after": 13,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 15
+    },
+    "svg_exits_after": {
+      "0": 15
+    },
+    "yaml_exits_before": {
+      "0": 15
+    },
+    "yaml_exits_after": {
+      "0": 15
+    },
+    "yaml_byte_equal": 15,
+    "yaml_semantic_equal": 15,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "fresh26",
+    "entries": 26,
+    "valid": 25,
+    "before": 24,
+    "after": 24,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 26
+    },
+    "svg_exits_after": {
+      "0": 26
+    },
+    "yaml_exits_before": {
+      "0": 26
+    },
+    "yaml_exits_after": {
+      "0": 26
+    },
+    "yaml_byte_equal": 26,
+    "yaml_semantic_equal": 26,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "new15",
+    "entries": 15,
+    "valid": 14,
+    "before": 12,
+    "after": 12,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 15
+    },
+    "svg_exits_after": {
+      "0": 15
+    },
+    "yaml_exits_before": {
+      "0": 15
+    },
+    "yaml_exits_after": {
+      "0": 15
+    },
+    "yaml_byte_equal": 15,
+    "yaml_semantic_equal": 15,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "delimiters4",
+    "entries": 4,
+    "valid": 4,
+    "before": 0,
+    "after": 0,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 4
+    },
+    "svg_exits_after": {
+      "0": 4
+    },
+    "yaml_exits_before": {
+      "0": 4
+    },
+    "yaml_exits_after": {
+      "0": 4
+    },
+    "yaml_byte_equal": 4,
+    "yaml_semantic_equal": 4,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "focused2",
+    "entries": 2,
+    "valid": 2,
+    "before": 2,
+    "after": 2,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 2
+    },
+    "svg_exits_after": {
+      "0": 2
+    },
+    "yaml_exits_before": {
+      "0": 2
+    },
+    "yaml_exits_after": {
+      "0": 2
+    },
+    "yaml_byte_equal": 2,
+    "yaml_semantic_equal": 2,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "checker30",
+    "entries": 30,
+    "valid": 26,
+    "before": 22,
+    "after": 22,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 30
+    },
+    "svg_exits_after": {
+      "0": 30
+    },
+    "yaml_exits_before": {
+      "0": 30
+    },
+    "yaml_exits_after": {
+      "0": 30
+    },
+    "yaml_byte_equal": 30,
+    "yaml_semantic_equal": 30,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "supplement8",
+    "entries": 8,
+    "valid": 7,
+    "before": 7,
+    "after": 7,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 8
+    },
+    "svg_exits_after": {
+      "0": 8
+    },
+    "yaml_exits_before": {
+      "0": 8
+    },
+    "yaml_exits_after": {
+      "0": 8
+    },
+    "yaml_byte_equal": 8,
+    "yaml_semantic_equal": 8,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "fresh12",
+    "entries": 12,
+    "valid": 12,
+    "before": 11,
+    "after": 11,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 12
+    },
+    "svg_exits_after": {
+      "0": 12
+    },
+    "yaml_exits_before": {
+      "0": 12
+    },
+    "yaml_exits_after": {
+      "0": 12
+    },
+    "yaml_byte_equal": 12,
+    "yaml_semantic_equal": 12,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "checker28",
+    "entries": 28,
+    "valid": 28,
+    "before": 21,
+    "after": 23,
+    "lost": [],
+    "gained": [
+      "checker28/hide_parameter_size",
+      "checker28/hide_parameter_color"
+    ],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 28
+    },
+    "svg_exits_after": {
+      "0": 28
+    },
+    "yaml_exits_before": {
+      "0": 28
+    },
+    "yaml_exits_after": {
+      "0": 28
+    },
+    "yaml_byte_equal": 28,
+    "yaml_semantic_equal": 28,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "fresh16",
+    "entries": 16,
+    "valid": 16,
+    "before": 1,
+    "after": 14,
+    "lost": [],
+    "gained": [
+      "fresh16/size_rejected",
+      "fresh16/color_rejected",
+      "fresh16/size_forms",
+      "fresh16/font_priority",
+      "fresh16/font_rejected",
+      "fresh16/font_fallback",
+      "fresh16/back_rejected",
+      "fresh16/back_forms",
+      "fresh16/image_rejected",
+      "fresh16/icon_rejected",
+      "fresh16/wbs_parameters",
+      "fresh16/inner_candidate",
+      "fresh16/class_member"
+    ],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 16
+    },
+    "svg_exits_after": {
+      "0": 16
+    },
+    "yaml_exits_before": {
+      "0": 16
+    },
+    "yaml_exits_after": {
+      "0": 16
+    },
+    "yaml_byte_equal": 16,
+    "yaml_semantic_equal": 16,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "golden-regressions",
+    "entries": 6,
+    "valid": 6,
+    "before": 6,
+    "after": 6,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 6
+    },
+    "svg_exits_after": {
+      "0": 6
+    },
+    "yaml_exits_before": {
+      "0": 6
+    },
+    "yaml_exits_after": {
+      "0": 6
+    },
+    "yaml_byte_equal": 6,
+    "yaml_semantic_equal": 6,
+    "yaml_differences": []
+  },
+  {
+    "cohort": "checker36",
+    "entries": 36,
+    "valid": 34,
+    "before": 2,
+    "after": 14,
+    "lost": [],
+    "gained": [
+      "checker36/size_signed_decimal",
+      "checker36/hidden_selection",
+      "checker36/font_attr_order",
+      "checker36/font_curly_nbsp",
+      "checker36/font_hidden_precedent",
+      "checker36/back_forms",
+      "checker36/back_hidden_invalid",
+      "checker36/icon_invalid",
+      "checker36/wbs_nested_parameters",
+      "checker36/cross_close",
+      "checker36/alias_mono",
+      "checker36/alias_lucida"
+    ],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 36
+    },
+    "svg_exits_after": {
+      "0": 36
+    },
+    "yaml_exits_before": {
+      "0": 36
+    },
+    "yaml_exits_after": {
+      "0": 36
+    },
+    "yaml_byte_equal": 36,
+    "yaml_semantic_equal": 36,
+    "yaml_differences": []
+  }
+]

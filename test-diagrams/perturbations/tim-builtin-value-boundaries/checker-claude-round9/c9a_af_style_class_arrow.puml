@@ -1,0 +1,13 @@
+@startuml
+<style>
+classDiagram {
+  arrow {
+    FontName Helvetica
+    FontSize 15
+  }
+}
+</style>
+class A
+class B
+A --> B : Pier quay
+@enduml

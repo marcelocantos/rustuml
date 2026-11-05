@@ -1,0 +1,21 @@
+golden_pairs: 12550 total, 10497 passed, 754 failed, 1299 skipped
+  panics: 0, xml diff: 754, other: 0
+  parked (numeric-only, allow-listed): 0 (max dev 0.0000)
+  park candidates (numeric-only, NOT yet parked, still counted as failures): 746 (max dev 441.8783) → see golden_ulp_candidates.txt
+  skip breakdown: parse=0, golden_error=1199, unsupported_kw=0, other=100
+  per-directory failures:
+      437 class
+      113 combo
+       81 edge-cases
+       52 er
+       28 preprocessing
+       17 rendering
+        7 deployment
+        7 state
+        4 creole
+        4 skinparam
+        3 component
+        1 type-detection
+test golden_pairs ... FAILED
+
+failures:

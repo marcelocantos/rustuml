@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam sequenceDividerFontStyle italic
+participant A
+A -> A : ok
+== Avid Dawky Vow 4.7, gym kayak ovo! ==
+A -> A : ok
+@enduml

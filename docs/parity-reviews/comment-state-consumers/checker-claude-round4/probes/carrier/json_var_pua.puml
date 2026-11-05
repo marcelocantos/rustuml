@@ -1,0 +1,4 @@
+@startuml
+!$j = { "a": "􏿽" }
+class "$j.a" as J
+@enduml

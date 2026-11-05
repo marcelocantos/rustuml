@@ -1,0 +1,116 @@
+{
+  "frozen": {
+    "summary": {
+      "total": 1038,
+      "matches": 489,
+      "invalid": 32,
+      "cli_errors": 23,
+      "valid_cli_errors": 2,
+      "panics": 2,
+      "sources": 0
+    },
+    "delta": {
+      "gains": [],
+      "lost_passes": [],
+      "new_valid_errors": [],
+      "new_errors": []
+    },
+    "baseline": "checker3 after-frozen.json",
+    "missing": 411
+  },
+  "cohort955": {
+    "total": 949,
+    "matches": 425,
+    "invalid": 10,
+    "cli_errors": 4,
+    "valid_cli_errors": 2,
+    "panics": 2,
+    "sources": 0
+  },
+  "cohort1044": {
+    "total": 1038,
+    "matches": 489,
+    "invalid": 32,
+    "cli_errors": 23,
+    "valid_cli_errors": 2,
+    "panics": 2,
+    "sources": 0
+  },
+  "fresh": {
+    "summary": {
+      "total": 42,
+      "matches": 32,
+      "invalid": 10,
+      "cli_errors": 7,
+      "valid_cli_errors": 0,
+      "panics": 0,
+      "sources": 32
+    },
+    "delta": {
+      "gains": [
+        "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_string.puml",
+        "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_substr_json.puml",
+        "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_string.puml",
+        "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_hex_negative.puml",
+        "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_index.puml",
+        "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_unicode_slice.puml",
+        "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_json_index.puml",
+        "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_snapshot.puml",
+        "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_literal_macro.puml",
+        "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_snapshot_logical.puml",
+        "test-diagrams/perturbations/tim-function-execution-kind/checker3_loop_early_return.puml",
+        "test-diagrams/perturbations/tim-function-execution-kind/checker3_foreach_return.puml",
+        "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+        "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml"
+      ],
+      "lost_passes": [],
+      "new_valid_errors": [],
+      "new_errors": [
+        "test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.puml"
+      ]
+    },
+    "baseline": "checker3 after-fresh.json",
+    "missing": 0
+  },
+  "retained": {
+    "summary": {
+      "total": 21,
+      "matches": 13,
+      "invalid": 7,
+      "cli_errors": 7,
+      "valid_cli_errors": 0,
+      "panics": 0,
+      "sources": 14
+    },
+    "delta": {
+      "gains": [],
+      "lost_passes": [],
+      "new_valid_errors": [],
+      "new_errors": []
+    },
+    "baseline": "checker3 after-retained.json",
+    "missing": 0
+  },
+  "supplement": {
+    "summary": {
+      "total": 4,
+      "matches": 2,
+      "invalid": 2,
+      "cli_errors": 2,
+      "valid_cli_errors": 0,
+      "panics": 0,
+      "sources": 2
+    },
+    "delta": {
+      "gains": [],
+      "lost_passes": [],
+      "new_valid_errors": [],
+      "new_errors": [
+        "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr_only.puml",
+        "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown_only.puml"
+      ]
+    },
+    "baseline": "checker3 after-supplement.json",
+    "missing": 0
+  }
+}

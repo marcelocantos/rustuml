@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/marcelo/Library/Caches/rustuml-tim8-checker/replay.py", line 124, in <module>
+    if sys.argv[1] == 'freeze': freeze()
+                                ~~~~~~^^
+  File "/Users/marcelo/Library/Caches/rustuml-tim8-checker/replay.py", line 44, in freeze
+    rows.append(dict(suite=suite, index=n, membership=m, original_classification=original['reference_category']))
+                                                                                 ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+KeyError: 'reference_category'

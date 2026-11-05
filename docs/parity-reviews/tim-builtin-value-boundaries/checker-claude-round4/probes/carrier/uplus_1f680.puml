@@ -1,0 +1,3 @@
+@startuml
+class "Vault <U+1F680> end" as V
+@enduml

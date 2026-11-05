@@ -1,0 +1,5 @@
+@startuml
+!$tag="label"
+!literal="<$tag>"
+class "<$tag> / literal / <$unknown>" as MarkupFresh
+@enduml

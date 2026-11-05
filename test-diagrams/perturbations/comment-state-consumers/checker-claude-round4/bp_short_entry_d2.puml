@@ -1,0 +1,12 @@
+@startuml
+state Works {
+  state Hall {
+    state Cell {
+      state in <<entryPoint>>
+      in --> Weld
+    }
+    Prep --> in
+  }
+  Start --> Prep
+}
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+skinparam stateBackgroundColor #7a3c9101
+state "Harbor Empty" as Empty
+state "Harbor Body" as Body
+Body : cargo manifest
+Empty --> Body
+@enduml

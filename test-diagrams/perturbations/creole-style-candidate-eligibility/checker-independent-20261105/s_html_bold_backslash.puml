@@ -1,0 +1,3 @@
+@startuml
+Kestrel -> Otter : q<b>a\~</B>r\nq<i>a\~</i>r
+@enduml

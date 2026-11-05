@@ -1,0 +1,357 @@
+[
+  {
+    "cohort": "retained",
+    "entries": 1730,
+    "valid": 1609,
+    "before_pass": 709,
+    "after_pass": 709,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 32,
+    "after_panics": 32,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {
+      "color serialization": 4,
+      "XML-equivalent attribute encoding": 2
+    }
+  },
+  {
+    "cohort": "maker18",
+    "entries": 18,
+    "valid": 17,
+    "before_pass": 13,
+    "after_pass": 13,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {}
+  },
+  {
+    "cohort": "sprites50",
+    "entries": 50,
+    "valid": 49,
+    "before_pass": 49,
+    "after_pass": 49,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {}
+  },
+  {
+    "cohort": "checker38",
+    "entries": 38,
+    "valid": 34,
+    "before_pass": 26,
+    "after_pass": 26,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {}
+  },
+  {
+    "cohort": "fresh15",
+    "entries": 15,
+    "valid": 15,
+    "before_pass": 13,
+    "after_pass": 13,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {}
+  },
+  {
+    "cohort": "fresh26",
+    "entries": 26,
+    "valid": 25,
+    "before_pass": 24,
+    "after_pass": 24,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {}
+  },
+  {
+    "cohort": "new15",
+    "entries": 15,
+    "valid": 14,
+    "before_pass": 12,
+    "after_pass": 12,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {}
+  },
+  {
+    "cohort": "delimiters4",
+    "entries": 4,
+    "valid": 4,
+    "before_pass": 0,
+    "after_pass": 0,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {}
+  },
+  {
+    "cohort": "focused2",
+    "entries": 2,
+    "valid": 2,
+    "before_pass": 2,
+    "after_pass": 2,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {}
+  },
+  {
+    "cohort": "checker30",
+    "entries": 30,
+    "valid": 26,
+    "before_pass": 22,
+    "after_pass": 22,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {}
+  },
+  {
+    "cohort": "supplement8",
+    "entries": 8,
+    "valid": 7,
+    "before_pass": 7,
+    "after_pass": 7,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {}
+  },
+  {
+    "cohort": "fresh12",
+    "entries": 12,
+    "valid": 12,
+    "before_pass": 11,
+    "after_pass": 11,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {}
+  },
+  {
+    "cohort": "checker28",
+    "entries": 28,
+    "valid": 28,
+    "before_pass": 23,
+    "after_pass": 23,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {
+      "XML-equivalent attribute encoding": 1
+    }
+  },
+  {
+    "cohort": "fresh16",
+    "entries": 16,
+    "valid": 16,
+    "before_pass": 14,
+    "after_pass": 15,
+    "losses": [],
+    "gains": [
+      "fresh16/color_forms"
+    ],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {
+      "color serialization": 1,
+      "XML-equivalent attribute encoding": 1
+    }
+  },
+  {
+    "cohort": "golden-regressions",
+    "entries": 6,
+    "valid": 6,
+    "before_pass": 6,
+    "after_pass": 6,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {}
+  },
+  {
+    "cohort": "checker36",
+    "entries": 36,
+    "valid": 34,
+    "before_pass": 15,
+    "after_pass": 19,
+    "losses": [],
+    "gains": [
+      "checker36/color_rgb",
+      "checker36/color_rgba",
+      "checker36/color_named_alias",
+      "checker36/family_slash"
+    ],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {
+      "color serialization": 3,
+      "XML parse transition": 3,
+      "XML-equivalent attribute encoding": 2
+    }
+  },
+  {
+    "cohort": "fallback16",
+    "entries": 16,
+    "valid": 14,
+    "before_pass": 11,
+    "after_pass": 13,
+    "losses": [],
+    "gains": [
+      "fallback16/color_valid_neighbors",
+      "fallback16/color_registry_boundary"
+    ],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {
+      "color serialization": 2
+    }
+  },
+  {
+    "cohort": "checker32",
+    "entries": 32,
+    "valid": 29,
+    "before_pass": 17,
+    "after_pass": 19,
+    "losses": [],
+    "gains": [
+      "checker32/color_single_nibble",
+      "checker32/back_transparent"
+    ],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {
+      "color serialization": 2,
+      "element count change: inspect": 1
+    }
+  },
+  {
+    "cohort": "shared22",
+    "entries": 22,
+    "valid": 18,
+    "before_pass": 4,
+    "after_pass": 10,
+    "losses": [],
+    "gains": [
+      "shared22/attr_font_quotes",
+      "shared22/color_short_full",
+      "shared22/color_named_hash",
+      "shared22/color_transparent",
+      "shared22/color_alpha_nested",
+      "shared22/color_wbs"
+    ],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [],
+    "byte_change_categories": {
+      "XML parse transition": 2,
+      "XML-equivalent attribute encoding": 2,
+      "mixed decoded changes: inspect": 1,
+      "color serialization": 5,
+      "element count change: inspect": 2
+    }
+  },
+  {
+    "cohort": "full-golden",
+    "entries": 12550,
+    "valid": 11251,
+    "before_pass": 11179,
+    "after_pass": 11179,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "before_panics": 0,
+    "after_panics": 0,
+    "yaml_byte_changes": [
+      "full-golden/dot/dot_edge_labels",
+      "full-golden/dot/dot_graph_attributes",
+      "full-golden/dot/dot_multi_edge",
+      "full-golden/dot/dot_node_colors",
+      "full-golden/dot/dot_node_url",
+      "full-golden/dot/dot_record_ports",
+      "full-golden/dot/dot_record_simple",
+      "full-golden/dot/dot_weighted_edges",
+      "full-golden/sprites/sprite_multiple"
+    ],
+    "byte_change_categories": {
+      "XML-equivalent attribute encoding": 16
+    }
+  }
+]

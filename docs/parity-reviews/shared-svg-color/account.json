@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "base_revision": "b8905e296b8865e53f3c573abaebf4adb632d751",
+  "production_base": "1ffb930b7b56decb15208121db5e70d252ed3c1b",
+  "imported_rejection": "84b5439aef3b41d10257d4ec964f0134a2e24ce1",
+  "import_commit": "bb550b42bf7bc3bd23774df31e9b137493cb6743",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "mechanism": "shared-svg-color",
+  "java_locations": [
+    "klimt/color/HColorSet.java:75-155 parseColor/parseSimpleColor: optional #, named/special,1/3/6/8hex RRGGBBAA",
+    "klimt/color/ColorTrieNode.java:52-210 palette including seven Archimate names",
+    "klimt/color/HColor.java:70-80 toRGB/toSvg; HColorSimple.java:132-150 transparency and :172-176 ColorMapper dispatch",
+    "klimt/color/ColorMapper.java normal mapper fromColorSimple; klimt/awt/XColor.java:105-117 uppercase hex and opacity encoding",
+    "klimt/drawing/svg/SvgGraphics.java:514-539 setFillColor/setStrokeColor/fixColor; :891-898 fillMe splits eight-digit fill and formats alpha/255 with five decimals",
+    "klimt/drawing/svg/DriverTextSvg.java:162-180 BACKCOLOR uses toRGB; gradient branch separate T14.18; SvgGraphics.java:751-765 flood-color",
+    "klimt/creole/legacy/AtomText.java:123-130 \u2192 font/FontConfiguration.java:349-355 \u2192 HColorAutomagic.java:40-41 \u2192 HColorSimple.java:211-214 automatic background-dependent; deferred consumer context"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/text_render.rs::normalize_color/css_color_hex/write_text_element",
+    "crates/rustuml-render/src/creole.rs::Style/handle_tag/is_resolvable_color",
+    "crates/rustuml-render/src/svg.rs::SvgBuilder shape fill/stroke attribute emission",
+    "crates/rustuml-render/src/filter_registry.rs::normalize_back_color/render_defs_content"
+  ],
+  "invariant": "Color candidate eligibility and per-command invalid-color behavior remain separate from paint serialization. Shared normalized RGB plus optional alpha preserves Java RRGGBBAA. Opaque defaults add no opacity. Transparent foreground uses none; BACKCOLOR uses RGB even for transparent/alpha colors. Stroke follows Java fixed-color path, not invented stroke-opacity. Automatic requires consumer background and is not hardcoded.",
+  "causal_divergence": "Raw short/named/alpha strings flow to fill and flood-color; named lookup misses Java special/palette cases; no Style opacity reaches SVG. Different paint roles are collapsed into generic raw strings.",
+  "planned_change": "Centralize simple color parsing/normalization in shared text/SVG serialization using existing palette plus Java additions. Expand1/3hex, uppercase6hex, parse8hex as RGB+alpha. Add optional byte opacity to renderer creole Style and reset it with every selected fill change, including hyperlink default; shared writer uses it for fill-opacity and can decode base raw colors as well. Serialize transparent fill as none and BACKCOLOR RGB without alpha. Preserve invalid foreground inheritance/BACKCOLORwhite and combined-font throwing residual. Do not change automatic, gradients, logical-font aliases/metrics or base-style OR. Preserve public emission signatures.",
+  "perturbation_axes": [
+    "hex lengths1/3/6/8 and mixed case / named hash-prefixed and Archimate names",
+    "alpha0/1/119/254/255 and nested restoration",
+    "foreground versus BACKCOLOR versus combined-font and shared shape paint",
+    "note/activity/WBS/sequence/class shared consumers"
+  ],
+  "production_files": [
+    "crates/rustuml-render/src/text_render.rs",
+    "crates/rustuml-render/src/svg.rs",
+    "crates/rustuml-render/src/creole.rs",
+    "crates/rustuml-render/src/filter_registry.rs"
+  ],
+  "serialization_compatibility": "creole::Style is a renderer-only Eq/Hash/Default struct, not a parser/YAML model and has no serde implementation. Optional opacity defaults to None; no parser schema field or serde change is needed or planned. Existing Theme and diagram models untouched. Verify every captured CLI YAML before/after, including alpha inputs; adding serde merely for an unpersisted renderer struct would create unrelated API surface.",
+  "verification": "Same full golden actual-CLI/retained/fresh/registered inventory as attribute account; report all decoded-value changes separately, preserve nonpositives; independent checker only after local production and evidence commits."
+}

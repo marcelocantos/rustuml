@@ -1,0 +1,10 @@
+@startuml
+!function $pick($a)
+!return "value "+$a
+!endfunction
+!procedure $pick($a,$b)
+class Phantom
+!endprocedure
+!$x=$pick(7)
+class "$x" as Selected
+@enduml

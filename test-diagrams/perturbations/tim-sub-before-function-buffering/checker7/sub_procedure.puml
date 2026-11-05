@@ -1,0 +1,8 @@
+@startuml
+!procedure $unused()
+!startsub stash
+class "retained" as Node
+!endsub
+!endprocedure
+!includesub stash
+@enduml

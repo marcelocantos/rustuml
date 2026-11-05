@@ -1,0 +1,252 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_nested_procedure.puml",
+    "mechanism": "tim-function-execution-kind",
+    "negative": false,
+    "cwd": "test-diagrams/perturbations/tim-function-execution-kind/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/kind_nested_procedure.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_theme_repeated.puml",
+    "mechanism": "tim-function-execution-kind",
+    "negative": false,
+    "cwd": "test-diagrams/perturbations/tim-function-execution-kind/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/kind_theme_repeated.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_binding.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "negative": false,
+    "cwd": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/values_binding.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_lookup_json.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "negative": false,
+    "cwd": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/values_lookup_json.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_json_scalar.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "negative": false,
+    "cwd": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/values_json_scalar.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_set_global.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "negative": false,
+    "cwd": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/values_set_global.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_values_wrap_quotient.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "negative": false,
+    "cwd": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/values_wrap_quotient.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_eager_and_or.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "negative": false,
+    "cwd": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/eager_and_or.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_literal_truth.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "negative": false,
+    "cwd": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/literal_truth.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_arguments.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "negative": true,
+    "cwd": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/first_error_arguments.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_logical.puml",
+    "mechanism": "tim-eager-operands-first-error",
+    "negative": true,
+    "cwd": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/first_error_logical.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_caller_relative.puml",
+    "mechanism": "tim-external-sub-selection",
+    "negative": false,
+    "cwd": "test-diagrams/perturbations/tim-external-sub-selection/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/sub_caller_relative.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_selected_fatal.puml",
+    "mechanism": "tim-external-sub-selection",
+    "negative": true,
+    "cwd": "test-diagrams/perturbations/tim-external-sub-selection/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/sub_selected_fatal.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+    "mechanism": "tim-zone-display-width",
+    "negative": false,
+    "zone": "Asia/Tokyo",
+    "debug": "date=1774210426000",
+    "cwd": "test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/zone_tokyo_width.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+    "mechanism": "tim-zone-display-width",
+    "negative": false,
+    "zone": "America/New_York",
+    "debug": "date=1774210426000",
+    "cwd": "test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/zone_new_york_summer.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml",
+    "mechanism": "tim-zone-display-width",
+    "negative": false,
+    "zone": "UTC",
+    "debug": "date=1774210426000",
+    "cwd": "test-diagrams/perturbations/tim-zone-display-width/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/zone_utc_width.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3_retained_boolean_value_kinds.puml",
+    "mechanism": "tim-typed-values-and-binding",
+    "negative": false,
+    "cwd": "test-diagrams/perturbations/tim-typed-values-and-binding/checker3-maker-resources",
+    "original_source": "docs/parity-reviews/tim-corrective-execution-maker/inputs/boolean_value_kinds.puml",
+    "kind": "retained maker, remote reference rerun",
+    "axes": [
+      "retained maker regression control",
+      "exact source and declared environment"
+    ]
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_pattern.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "exact root assertion source",
+    "axes": [
+      "class versus sequence",
+      "literal versus pattern failure"
+    ],
+    "negative": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_literal.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "exact root assertion source",
+    "axes": [
+      "class versus sequence",
+      "literal versus pattern failure"
+    ],
+    "negative": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_pattern.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "exact root assertion source",
+    "axes": [
+      "class versus sequence",
+      "literal versus pattern failure"
+    ],
+    "negative": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_literal.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "exact root assertion source",
+    "axes": [
+      "class versus sequence",
+      "literal versus pattern failure"
+    ],
+    "negative": true
+  }
+]

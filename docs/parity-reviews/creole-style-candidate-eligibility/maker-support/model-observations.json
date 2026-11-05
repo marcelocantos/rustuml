@@ -1,0 +1,287 @@
+[
+  {
+    "cohort": "retained",
+    "entries": 1730,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "maker18",
+    "entries": 18,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "sprites50",
+    "entries": 50,
+    "semantic_changes": [],
+    "raw_byte_changes": [
+      "sprites/sprite_multiple"
+    ]
+  },
+  {
+    "cohort": "checker38",
+    "entries": 38,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "fresh15",
+    "entries": 15,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "fresh26",
+    "entries": 26,
+    "semantic_changes": [
+      {
+        "id": "fresh26/wbs_boxless",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/frozen/fresh26/wbs_boxless/wbs_boxless.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/label/$value",
+            "before": "_ East<$seed>End",
+            "after": "East<$seed>End"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ West",
+            "after": "West"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      }
+    ],
+    "raw_byte_changes": [
+      "fresh26/wbs_boxless"
+    ]
+  },
+  {
+    "cohort": "new15",
+    "entries": 15,
+    "semantic_changes": [
+      {
+        "id": "new15/wbs_boxless_tree",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/new/wbs_boxless_tree.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/label/$value",
+            "before": "_ Leaf\\nNext",
+            "after": "Leaf\\nNext"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ West",
+            "after": "West"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/label/$value",
+            "before": "_ Root<$twig>End",
+            "after": "Root<$twig>End"
+          },
+          {
+            "path": "/diagram/nodes/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      },
+      {
+        "id": "new15/wbs_shape_color",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/new/wbs_shape_color.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/label/$value",
+            "before": "_ Leaf",
+            "after": "Leaf"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/color/$tag",
+            "before": "tag:yaml.org,2002:null",
+            "after": "tag:yaml.org,2002:str"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/color/$value",
+            "before": "null",
+            "after": "#pink"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/label/$value",
+            "before": "_[#pink] East",
+            "after": "East"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ West",
+            "after": "West"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      },
+      {
+        "id": "new15/wbs_literal_underscore",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/new/wbs_literal_underscore.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ Text",
+            "after": "Text"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      },
+      {
+        "id": "new15/wbs_boxless_empty",
+        "source": "/Users/marcelo/Library/Caches/rustuml-style-wbs-maker/new/wbs_boxless_empty.puml",
+        "changes": [
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/label/$value",
+            "before": "_ <size:20><$bud></size>",
+            "after": "<size:20><$bud></size>"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/label/$value",
+            "before": "_ <$twig>",
+            "after": "<$twig>"
+          },
+          {
+            "path": "/diagram/nodes/0/children/0/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/label/$value",
+            "before": "_ <b></b>",
+            "after": "<b></b>"
+          },
+          {
+            "path": "/diagram/nodes/0/children/1/shape",
+            "before": {
+              "absent": true
+            },
+            "after": {
+              "$tag": "tag:yaml.org,2002:str",
+              "$value": "None"
+            }
+          }
+        ]
+      }
+    ],
+    "raw_byte_changes": [
+      "new15/wbs_boxless_tree",
+      "new15/wbs_shape_color",
+      "new15/wbs_literal_underscore",
+      "new15/wbs_boxless_empty"
+    ]
+  },
+  {
+    "cohort": "delimiters4",
+    "entries": 4,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "focused2",
+    "entries": 2,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  }
+]

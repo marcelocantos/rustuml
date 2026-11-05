@@ -1,0 +1,6 @@
+@startjson
+{
+  "a": "x\ry",
+  "b": [1, "z"]
+}
+@endjson

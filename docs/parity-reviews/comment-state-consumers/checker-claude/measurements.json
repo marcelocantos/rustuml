@@ -1,0 +1,115 @@
+{
+ "trees": {
+  "before": "9834a719455308120c3289b59a260567f141b724",
+  "after": "55c92692dd7b589bde814a6fc34ed246746007c6",
+  "merged_predraft": "5e8dbd6881e49a63aa28922705e93305607fe0f0",
+  "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a"
+ },
+ "no_oracle": {
+  "before": "11181/11251",
+  "after": "11179/11251",
+  "lost": [
+   "activity/act_skinparam2_shadowing_true",
+   "activity/act_skinparam_shadowing",
+   "edge-cases/edge_whitespace_multiple_blank_lines"
+  ],
+  "gained": [
+   "preprocessing/preproc_complex_theme_override"
+  ],
+  "note": "Both trees fail the ratchet: the base has unlocked progress (class +1, preprocessing +1, rendering +4); the after tree regresses activity 1299->1297 and edge-cases 760->759 against the unchanged baseline."
+ },
+ "golden_pairs": {
+  "before": "10497 passed / 754 failed / 1299 skipped of 12550",
+  "after": "10497 / 754 / 1299 of 12550",
+  "failure_names_identical": true
+ },
+ "parity_perturbations": {
+  "before_sources": 3008,
+  "before_fail": 1365,
+  "after_sources": 3798,
+  "after_fail": 1602,
+  "pre_existing_sources_newly_failing": 0,
+  "pre_existing_sources_gained": 105,
+  "added_sources": 790,
+  "added_sources_in_pre_existing_dirs": 9,
+  "added_sources_in_pre_existing_dirs_failing": 9,
+  "note": "Counts are before this checker registered its pairs.",
+  "after_checker_records": {
+   "sources": 3852,
+   "failing": 1628,
+   "checker_pairs": 54,
+   "checker_pairs_failing": 26,
+   "non_checker_new_failures": 0
+  }
+ },
+ "harness_guards": {
+  "before": "4/6 (decimal_literal_ratchet, parity_review_records_are_complete fail)",
+  "after": "4/6 (same two)",
+  "decimal_ratchet_new_vs_base": {
+   "crates/rustuml-render/src/svg.rs": "0 -> 1 (unit-test literal 0.46667 = 0x77/255 at {:.5}, no adjacent provenance comment)"
+  },
+  "review_record_category_growth": {
+   "latest accepted review cannot contain failing perturbations": "1012 -> 1300",
+   "perturbation is not named in any checker review": "198 -> 306",
+   "latest checker review must be accepted": "151 -> 198",
+   "No such file or directory": "13 -> 15"
+  },
+  "t14_6_7_categories": "escape/same-stem/.puml-under: 98 each before and after (no growth)",
+  "after_checker_records": {
+   "tests": "4/6, same two failing",
+   "latest accepted review cannot contain failing perturbations": "1300 -> 1235 (record replacement: these records supersede larger rejected latest records in comment-state-consumers and tim-evaluated-event-stream)",
+   "latest checker review must be accepted": "198 -> 198",
+   "escape/same-stem/.puml-under": "98 each, unchanged",
+   "own-record entries": {
+    "comment-state-consumers/review-2.json": "1 latest-not-accepted, 15 failing pairs",
+    "sequence-delay-label-allocation/review-2.json": "1, 4",
+    "tim-evaluated-event-stream/review-4.json": "1, 6"
+   }
+  }
+ },
+ "pipe_mode": {
+  "before": "16/16",
+  "after": "17/17 (strict-XML census green; EXPECTED_MALFORMED 14 entries, byte-identical to 7ed71f3e5)",
+  "after_checker_records": "17/17; strict-XML census green including the 54 checker pairs"
+ },
+ "workspace_lib": {
+  "before": "all pass (parser 586, renderer 800)",
+  "after": "parser 649/649; renderer 825/827",
+  "after_failures": {
+   "filter_registry::tests::parser_source_identity_matches_java_shadow_id_after_initial_blanks": "expects GET seed fbdz2fx1jlqnt; after emits f1jczin02njk7, which pinned Java -pipe emits for the exact input (AU raw_unit_test_input)",
+   "class::tests::plain_theme_uses_legacy_class_icon_and_font_defaults": "bdda66260 dropped the skinparam __theme marker for unbundled themes"
+  }
+ },
+ "cli_whole_output_16348_sources_cwd_source_dir": {
+  "lost_matches_valid_refs": 3,
+  "gained_matches_valid_refs": 509,
+  "lost_rejections": [
+   "perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml"
+  ],
+  "rejections_gained": 69,
+  "new_nonzero_on_valid_refs_raw": 10,
+  "new_valid_input_errors_under_recorded_cwd": [
+   "perturbations/tim-intval-conversion/checker6/intval_unicode_digits.puml",
+   "perturbations/tim-intval-conversion/checker6/intval_unicode_json.puml"
+  ],
+  "base_panics_now_exit0_valid_ref": [
+   "perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+   "perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+   "perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+  ],
+  "panics": "8 -> 4",
+  "new_panics": 0,
+  "timeouts": 0
+ },
+ "comment_lists_16348_pairs": {
+  "exact_before": 14270,
+  "exact_after": 14952,
+  "gained": 685,
+  "lost": [
+   "perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+   "perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+   "perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+  ],
+  "lost_note": "all three references are nonpositive: two Java crash SVGs (T14.20) and one Java syntax-error page"
+ }
+}

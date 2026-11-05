@@ -1,0 +1,87 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml",
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-after/release/rustuml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml"
+    ],
+    "exit": 0,
+    "comparison_exit": 0,
+    "pass_": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml",
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-after/release/rustuml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml"
+    ],
+    "exit": 0,
+    "comparison_exit": 0,
+    "pass_": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml",
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-after/release/rustuml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml"
+    ],
+    "exit": 0,
+    "comparison_exit": 0,
+    "pass_": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-after/release/rustuml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml"
+    ],
+    "exit": 0,
+    "comparison_exit": 0,
+    "pass_": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-after/release/rustuml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml"
+    ],
+    "exit": 0,
+    "comparison_exit": 0,
+    "pass_": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+    "argv": [
+      "/Users/marcelo/Library/Caches/rustuml-review-1703a272/target-after/release/rustuml",
+      "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml"
+    ],
+    "exit": 0,
+    "comparison_exit": 0,
+    "pass_": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+    "svg_match": true,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+    "svg_match": true,
+    "source_equal": true
+  }
+]

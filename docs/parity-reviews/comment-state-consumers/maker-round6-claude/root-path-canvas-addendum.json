@@ -1,0 +1,15 @@
+{
+ "schema_version": 1,
+ "mechanism": "comment-state-consumers",
+ "kind": "addendum after measurement, before the change",
+ "amends": "maker-round6-claude/outer-canvas-rounding-account.json (second_trace)",
+ "measured": "held-out BH rp6_root_and_group (Java viewBox 259x307, tip 260x307) and pt6_note_outer_anchor_later_inner (Java 171x232, tip 172x232): render_non_autarkic_root_clusters computes width 259.32 / 171.64 and height 307 / 232 (debug print, removed).",
+ "java_locations": [
+  "svek/SvekResult.java 130-136 calculateDimension: moveDelta(6 - minX, 6 - minY), dimension = (maxX - minX) + 15, (maxY - minY) + 15.",
+  "CucaDiagram.getDefaultMargins: 0 top/left, 5 right/bottom (state.rs CUCA_POSITIVE_AXIS_MARGIN).",
+  "klimt/drawing/svg/SvgGraphics.java 142-147 ensureVisible: (int)(dimension + 1)."
+ ],
+ "cause": "state.rs 5906-5907 sizes the root path as origin + painted max + 15 = (max - min) + 21 and 5974-5975 rounds with ceil. Java's canvas is (int)((max - min) + 15 + 5 + 1). The two agree when the extent is integral (ceil(n + 21) = n + 21) and differ by one otherwise (rp6 width: ceil(259.32) = 260, Java (int)(258.32 + 1) = 259); heights 306 + 1 = 307 agree.",
+ "change": "state.rs root cluster path: width/height = (painted max - painted min) + SVEK_RESULT_DIMENSION_PAD + CUCA_POSITIVE_AXIS_MARGIN, canvas = svg_ensure_visible_dimension. Origins and painting unchanged.",
+ "expect": "BH rp6_root_and_group and pt6_note_outer_anchor_later_inner get Java's exact viewBox; sweep: exact viewBox gains on the root path, 0 exact canvases lost, 0 strict matches lost."
+}

@@ -1,0 +1,63 @@
+   Compiling bitflags v2.11.0
+warning: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:74:15
+   |
+74 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rustuml-parser` (lib) generated 1 warning
+   Compiling rustybuzz v0.20.1
+   Compiling png v0.18.1
+   Compiling pdf-writer v0.12.1
+   Compiling tiny-skia v0.12.0
+   Compiling image v0.25.10
+   Compiling usvg v0.45.1
+   Compiling usvg v0.47.0
+   Compiling resvg v0.45.1
+   Compiling svg2pdf v0.13.0
+   Compiling resvg v0.47.0
+   Compiling rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round10-claude-checker/gsrc/e24240b35/crates/rustuml-render)
+   Compiling rustuml v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round10-claude-checker/gsrc/e24240b35/crates/rustuml)
+    Finished `release` profile [optimized] target(s) in 32.10s
+     Running tests/pipe_mode.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round10-claude-checker/target/gates-e24240b35/release/deps/pipe_mode-24a3fb514c064660)
+
+running 17 tests
+test help_agent_discloses_no_oracle_product_metric ... ok
+test svg_doctype_guard_rejects_comment_decoy_and_internal_subset ... ok
+test pipe_with_empty_input ... ok
+test pipe_with_modern_theme ... ok
+test pipe_pdf_output ... ok
+test pipe_svg_sequence_diagram ... ok
+test pipe_svg_class_diagram ... ok
+test pipe_ascii_text_output ... ok
+test pipe_yaml_output ... ok
+test pipe_with_skinparams_in_input ... ok
+test pipe_png_output ... ok
+test pipe_with_invalid_input_terminates ... ok
+test pipe_flag_equivalent_to_dash_input ... ok
+test pipe_accepts_valid_dates_and_inactive_errors ... ok
+test pipe_multiple_invocations_do_not_hang ... ok
+test pipe_rejects_fatal_preprocessing_errors ... ok
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_escape.puml owner=T14.20: U+001B tooltip: Java SAXException crash SVG; Rust infallible rendering emits invalid XML; observed=Some("a non-XML character '\\u{1b}' found at 1:3221")
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_one.puml owner=T14.20: U+0001 tooltip: Java SAXException crash SVG; Rust infallible rendering emits invalid XML; observed=Some("a non-XML character '\\u{1}' found at 1:3221")
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_zero.puml owner=T14.20: U+0000 tooltip: Java SAXException crash SVG; Rust infallible rendering emits invalid XML; observed=Some("a non-XML character '\\0' found at 1:3221")
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_c0.puml owner=T14.20: Java exports a crash SVG; Rust emits a raw control character in an attribute; observed=Some("a non-XML character '\\u{2}' found at 1:584")
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_escape.puml owner=T14.20: Java exports a crash SVG; Rust emits a raw control character in an attribute; observed=Some("a non-XML character '\\u{1b}' found at 1:615")
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_zero.puml owner=T14.20: Java exports a crash SVG; Rust emits a raw control character in an attribute; observed=Some("a non-XML character '\\0' found at 1:615")
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_one.puml owner=T14.20: Java exports a crash SVG; Rust emits a raw control character in an attribute; observed=Some("a non-XML character '\\u{1}' found at 1:615")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml owner=T14.20: Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text; observed=Some("a non-XML character '\\0' found at 1:802")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_class.puml owner=T14.20: Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text; observed=Some("a non-XML character '\\0' found at 1:1480")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_component.puml owner=T14.21: Java sequence-family syntax error exit200; Rust admits a different family and emits raw NUL; T14.17 per-family admission co-dependency; observed=Some("a non-XML character '\\0' found at 7:164")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_deployment.puml owner=T14.21: Java sequence-family syntax error exit200; Rust admits a different family and emits raw NUL; T14.17 per-family admission co-dependency; observed=Some("a non-XML character '\\0' found at 7:164")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_description.puml owner=T14.20: Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text; observed=Some("a non-XML character '\\0' found at 4:164")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_state.puml owner=T14.20: Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text; observed=Some("a non-XML character '\\0' found at 1:766")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_usecase.puml owner=T14.21: Java sequence-family syntax error exit200; Rust admits a different family and emits raw NUL; T14.17 per-family admission co-dependency; observed=Some("a non-XML character '\\0' found at 4:169")
+test every_cli_golden_and_registered_perturbation_svg_is_strict_xml has been running for over 60 seconds
+XML corpus=golden inputs=12550 emitted=12470 malformed=0 process_errors=80 panics=0
+XML corpus=perturbation inputs=4960 emitted=4785 malformed=14 process_errors=175 panics=4
+test every_cli_golden_and_registered_perturbation_svg_is_strict_xml ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 66.20s
+

@@ -1,0 +1,22 @@
+{
+  "build_argv": [
+    "rustc",
+    "--edition=2024",
+    "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/model_probe.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/target-after/release/deps",
+    "--extern",
+    "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/target-after/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+    "--extern",
+    "serde_json=/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/target-after/release/deps/libserde_json-4a753cf8612a29da.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/model-probe"
+  ],
+  "build_exit": 0,
+  "run_argv": [
+    "/Users/marcelo/Library/Caches/rustuml-style-wbs-checker-20261105/model-probe"
+  ],
+  "exit": 0,
+  "stdout": "{\"old_input\":{\"label\":\"Cedar\\\\nBranch\",\"color\":\"#cyan\",\"depth\":3,\"side\":\"Left\",\"children\":[{\"label\":\"_ twig\",\"color\":null,\"depth\":4,\"side\":\"Right\",\"children\":[]}]},\"none_input\":{\"label\":\"Cedar\\\\nBranch\",\"color\":\"#cyan\",\"depth\":3,\"side\":\"Left\",\"children\":[{\"label\":\"_ twig\",\"color\":null,\"depth\":4,\"side\":\"Right\",\"children\":[],\"shape\":\"None\"}],\"shape\":\"None\"},\"old_defaults_box\":true,\"box_omitted\":true,\"none_roundtrip_exact\":true}\n",
+  "stderr": ""
+}

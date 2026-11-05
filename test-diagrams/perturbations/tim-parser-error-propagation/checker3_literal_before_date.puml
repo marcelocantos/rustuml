@@ -1,0 +1,5 @@
+@startuml
+class Before
+!$result=%date("QQ",2147483648)
+class After
+@enduml

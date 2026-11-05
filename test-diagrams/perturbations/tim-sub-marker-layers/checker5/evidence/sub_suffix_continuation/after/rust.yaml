@@ -1,0 +1,24 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      !endsub0
+      !endsub0
+      class "14" as Kept
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Kept
+  entities:
+  - id: Kept
+    label: '14'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 8
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

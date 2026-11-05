@@ -1,0 +1,5 @@
+@startwbs
+* x<size:25>G</size>y
+** a<sub>b</sub>c
+-- <b>Wide</b>tiny
+@endwbs

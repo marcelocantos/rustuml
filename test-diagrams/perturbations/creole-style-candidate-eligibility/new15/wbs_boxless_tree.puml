@@ -1,0 +1,6 @@
+@startwbs
+*_ Root<$twig>End
+** Box
+***_ Leaf\nNext
+--_ West
+@endwbs

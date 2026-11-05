@@ -1,0 +1,12 @@
+@startuml
+!$a="$b"
+!function $value()
+!$a="elsewhere"
+!return "oak"
+!endfunction
+!function $pair($a="seed",$b="leaf")
+!return $a+"/"+$b
+!endfunction
+!$v=$pair($a=$value())
+class "$v / $pair($a="elm")" as Keys
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+skinparam ArrowFontName Arial
+skinparam ArrowFontSize 11
+class A
+class B
+A --> B : Pier\nWharf qr
+@enduml

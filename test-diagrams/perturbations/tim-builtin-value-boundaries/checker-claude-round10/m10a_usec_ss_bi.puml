@@ -1,0 +1,4 @@
+@startuml
+skinparam usecaseFontStyle bold italic
+usecase "Pylon vk" as E1
+@enduml

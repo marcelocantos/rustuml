@@ -1,0 +1,4 @@
+@startuml
+skinparam backgroundColor black
+Elm -> Cedar : q<color:automatic>fir</color>r
+@enduml

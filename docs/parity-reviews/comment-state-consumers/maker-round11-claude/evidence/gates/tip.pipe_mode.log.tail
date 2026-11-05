@@ -1,0 +1,25 @@
+test pipe_flag_equivalent_to_dash_input ... ok
+test pipe_multiple_invocations_do_not_hang ... ok
+test pipe_rejects_fatal_preprocessing_errors ... ok
+test pipe_accepts_valid_dates_and_inactive_errors ... ok
+test every_cli_golden_and_registered_perturbation_svg_is_strict_xml has been running for over 60 seconds
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_one.puml owner=T14.20: U+0001 tooltip: Java SAXException crash SVG; Rust infallible rendering emits invalid XML; observed=Some("a non-XML character '\\u{1}' found at 1:3221")
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_escape.puml owner=T14.20: U+001B tooltip: Java SAXException crash SVG; Rust infallible rendering emits invalid XML; observed=Some("a non-XML character '\\u{1b}' found at 1:3221")
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_zero.puml owner=T14.20: U+0000 tooltip: Java SAXException crash SVG; Rust infallible rendering emits invalid XML; observed=Some("a non-XML character '\\0' found at 1:3221")
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_c0.puml owner=T14.20: Java exports a crash SVG; Rust emits a raw control character in an attribute; observed=Some("a non-XML character '\\u{2}' found at 1:584")
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_escape.puml owner=T14.20: Java exports a crash SVG; Rust emits a raw control character in an attribute; observed=Some("a non-XML character '\\u{1b}' found at 1:615")
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_zero.puml owner=T14.20: Java exports a crash SVG; Rust emits a raw control character in an attribute; observed=Some("a non-XML character '\\0' found at 1:615")
+MALFORMED expected test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_one.puml owner=T14.20: Java exports a crash SVG; Rust emits a raw control character in an attribute; observed=Some("a non-XML character '\\u{1}' found at 1:615")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml owner=T14.20: Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text; observed=Some("a non-XML character '\\0' found at 1:802")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_class.puml owner=T14.20: Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text; observed=Some("a non-XML character '\\0' found at 1:1480")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_component.puml owner=T14.21: Java sequence-family syntax error exit200; Rust admits a different family and emits raw NUL; T14.17 per-family admission co-dependency; observed=Some("a non-XML character '\\0' found at 7:164")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_deployment.puml owner=T14.21: Java sequence-family syntax error exit200; Rust admits a different family and emits raw NUL; T14.17 per-family admission co-dependency; observed=Some("a non-XML character '\\0' found at 7:164")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_description.puml owner=T14.20: Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text; observed=Some("a non-XML character '\\0' found at 4:164")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_usecase.puml owner=T14.21: Java sequence-family syntax error exit200; Rust admits a different family and emits raw NUL; T14.17 per-family admission co-dependency; observed=Some("a non-XML character '\\0' found at 4:169")
+MALFORMED expected test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_state.puml owner=T14.20: Java CharHidder maps literal U+E000 to NUL and exports a SAXException crash SVG; Rust emits raw NUL in text; observed=Some("a non-XML character '\\0' found at 1:766")
+XML corpus=golden inputs=12550 emitted=12470 malformed=0 process_errors=80 panics=0
+XML corpus=perturbation inputs=5713 emitted=5538 malformed=14 process_errors=175 panics=4
+test every_cli_golden_and_registered_perturbation_svg_is_strict_xml ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 154.16s
+

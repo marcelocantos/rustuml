@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Helvetica
+skinparam defaultFontSize 60
+class "a⸅⸅⸅⸅⸅⸅b" as K
+@enduml

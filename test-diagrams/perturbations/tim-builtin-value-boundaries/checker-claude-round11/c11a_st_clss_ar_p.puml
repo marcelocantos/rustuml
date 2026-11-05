@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Arial
+class "Gym Dawk" as E1 <<Vivid kayak Wovo>>
+@enduml

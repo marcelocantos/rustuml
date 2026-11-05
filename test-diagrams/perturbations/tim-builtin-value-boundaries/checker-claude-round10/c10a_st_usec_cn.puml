@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Courier New
+usecase "Kiln" as E1 <<Ferrous gauge vista>>
+@enduml

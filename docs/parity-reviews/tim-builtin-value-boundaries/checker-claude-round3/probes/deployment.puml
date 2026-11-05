@@ -1,0 +1,5 @@
+@startuml
+node "Rack%substr("🦉",0,1)" as R
+database Db
+R --> Db
+@enduml

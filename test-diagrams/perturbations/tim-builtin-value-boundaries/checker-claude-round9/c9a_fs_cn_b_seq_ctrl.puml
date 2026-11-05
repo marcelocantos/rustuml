@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Courier New
+participant Ann
+participant Bob
+Ann -> Bob : <b>Wharf qr</b>
+@enduml

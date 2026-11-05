@@ -1,0 +1,5 @@
+classes: code points differing rs vs DerivedBidiClass-15.0: 0 []
+brackets: rs 128 ucd 128 equal
+ubidi.icu format b'BiDi' data version (15, 0, 0, 0) trie sig 0x54726932
+classes: code points differing rs vs independent ubidi.icu decode: 0 []
+bracket-type code points in ubidi.icu: 128 ucd 128 same set

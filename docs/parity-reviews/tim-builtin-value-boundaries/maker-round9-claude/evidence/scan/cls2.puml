@@ -1,0 +1,9 @@
+@startuml
+skinparam defaultFontName Courier New
+interface "Iface i𝅧" as I
+class K {
+  {abstract} <i>m𝅧</i>()
+  {abstract} m2𝅧()
+}
+K --> I : <i>Lbl l𝅧</i>
+@enduml

@@ -1,0 +1,308 @@
+{
+ "conc_closed": {
+  "source_sha256": "dcbb7ac598528c535fbe02c25ef02d53e72220be817c074e2c42a831287950d7",
+  "source": "@startuml\nstate Dual {\n  Tick --> Tock\n  --\n  Ping --> Pong\n}\nDual --> Out\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "34e811f5afb001b2e9edbb47b2550f50d5799b25fa7e159bde4a8ae2297a2085",
+   "comments": [
+    "link Tick to Tock",
+    "link Ping to Pong",
+    "link Dual to Out"
+   ],
+   "geometry_check": "OK |  | comments: ['link Tick to Tock', 'link Ping to Pong', 'link Dual to Out']"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "34e811f5afb001b2e9edbb47b2550f50d5799b25fa7e159bde4a8ae2297a2085",
+   "comments": [
+    "link Tick to Tock",
+    "link Ping to Pong",
+    "link Dual to Out"
+   ],
+   "geometry_check": "OK |  | comments: ['link Tick to Tock', 'link Ping to Pong', 'link Dual to Out']"
+  }
+ },
+ "conc_crossing": {
+  "source_sha256": "28a90612378ba43f5544304fb917f694d232a7c2d3a3c1d20890bab51929696f",
+  "source": "@startuml\nstate Dual {\n  Tick --> Tock\n  --\n  Ping --> Pong\n}\nTick --> Out\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "622e04341e81a14b33a23a70191af08135cd595a2c73920e912981e3c5b55ade",
+   "comments": [
+    "link Dual.Tick to Dual.Tock",
+    "link Dual.CONC2.Ping to Dual.CONC2.Pong",
+    "link Dual.Tick to Out"
+   ],
+   "geometry_check": "VIOLATION | Dual.Tick (entity 92.48,7.0,50.0x50.0) outside parent Dual (entity 7.0,7.0,50.9531x50.0); Dual.Tock (entity 48.07,117.0,52.8057x50.0) outside parent Dual (entity 7.0,7.0,50.9531x50.0) | comments: ['link Dual.Tick to Dual.Tock', 'link Dual.CONC2.Ping to Dual.CONC2.Pong', 'link Dual.Tick to Out']"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "b6e19edd5e321b6a632384740efad8ac59a429d815574bbffb9506fd03271e89",
+   "comments": [
+    "link Tick to Tock",
+    "link Ping to Pong",
+    "link Tick to Out"
+   ],
+   "geometry_check": "VIOLATION | Dual.Tick (entity 92.48,7.0,50.0x50.0) outside parent Dual (entity 7.0,7.0,50.9531x50.0); Dual.Tock (entity 48.07,117.0,52.8057x50.0) outside parent Dual (entity 7.0,7.0,50.9531x50.0) | comments: ['link Tick to Tock', 'link Ping to Pong', 'link Tick to Out']"
+  }
+ },
+ "d1_group_link": {
+  "source_sha256": "6ec195ef8b36dc2ab8c24420f51a51870014dc25032d0a6bb0a918ef50b9afb6",
+  "source": "@startuml\nstate Mill {\n  Grind --> Sift\n}\nMill --> Bag\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "bd732088a9c4fb721793f7fe23eb66c0d6742f0de40879898e9f7b2592aaa98a",
+   "comments": [
+    "link Grind to Sift",
+    "link Mill to Bag"
+   ],
+   "geometry_check": "OK |  | comments: ['link Grind to Sift', 'link Mill to Bag']"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "bd732088a9c4fb721793f7fe23eb66c0d6742f0de40879898e9f7b2592aaa98a",
+   "comments": [
+    "link Grind to Sift",
+    "link Mill to Bag"
+   ],
+   "geometry_check": "OK |  | comments: ['link Grind to Sift', 'link Mill to Bag']"
+  }
+ },
+ "d1_inner_note_only": {
+  "source_sha256": "c713a121e079972ab33986754019d4a6f1a30fa8b476e65eedf01405741a2d37",
+  "source": "@startuml\nstate Barn {\n  Hoe --> Rake\n  note left of Hoe : shed\n}\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "fe1f11e9298ed1066d973ae6804fc08db5d118f1c0984317324acfc2bac7de1c",
+   "comments": [
+    "link Barn.Hoe to Barn.Rake"
+   ],
+   "geometry_check": "VIOLATION | Barn.Hoe (entity 177.56,7.0,50.0x50.0) outside parent Barn (entity 92.46,7.0,50.2012x50.0); Barn.Rake (entity 176.28,117.0,52.5664x50.0) outside parent Barn (entity 92.46,7.0,50.2012x50.0) | comments: ['link Barn.Hoe to Barn.Rake']"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "de5682b066bb384c5cf4a8fd14f149d63b30faaeada5f56aaca1fc7cc53b45bb",
+   "comments": [
+    "link Hoe to Rake"
+   ],
+   "geometry_check": "VIOLATION | Barn.Hoe (entity 177.56,7.0,50.0x50.0) outside parent Barn (entity 92.46,7.0,50.2012x50.0); Barn.Rake (entity 176.28,117.0,52.5664x50.0) outside parent Barn (entity 92.46,7.0,50.2012x50.0) | comments: ['link Hoe to Rake']"
+  }
+ },
+ "d1_root_note_only": {
+  "source_sha256": "b4c0e2581bddfc43dbe6e75a61d19bda729b2b2d710ff0b5e7e6eaac50edcd8c",
+  "source": "@startuml\nstate Lone {\n  state Wick\n}\nnote left of Wick : lit\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "f5fa841783b4cea1ea32d2da1e8d0fe7c336629004117044277cf1304e0aeea4",
+   "comments": [],
+   "geometry_check": "VIOLATION | Lone.Wick (entity 162.0,7.0,51.377x50.0) outside parent Lone (entity 74.41,7.0,52.5527x50.0) | comments: []"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "32bd4605598fc2f28cb2e91be82a7b5246724c25bffdec044a58ed417fd9442c",
+   "comments": [
+    "cluster Lone"
+   ],
+   "geometry_check": "OK |  | comments: ['cluster Lone']"
+  }
+ },
+ "d1_root_note_qualified": {
+  "source_sha256": "d713927c9c733ba44c1505005cc555addfb04cf5407f2899e48ba9f5677f4cee",
+  "source": "@startuml\nstate Lone {\n  state Wick\n}\nnote left of Lone.Wick : lit\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "4a5d3b2f0d58e616c140b6f83debbf452a692e4acc153ac12418882dc01a59af",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "4a5d3b2f0d58e616c140b6f83debbf452a692e4acc153ac12418882dc01a59af",
+   "comments": [],
+   "geometry_check": "OK |  | comments: []"
+  }
+ },
+ "d2_crossing": {
+  "source_sha256": "c6263402ca489c711b370e854cc170fecc0a06a9cd924cd4477cd6642ee08bfe",
+  "source": "@startuml\nstate Ore {\n  state Vein {\n    Chip --> Seam\n  }\n}\nSeam --> Cart\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "7b2ddf878b5a7aee3a3641ae2e6bc7bc50c7c6c67dbcb26d72a6e0e1b3419f47",
+   "comments": [
+    "link Chip to Seam",
+    "link Seam to Cart"
+   ],
+   "geometry_check": "OK |  | comments: ['link Chip to Seam', 'link Seam to Cart']"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "ef55f7a5888ac41f9e487d071005d29e7d408567f5efff522daf4bbd7af9dbd5",
+   "comments": [
+    "cluster Ore",
+    "cluster Vein",
+    "link Chip to Seam",
+    "link Seam to Cart"
+   ],
+   "geometry_check": "OK |  | comments: ['cluster Ore', 'cluster Vein', 'link Chip to Seam', 'link Seam to Cart']"
+  }
+ },
+ "d2_entry_renamed": {
+  "source_sha256": "17858adee1ec7b77765db4acd906605054dce91903ddaa94f5c1bf7ef9ba3727",
+  "source": "@startuml\nstate Dock {\n  state Berth {\n    state quay <<entryPoint>>\n    quay --> Crane\n  }\n}\nShip --> quay\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "5c2b7f32a27e35ea959fbc8e5f427442ee42ac62917bc582f83910d98f9f47d4",
+   "comments": [
+    "link Dock.Berth.quay to Dock.Berth.Crane",
+    "link Ship to Dock.Berth.quay"
+   ],
+   "geometry_check": "VIOLATION | Dock.Berth (entity 96.47,7.0,55.5059x50.0) outside parent Dock (entity 7.0,7.0,54.4395x50.0); Dock.Berth.quay (entity 206.22,117.0,12.0x12.0) outside parent Dock.Berth (entity 96.47,7.0,55.5059x50.0); Dock.Berth.Crane (entity 182.4,189.0,59.6348x50.0) outside parent Dock.Berth (entity 96.47,7.0,55.5059x50.0) | comments: ['link Dock.Berth.quay to Dock.Berth.Crane', 'link Ship to Dock.Berth.quay']"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "Warning: node Dock.Berth.quay, port P unrecognized\nWarning: node Dock.Berth.quay, port P unrecognized",
+   "stdout_sha256": "67c936fdbc284cbc995e6b66cd7b825e45d0eb3029bfcf2f9e36ce0370e53c49",
+   "comments": [
+    "cluster Dock",
+    "cluster Berth",
+    "link quay to Crane",
+    "link Ship to quay"
+   ],
+   "geometry_check": "OK |  | comments: ['cluster Dock', 'cluster Berth', 'link quay to Crane', 'link Ship to quay']"
+  }
+ },
+ "d2_inner_note_link": {
+  "source_sha256": "9505fda936743cd1f14406118d0b086eee7dd9f9c4be7c3baeff97965a031888",
+  "source": "@startuml\nstate Yard {\n  state Pen {\n    Ewe --> Ram\n    note right of Ram : wool\n  }\n}\nYard --> Gate\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "45ef4a715c72d3a6a3dadf76095a45ba5343de7e377c9cb417b2c184eebf6525",
+   "comments": [
+    "link Yard.Pen.Ewe to Yard.Pen.Ram",
+    "link Yard to Gate"
+   ],
+   "geometry_check": "VIOLATION | Yard.Pen (entity 177.37,7.0,50.0x50.0) outside parent Yard (entity 91.88,7.0,50.9941x50.0); Yard.Pen.Ewe (entity 262.37,7.0,50.0x50.0) outside parent Yard.Pen (entity 177.37,7.0,50.0x50.0); Yard.Pen.Ram (entity 262.37,117.0,50.0x50.0) outside parent Yard.Pen (entity 177.37,7.0,50.0x50.0) | comments: ['link Yard.Pen.Ewe to Yard.Pen.Ram', 'link Yard to Gate']"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "d42535a23282a150efc665857ee1d23d7a578b2c5f9129d2c37b78de627d7435",
+   "comments": [
+    "link Ewe to Ram",
+    "link Yard to Gate"
+   ],
+   "geometry_check": "VIOLATION | Yard.Pen (entity 177.37,7.0,50.0x50.0) outside parent Yard (entity 91.88,7.0,50.9941x50.0); Yard.Pen.Ewe (entity 262.37,7.0,50.0x50.0) outside parent Yard.Pen (entity 177.37,7.0,50.0x50.0); Yard.Pen.Ram (entity 262.37,117.0,50.0x50.0) outside parent Yard.Pen (entity 177.37,7.0,50.0x50.0) | comments: ['link Ewe to Ram', 'link Yard to Gate']"
+  }
+ },
+ "d3_history_renamed": {
+  "source_sha256": "206628d3975be687c9d738bc2e106773ea7a2d821c31dd64651dac98be1ce641",
+  "source": "@startuml\nstate Loom {\n  state Weft {\n    state Warp {\n      [*] --> Shuttle\n    }\n  }\n}\nSpool --> Warp[H]\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "c6311653ef5760aa1746140b883fe767b340ec653a3e0f71c682de8a9c1638c7",
+   "comments": [
+    "link *start*Warp to Shuttle"
+   ],
+   "geometry_check": "OK |  | comments: ['link *start*Warp to Shuttle']"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "32ed420141ea4b87b48749eea24c6a1b50b8c8bfb0b97645b45006c165eb42d5",
+   "comments": [
+    "cluster Loom",
+    "cluster Weft",
+    "cluster Warp",
+    "link *start*Warp to Shuttle",
+    "link Spool to *historical*Warp"
+   ],
+   "geometry_check": "OK |  | comments: ['cluster Loom', 'cluster Weft', 'cluster Warp', 'link *start*Warp to Shuttle', 'link Spool to *historical*Warp']"
+  }
+ },
+ "d3_root_note_only": {
+  "source_sha256": "bc9d79b9072b35c7cd63085be9d7c609eaa91baeaee0e2538fd33348a27b1da8",
+  "source": "@startuml\nstate Tier1 {\n  state Tier2 {\n    state Tier3 {\n      state Quill\n    }\n  }\n}\nnote right of Quill : ink\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "7bb70a32e142d536bd46c2d92309453f1611e7c5077f29864725efc273a5cd43",
+   "comments": [],
+   "geometry_check": "VIOLATION | Tier1.Tier2 (entity 171.57,7.0,55.2803x50.0) outside parent Tier1 (entity 81.57,7.0,55.2803x50.0); Tier1.Tier2.Tier3 (entity 261.57,7.0,55.2803x50.0) outside parent Tier1.Tier2 (entity 171.57,7.0,55.2803x50.0); Tier1.Tier2.Tier3.Quill (entity 351.36,7.0,51.7051x50.0) outside parent Tier1.Tier2.Tier3 (entity 261.57,7.0,55.2803x50.0) | comments: []"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "9e2c9841fcd80f7649a2c56bd46d22d5fb55f332b2391feb28bbefa58d078651",
+   "comments": [
+    "cluster Tier1",
+    "cluster Tier2",
+    "cluster Tier3"
+   ],
+   "geometry_check": "OK |  | comments: ['cluster Tier1', 'cluster Tier2', 'cluster Tier3']"
+  }
+ },
+ "note_on_cluster_group": {
+  "source_sha256": "e47e6da95cf5c2b4fb4952973c7b7076ec125a4489b10a4473d01df71ec2e3eb",
+  "source": "@startuml\nstate Lone {\n  state Wick\n}\nWick --> Out\nnote right of Lone : n\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "8964ebb4b0d92f3510107d30b17c10de958e4311c1f3e3b8ec256082025999ba",
+   "comments": [
+    "link Lone.Wick to Out"
+   ],
+   "geometry_check": "VIOLATION | Lone.Wick (entity 158.59,7.0,51.377x50.0) outside parent Lone (entity 7.0,7.0,52.5527x50.0) | comments: ['link Lone.Wick to Out']"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "0c58cc63d4827166e8c6cd7e242c6953ee0cc40fb72a845dd02660b42f6ed561",
+   "comments": [
+    "cluster Lone",
+    "link Wick to Out"
+   ],
+   "geometry_check": "OK |  | comments: ['cluster Lone', 'link Wick to Out']"
+  }
+ },
+ "note_on_cluster_group_control": {
+  "source_sha256": "524bb7aea82d3079ef0cdc1c005ec4c688819351e4271210fc4ceff44b338a91",
+  "source": "@startuml\nstate Lone {\n  state Wick\n}\nWick --> Out\n@enduml\n",
+  "50f4f5414": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "e5315e86975dc0f653dadeec5ef8ec4ae8f3d4df5417a53c6df7a344fe9d50e9",
+   "comments": [
+    "link Wick to Out"
+   ],
+   "geometry_check": "OK |  | comments: ['link Wick to Out']"
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stderr_head": "",
+   "stdout_sha256": "5ae899b210d6bf644b4f11e683a7dd9a5c315f938b6f060c8f635dd65505e907",
+   "comments": [
+    "cluster Lone",
+    "link Wick to Out"
+   ],
+   "geometry_check": "OK |  | comments: ['cluster Lone', 'link Wick to Out']"
+  }
+ }
+}

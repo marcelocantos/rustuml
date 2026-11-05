@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-memory-trie-text-lookup",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A78227ae1-6e7a-4609-acf0-9f2049302acc",
+    "model": "gpt-6-astra/high",
+    "tool": "Codex harness through T3 Code; exec_command/rustc/cargo/Python; parent Monkey Man relay only",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf",
+    "branch": "review/tim8-faf4634-independent-20261104",
+    "independence": "This task implemented none of the candidate; no children, Java/javac, own SSH, production edits, target edits or shipping."
+  },
+  "account_commit": "02fa49de2396c1445a4ddf1a783c973f883a82f4",
+  "implementation_commit": "2274e808433568aa1d8042bf9e3cb1f1de338b4b",
+  "candidate_revision": "faf463445591a53f17d25c5c16611f8e626ef93d",
+  "before_revision": "2cf6c7eeebae7354e7a3b7e53b86fb3754883e67",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-tim8-checker/target-after CARGO_BUILD_JOBS=4 cargo build -p rustuml --release",
+    "git switch --detach 2cf6c7eeebae7354e7a3b7e53b86fb3754883e67; CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-tim8-checker/target-before CARGO_BUILD_JOBS=4 cargo build -p rustuml --release; git switch review/tim8-faf4634-independent-20261104",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-tim8-checker/gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-tim8-checker/replay.py before",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-tim8-checker/replay.py after",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-tim8-checker/summarize.py",
+    "Remote SVG/probe argv/cwd/env for all 40 calls: checker8-support/cases/*/commands.json; immutable remote-request.json specifies only approved reference wrapper and <worker> placeholders."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/terminal_history.puml",
+      "golden": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/terminal_history.svg",
+      "axes": [
+        "removed-leaf versus retained-internal-node",
+        "prefix length and reinsertion"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_reference_category": "positive_reference",
+      "reference_valid": true,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": true,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 0,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/terminal_history/result.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/lazy_before.puml",
+      "golden": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/lazy_before.svg",
+      "axes": [
+        "override index before first text scan",
+        "global fallback versus local retained prefix"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_reference_category": "positive_reference",
+      "reference_valid": true,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": true,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 0,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/lazy_before/result.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/lazy_after.puml",
+      "golden": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/lazy_after.svg",
+      "axes": [
+        "override index after first text scan",
+        "removal and mutation order"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_reference_category": "positive_reference",
+      "reference_valid": true,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": true,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 0,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/lazy_after/result.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/punctuation_json.puml",
+      "golden": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/punctuation_json.svg",
+      "axes": [
+        "arbitrary stored punctuation and spaces",
+        "longer stored key versus JSON projection"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_reference_category": "positive_reference",
+      "reference_valid": true,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": true,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 0,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/punctuation_json/result.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/concat_original.puml",
+      "golden": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/concat_original.svg",
+      "axes": [
+        "output markers versus original boundaries",
+        "function priority and value no-rescan"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_reference_category": "positive_reference",
+      "reference_valid": true,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": true,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 0,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/concat_original/result.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/scope_mutations.puml",
+      "golden": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/scope_mutations.svg",
+      "axes": [
+        "automatic local versus newly introduced global",
+        "override removal and sibling frame"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_reference_category": "positive_reference",
+      "reference_valid": true,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": true,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 0,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/scope_mutations/result.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/astral_offsets.puml",
+      "golden": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/astral_offsets.svg",
+      "axes": [
+        "valid surrogate-pair trie edges",
+        "original boundary following shorter and longer values"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_reference_category": "positive_reference",
+      "reference_valid": true,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": true,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 0,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/astral_offsets/result.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/markup_literal.puml",
+      "golden": "test-diagrams/perturbations/tim-memory-trie-text-lookup/checker8/markup_literal.svg",
+      "axes": [
+        "stored name inside markup",
+        "replacement value retained literally"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_valid",
+      "observed_reference_category": "positive_reference",
+      "reference_valid": true,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": false,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 1,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/markup_literal/result.json"
+    }
+  ],
+  "findings": [
+    "Rejected for whole-output acceptance: fresh markup_literal remains a valid strict SVG counterexample, reproducing the preserved unresolved-sprite rendering failure. The bounded text-lookup correction survived these valid source controls; no new in-scope trie defect was demonstrated.",
+    "Independently reproduced retained1672: 1560 valid, 665 SVG before and after, 158/160 available valid sources exact. Total1710 entries/1631 distinct pairs/79 duplicate entries; no valid losses, new errors or valid model drops.",
+    "Fresh20 outcomes: 17 valid/16 CLI SVG matches, one syntax negative, two welcome truncations. Every nonnegative evaluated source is exact; negative diagnostic source is not. Original intended outcomes are retained separately.",
+    "Required exact-candidate gates ran once: parser622/CLI15 pass; main product11179/11251 and assisted10497/11251 exit101; standing609/1628 versus matching-environment CLI636 with27 discrepancies; guards4/6 and existing component dead-code clippy exit101. Touched rustfmt/diff pass. No gate/baseline/policy changes.",
+    "All9245 imported historical evidence files and129 original preprocessing test blocks unchanged. All19766 maker archive files and169 package hash entries verified, including failed iterations. Account chronology independently verified before code edits.",
+    "No unqualified Unicode-version/property/isolated-surrogate or global environment equivalence claim. See source-audit.json for exact boundary and next-step ownership."
+  ],
+  "verdict": "rejected",
+  "bounded_mechanism_result": "No new in-scope causal defect demonstrated on tested valid inputs; whole-output acceptance is not granted.",
+  "next_steps": [
+    "Resolve unresolved sprite marker projection in the downstream Creole/sprite renderer, using fresh markup_literal and preserved maker markup_scan; do not rescan inserted values.",
+    "Keep original boundary predicates and trie history independent. Any future Unicode acceptance requires pinned Character property/version evidence and explicit surrogate-domain contract, not ASCII sample inference."
+  ],
+  "evidence_root": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support"
+}

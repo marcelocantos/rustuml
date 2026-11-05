@@ -1,0 +1,60 @@
+    actual:   [("fill", "#F1F1F1"), ("height", "48.2656"), ("style", "stroke:#181818;stroke-width:1.5;"), ("width", "170.8789"), ("x", "20"), ("y", "20")]
+  [9] tag mismatch: expected <image>, got <text>
+  [10] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "37.2773"), ("x", "30"), ("y", "63.6016")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "37.2773"), ("x", "30"), ("y", "55.7344")]
+  [11] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "48.6387"), ("x2", "48.6387"), ("y1", "76.1328"), ("y2", "96.1328")]
+    actual:   [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "105.4395"), ("x2", "105.4395"), ("y1", "68.2656"), ("y2", "88.2656")]
+
+  test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_colors_old.puml: SVG structural differences:
+  element count: expected 15, got 13
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "WBS"), ("height", "166px"), ("preserveAspectRatio", "none"), ("style", "width:317px;height:166px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 317 166"), ("width", "317px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "WBS"), ("height", "144px"), ("preserveAspectRatio", "none"), ("style", "width:135px;height:144px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 135 144"), ("width", "135px"), ("zoomAndPan", "magnify")]
+  [3] tag mismatch: expected <rect>, got <line>
+  [4] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "monospace"), ("font-size", "10"), ("lengthAdjust", "spacing"), ("textLength", "276.9434"), ("x", "20"), ("y", "23.6406")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "21.8438"), ("x", "20"), ("y", "88.7344")]
+  [4] <text> text mismatch:
+    expected: Some("Please\u{a0}define\u{a0}Direction/Shape\u{a0}before\u{a0}Color/Id.")
+    actual:   Some("Ash")
+  [5] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "32.4219"), ("x2", "32.4219"), ("y1", "77.7734"), ("y2", "97.7734")]
+    actual:   [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "80.7813"), ("x2", "80.7813"), ("y1", "56.1328"), ("y2", "76.1328")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "21.8438"), ("x", "20"), ("y", "110.375")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "28.875"), ("x", "64.8438"), ("y", "88.7344")]
+  [6] <text> text mismatch:
+    expected: Some("Ash")
+    actual:   Some("Birch")
+  [7] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "80.7813"), ("x2", "80.7813"), ("y1", "77.7734"), ("y2", "97.7734")]
+    actual:   [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "80.7813"), ("x2", "90.7813"), ("y1", "115.332"), ("y2", "115.332")]
+  [8] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "28.875"), ("x", "64.8438"), ("y", "110.375")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "21.1758"), ("x", "90.7813"), ("y", "119.8672")]
+  [8] <text> text mismatch:
+    expected: Some("Birch")
+    actual:   Some("Elm")
+  [9] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "80.7813"), ("x2", "90.7813"), ("y1", "136.9727"), ("y2", "136.9727")]
+    actual:   [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "80.7813"), ("x2", "80.7813"), ("y1", "92.2656"), ("y2", "115.332")]
+  [10] tag mismatch: expected <text>, got <line>
+  [11] tag mismatch: expected <line>, got <text>
+  [12] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "32.4219"), ("x2", "80.7813"), ("y1", "77.7734"), ("y2", "77.7734")]
+    actual:   [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "56.6016"), ("x2", "56.6016"), ("y1", "36.1328"), ("y2", "56.1328")]
+
+  test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_direction_new.puml: checker preserved a Java error page instead of valid output
+  test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_direction_old.puml: checker preserved a Java error page instead of valid output
+test held_out_perturbations_match_java_without_oracle_layout ... FAILED
+
+failures:
+
+failures:
+    held_out_perturbations_match_java_without_oracle_layout
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.05s
+
+error: test failed, to rerun pass `-p rustuml-oracle --test parity_perturbations`

@@ -1,0 +1,8 @@
+@startuml
+state Hub {
+  state Spoke {
+    Rim --> Tire
+  }
+}
+note right of Hub : round
+@enduml

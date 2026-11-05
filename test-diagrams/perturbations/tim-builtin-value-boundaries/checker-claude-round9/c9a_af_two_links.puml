@@ -1,0 +1,9 @@
+@startuml
+skinparam ArrowFontName Verdana
+skinparam ArrowFontSize 12
+class A
+class B
+class C
+A --> B : Pier quay
+B ..> C : wharf longer label
+@enduml

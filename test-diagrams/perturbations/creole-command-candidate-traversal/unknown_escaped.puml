@@ -1,0 +1,3 @@
+@startuml
+Juniper -> Willow : A<alien~<$seed>>B<bogus~<b>Literal</b>>C
+@enduml

@@ -1,0 +1,8 @@
+@startyaml
+harbor:
+  fleet:
+    log: |
+      tide: |
+      ebb line
+    crew: nine
+@endyaml

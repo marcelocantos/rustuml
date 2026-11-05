@@ -1,0 +1,88 @@
+{
+  "replay": {
+    "entries": 1992,
+    "valid": 1858,
+    "before": 910,
+    "after": 925,
+    "yaml_byte_equal": 1992,
+    "yaml_semantic_equal": 1992,
+    "panics_before": 32,
+    "panics_after": 32,
+    "lost_passes": 0,
+    "new_process_errors": 0,
+    "new_panics": 0
+  },
+  "fresh": {
+    "cohort": "checker36",
+    "entries": 36,
+    "valid": 34,
+    "before": 2,
+    "after": 14,
+    "lost": [],
+    "gained": [
+      "checker36/size_signed_decimal",
+      "checker36/hidden_selection",
+      "checker36/font_attr_order",
+      "checker36/font_curly_nbsp",
+      "checker36/font_hidden_precedent",
+      "checker36/back_forms",
+      "checker36/back_hidden_invalid",
+      "checker36/icon_invalid",
+      "checker36/wbs_nested_parameters",
+      "checker36/cross_close",
+      "checker36/alias_mono",
+      "checker36/alias_lucida"
+    ],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 36
+    },
+    "svg_exits_after": {
+      "0": 36
+    },
+    "yaml_exits_before": {
+      "0": 36
+    },
+    "yaml_exits_after": {
+      "0": 36
+    },
+    "yaml_byte_equal": 36,
+    "yaml_semantic_equal": 36,
+    "yaml_differences": []
+  },
+  "extra_six": {
+    "cohort": "golden-regressions",
+    "entries": 6,
+    "valid": 6,
+    "before": 6,
+    "after": 6,
+    "lost": [],
+    "gained": [],
+    "new_errors": [],
+    "new_panics": [],
+    "panics_before": 0,
+    "panics_after": 0,
+    "svg_exits_before": {
+      "0": 6
+    },
+    "svg_exits_after": {
+      "0": 6
+    },
+    "yaml_exits_before": {
+      "0": 6
+    },
+    "yaml_exits_after": {
+      "0": 6
+    },
+    "yaml_byte_equal": 6,
+    "yaml_semantic_equal": 6,
+    "yaml_differences": []
+  },
+  "combined_observations": 2028,
+  "combined_before": 912,
+  "combined_after": 939,
+  "including_six_observations": 2034
+}

@@ -1,0 +1,6 @@
+@startuml
+[*] --> Ko
+Ko --> Jetty : go
+Jetty --> Mm
+Mm --> [*]
+@enduml

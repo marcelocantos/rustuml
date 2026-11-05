@@ -1,0 +1,4 @@
+@startuml
+!$result=%date("z / zzz / zzzz / zzzzz / XXX", 0)
+class "$result" as Result
+@enduml

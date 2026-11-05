@@ -1,0 +1,802 @@
+{
+ "note": "Rust predictions recorded before any Java result exists; run as <bin> -pipe <format from the manifest invocation> from the sources directory with RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 and TZ=GMT+11:00",
+ "binaries": {
+  "tip": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round4-claude-maker/bin/tip",
+   "sha256": "d3fac6d28a1d19a089d57985f6d8ab8b6bb57e9b15a967d3c97f9197d3c25c89"
+  },
+  "round3_71d16da4a": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round4-claude-maker/bin/r3",
+   "sha256": "242cdb356923ec18f2b07dd0a4206e90fbcc08dce85fe00397a2d9d4d814e78b"
+  },
+  "base_3992971a7": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round4-claude-maker/bin/base",
+   "sha256": "1bd32667f8b96074c6bf5e9dbd2b078d7339c418ca2a17a0afe852b2bbabb9bd"
+  }
+ },
+ "tip_commit": "f6b7f66f0 (code; later commits add only evidence and pairs)",
+ "cases": {
+  "bp_short_entry_d2": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "df8db357533371fdb2ec17678a1b4f7f3970dafb6a7e5290e0cc20b849f6c178",
+    "stdout_bytes": 4881,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "df8db357533371fdb2ec17678a1b4f7f3970dafb6a7e5290e0cc20b849f6c178",
+    "stdout_bytes": 4881,
+    "stderr_head": "Warning: node Works.Hall.Cell.in, port P unrecognized\nWarning: node Works.Hall.Cell.in, port P unrecognized\n"
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "fa27ccf1ace9b673cf8dc9782f2dac3523297dcf0a475a334079775e3e9c6e35",
+    "stdout_bytes": 4822,
+    "stderr_head": ""
+   }
+  },
+  "bp_short_exit_d1": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "0850869cd53e1b781d70ee1f6070d4da4d28f56d1e43f91fc9d610a5119802ac",
+    "stdout_bytes": 3586,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "0850869cd53e1b781d70ee1f6070d4da4d28f56d1e43f91fc9d610a5119802ac",
+    "stdout_bytes": 3586,
+    "stderr_head": "Warning: node Plant.Line.out, port P unrecognized\nWarning: node Plant.Line.out, port P unrecognized\n"
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "6789fbab80dd994772a16f3a6d614ebc90852c98a21e4c3be1d415e928874e59",
+    "stdout_bytes": 3437,
+    "stderr_head": ""
+   }
+  },
+  "bp_short_exit_d3": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "7ccc103506137367a5ddb9c64352b723ee81a4182ad10dc76e7bab1c1b42fce5",
+    "stdout_bytes": 6661,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "7ccc103506137367a5ddb9c64352b723ee81a4182ad10dc76e7bab1c1b42fce5",
+    "stdout_bytes": 6661,
+    "stderr_head": "Warning: node Campus.Block.Wing.Lab.ex, port P unrecognized\nWarning: node Campus.Block.Wing.Lab.ex, port P unrecognized\n"
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "867e5e97a86ffff0240e165a45599f9d4eb4942ab74eb4cafab4b026f3b7ddd4",
+    "stdout_bytes": 6324,
+    "stderr_head": ""
+   }
+  },
+  "bp_threshold_labels": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "98371439a5bd72891a8b3f59482f43332be5961dfa9e78aa3623d243245c3c77",
+    "stdout_bytes": 5470,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "3bfbe8419a536ae1fa38b16083b3f57818b0b3133923ed3e3f387afdecee7c99",
+    "stdout_bytes": 5594,
+    "stderr_head": "Warning: node Depot.Bay.Vent, port P unrecognized\nWarning: node Depot.Bay.Vent, port P unrecognized\n"
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "82c459074dcede2a526f2be34494dc2998934ffe09afa3d2cd0a7b5386a6904f",
+    "stdout_bytes": 5323,
+    "stderr_head": ""
+   }
+  },
+  "bp_wide_entry_d1": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "57f9548bade4debb644fece5b10317f6d422a0875745be33de268d45d80527e4",
+    "stdout_bytes": 4521,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "24eb408d3dc8d92d5b3fc5d0f4e496570cbf1c8dd66a8dd5a9c95acfb750491c",
+    "stdout_bytes": 4550,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "2888df581ff97921b5234ef14476357235405ab4c5c725b4f2c19dcf80fdb2af",
+    "stdout_bytes": 4388,
+    "stderr_head": ""
+   }
+  },
+  "bp_wide_entry_d3": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "e03d02b57950f483f4ebcc319367d6b0e712662e17c384e01de5ed6945b5990c",
+    "stdout_bytes": 6511,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "69e83c6eb9088d4269d95109583bdcbb9615cbe5ac5927801831b0db1b79249c",
+    "stdout_bytes": 6876,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "04c812fb17667b931424d0963fbeadbc6ebf084a582601e0c8993d9b471702ab",
+    "stdout_bytes": 6377,
+    "stderr_head": ""
+   }
+  },
+  "bp_wide_exit_d2": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "3f1ef5604e1e47c31a21bc1b48986ef080f3f8a765f034b709327f536ec13706",
+    "stdout_bytes": 5414,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "8b613f4db224196e79ed2277dad958b2809f92b14f4af91d23c5661bd4e16178",
+    "stdout_bytes": 5429,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "8334517da2e9420ea531577d9b069cdfb5b654cafc1e6b03225baf85241e982c",
+    "stdout_bytes": 4878,
+    "stderr_head": ""
+   }
+  },
+  "fmt_high_eps": {
+   "tip": {
+    "format": "-teps",
+    "exit": 0,
+    "stdout_sha256": "d965efb67bf63508a51005243538258a46011454852f747e9b91bdda61a89a05",
+    "stdout_bytes": 27341,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-teps",
+    "exit": 0,
+    "stdout_sha256": "d965efb67bf63508a51005243538258a46011454852f747e9b91bdda61a89a05",
+    "stdout_bytes": 27341,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-teps",
+    "exit": 0,
+    "stdout_sha256": "993f22a5edd82b58ccce06ad740b741c7b72019470cea7e081032778c41ec59a",
+    "stdout_bytes": 33033,
+    "stderr_head": ""
+   }
+  },
+  "fmt_high_pdf": {
+   "tip": {
+    "format": "-tpdf",
+    "exit": 0,
+    "stdout_sha256": "ca5306859618d5d2693f00cd1d10ebe26807689c1da81c4b088a98d3bce4edb1",
+    "stdout_bytes": 1902,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tpdf",
+    "exit": 0,
+    "stdout_sha256": "ca5306859618d5d2693f00cd1d10ebe26807689c1da81c4b088a98d3bce4edb1",
+    "stdout_bytes": 1902,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-tpdf",
+    "exit": 0,
+    "stdout_sha256": "976b966bc347ef13b51452062c04d6d2708fe43ab5cd9bd2c8102131a47eb75e",
+    "stdout_bytes": 1903,
+    "stderr_head": ""
+   }
+  },
+  "fmt_high_png": {
+   "tip": {
+    "format": "-tpng",
+    "exit": 0,
+    "stdout_sha256": "ae9db931c81cd07d53910ba96a63b62ab5ec95ca54558945a11c2718ae5351d4",
+    "stdout_bytes": 1418,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tpng",
+    "exit": 0,
+    "stdout_sha256": "ae9db931c81cd07d53910ba96a63b62ab5ec95ca54558945a11c2718ae5351d4",
+    "stdout_bytes": 1418,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-tpng",
+    "exit": 0,
+    "stdout_sha256": "14eb4f1117ebf61019a65f13aa5577ca191174a667ffee7c2a821dd2374e7602",
+    "stdout_bytes": 1431,
+    "stderr_head": ""
+   }
+  },
+  "fmt_low_eps": {
+   "tip": {
+    "format": "-teps",
+    "exit": 0,
+    "stdout_sha256": "ab115f16495ee183c2bf2af0c900b5383bbf5f34ad97085282fd4902d649cfa6",
+    "stdout_bytes": 24763,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-teps",
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_bytes": 0,
+    "stderr_head": "EPS error: SVG parse error: SVG data parsing failed cause the document does not have a root node\n"
+   },
+   "base_3992971a7": {
+    "format": "-teps",
+    "exit": 0,
+    "stdout_sha256": "61ffb8f6785921dc05261853a8a13ea7e3f2f287a0e1c29aa026d6ff681e48e1",
+    "stdout_bytes": 25542,
+    "stderr_head": ""
+   }
+  },
+  "fmt_low_pdf": {
+   "tip": {
+    "format": "-tpdf",
+    "exit": 0,
+    "stdout_sha256": "a42dc2b23ffa3439b0b7e51acf2f8142ffce85962f4871592d33240c8222625e",
+    "stdout_bytes": 1901,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tpdf",
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_bytes": 0,
+    "stderr_head": "PDF error: SVG parse error: SVG data parsing failed cause the document does not have a root node\n"
+   },
+   "base_3992971a7": {
+    "format": "-tpdf",
+    "exit": 0,
+    "stdout_sha256": "823895b928d03342d4d337d5c80dc12ed1f71a6209546ccf9867415e9c4d5b02",
+    "stdout_bytes": 1901,
+    "stderr_head": ""
+   }
+  },
+  "fmt_low_png": {
+   "tip": {
+    "format": "-tpng",
+    "exit": 0,
+    "stdout_sha256": "b38899c5dd7fba8e46235f23b02fbddd2ccf72f90b296f3c32bb7273edd3add0",
+    "stdout_bytes": 1413,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tpng",
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_bytes": 0,
+    "stderr_head": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node\n"
+   },
+   "base_3992971a7": {
+    "format": "-tpng",
+    "exit": 0,
+    "stdout_sha256": "523b0e1480142a313de6b93afb88cb402df755ab5ad68fd69643d895ebff6207",
+    "stdout_bytes": 1411,
+    "stderr_head": ""
+   }
+  },
+  "fmt_pua_png": {
+   "tip": {
+    "format": "-tpng",
+    "exit": 0,
+    "stdout_sha256": "2f716143cc10e36468d626376abd6ec69a6548aee896d72a29688d4d7c2579fc",
+    "stdout_bytes": 1411,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tpng",
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_bytes": 0,
+    "stderr_head": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node\n"
+   },
+   "base_3992971a7": {
+    "format": "-tpng",
+    "exit": 0,
+    "stdout_sha256": "be6dced41acd035a16cc5b2a1b12e15dc11249298a7818c353faa2fe5d934ac1",
+    "stdout_bytes": 1420,
+    "stderr_head": ""
+   }
+  },
+  "fmt_seq_high_txt": {
+   "tip": {
+    "format": "-ttxt",
+    "exit": 0,
+    "stdout_sha256": "c82f5c1a140ae8aab19181e97f60e0411e2e058996bcf1c5e23b91b5da25dc8b",
+    "stdout_bytes": 403,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-ttxt",
+    "exit": 0,
+    "stdout_sha256": "81e5649714fea20df1b2b37eb6cf22182e23da1c9c0dac7619cd4afc16f20a54",
+    "stdout_bytes": 406,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-ttxt",
+    "exit": 0,
+    "stdout_sha256": "141d6bfd21df64dc8a66a9a6f40701e5e20dad228c9216cc836e9a2cd352c01c",
+    "stdout_bytes": 406,
+    "stderr_head": ""
+   }
+  },
+  "fmt_seq_low_txt": {
+   "tip": {
+    "format": "-ttxt",
+    "exit": 0,
+    "stdout_sha256": "f646eccf8f15839c4fbcbde50835872805015887c44128f1f6725129fbbd7bce",
+    "stdout_bytes": 403,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-ttxt",
+    "exit": 0,
+    "stdout_sha256": "71c4c7ae151f8e095b5de7829b30e864751ee8648c83e824a427936637ae17e8",
+    "stdout_bytes": 406,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-ttxt",
+    "exit": 0,
+    "stdout_sha256": "20f8a466f07617389578b159c364726c4361f02b2e0b972ec3715b7dc4027e02",
+    "stdout_bytes": 403,
+    "stderr_head": ""
+   }
+  },
+  "fmt_seq_pua_txt": {
+   "tip": {
+    "format": "-ttxt",
+    "exit": 0,
+    "stdout_sha256": "4bb627668323763666e1b27a757f60531e840953217b57567c1392a52d5d16e4",
+    "stdout_bytes": 406,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-ttxt",
+    "exit": 0,
+    "stdout_sha256": "4bb627668323763666e1b27a757f60531e840953217b57567c1392a52d5d16e4",
+    "stdout_bytes": 406,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-ttxt",
+    "exit": 0,
+    "stdout_sha256": "4bb627668323763666e1b27a757f60531e840953217b57567c1392a52d5d16e4",
+    "stdout_bytes": 406,
+    "stderr_head": ""
+   }
+  },
+  "no_d1_left_renamed": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "e45ab15b23ffaa3e17ed30027daa4f188f5b01c5d12efd6c102afc1fc28143d3",
+    "stdout_bytes": 4940,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "0003a26cec82acc82c3049077c254bdd05dfd0d92f001d1d42106d30fe928d05",
+    "stdout_bytes": 4940,
+    "stderr_head": "Warning: node Yard.Bench.feed, port P unrecognized\n"
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "18b75fd17f57394d27665136d4d6a4e66c0838b3bbce824bd2dfcffb553bb5e1",
+    "stdout_bytes": 4948,
+    "stderr_head": ""
+   }
+  },
+  "no_d2_mid_leaves": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "ca732c0ad4465702f7eef49c7edb2d47548e89108daaa580ae89711365b54287",
+    "stdout_bytes": 5590,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "6b6c3012f97073cf4f31293ae46cc2de40d5f1eadd96ef6d438f4e027d86eb77",
+    "stdout_bytes": 5590,
+    "stderr_head": "Warning: node Port.Dock.Berth.lane, port P unrecognized\n"
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "10d7a5a5e39b002036d43e3a825b8ed0bcc508e5b29ecf151925a95ca3642e74",
+    "stdout_bytes": 5458,
+    "stderr_head": ""
+   }
+  },
+  "no_d3_deep": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "53b0460dee1e159d12d06b5a503886ae9d2f550d1912e47cfda3392baac74954",
+    "stdout_bytes": 7103,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "059a9230a255c6264ab14a25aac63abdfb8eb4a8f992bd5c5e3a14d8cf1af475",
+    "stdout_bytes": 7103,
+    "stderr_head": "Warning: node Mill.Floor.Bay.Cell.inlet, port P unrecognized\n"
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "2d5cc5e1084169e8ee2ff139fd18959b1f021f3029c1fb322c540a02b4c559b4",
+    "stdout_bytes": 6843,
+    "stderr_head": ""
+   }
+  },
+  "no_outer_note_left_of_image": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "ba6c67cbf3e9770979cf8320d9e38150c2ecfd86bfe3afb612f8810d952e412b",
+    "stdout_bytes": 2758,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "ccad5f535a2157290cd9e0493d14b74c896479b6b4a04550acf3551775651825",
+    "stdout_bytes": 2652,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "354b96c493546caad93d1abb4b57887a45f3d4467112bf24e0d4bca1d1dd8b00",
+    "stdout_bytes": 2662,
+    "stderr_head": ""
+   }
+  },
+  "no_outer_note_on_leaf_beside_image": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "14ddbc1ce2383178dc53cf3bc91a1c1efe3b4f1310cc38936dd827a1a599761a",
+    "stdout_bytes": 3546,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "4f4de4ec5a25b60cdbc5acdd823d6c4ccba03aea9da2f19fb73e52713b73cad8",
+    "stdout_bytes": 3524,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "3957e94f27cf6bc3e4a920f0a6da7aa57afa8bf4d34268f4c973b15a53420a9c",
+    "stdout_bytes": 3534,
+    "stderr_head": ""
+   }
+  },
+  "no_outer_two_notes_on_image": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "e1a7f7c3ea7448577f2e33125bbeebc90a94ab14fd4db4bfcd9c41f01355e3b4",
+    "stdout_bytes": 4306,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "60411821325a9015586d8fb7b691156894372e7dd980c0ea3ac7bc3a8faf2f68",
+    "stdout_bytes": 4170,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "143a367ee9befd9e967cc47d9b546c50e0a6020441e350a8b2a3d3205eac2197",
+    "stdout_bytes": 4182,
+    "stderr_head": ""
+   }
+  },
+  "no_root_cluster_note": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "1d4279dc595bfcfef8e7d8f052663419956a5d0f938353cb4395c09fcc3ab8ec",
+    "stdout_bytes": 4506,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "fd92959e49a87e7d23b17fdad8efb82b2063116a7b69aa049db9b798480a1d90",
+    "stdout_bytes": 4506,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "bea7856228fa809b32ceed9c237155bee0d0697dba5eb32f9b36d02e148181ad",
+    "stdout_bytes": 4382,
+    "stderr_head": ""
+   }
+  },
+  "no_root_two_clusters_notes": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "f304f00e624ea77b435c98adfe857205ed41273370cb07a0049d98004c5fd8c2",
+    "stdout_bytes": 7521,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "906d4d9785c8c72a3b411ad10deaec823ab13efb7b522b52e32fbcde537e8c01",
+    "stdout_bytes": 7521,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "c6472b786d8bb9408d657056ca19eb75ce2002fca6b081478319d96cc02fd85f",
+    "stdout_bytes": 7245,
+    "stderr_head": ""
+   }
+  },
+  "no_two_clusters_three_notes": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "1ca531af9ac84e4d4b08ed96ad040c2742a84c19c52c9bb91593b379f85710aa",
+    "stdout_bytes": 7719,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "13873ffa62372695338144d809d4563b9337c1f427a9812e7e9ba61786413e55",
+    "stdout_bytes": 7719,
+    "stderr_head": "Warning: node Farm.Barn.gate, port P unrecognized\nWarning: node Farm.Shed.door, port P unrecognized\n"
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "77d780db2462a757eafabc406a4df8750c969bbeed1f45400aec750ea299d341",
+    "stdout_bytes": 7623,
+    "stderr_head": ""
+   }
+  },
+  "pua_b_after_lone_high": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_bytes": 0,
+    "stderr_head": "export error: Invalid UTF-16 surrogate detected: d83d dbff ?\n"
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "d7eb6eeb7e7d352132a2393e5ecc759183e0afad97e556079cd4102e2af147c8",
+    "stdout_bytes": 1548,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "ef933a1c84051a1153567716afe8c8ac52a7b1994a11bbfbf5b32cfa44c0d7a4",
+    "stdout_bytes": 1567,
+    "stderr_head": ""
+   }
+  },
+  "pua_b_sequence_message": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "03454b0f1280777db3b32a8978a3e0522ca3afb094f8511dd5889f210247d377",
+    "stdout_bytes": 3179,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_bytes": 0,
+    "stderr_head": "export error: Invalid UTF-16 surrogate detected: da00 20 ?\n"
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "ce9c8e107c45474cc0b32b172be7a104df729901af8805be33fd2e31ef825bc4",
+    "stdout_bytes": 3183,
+    "stderr_head": ""
+   }
+  },
+  "pua_b_size12": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "ccf759f605075d508491cc7f73efae1521ab6b0bc214fbed5f16f0b39d6db44d",
+    "stdout_bytes": 1558,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_bytes": 0,
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n"
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "8b8e8c98a58b11c17205aa3039a3cc8abd3fac96077cfcdd54f51d2c0b1c5050",
+    "stdout_bytes": 1572,
+    "stderr_head": ""
+   }
+  },
+  "pua_b_size18_bold": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "c63505b3267ae003925454f5d0440e43e1f78bd137cd41160d70290f6eaaadd8",
+    "stdout_bytes": 1579,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_bytes": 0,
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n"
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "39b5245f5da745e1e2284c090b72be949ad3e32648246c1dd9e86c7e6a6be844",
+    "stdout_bytes": 1593,
+    "stderr_head": ""
+   }
+  },
+  "pua_b_state_note": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "8f6d31352c9465681e03ca6fad141d43ed4b51988144e4c8c0949a5c61c26d87",
+    "stdout_bytes": 1364,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_bytes": 0,
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n"
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "7f966fb2a73e9636ccacdcfae0f6ce1ce125d589037644e29111d0c127275f39",
+    "stdout_bytes": 1364,
+    "stderr_head": ""
+   }
+  },
+  "pua_b_strlen_substr": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "e0f4b0ee31509f68715b46fd1e86f513aa86a76430848321c9a78501f4e17f56",
+    "stdout_bytes": 1566,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "dbe5fc11762414358d7e4532271529abe22a0711b0a37b6e232bc3d726f4538b",
+    "stdout_bytes": 1562,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_bytes": 0,
+    "stderr_head": "\nthread 'main' (47963023) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 42 is not a char boundary; it is inside '\\u{10fe80}' (bytes 41..45 of string)\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+   }
+  },
+  "pua_b_then_lone_low": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_bytes": 0,
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.\n"
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "0cdf1b6a85e54fa5ccee7fb64f43d86f8032d788bf18dd550f9f5c727035c9fe",
+    "stdout_bytes": 1548,
+    "stderr_head": ""
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "0ca5f7cabdfd648f8aa572322492596bb6271ed01d6332f52e23a9899e304570",
+    "stdout_bytes": 1556,
+    "stderr_head": ""
+   }
+  },
+  "pua_b_upper_escape_point": {
+   "tip": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "def05d2de54b42dc25f7ad70e4e507668dba895c5d8ca1cff4ef8076d258b94b",
+    "stdout_bytes": 1551,
+    "stderr_head": ""
+   },
+   "round3_71d16da4a": {
+    "format": "-tsvg",
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout_bytes": 0,
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdfff) was found in the node's character data content.\n"
+   },
+   "base_3992971a7": {
+    "format": "-tsvg",
+    "exit": 0,
+    "stdout_sha256": "6b75891669bd9527f4a50704fe48a66c7b2f2e40a77d677aa22f309c5bcb1fc3",
+    "stdout_bytes": 1558,
+    "stderr_head": ""
+   }
+  }
+ }
+}

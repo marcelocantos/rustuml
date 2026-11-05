@@ -1,0 +1,4 @@
+@startuml
+class "elm" as First
+class "fir/yew" as Second
+@enduml

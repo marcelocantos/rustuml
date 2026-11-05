@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-builtin-value-boundaries",
+  "sub_mechanism": "lone UTF-16 surrogate reaching the diagram text (T14.20 export-failure contract; lost rejection attributed to the 92647b126 lineage)",
+  "status": "maker causal account before draft; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/builtin/SubStr.java, Lower.java: Java String operations work on UTF-16 units, so %substr(\"🚀\",1,1) is the lone low surrogate U+DE80 and %lower keeps it.",
+    "tim/TContext.java#applyFunctionsAndVariables: the TValue's display is spliced into the StringLocated diagram line unchanged, so the parser and the display hold the lone unit.",
+    "klimt/drawing/svg/SvgGraphics.java#createXmlInternal -> javax.xml.transform: the serializer (ToStream.accumDefaultEscape / writeAttrString) throws SAXException 'An invalid XML character (Unicode: 0xde80) was found in the node's character data content.'; UGraphicSvg.writeToStream wraps it as IOException.",
+    "core/UmlDiagram.java / UgDiagram.exportDiagram: the Throwable is caught and the crash diagram ('An error has occured : java.io.IOException: ...', 'PlantUML ... has crashed.') is exported instead. This is the T14.20 class."
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs#Value::to_display: Value::Utf16 projects through String::from_utf16_lossy, so the unit becomes U+FFFD and a normal diagram exits 0.",
+    "crates/rustuml-parser/src/preprocess/mod.rs#substitute_vars and the standalone-call return path: the two places a TIM value becomes diagram line text.",
+    "crates/rustuml-parser/src/parse/mod.rs#parse_with_base: where a TIM fatal error becomes ParseError and a nonzero CLI exit."
+  ],
+  "causal_divergence": "Rust String cannot hold a lone surrogate. The UTF-16 port keeps it in memory, but the lossy projection hides the failure that Java hits at export, so a Java crash diagram becomes a Rust normal diagram (a lost rejection).",
+  "invariant": "When TIM projects a value holding an unpaired surrogate into a diagram content line, and parsing otherwise succeeds, the Rust outcome is a structured error with a nonzero CLI exit carrying Java's SAX message for the first such unit. A TIM fatal error or a parser error anywhere in the block takes precedence, as in Java, where those stop before export. Values that never become content-line text (assignments, conditions, unused variables) stay legal.",
+  "planned_change": "Record the first unpaired unit seen when substitute_vars or the standalone-call return path projects a value into a content line (PreprocessOutput.export_failure, separate from the fatal TIM error). parse_with_base returns it as ParseError after a successful family parse. No crash SVG is produced and no character is deleted.",
+  "declared_residue": [
+    "Java fails only if the text reaches the SVG writer. A content line that the parser discards (a ' comment, a hidden entity's label, an unused skinparam value) still triggers the Rust error, where Java may render normally. The probes include one such line so the residue is measured, not assumed.",
+    "The Java message distinguishes 'character data content' from 'attribute value'; Rust reports the character data form for every unit."
+  ],
+  "perturbation_axes": [
+    "low and high lone surrogates (%substr index 0 and 1 of an astral character)",
+    "the lone unit in a class display, a sequence message and an activity label",
+    "%upper/%lower around the unit; concatenation with ASCII text",
+    "an unpaired unit stored in a variable that is never displayed (stays valid)",
+    "a re-joined pair (%substr 0,1 plus 1,1), which is valid in Java and must stay a normal diagram"
+  ],
+  "precommitted_measurement": {
+    "oracle": "status sweep at each case's recorded cwd; surrogate_display_residue; fresh lone-surrogate probes",
+    "expect_fixed": [
+      "perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue becomes a nonzero exit (rejection restored)"
+    ],
+    "expect": "units_rejoin and every other existing case keep their bytes; zero new valid-input errors"
+  }
+}

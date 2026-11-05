@@ -1,0 +1,8 @@
+@startuml
+state Den {
+  Fox --> Cub
+  note right of Cub : small
+}
+note left of Owl : wise
+Owl --> Fox
+@enduml

@@ -1,0 +1,3 @@
+@startjson
+["x\\ny", "p\tq", ["r\\rs", "t"]]
+@endjson

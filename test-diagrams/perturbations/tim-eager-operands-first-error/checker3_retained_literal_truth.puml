@@ -1,0 +1,12 @@
+@startuml
+!$n=0
+!function $tick()
+!$n=$n+1
+!return 1
+!endfunction
+!$a = "$tick()"
+!if $a && "0"
+!$v = "ok"
+!endif
+class "$n / $v" as Literal
+@enduml

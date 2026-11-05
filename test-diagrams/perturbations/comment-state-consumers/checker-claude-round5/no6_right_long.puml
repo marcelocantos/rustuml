@@ -1,0 +1,6 @@
+@startuml
+state Pier {
+  Boat --> Dock
+}
+note right of Pier : a much longer note text here
+@enduml

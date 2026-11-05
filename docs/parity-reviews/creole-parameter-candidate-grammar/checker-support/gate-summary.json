@@ -1,0 +1,185 @@
+{
+  "statuses": {
+    "library": 101,
+    "cli": 0,
+    "focused": 0,
+    "main-product": 101,
+    "main-assisted": 101,
+    "standing": 101,
+    "guards": 101,
+    "clippy": 101,
+    "format": 1,
+    "touched-format": 0
+  },
+  "parser": {
+    "passed": 624,
+    "total": 624
+  },
+  "cli": {
+    "passed": 15,
+    "total": 15
+  },
+  "renderer": {
+    "passed": 788,
+    "total": 790,
+    "failures": [
+      "class::tests::plain_theme_uses_legacy_class_icon_and_font_defaults",
+      "filter_registry::tests::parser_source_identity_matches_java_shadow_id_after_initial_blanks"
+    ]
+  },
+  "focused": {
+    "passed": 91,
+    "total": 91
+  },
+  "layout": {
+    "passed": 41,
+    "total": 41
+  },
+  "math": {
+    "passed": 10,
+    "total": 10
+  },
+  "oracle": {
+    "initial_passed": 30,
+    "initial_setup_failure": 1,
+    "recovery_passed": 1,
+    "total": 31
+  },
+  "product": {
+    "passed": 11179,
+    "eligible": 11251,
+    "baseline_passed": 11179,
+    "initial_passed": 11173
+  },
+  "assisted": {
+    "passed": 10497,
+    "eligible": 11251,
+    "total": 12550,
+    "skipped": 1299,
+    "baseline_passed": 10497,
+    "initial_passed": 10492
+  },
+  "failure_name_files": [
+    {
+      "file": "no_oracle_failure_names.txt",
+      "before_count": 72,
+      "initial_count": 78,
+      "after_count": 72,
+      "after_byte_equal_before": true,
+      "after_byte_equal_maker_baseline": true,
+      "initial_losses": [
+        "activity/act_creole_monospace",
+        "creole/creole_font_name_in_activity",
+        "creole/creole_font_name_in_class",
+        "creole/creole_font_name_in_note",
+        "creole/creole_font_name_in_sequence",
+        "creole/creole_font_name_in_title"
+      ],
+      "initial_gains": [],
+      "final_sha256": "7fe3bf366cbf6b4baa85b02e4a3bd7d42cfa0c514e0be05e619353930169710a"
+    },
+    {
+      "file": "golden_failure_names.txt",
+      "before_count": 754,
+      "initial_count": 759,
+      "after_count": 754,
+      "after_byte_equal_before": true,
+      "after_byte_equal_maker_baseline": true,
+      "initial_losses": [
+        "activity/act_creole_monospace",
+        "creole/creole_font_name_in_activity",
+        "creole/creole_font_name_in_class",
+        "creole/creole_font_name_in_sequence",
+        "creole/creole_font_name_in_title"
+      ],
+      "initial_gains": [],
+      "final_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b"
+    }
+  ],
+  "standing": {
+    "entries": 1860,
+    "harness_pass": 789,
+    "matching_env_cli_pass": 819,
+    "before_cli_pass": 804,
+    "unmapped": [],
+    "discrepancies": [
+      "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.puml",
+      "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.puml",
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+      "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+      "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_nested.puml",
+      "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_return_include.puml",
+      "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_selected.puml",
+      "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+      "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+      "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+      "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+      "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+      "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_function_selector.puml",
+      "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_repeated_comments.puml",
+      "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+      "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml"
+    ]
+  },
+  "guards": {
+    "passed": 4,
+    "total": 6,
+    "failures": [
+      "decimal_literal_ratchet",
+      "parity_review_records_are_complete"
+    ]
+  },
+  "clippy": "unchanged parse/component.rs:72 dead code",
+  "format": "unchanged parser/render class files",
+  "setup_failure": {
+    "setup_failure": "Initial source snapshot omitted Makefile; oracle harness test failed before parser/render ran. Preserved initial failure. Restored exact Makefile; ran only previously unrun crates and the single setup-failed oracle test. No passing job or broad golden suite repeated.",
+    "commands": [
+      {
+        "name": "library-missing",
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "rustuml-parser",
+          "-p",
+          "rustuml-render",
+          "--lib",
+          "--release"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/source-after",
+        "exit": 101,
+        "seconds": 0.7182209491729736
+      },
+      {
+        "name": "oracle-setup-recovery",
+        "argv": [
+          "cargo",
+          "test",
+          "-p",
+          "rustuml-oracle",
+          "--lib",
+          "--release",
+          "harness::tests::make_gate_preserves_failure_and_runs_remaining_checks"
+        ],
+        "cwd": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/source-after",
+        "exit": 0,
+        "seconds": 0.44188690185546875
+      }
+    ]
+  },
+  "measurement_boundary": "Stable candidate broad gates once, before checker36 registration. No full suite repeated; after Makefile setup recovery, only previously unrun parser/render crates and single failed oracle test ran. Product/assisted are library diagnostics, not CLI truth."
+}

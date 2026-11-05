@@ -1,0 +1,6 @@
+@startwbs
+* Grove
+** <size:24></size>
+*** <$seed>
+-- <color:red><$twig></color>
+@endwbs

@@ -1,0 +1,10 @@
+@startuml
+state Pier
+state Harbor {
+  state Pier {
+    [*] --> Moor
+    Moor --> Cast
+  }
+}
+Cast --> Sea
+@enduml

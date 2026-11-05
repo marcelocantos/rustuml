@@ -1,0 +1,26 @@
+1300 latest accepted review cannot contain failing perturbations
+ 306 perturbation is not named in any checker review
+ 198 latest checker review must be accepted
+  98 source must be a .puml under P
+  98 referenced source escapes the mechanism directory: P
+  98 referenced golden escapes the mechanism directory: P
+  98 golden must be the source's same-stem .svg under P
+  98 checker source is outside the executable perturbation walk
+  27 task_id must be a non-empty string
+  27 account_commit must be a N-character Git commit
+  24 perturbation result must be X or X
+  21 implementation_commit must be a N-character Git commit
+  15 No such file or directory (os error N)
+  11 result must be a non-empty string
+  10 perturbations must contain at least two entries
+   9 planned_change must be a non-empty string
+   9 account has no independent checker review
+   8 findings must contain at least N non-empty strings
+   8 axes must contain at least N non-empty strings
+   7 reviewer must be an object
+   7 java_revision must be a N-character Git commit
+   5 source must be a non-empty string
+   5 golden must be a non-empty string
+   2 model must be a non-empty string
+   1 review must exercise at least two distinct source files
+   1 commands must contain at least N non-empty strings

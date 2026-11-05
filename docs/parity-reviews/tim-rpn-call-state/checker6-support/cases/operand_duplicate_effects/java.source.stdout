@@ -1,0 +1,3 @@
+@startuml
+class "MOSS/12" as Effects
+@enduml

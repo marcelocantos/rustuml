@@ -1,0 +1,10 @@
+@startuml
+state Depot {
+  state Bay {
+    state dock <<entryPoint>>
+    dock --> Lift
+    note left of Lift : heavy load
+  }
+  Lift --> Rack
+}
+@enduml

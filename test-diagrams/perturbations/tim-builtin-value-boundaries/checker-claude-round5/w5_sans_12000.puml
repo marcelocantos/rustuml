@@ -1,0 +1,3 @@
+@startuml
+class "Vault 𒀀" as V
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Lucida Grande
+class Quay
+note right of Quay : <b>Wharf qr</b>
+@enduml

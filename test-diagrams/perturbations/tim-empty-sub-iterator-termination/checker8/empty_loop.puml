@@ -1,0 +1,8 @@
+@startuml
+class Beacon
+!foreach $x in []
+!startsub quiet
+!endsub
+!endfor
+class Lost
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+!$a=%hsl_color(120,"100",50,100)
+!$b=%hsl_color(120,100,%str2json("50"),100)
+!$c=%hsl_color(-721,101,-1,200)
+class "$a/$b/$c" as Channels
+@enduml

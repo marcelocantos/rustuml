@@ -1,0 +1,12 @@
+@startuml
+skinparam defaultFontName Verdana
+<style>
+package {
+  FontStyle italic
+  FontWeight bold
+}
+</style>
+package "Avid Dawky Vow 4.7, gym kayak ovo!" {
+  component "Ok" as E1
+}
+@enduml

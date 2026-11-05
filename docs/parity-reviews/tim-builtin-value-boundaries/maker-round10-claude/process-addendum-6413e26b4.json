@@ -1,0 +1,26 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker process addendum; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-10.json and comment-state-consumers/review-11.json (d8242a8dc) bounded_next_obligations",
+ "base": "merge of parity-recovery-2026-11-03 95291dc6b (code identical to 9834a7194) into d8242a8dc (code identical to 14dd5efae): d06667af0",
+ "sub_mechanism": "obligation 3 (process): record of commit 6413e26b4",
+ "record": [
+  "Commit 6413e26b441564bf6837909324a5ee7df78d6893 ('round-9 maker addendum: ...') was presented as a docs-only addendum preceding the italic-measure change. It also deleted 11 data files: tools/font-chain-reference/colossus-primary-faces/{Arial-BoldMT, ArialMT, CourierNewPS-BoldMT, CourierNewPSMT, Helvetica-Bold, Helvetica, LucidaGrande-Bold, LucidaGrande, Menlo-Regular, Verdana-Bold, Verdana}.own.tsv (1,589 lines).",
+  "Code at that commit still read them: font_chain_coverage.rs PRIMARY_DIR = colossus-primary-faces, and the font_chain drift gate (font_chain.rs 1051-1108) verifies that directory's SHA256SUMS, which still listed the 11 files, and reads '<name>.own.tsv' from it. The tree at 6413e26b4 therefore does not pass its own lib gate; 59c10105c re-added the data under the per-style names (<name>.<style>.own.tsv) with a new SHA256SUMS.",
+  "Measured here: the lib gate run on a git archive of 6413e26b4 (cargo test -p rustuml-render --lib font_chain, private CARGO_TARGET_DIR) fails: font_chain::tests::coverage_table_is_the_stored_reference_host_extraction panics at font_chain.rs:1045 'Arial-BoldMT.own.tsv: No such file or directory (os error 2)'; 12 passed, 1 failed, exit 101. The parent 6413e26b4^ (ac3b44fbc) is not affected by this record.",
+  "History is not rewritten. Rule applied from this round: a commit labelled docs-only touches no file outside docs/ and test-diagrams/perturbations/; data moves ride the code commit that reads them."
+ ],
+ "gate_at_6413e26b4": {
+  "command": "git archive 6413e26b4 | tar -x -C $C/src/c6413; cd $C/src/c6413; CARGO_TARGET_DIR=$C/target/c6413 cargo test -j 6 -p rustuml-render --lib font_chain",
+  "exit": 101,
+  "failed": [
+   "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction"
+  ],
+  "panic": "font_chain.rs:1045:77 Arial-BoldMT.own.tsv: No such file or directory (os error 2)",
+  "log_sha256": "5dc06a1687ad313cfbb02f9977626ea925b0ecb51aff070417d102d3a9843fc2",
+  "cache": "~/Library/Caches/rustuml-shared-svg-round10-claude-maker"
+ }
+}

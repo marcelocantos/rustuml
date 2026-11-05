@@ -1,0 +1,6 @@
+@startuml
+state Kiln {
+  Clay --> Pot
+}
+note "loose" as N1
+@enduml

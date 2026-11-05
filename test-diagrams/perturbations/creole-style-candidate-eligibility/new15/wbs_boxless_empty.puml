@@ -1,0 +1,6 @@
+@startwbs
+* Root
+**_ <$twig>
+***_ <size:20><$bud></size>
+--_ <b></b>
+@endwbs

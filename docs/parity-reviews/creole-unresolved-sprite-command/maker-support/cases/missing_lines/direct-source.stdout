@@ -1,0 +1,3 @@
+@startuml
+class "Cedar\n<$absent>\nGrove" as A
+@enduml

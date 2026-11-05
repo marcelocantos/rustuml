@@ -1,0 +1,13 @@
+@startuml
+!function $pick($a)
+!return "old "+$a
+!endfunction
+!function $pick($a,$b="two")
+!return $a+"/"+$b
+!endfunction
+!function $pick($a)
+!return "new "+$a
+!endfunction
+!$v=$pick("birch")+"/"+$pick("ash","fir")
+class "$v" as Replaced
+@enduml

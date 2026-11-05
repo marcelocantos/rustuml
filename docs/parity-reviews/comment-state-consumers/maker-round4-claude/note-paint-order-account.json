@@ -1,0 +1,43 @@
+{
+ "schema_version": 1,
+ "mechanism": "comment-state-consumers",
+ "sub_mechanism": "paint order of attached state notes relative to the leaves of their declaring group (round-4 obligation 1, BLOCKING)",
+ "status": "maker causal account before draft; independent review required",
+ "answers": "docs/parity-reviews/comment-state-consumers/review-4.json (img_note_in_cluster; bounded_next_obligations[0])",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "java_locations": [
+  "statediagram/StateDiagram.java#getRequiredPass (66-67): state diagrams parse in ParserPass ONE, TWO and THREE; command/PSystemCommandFactory.java#createSystem (94-107) replays the whole block once per pass and executes only commands whose isEligibleFor(pass) holds (executeFewLines 145).",
+  "statediagram/StateDiagramFactory.java#initCommandsList (97-103): the note-on-entity commands are built with CommandFactoryNoteOnEntity(\"state\", ..., ParserPass.THREE) and command/note/CommandFactoryNoteOnEntity.java#isEligibleFor (181-183) admits them only in pass THREE; CommandCreatePackageState is eligible in every pass (73-74), so the group stack is the same in pass THREE; state and link commands (SingleLineCommand2.isEligibleFor 157-158) run in pass ONE only.",
+  "command/note/CommandFactoryNoteOnEntity.java#executeInternal (258-260): the note quark is diagram.quarkInContext(true, \"GMN<n>\"), i.e. a new child of the current (declaring) group's quark; net/atmp/CucaDiagram.java#quarkInContextSafe (262-273) currentQuark.child(full).",
+  "plasma/Quark.java (54, 135-138): children is a LinkedHashMap filled on first child() call, so every pass-THREE note quark follows every pass-ONE quark (states, pseudostates, link endpoints) of the same group, and notes keep their mutual command order.",
+  "abel/Entity.java#leafs (645-653): a group's leaves are its non-group quark children in that order.",
+  "svek/GraphvizImageBuilder.java#buildImage (226-227) printGroups(root) then printEntities(getUnpackagedEntities()); #printGroup (425-436) printEntities(g.leafs()) then printGroups(g); #printEntity (356-363) Bibliotekon.createNode appends to a LinkedHashMap (svek/Bibliotekon.java 54, 72-77).",
+  "svek/SvekResult.java#drawU (70-90): clusters, then Bibliotekon.allNodes() in creation order, then edges. The same GraphvizImageBuilder serves the root diagram and every GroupMakerState image (svek/GroupMakerState.java#createGeneralImageBuilder 140-152)."
+ ],
+ "rust_locations": [
+  "crates/rustuml-render/src/state.rs#emit_autonomous_composite: paints a region's leaves sorted by owner position in the region's preorder live-cluster list (image's own leaves last), then every note of the region after all of them.",
+  "crates/rustuml-render/src/state.rs#render_non_autarkic_root_clusters: same at the root image: grouped and unpackaged leaves, then every attached note."
+ ],
+ "causal_divergence": "Rust treats notes as a separate trailing layer. Java treats a note as the last leaves of its declaring group, so a note declared inside a live cluster is painted with that cluster's leaves, before later clusters' leaves and before the image's own leaves.",
+ "invariant": "Within one GraphvizImageBuilder image (root or GroupMakerState region), nodes are painted bucket by bucket in printGroups preorder of live clusters, then the image group's own bucket; inside each bucket the state leaves keep their current order and are followed by the attached notes whose declaring group (StateNote.parent) owns the bucket, in note declaration order. A note whose declaring group is not a live cluster of the image belongs to the image's own bucket.",
+ "planned_change": [
+  "emit_autonomous_composite: build one paint sequence of (bucket, kind, item) for leaves and region notes; notes take the bucket of their declaring group; stable sort by bucket keeps leaves before notes inside a bucket.",
+  "render_non_autarkic_root_clusters: the same bucket rule for root note positions against the root live clusters (composites)."
+ ],
+ "declared_residue": [
+  "Notes on links (pass TWO) and floating notes are not leaves of this paint list; unchanged.",
+  "Quark order between pass-ONE leaves is not re-derived here; existing leaf order inside a bucket is kept."
+ ],
+ "perturbation_axes": [
+  "note declared inside a live cluster with a later image leaf at depth 1, 2 and 3",
+  "notes in two sibling clusters plus an image leaf",
+  "renamed labels; note left/right",
+  "root image (no autarkic group) with a note inside a live cluster and a later root leaf"
+ ],
+ "precommitted_measurement": {
+  "oracle": "strict compare (unchanged comparator) and exact comment lists; whole CLI output over all goldens, the 16,441-source sweep and batches BC, BB, AW, AU, AR against the merged base 3992971a7 and the round-3 tip as merged 71d16da4a",
+  "expect_fixed": ["BB img_note_in_cluster", "BC nc_note_in_cluster_renamed", "BC nc_note_in_cluster_depth2", "BC nc_two_clusters_notes (order part; other differences reported if present)"],
+  "expect_kept": ["BB img_note_depth2", "img_note_depth3", "img_note_first_left", "img_two_notes", "img_note_before_later_state", "AW rc_inner_note_autarkic"],
+  "expect": "outputs change only for state diagrams with an attached note declared inside a live cluster that has a later-painted leaf; zero lost strict matches, zero new errors"
+ }
+}

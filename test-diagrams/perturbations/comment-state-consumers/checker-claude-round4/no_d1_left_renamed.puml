@@ -1,0 +1,11 @@
+@startuml
+state Yard {
+  state Bench {
+    state feed <<entryPoint>>
+    feed --> Lathe
+    note left of Lathe : oily
+  }
+  Lathe --> Crate
+  Crate --> Truck
+}
+@enduml

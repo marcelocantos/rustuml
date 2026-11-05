@@ -1,0 +1,3 @@
+@startuml
+class "x 􏟿" as E
+@enduml

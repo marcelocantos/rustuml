@@ -1,0 +1,30 @@
+{
+ "sources": 17072,
+ "stdout_changed": [
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_couriernew_23.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_couriernew_9.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7b_cnew_latin_mark.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7b_cnew_leading_mark.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7b_cnew_thai_run.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7b_cnewbold_latin_mark.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7b_deva_rlm_digit.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7b_thai_rlm_digit.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7b_verdana_digit_rtl.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7b_verdana_tail_space.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7m_heb_cnew_digit.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7m_heb_cnew_letter.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7m_heb_verdana_digit.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7m_heb_verdana_usecase.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/c7m_heb_verdanabold_digit.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/mk9_couriernew_hebrew_space.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round7/mk9_verdana_hebrew_space.puml"
+ ],
+ "stderr_changed": [
+  "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+  "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+  "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+  "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+ ],
+ "stderr_change_cause": "thread ids in four pre-existing panic messages (crates/rustuml-parser/src/parse/class.rs:285), panicking identically at base, merge and tip",
+ "golden_outputs_changed": []
+}

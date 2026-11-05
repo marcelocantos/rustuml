@@ -1,0 +1,9 @@
+@startuml
+state Hold {
+  Crate --> Barrel
+}
+note left of Hold
+  first line
+  second, longer line
+end note
+@enduml

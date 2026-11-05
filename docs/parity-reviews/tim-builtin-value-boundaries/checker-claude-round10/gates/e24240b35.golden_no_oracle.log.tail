@@ -1,0 +1,67 @@
+warning: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:74:15
+   |
+74 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rustuml-parser` (lib) generated 1 warning
+   Compiling rustuml-oracle v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round10-claude-checker/gsrc/e24240b35/crates/rustuml-oracle)
+    Finished `release` profile [optimized] target(s) in 3.54s
+     Running tests/golden_no_oracle.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round10-claude-checker/target/gates-e24240b35/release/deps/golden_no_oracle-901d5e92a3796558)
+
+running 1 test
+running 12550 golden pairs (no-oracle tier)...
+
+golden_no_oracle: 11181/11251 eligible pairs pass per family:
+  activity          1297/1299
+  archimate           48/48
+  chart               25/25
+  class             1963/1971
+  combo              318/327
+  component          663/663
+  creole             639/639
+  deployment         495/495
+  dot                 25/25
+  ebnf                25/25
+  edge-cases         759/777
+  er                 153/157
+  gantt              114/114
+  git                 25/25
+  json-yaml          147/147
+  links               50/50
+  math                50/50
+  mindmap            157/157
+  multi-diagram       53/53
+  nwdiag              89/89
+  object             155/155
+  preprocessing      286/307
+  regex               45/45
+  rendering           95/98
+  salt               103/103
+  sequence          1411/1411
+  skinparam          409/410
+  sprites             49/49
+  state              897/901
+  timing             141/141
+  type-detection      42/42
+  usecase            315/315
+  wbs                138/138
+  wire                 0/0
+
+thread 'golden_no_oracle' (61623660) panicked at crates/rustuml-oracle/tests/golden_no_oracle.rs:214:5:
+no-oracle PRODUCT REGRESSION — the CLI path renders fewer goldens than baseline:
+  activity: pass 1299 -> 1297 (eligible 1299 -> 1299)
+  edge-cases: pass 760 -> 759 (eligible 777 -> 777)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test golden_no_oracle ... FAILED
+
+failures:
+
+failures:
+    golden_no_oracle
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.58s
+
+error: test failed, to rerun pass `-p rustuml-oracle --test golden_no_oracle`

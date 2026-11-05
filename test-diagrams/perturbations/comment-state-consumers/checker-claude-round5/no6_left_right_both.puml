@@ -1,0 +1,7 @@
+@startuml
+state Loft {
+  Hay --> Oat
+}
+note left of Loft : dry
+note right of Loft : warm
+@enduml

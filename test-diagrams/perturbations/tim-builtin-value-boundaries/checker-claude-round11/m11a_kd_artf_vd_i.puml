@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam artifactFontStyle italic
+artifact "Dawn Vow gym kit" as E1
+@enduml

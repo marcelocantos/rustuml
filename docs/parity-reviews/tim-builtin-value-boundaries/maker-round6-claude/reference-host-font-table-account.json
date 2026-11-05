@@ -1,0 +1,26 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "sub_mechanism": "font-chain coverage generated on the reference host and drift-gated (round-6 obligation 3, BLOCKING; T14.6.8)",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-5.json (findings[4..6]; bounded_next_obligations[2..3])",
+ "jdk_locations": [
+  "libawt_lwawt/font/CoreTextSupport.m 99-135 CTS_GetGlyphsAsIntsForCharacters (JDK 21.0.5 GA): own glyph, else JRSFontCreateFallbackFontForCharacters, glyph > 0 -> substituted, else 0 (missing). Measured on colossus: JRS returns nil where CTFontCreateForString returns LastResort (U+0378, U+0528, U+1AB0, U+E123, U+FDD0), so 'LastResort counts as missing' is JRS's behaviour.",
+  "AWTFont.m 547-580 getCascadeList: CTFontCopyDefaultCascadeListForLanguages(font, CFLocaleCopyISOLanguageCodes()).",
+  "CFont.java 203-239 createCompositeFont; CFontManager.java 328-338 getOrCreateFallbackFont: findFont2D (fonts registered by loadNativeFonts: AWTFont.m GetFilteredFonts 231-276, every face of every NSFontManager family not starting with '.', plus the two JavaFX UI fonts), else null for a '.'-name, else new CFont(name).",
+  "CCompositeGlyphMapper.java 54-67: first slot whose own code is > 0."
+ ],
+ "planned_change": [
+  "tools/FontChainExtract.swift: simple path through JRSFontCreateFallbackFontForCharacters (dlsym of JavaRuntimeSupport.framework, the JDK's own call) with no system-font filter, so user and downloaded-asset fonts count exactly as the JDK sees them; cascade with CFLocaleCopyISOLanguageCodes(); slot resolution as getOrCreateFallbackFont over the loadNativeFonts registry; per slot its location class (system, asset, local, user); per face the HarfBuzz plan facts (#hb_plan); a --census mode listing every registered font with its location.",
+  "A request (run.sh, request.json) for Monkey Man: the 13 faces, the census, ~/Library/Fonts, /Library/Fonts and AssetsV2 font listings, the JDK's libfontmanager linkage (bundled HarfBuzz check), SHA256SUMS.",
+  "After the parent returns the output: tools/font_chain_coverage.py generates font_chain_coverage.rs from it with the output's SHA256SUMS hash in the provenance header; the output is stored at tools/font-chain-reference/monkeyman-26B123/; a test asserts the table's recorded hash equals the SHA256 of the stored SHA256SUMS, that every stored file matches SHA256SUMS, and that the table's runs, .notdef advances and plan facts equal the stored TSVs.",
+  "Java probes (round-6 batch) for PingFang-asset scalars (U+31BC, U+F817, U+31D0, U+FE20, U+1F101) and user-font scalars (U+F8B7, U+20B7) in simple and complex text."
+ ],
+ "interim": "Until the round-6 Monkey Man output exists, the draft table is generated from the round-5 Monkey Man extraction (SHA256SUMS 810633ca2bf2d76acf2d03e35023bd765037cd17c4d4fb5a5615bae801532f5d; system and asset fonts, user fonts excluded by that tool); the Rust predictions of the round-6 batch come from that interim table.",
+ "precommitted_measurement": {
+  "oracle": "Java probes of the round-6 batch on Monkey Man (held out from this tool), BH/BG width probes, Times New Roman Java table as a dated secondary oracle",
+  "expect": "every PingFang-asset and user-font probe matches whole-output or differs only by a declared mapped-advance residue (mapped scalars outside Java tables keep approximations); BH/BG width probes that match at merge keep matching; goldens unchanged"
+ }
+}

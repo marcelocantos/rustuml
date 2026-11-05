@@ -1,0 +1,3 @@
+@startyaml
+k: "short\rmuch longer line"
+@endyaml

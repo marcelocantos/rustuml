@@ -1,0 +1,7 @@
+@startuml
+state Cellar {
+  Cask --> Barrel
+}
+note "loose" as N1
+Cellar --> Door
+@enduml

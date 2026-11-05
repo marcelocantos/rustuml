@@ -1,0 +1,5 @@
+thread 'golden_no_oracle' (52454267) panicked at crates/rustuml-oracle/tests/golden_no_oracle.rs:214:5:
+no-oracle PRODUCT REGRESSION — the CLI path renders fewer goldens than baseline:
+  activity: pass 1299 -> 1297 (eligible 1299 -> 1299)
+  edge-cases: pass 760 -> 759 (eligible 777 -> 777)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

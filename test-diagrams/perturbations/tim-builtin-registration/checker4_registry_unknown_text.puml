@@ -1,0 +1,4 @@
+@startuml
+!$tag="elm"
+class "%fresh_unregistered($tag) / $tag" as Registry
+@enduml

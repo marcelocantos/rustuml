@@ -1,0 +1,12 @@
+@startuml
+skinparam defaultFontName Arial
+<style>
+actor {
+  FontStyle italic
+  FontWeight bold
+}
+</style>
+actor "Avid Dawky Vow 4.7, gym kayak ovo!" as E1
+usecase "Ok" as E2
+E1 --> E2
+@enduml

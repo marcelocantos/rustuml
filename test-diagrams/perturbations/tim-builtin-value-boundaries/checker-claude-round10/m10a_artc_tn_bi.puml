@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam artifactFontStyle bold italic
+artifact "Pylon vk" as E1
+component "Ok" as E2
+E1 --> E2
+@enduml

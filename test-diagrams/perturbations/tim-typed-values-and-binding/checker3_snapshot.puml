@@ -1,0 +1,9 @@
+@startuml
+!$counter=4
+!function $advance()
+!$counter=$counter+1
+!return 10
+!endfunction
+!$result=$advance()+$counter
+class "$result / $counter" as Result
+@enduml

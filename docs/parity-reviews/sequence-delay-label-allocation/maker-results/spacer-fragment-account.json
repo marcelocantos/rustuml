@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-delay-spacer-fragment",
+  "status": "maker causal account before draft; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "klimt/creole/legacy/StripeSimple.java#getAtoms (lines 124-129): a stripe (one display line) with zero atoms receives one AtomTextUtils.createLegacy(\" \") atom. The rule is per stripe, never per atom run inside a stripe.",
+    "sequencediagram/command/CommandDelay.java#executeArg: LABEL is one Display line, hence one stripe whose atoms include any leading spacer atoms.",
+    "skin/rose/ComponentRoseDelayText.java#drawInternalU: the visible text is translated by the width of the spacer atoms that precede the first ink atom in that same stripe; with no leading spacers that width is the width of zero atoms, 0."
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs#Event::Delay (leading_width)",
+    "crates/rustuml-render/src/text_render.rs#line_segments (shared-SVG packet's StripeSimple.getAtoms port)",
+    "crates/rustuml-render/src/text_render.rs: new atom-run measurement that does not apply the per-stripe empty-atom rule"
+  ],
+  "invariant": "Measurement of a sub-line atom run (a prefix of a stripe) never applies StripeSimple's empty-stripe space; an empty run has width 0. Whole-line measurement keeps the empty-stripe space.",
+  "divergence": "Causal pair: the shared-SVG packet's line_segments (StripeSimple.getAtoms) makes measure_with_family(\"\") = width(\" \") = 3.48046875 at 11pt sans-serif. The sequence packet (829141653) measures the leading spacer prefix of a delay label through that whole-line API, so a label without leading spaces gains one phantom space: x shifts from 54.9211 to 58.4016 in edge_sequence_delay and edge_seq_delay_texts. Neither parent alone shows it (base: measure(\"\") = 0; packet alone: no leading_width code).",
+  "planned_change": "Add a text_render atom-run measurement that measures creole segments of a fragment without the per-stripe empty-atom insertion, and use it for the delay label's leading spacer run. No constants, no label conditions.",
+  "precommitted_measurement": {
+    "expect_fixed": ["edge-cases/edge_seq_delay_texts", "edge-cases/edge_sequence_delay"],
+    "expect_unchanged": "every other no-oracle and perturbation result versus the merged tree before this draft, in particular test-diagrams/perturbations/sequence-delay-label-allocation/* (leading-space delays keep their measured spacer width)",
+    "held_out": "delay labels with 0 and >0 leading spaces and different text widths, legacy and teoz, fresh pinned-Java pipe references"
+  },
+  "axes": ["leading spacer count 0/1/3", "label text width", "legacy and teoz"]
+}

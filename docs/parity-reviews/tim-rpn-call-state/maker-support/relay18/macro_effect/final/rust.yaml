@@ -1,0 +1,34 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      note as N
+      $tick() one
+      two
+      end note
+      class "1" as Count
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Note 0
+  - !Entity Count
+  entities:
+  - id: Count
+    label: '1'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 13
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - $tick() one
+    - two
+    target: null
+    position: null
+    alias: 'N'
+    source_line: 7
+  hide_show: []

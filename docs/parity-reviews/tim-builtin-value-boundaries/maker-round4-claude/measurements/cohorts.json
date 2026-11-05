@@ -1,0 +1,280 @@
+{
+ "goldens": {
+  "sources": 12550,
+  "base_comments_exact": 11563,
+  "r3_comments_exact": 11781,
+  "d5_comments_exact": 11781,
+  "java_valid": 11351,
+  "java_error": 1199,
+  "base_valid_strict_match": 11181,
+  "base_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "base_panics": 0,
+  "base_timeouts": 0,
+  "base_java_error_rejected": 76,
+  "r3_valid_strict_match": 11180,
+  "r3_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "r3_panics": 0,
+  "r3_timeouts": 0,
+  "r3_java_error_rejected": 76,
+  "d5_valid_strict_match": 11181,
+  "d5_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "d5_panics": 0,
+  "d5_timeouts": 0,
+  "d5_java_error_rejected": 76,
+  "base_to_d5": {
+   "comments_gained": 218,
+   "gained_match": [
+    "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+    "test-diagrams/golden/state/state_history_shallow.puml",
+    "test-diagrams/golden/state/state_note_composite.puml"
+   ],
+   "lost_match_GET_provenance": [
+    "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+   ],
+   "outputs_changed": 309
+  },
+  "base_to_d5_counts": {
+   "comments_gained": 218,
+   "gained_match": 3,
+   "lost_match_GET_provenance": 3,
+   "outputs_changed": 309
+  },
+  "r3_to_d5": {
+   "gained_match": [
+    "test-diagrams/golden/state/state_note_composite.puml"
+   ],
+   "outputs_changed": [
+    "test-diagrams/golden/state/state_note_composite.puml"
+   ]
+  },
+  "r3_to_d5_counts": {
+   "gained_match": 1,
+   "outputs_changed": 1
+  }
+ },
+ "perturbations": {
+  "sources": 3917,
+  "base_comments_exact": 2773,
+  "r3_comments_exact": 3296,
+  "d5_comments_exact": 3296,
+  "java_valid": 3604,
+  "java_error": 313,
+  "base_valid_strict_match": 1730,
+  "base_exit": {
+   "0": 3821,
+   "1": 88,
+   "101": 8
+  },
+  "base_panics": 8,
+  "base_timeouts": 0,
+  "base_java_error_rejected": 84,
+  "r3_valid_strict_match": 2328,
+  "r3_exit": {
+   "0": 3753,
+   "1": 160,
+   "101": 4
+  },
+  "r3_panics": 4,
+  "r3_timeouts": 0,
+  "r3_java_error_rejected": 155,
+  "d5_valid_strict_match": 2331,
+  "d5_exit": {
+   "0": 3753,
+   "1": 160,
+   "101": 4
+  },
+  "d5_panics": 4,
+  "d5_timeouts": 0,
+  "d5_java_error_rejected": 155,
+  "base_to_d5": {
+   "comments_gained": 525,
+   "comments_lost": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+   ],
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "gained_match": 601,
+   "outputs_changed": 1222,
+   "rejection_gained": 71
+  },
+  "base_to_d5_counts": {
+   "comments_gained": 525,
+   "comments_lost": 2,
+   "error_now_renders_valid_ref": 3,
+   "gained_match": 601,
+   "outputs_changed": 1222,
+   "rejection_gained": 71
+  },
+  "r3_to_d5": {
+   "gained_match": [
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml"
+   ],
+   "outputs_changed": [
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_class.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_component.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_deployment.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_description.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_state.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_usecase.puml"
+   ]
+  },
+  "r3_to_d5_counts": {
+   "gained_match": 3,
+   "outputs_changed": 10
+  }
+ },
+ "all": {
+  "sources": 16467,
+  "base_comments_exact": 14336,
+  "r3_comments_exact": 15077,
+  "d5_comments_exact": 15077,
+  "java_valid": 14955,
+  "java_error": 1512,
+  "base_valid_strict_match": 12911,
+  "base_exit": {
+   "1": 164,
+   "0": 16295,
+   "101": 8
+  },
+  "base_panics": 8,
+  "base_timeouts": 0,
+  "base_java_error_rejected": 160,
+  "r3_valid_strict_match": 13508,
+  "r3_exit": {
+   "1": 236,
+   "0": 16227,
+   "101": 4
+  },
+  "r3_panics": 4,
+  "r3_timeouts": 0,
+  "r3_java_error_rejected": 231,
+  "d5_valid_strict_match": 13512,
+  "d5_exit": {
+   "1": 236,
+   "0": 16227,
+   "101": 4
+  },
+  "d5_panics": 4,
+  "d5_timeouts": 0,
+  "d5_java_error_rejected": 231,
+  "base_to_d5": {
+   "comments_gained": 743,
+   "comments_lost": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+   ],
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "gained_match": 604,
+   "lost_match_GET_provenance": [
+    "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+   ],
+   "outputs_changed": 1531,
+   "rejection_gained": 71
+  },
+  "base_to_d5_counts": {
+   "comments_gained": 743,
+   "comments_lost": 2,
+   "error_now_renders_valid_ref": 3,
+   "gained_match": 604,
+   "lost_match_GET_provenance": 3,
+   "outputs_changed": 1531,
+   "rejection_gained": 71
+  },
+  "r3_to_d5": {
+   "gained_match": [
+    "test-diagrams/golden/state/state_note_composite.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml"
+   ],
+   "outputs_changed": [
+    "test-diagrams/golden/state/state_note_composite.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_class.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_component.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_deployment.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_description.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_state.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_usecase.puml"
+   ]
+  },
+  "r3_to_d5_counts": {
+   "gained_match": 4,
+   "outputs_changed": 11
+  }
+ },
+ "GET_goldens": {
+  "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+   "base": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "d5": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+   "base": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "d5": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+   "base": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "d5": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  }
+ }
+}

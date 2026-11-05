@@ -1,0 +1,7 @@
+@startuml
+!$a = 1073741824 * 4 + 7
+!$b = -2147483648 / -1
+!$c = 7 / 2
+!$d = "007" - 2
+class "$a / $b / $c / $d" as Arithmetic
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+state Yard {
+  state Shed {
+    Saw --> Plank
+  }
+  note left of Shed : dusty
+}
+@enduml

@@ -1,0 +1,6 @@
+{
+  "command": "verify existing checker5 probe expected maker comparator SHA",
+  "exit": 1,
+  "finding": "Existing checker5 cache probe is not the maker recorded comparator binary. Will build comparator from exact candidate instead; no measurements used that binary.",
+  "resolution": "Located expected exact unchanged comparator at /tmp/rustuml-tim6/probe, SHA verified; copied for replay. Comparator source and library Git blobs audited unchanged. No measurements use mismatched checker5 cache probe."
+}

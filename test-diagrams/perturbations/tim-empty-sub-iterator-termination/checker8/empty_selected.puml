@@ -1,0 +1,4 @@
+@startuml
+!includesub selected.iuml!quiet
+class SelectedFresh
+@enduml

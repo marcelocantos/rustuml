@@ -1,0 +1,3093 @@
+{
+ "cases": 81,
+ "trees": {
+  "base": {
+   "java_valid": 81,
+   "strict_match_valid": 26,
+   "viewBox_exact": 27,
+   "comments_exact": 25,
+   "nonzero_exit": 0,
+   "panics": 0,
+   "nonempty_stderr": 0
+  },
+  "merge": {
+   "java_valid": 81,
+   "strict_match_valid": 36,
+   "viewBox_exact": 39,
+   "comments_exact": 81,
+   "nonzero_exit": 0,
+   "panics": 0,
+   "nonempty_stderr": 0
+  },
+  "tip": {
+   "java_valid": 81,
+   "strict_match_valid": 36,
+   "viewBox_exact": 39,
+   "comments_exact": 81,
+   "nonzero_exit": 0,
+   "panics": 0,
+   "nonempty_stderr": 0
+  }
+ },
+ "deltas": {
+  "base->tip": {
+   "output_changed": [
+    "c8a_bl_cnew_hangul_split",
+    "c8a_bl_cnew_hangul_split_ctrl",
+    "c8a_bl_cnew_khmer_split",
+    "c8a_bl_cnew_khmer_split_ctrl",
+    "c8a_bl_lucida_al_en_thai",
+    "c8a_bl_lucida_al_en_thai_ctrl",
+    "c8a_bl_lucida_al_then_thai_en",
+    "c8a_bl_lucida_al_then_thai_en_ctrl",
+    "c8a_bl_lucida_an_cs_an",
+    "c8a_bl_lucida_an_cs_an_ctrl",
+    "c8a_bl_lucida_an_digit_thai",
+    "c8a_bl_lucida_an_digit_thai_ctrl",
+    "c8a_bl_lucida_deva_digit_r",
+    "c8a_bl_lucida_deva_digit_r_ctrl",
+    "c8a_bl_lucida_en_cs_en",
+    "c8a_bl_lucida_en_cs_en_ctrl",
+    "c8a_bl_lucida_et_en",
+    "c8a_bl_lucida_et_en_ctrl",
+    "c8a_bl_lucida_ext_arabic_digit",
+    "c8a_bl_lucida_ext_arabic_digit_ctrl",
+    "c8a_bl_lucida_rli_digit",
+    "c8a_bl_lucida_rli_digit_ctrl",
+    "c8a_bl_lucida_thai_digit_after_r",
+    "c8a_bl_lucida_thai_digit_after_r_ctrl",
+    "c8a_bl_verdana_angle_nsm_end",
+    "c8a_bl_verdana_angle_nsm_end_ctrl",
+    "c8a_bl_verdana_bracket_nsm_latin",
+    "c8a_bl_verdana_bracket_nsm_latin_ctrl",
+    "c8a_bl_verdana_bracket_nsm_r",
+    "c8a_bl_verdana_bracket_nsm_r_ctrl",
+    "c8a_bl_verdana_mark_then_digit",
+    "c8a_bl_verdana_mark_then_digit_ctrl",
+    "c8a_bl_verdana_open_l_context",
+    "c8a_bl_verdana_open_l_context_ctrl",
+    "c8a_bl_verdana_square_nsm_end",
+    "c8a_bl_verdana_square_nsm_end_ctrl",
+    "c8a_ci_abstract_hebrew",
+    "c8a_ci_abstract_hebrew_ctrl",
+    "c8a_ci_abstract_latin",
+    "c8a_ci_abstract_latin_ctrl",
+    "c8a_ci_abstract_leading",
+    "c8a_ci_abstract_leading_ctrl",
+    "c8a_ci_abstract_size11",
+    "c8a_ci_abstract_size11_ctrl",
+    "c8a_ci_fontstyle_italic",
+    "c8a_ci_fontstyle_italic_ctrl",
+    "c8a_ci_stereo_latin",
+    "c8a_cr_member_bold",
+    "c8a_cr_member_plain",
+    "c8a_cr_usecase_plain",
+    "c8a_hm_ltr_left",
+    "c8a_hm_ltr_right",
+    "c8a_hm_lucida_parens",
+    "c8a_hm_rtl_left",
+    "c8a_hm_rtl_right",
+    "c8a_lt_arial_tibetan",
+    "c8a_lt_cnew_thai_stereo",
+    "c8a_lt_deva_participant",
+    "c8a_lt_latin_marks_state",
+    "c8a_lt_thai_note",
+    "c8a_lt_verdana_deva_link",
+    "c8a_tn_abstract_italic",
+    "c8a_tn_abstract_italic_ctrl",
+    "c8a_tn_regular",
+    "c8a_tn_regular_ctrl"
+   ],
+   "viewBox_gained": [
+    "c8a_bl_cnew_khmer_split",
+    "c8a_bl_lucida_al_en_thai",
+    "c8a_bl_lucida_al_then_thai_en",
+    "c8a_bl_lucida_an_cs_an",
+    "c8a_bl_lucida_ext_arabic_digit",
+    "c8a_bl_verdana_bracket_nsm_r",
+    "c8a_ci_fontstyle_italic",
+    "c8a_cr_member_bold",
+    "c8a_cr_member_plain",
+    "c8a_lt_cnew_thai_stereo",
+    "c8a_lt_thai_note",
+    "c8a_lt_verdana_deva_link",
+    "c8a_tn_abstract_italic"
+   ],
+   "gained_match": [
+    "c8a_bl_cnew_khmer_split",
+    "c8a_bl_lucida_al_en_thai",
+    "c8a_bl_lucida_al_then_thai_en",
+    "c8a_bl_lucida_an_cs_an",
+    "c8a_cr_member_bold",
+    "c8a_cr_member_plain",
+    "c8a_cr_usecase_plain",
+    "c8a_lt_thai_note",
+    "c8a_tn_abstract_italic",
+    "c8a_tn_abstract_italic_ctrl"
+   ],
+   "viewBox_lost": [
+    "c8a_bl_lucida_thai_digit_after_r"
+   ],
+   "ndiff_worse": [
+    "c8a_bl_lucida_deva_digit_r",
+    "c8a_bl_lucida_thai_digit_after_r"
+   ]
+  },
+  "base->tip_counts": {
+   "output_changed": 65,
+   "viewBox_gained": 13,
+   "gained_match": 10,
+   "viewBox_lost": 1,
+   "ndiff_worse": 2
+  },
+  "merge->tip": {},
+  "merge->tip_counts": {},
+  "base->merge": {
+   "output_changed": [
+    "c8a_bl_cnew_hangul_split",
+    "c8a_bl_cnew_hangul_split_ctrl",
+    "c8a_bl_cnew_khmer_split",
+    "c8a_bl_cnew_khmer_split_ctrl",
+    "c8a_bl_lucida_al_en_thai",
+    "c8a_bl_lucida_al_en_thai_ctrl",
+    "c8a_bl_lucida_al_then_thai_en",
+    "c8a_bl_lucida_al_then_thai_en_ctrl",
+    "c8a_bl_lucida_an_cs_an",
+    "c8a_bl_lucida_an_cs_an_ctrl",
+    "c8a_bl_lucida_an_digit_thai",
+    "c8a_bl_lucida_an_digit_thai_ctrl",
+    "c8a_bl_lucida_deva_digit_r",
+    "c8a_bl_lucida_deva_digit_r_ctrl",
+    "c8a_bl_lucida_en_cs_en",
+    "c8a_bl_lucida_en_cs_en_ctrl",
+    "c8a_bl_lucida_et_en",
+    "c8a_bl_lucida_et_en_ctrl",
+    "c8a_bl_lucida_ext_arabic_digit",
+    "c8a_bl_lucida_ext_arabic_digit_ctrl",
+    "c8a_bl_lucida_rli_digit",
+    "c8a_bl_lucida_rli_digit_ctrl",
+    "c8a_bl_lucida_thai_digit_after_r",
+    "c8a_bl_lucida_thai_digit_after_r_ctrl",
+    "c8a_bl_verdana_angle_nsm_end",
+    "c8a_bl_verdana_angle_nsm_end_ctrl",
+    "c8a_bl_verdana_bracket_nsm_latin",
+    "c8a_bl_verdana_bracket_nsm_latin_ctrl",
+    "c8a_bl_verdana_bracket_nsm_r",
+    "c8a_bl_verdana_bracket_nsm_r_ctrl",
+    "c8a_bl_verdana_mark_then_digit",
+    "c8a_bl_verdana_mark_then_digit_ctrl",
+    "c8a_bl_verdana_open_l_context",
+    "c8a_bl_verdana_open_l_context_ctrl",
+    "c8a_bl_verdana_square_nsm_end",
+    "c8a_bl_verdana_square_nsm_end_ctrl",
+    "c8a_ci_abstract_hebrew",
+    "c8a_ci_abstract_hebrew_ctrl",
+    "c8a_ci_abstract_latin",
+    "c8a_ci_abstract_latin_ctrl",
+    "c8a_ci_abstract_leading",
+    "c8a_ci_abstract_leading_ctrl",
+    "c8a_ci_abstract_size11",
+    "c8a_ci_abstract_size11_ctrl",
+    "c8a_ci_fontstyle_italic",
+    "c8a_ci_fontstyle_italic_ctrl",
+    "c8a_ci_stereo_latin",
+    "c8a_cr_member_bold",
+    "c8a_cr_member_plain",
+    "c8a_cr_usecase_plain",
+    "c8a_hm_ltr_left",
+    "c8a_hm_ltr_right",
+    "c8a_hm_lucida_parens",
+    "c8a_hm_rtl_left",
+    "c8a_hm_rtl_right",
+    "c8a_lt_arial_tibetan",
+    "c8a_lt_cnew_thai_stereo",
+    "c8a_lt_deva_participant",
+    "c8a_lt_latin_marks_state",
+    "c8a_lt_thai_note",
+    "c8a_lt_verdana_deva_link",
+    "c8a_tn_abstract_italic",
+    "c8a_tn_abstract_italic_ctrl",
+    "c8a_tn_regular",
+    "c8a_tn_regular_ctrl"
+   ],
+   "viewBox_gained": [
+    "c8a_bl_cnew_khmer_split",
+    "c8a_bl_lucida_al_en_thai",
+    "c8a_bl_lucida_al_then_thai_en",
+    "c8a_bl_lucida_an_cs_an",
+    "c8a_bl_lucida_ext_arabic_digit",
+    "c8a_bl_verdana_bracket_nsm_r",
+    "c8a_ci_fontstyle_italic",
+    "c8a_cr_member_bold",
+    "c8a_cr_member_plain",
+    "c8a_lt_cnew_thai_stereo",
+    "c8a_lt_thai_note",
+    "c8a_lt_verdana_deva_link",
+    "c8a_tn_abstract_italic"
+   ],
+   "gained_match": [
+    "c8a_bl_cnew_khmer_split",
+    "c8a_bl_lucida_al_en_thai",
+    "c8a_bl_lucida_al_then_thai_en",
+    "c8a_bl_lucida_an_cs_an",
+    "c8a_cr_member_bold",
+    "c8a_cr_member_plain",
+    "c8a_cr_usecase_plain",
+    "c8a_lt_thai_note",
+    "c8a_tn_abstract_italic",
+    "c8a_tn_abstract_italic_ctrl"
+   ],
+   "viewBox_lost": [
+    "c8a_bl_lucida_thai_digit_after_r"
+   ],
+   "ndiff_worse": [
+    "c8a_bl_lucida_deva_digit_r",
+    "c8a_bl_lucida_thai_digit_after_r"
+   ]
+  },
+  "base->merge_counts": {
+   "output_changed": 65,
+   "viewBox_gained": 13,
+   "gained_match": 10,
+   "viewBox_lost": 1,
+   "ndiff_worse": 2
+  }
+ },
+ "per_case": {
+  "c8a_ci_abstract_latin": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 110 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "a03a1662c5b14db909c3684364a633cd2905a6f6c1143166af98ca37ec4f8238"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "ec667e3b8927493351b743854b8da23008029fddbd574386c224aad8522aa680"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "ec667e3b8927493351b743854b8da23008029fddbd574386c224aad8522aa680"
+   }
+  },
+  "c8a_ci_abstract_latin_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 102 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "0e164a1625c72593cf741d7a85e80d573b24aeaf458b3cdca14b670e7cf7620b"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "6ab386bbfbb84f08c29bcbcfcd387ed32559c2e4f4b4798b0e4bbc62069e15e0"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "6ab386bbfbb84f08c29bcbcfcd387ed32559c2e4f4b4798b0e4bbc62069e15e0"
+   }
+  },
+  "c8a_ci_abstract_hebrew": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 110 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "4932f9f5f45f97b3d802deaa981247e980b9fb62630831751a7a6500a35b28bd"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "2994a5e6c2d05681d79e87a563a85d9278f7c5efdd8e483eae0e749ecaa95814"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "2994a5e6c2d05681d79e87a563a85d9278f7c5efdd8e483eae0e749ecaa95814"
+   }
+  },
+  "c8a_ci_abstract_hebrew_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 102 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "6b628eb82a347471d0a11fedfcbc6da0d517151bb3e82b244620fa0f30e3d8c6"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "cafaa11c7bb0845c4f4038aa88bfa8fa911126a925ef3c8da55bcd037731d052"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "cafaa11c7bb0845c4f4038aa88bfa8fa911126a925ef3c8da55bcd037731d052"
+   }
+  },
+  "c8a_ci_abstract_leading": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 94 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "01104c19cca9420c95b7a3ca60f2028aa78ff1e25ef10ea3fcca6663a50339cd"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "de999326777983258ea438c0bd5f4643bf962f5050b0f8cf3c1246d9a38beddd"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "de999326777983258ea438c0bd5f4643bf962f5050b0f8cf3c1246d9a38beddd"
+   }
+  },
+  "c8a_ci_abstract_leading_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 85 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "e987ab5375f8e727a72e10d2c9c2f72780ddff83366f364bd0e6c63f37bbe8a9"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "727f9e46b348b2ffe740c0c603c906e81068840981a15faef2229502e85c6e2d"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "727f9e46b348b2ffe740c0c603c906e81068840981a15faef2229502e85c6e2d"
+   }
+  },
+  "c8a_ci_stereo_latin": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 112 75",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "08673eb5b61273676b32d88ab4472a95a71267d86b3eeea64e8bdd17dd2d8a4c"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "9b0d0303876c4da19738e8a56505220d565b409985ee795c239e233b88d4369b"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "9b0d0303876c4da19738e8a56505220d565b409985ee795c239e233b88d4369b"
+   }
+  },
+  "c8a_ci_stereo_latin_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 105 75",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "c4b9fd42203b7b4bb0f72126c57347f72df8b6be411b06bed5146f0e3ec348d2"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "c4b9fd42203b7b4bb0f72126c57347f72df8b6be411b06bed5146f0e3ec348d2"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "c4b9fd42203b7b4bb0f72126c57347f72df8b6be411b06bed5146f0e3ec348d2"
+   }
+  },
+  "c8a_ci_fontstyle_italic": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 102 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "b9af136444a92627de521ee716c60acd4a4530e792c54950d6ea14ba9ac103dd"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "89a73578152b6fa0689b7c6a452254258caf7c15e75d185ac837b882a29f789e"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "89a73578152b6fa0689b7c6a452254258caf7c15e75d185ac837b882a29f789e"
+   }
+  },
+  "c8a_ci_fontstyle_italic_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 102 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "09ea5097f84816d4ef6536884e2974100f19eaedb4d9a845bb0caa25e82d3d38"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "f3afb97bedc1169dd442c2ae723a644d4581b422fb4ced761c28abb6742ec2de"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "f3afb97bedc1169dd442c2ae723a644d4581b422fb4ced761c28abb6742ec2de"
+   }
+  },
+  "c8a_ci_creole_italic": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 90 83",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "486a7174ac31d42517dc8777a7b3e75aa412da6a5ad188abe2b50fad3e6241d3"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "486a7174ac31d42517dc8777a7b3e75aa412da6a5ad188abe2b50fad3e6241d3"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "486a7174ac31d42517dc8777a7b3e75aa412da6a5ad188abe2b50fad3e6241d3"
+   }
+  },
+  "c8a_ci_creole_italic_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 82 83",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "dc76fe8eaf00f8a2cb8dab7be0a1b890e151ce81701dd8736af2fa796aad1204"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "dc76fe8eaf00f8a2cb8dab7be0a1b890e151ce81701dd8736af2fa796aad1204"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "dc76fe8eaf00f8a2cb8dab7be0a1b890e151ce81701dd8736af2fa796aad1204"
+   }
+  },
+  "c8a_ci_creole_bolditalic": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 90 83",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "5b7ec81fd5266aa2fe3355f791cfe6a11dea41c0ce6bf520422267acbf913823"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "5b7ec81fd5266aa2fe3355f791cfe6a11dea41c0ce6bf520422267acbf913823"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "5b7ec81fd5266aa2fe3355f791cfe6a11dea41c0ce6bf520422267acbf913823"
+   }
+  },
+  "c8a_ci_creole_bolditalic_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 82 83",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "cd1b4b7b6b4d8d42837652279879fd4109c73ba53527247d01d3626c3adba119"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "cd1b4b7b6b4d8d42837652279879fd4109c73ba53527247d01d3626c3adba119"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "cd1b4b7b6b4d8d42837652279879fd4109c73ba53527247d01d3626c3adba119"
+   }
+  },
+  "c8a_ci_usecase_italic": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 109 48",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "127b3907a09f4e969d23e72859f65e83504fb05d7dec8334f11526d901ccc8de"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "127b3907a09f4e969d23e72859f65e83504fb05d7dec8334f11526d901ccc8de"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "127b3907a09f4e969d23e72859f65e83504fb05d7dec8334f11526d901ccc8de"
+   }
+  },
+  "c8a_ci_usecase_italic_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 97 48",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "9640587ae7d9ca8ce8ab9064c816d2607e4c75f02b2d9e1257fdbc80b699849c"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "9640587ae7d9ca8ce8ab9064c816d2607e4c75f02b2d9e1257fdbc80b699849c"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "9640587ae7d9ca8ce8ab9064c816d2607e4c75f02b2d9e1257fdbc80b699849c"
+   }
+  },
+  "c8a_ci_abstract_size11": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 107 64",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "f6f91e0ae27f5eb0a1e1e2e957de15b91a9ecc4d934684d2fffe79606b42af31"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "f92f3e86474fb415f1f21378b31449e849350a0f092d66a77fc348d01f91b5f4"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "f92f3e86474fb415f1f21378b31449e849350a0f092d66a77fc348d01f91b5f4"
+   }
+  },
+  "c8a_ci_abstract_size11_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 100 64",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "d333afa75bf39259346c06c446fc06744b5dc4297ad8e22f40d213b28446ffb3"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "912e02365edece819cbff11a44854ad1942dc230fbc067d8092e8d91041a8082"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "912e02365edece819cbff11a44854ad1942dc230fbc067d8092e8d91041a8082"
+   }
+  },
+  "c8a_cr_member_plain": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 82 83",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d22412ea909380abde7e66b9c9b247fe4425c0a2a0642facd51f7212a960518c"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "9500a0fbcc0ebe4045d8d0cfe5503cf61db24097ebb144cf9d4b754c02c98f1f"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "9500a0fbcc0ebe4045d8d0cfe5503cf61db24097ebb144cf9d4b754c02c98f1f"
+   }
+  },
+  "c8a_cr_member_plain_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 82 83",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "8b24349fea51c45c6a3c16cb2e2fde86ad1bd48d569e68759be4dae7887580e4"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "8b24349fea51c45c6a3c16cb2e2fde86ad1bd48d569e68759be4dae7887580e4"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "8b24349fea51c45c6a3c16cb2e2fde86ad1bd48d569e68759be4dae7887580e4"
+   }
+  },
+  "c8a_cr_member_bold": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 82 83",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "a89c7a5b176e2ec7df26dddb6e9a049fd23bcd56c724c35744bd83f29857be47"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "72881330c3b0f86098da7e5203b7714233d0cc771e86aab55c873e8c4f0dd2b2"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "72881330c3b0f86098da7e5203b7714233d0cc771e86aab55c873e8c4f0dd2b2"
+   }
+  },
+  "c8a_cr_member_bold_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 82 83",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "30cfb8be771849cc57cead4a2faef2f0128df90c076155a9fcb221613a660af4"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "30cfb8be771849cc57cead4a2faef2f0128df90c076155a9fcb221613a660af4"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "30cfb8be771849cc57cead4a2faef2f0128df90c076155a9fcb221613a660af4"
+   }
+  },
+  "c8a_cr_usecase_plain": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 97 48",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 3,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "60e8be8f1510785528df492d8849ba037eff59eaa0824049fe252f1247e55e1b"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "7f43a17e19f2703e0c3373a40b3c14d8381717e24508a403edd3e00ad5b47fda"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "7f43a17e19f2703e0c3373a40b3c14d8381717e24508a403edd3e00ad5b47fda"
+   }
+  },
+  "c8a_cr_usecase_plain_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 97 48",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "b775491759eca93b188d032ca30735d76dfc155fcfe3e187de0f5f7fb3391872"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "b775491759eca93b188d032ca30735d76dfc155fcfe3e187de0f5f7fb3391872"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "b775491759eca93b188d032ca30735d76dfc155fcfe3e187de0f5f7fb3391872"
+   }
+  },
+  "c8a_hm_rtl_left": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 226 106",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "bcbeeec70ebbd3017e502b3dd9799dda2b8cf72d7f32816f7181c90053fda09f"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "86d911fbd5d9ab91a3e210daa329d44d17b13982d8cabdfa983432907bfc9610"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "86d911fbd5d9ab91a3e210daa329d44d17b13982d8cabdfa983432907bfc9610"
+   }
+  },
+  "c8a_hm_rtl_right": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 226 106",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "04a90dbf24ddccfae378551e5ed7e16948c8734375d855ae43dde81e1bec78c9"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "7cf4b0a26d68c3892b5ee519ce994bafb9ee2ee322603ea4c5aa7182ede7418b"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "7cf4b0a26d68c3892b5ee519ce994bafb9ee2ee322603ea4c5aa7182ede7418b"
+   }
+  },
+  "c8a_hm_ltr_left": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 220 106",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "20cbc0492a7cc6100e0d1c1f90579d5fa97e1ee8e635fa8ef09e7c674aef3e2f"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "5c5ada360bdd03e05a8f14572a695636a088bdac0f9c62f417c5c32179e22d5f"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "5c5ada360bdd03e05a8f14572a695636a088bdac0f9c62f417c5c32179e22d5f"
+   }
+  },
+  "c8a_hm_ltr_right": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 220 106",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "64b22e7057cb1246d747bbfd9d6e4dc7c679b468ea5956b8d19cf0123b37261d"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "991c11b80488e4b46cb8a01a8cab5abec5fdc8a62b8f8c225c659744895e1dac"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "991c11b80488e4b46cb8a01a8cab5abec5fdc8a62b8f8c225c659744895e1dac"
+   }
+  },
+  "c8a_hm_lucida_parens": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 310 116",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "c3404857ab85ee6c26f1d990eb414859cdc3df7e5a5ef043aa2ce129c8cd6b1e"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "a749fd06bf2348e58253f919c0dbc86db4e2c4dd48dccd385ca1e4c0c7e3e6b6"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "a749fd06bf2348e58253f919c0dbc86db4e2c4dd48dccd385ca1e4c0c7e3e6b6"
+   }
+  },
+  "c8a_bl_verdana_bracket_nsm_latin": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 140 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "6e3296f519fa631d4f4c5d1a587d3c485aa3b92ed6f7ebd0607baa409b743692"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "cc34f551f9be6f57d468c79038132f4c1965708b7b25da4cd435c5b583f71658"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "cc34f551f9be6f57d468c79038132f4c1965708b7b25da4cd435c5b583f71658"
+   }
+  },
+  "c8a_bl_verdana_bracket_nsm_latin_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 126 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "0e8032100f8296cd15f5ffed998477bb9e19bc687b2d7dec5205771f8b348863"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "07969a5bfeba53c981cf9fab7a4bddb72401aea2de46f9c935bc50d98678e607"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "07969a5bfeba53c981cf9fab7a4bddb72401aea2de46f9c935bc50d98678e607"
+   }
+  },
+  "c8a_bl_verdana_square_nsm_end": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 132 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "f6a6119553aeee3bd9cdf7d92c3b514317422ac2feef6c3f1fb676a72e8592ec"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "87a43118d2840e7233325fa8602b2751441b1fba8764041d64309624019acc64"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "87a43118d2840e7233325fa8602b2751441b1fba8764041d64309624019acc64"
+   }
+  },
+  "c8a_bl_verdana_square_nsm_end_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 118 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "782bebfb95aceee10b4eaf098b3fd151309f0024c15fb33b78c330e12d4ec2c8"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "46cc793c2d74c361069ff4bb016d1d7fbd1f80c70a6b3554e9d191fb0fc5a788"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "46cc793c2d74c361069ff4bb016d1d7fbd1f80c70a6b3554e9d191fb0fc5a788"
+   }
+  },
+  "c8a_bl_verdana_angle_nsm_end": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 133 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "06dd93b77c65c564cedb6a1a04182c5a68355df675396cde8c1e264acea9d98e"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "b1f8c8503526d13c3cdfe5ad1fb4d14c753a6ce21336622b2e8b17855bb985ac"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "b1f8c8503526d13c3cdfe5ad1fb4d14c753a6ce21336622b2e8b17855bb985ac"
+   }
+  },
+  "c8a_bl_verdana_angle_nsm_end_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 119 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "3b383af9e90245989e11379c8e91375f44541e18df79f88fb357d49ae5c9356f"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "6f8bda4a5ba8ad0309c8b7871cf6146c3017812e60edbd0b5363a8b9b8b4cb4a"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "6f8bda4a5ba8ad0309c8b7871cf6146c3017812e60edbd0b5363a8b9b8b4cb4a"
+   }
+  },
+  "c8a_bl_verdana_bracket_nsm_r": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 119 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "a21265b28be6387e93d4633fdb9d7d4cc6572aecde716515f97a30b85f82276c"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "32684bcb8711e0f52a4f22a3f07f1f6c7b6accf8d30d267e6e2c99fb0416a6a3"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "32684bcb8711e0f52a4f22a3f07f1f6c7b6accf8d30d267e6e2c99fb0416a6a3"
+   }
+  },
+  "c8a_bl_verdana_bracket_nsm_r_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 119 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "92eda6bc237df24cbddd12a1b847d9c10a2b49fb172025f8d29a7c4c16384a64"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "33a2defbfa0058a1b24fd4aed23e8887649f7124360af3fea5cf3b6d60e1f062"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "33a2defbfa0058a1b24fd4aed23e8887649f7124360af3fea5cf3b6d60e1f062"
+   }
+  },
+  "c8a_bl_verdana_mark_then_digit": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 115 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "027e214886f2b6805a794deb81017cb84f45a9854f5633758ad3e9bcd83d537d"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "be0fb4cae47eae0feef2bad1de049fcd3c06073722843619391ac43f22281c02"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "be0fb4cae47eae0feef2bad1de049fcd3c06073722843619391ac43f22281c02"
+   }
+  },
+  "c8a_bl_verdana_mark_then_digit_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 101 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "bea35363416568577bc3e19a968f9d92246fd80e181b1506fcb2c97fc33fff21"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "fe3c775fc15a84406ae8b832163f583d601a7512141505f1e3c07cbdc05dd109"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "fe3c775fc15a84406ae8b832163f583d601a7512141505f1e3c07cbdc05dd109"
+   }
+  },
+  "c8a_bl_verdana_open_l_context": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 119 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "cd2e9067a638df5272850b83f9e786c7b55d6a8cf967bc378b33b52b600cc3f4"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "51f8cd4eadd0c2b6a2b031294663a7bb361ebc6f298f2afd81899fa830030811"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "51f8cd4eadd0c2b6a2b031294663a7bb361ebc6f298f2afd81899fa830030811"
+   }
+  },
+  "c8a_bl_verdana_open_l_context_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 105 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "a984dae637f489ecac5914f193e112ccada2408f65e9e8ea41989bad17436141"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "ec6c2992c7a1b47497d3396ec576e838b8a8269c0f8a705e5e68d7e057150c53"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "ec6c2992c7a1b47497d3396ec576e838b8a8269c0f8a705e5e68d7e057150c53"
+   }
+  },
+  "c8a_bl_lucida_an_digit_thai": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 101 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "388fa4c5511645347764d04c363bd175530ac65d165c9f9ef7180e0d95178d87"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "9d4d7bd6a3eae4cd08243989961599fe315537126aa8a00b35e66a2506943657"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "9d4d7bd6a3eae4cd08243989961599fe315537126aa8a00b35e66a2506943657"
+   }
+  },
+  "c8a_bl_lucida_an_digit_thai_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 101 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "785e06537582edcf74fd52036052bc3f77d08eb377fe77f71d4bb2eff88af68e"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "2a1bea32d5bb930f9441a52adbefcc56799f0bccc6318e888301a38d6d73cbcd"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "2a1bea32d5bb930f9441a52adbefcc56799f0bccc6318e888301a38d6d73cbcd"
+   }
+  },
+  "c8a_bl_lucida_al_en_thai": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 103 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "9675ed9d88adf2841c5855a0566cf6acf87c509068b81fb6ddc29ce9de3e2a8a"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "2d76b2ea1c9be5dc5458af50698df7238ed245d1d7e4645a6765f6b25674b286"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "2d76b2ea1c9be5dc5458af50698df7238ed245d1d7e4645a6765f6b25674b286"
+   }
+  },
+  "c8a_bl_lucida_al_en_thai_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 103 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "8f957a6fa5dd5f8aef19de2c9121e1dac7cf18eb4dedafef3c6b601fecc400db"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "64d50613ee2d607d3c0867fa4860dd47ddc63c6d5233af700ef5d62d25e1079e"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "64d50613ee2d607d3c0867fa4860dd47ddc63c6d5233af700ef5d62d25e1079e"
+   }
+  },
+  "c8a_bl_lucida_al_then_thai_en": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 118 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "dce4733cabf246f8e7ef3942b1e3c2c94a6f95b2c6465b96b1261802c99b0d6b"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "83839053b484e0cd4ebc84cd847ecf186dae10e3b197f1941e36943c295de957"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "83839053b484e0cd4ebc84cd847ecf186dae10e3b197f1941e36943c295de957"
+   }
+  },
+  "c8a_bl_lucida_al_then_thai_en_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 107 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "ec5d5384413cf1f280c69b91747d7806e1b6e64dc869447547aa9f535f56b8c7"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "0f7209296b8d2f8620b770647fa5a15b24e7a8f95159dacdf0b4f624123c1b76"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "0f7209296b8d2f8620b770647fa5a15b24e7a8f95159dacdf0b4f624123c1b76"
+   }
+  },
+  "c8a_bl_lucida_thai_digit_after_r": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 124 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "d392c0ec909fed367df318a3be92eaffa96102a28d7b205d76f59067d1e3606f"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d10aec5cad3dfea0ec66cee076da7ffa7b2b0e4fbefa6b231d44577751628465"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d10aec5cad3dfea0ec66cee076da7ffa7b2b0e4fbefa6b231d44577751628465"
+   }
+  },
+  "c8a_bl_lucida_thai_digit_after_r_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 114 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "430ab23ca452c0a927d0af30024a9df2f241fd7efdeb3fa61dc6b725c5861f5f"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "4df6c290361b74a6aeb5e88b1d85af1a0422b449e8ffc6c93476f0bec680c741"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "4df6c290361b74a6aeb5e88b1d85af1a0422b449e8ffc6c93476f0bec680c741"
+   }
+  },
+  "c8a_bl_lucida_ext_arabic_digit": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 110 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "8d1e7c6154c47796ca7ba43f046fba1bbf1a4dd23782baeba77faee2a7154e01"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "43fc6d096081642ae245c4b89664cc548d520fdd3ba19098c022beb8cc8e1a5d"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "43fc6d096081642ae245c4b89664cc548d520fdd3ba19098c022beb8cc8e1a5d"
+   }
+  },
+  "c8a_bl_lucida_ext_arabic_digit_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 110 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "9ab27811dab6edbfdea3628e5f49408da54fe59052d9f2f8f80a4f88bbbdf265"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "ddc6f442ba9ba19beb9a4451b8cdce7e25fa177cf269690b092eb5fc606c1127"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "ddc6f442ba9ba19beb9a4451b8cdce7e25fa177cf269690b092eb5fc606c1127"
+   }
+  },
+  "c8a_bl_lucida_en_cs_en": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 125 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "6f084ebe209dfe29cf0d42d45474321b676ccda25011938e2ba41003d8a6e023"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "19a900a7133783e295f6c1fbb0076fdc747b02a8aa3f4d87d08ce6f93cf9a5c1"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "19a900a7133783e295f6c1fbb0076fdc747b02a8aa3f4d87d08ce6f93cf9a5c1"
+   }
+  },
+  "c8a_bl_lucida_en_cs_en_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 125 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "acc4b52d8a617ef249a8691fdc9017e32a4ea88cafddbd005de1e7f37b331b5e"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "837749fccadbc35c1a8a2bd67d43bedf069b234b277405e02588b98a00bfd50c"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "837749fccadbc35c1a8a2bd67d43bedf069b234b277405e02588b98a00bfd50c"
+   }
+  },
+  "c8a_bl_lucida_an_cs_an": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 120 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "a74ffc8fe96d5c9a0a7515e174aa1b1a04d47e728d8e14fbb669c155ebf00ac1"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "6c8e12327f0eab0f0f9cc1eea842060d0c9e7900cc8384f34a01e831415beb9d"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "6c8e12327f0eab0f0f9cc1eea842060d0c9e7900cc8384f34a01e831415beb9d"
+   }
+  },
+  "c8a_bl_lucida_an_cs_an_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 120 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "b0285a921aaa3a126b3d48dc9f658a48a7c8f275e0a1bc4dae5d4999691efec5"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "e4baa0f1256bcf5aaac5e97363aad24c67356d501786b7687580523fc94623b9"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "e4baa0f1256bcf5aaac5e97363aad24c67356d501786b7687580523fc94623b9"
+   }
+  },
+  "c8a_bl_lucida_et_en": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 121 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "45c2415e3c1531419b304580203a612f6c2d535eb85fd45006d89065036930f6"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "3839041bd94a82dee6ff1ced71e9107b5e33a3a42db175679f57fd5e4de836cf"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "3839041bd94a82dee6ff1ced71e9107b5e33a3a42db175679f57fd5e4de836cf"
+   }
+  },
+  "c8a_bl_lucida_et_en_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 121 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "7c80c11d18968a2aac5c2fd61b4b74050725bd697d3cbc39b36826311fd5f2e7"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d2a9d2c93b8132bea960a322746cfeb617795f8244a33b4a59145d3cc14e1ba2"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d2a9d2c93b8132bea960a322746cfeb617795f8244a33b4a59145d3cc14e1ba2"
+   }
+  },
+  "c8a_bl_lucida_rli_digit": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 112 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "210d922fe23375632fb5960db11a025041830eeaa6a8d636b8c7200d29af74fa"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "4264a5aac63b265a6a32216e8af933f300890ff814a4eccab09e4679eb6de0c8"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "4264a5aac63b265a6a32216e8af933f300890ff814a4eccab09e4679eb6de0c8"
+   }
+  },
+  "c8a_bl_lucida_rli_digit_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 112 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "4fe548d83a7445d3917db06eace9f60d9a8cba6f45ea93f6b44ccb198d6cbd49"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "4d2d6a6afac77624630bedfa33a3722c8951fbd6dee23165dbb6106b99c17ce3"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "4d2d6a6afac77624630bedfa33a3722c8951fbd6dee23165dbb6106b99c17ce3"
+   }
+  },
+  "c8a_bl_lucida_deva_digit_r": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 125 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "e5027e717f2d2781282ebc813dce9916cea0a11bd1ad2b7f3d186fbe5540ccd9"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "57073f17ab6c0b9825699e061eee3a52de5b6f8846a6c696309c7c50957f492b"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "57073f17ab6c0b9825699e061eee3a52de5b6f8846a6c696309c7c50957f492b"
+   }
+  },
+  "c8a_bl_lucida_deva_digit_r_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 115 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "28f4a3b5203b49fcfb74a58c700c0d3a0ded88625e80a2e0bbde7b007a07680a"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "91a5f765a3aa9738a7bb1478120be3c726a68f65d9a45b6a6787914cab75a071"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "91a5f765a3aa9738a7bb1478120be3c726a68f65d9a45b6a6787914cab75a071"
+   }
+  },
+  "c8a_bl_cnew_khmer_split": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 127 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "44976de340cc5484da100faa3ff875cbd780096bfce74c98ecf538909f294745"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "d7f408046b432714433367ed88641c58bedc3dda9e04eb0a1e30705a64b0bfb4"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "d7f408046b432714433367ed88641c58bedc3dda9e04eb0a1e30705a64b0bfb4"
+   }
+  },
+  "c8a_bl_cnew_khmer_split_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 127 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "dea4fd396a5a55f3f6833fa4d9672c0dc15106746bb58e68b076355f78bdf076"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "008c56d57c1b2c6ea6fe0eb9fc892914a3b6718b3e5931f6d8f1c86b3ab6927b"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "008c56d57c1b2c6ea6fe0eb9fc892914a3b6718b3e5931f6d8f1c86b3ab6927b"
+   }
+  },
+  "c8a_bl_cnew_hangul_split": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 131 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "eb6aa167f86df1f78a26886ba4bea453dc391fd09b4d15b6dcef2b3d7e19af25"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "2cac78311cd4930c110e8b48d3d6c11055f1c7d63451dae8aad69f13730b80b9"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "2cac78311cd4930c110e8b48d3d6c11055f1c7d63451dae8aad69f13730b80b9"
+   }
+  },
+  "c8a_bl_cnew_hangul_split_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 131 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "2ce86a10da4d9e9f87dbceef2d85d4cbb99fcab6118f576e356304be7decc98f"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "6d2576101942315ae6dbc289ef900f327a39caa3cc5cfbb41e92c263f64a79d1"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "6d2576101942315ae6dbc289ef900f327a39caa3cc5cfbb41e92c263f64a79d1"
+   }
+  },
+  "c8a_bl_verdana_sequence": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 144 137",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "919697d251e10db10821f8f521ae3435d3f5ba3474c9924cd14642d855cc21f6"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "919697d251e10db10821f8f521ae3435d3f5ba3474c9924cd14642d855cc21f6"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "919697d251e10db10821f8f521ae3435d3f5ba3474c9924cd14642d855cc21f6"
+   }
+  },
+  "c8a_bl_verdana_sequence_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 124 137",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "81ccf8be1bdb5841483cd42d006cb27b7d861c7b67152f5e8c749c7e69f6ee05"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "81ccf8be1bdb5841483cd42d006cb27b7d861c7b67152f5e8c749c7e69f6ee05"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "81ccf8be1bdb5841483cd42d006cb27b7d861c7b67152f5e8c749c7e69f6ee05"
+   }
+  },
+  "c8a_bl_verdana_activity": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 122 206",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 13,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d2ed4a20dd9febd2d4c214cfe06204866613f9541c4373d8ad09e7d15f83d7ab"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 13,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d2ed4a20dd9febd2d4c214cfe06204866613f9541c4373d8ad09e7d15f83d7ab"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 13,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "d2ed4a20dd9febd2d4c214cfe06204866613f9541c4373d8ad09e7d15f83d7ab"
+   }
+  },
+  "c8a_bl_verdana_activity_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 110 206",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 13,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "f801f9c3821f24e6070f67778a4a343f7b92a81d82ce33a4f8f5dd1d9c687e8d"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 13,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "f801f9c3821f24e6070f67778a4a343f7b92a81d82ce33a4f8f5dd1d9c687e8d"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 13,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "f801f9c3821f24e6070f67778a4a343f7b92a81d82ce33a4f8f5dd1d9c687e8d"
+   }
+  },
+  "c8a_tn_abstract_italic": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 85 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "4345ba237ce80a8ffd17572d0f274d0a6d8dfcc1b572393157a7aeae9100388c"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "e37eb95972af9b7829795ab506bdb92f4ec4726968f5fc01a5299ab1d927a68e"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "e37eb95972af9b7829795ab506bdb92f4ec4726968f5fc01a5299ab1d927a68e"
+   }
+  },
+  "c8a_tn_abstract_italic_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 85 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 3,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "071ef3947c8373aac8d854ed5e6a165e67ddfd8f7d062ed2d336d0500463b862"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "0671bb06fc0fae83cad10843bea90b3d4e7217d9ea8b51aeb160e18e8bd61b8a"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "0671bb06fc0fae83cad10843bea90b3d4e7217d9ea8b51aeb160e18e8bd61b8a"
+   }
+  },
+  "c8a_tn_regular": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 95 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "79a8f1502230e25c2209a7cf83a482b8c473b5cb77d8d48856c4a3a0fb83637b"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "7fe3184edd671cce3909e861ea6b403219a5cf9a114c7d9ae57f60f6b6529fff"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "7fe3184edd671cce3909e861ea6b403219a5cf9a114c7d9ae57f60f6b6529fff"
+   }
+  },
+  "c8a_tn_regular_ctrl": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 85 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": true,
+    "sha256": "7eec934cbd790e296465dfbf3cf72357612a69b3e7272d8e7ab3d77c976add7e"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "d2701e5b5f65ecec29c581e841b75874cb7a94fef28fbae445110957e3382513"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "d2701e5b5f65ecec29c581e841b75874cb7a94fef28fbae445110957e3382513"
+   }
+  },
+  "c8a_lt_deva_participant": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 90 136",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e7b258ae22e1bf07fbb8571a5317774b18ed8005c8a0a982d19886181ac0e4c7"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "caa19e02e55ed4c6c7cc3cf074e20b3dd5238d44b50066b202050ae18727bad3"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "caa19e02e55ed4c6c7cc3cf074e20b3dd5238d44b50066b202050ae18727bad3"
+   }
+  },
+  "c8a_lt_thai_note": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 171 70",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "4454d445f3cae35a77c641ca0ce838120ff82c4101e5e898ed2060bd828bce92"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "37b9419710b15b4c1cc43ee83cd85bb5e0b0eb50e38a99bdf104955ba2a6fc20"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "37b9419710b15b4c1cc43ee83cd85bb5e0b0eb50e38a99bdf104955ba2a6fc20"
+   }
+  },
+  "c8a_lt_cjk_usecase": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 123 202",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "cdff44001142c81317bd0522ddd7c1e4f30ec3cc73ecbf5f01e0246e0ec98e4f"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "cdff44001142c81317bd0522ddd7c1e4f30ec3cc73ecbf5f01e0246e0ec98e4f"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "cdff44001142c81317bd0522ddd7c1e4f30ec3cc73ecbf5f01e0246e0ec98e4f"
+   }
+  },
+  "c8a_lt_emoji_title": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 110 105",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "23616d3989aef56c399b305bc543144a0dcf8ab58c251b80d7c0686bad0169eb"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "23616d3989aef56c399b305bc543144a0dcf8ab58c251b80d7c0686bad0169eb"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "23616d3989aef56c399b305bc543144a0dcf8ab58c251b80d7c0686bad0169eb"
+   }
+  },
+  "c8a_lt_latin_marks_state": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 92 167",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "bcd00c226fdd8493c24bd44faa939058edc69a067e5c18e2de5e7fab20b415a7"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "c22b76710662c5290df13305b8a92446bb697821222c35c121a3dcc66e61ba6a"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "c22b76710662c5290df13305b8a92446bb697821222c35c121a3dcc66e61ba6a"
+   }
+  },
+  "c8a_lt_verdana_deva_link": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 80 195",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "15fd001a80d153eab9f6cc328322923c8fa96915230397bbebffcb3e9ebb8707"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "d9da455c3f2c24296316e908c25d4afc33a0b407e57ecd6e13892cb8e179b0e8"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "d9da455c3f2c24296316e908c25d4afc33a0b407e57ecd6e13892cb8e179b0e8"
+   }
+  },
+  "c8a_lt_arial_tibetan": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 98 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 5,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "4266d46fef1c6261db6e3a3aa2ba0bea27ac35b98135f3135fdd97e31fa61621"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "a4a3edc60c91081248177eab132a4de0eb6bf063d0698d303a49008168622bbb"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 4,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "a4a3edc60c91081248177eab132a4de0eb6bf063d0698d303a49008168622bbb"
+   }
+  },
+  "c8a_lt_cnew_thai_stereo": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 76 75",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "dc2badfde3290cdbea6797fd0c487030da6642ce5fb97fb213dbbe03d3e4838f"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 7,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "13d3ca2f084ee7c6f84eb72731d1485bdce00c9bc42db807af0e0866bb8f212a"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 7,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "13d3ca2f084ee7c6f84eb72731d1485bdce00c9bc42db807af0e0866bb8f212a"
+   }
+  }
+ }
+}

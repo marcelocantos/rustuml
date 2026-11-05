@@ -1,0 +1,3 @@
+@startuml
+class "Quay x᫏" as Q
+@enduml

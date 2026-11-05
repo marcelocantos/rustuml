@@ -1,0 +1,4 @@
+@startuml
+state Chamber
+Chamber : [[https://example.invalid/p?x=2&y=3{Glow<U+000D>Dusk}Link]]
+@enduml

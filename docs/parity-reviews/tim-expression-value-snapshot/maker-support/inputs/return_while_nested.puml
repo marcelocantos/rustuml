@@ -1,0 +1,15 @@
+@startuml
+!$n=0
+!function $choose()
+!while $n < 3
+!while $n < 2
+!$n=$n+1
+!return $n
+!endwhile
+!$n=90
+!endwhile
+!return 91
+!endfunction
+!$a=$choose()
+class "$a / $n" as Return
+@enduml

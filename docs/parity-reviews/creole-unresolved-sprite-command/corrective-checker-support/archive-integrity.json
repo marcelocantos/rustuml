@@ -1,0 +1,7 @@
+{
+  "members": 34094,
+  "all_members_verified": true,
+  "archive_sha256": "1296a391d0467f51baf0f3c2947b4e6bddbac8eee0d47042d0ed654d4465bd66",
+  "archive_bytes": 13219325,
+  "excluded": "Rebuildable target directories, executables, Python bytecode caches; every raw measurement and stream retained."
+}

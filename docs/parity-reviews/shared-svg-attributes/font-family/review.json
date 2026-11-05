@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A02b1a747-7512-424a-bf7a-dd53d71bb634",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "tool": "T3 Code / Codex harness",
+    "independence": "New checker with no implementation involvement. No child agents, worktrees or production edits. Native review branch prepared by T3."
+  },
+  "account_commit": "d48ed1e7033e5539568a59b63c3d3229d07972db",
+  "implementation_commit": "a33dccc8e94dc44b5bafdc756fc1b88c42823a7d",
+  "evidence_revision": "a2167f93695497e49b8ae71c4830bac96309023b",
+  "base_revision": "b8905e296b8865e53f3c573abaebf4adb632d751",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "jdk": "OpenJDK 21.0.5 Homebrew",
+  "commands": [
+    "CARGO_TARGET_DIR=<private>/target-before CARGO_BUILD_JOBS=4 cargo build --release --locked -p rustuml (base revision)",
+    "CARGO_TARGET_DIR=<private>/target-after CARGO_BUILD_JOBS=4 cargo build --release --locked -p rustuml -p rustuml-oracle (evidence tip, identical production sources)",
+    "uv run --no-project python replay.py (12550 goldens plus 2104 membership-preserved retained/maker observations; actual CLI SVG and YAML both phases)",
+    "uv run --no-project python fresh_measure.py (87 held-out actual CLI before/after; immutable Java relay)",
+    "uv run --no-project python gates.py (eight broad gates once, frozen candidate before registering checker cases)",
+    "reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.L9dFp3l5/new --timezone GMT+11:00 -- -pipe -tsvg (parent existing runner only; Java argv derived, not process-traced)"
+  ],
+  "support": "docs/parity-reviews/shared-svg-attributes/checker-support/",
+  "verdict": "rejected",
+  "policy": "Whole-output failures reject; bounded helper/attribute evidence is not acceptance. No combined correctness claim with concurrent sequence work.",
+  "mechanism": "font-family-normalization",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_activity.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_activity.svg",
+      "axes": [
+        "activity",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "bf2d2dfe8de8569bf3bb340abf9359e3462dc6f71275695683c205f4ec23297a",
+      "golden_sha256": "94f24b13c772b9951573b4bad193b4199bfcc5cf7143fbe640569fd3aff1995c",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_class.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_class.svg",
+      "axes": [
+        "class",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "76145810a2a185e415bebb6e4efbefd11e8d4ecfdc37fb943c8394452e1a22d8",
+      "golden_sha256": "bccb007c068916f266f40f232dbecea76dbf69fec2438bb641876237a4ab15a9",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_state.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_state.svg",
+      "axes": [
+        "state",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "81dbd08f4359502312e4644b71f408c15520ecfc7432b0fab22bc1ad727bdefc",
+      "golden_sha256": "7be237c7282e04240ad8f96a694e00524b1d7ceda54c740d3aa795a4dd890f19",
+      "before_pass": true,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_deployment.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_deployment.svg",
+      "axes": [
+        "deployment",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "f751d03886095f728573d261fe0293929e2f8ea5795658e9d64702ecca4c81e5",
+      "golden_sha256": "58db55deb55988c606e1b233b5c6c2d4f0668a05f74e7ec2207c9d4a3690376f",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_component.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_component.svg",
+      "axes": [
+        "component",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "f139ce5b01cfdb534d755601434b2d913078534818518c1fc8f9924ded351d2b",
+      "golden_sha256": "42f4acbecff39201dfb401d9dbd6a086782e42099827b37133a576cfdf910bc4",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_usecase.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_usecase.svg",
+      "axes": [
+        "usecase",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "9f29789d64157c7ce94bcfb3aaf2b0692d7ca9b9e6b807654120b811826e37fa",
+      "golden_sha256": "23cb0a13e04ae7250f42ee8ec7e829e212c998ddfae393e93580982c597b9135",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_object.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_object.svg",
+      "axes": [
+        "object",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "f475d2f86bc1f4f79e71218f35d016ca60bd49f0e3c88b252b976fff769cb166",
+      "golden_sha256": "5513787f37bdf829b88435e3ae68a6c998954d013ff008aeb15a5309d2df52b7",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_archimate.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_archimate.svg",
+      "axes": [
+        "archimate",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "b15a7b1dd250c471fe53d999123413e9e8e911c02fc605be574868e429c9ba26",
+      "golden_sha256": "5b5a736307fb49eeb162ac9bb222135a16dd4c8055e245da222108055116b0a8",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_gantt.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_gantt.svg",
+      "axes": [
+        "gantt",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "896f7aca29180fee14750b014d4b39c442d7e36c1a3c93f22209db019c880b67",
+      "golden_sha256": "0a65479fa98b982dcca1290256dec0801b33c06666825b6de94340dc73bbf90f",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_timing.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_timing.svg",
+      "axes": [
+        "timing",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "895d81fa968f861305395c0be6eaaf0b9936fb51a37abc7ba379a1bcafc50614",
+      "golden_sha256": "30d54fa412304ee1f68ca7fd0d8336df33c77f7b79dd1a99119541e7e743f56a",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_mindmap.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_mindmap.svg",
+      "axes": [
+        "mindmap",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "5255da8fe5bddb8a51233f17a9259e04c630163e1c713713105a5443800c9e84",
+      "golden_sha256": "a8765a715981da3b58cfeb82538b1a2208bb50fae4715b08643adf6f69b032ac",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_wbs.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_wbs.svg",
+      "axes": [
+        "wbs",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "ec0b9bbde53a797fec6f27f94fae5ad65d2a0c4609aba77db78ae5aaf1206738",
+      "golden_sha256": "2b13fc4b2cdbc6a2b0b7a7bcf102f560834e8f91215d9e407bfcf96fdd578d02",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_salt.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_salt.svg",
+      "axes": [
+        "salt",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "11cd8bb504b0a3c6d9fbec2b9a18ba4c6dcf4a12550497e0dd6a7d653ddce92b",
+      "golden_sha256": "20d9d6505a03c3eb0357aaa72a45313887494a3e35a5116930628cd2b53bb885",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 1,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.svg",
+      "axes": [
+        "json",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "9488b3718e68d764af1b9edf5308575669126e3e42ce2de820e5bf4af33491d2",
+      "golden_sha256": "21f7f338fb23efa3d33c49fbc29bf94f3dc7bb0718ecc2481bd5fff8c67e51b1",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 1,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_nwdiag.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_nwdiag.svg",
+      "axes": [
+        "nwdiag",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "869c91d4f262f51594a3acfdd512ecb63487f5766a0a3625b0bfbfd16d4f39f3",
+      "golden_sha256": "183f366745dbf257ea0ffe66a6d3cdcee2d90fc2fb281c130e9e5478d8ac74ac",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_regex.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_regex.svg",
+      "axes": [
+        "regex",
+        "skinparam font-family quoting/padding/non-ASCII"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "932e55ac6da2b0ac33523bea8811a07830497550152ddd8fc4a14829eba1564a",
+      "golden_sha256": "685429a0c8eb3520069cb96b17e5e38467cf38d45726c049feee8e632117c1ae",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    }
+  ],
+  "findings": [
+    "UFontImpl.getFamily(SVG):118-121 replaces each double quote with apostrophe before DOM serialization. font_family_attribute performs the same final operation; it does not change measurement.",
+    "The 16-family fresh font subset passes 1\u21924/16. Quoted & and angle/non-ASCII names, nested apostrophe/double quotes, and padding are included. Salt/json are valid Java references but Rust process errors with empty stdout; these are not counted as malformed SVGs.",
+    "family_component shows pre-serializer truncation: Java Quill''Reed'' versus Rust Quill''Reed'. component.rs::canonical_font_family repeatedly trim_matches quotes before adding wrapping quotes, unlike Java retaining the definition. Deployment/object/gantt/mindmap/WBS retain ignored family/default or metric gaps. Final XML quote substitution alone cannot achieve the whole-family contract."
+  ],
+  "measurements": {
+    "inputs": 16,
+    "valid": 16,
+    "before_pass": 1,
+    "after_pass": 4
+  }
+}

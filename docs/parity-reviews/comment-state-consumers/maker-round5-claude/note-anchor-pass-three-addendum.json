@@ -1,0 +1,21 @@
+{
+ "schema_version": 1,
+ "mechanism": "comment-state-consumers",
+ "kind": "account addendum after measurement, before the change is committed",
+ "amends": "docs/parity-reviews/comment-state-consumers/maker-round5-claude/outer-image-origin-account.json",
+ "measured_on": "a18a76980",
+ "finding": "BF st_np_outer_note_left_on_leaf_with_image (named in review-5 bounded_next_obligations[0]) still falls through to the flat path (Hive drawn as a childless 50x50 state, 260x181 instead of Java's 188x318). The source declares 'note left of Field' before 'Field --> Hive' creates Field. The same source with the note after the transition takes the image path and renders 188x318. The outer origin is not involved.",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "java_trace": [
+  "statediagram/StateDiagramFactory.java (97-100): the note-on-entity command is registered for ParserPass.THREE; CommandLinkStateCommon runs in pass two (command/PSystemCommandFactory rewinds the source for each pass).",
+  "command/note/CommandFactoryNoteOnEntity.java#isEligibleFor (181-183) and #executeInternal (224-240): in pass three, quarkInContext(true, idShort) finds Field, which pass two created from the transition; 'Not known' is returned only when no entity exists after the earlier passes.",
+  "The note's quark is still created in the group current at the note line (CucaDiagram.quarkInContextSafe, root-path-note-names-account.json)."
+ ],
+ "rust_cause": "crates/rustuml-parser/src/parse/state.rs#scope_last_note resolves the anchor while the note line is parsed, in the single main pass, and keeps anchor_id only if the state already exists; a state first created by a later transition leaves the note without an anchor, and build_autonomous_composite then declines the diagram.",
+ "planned_change": "StateParser::finish resolves the anchor of every attached note whose anchor_id is still None once all lines are parsed (pass three), with the same quark rule (resolve_state_id) in the note's declaring scope. Anchors that resolved at the note line keep that resolution.",
+ "declared_residue": "An anchor that resolved at the note line to a quark that a later line would make ambiguous keeps the earlier resolution.",
+ "precommitted_measurement": {
+  "expect_fixed": ["BF st_np_outer_note_left_on_leaf_with_image"],
+  "expect": "outputs change only for state diagrams with a note declared before its anchor's first use; zero lost matches, zero new errors"
+ }
+}

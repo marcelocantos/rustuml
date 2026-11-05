@@ -1,0 +1,7 @@
+@startuml
+skinparam stateBackgroundColor transparent
+state Empty <<choice>>
+state Body <<choice>>
+Body : choose berth
+Empty --> Body
+@enduml

@@ -1,0 +1,25 @@
+{
+  "binaries": [
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/before-rustuml",
+      "sha256": "96566042e22c23dfec5d9113facd51c70b454e9401b16d42e3e0d7daa40ef216",
+      "bytes": 24729232
+    },
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/after-rustuml",
+      "sha256": "6a647baaba72c975b8b41a4f965e06c4f66d2a1e4d75a46d2bef4afea24cabfd",
+      "bytes": 24727984
+    },
+    {
+      "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/probe",
+      "sha256": "ff7b3a8656b6565734d11e4aaa3f7fecc27ebe9aa9d10faa5ae36a61af578f21",
+      "bytes": 3266072
+    }
+  ],
+  "comparator_source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+  "before_revision": "2ed88eb55ec5f0974ec2830deccfcc401f6d9885",
+  "production_before": "a33dccc8e94dc44b5bafdc756fc1b88c42823a7d",
+  "after_source_hashes": "production-source-hashes.json",
+  "build_jobs": 4,
+  "shipping": false
+}

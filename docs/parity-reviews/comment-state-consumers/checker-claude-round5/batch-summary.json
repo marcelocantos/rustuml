@@ -1,0 +1,1027 @@
+{
+ "BH": {
+  "cases": 99,
+  "java_valid": 96,
+  "strict_and_comments": {
+   "base": 3,
+   "merge": 14,
+   "tip": 67,
+   "ev": 67
+  },
+  "strict_only": {
+   "base": 12,
+   "merge": 14,
+   "tip": 67,
+   "ev": 67
+  },
+  "lost_vs_merge": [],
+  "lost_vs_base": [],
+  "gained_vs_merge": [
+   "w6_sans_0870",
+   "w6_sans_1c80",
+   "w6_sans_2e5e",
+   "w6_sans_1ab0",
+   "w6_sans_0d80",
+   "w6_sans_a69e",
+   "w6_sans_2065",
+   "w6_sans_fff0",
+   "w6_sans_2065_complex",
+   "w6_sans_fff0_complex",
+   "w6_sans_1e900",
+   "w6_sans_30000",
+   "w6_sans_31350",
+   "w6_sans_e0080",
+   "w6_sans_e01f0",
+   "w6_sans_13430",
+   "w6_sans_combining",
+   "w6_sans_arabic_missing",
+   "w6_sans_thai_missing",
+   "w6_sans_size9_0378",
+   "w6_sans_size23_0378",
+   "w6_sans_bold_0870",
+   "w6_arial_0870",
+   "w6_arial_e0080",
+   "w6_arial_1e900",
+   "w6_verdana_0870",
+   "w6_verdana_e0080",
+   "w6_helvetica_0870",
+   "w6_helvetica_e0080",
+   "w6_helvetica_1e900",
+   "w6_couriernew_e0080",
+   "w6_arial_size11_10fffd",
+   "w6_verdana_bold_10fffd",
+   "w6_seq_0870",
+   "w6_activity_10fffd",
+   "w6_state_e0080",
+   "w6_mindmap_0378",
+   "dc6_yaml_escaped_quote",
+   "dc6_yaml_trailing_backslash",
+   "dc6_yaml_colon_key",
+   "dc6_yaml_listonly",
+   "no6_left_depth2",
+   "no6_left_and_start",
+   "no6_left_right_both",
+   "no6_left_multiline_depth1",
+   "no6_left_leaf_beside_image",
+   "pt6_note_before_nested_link",
+   "pt6_note_before_root_link_image",
+   "pt6_note_outer_anchor_later_inner",
+   "pt6_note_before_concurrent",
+   "rp6_depth3",
+   "rp6_duplicate_text",
+   "rp6_root_and_group"
+  ],
+  "exit_changes_merge_to_tip": [
+   [
+    "dc6_yaml_trailing_backslash",
+    1,
+    0
+   ],
+   [
+    "dc6_yaml_colon_key",
+    1,
+    0
+   ],
+   [
+    "dc6_yaml_listonly",
+    1,
+    0
+   ]
+  ],
+  "tip_panics": [],
+  "tip_failures": {
+   "w6_sans_180f_complex": {
+    "java_exit": 0,
+    "merge": "DIFF5",
+    "tip": "DIFF5",
+    "tip_comments_exact": true
+   },
+   "w6_sans_211a": {
+    "java_exit": 0,
+    "merge": "DIFF5",
+    "tip": "DIFF5",
+    "tip_comments_exact": true
+   },
+   "w6_sans_22ad": {
+    "java_exit": 0,
+    "merge": "DIFF5",
+    "tip": "DIFF5",
+    "tip_comments_exact": true
+   },
+   "w6_sans_a8fb": {
+    "java_exit": 0,
+    "merge": "DIFF5",
+    "tip": "DIFF5",
+    "tip_comments_exact": true
+   },
+   "w6_sans_1d17b": {
+    "java_exit": 0,
+    "merge": "DIFF5",
+    "tip": "DIFF5",
+    "tip_comments_exact": true
+   },
+   "w6_sans_16fe4": {
+    "java_exit": 0,
+    "merge": "DIFF5",
+    "tip": "DIFF5",
+    "tip_comments_exact": true
+   },
+   "w6_sans_tag_flag": {
+    "java_exit": 0,
+    "merge": "DIFF5",
+    "tip": "DIFF5",
+    "tip_comments_exact": true
+   },
+   "w6_sans_hebrew_missing": {
+    "java_exit": 0,
+    "merge": "DIFF5",
+    "tip": "DIFF4",
+    "tip_comments_exact": true
+   },
+   "w6_mono_0870": {
+    "java_exit": 0,
+    "merge": "DIFF2",
+    "tip": "DIFF2",
+    "tip_comments_exact": true
+   },
+   "w6_mono_e0080": {
+    "java_exit": 0,
+    "merge": "DIFF6",
+    "tip": "DIFF2",
+    "tip_comments_exact": true
+   },
+   "w6_mono_1e900": {
+    "java_exit": 0,
+    "merge": "DIFF2",
+    "tip": "DIFF2",
+    "tip_comments_exact": true
+   },
+   "w6_times_e0080": {
+    "java_exit": 0,
+    "merge": "DIFF5",
+    "tip": "DIFF5",
+    "tip_comments_exact": true
+   },
+   "dc6_yaml_key_newline": {
+    "java_exit": 0,
+    "merge": "DIFF9",
+    "tip": "DIFF9",
+    "tip_comments_exact": true
+   },
+   "dc6_yaml_apostrophe": {
+    "java_exit": 0,
+    "merge": "DIFF7",
+    "tip": "DIFF6",
+    "tip_comments_exact": true
+   },
+   "dc6_yaml_comment": {
+    "java_exit": 0,
+    "merge": "DIFF7",
+    "tip": "DIFF7",
+    "tip_comments_exact": true
+   },
+   "dc6_yaml_hash_in_quotes": {
+    "java_exit": 0,
+    "merge": "DIFF7",
+    "tip": "DIFF7",
+    "tip_comments_exact": true
+   },
+   "dc6_yaml_nested": {
+    "java_exit": 0,
+    "merge": "DIFF7",
+    "tip": "DIFF14",
+    "tip_comments_exact": true
+   },
+   "dc6_yaml_plain": {
+    "java_exit": 0,
+    "merge": "DIFF7",
+    "tip": "DIFF7",
+    "tip_comments_exact": true
+   },
+   "dc6_yaml_single": {
+    "java_exit": 0,
+    "merge": "DIFF7",
+    "tip": "DIFF7",
+    "tip_comments_exact": true
+   },
+   "dc6_yaml_block": {
+    "java_exit": 0,
+    "merge": "DIFF7",
+    "tip": "DIFF7",
+    "tip_comments_exact": true
+   },
+   "cm6_state_code": {
+    "java_exit": 200,
+    "merge": "DIFF2",
+    "tip": "DIFF2",
+    "tip_comments_exact": true
+   },
+   "cm6_object_code": {
+    "java_exit": 0,
+    "merge": "DIFF2",
+    "tip": "DIFF2",
+    "tip_comments_exact": true
+   },
+   "cm6_usecase_code": {
+    "java_exit": 200,
+    "merge": "DIFF7",
+    "tip": "DIFF7",
+    "tip_comments_exact": false
+   },
+   "cm6_component_code": {
+    "java_exit": 200,
+    "merge": "DIFF10",
+    "tip": "DIFF10",
+    "tip_comments_exact": false
+   },
+   "cm6_class_bare": {
+    "java_exit": 0,
+    "merge": "DIFF6",
+    "tip": "DIFF6",
+    "tip_comments_exact": false
+   },
+   "cm6_class_low": {
+    "java_exit": 0,
+    "merge": "DIFF1",
+    "tip": "DIFF1",
+    "tip_comments_exact": false
+   },
+   "no6_two_left_same": {
+    "java_exit": 0,
+    "merge": "DIFF20",
+    "tip": "DIFF20",
+    "tip_comments_exact": false
+   },
+   "no6_note_on_link_image": {
+    "java_exit": 0,
+    "merge": "DIFF26",
+    "tip": "DIFF26",
+    "tip_comments_exact": true
+   },
+   "no6_floating": {
+    "java_exit": 0,
+    "merge": "DIFF25",
+    "tip": "DIFF25",
+    "tip_comments_exact": true
+   },
+   "no6_top_depth2": {
+    "java_exit": 0,
+    "merge": "DIFF18",
+    "tip": "DIFF18",
+    "tip_comments_exact": true
+   },
+   "rp6_group_note_outer_anchor": {
+    "java_exit": 0,
+    "merge": "DIFF13",
+    "tip": "DIFF12",
+    "tip_comments_exact": true
+   },
+   "rp6_named_floating_in_group": {
+    "java_exit": 0,
+    "merge": "DIFF28",
+    "tip": "DIFF28",
+    "tip_comments_exact": false
+   }
+  }
+ },
+ "BG": {
+  "cases": 53,
+  "java_valid": 52,
+  "strict_and_comments": {
+   "base": 0,
+   "merge": 8,
+   "tip": 41
+  },
+  "strict_only": {
+   "base": 12,
+   "merge": 8,
+   "tip": 41
+  },
+  "lost_vs_merge": [],
+  "lost_vs_base": [],
+  "gained_vs_merge": [
+   "no5_left_note_renamed",
+   "no5_left_note_start_top",
+   "no5_left_note_multiline_renamed",
+   "rp5_root_note_depth2",
+   "rp5_two_groups_sides",
+   "w5_sans_0378",
+   "w5_sans_fdd0",
+   "w5_sans_e123",
+   "w5_sans_12000",
+   "w5_sans_2fffd",
+   "w5_sans_1bca0",
+   "w5_sans_e0100",
+   "w5_sans_1d173",
+   "w5_sans_20000",
+   "w5_sans_a500_complex",
+   "w5_sans_bold18_10fffe",
+   "w5_helvetica_10fffd",
+   "w5_helvetica_10f800",
+   "w5_verdana_10fffd",
+   "w5_verdana_10f800",
+   "w5_couriernew_10fffd",
+   "w5_couriernew_10f800",
+   "w5_arial_10fffd",
+   "w5_arial_10f800",
+   "w5_times_10fffd",
+   "w5_times_10f800",
+   "w5_helvetica_bold_10fffd",
+   "w5_arial_10f7ff",
+   "dc5_yaml_key_escape",
+   "dc5_yaml_list_escape",
+   "dc5_json_nested",
+   "dc5_tim_json_member",
+   "dc5_tim_json_array"
+  ],
+  "exit_changes_merge_to_tip": [
+   [
+    "dc5_yaml_key_escape",
+    1,
+    0
+   ],
+   [
+    "dc5_yaml_list_escape",
+    1,
+    0
+   ],
+   [
+    "dc5_yaml_flow_escape",
+    1,
+    0
+   ],
+   [
+    "dc5_json_nested",
+    1,
+    0
+   ],
+   [
+    "dc5_tim_json_member",
+    1,
+    0
+   ],
+   [
+    "dc5_tim_json_array",
+    1,
+    0
+   ]
+  ],
+  "tip_panics": [],
+  "tip_failures": {
+   "no5_three_notes_image": {
+    "java_exit": 0,
+    "merge": "DIFF23",
+    "tip": "DIFF23",
+    "tip_comments_exact": false
+   },
+   "no5_note_top_image": {
+    "java_exit": 0,
+    "merge": "DIFF14",
+    "tip": "DIFF14",
+    "tip_comments_exact": true
+   },
+   "no5_note_bottom_image": {
+    "java_exit": 0,
+    "merge": "DIFF2",
+    "tip": "DIFF2",
+    "tip_comments_exact": true
+   },
+   "w5_sans_a500": {
+    "java_exit": 0,
+    "merge": "DIFF5",
+    "tip": "DIFF5",
+    "tip_comments_exact": true
+   },
+   "w5_mono_ctl": {
+    "java_exit": 0,
+    "merge": "DIFF1",
+    "tip": "DIFF1",
+    "tip_comments_exact": true
+   },
+   "w5_mono_10fffd": {
+    "java_exit": 0,
+    "merge": "DIFF6",
+    "tip": "DIFF2",
+    "tip_comments_exact": true
+   },
+   "w5_mono_10f800": {
+    "java_exit": 0,
+    "merge": "DIFF6",
+    "tip": "DIFF2",
+    "tip_comments_exact": true
+   },
+   "w5_mono_e0041": {
+    "java_exit": 0,
+    "merge": "DIFF6",
+    "tip": "DIFF2",
+    "tip_comments_exact": true
+   },
+   "dc5_yaml_flow_escape": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "DIFF8",
+    "tip_comments_exact": true
+   },
+   "cm_unit_class_code": {
+    "java_exit": 0,
+    "merge": "DIFF1",
+    "tip": "DIFF1",
+    "tip_comments_exact": false
+   },
+   "cm_unit_link_code": {
+    "java_exit": 200,
+    "merge": "DIFF20",
+    "tip": "DIFF20",
+    "tip_comments_exact": false
+   },
+   "cm_unit_package_code": {
+    "java_exit": 0,
+    "merge": "DIFF9",
+    "tip": "DIFF9",
+    "tip_comments_exact": false
+   }
+  }
+ },
+ "BF": {
+  "cases": 46,
+  "java_valid": 45,
+  "strict_and_comments": {
+   "base": 1,
+   "merge": 17,
+   "tip": 32
+  },
+  "strict_only": {
+   "base": 6,
+   "merge": 17,
+   "tip": 32
+  },
+  "lost_vs_merge": [],
+  "lost_vs_base": [],
+  "gained_vs_merge": [
+   "cr_json_u_escape",
+   "cr_yaml_u_escape",
+   "w_arial_pua_b",
+   "w_times_pua_b",
+   "w_arial_nonchar_10ffff",
+   "w_sans_nonchar_10ffff",
+   "w_sans_nonchar_10fffe",
+   "w_sans_unassigned_3fffd",
+   "w_sans_tag_e0041",
+   "w_sans_bmp_pua_f000",
+   "st_np_note_before_target",
+   "st_np_outer_note_left_multiline",
+   "st_np_outer_note_left_on_leaf_with_image",
+   "st_np_root_note_before_states",
+   "st_np_root_three_clusters"
+  ],
+  "exit_changes_merge_to_tip": [
+   [
+    "cr_json_u_escape",
+    1,
+    0
+   ],
+   [
+    "cr_yaml_u_escape",
+    1,
+    0
+   ]
+  ],
+  "tip_panics": [],
+  "tip_failures": {
+   "cr_ent_dec_10fffd": {
+    "java_exit": 0,
+    "merge": "DIFF6",
+    "tip": "DIFF6",
+    "tip_comments_exact": true
+   },
+   "cr_wrap_seq_pua": {
+    "java_exit": 0,
+    "merge": "DIFF16",
+    "tip": "DIFF16",
+    "tip_comments_exact": true
+   },
+   "cr_id_code_pua": {
+    "java_exit": 200,
+    "merge": "DIFF12",
+    "tip": "DIFF12",
+    "tip_comments_exact": false
+   },
+   "cr_stereotype_pua": {
+    "java_exit": 0,
+    "merge": "DIFF6",
+    "tip": "DIFF6",
+    "tip_comments_exact": true
+   },
+   "w_courier_pua_b": {
+    "java_exit": 0,
+    "merge": "DIFF6",
+    "tip": "DIFF1",
+    "tip_comments_exact": true
+   },
+   "w_monospaced_pua_b": {
+    "java_exit": 0,
+    "merge": "DIFF6",
+    "tip": "DIFF2",
+    "tip_comments_exact": true
+   },
+   "st_bp_multiline_label": {
+    "java_exit": 0,
+    "merge": "DIFF29",
+    "tip": "DIFF29",
+    "tip_comments_exact": true
+   },
+   "st_bp_root_wide_multiline": {
+    "java_exit": 0,
+    "merge": "DIFF25",
+    "tip": "DIFF25",
+    "tip_comments_exact": true
+   },
+   "st_np_concurrent_regions": {
+    "java_exit": 0,
+    "merge": "DIFF48",
+    "tip": "DIFF48",
+    "tip_comments_exact": false
+   },
+   "st_np_link_note_in_cluster": {
+    "java_exit": 0,
+    "merge": "DIFF40",
+    "tip": "DIFF40",
+    "tip_comments_exact": false
+   },
+   "st_np_outer_floating_with_image": {
+    "java_exit": 0,
+    "merge": "DIFF31",
+    "tip": "DIFF31",
+    "tip_comments_exact": true
+   },
+   "st_np_outer_note_in_live_cluster_on_image": {
+    "java_exit": 0,
+    "merge": "DIFF38",
+    "tip": "DIFF38",
+    "tip_comments_exact": false
+   },
+   "st_np_outer_note_top_of_image": {
+    "java_exit": 0,
+    "merge": "DIFF14",
+    "tip": "DIFF14",
+    "tip_comments_exact": true
+   },
+   "st_np_three_notes_one_cluster": {
+    "java_exit": 0,
+    "merge": "DIFF26",
+    "tip": "DIFF26",
+    "tip_comments_exact": true
+   }
+  }
+ },
+ "BE": {
+  "cases": 34,
+  "java_valid": 30,
+  "strict_and_comments": {
+   "base": 0,
+   "merge": 17,
+   "tip": 22
+  },
+  "strict_only": {
+   "base": 0,
+   "merge": 17,
+   "tip": 22
+  },
+  "lost_vs_merge": [],
+  "lost_vs_base": [],
+  "gained_vs_merge": [
+   "no_outer_note_left_of_image",
+   "no_outer_two_notes_on_image",
+   "no_root_cluster_note",
+   "no_root_two_clusters_notes",
+   "pua_b_upper_escape_point"
+  ],
+  "exit_changes_merge_to_tip": [],
+  "tip_panics": [],
+  "tip_failures": {
+   "fmt_high_eps": {
+    "java_exit": 0,
+    "merge": "N/A-eps-1",
+    "tip": "N/A-eps-1",
+    "tip_comments_exact": null
+   },
+   "fmt_high_pdf": {
+    "java_exit": 1,
+    "merge": "N/A-java-pdf-unavailable-1",
+    "tip": "N/A-java-pdf-unavailable-1",
+    "tip_comments_exact": null
+   },
+   "fmt_high_png": {
+    "java_exit": 0,
+    "merge": "N/A-raster-1",
+    "tip": "N/A-raster-1",
+    "tip_comments_exact": null
+   },
+   "fmt_low_eps": {
+    "java_exit": 0,
+    "merge": "N/A-eps-1",
+    "tip": "N/A-eps-1",
+    "tip_comments_exact": null
+   },
+   "fmt_low_pdf": {
+    "java_exit": 1,
+    "merge": "N/A-java-pdf-unavailable-1",
+    "tip": "N/A-java-pdf-unavailable-1",
+    "tip_comments_exact": null
+   },
+   "fmt_low_png": {
+    "java_exit": 0,
+    "merge": "N/A-raster-1",
+    "tip": "N/A-raster-1",
+    "tip_comments_exact": null
+   },
+   "fmt_pua_png": {
+    "java_exit": 0,
+    "merge": "N/A-raster-1",
+    "tip": "N/A-raster-1",
+    "tip_comments_exact": null
+   },
+   "fmt_seq_high_txt": {
+    "java_exit": 0,
+    "merge": "DIFF1",
+    "tip": "DIFF1",
+    "tip_comments_exact": null
+   },
+   "fmt_seq_low_txt": {
+    "java_exit": 0,
+    "merge": "DIFF1",
+    "tip": "DIFF1",
+    "tip_comments_exact": null
+   },
+   "fmt_seq_pua_txt": {
+    "java_exit": 0,
+    "merge": "DIFF1",
+    "tip": "DIFF1",
+    "tip_comments_exact": null
+   },
+   "pua_b_after_lone_high": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "pua_b_then_lone_low": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   }
+  }
+ },
+ "BC": {
+  "cases": 19,
+  "java_valid": 19,
+  "strict_and_comments": {
+   "base": 0,
+   "merge": 18,
+   "tip": 18
+  },
+  "strict_only": {
+   "base": 0,
+   "merge": 18,
+   "tip": 18
+  },
+  "lost_vs_merge": [],
+  "lost_vs_base": [],
+  "gained_vs_merge": [],
+  "exit_changes_merge_to_tip": [],
+  "tip_panics": [],
+  "tip_failures": {
+   "pua_b_usecase": {
+    "java_exit": 0,
+    "merge": "DIFF12",
+    "tip": "DIFF12",
+    "tip_comments_exact": false
+   }
+  }
+ },
+ "BB": {
+  "cases": 36,
+  "java_valid": 26,
+  "strict_and_comments": {
+   "base": 2,
+   "merge": 25,
+   "tip": 25
+  },
+  "strict_only": {
+   "base": 2,
+   "merge": 25,
+   "tip": 25
+  },
+  "lost_vs_merge": [],
+  "lost_vs_base": [],
+  "gained_vs_merge": [],
+  "exit_changes_merge_to_tip": [],
+  "tip_panics": [],
+  "tip_failures": {
+   "sur_activity_low_end": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "sur_class_high_mid_valid": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "sur_class_high_then_nonascii": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "sur_class_low_end": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "sur_class_low_mid": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "sur_link_title_escape": {
+    "java_exit": 0,
+    "merge": "DIFF12",
+    "tip": "DIFF12",
+    "tip_comments_exact": false
+   },
+   "sur_removed_entity": {
+    "java_exit": 0,
+    "merge": "DIFF1",
+    "tip": "DIFF1",
+    "tip_comments_exact": true
+   },
+   "sur_sequence_high_space": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "sur_sequence_participant_high": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "sur_state_link_title_escape": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "sur_tooltip_high_end": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   }
+  }
+ },
+ "AW": {
+  "cases": 45,
+  "java_valid": 39,
+  "strict_and_comments": {
+   "base": 6,
+   "merge": 30,
+   "tip": 30
+  },
+  "strict_only": {
+   "base": 6,
+   "merge": 30,
+   "tip": 30
+  },
+  "lost_vs_merge": [],
+  "lost_vs_base": [],
+  "gained_vs_merge": [],
+  "exit_changes_merge_to_tip": [],
+  "tip_panics": [],
+  "tip_failures": {
+   "theme_plain_activity": {
+    "java_exit": 0,
+    "merge": "DIFF27",
+    "tip": "DIFF27",
+    "tip_comments_exact": true
+   },
+   "theme_mono_sequence": {
+    "java_exit": 0,
+    "merge": "DIFF19",
+    "tip": "DIFF19",
+    "tip_comments_exact": true
+   },
+   "theme_amiga_class": {
+    "java_exit": 0,
+    "merge": "DIFF19",
+    "tip": "DIFF19",
+    "tip_comments_exact": true
+   },
+   "theme_plain_state": {
+    "java_exit": 0,
+    "merge": "DIFF16",
+    "tip": "DIFF16",
+    "tip_comments_exact": true
+   },
+   "theme_mono_usecase": {
+    "java_exit": 0,
+    "merge": "DIFF12",
+    "tip": "DIFF12",
+    "tip_comments_exact": false
+   },
+   "theme_amiga_component": {
+    "java_exit": 0,
+    "merge": "DIFF17",
+    "tip": "DIFF17",
+    "tip_comments_exact": true
+   },
+   "theme_plain_variable": {
+    "java_exit": 0,
+    "merge": "DIFF15",
+    "tip": "DIFF15",
+    "tip_comments_exact": true
+   },
+   "theme_plain_then_cerulean": {
+    "java_exit": 0,
+    "merge": "DIFF9",
+    "tip": "DIFF9",
+    "tip_comments_exact": true
+   },
+   "intval_fullwidth_overflow": {
+    "java_exit": 200,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "intval_supplementary_digit": {
+    "java_exit": 200,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "intval_superscript_digit": {
+    "java_exit": 200,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "intval_double_sign": {
+    "java_exit": 200,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "surrogate_upper_sequence": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "surrogate_activity_label": {
+    "java_exit": 0,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": true
+   },
+   "rh_suffix_undeclared": {
+    "java_exit": 0,
+    "merge": "DIFF2",
+    "tip": "DIFF2",
+    "tip_comments_exact": false
+   }
+  }
+ },
+ "AU": {
+  "cases": 32,
+  "java_valid": 29,
+  "strict_and_comments": {
+   "base": 6,
+   "merge": 21,
+   "tip": 21
+  },
+  "strict_only": {
+   "base": 6,
+   "merge": 21,
+   "tip": 21
+  },
+  "lost_vs_merge": [],
+  "lost_vs_base": [],
+  "gained_vs_merge": [],
+  "exit_changes_merge_to_tip": [],
+  "tip_panics": [],
+  "tip_failures": {
+   "cluster_concurrent_crossing": {
+    "java_exit": 200,
+    "merge": "DIFF19",
+    "tip": "DIFF19",
+    "tip_comments_exact": false
+   },
+   "delay_legacy_lead2_creole": {
+    "java_exit": 0,
+    "merge": "DIFF9",
+    "tip": "DIFF9",
+    "tip_comments_exact": true
+   },
+   "delay_legacy_multiline": {
+    "java_exit": 0,
+    "merge": "DIFF18",
+    "tip": "DIFF18",
+    "tip_comments_exact": true
+   },
+   "delay_teoz_lead3_multiline": {
+    "java_exit": 0,
+    "merge": "DIFF17",
+    "tip": "DIFF17",
+    "tip_comments_exact": true
+   },
+   "raw_blank_before_start": {
+    "java_exit": 0,
+    "merge": "DIFF7",
+    "tip": "DIFF7",
+    "tip_comments_exact": true
+   },
+   "raw_multi_blank_first_block": {
+    "java_exit": 200,
+    "merge": "ERR0",
+    "tip": "ERR0",
+    "tip_comments_exact": false
+   },
+   "raw_sequence_two_blanks": {
+    "java_exit": 0,
+    "merge": "DIFF16",
+    "tip": "DIFF16",
+    "tip_comments_exact": true
+   },
+   "stroke_per_state_css4": {
+    "java_exit": 200,
+    "merge": "DIFF12",
+    "tip": "DIFF12",
+    "tip_comments_exact": false
+   },
+   "theme_mono_class": {
+    "java_exit": 0,
+    "merge": "DIFF15",
+    "tip": "DIFF15",
+    "tip_comments_exact": true
+   },
+   "theme_plain_class_note": {
+    "java_exit": 0,
+    "merge": "DIFF18",
+    "tip": "DIFF18",
+    "tip_comments_exact": true
+   },
+   "theme_plain_sequence": {
+    "java_exit": 0,
+    "merge": "DIFF16",
+    "tip": "DIFF16",
+    "tip_comments_exact": true
+   }
+  }
+ },
+ "AR": {
+  "cases": 20,
+  "java_valid": 20,
+  "strict_and_comments": {
+   "base": 6,
+   "merge": 17,
+   "tip": 17
+  },
+  "strict_only": {
+   "base": 6,
+   "merge": 17,
+   "tip": 17
+  },
+  "lost_vs_merge": [],
+  "lost_vs_base": [],
+  "gained_vs_merge": [],
+  "exit_changes_merge_to_tip": [],
+  "tip_panics": [],
+  "tip_failures": {
+   "delay_legacy_short": {
+    "java_exit": 0,
+    "merge": "DIFF40",
+    "tip": "DIFF40",
+    "tip_comments_exact": false
+   },
+   "delay_legacy_wide": {
+    "java_exit": 0,
+    "merge": "DIFF27",
+    "tip": "DIFF27",
+    "tip_comments_exact": true
+   },
+   "deploy_alias_reverse_up": {
+    "java_exit": 0,
+    "merge": "DIFF15",
+    "tip": "DIFF15",
+    "tip_comments_exact": true
+   }
+  }
+ }
+}

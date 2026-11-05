@@ -1,0 +1,5 @@
+@startuml
+actor "Visible Person" as P
+usecase "Visible Task" as T
+P --> T
+@enduml

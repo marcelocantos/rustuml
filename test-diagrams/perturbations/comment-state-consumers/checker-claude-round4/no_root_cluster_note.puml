@@ -1,0 +1,8 @@
+@startuml
+state Hall {
+  Desk --> Lamp
+  note right of Desk : tidy
+}
+Door --> Desk
+Lamp --> Exit
+@enduml

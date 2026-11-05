@@ -1,0 +1,3 @@
+@startjson
+["a\rb", "c\r\nd", "e\nf"]
+@endjson

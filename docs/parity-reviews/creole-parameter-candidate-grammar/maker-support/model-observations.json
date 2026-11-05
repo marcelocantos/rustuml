@@ -1,0 +1,88 @@
+[
+  {
+    "cohort": "retained",
+    "entries": 1730,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "maker18",
+    "entries": 18,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "sprites50",
+    "entries": 50,
+    "semantic_changes": [],
+    "raw_byte_changes": [
+      "sprites/sprite_multiple"
+    ]
+  },
+  {
+    "cohort": "checker38",
+    "entries": 38,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "fresh15",
+    "entries": 15,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "fresh26",
+    "entries": 26,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "new15",
+    "entries": 15,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "delimiters4",
+    "entries": 4,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "focused2",
+    "entries": 2,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "checker30",
+    "entries": 30,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "supplement8",
+    "entries": 8,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "fresh12",
+    "entries": 12,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "checker28",
+    "entries": 28,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  },
+  {
+    "cohort": "fresh16",
+    "entries": 16,
+    "semantic_changes": [],
+    "raw_byte_changes": []
+  }
+]

@@ -1,0 +1,5 @@
+@startuml
+start
+:[[https://example.invalid/aé𐐀b{Hint}Link]];
+stop
+@enduml

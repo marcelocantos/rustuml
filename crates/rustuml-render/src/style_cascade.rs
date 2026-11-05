@@ -134,6 +134,38 @@ pub struct StyleStroke {
     pub dash: Option<(f64, f64)>,
 }
 
+/// CSS weight from which a face is bold (`UFontFace.isBold` 158-159).
+const BOLD_CSS_WEIGHT: i32 = 700;
+/// `UFontWeight.fromCssValue` clamps to 100..=900 (`clamp` 103-109).
+const MIN_CSS_WEIGHT: i32 = 100;
+const MAX_CSS_WEIGHT: i32 = 900;
+/// `fromCssWeight` 128-131: the `lighter` and `bolder` keyword weights.
+const LIGHTER_CSS_WEIGHT: i32 = 300;
+const BOLDER_CSS_WEIGHT: i32 = 800;
+
+/// The (bold, italic) face a style `FontStyle` value selects: Java
+/// `Style.getUFont` 209 reads `value(PName.FontStyle).asFontFace()`, and
+/// `ValueImpl.asFontFace` (159-178) knows only `bold`, `italic`,
+/// `plain`/`normal` and CSS weights (`UFontFace.fromCssWeight` 118-140);
+/// any other value, `bold italic` included, is `UFontFace.normal()`.
+pub(crate) fn font_face(value: &str) -> (bool, bool) {
+    let value = value.trim().to_ascii_lowercase();
+    let weight = match value.as_str() {
+        "" | "plain" | "normal" => return (false, false),
+        "bold" => return (true, false),
+        "italic" => return (false, true),
+        "lighter" => LIGHTER_CSS_WEIGHT,
+        "bolder" => BOLDER_CSS_WEIGHT,
+        number => match number.parse::<i32>() {
+            Ok(weight) if weight < MIN_CSS_WEIGHT => MIN_CSS_WEIGHT,
+            Ok(weight) if weight > MAX_CSS_WEIGHT => MAX_CSS_WEIGHT,
+            Ok(weight) => (weight + 50) / 100 * 100,
+            Err(_) => return (false, false),
+        },
+    };
+    (weight >= BOLD_CSS_WEIGHT, false)
+}
+
 fn parse_dash_pair(value: &str) -> Option<(f64, f64)> {
     let mut values = value
         .split(['-', ';', ','])
@@ -423,6 +455,29 @@ fn normalize_property(property: &str) -> String {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn font_face_ports_value_impl_as_font_face() {
+        // ValueImpl.asFontFace 159-178 and UFontFace.fromCssWeight 118-140.
+        for (value, face) in [
+            ("bold", (true, false)),
+            (" Italic ", (false, true)),
+            ("plain", (false, false)),
+            ("normal", (false, false)),
+            ("bold italic", (false, false)),
+            ("italic bold", (false, false)),
+            ("bolder", (true, false)),
+            ("lighter", (false, false)),
+            ("650", (true, false)),
+            ("649", (false, false)),
+            ("2000", (true, false)),
+            ("-5", (false, false)),
+            ("heavy", (false, false)),
+            ("", (false, false)),
+        ] {
+            assert_eq!(super::font_face(value), face, "{value:?}");
+        }
+    }
     use rustuml_parser::diagram::style::{
         StyleDeclaration, StyleOrigin, StyleProgram, StyleScheme,
     };

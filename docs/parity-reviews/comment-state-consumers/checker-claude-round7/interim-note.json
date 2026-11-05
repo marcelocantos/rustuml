@@ -1,0 +1,63 @@
+{
+ "schema_version": 1,
+ "status": "interim checker note (round 7, claude); written before any C7A/C7B Java result exists; the final review records follow the relay",
+ "tested_revision": "b0ca0a7dc3547e60c88c256ca5933eead7eb3803",
+ "base": "460570ba2",
+ "merge": "716762056",
+ "binaries_sha256": {
+  "460570ba2": "25aa13be93b2893f0f4b9c4b1a4777c8b51cd93b5d269df0381d7e9667c0c83c",
+  "716762056": "2b4cefb086b5f023002479ddb3e61b73539f82b0afc8d100e08c18e053c7a12b",
+  "b0ca0a7dc": "1663356e7d0d50b91ef3742455b271b45599975ce73654a6b3ebabfc4be3b137"
+ },
+ "BK_L7A": {
+  "reference_results_sha256": "bb7615cd43681427f7f177b9e74ea87e16a711671990a67a9a92e3f16d6790a7",
+  "strict_base_merge_tip": [
+   4,
+   13,
+   31
+  ],
+  "cases": 49,
+  "lost_vs_merge": [],
+  "packet_moved_away_from_java": {
+   "mk9_verdana_hebrew_space": "Java 71.5654 = control 57.5654 + 14.0 (Verdana .notdef kept); merge 70.2666 = control 56.2666 + 14 (mark right, alef residue 1.2988); tip 56.2666 zeroes the mark; DIFF4 -> DIFF5"
+  },
+  "pre_existing_contradiction": {
+   "mk9_couriernew_hebrew_space": "Java 67.2109 = control (mark zeroed); base/merge/tip keep Courier New .notdef 8.4014 (75.6123); control matches at every tree"
+  }
+ },
+ "BJ_K6A_reproduced": {
+  "strict_base_merge_tip": [
+   25,
+   80,
+   94
+  ],
+  "mk8_couriernew_9": "Java 37.8062 = 7 x 5.4009 Courier New cells for 9 characters: both unmapped Mn zeroed; Rust 48.6079 keeps both (maker attributed this to family-name handling; it is the marks)"
+ },
+ "causes_found": [
+  "HarfBuzz >= 11.0.0 OT::GDEF::is_blocklisted (src/hb-ot-layout.cc 153-, 15.0.0 lines 251-254: '88d2006c... Courier New.ttf from macOS 15' ENCODE3(588, 5078, 14418), Courier New Bold ENCODE3(588, 5078, 14238); absent in 10.1.0, present 11.0.0..15.0.0). The reference host's Courier New.ttf (c886ca31...) has GDEF 588, GSUB 5078, GPOS 14418 bytes, so GDEF.hh 974-985 replaces it with an empty blob: no glyph classes, hb_synthesize_glyph_classes makes unmapped Mn MARK glyphs and zero_mark_widths_by_gdef zeroes them. The packet's planner reads gdef_glyph_classes=true from the raw table. Local hb-shape 15.0.0 diagnostic: Courier New glyph 0 advance 0 for a leading or trailing U+1D17B in Latn/Hebr/Zyyy, Mc U+11F03 kept.",
+  "JDK splits TextLayout text at bidi level changes (java/awt/font/TextLine.java fastCreateTextLine 933-965, createComponentsOnRun 994-1039, firstVisualChunk 1296-1305; sun/font/TextLabelFactory.createExtended 116-134) and GlyphLayout.layout runs ScriptRun over the component only (_scriptRuns.init(text, offset, count), 410-412). A neutral + mark after a Hebrew letter at the end of an LTR line is an LTR component with script COMMON/Latin: default shaper, GPOS on for Verdana, mark kept (BK mk9_verdana_hebrew_space). Rust computes script runs over the whole string at every tree; the packet's Verdana hebrew-shaper GPOS switch-off turns that into a wrong zero. Local hb-shape 15.0.0: Verdana glyph 0 keeps 2048 units in Latn/Zyyy, is repositioned (zeroed under JDK's extents=false) only in Hebr."
+ ],
+ "relay_requests": {
+  "C7A": {
+   "dir": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round7-claude-checker/c7a",
+   "cases": 142,
+   "reference-manifest.json": "b186123f72901b1903543f979499c56f9722d40e65ac830fd729dba4fd889388",
+   "reference-input-bundle.json.gz": "ce3bd1086ed3630acfffd10ac7bd9120da8b14fd458b28aba890bfecf44ed59c",
+   "rust-predictions.json": "a992baf6555cf39f101dd7cfba62d26ee5aa2c500edc30345db3021bb9502d58"
+  },
+  "C7B": {
+   "dir": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round7-claude-checker/c7b",
+   "cases": 26,
+   "reference-manifest.json": "c8289a9a348e2e837db96dec1200a0534c4b20dd36f7cfd896d52758dbe9bf13",
+   "reference-input-bundle.json.gz": "8e2791d0e875afe0ac81c8dd66267f6eeb5f6af038491b0af0dae6b6aa7a06d1",
+   "rust-predictions.json": "4f415873431a41583fb28f6635b79bb435ba0de55ed256d63c3fe1c8450fdfa9"
+  }
+ },
+ "monkeyman_font_hash": {
+  "output_sha256": "a5591bab8d3dc44a1dc54b2e9ca7868538eda6733b43a87c7124bdb488c31152",
+  "Verdana Bold.ttf": "480f66b66430bdfa6e9a2199e4bf8f79d915221e60d58e7a32b4ff50645de2e0 = colossus",
+  "Arial Bold.ttf": "d72db21f... = colossus",
+  "all eight colossus-hashed faces equal": true
+ },
+ "drift_drill": "17 mutations of my own (drift_drill7.py): 14/14 gate mutations caught, positive control (Verdana Bold hash from the MM relay added, pending list emptied) passes, tree restored; not pinned by any test: the Unicode 18 Mn table (D14) and SCRIPT_SHAPERS (D15)."
+}

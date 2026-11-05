@@ -1,0 +1,13 @@
+{
+  "archive_sha256": "0fc1e3eae99598c557ab4f5071f18745b0aea2ceca23f52dddaa95315f29119f",
+  "files_checked": 19766,
+  "maker_support_files_checked": 169,
+  "modified": [],
+  "failed_iterations_preserved": [
+    "analysis1.log",
+    "analysis2.log",
+    "iteration1-module.rs",
+    "iteration1-fresh23.json"
+  ],
+  "archived_membership_and_measurements_equal_live_cache": true
+}

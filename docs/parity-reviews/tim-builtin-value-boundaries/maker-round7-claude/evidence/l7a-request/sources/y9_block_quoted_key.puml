@@ -1,0 +1,6 @@
+@startyaml
+"odd: key": |
+  Reed
+  Rush
+next: y
+@endyaml

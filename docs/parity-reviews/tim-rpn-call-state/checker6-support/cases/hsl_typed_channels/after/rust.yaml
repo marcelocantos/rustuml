@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "#808080/#000000/#000000" as Channels
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Channels
+  entities:
+  - id: Channels
+    label: '#808080/#000000/#000000'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

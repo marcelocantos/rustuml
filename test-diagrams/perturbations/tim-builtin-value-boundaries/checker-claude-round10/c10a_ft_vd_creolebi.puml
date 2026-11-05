@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam componentFontStyle bold
+component "<i>Pylon wq vista Kiln</i>" as E1
+@enduml

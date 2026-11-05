@@ -1,0 +1,72 @@
+[
+  {
+    "name": "before-check",
+    "argv": [
+      "cargo",
+      "check",
+      "--workspace"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "revision": "0f00130a26b2f300996d0bd427f9e70b4ef10e30",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-before",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 0,
+    "seconds": 27.178553417004878
+  },
+  {
+    "name": "before-build",
+    "argv": [
+      "cargo",
+      "build",
+      "-p",
+      "rustuml",
+      "--release"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "revision": "0f00130a26b2f300996d0bd427f9e70b4ef10e30",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-before",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 0,
+    "seconds": 35.401413750005304,
+    "binary_sha256": "e4382bfa2396f52af3d4e613ebdb3f7a8f1a3730cc7c10912c79539f415e943e"
+  },
+  {
+    "name": "after-check",
+    "argv": [
+      "cargo",
+      "check",
+      "--workspace"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "revision": "246ff6396b538843143ee9d2cc9a569b67f614dd",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 0,
+    "seconds": 16.286781583999982
+  },
+  {
+    "name": "after-build",
+    "argv": [
+      "cargo",
+      "build",
+      "-p",
+      "rustuml",
+      "--release"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-9a8dea60",
+    "revision": "246ff6396b538843143ee9d2cc9a569b67f614dd",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 0,
+    "seconds": 35.251239749995875,
+    "binary_sha256": "177e06c0264009af5e8746969f497342268e833a87e56ade3e2a8d2721a315a0"
+  }
+]

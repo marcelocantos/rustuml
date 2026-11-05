@@ -1,0 +1,10 @@
+@startuml
+skinparam defaultFontName Courier New
+<style>
+participant {
+  FontStyle italic
+}
+</style>
+participant "Pylon v𝅧k" as E1
+E1 -> E1 : ok
+@enduml

@@ -1,0 +1,1309 @@
+{
+ "schema_version": 1,
+ "batch": "C7A",
+ "cases": [
+  {
+   "name": "c7m_thai_1d167",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "other-slot-base",
+    "thai"
+   ]
+  },
+  {
+   "name": "c7m_thai_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "thai"
+   ]
+  },
+  {
+   "name": "c7m_deva_1d167",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "other-slot-base",
+    "deva"
+   ]
+  },
+  {
+   "name": "c7m_deva_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "deva"
+   ]
+  },
+  {
+   "name": "c7m_ethiopic_1d167",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "other-slot-base",
+    "ethiopic"
+   ]
+  },
+  {
+   "name": "c7m_ethiopic_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "ethiopic"
+   ]
+  },
+  {
+   "name": "c7m_tamil_302a",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "other-slot-base",
+    "tamil",
+    "U+302A"
+   ]
+  },
+  {
+   "name": "c7m_tamil_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "tamil"
+   ]
+  },
+  {
+   "name": "c7m_khmer_fe2e",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "other-slot-base",
+    "khmer",
+    "U+FE2E"
+   ]
+  },
+  {
+   "name": "c7m_khmer_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "khmer"
+   ]
+  },
+  {
+   "name": "c7m_jamo_1d167",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "other-slot-base",
+    "hangul-jamo"
+   ]
+  },
+  {
+   "name": "c7m_jamo_dot_1d167",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "slot0-base",
+    "hangul-run",
+    "hb12.2-fallback"
+   ]
+  },
+  {
+   "name": "c7m_jamo_dot_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "hangul-jamo"
+   ]
+  },
+  {
+   "name": "c7m_cjkcompat_1dfa",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "other-slot-base",
+    "cjk-compat",
+    "U+1DFA"
+   ]
+  },
+  {
+   "name": "c7m_cjkcompat_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "cjk-compat"
+   ]
+  },
+  {
+   "name": "c7m_hangul_comma_1d167",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "slot0-base",
+    "hangul-run"
+   ]
+  },
+  {
+   "name": "c7m_hangul_comma_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "hangul-run"
+   ]
+  },
+  {
+   "name": "c7m_hangul_helv",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "slot0-base",
+    "hangul-run",
+    "helv"
+   ]
+  },
+  {
+   "name": "c7m_hangul_helv_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "helv"
+   ]
+  },
+  {
+   "name": "c7m_hangul_mono",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "slot0-base",
+    "hangul-run",
+    "mono"
+   ]
+  },
+  {
+   "name": "c7m_hangul_mono_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "mono"
+   ]
+  },
+  {
+   "name": "c7m_hangul_verdana",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "slot0-base",
+    "hangul-run",
+    "verdana",
+    "gpos"
+   ]
+  },
+  {
+   "name": "c7m_hangul_verdana_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "verdana"
+   ]
+  },
+  {
+   "name": "c7m_hangul_seq",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "slot0-base",
+    "hangul-run",
+    "sequence"
+   ]
+  },
+  {
+   "name": "c7m_hangul_seq_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "sequence"
+   ]
+  },
+  {
+   "name": "c7m_heb_arial_letter",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "hebrew-run",
+    "arial"
+   ]
+  },
+  {
+   "name": "c7m_heb_arial_letter_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "arial"
+   ]
+  },
+  {
+   "name": "c7m_heb_arial_digit",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "slot0-base",
+    "hebrew-run",
+    "arial"
+   ]
+  },
+  {
+   "name": "c7m_heb_arial_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "arial"
+   ]
+  },
+  {
+   "name": "c7m_heb_verdana_letter",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "hebrew-run",
+    "verdana"
+   ]
+  },
+  {
+   "name": "c7m_heb_verdana_letter_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "verdana"
+   ]
+  },
+  {
+   "name": "c7m_heb_verdana_digit",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "slot0-base",
+    "hebrew-run",
+    "verdana"
+   ]
+  },
+  {
+   "name": "c7m_heb_verdana_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "verdana"
+   ]
+  },
+  {
+   "name": "c7m_heb_cnew_letter",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "hebrew-run",
+    "cnew"
+   ]
+  },
+  {
+   "name": "c7m_heb_cnew_letter_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "cnew"
+   ]
+  },
+  {
+   "name": "c7m_heb_cnew_digit",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "slot0-base",
+    "hebrew-run",
+    "cnew"
+   ]
+  },
+  {
+   "name": "c7m_heb_cnew_digit_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "cnew"
+   ]
+  },
+  {
+   "name": "c7m_heb_verdanabold_digit",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "slot0-base",
+    "hebrew-run",
+    "verdana-bold"
+   ]
+  },
+  {
+   "name": "c7m_heb_verdanabold_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "verdana-bold"
+   ]
+  },
+  {
+   "name": "c7m_heb_arialbold_letter",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "hebrew-run",
+    "arial-bold"
+   ]
+  },
+  {
+   "name": "c7m_heb_arialbold_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "arial-bold"
+   ]
+  },
+  {
+   "name": "c7m_heb_verdana_wj",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "hebrew-run",
+    "verdana",
+    "other-slot-default-ignorable-between"
+   ]
+  },
+  {
+   "name": "c7m_heb_lucida_wj",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "hebrew-run",
+    "lucida",
+    "slot0-default-ignorable-between"
+   ]
+  },
+  {
+   "name": "c7m_heb_verdana_usecase",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "slot0-base",
+    "hebrew-run",
+    "verdana",
+    "usecase"
+   ]
+  },
+  {
+   "name": "c7m_heb_verdana_usecase_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "verdana",
+    "usecase"
+   ]
+  },
+  {
+   "name": "c7m_arabic_mappedmark",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "buffer-split",
+    "arabic-run",
+    "other-slot-mark-between"
+   ]
+  },
+  {
+   "name": "c7m_arabic_mappedmark_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "arabic-run"
+   ]
+  },
+  {
+   "name": "c7m_heb_othermark",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "buffer-split",
+    "hebrew-run",
+    "other-slot-mark-between"
+   ]
+  },
+  {
+   "name": "c7m_heb_othermark_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "hebrew-run"
+   ]
+  },
+  {
+   "name": "c7m_menlo_arabic",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "other-slot-base",
+    "arabic-run",
+    "mono"
+   ]
+  },
+  {
+   "name": "c7m_menlo_arabic_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "mono"
+   ]
+  },
+  {
+   "name": "c7m_syriac_space_helvbold",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "slot0-base",
+    "syriac-run",
+    "helv-bold"
+   ]
+  },
+  {
+   "name": "c7m_syriac_space_helvbold_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "helv-bold"
+   ]
+  },
+  {
+   "name": "c7m_helv_heb_state",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "other-slot-base",
+    "hebrew-run",
+    "helv",
+    "state"
+   ]
+  },
+  {
+   "name": "c7m_helv_heb_state_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "helv",
+    "state"
+   ]
+  },
+  {
+   "name": "c7m_u17_1acf",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd17",
+    "default-run"
+   ]
+  },
+  {
+   "name": "c7m_u17_1acf_simple",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd17",
+    "simple-path"
+   ]
+  },
+  {
+   "name": "c7m_u17_1ae5_seq",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd17",
+    "sequence"
+   ]
+  },
+  {
+   "name": "c7m_u18_1af0_usecase",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "usecase"
+   ]
+  },
+  {
+   "name": "c7m_u17_1e6f5",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd17",
+    "default-run",
+    "after-space"
+   ]
+  },
+  {
+   "name": "c7m_u17_10efb_note",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd17",
+    "note"
+   ]
+  },
+  {
+   "name": "c7m_u17_11b66_activity",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd17",
+    "activity"
+   ]
+  },
+  {
+   "name": "c7m_u18_10ef9_state",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "state"
+   ]
+  },
+  {
+   "name": "c7m_u18_11df0_component",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "component"
+   ]
+  },
+  {
+   "name": "c7m_u18_1d25b_helv",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "helv"
+   ]
+  },
+  {
+   "name": "c7m_u18_1d128_mono",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "mono"
+   ]
+  },
+  {
+   "name": "c7m_u18_05c9_heb",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "hebrew-run",
+    "lucida"
+   ]
+  },
+  {
+   "name": "c7m_u18_05c9_arial",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "hebrew-run",
+    "arial"
+   ]
+  },
+  {
+   "name": "c7m_u18_0b54_oriya",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "other-slot-base",
+    "oriya"
+   ]
+  },
+  {
+   "name": "c7m_u18_0b54_latin",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "default-run"
+   ]
+  },
+  {
+   "name": "c7m_u17_mc_11b61",
+   "intended_valid": true,
+   "axes": [
+    "mc",
+    "ucd17"
+   ]
+  },
+  {
+   "name": "c7m_u18_mc_1d250",
+   "intended_valid": true,
+   "axes": [
+    "mc",
+    "ucd18"
+   ]
+  },
+  {
+   "name": "c7m_u18_1ade_verdana",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd18",
+    "verdana",
+    "gdef"
+   ]
+  },
+  {
+   "name": "c7m_u17_1ad9_mono_seq",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "ucd17",
+    "mono",
+    "sequence"
+   ]
+  },
+  {
+   "name": "c7m_180f_deva",
+   "intended_valid": true,
+   "axes": [
+    "default-ignorable",
+    "U+180F",
+    "indic-run"
+   ]
+  },
+  {
+   "name": "c7m_180f_khmer",
+   "intended_valid": true,
+   "axes": [
+    "default-ignorable",
+    "U+180F",
+    "khmer-run"
+   ]
+  },
+  {
+   "name": "c7m_180f_verdana",
+   "intended_valid": true,
+   "axes": [
+    "default-ignorable",
+    "U+180F",
+    "verdana"
+   ]
+  },
+  {
+   "name": "c7m_180e_deva_ctrl",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "default-ignorable",
+    "U+180E"
+   ]
+  },
+  {
+   "name": "c7m_180f_jamo_skip",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "default-ignorable-between",
+    "hangul-run"
+   ]
+  },
+  {
+   "name": "c7m_tag_skip_heb",
+   "intended_valid": true,
+   "axes": [
+    "mark",
+    "default-ignorable-between",
+    "hebrew-run"
+   ]
+  },
+  {
+   "name": "c7m_menlo_mapped_0301",
+   "intended_valid": true,
+   "axes": [
+    "mapped-mark",
+    "residue",
+    "mono"
+   ]
+  },
+  {
+   "name": "c7y_block_depths",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "indent"
+   ]
+  },
+  {
+   "name": "c7y_block_text_col0",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "dedented-text"
+   ]
+  },
+  {
+   "name": "c7y_block_listlike_body",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "list-lines"
+   ]
+  },
+  {
+   "name": "c7y_block_empty_body",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "empty"
+   ]
+  },
+  {
+   "name": "c7y_block_crlf",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "crlf",
+    "tab",
+    "flow-sequence"
+   ]
+  },
+  {
+   "name": "c7y_block_tab_body",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "tab"
+   ]
+  },
+  {
+   "name": "c7y_block_key_tab",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "tab",
+    "key"
+   ]
+  },
+  {
+   "name": "c7y_block_in_list_map",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "list"
+   ]
+  },
+  {
+   "name": "c7y_block_quoted_colon_key",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "block",
+    "quoted-key"
+   ]
+  },
+  {
+   "name": "c7y_tab_value_multi",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "tab",
+    "value"
+   ]
+  },
+  {
+   "name": "c7y_tab_quoted",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "tab",
+    "quoted"
+   ]
+  },
+  {
+   "name": "c7y_tab_flow",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "tab",
+    "flow-sequence"
+   ]
+  },
+  {
+   "name": "c7y_tab_nested_key",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "tab",
+    "indent",
+    "key"
+   ]
+  },
+  {
+   "name": "c7y_tab_trailing",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "tab",
+    "trailing"
+   ]
+  },
+  {
+   "name": "c7y_list_extra_spaces",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "list"
+   ]
+  },
+  {
+   "name": "c7y_flow_quote_trailing",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "flow-sequence",
+    "quotes"
+   ]
+  },
+  {
+   "name": "c7y_flow_escapes2",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "flow-sequence",
+    "escapes"
+   ]
+  },
+  {
+   "name": "c7y_flow_colon_inside",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "flow-sequence",
+    "colon"
+   ]
+  },
+  {
+   "name": "c7y_flow_comment_tail",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "flow-sequence",
+    "comment"
+   ]
+  },
+  {
+   "name": "c7y_flow_hash_inside",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "flow-sequence",
+    "comment-inside"
+   ]
+  },
+  {
+   "name": "c7y_flow_junk_after",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "flow-sequence",
+    "not-flow"
+   ]
+  },
+  {
+   "name": "c7y_flow_list_item_plain",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "flow-sequence",
+    "list-item"
+   ]
+  },
+  {
+   "name": "c7y_flow_map",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "flow-map"
+   ]
+  },
+  {
+   "name": "c7y_flow_nested_brackets",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "flow-sequence",
+    "nested"
+   ]
+  },
+  {
+   "name": "c7y_flow_list_item_key",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "flow-sequence",
+    "list-item-key"
+   ]
+  },
+  {
+   "name": "c7y_scalar_typing",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "scalars"
+   ]
+  },
+  {
+   "name": "c7y_pre_skinparam_indented",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "preamble",
+    "skinparam",
+    "indented"
+   ]
+  },
+  {
+   "name": "c7y_pre_skinparam_tab",
+   "intended_valid": false,
+   "axes": [
+    "yaml",
+    "preamble",
+    "skinparam",
+    "tab-separator"
+   ]
+  },
+  {
+   "name": "c7y_pre_mix",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "preamble",
+    "pragma",
+    "hide",
+    "skinparam"
+   ]
+  },
+  {
+   "name": "c7y_between_hide",
+   "intended_valid": false,
+   "axes": [
+    "yaml",
+    "hide",
+    "between"
+   ]
+  },
+  {
+   "name": "c7y_after_pragma",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "pragma",
+    "after-data"
+   ]
+  },
+  {
+   "name": "c7y_comment_then_skinparam",
+   "intended_valid": false,
+   "axes": [
+    "yaml",
+    "preamble",
+    "comment-first",
+    "skinparam"
+   ]
+  },
+  {
+   "name": "c7y_skinparam_brace_inline",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "preamble",
+    "skinparam",
+    "brace"
+   ]
+  },
+  {
+   "name": "c7y_style_neutral",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "preamble",
+    "style",
+    "residue"
+   ]
+  },
+  {
+   "name": "c7y_style_effective",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "preamble",
+    "style",
+    "residue"
+   ]
+  },
+  {
+   "name": "c7y_title_pre",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "preamble",
+    "title",
+    "residue"
+   ]
+  },
+  {
+   "name": "c7y_scale_pre",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "preamble",
+    "scale",
+    "residue"
+   ]
+  },
+  {
+   "name": "c7y_skin_pre",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "preamble",
+    "skin",
+    "residue"
+   ]
+  },
+  {
+   "name": "c7y_handwritten",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "preamble",
+    "handwritten",
+    "residue"
+   ]
+  },
+  {
+   "name": "c7y_key_title_space",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "preamble",
+    "title",
+    "key-shaped"
+   ]
+  },
+  {
+   "name": "c7y_key_hide_space",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "preamble",
+    "hide",
+    "key-shaped"
+   ]
+  },
+  {
+   "name": "c7y_key_skinparam_colon",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "preamble",
+    "key-named-skinparam"
+   ]
+  },
+  {
+   "name": "c7y_cr_value",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "cr",
+    "value"
+   ]
+  },
+  {
+   "name": "c7y_cr_key",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "cr",
+    "key"
+   ]
+  },
+  {
+   "name": "c7y_cr_flow",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "cr",
+    "flow-sequence"
+   ]
+  },
+  {
+   "name": "c7y_cr_block",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "cr",
+    "block"
+   ]
+  },
+  {
+   "name": "c7y_lf_value",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "lf",
+    "value"
+   ]
+  },
+  {
+   "name": "c7j_title_pre",
+   "intended_valid": true,
+   "axes": [
+    "json",
+    "preamble",
+    "title",
+    "residue"
+   ]
+  },
+  {
+   "name": "c7j_after_skinparam",
+   "intended_valid": false,
+   "axes": [
+    "json",
+    "skinparam",
+    "after-data"
+   ]
+  },
+  {
+   "name": "c7j_comment_then_skinparam",
+   "intended_valid": false,
+   "axes": [
+    "json",
+    "preamble",
+    "comment-first"
+   ]
+  },
+  {
+   "name": "c7j_hide_pragma",
+   "intended_valid": true,
+   "axes": [
+    "json",
+    "preamble",
+    "hide",
+    "pragma"
+   ]
+  },
+  {
+   "name": "c7j_style_effective",
+   "intended_valid": true,
+   "axes": [
+    "json",
+    "preamble",
+    "style",
+    "residue"
+   ]
+  },
+  {
+   "name": "c7j_skinparam_ws_block",
+   "intended_valid": true,
+   "axes": [
+    "json",
+    "preamble",
+    "skinparam",
+    "block",
+    "indented"
+   ]
+  },
+  {
+   "name": "c7j_cr_array",
+   "intended_valid": true,
+   "axes": [
+    "json",
+    "cr",
+    "array"
+   ]
+  },
+  {
+   "name": "c7j_cr_nested_key",
+   "intended_valid": true,
+   "axes": [
+    "json",
+    "cr",
+    "key",
+    "nested"
+   ]
+  },
+  {
+   "name": "c7j_crlf_file",
+   "intended_valid": true,
+   "axes": [
+    "json",
+    "crlf",
+    "cr"
+   ]
+  },
+  {
+   "name": "c7r_class_amp13",
+   "intended_valid": true,
+   "axes": [
+    "cr",
+    "entity",
+    "class"
+   ]
+  },
+  {
+   "name": "c7r_seq_uplus",
+   "intended_valid": true,
+   "axes": [
+    "cr",
+    "uplus",
+    "sequence"
+   ]
+  },
+  {
+   "name": "c7r_note_amp13",
+   "intended_valid": true,
+   "axes": [
+    "cr",
+    "entity",
+    "note"
+   ]
+  },
+  {
+   "name": "c7r_tooltip_amp13",
+   "intended_valid": true,
+   "axes": [
+    "cr",
+    "entity",
+    "tooltip",
+    "attribute"
+   ]
+  },
+  {
+   "name": "c7r_title_amp13",
+   "intended_valid": true,
+   "axes": [
+    "cr",
+    "entity",
+    "title"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,3 @@
+@startuml
+Juniper -> Alder : X~~fir~~Y\nX~~~fir~~Y\nX<b>~~~fir~~</b>Y\nX<i><b>\~~~fir~~</b></i>Y\nX~~\~\~fir\~\~~~Y
+@enduml

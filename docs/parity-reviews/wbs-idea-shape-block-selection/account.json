@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "base_revision": "a84856637adcd8e8d4e78fd2ee00658c9c612feb",
+  "imported_rejection": "521fe226d428c01128f4379bb7342584772924d7",
+  "import_commit": "dc796484a0a1ef723b8030ef0fd767da2708533d",
+  "verification": "Private before/after CLI -pipe plus --yaml -pipe, unchanged strict comparator, exact six retained memberships1730+18+50+38+15+26, including all nonpositives and32panics. Fresh reference via parent existing runner only; all raw outcomes preserved. Broad gates once stable. No self-review, baseline/contract changes or old evidence edits.",
+  "mechanism": "wbs-idea-shape-block-selection",
+  "java_locations": [
+    "wbs/CommandWBSItemNew#getRegexConcat/executeArg: SHAPE adjacent to prefix before optional color/id",
+    "wbs/CommandWBSItemOld#getRegexConcat/executeArg: legacy optional color/id before SHAPE",
+    "mindmap/IdeaShape#fromDesc: underscore maps NONE, otherwise BOX",
+    "wbs/WBSDiagram#addIdea/initRoot and wbs/WElement#shape",
+    "wbs/WBSTextBlock#buildMain (87) and wbs/ITFLeaf#constructor (58): BOX FtileBoxOld versus Display text with margins0,3,1,1",
+    "klimt/shape/TextBlockUtils#withMargin (76) and TextBlockMarged#calculateDimension/drawU",
+    "src/main/resources/skin/plantuml.skin::wbsDiagram Padding10"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/wbs.rs::WbsShape (new), WbsNode.shape",
+    "crates/rustuml-parser/src/parse/wbs.rs::parse_wbs prefix/color interpretation and sole WbsNode constructor",
+    "crates/rustuml-render/src/wbs.rs::measure/emit_box"
+  ],
+  "invariant": "Underscore adjacent to an existing WBS node prefix is shape syntax represented separately from label content. BOX uses padded boxed text; NONE uses unboxed text with Java consumer margins. Both use the same Display projection and existing tree layout. A literal underscore after separating whitespace remains label content.",
+  "causal_divergence": "Rust has no shape field, retains the marker as label text and emits a rectangle for every node. Java separates command shape before constructing WElement, then selects its text component. Renderer-only label stripping would conceal missing model semantics and misclassify literal underscores.",
+  "planned_change": "User-confirmed additional ownership: add WbsShape {Box,None}, defaultBox and serde default/skip-Box shape field in diagram/wbs.rs. Recognize only adjacent underscore in existing * / - prefix plus existing optional color ordering in parse/wbs.rs, initialize sole constructor and add focused serialization/parser controls. Keep actual label content and depth/side/children, default old YAML/JSON to Box and leave plain serialized models unchanged. Renderer selects BOX padded rectangle or NONE unboxed margins(0left,3right,1top,1bottom) from named Java consumers. No UID/object/factory/dispatch/topology expansion.",
+  "perturbation_axes": [
+    "boxed versus unboxed root/leaf/internal nodes and left/right depth",
+    "adjacent shape marker versus literal underscore and optional color order",
+    "plain legacy serialization/defaults versus explicit unboxed shape; multiline/empty styled text"
+  ]
+}

@@ -27,11 +27,28 @@ pub enum WbsSide {
     Left,
 }
 
+/// Java IdeaShape: a boxed node or a text-only node.
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum WbsShape {
+    #[default]
+    Box,
+    None,
+}
+
+impl WbsShape {
+    fn is_box(&self) -> bool {
+        *self == Self::Box
+    }
+}
+
 /// A single node in the WBS tree.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WbsNode {
     /// Display label.
     pub label: String,
+    /// Command shape, separate from literal label content. Old models omit it.
+    #[serde(default, skip_serializing_if = "WbsShape::is_box")]
+    pub shape: WbsShape,
     /// Optional explicit fill colour, taken from a leading `[#color]` token
     /// (e.g. `**[#blue] Subtask`).  Stored verbatim including the leading `#`
     /// (the renderer resolves named colours to hex).

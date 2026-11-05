@@ -1,0 +1,18 @@
+@startuml
+!$n=0
+!function $pick($label)
+!while $n<5
+!foreach $item in ["04","09"]
+!if $item=="04"
+!$n=$n+1
+!return $label+$item
+!endif
+!$n=99
+!endfor
+!endwhile
+!return "miss"
+!endfunction
+!$a=$pick("oak")
+!$b=$pick("elm")
+class "$a / $b / $n / $item" as Return
+@enduml

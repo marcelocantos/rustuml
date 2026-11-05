@@ -1,0 +1,10 @@
+@startuml
+!function $choose($a="one",$b="two",$c="three")
+!return "three"
+!endfunction
+!function $choose($a="one",$b="two")
+!return "two"
+!endfunction
+!$v=$choose()
+class "$v" as Overlap
+@enduml

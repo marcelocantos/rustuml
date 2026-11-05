@@ -1,0 +1,10 @@
+@startuml
+state "Top Display" as Top {
+state "Lower Display" as Lower {
+[*] --> [H]
+[H] --> First
+First --> [H*]
+[H*] --> Last
+}
+}
+@enduml

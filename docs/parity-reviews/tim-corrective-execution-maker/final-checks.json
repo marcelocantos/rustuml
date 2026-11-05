@@ -1,0 +1,74 @@
+[
+  {
+    "check": "fmt",
+    "command": [
+      "cargo",
+      "fmt",
+      "--check"
+    ],
+    "exit": 1,
+    "seconds": 1.4261150360107422
+  },
+  {
+    "check": "clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "--workspace",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "exit": 101,
+    "seconds": 3.313148021697998
+  },
+  {
+    "check": "parser",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-parser",
+      "--lib"
+    ],
+    "exit": 101,
+    "seconds": 6.778525114059448
+  },
+  {
+    "check": "cli",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml",
+      "--test",
+      "pipe_mode"
+    ],
+    "exit": 0,
+    "seconds": 26.76695704460144
+  },
+  {
+    "check": "tiers",
+    "command": [
+      "cargo",
+      "test",
+      "--workspace",
+      "--release",
+      "--no-fail-fast",
+      "--test",
+      "golden_no_oracle",
+      "--test",
+      "golden_pairs",
+      "--test",
+      "harness_guards",
+      "--test",
+      "doc_claims",
+      "--test",
+      "parity_perturbations",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 28.564125061035156
+  }
+]

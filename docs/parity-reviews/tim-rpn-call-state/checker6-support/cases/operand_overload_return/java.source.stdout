@@ -1,0 +1,3 @@
+@startuml
+class "value 7" as Selected
+@enduml

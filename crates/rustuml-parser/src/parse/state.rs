@@ -257,8 +257,12 @@ impl StateParser {
     ///   carries its full scope prefix (rare, when authors dot-qualify) is left
     ///   untouched.
     fn qualify(&self, raw: &str) -> String {
+        self.qualify_in(raw, self.current_scope())
+    }
+
+    fn qualify_in(&self, raw: &str, scope: Option<&str>) -> String {
         let raw = raw.trim();
-        match self.current_scope() {
+        match scope {
             None => raw.to_string(),
             Some(scope) => {
                 if raw.starts_with('[') && raw.ends_with(']') {
@@ -285,9 +289,13 @@ impl StateParser {
     /// concurrent-region boundaries, so those scopes retain independent
     /// children.
     fn resolve_state_id(&self, raw: &str) -> String {
+        self.resolve_state_id_in(raw, self.current_scope())
+    }
+
+    fn resolve_state_id_in(&self, raw: &str, scope: Option<&str>) -> String {
         let raw = raw.trim();
         if raw.starts_with('[') && raw.ends_with(']') || raw.contains('.') {
-            return self.qualify(raw);
+            return self.qualify_in(raw, scope);
         }
 
         let mut matches = self.states.iter().filter(|state| {
@@ -296,13 +304,12 @@ impl StateParser {
                 .as_deref()
                 .and_then(|parent| parent.rsplit('.').next())
                 .is_some_and(|segment| segment.starts_with("CONC"));
-            let current_is_concurrent = self
-                .current_scope()
+            let current_is_concurrent = scope
                 .and_then(|scope| scope.rsplit('.').next())
                 .is_some_and(|segment| segment.starts_with("CONC"));
             state.id.rsplit('.').next() == Some(raw)
                 && (!(existing_is_concurrent || current_is_concurrent)
-                    || state.parent.as_deref() == self.current_scope())
+                    || state.parent.as_deref() == scope)
         });
         if let Some(sole) = matches.next()
             && matches.next().is_none()
@@ -310,7 +317,28 @@ impl StateParser {
             return sole.id.clone();
         }
 
-        self.qualify(raw)
+        self.qualify_in(raw, scope)
+    }
+
+    /// Record where Java creates the newest note entity and resolve its
+    /// `of <state>` anchor in the same quark context.
+    fn scope_last_note(&mut self) {
+        let parent = self.current_scope().map(String::from);
+        let anchor = self.notes.last().and_then(|note| match &note.kind {
+            StateNoteKind::LeftOf(anchor) | StateNoteKind::RightOf(anchor)
+                if !anchor.is_empty() =>
+            {
+                Some(anchor.clone())
+            }
+            _ => None,
+        });
+        let anchor_id = anchor
+            .map(|anchor| self.resolve_state_id(&anchor))
+            .filter(|id| self.states.iter().any(|state| state.id == *id));
+        if let Some(note) = self.notes.last_mut() {
+            note.parent = parent;
+            note.anchor_id = anchor_id;
+        }
     }
 
     fn flush_note(&mut self) {
@@ -323,7 +351,10 @@ impl StateParser {
                     source_line: buf.source_line,
                     command_line: buf.command_line,
                     creation_order: buf.creation_order,
+                    parent: None,
+                    anchor_id: None,
                 });
+                self.scope_last_note();
             }
         }
     }
@@ -334,7 +365,25 @@ impl StateParser {
         (self.current_line, creation_order)
     }
 
-    fn finish(self) -> StateDiagram {
+    fn finish(mut self) -> StateDiagram {
+        // StateDiagramFactory registers CommandFactoryNoteOnEntity for
+        // ParserPass.THREE: an anchor first created by a later line (a pass-two
+        // transition) is known when the note executes.
+        for index in 0..self.notes.len() {
+            let note = &self.notes[index];
+            let anchor = match &note.kind {
+                StateNoteKind::LeftOf(anchor) | StateNoteKind::RightOf(anchor)
+                    if note.anchor_id.is_none() && !anchor.is_empty() =>
+                {
+                    anchor
+                }
+                _ => continue,
+            };
+            let id = self.resolve_state_id_in(anchor, note.parent.as_deref());
+            if self.states.iter().any(|state| state.id == id) {
+                self.notes[index].anchor_id = Some(id);
+            }
+        }
         StateDiagram {
             meta: self.meta,
             direction: self.direction,
@@ -352,6 +401,21 @@ impl StateParser {
         // composite's start/end pseudo-state.
         if raw.starts_with('[') && raw.ends_with(']') {
             return self.qualify(raw);
+        }
+        // CommandLinkStateCommon: `X[H]` / `X[H*]` call StateDiagram
+        // getHistorical/getDeepHistory(location, X), which resolve X with
+        // quarkInContext(true, ...), enter it as a STATE group and create the
+        // history pseudo-state inside it.
+        for marker in ["[H*]", "[H]"] {
+            if let Some(base) = raw.strip_suffix(marker)
+                && !base.is_empty()
+            {
+                let group = self.ensure_state(base);
+                if let Some(state) = self.states.iter_mut().find(|state| state.id == group) {
+                    state.composite = true;
+                }
+                return format!("{marker}{group}");
+            }
         }
         let id = self.resolve_state_id(raw);
         let parent = self.current_scope().map(String::from);
@@ -525,7 +589,7 @@ impl StateParser {
             // `<` to keep this loose; typed direction and command orientation
             // are derived from the captured arrow token.
             Regex::new(
-                r"^(\[[\w*]*\]|[\w.]+)\s*([-.<>][-.<>\[\]#,=\w]*[->])\s*(\[[\w*]*\]|[\w.]+)(?:\s*:\s*(.+))?$",
+                r"^(\[[\w*]*\]|[\w.]+(?:\[H\*?\])?)\s*([-.<>][-.<>\[\]#,=\w]*[->])\s*(\[[\w*]*\]|[\w.]+(?:\[H\*?\])?)(?:\s*:\s*(.+))?$",
             )
             .unwrap()
         });
@@ -792,7 +856,10 @@ impl StateParser {
                     source_line,
                     command_line: source_line,
                     creation_order,
+                    parent: None,
+                    anchor_id: None,
                 });
+                self.scope_last_note();
             } else {
                 let (source_line, creation_order) = self.note_metadata();
                 self.note_buffer = Some(NoteBuffer {
@@ -826,7 +893,10 @@ impl StateParser {
                     source_line,
                     command_line: source_line,
                     creation_order,
+                    parent: None,
+                    anchor_id: None,
                 });
+                self.scope_last_note();
                 return true;
             }
         }
@@ -873,7 +943,10 @@ impl StateParser {
                         source_line,
                         command_line: source_line,
                         creation_order,
+                        parent: None,
+                        anchor_id: None,
                     });
+                    self.scope_last_note();
                 } else {
                     let (source_line, creation_order) = self.note_metadata();
                     self.note_buffer = Some(NoteBuffer {
@@ -911,7 +984,10 @@ impl StateParser {
                         source_line,
                         command_line: source_line,
                         creation_order,
+                        parent: None,
+                        anchor_id: None,
                     });
+                    self.scope_last_note();
                 } else {
                     let (source_line, creation_order) = self.note_metadata();
                     self.note_buffer = Some(NoteBuffer {
@@ -938,6 +1014,24 @@ impl StateParser {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn note_anchors_resolve_in_pass_three_after_later_transitions() {
+        // StateDiagramFactory: CommandFactoryNoteOnEntity runs in ParserPass.THREE.
+        let lines = [
+            "note right of Quay : wet",
+            "state Dock {",
+            "  note left of Crane : tall",
+            "}",
+            "Quay --> Dock",
+            "Dock.Crane --> Quay",
+        ]
+        .map(String::from);
+        let diagram = parse_state(&lines).unwrap();
+        assert_eq!(diagram.notes[0].anchor_id.as_deref(), Some("Quay"));
+        assert_eq!(diagram.notes[1].anchor_id.as_deref(), Some("Dock.Crane"));
+        assert_eq!(diagram.notes[1].parent.as_deref(), Some("Dock"));
+    }
 
     fn parse(input: &str) -> StateDiagram {
         let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
@@ -1442,5 +1536,30 @@ mod tests {
         ));
         assert_eq!(d.notes[0].source_line, 2);
         assert_eq!(d.notes[0].command_line, 1);
+    }
+
+    #[test]
+    fn suffix_history_endpoints_enter_the_named_group() {
+        // StateDiagram.getHistorical/getDeepHistory(location, idShort).
+        let d = parse(
+            "state Outer {\n\
+             state Cellar {\n\
+             [*] --> Cask\n\
+             }\n\
+             Porter --> Cellar[H]\n\
+             }\n\
+             Porter --> Attic[H*]",
+        );
+        let endpoints: Vec<_> = d.transitions.iter().map(|t| t.to.as_str()).collect();
+        assert_eq!(
+            endpoints,
+            ["Outer.Cellar.Cask", "[H]Outer.Cellar", "[H*]Attic"]
+        );
+        for group in ["Outer.Cellar", "Attic"] {
+            assert!(
+                d.states.iter().any(|s| s.id == group && s.composite),
+                "{group}"
+            );
+        }
     }
 }

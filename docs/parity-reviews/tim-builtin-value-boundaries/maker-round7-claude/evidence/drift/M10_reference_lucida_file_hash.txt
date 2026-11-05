@@ -1,0 +1,5 @@
+thread 'font_chain::tests::coverage_table_is_the_stored_reference_host_extraction' (54052299) panicked at crates/rustuml-render/src/font_chain.rs:954:36:
+assertion `left == right` failed: LucidaGrande: /System/Library/Fonts/LucidaGrande.ttc
+  left: "c481b239979bf0a4912949494e00568fba253fd6265a9770c8721e7989e111ca"
+ right: "00000000979bf0a4912949494e00568fba253fd6265a9770c8721e7989e111ca"
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 850 filtered out; finished in 0.04s

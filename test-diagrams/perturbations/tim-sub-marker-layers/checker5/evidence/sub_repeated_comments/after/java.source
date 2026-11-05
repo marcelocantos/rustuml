@@ -1,0 +1,3 @@
+@startuml
+class "7" as Repeated
+@enduml

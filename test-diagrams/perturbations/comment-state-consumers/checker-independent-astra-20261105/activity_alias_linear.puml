@@ -1,0 +1,5 @@
+@startuml
+(*) --> "Check copper" as Check
+Check --> "Release silver" as Release
+Release --> (*)
+@enduml

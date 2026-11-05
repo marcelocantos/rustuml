@@ -1,0 +1,34 @@
+{
+  "approved": "User explicitly approved exact four entries, hashes and latest reason; total expected-malformed entries becomes seven.",
+  "ratchet": "source hash; unlisted malformed fails; listed becoming well-formed fails",
+  "entries": [
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_c0.puml",
+      "sha256": "f8e49aa31c65047de872fe145933815200748337bf7a7a155bfe218a49288d68",
+      "owner": "T14.20",
+      "reason": "Java exports a crash SVG; Rust emits a raw control character in an attribute",
+      "bytes_repr": "b'@startuml\\nstart\\n:[[https://example.invalid/a\\x02b{Hint}Link]];\\nstop\\n@enduml\\n'"
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_zero.puml",
+      "sha256": "9db5169301ad8914aef80e6e181f446f978432ede32353a9ac004269ff93c462",
+      "owner": "T14.20",
+      "reason": "Java exports a crash SVG; Rust emits a raw control character in an attribute",
+      "bytes_repr": "b'@startuml\\nstart\\n:[[https://example.invalid/p{Glow\\x00Dusk}Link]];\\nstop\\n@enduml\\n'"
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_one.puml",
+      "sha256": "e563876518e6b3ad61d820de64242456ee01aa8c9d2f53f1ab14570b91b180b0",
+      "owner": "T14.20",
+      "reason": "Java exports a crash SVG; Rust emits a raw control character in an attribute",
+      "bytes_repr": "b'@startuml\\nstart\\n:[[https://example.invalid/p{Glow\\x01Dusk}Link]];\\nstop\\n@enduml\\n'"
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_escape.puml",
+      "sha256": "0ad00c5109c7a76ed425ba4f2a545c34818c5020657c6165d130eb9a4a04e35c",
+      "owner": "T14.20",
+      "reason": "Java exports a crash SVG; Rust emits a raw control character in an attribute",
+      "bytes_repr": "b'@startuml\\nstart\\n:[[https://example.invalid/p{Glow\\x1bDusk}Link]];\\nstop\\n@enduml\\n'"
+    }
+  ]
+}

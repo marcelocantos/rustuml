@@ -1,0 +1,8 @@
+@startyaml
+a: |
+  one
+b: |
+  two
+
+
+@endyaml

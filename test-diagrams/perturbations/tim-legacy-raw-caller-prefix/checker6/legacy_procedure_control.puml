@@ -1,0 +1,10 @@
+@startuml
+!$p="cooked"
+!procedure $strip($x)
+first $x
+second $x
+!endprocedure
+note as Memo
+  $p $strip("lime") suffix
+end note
+@enduml

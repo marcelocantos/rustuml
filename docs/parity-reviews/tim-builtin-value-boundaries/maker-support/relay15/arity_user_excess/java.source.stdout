@@ -1,0 +1,2 @@
+@startuml
+!$bad=$only(1,2)

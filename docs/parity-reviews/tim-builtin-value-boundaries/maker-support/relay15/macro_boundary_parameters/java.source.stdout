@@ -1,0 +1,3 @@
+@startuml
+class "[oak] / WRAP(ash) / north\ngold / prefixTOKEN" as Boundary
+@enduml

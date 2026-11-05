@@ -1,0 +1,12 @@
+@startuml
+state Depot {
+  state Bay {
+    state Outlets <<exitPoint>>
+    state Vent <<exitPoint>>
+    Fan --> Outlets
+    Fan --> Vent
+  }
+  Outlets --> Yard
+  Vent --> Roof
+}
+@enduml

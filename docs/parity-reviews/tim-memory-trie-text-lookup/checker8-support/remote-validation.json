@@ -1,0 +1,50 @@
+{
+  "resources_verified": 24,
+  "membership_verified": 20,
+  "calls_verified": 40,
+  "request_sha256": "77fbc289bc49685ab5aa853b62efad4ab5c0ae7d165cec01d4a558adadc3afb6",
+  "manifest_sha256": "f3f75e45190bf83f926811d00be35dad86a2cdf189bc37c63ea7dae784311fac",
+  "returned_gzip_sha256": "57dd7f3aae20e502a9ac87ed2aabca8042bc43f2bb121a128ddce38a18328113",
+  "returned_json_sha256": "de368aaf55bd71204f0587e05b962ab9423792fd8d84373bb47246495c7f8bc5",
+  "environment": {
+    "batch": "TIM8-checker20",
+    "request_sha256": "77fbc289bc49685ab5aa853b62efad4ab5c0ae7d165cec01d4a558adadc3afb6",
+    "worker": "/Users/marcelo/rustuml-reference/scratch/worker.oLefpE45",
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/worker.oLefpE45",
+    "hostname": "MacBookPro",
+    "platform": "macOS-27.2-arm64-arm-64bit-Mach-O",
+    "architecture": "arm64",
+    "jar": "/Users/marcelo/rustuml-reference/reference.jar",
+    "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+    "java": "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+    "java_release": "IMPLEMENTOR=\"Homebrew\"\nIMPLEMENTOR_VERSION=\"Homebrew\"\nJAVA_RUNTIME_VERSION=\"21.0.5\"\nJAVA_VERSION=\"21.0.5\"\nJAVA_VERSION_DATE=\"2024-10-15\"\nLIBC=\"default\"\nMODULES=\"java.base java.compiler java.datatransfer java.xml java.prefs java.desktop java.instrument java.logging java.management java.security.sasl java.naming java.rmi java.management.rmi java.net.http java.scripting java.security.jgss java.transaction.xa java.sql java.sql.rowset java.xml.crypto java.se java.smartcardio jdk.accessibility jdk.internal.jvmstat jdk.attach jdk.charsets jdk.internal.opt jdk.zipfs jdk.compiler jdk.crypto.ec jdk.crypto.cryptoki jdk.dynalink jdk.internal.ed jdk.editpad jdk.hotspot.agent jdk.httpserver jdk.incubator.vector jdk.internal.le jdk.internal.vm.ci jdk.internal.vm.compiler jdk.internal.vm.compiler.management jdk.jartool jdk.javadoc jdk.jcmd jdk.management jdk.management.agent jdk.jconsole jdk.jdeps jdk.jdwp.agent jdk.jdi jdk.jfr jdk.jlink jdk.jpackage jdk.jshell jdk.jsobject jdk.jstatd jdk.localedata jdk.management.jfr jdk.naming.dns jdk.naming.rmi jdk.net jdk.nio.mapmode jdk.random jdk.sctp jdk.security.auth jdk.security.jgss jdk.unsupported jdk.unsupported.desktop jdk.xml.dom\"\nOS_ARCH=\"aarch64\"\nOS_NAME=\"Darwin\"\nSOURCE=\"\"\n",
+    "java_executable_sha256": "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9",
+    "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+    "wrapper_sha256": "6115a3503877999796cb98b9efb6872d9bb8090c2f7b986706919e475dee069e",
+    "dot": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot",
+    "timezone": "per result argv",
+    "locale": "en_AU",
+    "encoding": "UTF-8",
+    "headless": true,
+    "timeout_seconds_per_call": 60,
+    "input_compressed_sha256": "c080ebc3cb87aeab74a9029f00d6b38b01cca36f97ce1d017b5a81e3daceeea8",
+    "manifest_sha256": "f3f75e45190bf83f926811d00be35dad86a2cdf189bc37c63ea7dae784311fac",
+    "probe_sha256": "fa9dde4b9f18e337741c73fdc23fa8d94034d2341725566e378eab0ac95ad4b4",
+    "classification_performed": false,
+    "ambient_jvm_variables_removed": [
+      "JAVA_TOOL_OPTIONS",
+      "_JAVA_OPTIONS",
+      "JDK_JAVA_OPTIONS",
+      "CLASSPATH"
+    ],
+    "original_input_bundle_sha256": "a8b4040b4bedbdff85791315d5e92bcbb4eb6585a60c898060a3a8c55c214e4f",
+    "transport_mapping": "Parent-provided files[].base64 to resources[].data envelope mapping; original bundle hash retained as declared provenance",
+    "input_path": "/Users/marcelo/rustuml-reference/scratch/transfer.40QNxqeJ/input.json.gz",
+    "env_overrides": {},
+    "java_argv_provenance": "Unchanged pinned wrapper execve construction and exact invocation arguments",
+    "effective_environment_delta": {
+      "GRAPHVIZ_DOT": "/opt/homebrew/Cellar/graphviz/12.2.0/bin/dot"
+    }
+  },
+  "scope": "Captured resource bytes and declared/recorded process contract only; not global runtime or environment equivalence."
+}

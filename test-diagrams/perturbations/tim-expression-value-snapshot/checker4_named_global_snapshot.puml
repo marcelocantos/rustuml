@@ -1,0 +1,8 @@
+@startuml
+!$a="outer"
+!function $pair($a="seed",$b=2)
+!return $a+"/"+$b
+!endfunction
+!$v=$pair($a="oak",$b=4)
+class "$v / $pair($a="elm",$b=5)" as Named
+@enduml

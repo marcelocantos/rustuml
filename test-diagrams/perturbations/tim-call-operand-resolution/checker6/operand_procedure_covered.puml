@@ -1,0 +1,12 @@
+@startuml
+!$n=0
+!function $tick($digit)
+!$n=$n*10+$digit
+!return "value"
+!endfunction
+!procedure $emit($a,$b="default")
+class Phantom
+!endprocedure
+!$x=$emit($tick(3))
+class Lost
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+participant Alder
+note right of Alder
+a<back:red-blue>seed</back>z
+a<back:#44aa77/blue>seed</back>z
+a<back:blue-#44aa77>seed</back>z
+end note
+@enduml

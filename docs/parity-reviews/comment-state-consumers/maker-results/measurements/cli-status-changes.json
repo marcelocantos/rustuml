@@ -1,0 +1,758 @@
+{
+ "schema_version": 1,
+ "binaries": {
+  "base": "9834a7194",
+  "merged": "6830bd056",
+  "final": "b27411107"
+ },
+ "sources": 16348,
+ "changes": [
+  {
+   "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_expression.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_arity_without_later_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_strlen_arity_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+   "base_status": 101,
+   "base_panic": true,
+   "merged_6830bd056_status": 0,
+   "final_status": 0,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/bool_space_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+   "base_status": 101,
+   "base_panic": true,
+   "merged_6830bd056_status": 0,
+   "final_status": 0,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+   "base_status": 101,
+   "base_panic": true,
+   "merged_6830bd056_status": 0,
+   "final_status": 0,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_covered.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_missing.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_rhs_first_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/adjacent_dispatch.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_argument_first.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_plain_named_builtin.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-call-resolution-arity/checker5/arity_procedure_first.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_letter.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_quote.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_invalid_x.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_four_x.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_retained_invalid_unclosed_pattern.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-duplicate-formal-binding/checker8/duplicate_negative.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_nested.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr_only.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown_only.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_arguments.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_logical.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml",
+   "base_status": 101,
+   "base_panic": true,
+   "merged_6830bd056_status": 0,
+   "final_status": 0,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_missing_chain.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_caller_relative.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_selected_fatal.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_selected_origin.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_scalar_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-function-signature-availability/checker7/kind_after_exact.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-hsl-typed-alpha/checker6/hsl_bad_arity.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_invalid_sign.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_underflow_bound.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_digits.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_json.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-json-container-validation/checker5/json_missing_dot.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-json-container-validation/checker5/json_scalar_null.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-legacy-raw-caller-prefix/checker6/legacy_prefix_failure.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_collect_error_precedence.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-local-sub-collection/checker6/sub_uncalled_function.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_duplicate.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-named-key-operands/checker5/keys_nested_call.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-original-macro-scanning/checker5/macro_argument_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_1.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_3.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_default_first_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_literal.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_pattern.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_literal.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_pattern.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker3_literal_before_date.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-return-unwind/checker4_procedure_argument_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-rpn-call-state/checker6/rpn_duplicate_underflow.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_valid"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-sub-before-function-buffering/checker7/sub_nested_negative.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_commented_invalid.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_invalid_after_selected.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_local_nested.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_raw_tail_error.puml",
+   "base_status": 0,
+   "base_panic": false,
+   "merged_6830bd056_status": 1,
+   "final_status": 1,
+   "final_panic": false,
+   "java_reference": "java_error"
+  }
+ ]
+}

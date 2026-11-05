@@ -1,0 +1,9 @@
+@startuml
+namespace Observatory {
+class "Bright Star" as Sirius
+namespace Dome {
+class "Night Lens" as Lens
+}
+Sirius --> Dome.Lens
+}
+@enduml

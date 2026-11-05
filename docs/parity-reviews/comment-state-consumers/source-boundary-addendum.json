@@ -1,0 +1,67 @@
+{
+  "before_any_production_draft": true,
+  "correction": "State color account named two non-existent superclass/concurrent class paths. Exact pinned sources are EntityImageStateCommon.java:122\u2013135 and svek/ConcurrentStates.java; Cluster.drawUState:451\u2013482. Earlier account retained unchanged; this addendum supersedes those two path names.",
+  "state_flow": "EntityImageStateCommon.applyColor selects explicit BACK else style BackGroundColor.asColor; ValueImpl:90\u2013103 recognizes none/transparent, otherwise HColorSet.getColorOrWhite. Cluster.drawUState uses same state/header styles; shape drivers route HColor.toSvg and transparency into SvgGraphics.",
+  "files": [
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageStateCommon.java",
+      "sha256": "aee1b7c29fc99da6a0ac481f0505eb22580e6999016dde6dfb6dc5e3e9b11614"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/ConcurrentStates.java",
+      "sha256": "dfd9f3c660ad7773ff9f6083f75132cbff0e804b6273eb986e58f501a90967f8"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+      "sha256": "e1d04c9264cd4a0215581f30560917ff44aad2d70ecd7fe6c639dd8f7eec41d3"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/style/ValueImpl.java",
+      "sha256": "803a162f03659ed7ca6a48238145bd0f8c8176a5e6f01fc7c37c1013568ffa4b"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/color/HColorSet.java",
+      "sha256": "cdd4b8ae6aaf39eebafb1107bab16184e671e639aafdc77fd925bc1b66597be1"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverRectangleSvg.java",
+      "sha256": "5aab9c05752a57b4067781ccdba9794c5b7b9cc5eea1acbead12113491c47435"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverEllipseSvg.java",
+      "sha256": "e3f5b3a121c257437daee11f950ba97a6320db872e76e83f44c017ac11a29b29"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverPolygonSvg.java",
+      "sha256": "2a2cff7c676d62b3c3cf4dbcebdc54c5ac9cc1f877d5eafaf051b9e3717ae4e2"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverPathSvg.java",
+      "sha256": "d2cf41f092ffd9b9f42ab12dc93c43d771b51ec802afa61815f6ea7731f38b2f"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "sha256": "853cab1a6ed28d5bbdbf7be524b9d6b7610fbd392804e0ec9df3620ad40910bf"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/abel/Link.java",
+      "sha256": "79d7108561706e96a94086fe3ad44ba9b8ae2b8d08056827d46fd02be37865a0"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+      "sha256": "b10a512804766ce08729a737389ee2a26320a5b725f41dfc20c0e8bb16aab8c2"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/plasma/Quark.java",
+      "sha256": "0135f01bd5be1b9ed184b8db8f7f98e29c45caa787dac15b13bf99b5ef476700"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/statediagram/StateDiagram.java",
+      "sha256": "21ccc49da0f4a4aa7d0f44b80a2b2c093af03bef0a5319457c299604aab10db7"
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/activitydiagram/ActivityDiagram.java",
+      "sha256": "6408e7b2bd17b71e576ca1eb11e4bcee172b41b43926f4ff3771e2792f2dcd9c"
+    }
+  ]
+}

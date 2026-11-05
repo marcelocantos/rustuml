@@ -1,0 +1,35 @@
+// Scratch tests appended to a private copy of 14dd5efae (never committed to a product tree)
+mod checker_round9_dump {
+    use super::*;
+    /// Checker scratch: dump requiresBidi;isLTR;paraLevel;levels;run_levels;text_line_levels for every input line.
+    #[test]
+    fn checker_dump_bidi() {
+        let (Ok(inp), Ok(out)) = (std::env::var("CHK_BIDI_IN"), std::env::var("CHK_BIDI_OUT")) else { return };
+        let text = std::fs::read_to_string(inp).unwrap();
+        let j = |l: &[u8]| l.iter().map(u8::to_string).collect::<Vec<_>>().join(" ");
+        let mut o = String::new();
+        for line in text.lines() {
+            let (dir, hexes) = line.split_once(';').unwrap();
+            let units: Vec<u16> = hexes.split_whitespace().map(|h| u16::from_str_radix(h, 16).unwrap()).collect();
+            let p = set_para(&units, match dir { "0" => 0, "1" => 1, _ => LEVEL_DEFAULT_LTR });
+            let tl = if dir == "D" { text_line_levels(&units).map_or("-".to_string(), |l| j(&l)) } else { "x".to_string() };
+            o.push_str(&format!("{};{};{};{};{};{}\n", u8::from(requires_bidi(&units)), u8::from(p.is_left_to_right()), p.para_level, j(&p.levels), j(&p.run_levels()), tl));
+        }
+        std::fs::write(out, o).unwrap();
+    }
+}
+mod checker_round9_faces {
+    #[test]
+    fn checker_face_probe() {
+        let Ok(out) = std::env::var("CHK_FACE_OUT") else { return };
+        let mut o = String::new();
+        for fam in ["SansSerif", "Lucida Grande", "Arial", "Helvetica", "Verdana", "Monospaced", "Menlo", "Courier New"] {
+            for (style, b, i) in [("plain", false, false), ("bold", true, false), ("italic", false, true), ("bolditalic", true, true)] {
+                let w = super::measure_no_underline_with_family_and_face("Pier x\u{1D167}", 14.0, b, i, fam);
+                let wo = super::measure_no_underline_with_family_and_face("Pier x", 14.0, b, i, fam);
+                o.push_str(&format!("{fam}\t{style}\t{w}\t{wo}\n"));
+            }
+        }
+        std::fs::write(out, o).unwrap();
+    }
+}

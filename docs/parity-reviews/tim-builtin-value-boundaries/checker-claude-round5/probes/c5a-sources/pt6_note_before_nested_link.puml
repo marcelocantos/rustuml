@@ -1,0 +1,6 @@
+@startuml
+state Dam {
+  note left of Sluice : open
+  Lake --> Sluice
+}
+@enduml

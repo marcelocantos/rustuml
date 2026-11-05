@@ -1,0 +1,7 @@
+@startuml
+class Grove {
+<size:13></size>X<color:black></color>
+A<size:13></size><color:black></color>B
+<color:blue><size:13></size></color>X<color:red>Q</color>
+}
+@enduml

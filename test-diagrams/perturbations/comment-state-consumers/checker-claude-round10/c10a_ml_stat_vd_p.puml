@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Verdana
+state "Kiln wq" as E1
+E1 : first desc
+E1 : longer second description
+@enduml

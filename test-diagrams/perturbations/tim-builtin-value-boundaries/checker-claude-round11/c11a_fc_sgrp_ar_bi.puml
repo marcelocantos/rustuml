@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam sequenceGroupHeaderFontStyle bold
+participant A
+group <i>Avid Dawky Vow 4.7, gym kayak ovo!</i>
+A -> A : ok
+end
+@enduml

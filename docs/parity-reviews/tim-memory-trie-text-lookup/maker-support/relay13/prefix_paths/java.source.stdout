@@ -1,0 +1,3 @@
+@startuml
+class "ax-bX / ax- / short / long / ax-bcZ" as Paths
+@enduml

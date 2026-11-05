@@ -1,0 +1,41 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class Ledger {
+       [sky]
+      }
+      note as N
+       [cloud] / MARK(rain) / MARK / north\nFLAG / preFLAG
+      end note
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Ledger
+  - !Note 0
+  entities:
+  - id: Ledger
+    label: Ledger
+    explicit_alias: false
+    kind: Class
+    members:
+    - name: '[sky]'
+      return_type: null
+      visibility: Default
+      is_static: false
+      is_abstract: false
+      kind: Field
+      display_text: '[sky]'
+    stereotypes: []
+    source_line: 6
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - '[cloud] / MARK(rain) / MARK / north\nFLAG / preFLAG'
+    target: null
+    position: null
+    alias: 'N'
+    source_line: 10
+  hide_show: []

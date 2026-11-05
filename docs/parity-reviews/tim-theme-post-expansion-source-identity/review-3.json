@@ -1,0 +1,860 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-theme-post-expansion-source-identity",
+  "reviewer": {
+    "task_id": "t3-bf706fe0-fresh-independent-typed-TIM-checker",
+    "model": "gpt-6-astra / high / Codex in T3 Code; no children; did not implement candidate"
+  },
+  "account_commit": "ee8f405de889a60f4679939a2671d3aba28f05db",
+  "implementation_commit": "0dd2de894fea40d5e9ed81efb6a54d837f80fa4c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "prepared_before": "ed0dcd3c9c11de50288f914947e6735005fb6bb5",
+  "combined_tested_commit": "579b9b1173fef9dd3d10afca05b6d688b9bbd2c2",
+  "parent_commit": "caae198aabd7a20a989e906b42749602a1d73cc5",
+  "root_test_only_followup": "6f52f87e532d549b047f7ccd3fe7fb577fc56df9",
+  "commands": [
+    "ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/new-worker",
+    "ssh -T -o BatchMode=yes marcelo@192.168.1.112 '/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn --timezone GMT+11:00 -- -pipe -tsvg' < SOURCE.puml",
+    "uv run --with pyyaml python docs/parity-reviews/tim-typed-values-and-binding/checker3-support/check.py before frozen",
+    "uv run --with pyyaml python docs/parity-reviews/tim-typed-values-and-binding/checker3-support/check.py after frozen",
+    "uv run --with pyyaml python docs/parity-reviews/tim-typed-values-and-binding/checker3-support/check.py reference fresh (also retained, supplement; each row records zone/cwd)",
+    "uv run --with pyyaml python docs/parity-reviews/tim-typed-values-and-binding/checker3-support/check.py after fresh (also before and retained/supplement)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker3.dRQvKH/target CARGO_BUILD_JOBS=4 RAYON_NUM_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs -- --nocapture",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker3.dRQvKH/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser --lib",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker3.dRQvKH/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml --bin rustuml --test pipe_mode",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker3.dRQvKH/target CARGO_BUILD_JOBS=4 cargo clippy --workspace -- -D warnings",
+    "rustfmt --edition 2024 --config skip_children=true --check crates/rustuml-parser/src/preprocess/mod.rs crates/rustuml-parser/src/preprocess/debug.rs crates/rustuml-parser/src/preprocess/date_format.rs crates/rustuml-parser/src/parse/mod.rs crates/rustuml/tests/pipe_mode.rs"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_variable.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_variable.svg",
+      "axes": [
+        "variable theme selector",
+        "renamed entity"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_function.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_function.svg",
+      "axes": [
+        "function theme selector",
+        "theme choice"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_procedure.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_procedure.svg",
+      "axes": [
+        "theme in procedure",
+        "declaration after call"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_loop.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_loop.svg",
+      "axes": [
+        "theme in foreach",
+        "repeated theme"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_while.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_while.svg",
+      "axes": [
+        "theme in while",
+        "mutable loop state"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_function.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_function.svg",
+      "axes": [
+        "inactive function redefinition",
+        "theme and custom color"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_outline_state.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_outline_state.svg",
+      "axes": [
+        "theme guarded variable",
+        "outline theme"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_subblock_state.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_subblock_state.svg",
+      "axes": [
+        "user subblock execution",
+        "state and style"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_sprite_identity.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_sprite_identity.svg",
+      "axes": [
+        "sprite source retained in identity",
+        "themed class"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.svg",
+      "axes": [
+        "debug directive consumption",
+        "variable state"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.svg",
+      "axes": [
+        "inline comment",
+        "whitespace after declaration"
+      ],
+      "result": "fail",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": true,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_blank_lines.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_blank_lines.svg",
+      "axes": [
+        "leading versus internal blank lines",
+        "renamed entity"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_false.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_false.svg",
+      "axes": [
+        "non-themed option",
+        "source-derived shadow ID"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_true.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_true.svg",
+      "axes": [
+        "non-themed option",
+        "handwritten shapes and shadow"
+      ],
+      "result": "fail",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_inactive.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_option_inactive.svg",
+      "axes": [
+        "inactive option",
+        "source-line attribution"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_repeated_reverse.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_repeated_reverse.svg",
+      "axes": [
+        "reversed theme order",
+        "class circled-character style"
+      ],
+      "result": "fail",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_theme_pair.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_theme_pair.svg",
+      "axes": [
+        "two inactive themes",
+        "line attribution"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.svg",
+      "axes": [
+        "theme through include",
+        "stateful include and declaration"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_include.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inactive_include.svg",
+      "axes": [
+        "inactive include",
+        "theme side effects"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_line_continuation.svg",
+      "axes": [
+        "sequence line continuation",
+        "theme source identity"
+      ],
+      "result": "fail",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_custom_function.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_theme_custom_function.svg",
+      "axes": [
+        "function observes theme state",
+        "assignment ordering"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_clock_year.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_clock_year.svg",
+      "axes": [
+        "environmental date evaluation",
+        "themed identity and label"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_comments_before_after.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_comments_before_after.svg",
+      "axes": [
+        "preserved maker input",
+        "comments_before_after"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_conditional_before_theme.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_conditional_before_theme.svg",
+      "axes": [
+        "preserved maker input",
+        "conditional_before_theme"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_inactive_theme.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_inactive_theme.svg",
+      "axes": [
+        "preserved maker input",
+        "inactive_theme"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_nested_conditional.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_nested_conditional.svg",
+      "axes": [
+        "preserved maker input",
+        "nested_conditional"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_preproc_complex_theme_override.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_preproc_complex_theme_override.svg",
+      "axes": [
+        "preserved maker input",
+        "preproc_complex_theme_override"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_procedure_after_theme.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_procedure_after_theme.svg",
+      "axes": [
+        "preserved maker input",
+        "procedure_after_theme"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_repeated_themes.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_repeated_themes.svg",
+      "axes": [
+        "preserved maker input",
+        "repeated_themes"
+      ],
+      "result": "fail",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_variable_before_theme.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_variable_before_theme.svg",
+      "axes": [
+        "preserved maker input",
+        "variable_before_theme"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_variables_after_theme.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/maker_variables_after_theme.svg",
+      "axes": [
+        "preserved maker input",
+        "variables_after_theme"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_fixed_timestamp.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_fixed_timestamp.svg",
+      "axes": [
+        "explicit timestamp",
+        "theme variable source identity"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+      "golden": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.svg",
+      "axes": [
+        "inline block comment",
+        "themed entity"
+      ],
+      "result": "pass",
+      "kind": "frozen prior checker",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    }
+  ],
+  "dependency_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_recursive_plain.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_recursive_plain.svg",
+      "axes": [
+        "recursive return frames",
+        "nested emitting procedure versus plain suppression"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_loop_early_return.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_loop_early_return.svg",
+      "axes": [
+        "return inside while",
+        "post-return mutation"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_foreach_return.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_foreach_return.svg",
+      "axes": [
+        "typed foreach values",
+        "early return termination"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.svg",
+      "axes": [
+        "procedure versus return call context",
+        "illegal expression invocation"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 200,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_no_return_extension.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_no_return_extension.svg",
+      "axes": [
+        "declaration kind",
+        "documented no-return extension"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 200,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+      "golden": "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.svg",
+      "axes": [
+        "raw block selection shape repeated",
+        "caller memory and ignored errors"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+      "golden": "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.svg",
+      "axes": [
+        "raw block selection shape tabs",
+        "caller memory and ignored errors"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+      "golden": "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.svg",
+      "axes": [
+        "raw block selection shape nested",
+        "caller memory and ignored errors"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+      "golden": "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.svg",
+      "axes": [
+        "raw block selection shape relative",
+        "caller memory and ignored errors"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+      "golden": "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.svg",
+      "axes": [
+        "evaluated selected name",
+        "ignored fatal prelude"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_selected_origin.puml",
+      "golden": "test-diagrams/perturbations/tim-external-sub-selection/checker3_selected_origin.svg",
+      "axes": [
+        "selected fatal versus ignored body",
+        "first diagnostic and file origin"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 1,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 200,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.svg",
+      "axes": [
+        "external sub in return function",
+        "nested include and execution-kind restoration"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_nested_procedure.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_nested_procedure.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-function-execution-kind/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_theme_repeated.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_theme_repeated.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-function-execution-kind/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_caller_relative.puml",
+      "golden": "test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_caller_relative.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "fail",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-external-sub-selection/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_selected_fatal.puml",
+      "golden": "test-diagrams/perturbations/tim-external-sub-selection/checker3_retained_sub_selected_fatal.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "fail",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 1,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 200,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-external-sub-selection/checker3-maker-resources"
+    }
+  ],
+  "findings": [
+    "REJECTED as the complete inherited mechanism. The new typed execution changes repair the prior measured cases, but fresh independent counterexamples in tim-function-execution-kind, tim-external-sub-selection remain relevant dependencies; source equality never waives unequal SVG.",
+    "Reassessment includes all own preserved cases in the frozen1449 actual CLI replay plus the source-guided fresh tests linked below. Old reviews and every old input/reference remain byte-identical. Five class TIM handoff controls and six raw reader controls independently match Java source and SVG; no reader-policy re-investigation or change was made.",
+    "The historical repeated theme palette, opposite-quote aliases, empty themed canvas/note, handwritten, activity and sequence failures remain failed where present. Newly corrected source/event behavior does not certify their larger end-to-end clusters."
+  ],
+  "verdict": "rejected",
+  "packet_verdict": "rejected; no production changes accepted or integrated by this review",
+  "evidence": "docs/parity-reviews/tim-typed-values-and-binding/checker3-support/README.md",
+  "environment": "All Java remote Monkey Man: OpenJDK21.0.5, Graphviz12.2.0, en_AU, UTF8, headless wrapper; origin21.0.13/16.1.0 equivalence unproven. Local Rust and unchanged strict comparator; declared per-input timezone/cwd.",
+  "scope": "Evidence only; original accounts/reviews/reference data/frozen rules/targets unchanged. No class or sequence candidate production imported.",
+  "supersedes_without_overwriting": "docs/parity-reviews/tim-theme-post-expansion-source-identity/review-2.json"
+}

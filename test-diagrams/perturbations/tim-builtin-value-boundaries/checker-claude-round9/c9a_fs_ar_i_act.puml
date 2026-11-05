@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Arial
+start
+:<i>Wharf q𝅧r</i>;
+stop
+@enduml

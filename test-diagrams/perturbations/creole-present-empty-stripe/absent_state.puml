@@ -1,0 +1,5 @@
+@startuml
+state Juniper
+state Willow
+Juniper --> Willow
+@enduml

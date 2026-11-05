@@ -1,0 +1,6 @@
+@startyaml
+steps: |
+  - first
+  - second
+end: z
+@endyaml

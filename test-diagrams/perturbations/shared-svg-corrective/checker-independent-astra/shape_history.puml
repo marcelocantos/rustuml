@@ -1,0 +1,8 @@
+@startuml
+skinparam stateBackgroundColor #7a3c917f
+state Copse {
+[*] --> [H]
+state Fern
+[H] --> Fern
+}
+@enduml

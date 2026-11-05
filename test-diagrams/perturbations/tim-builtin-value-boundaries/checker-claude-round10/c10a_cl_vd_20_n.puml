@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam cloudFontSize 20
+cloud "Harbour wq vista" as E1
+component "Ok" as E2
+E1 --> E2
+@enduml

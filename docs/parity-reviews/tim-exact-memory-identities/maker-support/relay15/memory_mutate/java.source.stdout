@@ -1,0 +1,3 @@
+@startuml
+class "changed/leaf/1 / global / dollar" as Scope
+@enduml

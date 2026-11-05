@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam stateFontStyle italic
+state E1
+E1 : first line
+E1 : a much longer second line
+E1 : third
+@enduml

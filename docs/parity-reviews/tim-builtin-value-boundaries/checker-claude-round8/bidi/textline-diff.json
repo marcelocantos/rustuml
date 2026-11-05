@@ -1,0 +1,2472 @@
+{
+"count": 352,
+"classes": {
+"(True, 'java_runs_single_at_paraLevel', 'rust_levels==levelAt')": 352
+},
+"rows": [
+{
+"line": 92178,
+"input": "D;D802 DC00 0024 202E 3009 200F 2069 0020 2069 005A 002A D834 DD67 202E 005B 0031 05D0 05D0 007D 0085 00AB 202C",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 92205,
+"input": "D;D83B DC71 07C0 000D 202C D834 DD67 001F",
+"rust_textline": "1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0 0"
+},
+{
+"line": 92519,
+"input": "D;D83A DD00 003A 00AB 2029 D834 DD67 0085 002C 000A 202C 0025 0020 002D",
+"rust_textline": "1 1 1 1 1 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 92688,
+"input": "D;07C0 08A0 202B 2069 0085 2329 005D 202E DB40 DC01 202E 2067 005B",
+"rust_textline": "1 1 1 1 1 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0 0 0 0 0 0"
+},
+{
+"line": 93283,
+"input": "D;07C0 0627 232A 0029 05FF 00AD 0025 000A 2018 000A 00AB 202D",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 93301,
+"input": "D;202E FE5A 00B2 05D0 DC00 0780 05D1 00A0 2069 D83B DC71 0085 000C",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 93516,
+"input": "D;202E 07C0 08A0 2069 001C DB40 DC01 D834 DD67 2212",
+"rust_textline": "1 1 1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0 0 0"
+},
+{
+"line": 94620,
+"input": "D;2003 07FB 0029 2329 FE5A 0029 000A 0023 00A0 202E",
+"rust_textline": "1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 94716,
+"input": "D;2003 202C 07FB 0029 202E DB40 DC01 0710 05FF 0025 2029 000A 05D1",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0 1"
+},
+{
+"line": 95563,
+"input": "D;D83B DE00 003A 202E 000D 005B FF08",
+"rust_textline": "1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0"
+},
+{
+"line": 95959,
+"input": "D;002E 05D0 202B 00AD 2067 000D 00B0 0024",
+"rust_textline": "1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0"
+},
+{
+"line": 96151,
+"input": "D;00AB 202E 00B0 0627 0028 0301 0660 FDD0 0061 AC00 002C 0020 D802 DC00 2045 001C 00B0",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 96479,
+"input": "D;202C 202E 0021 002A 002A 05D0 0061 2029 002C 005D FDD0 2018",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 96885,
+"input": "D;064B 2007 D83B DE00 064B 005B 0085 064B 0085 2045 202B",
+"rust_textline": "1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 97536,
+"input": "D;002F 05D0 2029 0020 202E 202E 0E01 D834 DD67 FF09 0031 064B D83A DD00",
+"rust_textline": "1 1 1 0 0 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 98233,
+"input": "D;05D1 202C FF09 0085 202D",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 98541,
+"input": "D;0301 061C 005D 05D0 202E 0061 D802 DC00 202E 001C 232A 0020 202C 0029 202E D800 0029",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0"
+},
+{
+"line": 98643,
+"input": "D;05FF 0028 061C 07FB 0627 0023 2329 05D0 007D 2067 05D1 002C 05B4 000A 202B 002A",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 98893,
+"input": "D;2069 D802 DC00 002A 3000 000A 00B0",
+"rust_textline": "1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0"
+},
+{
+"line": 98964,
+"input": "D;05FF D834 DD67 002B FF08 001F 202C 005D 000D 202C 0085",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 99050,
+"input": "D;D802 DC00 0085 002F 202E 000A D834 DD67 002E D802 DC00 2067 2045",
+"rust_textline": "1 1 1 0 0 0 1 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 1 1 1 1 1 1 1"
+},
+{
+"line": 99150,
+"input": "D;D802 DC00 05D0 2069 0020 FE59 000D 202E 202A",
+"rust_textline": "1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 99575,
+"input": "D;0020 05D1 20C1 2068 08A0 002F 202E 002F 000A 001C",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 99639,
+"input": "D;FF08 0022 05D0 0301 0021 202E 07FB 202E 200D FDD0 FF09 0020 0627 D834 DD67 0627 002C 2069 D802 DC00 0600 0031 000C FB1D 2067 0085 202C D834 DD67 002F 0301",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0"
+},
+{
+"line": 99671,
+"input": "D;202B 05FF 2029 005B 0021",
+"rust_textline": "1 1 1 0 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0"
+},
+{
+"line": 100069,
+"input": "D;0627 2329 FE5A 0021 000D 202E",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 100273,
+"input": "D;00A0 D802 DC00 202E 0020 FB1D 005B 003A 06F1 D834 DD67 D834 DD67 05B4 05D0 232A 0029 2069 0029 0061 0627 002E D835 DC00 0660 3000 0627 2069 FB1D FF09 0028 003A 0031 00A0 2046 0E01 0F3B D83A DD00 200F FDD0 2067 202B 001C D834 DD67",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 100644,
+"input": "D;0028 FB1D 0085 200D 2046 0024 05B4 003A 202E AC00 2007 2067 202E 0627 0029 FF09",
+"rust_textline": "1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 101134,
+"input": "D;202C 0020 0020 061C 001C 003A 2007 002F",
+"rust_textline": "1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0"
+},
+{
+"line": 101216,
+"input": "D;07C0 0F3A 0029 0627 00AB 0029 202E 0037 05D1 05D1 000D 007D",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 101295,
+"input": "D;005B 061C 00B0 000A 202E 00AD 000A 000D 0020 0029 D803 DD00 007B FF09 DB40 DC01 202B 003A 007D 0028 202E 0600 2069 0627 FF09 0020 D83A DD00 D802 DC00 005B 064B 0029 0061 002B 0028 002C 002C 005B 202E 200B 0009 0660 2003",
+"rust_textline": "1 1 1 1 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"
+},
+{
+"line": 101656,
+"input": "D;00AD 05D0 202C D83A DD00 3008 0029 00B0 000A 2045 0020",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 101850,
+"input": "D;DB40 DC01 FEFF 0028 0301 08A0 3008 0627 001C 202B 202B 0028 2029",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 102779,
+"input": "D;05D0 FE5A 2067 0025 000A 20C1",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 103486,
+"input": "D;05D0 001C FE70 2046 061C D83B DE00 2069 002C 007B 07C0 064B 202B 2029 005B 2029 002B FF09 2018 202E FB1D 2069 D834 DD67 05D0 0025 200F 002F 002D 202B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1"
+},
+{
+"line": 103738,
+"input": "D;0029 2069 05D0 003A 0085 005B 0022 005B",
+"rust_textline": "1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0"
+},
+{
+"line": 103898,
+"input": "D;0627 0029 202E 3000 D802 DC00 05B4 2069 0085 00AB 3000",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 105344,
+"input": "D;FE5A D802 DC00 202E 005D 0029 001F D835 DFCE 2029 0085 D834 DD67",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 106783,
+"input": "D;00AD 202B 2329 2069 FE70 D834 DD67 D834 DD67 2029 00B0 003A",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 106924,
+"input": "D;3000 07FB 200F 2067 2029 005D",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 108356,
+"input": "D;007B FE59 200F 2067 0028 005B FE70 0028 05D0 D834 DD67 2329 202B 005B 007D 0780 2029 003A 000A 202E 0020",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 109116,
+"input": "D;202B 061C 000D 002B",
+"rust_textline": "1 1 1 0",
+"java_runs": "1 1 1 1",
+"java_levelAt": "1 1 1 0"
+},
+{
+"line": 109201,
+"input": "D;05D0 0F3B 005D 05B4 0029 0028 202C 000A 0022 2329",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 109740,
+"input": "D;202C 005D 0029 003A 0780 200B 002A 002E FF08 000D 000C 202E",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 110066,
+"input": "D;D83B DC71 2329 202B 2029 FF08",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 110211,
+"input": "D;202C 005B 00B0 0029 2069 2046 05FF 0301 FE70 05B4 D83B DE00 001F FF09 00B0 005D 2069 000A 0F3A 007D 002F",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 110450,
+"input": "D;005B 002B 061C 2007 202C 202C 000D 2329 00AD 007D",
+"rust_textline": "1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 110578,
+"input": "D;00B0 0780 0020 2003 2329 0020 2018 064B 2007 0020 002B 2029 00AD 0F3A 202E D800",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 110744,
+"input": "D;202C 2046 061C 003A 200D 001C 005B FF09",
+"rust_textline": "1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0"
+},
+{
+"line": 111463,
+"input": "D;002E 0028 003A 2329 0780 FB1D 000C 064B 202B 0627 002D 202B 200D 0085 0020 064B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 112191,
+"input": "D;0023 202E 0661 202E 0022 08A0 0661 0627 001F 2067 0028 05D1 0710 000D 0020 00AB",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 112828,
+"input": "D;202E FE70 001C 2329 202E",
+"rust_textline": "1 1 1 0 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0"
+},
+{
+"line": 113075,
+"input": "D;0029 002B 0780 002B 202E 08A0 FF09 202C 000A 202C 3008 FEFF",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 114221,
+"input": "D;07FB 002D 001F 000D 202C",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 114899,
+"input": "D;0029 005B FDD0 D83B DC71 000D 202E",
+"rust_textline": "1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0"
+},
+{
+"line": 114981,
+"input": "D;0020 0F3B 2329 202B 0028 0028 D83B DC71 005B 001C 007D",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 115118,
+"input": "D;002B 002F 05FF 001C 202E 0301",
+"rust_textline": "1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0"
+},
+{
+"line": 117198,
+"input": "D;0022 202B 08A0 0085 0029",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 117311,
+"input": "D;2069 05D0 200D 202E 0031 001C 200B 000C 0021 0028",
+"rust_textline": "1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 118226,
+"input": "D;232A 202B 001F 200D 0780 202B FDD0 FF09 D83A DD00 FDD0 202E 064B 0021 3008 000A D834 DD67",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 118270,
+"input": "D;2046 05D0 005B 0028 2069 202E 2212 3008 2069 0627 000D 202B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 119290,
+"input": "D;3009 202C 2212 000C 08A0 0021 001C 202E",
+"rust_textline": "1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0"
+},
+{
+"line": 119304,
+"input": "D;D802 DC00 002E 05D0 0085 001C 000D 202E D83A DD00 FDD0 0029",
+"rust_textline": "1 1 1 1 1 0 0 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 1 1 1 1 1"
+},
+{
+"line": 120304,
+"input": "D;0301 0029 0780 05D1 202C 000D 0F3B 000D DB40 DC01 002B 0025 2007",
+"rust_textline": "1 1 1 1 1 1 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0 0 0 0 0 0"
+},
+{
+"line": 120330,
+"input": "D;05D0 000A 3000 202E D835 DC00",
+"rust_textline": "1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 0 0 0 0"
+},
+{
+"line": 120614,
+"input": "D;FF09 FE70 200D 0029 001F 005D 000A 001C 202B FB1D",
+"rust_textline": "1 1 1 1 1 1 1 0 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 1 1"
+},
+{
+"line": 121593,
+"input": "D;20C1 D803 DD00 202D 000D 0029 202E",
+"rust_textline": "1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0"
+},
+{
+"line": 123140,
+"input": "D;3009 005B 0025 0780 202C 2029 005D 2007 2029 001C 3008 202E 3009 2003 000C 003A",
+"rust_textline": "1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 123293,
+"input": "D;202E 05D0 002B 000D 005D",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 124508,
+"input": "D;05D0 007B 000A 064B 202B 200B",
+"rust_textline": "1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0"
+},
+{
+"line": 124695,
+"input": "D;0780 2069 0710 202E 07C0 D802 DC00 0028 001C 000A 05D0",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 1"
+},
+{
+"line": 124929,
+"input": "D;200F 0627 2018 2069 0020 202E 0029 002B 001C 002A",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 125315,
+"input": "D;08A0 00A0 0025 2045 001C 2007 064B 202E 005D 0061 0020 0627 0061 DB40 DC01 FF09 0660",
+"rust_textline": "1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 125404,
+"input": "D;001F 202E 001F 0301 0028 2007 00AD 0627 001C 002B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 125790,
+"input": "D;005B 0025 00AD FB1D 0627 000A 202B 202D",
+"rust_textline": "1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0"
+},
+{
+"line": 125826,
+"input": "D;0627 0301 202A 0085 002C",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 125869,
+"input": "D;FE70 202B 0085 202B 2069",
+"rust_textline": "1 1 1 0 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0"
+},
+{
+"line": 126029,
+"input": "D;D802 DC00 005B 2067 002D 05FF 202E 0022 2046 0028 3000 0085 00AB",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 126714,
+"input": "D;202E 05D0 05D1 0028 05D0 0061 D835 DC00 05FF 2069 0301 000A 002D",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 127151,
+"input": "D;0627 0780 0029 202E 005B 005B 000A 202B",
+"rust_textline": "1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0"
+},
+{
+"line": 127235,
+"input": "D;2007 202B 0627 D83B DC71 0020 200B 0029 000A 002B 202B 005D D834 DD67",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0 0 0 0"
+},
+{
+"line": 127808,
+"input": "D;202E 3000 0028 2003 002D D802 DC00 0085 200B",
+"rust_textline": "1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 128123,
+"input": "D;0780 202B 0028 2029 0F3B 202B 202B 200B 200F 200D 2029 00AB",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 128164,
+"input": "D;D83B DC71 002D 2029 202E 2067 202C",
+"rust_textline": "1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0"
+},
+{
+"line": 129545,
+"input": "D;07C0 200F 05D0 0023 2003 000D 0020 2018 000D 202E 0024 202C 0780 0028 2067 064B",
+"rust_textline": "1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 1"
+},
+{
+"line": 129550,
+"input": "D;005D 202E 000C D834 DD67 FE59 2329 0021 2045 0029 07C0 001C 0029",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 130410,
+"input": "D;2069 08A0 00A0 0021 0085 000C 2046 FF09",
+"rust_textline": "1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0"
+},
+{
+"line": 131235,
+"input": "D;005B 05D0 001C 064B 0F3A 003A 0009 D834 DD67 007B 000D 00A0 202E",
+"rust_textline": "1 1 1 0 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 131255,
+"input": "D;D834 DD67 202C 005D 05D0 202B FDD0 061C 0627 001C 001C",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 131806,
+"input": "D;D83B DC71 2069 0085 D834 DD67 202E",
+"rust_textline": "1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0"
+},
+{
+"line": 132346,
+"input": "D;D834 DD67 0028 FE70 2029 202B",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 132379,
+"input": "D;0627 0028 002B 2069 005B 002D 0028 2018 064B 001F FEFF 000A 202E FF09 0E01 FE5A",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 134014,
+"input": "D;0780 2067 061C 0022 0301 200B 2069 0028 0780 0710 202C 0710 202D 202E 005D 2018 000D 3009 002D 202D",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 134478,
+"input": "D;05D0 002E 005D 005D 0021 2007 064B 0085 002B 202B",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 135126,
+"input": "D;0780 005B 001C 202B",
+"rust_textline": "1 1 1 0",
+"java_runs": "1 1 1 1",
+"java_levelAt": "1 1 1 0"
+},
+{
+"line": 135594,
+"input": "D;0627 2212 2003 0029 0028 07FB 002E 07FB 001F FF09 D83A DD00 DB40 DC01 0627 2046 2046 0301 002B 005D 2067 2069 05D0 200D FF09 000A 002E FE59 005B 202B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 135818,
+"input": "D;202C FF08 D83A DD00 2067 0085 002A",
+"rust_textline": "1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0"
+},
+{
+"line": 137440,
+"input": "D;005B 007D 05D0 200B 202B 0009 200B 000D FB1D 064B D802 DC00 D83B DC71 00B0 D83B DE00 000A 005B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 137593,
+"input": "D;FB1D 001C 0028 0009 0028 202C D834 DD67 000D 005B 0029 FDD0 0024 0301 FEFF 0028 FF08 0029 202C 202D 202C",
+"rust_textline": "1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 137594,
+"input": "D;0029 05D1 3009 2069 001C 000A",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 137764,
+"input": "D;FE70 202C 202C 2007 007B 2069 2029 D834 DD67",
+"rust_textline": "1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 138855,
+"input": "D;0F3A 007B 0022 202C 07C0 202B 061C 2029 FF09 005B",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 139201,
+"input": "D;202B 07C0 D834 DD67 0085 3009 200D",
+"rust_textline": "1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0"
+},
+{
+"line": 140085,
+"input": "D;0028 05D1 0020 05B4 2029 202C 001F 0024",
+"rust_textline": "1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0"
+},
+{
+"line": 140575,
+"input": "D;00AB 00A0 202C 3009 202E 2003 0627 064B 001C 002D",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 142116,
+"input": "D;D83B DE00 005D 05B4 0F3A 2067 000A 005D 3008 0020 00AB 202B FDD0",
+"rust_textline": "1 1 1 1 1 1 1 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0 0 0 0 0"
+},
+{
+"line": 142686,
+"input": "D;200D 0020 FE59 D802 DC00 007B D834 DD67 2069 202B 0085 000D 202B 0020",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 143043,
+"input": "D;202E 0780 2069 000A 007D 002F",
+"rust_textline": "1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0"
+},
+{
+"line": 144106,
+"input": "D;08A0 000A 202E",
+"rust_textline": "1 1 0",
+"java_runs": "1 1 1",
+"java_levelAt": "1 1 0"
+},
+{
+"line": 144124,
+"input": "D;001F 0029 07FB 00AD 00B0 08A0 001C 202B 005B 2029 0028 0780",
+"rust_textline": "1 1 1 1 1 1 1 0 0 0 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0 0 1 1"
+},
+{
+"line": 144171,
+"input": "D;2045 200F 0029 202B 007D 2029 202E 0025",
+"rust_textline": "1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0"
+},
+{
+"line": 144220,
+"input": "D;202E 202C 20C1 0023 FB1D 0780 000D 202C",
+"rust_textline": "1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0"
+},
+{
+"line": 144954,
+"input": "D;05FF 0009 000A FDD0 202E 0F3A AC00 001F 0E01 202E 05D0 FE70",
+"rust_textline": "1 1 1 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 144990,
+"input": "D;05D0 232A 202E 0009 2212 005B 2029 2003 FF08 005D 002C 0009",
+"rust_textline": "1 1 1 1 1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0 0 0 0"
+},
+{
+"line": 145179,
+"input": "D;0627 D83B DC71 FE59 000A 0029 202C",
+"rust_textline": "1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0"
+},
+{
+"line": 145336,
+"input": "D;0710 202E FEFF 000D 2212 0029",
+"rust_textline": "1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0"
+},
+{
+"line": 145665,
+"input": "D;0029 007D 202B 000C 202E 07FB 0780 D803 DE60 200E 202B 0085 202E 002D D835 DC00 2007 202C",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0"
+},
+{
+"line": 146139,
+"input": "D;0627 0020 0009 2068 2212 00A0 D83A DD00 0301 002D 001C DB40 DC01 202C 00B0 202C 0025 202E FEFF FF09 0009 202C",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 146298,
+"input": "D;2069 05FF 202D 000A 0022",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 146559,
+"input": "D;0028 D803 DD00 00AB 064B 202C 000A 002E 0029 FE59 0009",
+"rust_textline": "1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 147150,
+"input": "D;200B 202B 0627 001C 001C",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 147168,
+"input": "D;202E 005D D803 DD00 D803 DD00 0660 0E01 FDD0 2329 0020 00B2 3008 0031 D803 DD00 0020 232A 0061 000D 007D 2046 202A",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 147233,
+"input": "D;2069 05D1 0009 D802 DC00 0020 D83A DD00 001C 2046 002F 0023",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 147514,
+"input": "D;0780 2029 FEFF 3000 202E",
+"rust_textline": "1 1 0 0 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 0 0 0"
+},
+{
+"line": 148264,
+"input": "D;07C0 FF08 2068 00AD 0022 200B 0024 0710 2329 002F 000D 0025",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 148685,
+"input": "D;FE5A FB1D 000A 202E 2018",
+"rust_textline": "1 1 1 0 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0"
+},
+{
+"line": 148695,
+"input": "D;005D 00B0 2069 0024 FE70 00AB 05D0 202E DB40 DC01 2069 0085 FF09 002A 0023 001F 232A",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0"
+},
+{
+"line": 148721,
+"input": "D;202B 2069 0F3A 061C 2029 005B",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 149535,
+"input": "D;FDD0 0024 D802 DC00 2046 000C 2069 D83B DC71 002B 0021 D834 DD67 08A0 202E 0031 D835 DFCE 08A0 200D 05FF 08A0 200B 007D 20C1 0085 0F3A 0023 3009 3009 002B 002B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0"
+},
+{
+"line": 149696,
+"input": "D;FE70 2029 202C 202B 2029 202C 05FF 08A0 0780 007B 0F3B 001C",
+"rust_textline": "1 1 0 0 0 1 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 0 0 0 1 1 1 1 1 1 1"
+},
+{
+"line": 149876,
+"input": "D;007B 2069 D803 DD00 0022 0085 064B",
+"rust_textline": "1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0"
+},
+{
+"line": 150188,
+"input": "D;07C0 2003 05D0 3008 D83B DC71 005B FF08 2329 3008 05B4 000A 202B 3000 000D 001C FEFF",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0"
+},
+{
+"line": 150213,
+"input": "D;007D 0627 202B 202A 202B 0028 0029 005B 000D 00B0",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 150569,
+"input": "D;0710 202C 0085 0021 000D 005B 202D 202E 002A 0029 FB1D 0028",
+"rust_textline": "1 1 1 0 0 1 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 1 1 1 1 1 1 1"
+},
+{
+"line": 150591,
+"input": "D;0020 005B FDD0 D83A DD00 2069 002F 0029 005B 064B 061C 0085 00AB",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 151664,
+"input": "D;202C 0022 D83B DC71 05D0 202E 202B 2029 200B",
+"rust_textline": "1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 152078,
+"input": "D;0710 0F3B 2067 D834 DD67 2003 2007 07FB 2069 000A 2003",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 152499,
+"input": "D;05FF 000A 202C FDD0",
+"rust_textline": "1 1 0 0",
+"java_runs": "1 1 1 1",
+"java_levelAt": "1 1 0 0"
+},
+{
+"line": 152741,
+"input": "D;0301 202E 2069 0024 D834 DD67 D83B DE00 000D FE5A FF08 2029",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 152979,
+"input": "D;07C0 000A 202E 0F3B 2046",
+"rust_textline": "1 1 0 0 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 0 0 0"
+},
+{
+"line": 153263,
+"input": "D;2003 005B 08A0 202E 0661 0301 05B4 0915 202E 002D 005D D803 DD00 D835 DFCE 0020 005A 2046 0023 D803 DE60 FE70 2212 0085 2007 005D 3000 202C 000C 0085 D83B DE00",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 1 1"
+},
+{
+"line": 153713,
+"input": "D;007D 0028 061C 001C 202E 202E 002B 0031",
+"rust_textline": "1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0 0"
+},
+{
+"line": 154595,
+"input": "D;FE70 005D 2046 202B FE70 05D0 002F 2329 07C0 07C0 0710 001C FE59 064B 0020 007B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 154769,
+"input": "D;0021 0028 FB1D 0085 202E",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 155066,
+"input": "D;0029 3000 00AB 0710 0029 202E D834 DD67 D803 DD00 005B 0029 002E 0301 200E 0061 0031 05D0 000D 2046 0029 202A",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 155201,
+"input": "D;005B 202E 0627 0028 FE5A 202B DB40 DC01 005D 001C 2018 003A 2046",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 156701,
+"input": "D;002C 0710 2069 202E DB40 DC01 3000 000D 2029 FE59 002B",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 156871,
+"input": "D;005D 0627 000A 2029 FDD0 0020 2029 202E 002F 05FF 05FF 2067",
+"rust_textline": "1 1 1 0 0 0 0 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 0 1 1 1 1 1"
+},
+{
+"line": 157040,
+"input": "D;202C 0025 07FB 2029 FDD0 202B",
+"rust_textline": "1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0"
+},
+{
+"line": 157116,
+"input": "D;2045 05B4 FE70 0028 D803 DD00 202E D802 DC00 0022 202E 00AD 0020 2018 D800 D802 DC00 D835 DC00 0061 3000 002A 2029 05B4",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 157774,
+"input": "D;0023 0627 000A 007D 202C 2045 3008 202B",
+"rust_textline": "1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 0 0"
+},
+{
+"line": 158123,
+"input": "D;0029 0029 05D1 08A0 000D 202B 2067 3000 200D 0627 202B 003A",
+"rust_textline": "1 1 1 1 1 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0 0 0 0 0"
+},
+{
+"line": 158199,
+"input": "D;0024 05D0 202C 0627 D803 DD00 202E 000D 232A 005D FDD0 202C 20C1",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0 0 0 0"
+},
+{
+"line": 158915,
+"input": "D;D803 DD00 0022 202E D834 DD67 D83B DE00 DC00 DB40 DC01 0085 0025 0F3A",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 159269,
+"input": "D;FB1D 3009 202C 2067 2029 3009",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 159501,
+"input": "D;0710 005B 0028 0021 2029 07FB 3008 2029 202C 202C",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 159940,
+"input": "D;D83B DE00 2067 202D 001C 002C 3000 0028 202E",
+"rust_textline": "1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 160770,
+"input": "D;202E 005D 05D0 DB40 DC01 200B 001F 00AD 202E D83B DE00 D83A DD00 000D 002B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 160998,
+"input": "D;D83B DC71 007B 000C 202B 001C FE59 3009 D834 DD67 202D 0085",
+"rust_textline": "1 1 1 1 1 1 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0 0 0 0 0"
+},
+{
+"line": 161131,
+"input": "D;07C0 07FB 2069 001C 2212 2003",
+"rust_textline": "1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0"
+},
+{
+"line": 161840,
+"input": "D;001F 05D0 00B0 202E 05D0 064B 0061 0028 000A D834 DD67",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 162040,
+"input": "D;00B0 0029 202B 0025 0627 0028 07FB 0020 000A 0028",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 162913,
+"input": "D;08A0 202E 002F 2029 D834 DD67",
+"rust_textline": "1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0"
+},
+{
+"line": 163656,
+"input": "D;07FB 0301 002F 202C D83A DD00 2329 2046 000A 202B 000A 0627 2069",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0 1 1"
+},
+{
+"line": 163891,
+"input": "D;07FB 202A 000A 002C FEFF FDD0 002A 3008",
+"rust_textline": "1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 0 0"
+},
+{
+"line": 164465,
+"input": "D;05D0 2029 200D 0F3B 3000 202B 2067 005D 0029 FDD0",
+"rust_textline": "1 1 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 0 0 0 0 0 0 0 0"
+},
+{
+"line": 165244,
+"input": "D;007D D803 DD00 000A 007D 202B 0020",
+"rust_textline": "1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0"
+},
+{
+"line": 166069,
+"input": "D;2046 0023 08A0 000A 202E 2045 0660 202B",
+"rust_textline": "1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0 0"
+},
+{
+"line": 167108,
+"input": "D;007B 0627 0F3B 232A D83A DD00 0085 202E 202C",
+"rust_textline": "1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 167355,
+"input": "D;0028 0028 05D0 202B 0029 05FF 000A 202B 00A0 000A",
+"rust_textline": "1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 167428,
+"input": "D;200F 2069 3009 2069 202C 0023 202B 000D 05B4 200D",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 167686,
+"input": "D;FE70 2067 0085 202C 000A D802 DC00 0020 002A 0627 3008",
+"rust_textline": "1 1 1 0 0 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 1 1 1 1 1 1"
+},
+{
+"line": 168455,
+"input": "D;05D1 FE5A 202E FF09 001C 005B 001F 002C",
+"rust_textline": "1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0"
+},
+{
+"line": 168594,
+"input": "D;D803 DD00 001F 2212 002D 05D0 007B 202A 202E 0009 D835 DC00 005D AC00 0024 3008 D834 DD67 0023 002F 0E01 0085 0F3A",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 170344,
+"input": "D;007D 000C 200D 007B D83B DE00 0029 2069 202B 000D 2007",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 170409,
+"input": "D;07C0 FB1D 202E D834 DD67 D835 DC00 0061 FF08 000D 002C 0029",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 170809,
+"input": "D;202B 0022 07C0 000A 0028 202E",
+"rust_textline": "1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0"
+},
+{
+"line": 170846,
+"input": "D;0710 0028 0020 DB40 DC01 07FB 002D 05D1 005B 000D 202B FE5A D834 DD67",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 170904,
+"input": "D;0627 202C 001C 0024",
+"rust_textline": "1 1 1 0",
+"java_runs": "1 1 1 1",
+"java_levelAt": "1 1 1 0"
+},
+{
+"line": 171051,
+"input": "D;0301 0627 2029 00AD 00B0 002F 2029 202C 05D0 00AD D83B DC71 232A",
+"rust_textline": "1 1 1 0 0 0 0 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 0 1 1 1 1 1 1"
+},
+{
+"line": 171113,
+"input": "D;D83B DC71 D83B DE00 200D 202B D83B DC71 0710 003A 200D 000D 05B4 001C 202C",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 171764,
+"input": "D;05D0 0301 202E 005D 0627 FF08 0E01 0031 000C 0660 0061 2018 07C0 2029 0020 000D",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 171791,
+"input": "D;05D0 002F 202B 00AD 000A 005B",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 171853,
+"input": "D;D802 DC00 2018 000D 202B 002D FE5A 3009 0029 2069 0085",
+"rust_textline": "1 1 1 1 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0 0 0 0 0"
+},
+{
+"line": 172188,
+"input": "D;0020 0627 0029 202E 000D 202E 0009 0037",
+"rust_textline": "1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0"
+},
+{
+"line": 172639,
+"input": "D;FF09 05B4 05D0 200F 20C1 2018 005D 000D 202E 200E",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 172981,
+"input": "D;001F 007B 2212 0627 0780 001F 0085 202B",
+"rust_textline": "1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0"
+},
+{
+"line": 173083,
+"input": "D;2067 0020 00A0 0F3B 2212 005B 0710 FE5A 005B 07FB 2069 0627 200D 0085 FF08 FEFF",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 173120,
+"input": "D;3000 0627 0710 202C 3000 000A 0085 0627 200F 2067",
+"rust_textline": "1 1 1 1 1 1 0 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 1 1 1"
+},
+{
+"line": 173568,
+"input": "D;200D D83B DE00 000D 202C",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 173779,
+"input": "D;200F FDD0 202E 0009 005D 000A 202E 0025 001C 0024",
+"rust_textline": "1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 174025,
+"input": "D;FF08 07C0 3009 2067 0021 001C 0009 002C 2029 2007 DB40 DC01 202B 202B 200D 002F 05D0",
+"rust_textline": "1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0 0 1 1 1 1 1 1 1 1"
+},
+{
+"line": 174663,
+"input": "D;001F 05D0 00AD 2069 005B 2067 05D0 202E DB40 DC01 202B 0085 3000",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 174936,
+"input": "D;005B 005B 003A 05FF D802 DC00 202E D83A DD00 07C0 AC00 05D0 005A 0020 005B 200D 007B 0085 202C 202B 000D 20C1",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 175414,
+"input": "D;FE70 202B 07C0 0085 005B 000C",
+"rust_textline": "1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0"
+},
+{
+"line": 175455,
+"input": "D;061C 0085 002E 002C 00B0 202C 0020 064B",
+"rust_textline": "1 1 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 0 0 0 0 0 0"
+},
+{
+"line": 175860,
+"input": "D;005D 202A 202E 0029 061C 05D0 005B 0301 D83B DC71 0710 2069 05D0 0024 AC00 0627 08A0 001C 0085 0020 0024",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 176593,
+"input": "D;202C 0710 0780 0029 0085 002A",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 176803,
+"input": "D;2069 0023 D803 DD00 000D 05B4",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 176809,
+"input": "D;2068 002C FE70 0627 202E 2069 0025 2018 2069 05D0 000D 005B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 177890,
+"input": "D;07C0 05B4 0085 202D",
+"rust_textline": "1 1 1 0",
+"java_runs": "1 1 1 1",
+"java_levelAt": "1 1 1 0"
+},
+{
+"line": 178176,
+"input": "D;202C FB1D 003A 0024 20C1 07C0 2029 FE59 2046 0029 001F 0020 05D0 005B 2029 202B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 179285,
+"input": "D;D83B DE00 002A DB40 DC01 FF08 005B 05D0 0028 005D D834 DD67 0025 0085 202E",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 179959,
+"input": "D;0024 D834 DD67 007D D83B DC71 200D 0085 202B 00A0 3000 001C 0025 3009 202E 00B0 0022 0E01",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 180135,
+"input": "D;0627 000D 202B",
+"rust_textline": "1 1 0",
+"java_runs": "1 1 1",
+"java_levelAt": "1 1 0"
+},
+{
+"line": 180855,
+"input": "D;064B 202E D83B DC71 2003 FF08 0020 FEFF 002F 2029 DB40 DC01 200D 005B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 180946,
+"input": "D;FF09 05D0 001C 000D 0627 202C 005D 002D",
+"rust_textline": "1 1 1 0 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 1 1 1 1"
+},
+{
+"line": 181908,
+"input": "D;0627 2067 FDD0 0085 0020",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 182183,
+"input": "D;3009 002D D83A DD00 3009 202C 000D 0028 005D D83B DE00 202B FDD0 07FB 001C 0020 D834 DD67 002C",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 182189,
+"input": "D;005D 07FB 202C 2329 005D 2018 FF08 2069 2045 3000 000A 0085",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 182336,
+"input": "D;08A0 002E 000C 002D 0029 2069 FEFF 0029 2045 001C 000A 20C1 202E D834 DD67 D800 005B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0"
+},
+{
+"line": 183056,
+"input": "D;202E 232A 0028 00A0 0F3B 0031 0627 0024 D800 2069 000D 200D",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 183349,
+"input": "D;FE59 D834 DD67 20C1 D83A DD00 003A 2029 00A0 202B",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 184016,
+"input": "D;FE5A 2045 05D0 005B FF09 202E 2003 005D 0710 0661 005A 2067 2067 0029 2029 00A0",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 184169,
+"input": "D;000C 0F3A 05FF 3009 0627 0029 D834 DD67 202C 3000 002F 2067 202B 0020 2046 2029 0029",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 184298,
+"input": "D;202B 0025 00AB D83B DC71 2029 0009",
+"rust_textline": "1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0"
+},
+{
+"line": 184441,
+"input": "D;007D 00AD 05D0 0024 FE70 000D 202C 202C",
+"rust_textline": "1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0"
+},
+{
+"line": 184505,
+"input": "D;FDD0 D83B DC71 202E 07FB 0627 FB1D 0085 2045",
+"rust_textline": "1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 184665,
+"input": "D;061C FB1D 07C0 202C 001C 202C 3008 3000",
+"rust_textline": "1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0"
+},
+{
+"line": 184761,
+"input": "D;202C 0028 0024 002E 0627 2067 0029 05FF 001C 202C",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 185641,
+"input": "D;0028 0021 FE70 000D 002B 202B 002A 0020",
+"rust_textline": "1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0 0"
+},
+{
+"line": 185674,
+"input": "D;05D0 20C1 202C 000A 0029",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 186085,
+"input": "D;0710 002D 202A 000A 0085 2018",
+"rust_textline": "1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0"
+},
+{
+"line": 187024,
+"input": "D;0627 FF09 2329 002E 05D0 05D0 002B 05D1 202B 000A 064B 0F3B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 187566,
+"input": "D;005B 202C 200F 202E 0710 0031 0061 2069 002B 202E 0085 202B 0020 FDD0 0029 0F3B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0"
+},
+{
+"line": 187835,
+"input": "D;202B FB1D 000D 00A0",
+"rust_textline": "1 1 1 0",
+"java_runs": "1 1 1 1",
+"java_levelAt": "1 1 1 0"
+},
+{
+"line": 188103,
+"input": "D;08A0 07C0 FB1D 005D 00A0 0020 0029 FE59 00AB 200B 000C 202C 0029 D802 DC00 200B 0023 FE59 0085 232A 007D",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 188106,
+"input": "D;FE5A 005B 3008 2329 D834 DD67 200F FE70 08A0 2018 0780 003A 0627 005D 002D 001C 2029 0020 FE59 202B 00B0",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0"
+},
+{
+"line": 188555,
+"input": "D;0029 061C FF08 000A 2003 061C 05FF 0020 202B 202C 0020 05D1 FE5A 2029 0301 FF09",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 189140,
+"input": "D;08A0 05B4 0085 005B 001F 002C 0028 202E",
+"rust_textline": "1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 0 0"
+},
+{
+"line": 189556,
+"input": "D;002C 005B 2329 061C 0028 2046 0F3B 000D 005D 2029 005D 202C",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 190066,
+"input": "D;202E D802 DC00 200E 000D 007B 0020",
+"rust_textline": "1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0"
+},
+{
+"line": 190326,
+"input": "D;D83B DC71 2007 2069 0F3B D83B DE00 005D 000A 0020",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 190515,
+"input": "D;061C FE59 2069 2003 2067 FB1D D803 DD00 2003 007B 2029 007D 0029",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 190679,
+"input": "D;D83B DC71 202E 001C 05B4 0023",
+"rust_textline": "1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0"
+},
+{
+"line": 190825,
+"input": "D;07FB 2069 2067 000D 005D 005B",
+"rust_textline": "1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0"
+},
+{
+"line": 192475,
+"input": "D;00AB FE70 3008 202D 202C FEFF 005D 001C 202E 0028",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 192525,
+"input": "D;D83A DD00 2029 000A FDD0 002C 202C",
+"rust_textline": "1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 0"
+},
+{
+"line": 192604,
+"input": "D;2007 0022 0301 005D 05D0 000A 001C 2069 0029 FE70",
+"rust_textline": "1 1 1 1 1 1 0 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 1 1 1"
+},
+{
+"line": 192929,
+"input": "D;0780 0029 002D 202E 002D 0085 3008 00B0",
+"rust_textline": "1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0"
+},
+{
+"line": 193676,
+"input": "D;00B0 05D0 00B0 05D1 001F 2067 000D 202E",
+"rust_textline": "1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0"
+},
+{
+"line": 193774,
+"input": "D;0627 0021 0780 0085 202E",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 193916,
+"input": "D;0028 0029 0029 D83A DD00 005D 2069 20C1 0028 0F3A FE59 001C 002A",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 194786,
+"input": "D;005D 0028 002A 2069 07FB 05D0 FB1D 000D FDD0 000C",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 195995,
+"input": "D;2018 0020 0028 0020 D802 DC00 2003 005D 0022 0627 05D1 D834 DD67 00B0 FEFF 2067 001C 002E",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 196556,
+"input": "D;0029 FEFF D834 DD67 2018 0025 0023 061C 0022 000A 202E",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 196675,
+"input": "D;00AB 002B DB40 DC01 005D 0F3A D83A DD00 000D 202B 202E D834 DD67",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 197285,
+"input": "D;3009 200D 0028 08A0 202E 202E 0009 003A 0029 0029 0024 0061 202E 003A 2045 0028 005D 08A0 001C 2018",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 197798,
+"input": "D;0025 200D D83A DD00 000D 202D",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 197995,
+"input": "D;003A 064B 202B 202E 3009 0024 D83B DE00 0915 0085 D834 DD67 0021 2029 0024 002A 002C 202E",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0"
+},
+{
+"line": 198645,
+"input": "D;FE59 005D 3009 202E FEFF 00B0 007B 05D0 0085 2029 202B 3000",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 199136,
+"input": "D;00A0 05B4 FB1D 0085 202B D834 DD67",
+"rust_textline": "1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0"
+},
+{
+"line": 199663,
+"input": "D;2007 202C D83B DE00 0028 00A0 2069 0028 D803 DD00 000A 2046 202C 2329",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 199908,
+"input": "D;202C D802 DC00 2018 0009 07FB 0029 005D 0023 DB40 DC01 2046 2029 000A 0710 202E 2067 FDD0",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1"
+},
+{
+"line": 200574,
+"input": "D;0301 0627 D83A DD00 202E 0028 202E 064B D834 DD67 0020 FEFF 0029 2069 00B0 0061 005B 0661 000C 07C0 0600 002B 05FF 00AB 202E 07FB 0710 202C 002D FEFF D803 DE60 002B 0661 3009 FF08 0301 0028 200F 00A0 00B0 000A 005B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 200966,
+"input": "D;202B 0627 002A 000D 005B",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 201119,
+"input": "D;FE70 0023 FE5A 001C 005D 3008 0020 202A 000A 0780 0627 002B 2067 0085 2007 202C",
+"rust_textline": "1 1 1 1 0 0 0 0 0 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0 0 0 1 1 1 1 1 0 0"
+},
+{
+"line": 202795,
+"input": "D;202E 002F 00A0 005D 0022 0627 D834 DD67 D83B DE00 0061 2069 2069 000A 0085 0029 002D 007B 3000 20C1 05D1 FE70 003A 005B 2067 202E 00B0 D800 002D 2068 D802 DC00 064B 3008 0028 D83B DE00 0F3B 0301 0301 202E 0009 0661 005D",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1"
+},
+{
+"line": 202920,
+"input": "D;FF09 2069 2045 005D FEFF 05D0 D834 DD67 2067 0710 05D0 2045 2029 003A 000D 2329 0020",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 203119,
+"input": "D;0020 0020 05D1 FE70 D83B DE00 D803 DD00 2003 05D1 000A 005B FE5A 0085 20C1 002A 202E 005B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0"
+},
+{
+"line": 203620,
+"input": "D;0023 2329 202B 0020 D83B DC71 002B D802 DC00 2018 0020 200D 000A 0028",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 203625,
+"input": "D;05D0 007B FEFF 0021 000D 202C",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 203923,
+"input": "D;0627 0009 07C0 202B 00AD 005D 0085 002E",
+"rust_textline": "1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0"
+},
+{
+"line": 204020,
+"input": "D;200F 000A 202E 0031",
+"rust_textline": "1 1 0 0",
+"java_runs": "1 1 1 1",
+"java_levelAt": "1 1 0 0"
+},
+{
+"line": 205639,
+"input": "D;0023 202E 002F 0028 00B0 0780 002C 002C 202B 3008 002D 05D0 202C 001C 005D 0F3B 2069 FE70 0F3A 2329 FDD0 202B 000D 001C 05FF 3009 0025 061C",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1"
+},
+{
+"line": 205661,
+"input": "D;0F3B 05FF 0F3B FE5A 0627 002D 002F 0627 D802 DC00 202B 000A 3009",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 205676,
+"input": "D;0627 202C 2029 0F3A",
+"rust_textline": "1 1 1 0",
+"java_runs": "1 1 1 1",
+"java_levelAt": "1 1 1 0"
+},
+{
+"line": 205844,
+"input": "D;D803 DD00 FE59 0021 00AD 202C 0021 202E 2067 0627 0085 202C 2045",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 206513,
+"input": "D;D802 DC00 002C 0710 D834 DD67 2329 202C D803 DD00 202B 0627 0710 05D1 232A 3009 0022 2029 2029",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 206789,
+"input": "D;07C0 000D 202E 0301 002D 2045 003A 0028",
+"rust_textline": "1 1 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 0 0 0 0 0 0"
+},
+{
+"line": 206841,
+"input": "D;DB40 DC01 2045 05D0 3000 D834 DD67 2329 2067 D802 DC00 200F 0020 005B 00A0 0029 000C 002B 0024 D802 DC00 0627 2029 0024",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 207166,
+"input": "D;0301 200B 202E 0661 00AD 05D0 00B2 0031 2029 2029 202E D803 DE60",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 207385,
+"input": "D;200F 0F3B 002D 001C 202E 0037 0301 002A",
+"rust_textline": "1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0 0"
+},
+{
+"line": 208528,
+"input": "D;202B 0780 064B 002E FB1D 200D 0025 2029 202B FE5A 005B 0301",
+"rust_textline": "1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 208561,
+"input": "D;002E 202E 0F3B 00B0 FE5A D83B DE00 0029 0009 D800 D83B DC71 000D 0028",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 208664,
+"input": "D;05FF 202B 005B 000D 202A",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 208808,
+"input": "D;202C FB1D 0028 002D D83A DD00 005B 08A0 FEFF 200D 2007 202E 0061 202B 2067 000A 20C1",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 208981,
+"input": "D;200F 202E D83B DC71 002A 002C 202E 08A0 FB1D 0061 D83A DD00 3000 0025 0627 000D 2003 200D",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 209624,
+"input": "D;0780 002D 05D0 0627 000A 202E 2003 FE59 003A 2329 005A 007B 0660 D802 DC00 005D 0661 3008 2046 0028 200B",
+"rust_textline": "1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 211324,
+"input": "D;0020 0627 000A 00B0 0029 202E 00AB 2003 AC00 0660 0780 200D",
+"rust_textline": "1 1 1 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 211986,
+"input": "D;05D0 0627 0020 202C 001C 2212 0009 0F3A",
+"rust_textline": "1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0"
+},
+{
+"line": 212163,
+"input": "D;05D0 2067 FF09 D83B DC71 2007 000A 0028 FF08 3000 202E",
+"rust_textline": "1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 213071,
+"input": "D;2003 0627 000D 202E 0085",
+"rust_textline": "1 1 1 0 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0"
+},
+{
+"line": 213251,
+"input": "D;07C0 000D 2007 000C 202B",
+"rust_textline": "1 1 0 0 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 0 0 0"
+},
+{
+"line": 213836,
+"input": "D;07FB 2018 064B 00B0 0085 202C",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 213849,
+"input": "D;05D0 232A 0085 202E",
+"rust_textline": "1 1 1 0",
+"java_runs": "1 1 1 1",
+"java_levelAt": "1 1 1 0"
+},
+{
+"line": 213868,
+"input": "D;2067 202E 0031 FEFF D835 DC00 05FF 007D 2069 005D 08A0 002A 2003 064B FDD0 000D 0085 0023 202C 00AD 202E 002E 000D 05D1 005B 00AD 0028 0028 0301",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 1 1 1 1 1 1"
+},
+{
+"line": 214293,
+"input": "D;D802 DC00 002D 2007 001F 202B 000D 002C 00B0",
+"rust_textline": "1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 214338,
+"input": "D;2067 2069 0627 000A 001C",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 214669,
+"input": "D;2069 00AD 0024 0028 202C 002B 002F 0627 000D FF08",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 214899,
+"input": "D;07C0 FE70 202B 2029 000D",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 215233,
+"input": "D;0022 DB40 DC01 D83B DC71 202C 2212 003A 001C 00AB",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 215259,
+"input": "D;D83A DD00 08A0 0085 202B",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 215634,
+"input": "D;202C 005D 0627 202C 2029 200D",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 216001,
+"input": "D;05B4 0627 064B 002C 000A 202B 00AB 202E",
+"rust_textline": "1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0"
+},
+{
+"line": 217271,
+"input": "D;05D0 202E 0031 0600 005D 2069 20C1 003A 0E01 0025 0627 0023 05D0 0061 2003 005D 0024 20C1 200D 0031 0031 003A 202E 2069 FEFF 08A0 000A 0020",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 217744,
+"input": "D;002C 061C 202E 2045 202C 000D 3009 2029 DB40 DC01 0029",
+"rust_textline": "1 1 1 1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0 0 0 0"
+},
+{
+"line": 217928,
+"input": "D;0025 0024 D802 DC00 202A 2029 001C 0021 202E 2069 0022 0031 2067",
+"rust_textline": "1 1 1 1 1 1 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0 0 0 0 0 0"
+},
+{
+"line": 218103,
+"input": "D;202B 202B FDD0 08A0 2029 0301",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 218169,
+"input": "D;00AB 202E 200F 0F3A 0028 064B 0020 FE70 2045 202C 05D0 0028 0F3A 00AB 000D 007B 202E 005A 0031 FE70",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0"
+},
+{
+"line": 218456,
+"input": "D;2329 D83B DC71 2329 0627 002F 005D 2069 0028 001C 05B4",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 218714,
+"input": "D;0022 07C0 200F 200F 00AD 002E 0F3B 202A 001C 00AB",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 219271,
+"input": "D;05D0 2029 2003 200D 00AB 002D 005D DB40 DC01 20C1 0301 002C 0020 202E 0028 0029 FF09",
+"rust_textline": "1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 219629,
+"input": "D;07C0 FF08 D83B DE00 0710 000D FE5A 005D 005B 202E D834 DD67",
+"rust_textline": "1 1 1 1 1 1 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0 0 0 0 0"
+},
+{
+"line": 220048,
+"input": "D;005B 20C1 05D0 00A0 0029 D83B DE00 202B 005D 001C 0028",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 220216,
+"input": "D;D83B DC71 202A 202E 0029 0028 0009 2329 05D1 2003 0710 002A 202C 000A 003A 00A0 0301",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 220991,
+"input": "D;202E 0627 0085 FE59",
+"rust_textline": "1 1 1 0",
+"java_runs": "1 1 1 1",
+"java_levelAt": "1 1 1 0"
+},
+{
+"line": 221926,
+"input": "D;200F 2067 0085 007B 202C FE5A",
+"rust_textline": "1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0"
+},
+{
+"line": 222604,
+"input": "D;D834 DD67 202E 05D0 232A D802 DC00 200D 0029 00AD 202D 001C 2007 002F 202C 202E D835 DC00 002E",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0"
+},
+{
+"line": 222640,
+"input": "D;D83A DD00 D83B DE00 001C 202C 007B 2045 001C FE70",
+"rust_textline": "1 1 1 1 1 0 0 0 0 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0 0 0 0 1"
+},
+{
+"line": 222851,
+"input": "D;05D1 0F3A 202B 05D0 05B4 0020 2029 0020",
+"rust_textline": "1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0"
+},
+{
+"line": 222913,
+"input": "D;05D0 0028 2067 D834 DD67 202B 2046 0085 202C",
+"rust_textline": "1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 223008,
+"input": "D;D803 DD00 202E 0301 D803 DD00 AC00 0022 0037 05D0 0F3A 002E FDD0 202E 0061 05D0 D83A DD00 0627 0F3B 0627 D83A DD00 2069 0661 0710 0025 FDD0 007B 0660 000D 005D",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 223125,
+"input": "D;202C 0029 0627 3008 2045 0085 003A 000C",
+"rust_textline": "1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0"
+},
+{
+"line": 223610,
+"input": "D;0029 D83B DE00 0085 00AD 2329 3009 2029 000D 005B 2069 05D0 200F 0020 D83B DC71 2067 0627",
+"rust_textline": "1 1 1 1 0 0 0 0 0 1 1 1 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0 0 0 1 1 1 1 1 1 1 1 1"
+},
+{
+"line": 223706,
+"input": "D;005B 05FF 0085 202C 0020",
+"rust_textline": "1 1 1 0 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0"
+},
+{
+"line": 223959,
+"input": "D;061C 2029 0024 202E",
+"rust_textline": "1 1 0 0",
+"java_runs": "1 1 1 1",
+"java_levelAt": "1 1 0 0"
+},
+{
+"line": 224141,
+"input": "D;002F 0025 0627 000A 202A",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 224663,
+"input": "D;07C0 08A0 07FB 001C 002A 202E 0028 D834 DD67 0020 064B",
+"rust_textline": "1 1 1 1 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0 0 0 0 0"
+},
+{
+"line": 225055,
+"input": "D;0020 002F D803 DD00 FF09 05D0 2067 000A 2069 2007 202C 0627 FEFF 005D 064B FE5A 2067 0710 001C 002D 0022",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0"
+},
+{
+"line": 225083,
+"input": "D;05D0 2069 000D 0F3A",
+"rust_textline": "1 1 1 0",
+"java_runs": "1 1 1 1",
+"java_levelAt": "1 1 1 0"
+},
+{
+"line": 225086,
+"input": "D;07FB 007B 0029 001C 001C 202D",
+"rust_textline": "1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0"
+},
+{
+"line": 225345,
+"input": "D;05FF 200B D83B DC71 0023 0009 05D0 2329 001F 001C 202A",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 226355,
+"input": "D;2069 002E 07C0 08A0 07FB 000D 00B0 002C",
+"rust_textline": "1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0"
+},
+{
+"line": 227008,
+"input": "D;D83B DE00 0020 202B 2029 2046",
+"rust_textline": "1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 0"
+},
+{
+"line": 228419,
+"input": "D;0024 0029 061C 001C 202C 202C FF08 202E 2069 2067",
+"rust_textline": "1 1 1 1 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0 0 0 0 0"
+},
+{
+"line": 228448,
+"input": "D;005D 0029 2046 007D 200F 2067 FE5A 07FB 0085 202B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 228500,
+"input": "D;0710 202E 202E D83B DC71 0020 FB1D 0627 005D FDD0 2029 202E FDD0 005A 0020 05FF 061C D800 003A 200F D83B DE00 202E 3000 D835 DC00 0661 002E 0031 FDD0 0301 002F 0031 D834 DD67 00A0 0025 0661 005D 002F 0029 0F3A 0661 FF09",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 229856,
+"input": "D;0627 0F3A D83B DC71 0020 0F3A FDD0 2029 202E",
+"rust_textline": "1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 230086,
+"input": "D;0023 2069 061C 005D 202C D834 DD67 202B 0028 001C 2003",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 230350,
+"input": "D;D834 DD67 005D 202E D83A DD00 0627 00B0 0085 200D",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0"
+},
+{
+"line": 231560,
+"input": "D;2003 05D1 202E 000A 200D",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+},
+{
+"line": 231746,
+"input": "D;202C 2045 3009 001F 07C0 001C 3008 200D",
+"rust_textline": "1 1 1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0"
+},
+{
+"line": 231901,
+"input": "D;005B 202B 00B0 0020 202B 007B 003A 3008 D83B DC71 200D 0627 200D 000D 0085 05D0 0F3A",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1"
+},
+{
+"line": 233386,
+"input": "D;202E 202E 202C 3009 0029 0009 0009 00B2 06F1 0029 0627 202E 2069 002C 202C 0028 0021 D802 DC00 061C FF09 202C 007D 00AD 005D 000A 2212 20C1 0028",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 0"
+},
+{
+"line": 233844,
+"input": "D;05FF 005D 202B D802 DC00 0085 202E 064B 007B 0301 0024 0021 0061 3008 D800 D835 DC00 D803 DD00",
+"rust_textline": "1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 233911,
+"input": "D;05FF 202C 000D 232A D834 DD67 FEFF",
+"rust_textline": "1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 0"
+},
+{
+"line": 234028,
+"input": "D;05D0 001C 202C 0020",
+"rust_textline": "1 1 0 0",
+"java_runs": "1 1 1 1",
+"java_levelAt": "1 1 0 0"
+},
+{
+"line": 234683,
+"input": "D;005D 0028 0627 0085 202E 06F1",
+"rust_textline": "1 1 1 1 0 0",
+"java_runs": "1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0 0"
+},
+{
+"line": 235160,
+"input": "D;3000 007D 202E 0025 0780 07C0 FE70 005D D800 D83A DD00 D803 DD00 00AB 05FF 0301 0061 0028 3009 05D0 DC00 200E 000A 0029 0028 0627 07C0 2069 000D 07C0 08A0 3000 232A D803 DD00 2029 0085 2212 07C0 FE59 2067 2067 007B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1 1 1 1"
+},
+{
+"line": 235490,
+"input": "D;D834 DD67 07C0 202C 00B0 000A D834 DD67 000D 005D",
+"rust_textline": "1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 235613,
+"input": "D;00AD DB40 DC01 05D0 FF09 007D 001C 202E 0061 064B 003A 0037 005D 000C 001C 202C 0627",
+"rust_textline": "1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 1 1"
+},
+{
+"line": 236185,
+"input": "D;D803 DD00 FB1D 202E 00AB 2029 200B",
+"rust_textline": "1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0"
+},
+{
+"line": 236856,
+"input": "D;202C 3008 D83B DC71 202E 000A 202E 200D 0E01 FF09 FE70 0037 FB1D 002A 000A 0627 D83A DD00 0024 2069 FDD0 005D",
+"rust_textline": "1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1"
+},
+{
+"line": 237676,
+"input": "D;202E D834 DD67 07FB 0661 202C 002B 2069 2029 202C 2329 202C 005B",
+"rust_textline": "1 1 1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 238204,
+"input": "D;200B 0020 0029 0009 0627 202B 05D0 002B 200F 000D 2029 0F3B 0023 0020 202C 00B0",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0"
+},
+{
+"line": 239256,
+"input": "D;00AB 05D1 000D 202B D83A DD00 007B 202E 001F 0031 202D 202C 0780 000D FE59 0085 05D0 2212 003A 3008 007D",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 0 1 1 1 1 1"
+},
+{
+"line": 239971,
+"input": "D;D83A DD00 08A0 005D 0022 0085 202A",
+"rust_textline": "1 1 1 1 1 1 0",
+"java_runs": "1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 0"
+},
+{
+"line": 240378,
+"input": "D;FE70 061C 000D 202C 202C 0021 20C1 202E 003A 0028 00A0 0037",
+"rust_textline": "1 1 1 0 0 0 0 0 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 0 0 0 0 0 0 0 0 0"
+},
+{
+"line": 240528,
+"input": "D;0022 05B4 064B 064B FE70 FF08 061C D834 DD67 202E D834 DD67 0085 3000 05FF 007D 0020 001C 000D 07FB 003A 00AB",
+"rust_textline": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1"
+},
+{
+"line": 241284,
+"input": "D;2069 FDD0 0627 3009 0022 2069 000D DB40 DC01 00AB 0021",
+"rust_textline": "1 1 1 1 1 1 1 0 0 0 0",
+"java_runs": "1 1 1 1 1 1 1 1 1 1 1",
+"java_levelAt": "1 1 1 1 1 1 1 0 0 0 0"
+},
+{
+"line": 241523,
+"input": "D;05D0 D834 DD67 001C 202E",
+"rust_textline": "1 1 1 1 0",
+"java_runs": "1 1 1 1 1",
+"java_levelAt": "1 1 1 1 0"
+}
+]
+}

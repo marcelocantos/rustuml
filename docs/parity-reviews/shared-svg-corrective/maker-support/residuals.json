@@ -1,0 +1,178 @@
+{
+  "not_waivers": true,
+  "production": "346f6b3f680895d3eb457041ed88ae224c583d95",
+  "targets": {
+    "T14.15": [
+      "automatic active/default-background selection remains absent: AtomText.drawU \u2192 FontConfiguration.adjustColorForBackground \u2192 HColorAutomagic.getAppropriateColor \u2192 HColorSimple.opposite",
+      "font logical names, padded aliases/metrics coupling, transparent-text whole-output failures remain"
+    ],
+    "T14.16": [
+      "No sequence files touched; prior sequence escaper handoff remains against Java decimal LF/CR/TAB/non-ASCII serialization",
+      "Existing comment label-versus-entity-name selection differs for six creole stereotype goldens and deployment aliases; serializer cannot repair consumer naming",
+      "Only approved45comment producers measured; no broad claim for unowned comments or arbitrary consumers"
+    ],
+    "T14.18": [
+      "background gradients DriverTextSvg:164\u2013173"
+    ],
+    "T14.19": [
+      "consumer TextBase bold/italic OR"
+    ],
+    "T14.20": [
+      "Exactly7C0malformed outputs remain; source-hash and both-direction ratchet holds",
+      "font-color throws, size zero/overflow, malformed DOT, VT/FF and all negative diagnostics remain"
+    ],
+    "T14.12": [
+      "warning chrome wbs_shape_color"
+    ],
+    "T14.13": [
+      "sequence SECTION_HEADER and ASTERISK_PREFIXED_LINE controls"
+    ],
+    "T14.14": [
+      "plain/code hide_raw_regions"
+    ],
+    "T14.17": [
+      "unconsumed lines"
+    ],
+    "T14.6.6": [
+      "1sprite-map and6DOT-attribute-map YAML order changes only; no semantic delta"
+    ]
+  },
+  "other_visible_failures": [
+    "sequence mixed-size baselines93.6777 vs106.2461/105.2793 and note_rendered_height; no compensation",
+    "forced alignment",
+    "unknown/guillemet, Unicode/font/Omega/PLAIN, note resolver, URL/italic/legacy tspan, welcome",
+    "class markup_literal/markup_scan/style_nested combined-integration obligations; no sibling candidate import, no combined claim",
+    "source-line-zero fallback",
+    "defined class/sequence/scale-color-note registry owners; never classified as missing sprites",
+    "32retained sequence panics",
+    "checker87 family_salt/family_json exit1 empty-output errors"
+  ],
+  "nonpositive": [
+    "malformed_dot",
+    "two shape_direction syntax errors",
+    "Batik-limited html_url_math/display_raw_math/s_display_latex_valid, no math claim",
+    "font-color/size-zero/overflow runtime error SVGs",
+    "7C0Java crashSVG controls",
+    "comment_state_links intended-valid disagreement: Java syntax error exit200"
+  ],
+  "fresh_whole_failures": [
+    {
+      "name": "comment_class_unicode",
+      "intended": "intended_valid; independently classify returned SVG",
+      "classification": "valid_diagram",
+      "valid": true,
+      "factory": "CLASS",
+      "reference_exit": 0,
+      "reference_comparator_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "97347e1f57f9ae4504de87d368ac7942b4f59166ff44b025c2e7082674b7b7d6",
+      "golden_sha256": "2297488ed4fe21fa48dee00307f5d1489437d75b679f6764627f48437a8e8645",
+      "visible_text": "\u00c9\u03a9\ud801\udc37--Leaf-",
+      "id": "corrective16/comment_class_unicode",
+      "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_class_unicode.puml",
+      "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_class_unicode/java.svg.stdout",
+      "registered_source": "test-diagrams/perturbations/shared-svg-corrective/comment_class_unicode.puml",
+      "before_pass": false,
+      "after_pass": false,
+      "whole_failure": "Unicode/font metrics: Java81.4297 vs Rust81.7646 textLength; comment scalar replacement exact",
+      "java_comments": [
+        "class ???- -Leaf- "
+      ],
+      "rust_comments": [
+        "class ???- -Leaf- "
+      ]
+    },
+    {
+      "name": "comment_object_links",
+      "intended": "intended_valid; independently classify returned SVG",
+      "classification": "valid_diagram",
+      "valid": true,
+      "factory": "CLASS",
+      "reference_exit": 0,
+      "reference_comparator_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "86e4f65f1d96ebfb74fc85d249ddbd6bc79ad28b52d8a304140d0dda974c46c1",
+      "golden_sha256": "ff5e876c82d9a448dce6d28aa9768787467f19e1667049096922d5df49134646",
+      "visible_text": "Obj-- Peer-",
+      "id": "corrective16/comment_object_links",
+      "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_object_links.puml",
+      "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_object_links/java.svg.stdout",
+      "registered_source": "test-diagrams/perturbations/shared-svg-corrective/comment_object_links.puml",
+      "before_pass": false,
+      "after_pass": false,
+      "whole_failure": "Object parser/consumer emits empty100x50SVG; Java14elements; no comment control claim for missing consumer output",
+      "java_comments": [
+        "link Obj- - to Peer- "
+      ],
+      "rust_comments": []
+    },
+    {
+      "name": "comment_state_links",
+      "intended": "intended_valid; independently classify returned SVG",
+      "classification": "error_svg",
+      "valid": false,
+      "factory": null,
+      "reference_exit": 200,
+      "reference_comparator_exit": 2,
+      "reference_timed_out": false,
+      "source_sha256": "3811bcf63a4116bf61adb741ba87601426e2f61e883dc7133e53958e48776b76",
+      "golden_sha256": "870132576dbd054129a5a8bdc6f758259a9ca2cf25fc390e4a36f3bf9e33a28e",
+      "visible_text": "PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC] [From string (line 4) ] \u00a0 @startuml state \"Stage--\" state \"Pause-\" \"Stage--\" --> \"Pause-\" Syntax Error? (Assumed diagram type: state)",
+      "id": "corrective16/comment_state_links",
+      "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_state_links.puml",
+      "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_state_links/java.svg.stdout",
+      "registered_source": "test-diagrams/perturbations/shared-svg-corrective/comment_state_links.puml",
+      "before_pass": false,
+      "after_pass": false,
+      "whole_failure": "Intended-valid versus observed Java syntax-error exit200; nonpositive, Rust acceptance remains negative-contract difference",
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "name": "comment_archimate",
+      "intended": "intended_valid; independently classify returned SVG",
+      "classification": "valid_diagram",
+      "valid": true,
+      "factory": "DESCRIPTION",
+      "reference_exit": 0,
+      "reference_comparator_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "da7924124c96fdad15b8adc2e7325e897fcd39faa5dad72323400e305ed7910d",
+      "golden_sha256": "a5b322223038d3dd1ed27c3f624aec5e2f8a5fb4625c578eb31022e19eea4573",
+      "visible_text": "Thing--Tail-",
+      "id": "corrective16/comment_archimate",
+      "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/comment_archimate.puml",
+      "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/comment_archimate/java.svg.stdout",
+      "registered_source": "test-diagrams/perturbations/shared-svg-corrective/comment_archimate.puml",
+      "before_pass": false,
+      "after_pass": false,
+      "whole_failure": "Archimate source dispatch yields welcome SVG in Rust; JavaDESCRIPTION diagram; no comment control claim",
+      "java_comments": [
+        "entity Ledger"
+      ],
+      "rust_comments": []
+    },
+    {
+      "name": "state_alpha_empty",
+      "intended": "intended_valid; independently classify returned SVG",
+      "classification": "valid_diagram",
+      "valid": true,
+      "factory": "STATE",
+      "reference_exit": 0,
+      "reference_comparator_exit": 0,
+      "reference_timed_out": false,
+      "source_sha256": "b8940a769318ee7496c7aa5124790cc8926bd7557d4adb66b820f7754189986d",
+      "golden_sha256": "6bfa0359b53cd0ced39e63e6db301bf780f6abcf0e2701787f1be76d3a611210",
+      "visible_text": "Cedar",
+      "id": "corrective16/state_alpha_empty",
+      "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/new/state_alpha_empty.puml",
+      "reference": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/fresh-reference/state_alpha_empty/java.svg.stdout",
+      "registered_source": "test-diagrams/perturbations/shared-svg-corrective/state_alpha_empty.puml",
+      "before_pass": false,
+      "after_pass": false,
+      "whole_failure": "Empty-state geometry: Java50x40 vs Rust59.7578x50, text origin differs; both fill#2468AC opacity0.00392",
+      "java_comments": [],
+      "rust_comments": []
+    }
+  ]
+}

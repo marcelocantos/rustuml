@@ -1,0 +1,690 @@
+{
+  "schema_version": 1,
+  "mechanism": "shared-svg-corrective",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A08474951-e1a7-40da-806b-5e06f7c9ced3",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "tool": "T3 Code / Codex harness",
+    "independence": "New independent checker, no prior implementation involvement. Evidence-only unique branch in T3-prepared checkout; no children, new worktrees, production changes or shipping."
+  },
+  "account_commit": "db89554110b766979582ef46c6303db09f489447",
+  "implementation_commit": "346f6b3f680895d3eb457041ed88ae224c583d95",
+  "evidence_revision": "3875fee3b164d63d4b39df4bc6c13ca8ace89169",
+  "production_base": "a33dccc8e94dc44b5bafdc756fc1b88c42823a7d",
+  "evidence_base": "a2167f93695497e49b8ae71c4830bac96309023b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "jdk": "OpenJDK21.0.5 Homebrew",
+  "support": "docs/parity-reviews/shared-svg-corrective/checker-support/",
+  "commands": [
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/build.py (exact private production snapshots, separate release targets, jobs4)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/replay_all.py before; then after (actual CLI SVG+YAML and unchanged comparator; 14757 membership entries per phase)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/gates.py (one stable broad run before fresh registrations)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/fresh_measure.py; same with unicode-followup (54 fresh pairs)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/dtd_check.py; ratchet.py (scratch-only mutations discarded)",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/register.py (54 fresh executable pairs; exact standing library test scoped to those pairs, exit101)",
+    "Parent existing reference runner: --cwd <worker>/new --timezone GMT+11:00 -- -pipe -tsvg. Workers lTnmIo28 and I3Ig0G77; argv derived from pinned wrapper, not process-traced."
+  ],
+  "policy": "Any whole-output failure rejects production parity. Bounded serialization evidence does not waive any failure. No combined correctness claim with concurrent sequence packet.",
+  "submechanism": "state-fill",
+  "findings": [
+    "Only the two ordinary-state rect fill producers were changed, at current state.rs:7332/7412, plus existing fill_attributes visibility. Coordinates, stroke and every other argument remain identical. Java EntityImageStateEmptyDescription/EntityImageState \u2192 DriverRectangleSvg \u2192 fillMe source hashes match the pin.",
+    "Fresh state-fill whole cohort is1\u21928/24 valid; zero errors, panics, malformed outputs or lost passes. The two ordinary rectangle branches serialize alpha00/01/7f/fe/ff and #9b4 paint exactly: none; #7A3C91 with opacity0.00392/0.49804/0.99608; opaque omits opacity; short hex becomes #99BB44. Empty-description dimensions still differ, so matching paint is bounded support.",
+    "Both ordinary transparent inputs emit white #FFFFFF instead of Java fill=none. state.rs::resolve_state_paint passes the name through sequence::resolve_color, whose unknown-name fallback is white before fill_attributes sees it. RebeccaPurple resolves to Rust #663399 versus Java #FFFFFF in both branches. Whole failure is preserved, including named-color acceptance differences.",
+    "Unrouted paths remain: emit_autonomous_scope_entities ordinary nested rectangles (4032), start/end (3802/3820), choice (3840), fork/join (3866), history/deep-history (3888), border entry/exit/normal shapes (3946/3955); empty concurrent rectangle4326; autonomous composite header4400; root cluster header5488. Main render branches also bypass shared paint for initial/final ellipses6958/6997/7063/7110, choice7140, fork/join7167, history7017/7199 and deep-history7239, and oracle polygon/path passthrough1600/1632/1646. Fixed none/stroke-only surfaces are not alpha claims. Full source census and paint projections are retained.",
+    "Composite/concurrent probes emit raw #7a3c917f with no opacity for header and nested normal rectangle, while Java uses #7A3C91 fill-opacity=0.49804. Choice selects the skin fill in Rust where Java uses #F1F1F1. Fork/join fixed bar paints match in these probes but still bypass the serializer. History/deep-history have missing shape/name differences. Named start/end probe follows a wrong Rust dispatch/render path. No scope expansion or production repair was attempted."
+  ],
+  "verdict": "rejected",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_7a3c9100.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_7a3c9100.svg",
+      "source_sha256": "d6c0e342271f11014865e85c0cdf54c2b602bc5cb002d41d619454509ef93067",
+      "golden_sha256": "f532dede0b2f17108a4b381b02c92f0478763397b2f62b1b941a9240e480ed46",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent #7a3c9100"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_7a3c9101.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_7a3c9101.svg",
+      "source_sha256": "19caafd47f67d7fb2efaa8d186f4e375c67a34912048db7b5794710526f57efe",
+      "golden_sha256": "74d736a018b9f21f38ac210737801b1a1d40d855910cb99f9113b75d6aecfab7",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent #7a3c9101"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_7a3c917f.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_7a3c917f.svg",
+      "source_sha256": "4ac1e4c2f7cf901c7f64677df42b81b722856ad361d710c7d8ab1b4e7c250fee",
+      "golden_sha256": "9f41e3c78373ee42246fa22ef9eef65e55f214e927250bcc2fdf6dc77b492fb2",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent #7a3c917f"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_7a3c91fe.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_7a3c91fe.svg",
+      "source_sha256": "e93c7edda380d9d2eb57a5006679212867d346b40addeb523c8e677230b3d83d",
+      "golden_sha256": "b44f37751bbf7a6606fdd8d554e53bdf865d960072aba740c748e5b14e5f2895",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent #7a3c91fe"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_7a3c91ff.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_7a3c91ff.svg",
+      "source_sha256": "0f5b86e280764263202dbe907976541ae4dd24086c0d6efcb231e634b8a32caa",
+      "golden_sha256": "fe1c78e629a4b613862419b66dbb1f795592b2239db83a70064e69beb8f29e14",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent #7a3c91ff"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_9b4.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_9b4.svg",
+      "source_sha256": "b41354eae47073c8727fd12d7c1089e2cae273d0a33d7f3d2bef022ab6765f77",
+      "golden_sha256": "8ecd76b6019730e8a26df7f29c3c34189f63894fe76f006590371b9ec5db588e",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent #9b4"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_rebeccapurple.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_rebeccapurple.svg",
+      "source_sha256": "18367fa575883383332958a4afba7c73919830736cbb1b9e8eec6b351b302f27",
+      "golden_sha256": "ba9d9b41fe419c1cedc9e93a189202c98d7f23988155a8f6ad487fb46e432a7b",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent RebeccaPurple"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_transparent.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_empty_transparent.svg",
+      "source_sha256": "2ecf3f3ace33d638e7591048d5089cdd05543fccd989567c5d7974ef266bc06c",
+      "golden_sha256": "6a6b5d78431a292dd0e4a082b8fbdb10b226dbff11aca198e6db5e5aa522626e",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent transparent"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_7a3c9100.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_7a3c9100.svg",
+      "source_sha256": "f36454b45293597c318dee1f6ee1187c99adc91fe0cc0f9a09cf039ffc73257c",
+      "golden_sha256": "81fb6281c32842f4789f15a42bcd894627a0b59dfb1de43243af9b286234f718",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent #7a3c9100"
+      ],
+      "mechanism": "state-fill",
+      "result": "pass",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": true,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_7a3c9101.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_7a3c9101.svg",
+      "source_sha256": "471a0a3f834cbfcfc8d2993470d536a88607a2b1340836904231f09ee431bdd8",
+      "golden_sha256": "93091d9732868f9e7c7ec1735d1c14847965a63144bf9326e4f577533bfff5c9",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent #7a3c9101"
+      ],
+      "mechanism": "state-fill",
+      "result": "pass",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": true,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_7a3c917f.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_7a3c917f.svg",
+      "source_sha256": "6ef3d6b3117d3ed28fc5886c3c060a16983d3f7aa8d56fd4d42e6da798c142fd",
+      "golden_sha256": "2195e9924f91e019197c04356fa5fb7fd9c582b985d1101151e98064c2bc18cd",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent #7a3c917f"
+      ],
+      "mechanism": "state-fill",
+      "result": "pass",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": true,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_7a3c91fe.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_7a3c91fe.svg",
+      "source_sha256": "bec19de360d6553d3e5a7663d5a86e4df414509066ac2021c875072f2804e349",
+      "golden_sha256": "ff94631c7052e4d36b2f0757f65ddc4c886eace78d059f728e2aaccfbbd963de",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent #7a3c91fe"
+      ],
+      "mechanism": "state-fill",
+      "result": "pass",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": true,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_7a3c91ff.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_7a3c91ff.svg",
+      "source_sha256": "6d06916150a13a16ea82521f6c7a82832b8d717bd2b7ad81af3a61e9f4da01a8",
+      "golden_sha256": "c87142799287fb6437228f09e9e293afe6f7efd18296b1b199c9cd60f5b96e8d",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent #7a3c91ff"
+      ],
+      "mechanism": "state-fill",
+      "result": "pass",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": true,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_9b4.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_9b4.svg",
+      "source_sha256": "0407a3edac92310e0566f20b8e43d015d75f02d466828a098b9785cb573f7330",
+      "golden_sha256": "b6370fc4ba9a5c488e731f1fd6e632d55c7b3c77895c93254544c7cb267931fd",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent #9b4"
+      ],
+      "mechanism": "state-fill",
+      "result": "pass",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": true,
+      "after_pass": true,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_rebeccapurple.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_rebeccapurple.svg",
+      "source_sha256": "dec84455fa78320ca8e130e2149c926d46dab3cc5d7234789be2e3f7c4bf01dd",
+      "golden_sha256": "758a6868778de7be0beca0579d933552a8792ee5d94357beec1ceca8a9f971aa",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent RebeccaPurple"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_transparent.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/fill_body_transparent.svg",
+      "source_sha256": "e3754cd90bcf6cf10c44234639f6d18205cf0fde2b5a38af71a577af002cebaa",
+      "golden_sha256": "3203bb37f7b56e2e60123f2144ce7a866f45f05ba855a41bc15bee9930180740",
+      "axes": [
+        "empty/description rectangle",
+        "RGB alpha or named/short/transparent transparent"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_composite.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_composite.svg",
+      "source_sha256": "d8b3701502cf09e6ec44a8bf8eab7e664aa84551f9085f8db9c54ce31e08bcf3",
+      "golden_sha256": "234955754324fca1d68ae2cdc67f89c9e99fc92074adc9329483e827e6810d9b",
+      "axes": [
+        "unrouted state shape composite",
+        "partial alpha"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_concurrent.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_concurrent.svg",
+      "source_sha256": "493cb06a872813552cf297b467bee3ad89c4518e0e4f3e1db213f875cf8607c1",
+      "golden_sha256": "befe704869127d052f804c3d638cda049f42e8c97cec5d26d1c4d1518641fbbe",
+      "axes": [
+        "unrouted state shape concurrent",
+        "partial alpha"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [],
+      "rust_comments": []
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_history.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_history.svg",
+      "source_sha256": "1546040ee1ac7689e4f8b137231a861c85f5a939618f551e59d987acf8508f90",
+      "golden_sha256": "076b7db508e5f1f83c37fa29b3d0e0884ab2817c2982126b5f8e01e323e237fc",
+      "axes": [
+        "unrouted state shape history",
+        "partial alpha"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [
+        "link *start*Copse to *historical*Copse",
+        "link *historical*Copse to Fern"
+      ],
+      "rust_comments": [
+        "link *start*Copse to [H]Copse",
+        "link [H]Copse to Fern"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_choice.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_choice.svg",
+      "source_sha256": "2b856a3edb21d4a659fe2a2aaae7cb352314f65b97f51426db82076764b9f21b",
+      "golden_sha256": "4dafc4c8b956a1409aaa175026b459d060cdf64d9f2ead82cee455519dd0362f",
+      "axes": [
+        "unrouted state shape choice",
+        "partial alpha"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [
+        "link Branch to Fern"
+      ],
+      "rust_comments": [
+        "link Branch to Fern"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_fork.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_fork.svg",
+      "source_sha256": "dab76b7594480bc85eb906273917d3c588b4a25116aec91fc1d8e9d7e6b1357e",
+      "golden_sha256": "414bd88d1bcceea94859abc79426143e7543e559a02ef78a442c2efcf9f82de1",
+      "axes": [
+        "unrouted state shape fork",
+        "partial alpha"
+      ],
+      "mechanism": "state-fill",
+      "result": "pass",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": true,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [
+        "link Split to Fern"
+      ],
+      "rust_comments": [
+        "link Split to Fern"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_join.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_join.svg",
+      "source_sha256": "2bd4763e329771463c6bff36f15c72a423ad565bfeabd1ba4e91e9c4acffda0a",
+      "golden_sha256": "71a8de8e047b41b6cc23c695347c86bc4e19fa0747e589bf77c622d5d9ec5cab",
+      "axes": [
+        "unrouted state shape join",
+        "partial alpha"
+      ],
+      "mechanism": "state-fill",
+      "result": "pass",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": true,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [
+        "link Fern to Merge"
+      ],
+      "rust_comments": [
+        "link Fern to Merge"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_deep_history.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_deep_history.svg",
+      "source_sha256": "6057aadeeebc5922241c393d9dcc68958cba8f6d5d491f747b423a8340c8c265",
+      "golden_sha256": "0ab20242e7db127af4e1f1d8fd7d7277d7c8c2a1401d4fe0fe1d902a45bb60fe",
+      "axes": [
+        "unrouted state shape deep_history",
+        "partial alpha"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [
+        "link *start*Copse to *deephistory*Copse",
+        "link *deephistory*Copse to Fern"
+      ],
+      "rust_comments": [
+        "link *start*Copse to [H*]Copse",
+        "link [H*]Copse to Fern"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_round.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_round.svg",
+      "source_sha256": "0646d5312a8010b56e498d75cf62fbd7b122390d1075fcbce39b30d3a9d5e058",
+      "golden_sha256": "ce67d589aa26516c21c879cce2b5eda16841e19caccdecbc5a7b55bce0c59d13",
+      "axes": [
+        "unrouted state shape round",
+        "partial alpha"
+      ],
+      "mechanism": "state-fill",
+      "result": "fail",
+      "java_classification": "valid_diagram",
+      "intended_validity": "intended_valid; classify fresh Java independently",
+      "java_exit": 0,
+      "before_pass": false,
+      "after_pass": false,
+      "before_exit": 0,
+      "after_exit": 0,
+      "before_panic": false,
+      "after_panic": false,
+      "before_malformed": null,
+      "after_malformed": null,
+      "java_comments": [
+        "link Start to End"
+      ],
+      "rust_comments": []
+    }
+  ],
+  "measurements": {
+    "entries": 24,
+    "valid": 24,
+    "phases": {
+      "before": {
+        "passes": 1,
+        "errors": 0,
+        "panics": 0,
+        "emitted": 24,
+        "malformed": 0
+      },
+      "after": {
+        "passes": 8,
+        "errors": 0,
+        "panics": 0,
+        "emitted": 24,
+        "malformed": 0
+      }
+    },
+    "lost_passes": [],
+    "new_errors": [],
+    "new_panics": []
+  }
+}

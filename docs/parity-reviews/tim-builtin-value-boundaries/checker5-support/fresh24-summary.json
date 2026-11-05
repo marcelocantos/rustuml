@@ -1,0 +1,21 @@
+{
+  "total": 24,
+  "valid": 10,
+  "before": 4,
+  "after": 9,
+  "source_matches": 9,
+  "negative_rejected": 7,
+  "panics": 0,
+  "losses": [
+    "/Users/marcelo/Library/Caches/rustuml-review-1703a272/new/keys_exact_spelling.puml"
+  ],
+  "new_valid_errors": [],
+  "cohort955": {
+    "total": 0,
+    "after": 0
+  },
+  "cohort1044": {
+    "total": 0,
+    "after": 0
+  }
+}

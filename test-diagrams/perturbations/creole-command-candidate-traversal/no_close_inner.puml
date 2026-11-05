@@ -1,0 +1,3 @@
+@startuml
+Juniper -> Willow : A<alien **bold** and <$seed
+@enduml

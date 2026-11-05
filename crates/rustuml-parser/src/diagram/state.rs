@@ -123,6 +123,14 @@ pub struct StateNote {
     /// Zero-based order in which note commands created their model entities.
     #[serde(default)]
     pub creation_order: usize,
+    /// Group in effect at the note command: Java creates the note entity
+    /// there (`CommandFactoryNoteOnEntity`). `None` is the root.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parent: Option<String>,
+    /// Qualified state id of a `left of`/`right of` anchor, resolved like
+    /// Java's `quarkInContext(true, ...)` at the note command.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub anchor_id: Option<String>,
 }
 
 /// Where the note is anchored.

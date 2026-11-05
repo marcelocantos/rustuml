@@ -1,0 +1,8 @@
+@startuml
+set namespaceSeparator ::
+package "West Roof" as West {
+package "Inner Bay" as Bay {
+class "Copper Tile" as Tile
+}
+}
+@enduml

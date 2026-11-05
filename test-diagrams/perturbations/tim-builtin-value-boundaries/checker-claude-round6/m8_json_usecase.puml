@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+actor Pilot
+json Log {
+  "when": "dawn\\rdusk",
+  "list": ["x\\ny", "z"]
+}
+@enduml

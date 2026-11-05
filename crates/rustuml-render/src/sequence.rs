@@ -1321,13 +1321,15 @@ struct ParticipantTextBlock<'a> {
     height: f64,
 }
 impl<'a> ParticipantTextBlock<'a> {
-    fn new(text: &'a str, size: f64, family: &str, bold: bool) -> Self {
-        let lines: Vec<_> = text
-            .split('\n')
+    /// `bold`/`italic` are the face the stripe is drawn in:
+    /// `AbstractTextualComponent` (73-95) measures and draws one TextBlock
+    /// built with the participant style's `FontConfiguration` for the label
+    /// and the stereotype style's UFont (italic) for the stereotype line.
+    fn new(text: &'a str, size: f64, family: &str, bold: bool, italic: bool) -> Self {
+        let lines: Vec<_> = Self::lines(text)
             .map(|line| {
-                // StripeSimple#getAtoms supplies a space for a present empty line.
-                let line = if line.is_empty() { " " } else { line };
-                let width = text_render::measure_with_family(line, size, bold, family);
+                let width =
+                    text_render::measure_with_family_and_face(line, size, bold, italic, family);
                 (
                     line,
                     width,
@@ -1342,6 +1344,19 @@ impl<'a> ParticipantTextBlock<'a> {
             width,
             height,
         }
+    }
+    /// The display lines: StripeSimple#getAtoms supplies a space for a
+    /// present empty line.
+    fn lines(text: &str) -> impl Iterator<Item = &str> {
+        text.split('\n')
+            .map(|line| if line.is_empty() { " " } else { line })
+    }
+    /// Height of the block [`Self::new`] builds for `text`; the line metrics
+    /// take no face, so no face is needed.
+    fn height_of(text: &str, size: f64, family: &str) -> f64 {
+        Self::lines(text)
+            .map(|line| rendered_line_metrics_with_family(line, size, family).height)
+            .sum()
     }
     fn draw(&self, buf: &mut String, base: &TextBase<'_>) {
         let mut top = base.y - self.lines[0].2.ascent;
@@ -4999,6 +5014,7 @@ impl PlantUmlSvg {
                 self.participant_font_size as f64,
                 &self.participant_font_family,
                 !stereotype && self.participant_font_bold,
+                *stereotype || self.participant_font_italic,
             );
             block.draw(
                 &mut self.buf,
@@ -5643,22 +5659,19 @@ impl PlantUmlSvg {
         queue_head_offset: f64,
     ) {
         self.participant_group_open(part_uid, qualified_name, source_line, position);
-        // ComponentRoseQueue passes Participant#getDisplay as one ordered label.
-        // Reuse that filtered structure for the pill and every painted stripe.
-        let blocks: Vec<_> = display
+        // ComponentRoseQueue passes Participant#getDisplay as one ordered
+        // label; the pill is as tall as that label. The label is drawn (in
+        // its faces) by `participant_display` below; its height takes no face.
+        let label_height: f64 = display
             .iter()
-            .map(|(text, stereotype)| {
-                (
-                    ParticipantTextBlock::new(
-                        text,
-                        self.participant_font_size as f64,
-                        &self.participant_font_family,
-                        !stereotype && self.participant_font_bold,
-                    ),
-                    *stereotype,
+            .map(|(text, _)| {
+                ParticipantTextBlock::height_of(
+                    text,
+                    self.participant_font_size as f64,
+                    &self.participant_font_family,
                 )
             })
-            .collect();
+            .sum();
         // Pill shape: rounded left side, right side with inner curve
         // From golden SVG for queue "Alice":
         // Main body: M10,10 L52.7236,10 C57.7236,10 57.7236,23.2441 57.7236,23.2441
@@ -5675,7 +5688,7 @@ impl PlantUmlSvg {
         let inner_left = left + cap_r;
         let inner_right = right - cap_r;
         // ComponentRoseQueue -> USymbolQueue uses Display height + margins5/5.
-        let pill_h = blocks.iter().map(|(block, _)| block.height).sum::<f64>() + 5.0 + 5.0;
+        let pill_h = label_height + 5.0 + 5.0;
         let top = if position == "tail" {
             base_y
         } else {
@@ -7129,9 +7142,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             }
             "participantfontstyle" | "sequenceparticipantfontstyle" => {
-                let style = val.to_ascii_lowercase();
-                participant_font_bold = style.contains("bold");
-                participant_font_italic = style.contains("italic");
+                // FromSkinparamToStyle keeps the value; `ValueImpl.asFontFace` reads it.
+                (participant_font_bold, participant_font_italic) =
+                    crate::style_cascade::font_face(val);
             }
             "participantpadding" => {
                 if let Ok(v) = val.parse::<f64>() {
@@ -7753,6 +7766,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         participant_font_size_f,
                         &participant_font_family,
                         false,
+                        true,
                     )
                     .width
                 })
@@ -7763,6 +7777,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 participant_font_size_f,
                 &participant_font_family,
                 participant_font_bold,
+                participant_font_italic,
             );
             let tw = label_block.width;
             let label_height = label_block.height;
@@ -7774,6 +7789,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         participant_font_size_f,
                         &participant_font_family,
                         false,
+                        true,
                     )
                     .height
                 })
@@ -14870,9 +14886,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // CommandDelay preserves spacer atoms. SVG emits the ink text
                 // after leading spacers, while allocation includes both sides.
                 let leading = &t[..t.len() - t.trim_start().len()];
-                let leading_width = text_width_with_family(
+                // The leading spacers are a prefix of the label's stripe, not
+                // a stripe of their own, so none means zero width.
+                let leading_width = text_render::measure_atom_run_with_family(
                     leading,
                     DELAY_LABEL_FONT_SIZE as f64,
+                    false,
                     &message_font_family,
                 );
                 text_render::emit_text(
@@ -16389,8 +16408,13 @@ mod tests {
     #[test]
     fn participant_display_measures_and_paints_each_stripe() {
         for size in [11, 19] {
-            let block =
-                ParticipantTextBlock::new("Long label\n\nEnd", size as f64, "sans-serif", false);
+            let block = ParticipantTextBlock::new(
+                "Long label\n\nEnd",
+                size as f64,
+                "sans-serif",
+                false,
+                false,
+            );
             assert_eq!(block.lines.len(), 3);
             assert_eq!(block.lines[1].0, " ");
             assert_eq!(

@@ -1,0 +1,202 @@
+{
+ "test-diagrams/golden/state/state_composite_entry_only.puml": {
+  "round3_71d16da4a": "Warning: node Composite.ep, port P unrecognized\nWarning: node Composite.ep, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_composite_exit_only.puml": {
+  "round3_71d16da4a": "Warning: node Composite.xp, port P unrecognized\nWarning: node Composite.xp, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_entry1_exit1.puml": {
+  "round3_71d16da4a": "Warning: node Composite.ep0, port P unrecognized\nWarning: node Composite.xp0, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_entry1_exit2.puml": {
+  "round3_71d16da4a": "Warning: node Composite.ep0, port P unrecognized\nWarning: node Composite.xp0, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_entry1_exit3.puml": {
+  "round3_71d16da4a": "Warning: node Composite.ep0, port P unrecognized\nWarning: node Composite.xp0, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_entry2_exit1.puml": {
+  "round3_71d16da4a": "Warning: node Composite.ep0, port P unrecognized\nWarning: node Composite.ep1, port P unrecognized\nWarning: node Composite.xp0, port P unrecognized\nWarning: node Composite.xp0, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_entry2_exit2.puml": {
+  "round3_71d16da4a": "Warning: node Composite.ep0, port P unrecognized\nWarning: node Composite.ep1, port P unrecognized\nWarning: node Composite.xp0, port P unrecognized\nWarning: node Composite.xp1, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_entry2_exit3.puml": {
+  "round3_71d16da4a": "Warning: node Composite.ep0, port P unrecognized\nWarning: node Composite.ep1, port P unrecognized\nWarning: node Composite.xp0, port P unrecognized\nWarning: node Composite.xp1, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_entry3_exit1.puml": {
+  "round3_71d16da4a": "Warning: node Composite.ep0, port P unrecognized\nWarning: node Composite.ep1, port P unrecognized\nWarning: node Composite.ep2, port P unrecognized\nWarning: node Composite.xp0, port P unrecognized\nWarn",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_entry3_exit2.puml": {
+  "round3_71d16da4a": "Warning: node Composite.ep0, port P unrecognized\nWarning: node Composite.ep1, port P unrecognized\nWarning: node Composite.ep2, port P unrecognized\nWarning: node Composite.xp0, port P unrecognized\nWarn",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_entry3_exit3.puml": {
+  "round3_71d16da4a": "Warning: node Composite.ep0, port P unrecognized\nWarning: node Composite.ep1, port P unrecognized\nWarning: node Composite.ep2, port P unrecognized\nWarning: node Composite.xp0, port P unrecognized\nWarn",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_entry_exit_both.puml": {
+  "round3_71d16da4a": "Warning: node Composite.ep, port P unrecognized\nWarning: node Composite.ep, port P unrecognized\nWarning: node Composite.xp, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_entry_exit_in_composite.puml": {
+  "round3_71d16da4a": "Warning: node Composite.exit1, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_entry_in_composite.puml": {
+  "round3_71d16da4a": "Warning: node Composite.ep, port P unrecognized\nWarning: node Composite.ep, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_exit_in_composite.puml": {
+  "round3_71d16da4a": "Warning: node Composite.xp, port P unrecognized\nWarning: node Composite.xp, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_multiple_entry_points.puml": {
+  "round3_71d16da4a": "Warning: node Composite.ep1, port P unrecognized\nWarning: node Composite.ep2, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/state/state_multiple_exit_points.puml": {
+  "round3_71d16da4a": "Warning: node Composite.xp1, port P unrecognized\nWarning: node Composite.xp2, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/golden/usecase/usecase_long_names.puml": {
+  "round3_71d16da4a": "Warning: Unable to reclaim box space in spline routing for edge \"PCCT\" -> \"VPIFC\". Something is probably seriously wrong.\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_lr_together_generic_rank_edge.puml": {
+  "round3_71d16da4a": "Warning: GenericPeerReview was already in a rankset, deleted from cluster G\nWarning: PlainPeerReview was already in a rankset, deleted from cluster G\nWarning: removing empty cluster\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/class-together-structural-layout/review2_note_target_squaremaker_together.puml": {
+  "round3_71d16da4a": "Warning: Review2Memo6503 was already in a rankset, deleted from cluster G\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_entry_inside_autarkic_depth3.puml": {
+  "round3_71d16da4a": "Warning: node Plant.Hall.Bay.door, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_exitpoint_depth1.puml": {
+  "round3_71d16da4a": "Warning: node Forge.vent, port P unrecognized\nWarning: node Forge.vent, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_two_entry_points.puml": {
+  "round3_71d16da4a": "Warning: node Gatehouse.north, port P unrecognized\nWarning: node Gatehouse.south, port P unrecognized\nWarning: node Gatehouse.north, port P unrecognized\nWarning: node Gatehouse.south, port P unrecogni",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_depth2.puml": {
+  "round3_71d16da4a": "Warning: node Mine.Shaft.cage, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_depth3.puml": {
+  "round3_71d16da4a": "Warning: node Mine.Shaft.Level.cage, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_depth4.puml": {
+  "round3_71d16da4a": "Warning: node Tower.Floor.Room.Desk.slot, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml": {
+  "round3_71d16da4a": "Warning: node Works.Shed.gate, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_entry_inside_autarkic.puml": {
+  "round3_71d16da4a": "Warning: node Works.Shed.gate, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_integer_thresholds.puml": {
+  "round3_71d16da4a": "Warning: node ThresholdCabinet.WWWJ, port P unrecognized\nWarning: node ThresholdCabinet.WWWJ, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.puml": {
+  "round3_71d16da4a": "Warning: node PortEnvelopeMatrix.ThresholdBasic, port P unrecognized\nWarning: node PortEnvelopeMatrix.ThresholdBasic, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_short_labels.puml": {
+  "round3_71d16da4a": "Warning: node ShortPortCabinet.I, port P unrecognized\nWarning: node ShortPortCabinet.O, port P unrecognized\nWarning: node ShortPortCabinet.O, port P unrecognized\nWarning: node ShortPortCabinet.I, port",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/cardinal_abbreviation_grid.puml": {
+  "round3_71d16da4a": "Warning: node EastQuay47.ei, port P unrecognized\nWarning: node EastQuay47.ex, port P unrecognized\nWarning: node NorthQuay47.ni, port P unrecognized\nWarning: node NorthQuay47.nx, port P unrecognized\nWa",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/directional_left_up_groups.puml": {
+  "round3_71d16da4a": "Warning: node NorthCell.ni, port P unrecognized\nWarning: node NorthCell.nx, port P unrecognized\nWarning: node WestCell.wi, port P unrecognized\nWarning: node WestCell.wx, port P unrecognized\nWarning: n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/dual_composite_basic_ports.puml": {
+  "round3_71d16da4a": "Warning: node PodAlpha.qa, port P unrecognized\nWarning: node PodAlpha.qz, port P unrecognized\nWarning: node PodBeta.rb, port P unrecognized\nWarning: node PodBeta.ry, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_left_group_link_minimal.puml": {
+  "round3_71d16da4a": "Warning: node LeftNode.li, port P unrecognized\nWarning: node LeftNode.lx, port P unrecognized\nWarning: node RightNode.ri, port P unrecognized\nWarning: node RightNode.rx, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_up_group_link_minimal.puml": {
+  "round3_71d16da4a": "Warning: node UpperNode.ui, port P unrecognized\nWarning: node UpperNode.ux, port P unrecognized\nWarning: node LowerNode.li, port P unrecognized\nWarning: node LowerNode.lx, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/five_group_depth_reordered.puml": {
+  "round3_71d16da4a": "Warning: node DeltaField47.di, port P unrecognized\nWarning: node DeltaField47.dx, port P unrecognized\nWarning: node AlphaField47.ai, port P unrecognized\nWarning: node AlphaField47.ax, port P unrecogni",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.puml": {
+  "round3_71d16da4a": "Warning: node PineBay.pi, port P unrecognized\nWarning: node PineBay.po, port P unrecognized\nWarning: node CedarBay.ci, port P unrecognized\nWarning: node CedarBay.co, port P unrecognized\nWarning: node ",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/four_groups_parallel_projection_order.puml": {
+  "round3_71d16da4a": "Warning: node DeltaPack.di, port P unrecognized\nWarning: node DeltaPack.dx, port P unrecognized\nWarning: node AlphaPack.ai, port P unrecognized\nWarning: node AlphaPack.ax, port P unrecognized\nWarning:",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/mixed_parallel_direction_identity.puml": {
+  "round3_71d16da4a": "Warning: node UmberDock47.ui, port P unrecognized\nWarning: node UmberDock47.ux, port P unrecognized\nWarning: node SableDock47.si, port P unrecognized\nWarning: node SableDock47.sx, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/reordered_basic_ports.puml": {
+  "round3_71d16da4a": "Warning: node ShellKappa.uh, port P unrecognized\nWarning: node ShellKappa.vx, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/reverse_explicit_direction_matrix.puml": {
+  "round3_71d16da4a": "Warning: node IbisVault47.ii, port P unrecognized\nWarning: node IbisVault47.ix, port P unrecognized\nWarning: node LumenVault47.li, port P unrecognized\nWarning: node LumenVault47.lx, port P unrecognize",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_group_link_minimal.puml": {
+  "round3_71d16da4a": "Warning: node FirstNode.fi, port P unrecognized\nWarning: node FirstNode.fx, port P unrecognized\nWarning: node SecondNode.si, port P unrecognized\nWarning: node SecondNode.sx, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_parallel_group_links.puml": {
+  "round3_71d16da4a": "Warning: node RubyCell.ri, port P unrecognized\nWarning: node RubyCell.rx, port P unrecognized\nWarning: node CyanCell.ci, port P unrecognized\nWarning: node CyanCell.cx, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/same_container_port_link.puml": {
+  "round3_71d16da4a": "Warning: node RelayBox.ln, port P unrecognized\nWarning: node RelayBox.mq, port P unrecognized\nWarning: node RelayBox.mq, port P unrecognized\nWarning: node RelayBox.rt, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.puml": {
+  "round3_71d16da4a": "Warning: node CedarArc.ci, port P unrecognized\nWarning: node CedarArc.cx, port P unrecognized\nWarning: node BirchArc.bi, port P unrecognized\nWarning: node BirchArc.bx, port P unrecognized\nWarning: nod",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_long_cubic_round4.puml": {
+  "round3_71d16da4a": "Warning: node ZenithBay47.zi, port P unrecognized\nWarning: node ZenithBay47.zx, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_short_cubic_round4.puml": {
+  "round3_71d16da4a": "Warning: node MicaGate47.mi, port P unrecognized\nWarning: node MicaGate47.mx, port P unrecognized\nWarning: node OpalGate47.oi, port P unrecognized\nWarning: node OpalGate47.ox, port P unrecognized\n",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_root_leaf_interleave.puml": {
+  "round3_71d16da4a": "Warning: node QuartzZone.qa, port P unrecognized\nWarning: node QuartzZone.qx, port P unrecognized\nWarning: node AmberZone.aa, port P unrecognized\nWarning: node AmberZone.ax, port P unrecognized\nWarnin",
+  "tip": ""
+ },
+ "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.puml": {
+  "round3_71d16da4a": "Warning: node DeltaCell.di, port P unrecognized\nWarning: node DeltaCell.do, port P unrecognized\nWarning: node BirchCell.bi, port P unrecognized\nWarning: node BirchCell.bo, port P unrecognized\nWarning:",
+  "tip": ""
+ }
+}

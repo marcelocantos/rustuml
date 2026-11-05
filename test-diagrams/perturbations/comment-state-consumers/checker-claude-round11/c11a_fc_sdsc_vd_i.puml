@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam stateAttributeFontStyle italic
+state E1
+E1 : Avid Dawky Vow 4.7, gym kayak ovo!
+@enduml

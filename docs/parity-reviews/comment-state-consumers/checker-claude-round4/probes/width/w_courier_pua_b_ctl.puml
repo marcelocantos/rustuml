@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Courier
+class "Vault " as V
+@enduml

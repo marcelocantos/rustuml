@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Helvetica
+state "Quay א" as S
+@enduml

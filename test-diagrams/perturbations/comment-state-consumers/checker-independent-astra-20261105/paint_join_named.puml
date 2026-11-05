@@ -1,0 +1,7 @@
+@startuml
+skinparam stateBackgroundColor DarkSlateBlue
+state Empty <<join>>
+state Body <<join>>
+Body : merge cargo
+Empty --> Body
+@enduml

@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "7" as Repeated
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Repeated
+  entities:
+  - id: Repeated
+    label: '7'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

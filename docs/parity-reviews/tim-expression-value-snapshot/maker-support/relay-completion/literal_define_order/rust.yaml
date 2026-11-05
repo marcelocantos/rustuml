@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "LATER / LATER / FIRST!" as Literal
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Literal
+  entities:
+  - id: Literal
+    label: LATER / LATER / FIRST!
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 8
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

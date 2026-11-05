@@ -1,0 +1,10 @@
+@startuml
+!$a="##"
+!$b="twig"
+!raw="$b"
+!function read()
+!return "branch"
+!endfunction
+!$x=%set_variable_value("read()","blocked")
+class "$a$b / ##$b## / raw / read() / xread() / \n$b" as Scan
+@enduml

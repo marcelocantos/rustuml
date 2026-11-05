@@ -1,0 +1,22 @@
+[
+  {
+    "file": "crates/rustuml-render/src/activity.rs",
+    "existing_element_macros": 116,
+    "noncomment_nonpaint_differences": []
+  },
+  {
+    "file": "crates/rustuml-render/src/class.rs",
+    "existing_element_macros": 151,
+    "noncomment_nonpaint_differences": []
+  },
+  {
+    "file": "crates/rustuml-render/src/deployment.rs",
+    "existing_element_macros": 83,
+    "noncomment_nonpaint_differences": []
+  },
+  {
+    "file": "crates/rustuml-render/src/state.rs",
+    "existing_element_macros": 106,
+    "noncomment_nonpaint_differences": []
+  }
+]

@@ -1,0 +1,8 @@
+@startuml
+state Vault {
+  Coin --> Chest
+}
+note right of Vault : locked
+note left of Vault : heavy
+Vault --> Bank
+@enduml

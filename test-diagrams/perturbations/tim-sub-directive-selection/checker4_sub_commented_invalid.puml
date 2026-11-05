@@ -1,0 +1,5 @@
+@startuml
+!$n=0
+!includesub checker4-resources/comment.inc!chosen
+class "n=$n" as Comment
+@enduml

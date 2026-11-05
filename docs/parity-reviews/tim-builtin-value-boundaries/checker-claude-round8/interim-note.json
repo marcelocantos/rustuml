@@ -1,0 +1,100 @@
+{
+ "schema_version": 1,
+ "status": "interim checker note (round 8, claude); written before any C8A, Java-bidi or font-hash relay result exists; NO verdict yet. The final per-mechanism review records follow the relays.",
+ "reviewer": {
+  "task_id": "t3-8de57a6d independent shared-SVG round-8 checker (claude)",
+  "model": "claude-opus-5-5 / Claude Code in T3 Code; no children; did not implement the candidate; no Java run locally"
+ },
+ "tested_revision": "c3116f0b035046bd0a23f410b7ad41e97d6849d7",
+ "code_commit": "9f025704bcc9803fe88c5a3d7e392cce73bc2a88",
+ "account_commit": "7c391218a84589faad83baf2e6419617a0ca89e2",
+ "addendum_commit": "b6646894b083e7149678867e5ef8b97f880f0b6d",
+ "base": "5d8b1f7c1 (code identical to 9834a7194)",
+ "merge": "d6e9ffd94 (code identical to round-7 tip b0ca0a7dc)",
+ "binaries_sha256": {
+  "5d8b1f7c1": "e6a84bd7b7ab8763ca68977d99e9dffe35288f0dd947eb4c07e873567fbc296b",
+  "d6e9ffd94": "be3e68368476122fc9f1d8d9adb8b0f471592bb8328396d67ef2303e505e9762",
+  "c3116f0b0": "9621fc5880657a6a85cffc51c7095599fcc280b60f9eaf5ff90e8287a9a4ac9d"
+ },
+ "account_chronology": "accounts 7c391218a (03:44) precede code 9f025704b (04:02); no account file changed after the code; addendum b6646894b corrects 45 -> 40 triples and the mk8_couriernew attribution. Account/implementation drift (minor): planned pinned scriptMapping.c and hb-common.h are not stored (HB_SCRIPTS/HB_NAMES are hard-coded in the generator and the test; my independent parse of jdk-21.0.5-ga scriptMapping.c agrees); hb-script-list.h is stored instead.",
+ "BN_M8A": {
+  "reference_results_sha256": "c2b735beabf7e558c87f85d3d90ee3894c93a0e1e8a2693c3003f46cfee5d1ee",
+  "maker_rust_predictions_sha256": "66699a836f9298e034809dc04cffeb80a204c3a0b8cb1ab704aaf7cb18def741 (verified)",
+  "strict_base_merge_tip": [
+   17,
+   24,
+   32
+  ],
+  "cases": 63,
+  "java_valid": 63,
+  "lost_vs_merge": [],
+  "lost_vs_base": [],
+  "new_errors_panics": [],
+  "tip_failures": 31,
+  "tip_failures_attribution": "every failing mark case has a failing control at every tree, and its tip mark-minus-control textLength delta equals Java's (widths-BN.json; Syriac: Java's control is wider than the mark case, tip matches the mark case whole-output). Residues: RLE/PDF/LRO/LRE/RLM/ALM format controls measured with width (T14.35 family), Hebrew/Syriac/Hangul/Devanagari fallback-face widths."
+ },
+ "earlier_batches": "AR..BM re-measured at base/merge/tip: no lost match, rejection or comment, no new valid-input error or panic merge->tip or base->tip; merge->tip gains BJ 2, BK 1, BL 2, BM 3 (batch-summary.json).",
+ "goldens_and_sweep": {
+  "sources": 17072,
+  "goldens_byte_identical_merge_to_tip": 12550,
+  "perturbation_outputs_changed_merge_to_tip": 17,
+  "gained": 8,
+  "lost": 0,
+  "stderr_changed": "4, thread ids in pre-existing class.rs panics",
+  "GET_goldens": "act_skinparam2_shadowing_true, act_skinparam_shadowing, edge_whitespace_multiple_blank_lines: MATCH at base, DIFF at merge and tip (earlier rounds, raw-reader contract)"
+ },
+ "gates": {
+  "no_oracle": "11181/11251 at 9834a7194 and tip; failure names differ by the 3 GET goldens (lost, earlier rounds) and preproc_complex_theme_override, state_history_shallow, state_note_composite (gained); merge->tip identical",
+  "golden_pairs": "10497 passed / 754 failed / 1299 skipped at tip",
+  "parity_perturbations": "0 new failures merge->tip; 8 fixed",
+  "harness_guards": "categories identical merge->tip (T14.6.7 path categories 4 x 98 unchanged)",
+  "pipe_mode": "17/17 tip",
+  "workspace_lib": "1604 passed 0 failed 1 ignored at tip",
+  "clippy": "per crate identical diagnostics base = merge = tip (render 19, parser 1, oracle 1; none in new files)",
+  "frozen_items": "unchanged base..tip: crates/rustuml-oracle, test-diagrams/no_oracle_baseline.txt, docs/reference-bootstrap.md, bullseye.yaml"
+ },
+ "verified": {
+  "pinned_sources": "hb-ot-layout.cc 3c4e62bc, hb-ot-shaper.hh 3eb84b0a, hb-script-list.h 898de25a, ubidi.icu 3d394ff3, UnicodeData 18.0.0 0736451d equal fresh downloads from harfbuzz 15.0.0, openjdk/jdk21u jdk-21.0.5-ga and unicode.org (diagnostics/upstream-sources.sha256)",
+  "gdef_blocklist": "40 triples, identical to my parse of the 15.0.0 switch",
+  "ubidi_icu": "0 class differences over all 1,114,112 code points vs Unicode 15.0.0 DerivedBidiClass (with @missing defaults) and vs my independent Trie2_16 decode; 128 bracket pairs equal BidiBrackets.txt",
+  "shaper_groups": "SCRIPT_SHAPERS and HB_SCRIPTS equal my parse of hb-ot-shaper.hh and scriptMapping.c; categorize/ot_script_tags match hb_ot_shaper_categorize and hb_ot_all_tags_from_script",
+  "conformance": "91676/91707 reproduced; the 31 deviations listed in diagnostics/conformance-31.json; whether they are JDK behaviour is pending the Java-bidi relay"
+ },
+ "provisional_findings": {
+  "F1_courier_new_italic_regression (pending C8A)": "RustUML measures every Courier New style with ChainFace::CourierNew (plantuml_metrics::courier_new_text_width ignores bold/italic), so the tip applies the plain face's GDEF blocklist decision to italic text. Courier New Italic.ttf (b5c6d453..., GDEF/GSUB/GPOS 162/914/8502) and Bold Italic (60e4c514..., 114/928/8322) are NOT in the 15.0.0 blocklist and their .notdef is GDEF class 1; local hb-shape 15.0.0 keeps 1229 units for glyph 0 there (diagnostics/hb-shape-diagnostic.txt). Merge keeps the mark, tip zeroes it, in abstract class names, stereotypes, <i> members and usecases (C8A c8a_ci_*, c8a_lt_cnew_thai_stereo). If Java keeps the mark, these are packet-caused whole-output losses on fresh held-out cases -> reject.",
+  "F2_mirroring_residue (pending C8A)": "HarfBuzz mirrors U+2E04 -> U+2E05 in RTL Helvetica (409 -> 408 units, hb-shape diagnostic); RustUML never mirrors. Pre-existing at every tree; the maker's equal-advance assumption is false for this pair. Other modelled faces have no differing mapped mirror pair.",
+  "F3_times_new_roman_italic_blocklisted (pending C8A)": "Times New Roman Italic (490, 3046, 41638) and Bold Italic (478, 3046, 41902) are blocklisted on the host (hb-shape zeroes glyph 0); RustUML's Times path has no shaping model. Pre-existing at every tree. Tahoma/Tahoma Bold are also blocklisted (not modelled).",
+  "F4_drill_survivors": "my drill: 16/19 caught; survivors M12 (requires_bidi without AN), M14 (adjust_ws_levels no-op), M16 (MAX_EXPLICIT_LEVEL 61): the 946-line conformance sample and unit tests do not pin these paths. C8A c8a_bl_lucida_an_digit_thai and the Java-bidi relay exercise them."
+ },
+ "relay_requests": {
+  "C8A": {
+   "dir": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/c8a",
+   "cases": 81,
+   "reference-manifest.json": "67ee5ef6609ed7bed72409b30aa3a018c3f30544b28ee1e4dea1244049d572f6",
+   "reference-input-bundle.json.gz": "a92c2c2863e4dab2c23a506f4da5eae80493a2ad79376044ab9537096bc67aac",
+   "rust-predictions.json (base/merge/tip, before any Java run)": "a9dada95c3b1e24a7ed1f37fd4222aa79606bf32f2825315a3ee89e049d72582"
+  },
+  "Java bidi probe": {
+   "dir": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/bidi-diff/request",
+   "BidiProbe.java": "7e0632e7bddb82e99b7708c122fe8b7bd58b70ccbe6fa747d708a2d3ca83af33",
+   "bidi-input.txt (242,508 lines)": "fb7cd937973956246a1b34bdb9784ee7cf36422d1b8dd398fe47e97c1254d2e2",
+   "rust-tip-levels.txt (prediction, before any Java run)": "8586eeae3036ce4d998b2dc35ec21a0c6b1a5ecfe4b573b29e1b0f514de4013a",
+   "invocation": "/Users/marcelo/rustuml-reference/bin/reference --probe WORKER_PATH/BidiProbe.java -- WORKER_PATH/bidi-input.txt WORKER_PATH/bidi-java-levels.txt"
+  },
+  "Monkey Man font hashes": {
+   "script": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round8-claude-checker/mm-font-hash8/run.sh",
+   "sha256": "23440c91f829fc05d2305d63f0d8662fef24e412997898a688b7ec9107d31f62",
+   "colossus_hashes_sha256": "578da67e334eb4f6f868ea97d1070845ded6b70aebea2fc4fa98d8cd84945145"
+  }
+ },
+ "commands": [
+  "git switch -c review/shared-svg-round8-claude c3116f0b0; git -c protocol.file.allow=always submodule update --init --reference .../rustuml/test-diagrams/golden test-diagrams/golden  # 9efdc12f",
+  "git archive <rev> -> ~/Library/Caches/rustuml-shared-svg-round8-claude-checker/src/<rev>; CARGO_TARGET_DIR=.../target/<rev> cargo build --release -j 6 -p rustuml",
+  "tools/run_batches.sh; tools/batchsum.py; tools/widths.py work BN Pier",
+  "tools/sweep3.sh (17,072 sources x 3 trees, recorded cwd, unchanged comparator)",
+  "tools/gates_all.sh; tools/clippy_json.sh; tools/gatelists.py",
+  "tools/drift_drill8.py <git copy of c3116f0b0> (19 mutations)",
+  "private copy + tools/private-checker-probe.patch: cargo test --release -p rustuml-render --lib java_bidi -- --ignored (conformance and checker_dump_levels)",
+  "tools/check_ubidi_tables.py; hb-shape 15.0.0 diagnostics (diagnostics/)"
+ ]
+}

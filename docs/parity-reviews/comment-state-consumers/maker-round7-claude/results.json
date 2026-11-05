@@ -1,0 +1,1199 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-builtin-value-boundaries",
+ "also_recorded_under": "comment-state-consumers/maker-round7-claude (byte-identical copy)",
+ "status": "maker results; independent checker review required",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "trees": {
+  "base": "460570ba24f3de00d28ef57ee8bf9f476061e585 (parity-recovery-2026-11-03; code identical to 9834a7194)",
+  "merge": "7167620568369689aac23d76f67f9d74bb40b1f7 (round-6 review 4689792ca on maker tip 7e9b16f52, merged with base)",
+  "c1": "9f33bc3b1 (all round-7 code but the clippy commit)",
+  "tip": "the commit that adds this file (evidence only; code identical to c77fa20a2) (code identical to c77fa20a2; later commits add evidence only)"
+ },
+ "commits": [
+  [
+   "7167620568369689aac23d76f67f9d74bb40b1f7",
+   "merge of parity-recovery-2026-11-03 (460570ba2)"
+  ],
+  [
+   "0030a27dd",
+   "accounts before the drafts (5 files, precommitted measurements)"
+  ],
+  [
+   "f74008cd8",
+   "obligations 1 and 4: YAML block port, YamlLine TAB/toList, StyleExtractor preamble"
+  ],
+  [
+   "adc5ffde4",
+   "obligation 5: CR in character data written &#13;"
+  ],
+  [
+   "9f33bc3b1",
+   "obligations 2, 3, 7: HarfBuzz buffer (script run x slot run) marks under HarfBuzz 15.0.0; primary-face extraction; drift gate"
+  ],
+  [
+   "c77fa20a2",
+   "obligation 6: the 13 rustuml-render clippy diagnostics"
+  ],
+  [
+   "the commit that adds this file (evidence only; code identical to c77fa20a2)",
+   "evidence"
+  ]
+ ],
+ "obligations": {
+  "1_yaml_block_style": {
+   "status": "done; BJ acceptance met",
+   "trace": "YamlLine.build 52-97 (header: trimmed value '|' after removeYamlComment), YamlParser 84-85, getBlockStyleString 132-149 (body until a keyed/listed line indented <= the key), cleanBlockStyle 151-154 (String.trim per line)",
+   "measured": "BJ y8_block_inner_pipe, y8_block_inner_pipe_end, y8_block_inner_pipe_nested, y8_block_relative_indent MATCH; y8_block_spaced_pipe, y8_block_comment_pipe, y8_block_two_blocks_end, y8_block_dash_body, y8_block_nested_key, y8_block_whitespace_lines, BI yd7_block_mid_document, BH dc6_yaml_block still MATCH; the '|+' rewrite is removed",
+   "pending": "fresh depth-3 renamed variant y9_block_depth3 and four other block probes staged in L7A"
+  },
+  "2_buffer_marks": {
+   "status": "done for the mark rule; two cases keep pre-existing non-mark residue",
+   "trace": "GlyphLayout.layout 408-431, FontRunIterator.next 115-126, CCompositeGlyphMapper.convertToGlyph 54-67, CoreTextSupport.m 99-133, hb-jdk-font.cc 199-207",
+   "measured": {
+    "mk8_lucida_arabic": "MATCH (lost at merge)",
+    "mk8_seq_arabic": "MATCH (lost at merge)",
+    "mk8_helv_hebrew": "DIFF4: width 52.4043 = Rust control 43.5313 + Helvetica .notdef 8.873, exactly Java's mark decomposition (53.7031 - 44.8301); the remaining difference is the alef advance on which mk8_helv_hebrew_ctrl fails identically at base, merge and tip (Rust measures Helvetica text with SansSerif advances); not a mark defect",
+    "mk8_menlo_hebrew": "DIFF5: exact viewBox 119x68 = Java; mark keeps its 8.4287 cell; residue alef advance (67.4297 vs 67.4023: Java's alef comes from another slot with its own advance, Rust counts a Menlo cell) and the Monospaced family name/NBSP (pre-existing, as mk8_mono_9/23)",
+    "same_buffer_controls": "mk8_lucida_syriac, mk8_helv_hebrew_pres, mk8_cjk_base MATCH; BI mk7_after_hebrew unchanged"
+   },
+   "note": "These two cases cannot match whole-output without the Helvetica/Monospaced family metrics and other-slot advances, which are outside this packet."
+  },
+  "3_harfbuzz_15": {
+   "status": "done",
+   "trace": "hb-ot-shape.cc 85-103, 152-221 (legacy kern only with script_fallback_position; trak needs STAT), 856-879, 988-999, 1051-1090; hb-ot-shape-fallback.cc 189-208, 324-342, 426-497 (hidden/default-ignorable skip); hb-ot-layout.hh 216-260; hb-unicode.hh 167-197 (U+180F); hb-ucd-table.hh Unicode 18.0.0; shapers' zero_width_marks/fallback_position; hangul fallback_position true since 12.2.0 (63e8c13e1, not listed in review-7)",
+   "measured": "BJ mk8_u17_1ad0, mk8_u17_1e6e3, mk8_u18_05c8 MATCH; Unicode 18 Mn table: 70 added vs 16.0.0, 0 removed; provenance comments name 15.0.0",
+   "legacy_kern": "Ported in plan(): apply_kern = has kern && script_fallback_position. On the modelled faces it changes no mark advance (no machine or cross-stream kern; drift gate asserts the facts); Rust models no kern-pair advances, so no other output is affected.",
+   "pending": "fresh Unicode 17/18 marks (U+1AD5, U+10EFA, U+11B60, U+0B53, U+1D127, U+10ECB), U+180F after a Thai base, the hangul fallback change and the base-skip in L7A"
+  },
+  "4_yaml_preprocessing": {
+   "status": "done; all four BJ cases match",
+   "trace": "YamlLine 54 (TAB -> four spaces), 91-93 and toList 117-170, MonomorphToJson 44-80; StyleExtractor 59-98 (preamble skinparam consumed; only handwritten read)",
+   "measured": "BJ y8_real_tab_value, y8_flow_seq_escapes, y8_tabsize4, j8_tabsize4 MATCH (the last two: exit 1 -> MATCH; Java ignores tabSize, eight-space tab stop); perturbation shared-svg-attributes/checker-independent-astra/family_json exit 1 -> MATCH",
+   "residue": "StyleExtractor's handwritten flag, title, scale, skin and <style> effects are not ported (those inputs behave as before)"
+  },
+  "5_svg_text_cr": {
+   "status": "done",
+   "trace": "CharInfo 201/302, 326-334; ToStream 1438-1520, 1619-1650, 1696-1788 (jdk-21.0.5-ga)",
+   "measured": "BJ j8_decoded_cr MATCH; no golden output changed"
+  },
+  "6_clippy": {
+   "status": "done",
+   "measured": "cargo clippy -p <crate> --no-deps -- -D warnings: tip diagnostics equal base per crate (render 19, parser 1 dead_code, oracle 1 useless_format, others 0); merge had render 32. Byte identity of the clippy commit: {\"sources\": 16864, \"stdout_identical\": 16864, \"exit_identical\": 16864}; stderr differs only in thread ids of four pre-existing panic messages"
+  },
+  "7_drift_gate": {
+   "status": "done; one face pending a reference-host hash",
+   "measured": "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction checks both stored extractions' SHA256SUMS, every run table, every plan fact including Helvetica and Helvetica-Bold cross_kern, the GPOS 'hebr' fact, trak/STAT, GPOS-kern invariance, and the Monkey Man font-file hashes; mutation drill 12/12 caught (evidence/drift), M0 green, tree restored",
+   "pending": "Verdana Bold.ttf is not hashed on Monkey Man and its plan can zero (GPOS lacks 'hebr'); PENDING_REFERENCE_HASH lists it and the gate fails if the list goes stale; relay request mm-font-hash"
+  }
+ },
+ "counts": {
+  "goldens": {
+   "sources": 12550,
+   "java_valid": 11351,
+   "java_error": 1199,
+   "base": {
+    "valid_strict_match": 11181,
+    "comments_exact": 11563,
+    "exit": {
+     "1": 76,
+     "0": 12474
+    },
+    "panics": 0,
+    "timeouts": 0,
+    "java_error_rejected": 76,
+    "nonempty_stderr": 94
+   },
+   "merge": {
+    "valid_strict_match": 11181,
+    "comments_exact": 11781,
+    "exit": {
+     "1": 76,
+     "0": 12474
+    },
+    "panics": 0,
+    "timeouts": 0,
+    "java_error_rejected": 76,
+    "nonempty_stderr": 76
+   },
+   "tip1": {
+    "valid_strict_match": 11181,
+    "comments_exact": 11781,
+    "exit": {
+     "1": 76,
+     "0": 12474
+    },
+    "panics": 0,
+    "timeouts": 0,
+    "java_error_rejected": 76,
+    "nonempty_stderr": 76
+   },
+   "base_to_tip": {
+    "comments_gained": 218,
+    "gained_match": [
+     "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+     "test-diagrams/golden/state/state_history_shallow.puml",
+     "test-diagrams/golden/state/state_note_composite.puml"
+    ],
+    "lost_match_GET_provenance": [
+     "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+     "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+     "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+    ],
+    "outputs_changed": 396,
+    "stderr_changed": [
+     "test-diagrams/golden/activity/act_action_ending_flow_final.puml",
+     "test-diagrams/golden/activity/act_action_ending_fork_bar.puml",
+     "test-diagrams/golden/activity/act_action_ending_input.puml",
+     "test-diagrams/golden/activity/act_action_ending_output.puml",
+     "test-diagrams/golden/activity/act_action_ending_receive.puml",
+     "test-diagrams/golden/activity/act_action_ending_send.puml",
+     "test-diagrams/golden/activity/act_edge_all_action_endings_in_if.puml",
+     "test-diagrams/golden/state/state_composite_entry_only.puml",
+     "test-diagrams/golden/state/state_composite_exit_only.puml",
+     "test-diagrams/golden/state/state_entry1_exit1.puml",
+     "test-diagrams/golden/state/state_entry1_exit2.puml",
+     "test-diagrams/golden/state/state_entry1_exit3.puml",
+     "test-diagrams/golden/state/state_entry2_exit1.puml",
+     "test-diagrams/golden/state/state_entry2_exit2.puml",
+     "test-diagrams/golden/state/state_entry2_exit3.puml",
+     "test-diagrams/golden/state/state_entry3_exit1.puml",
+     "test-diagrams/golden/state/state_entry3_exit2.puml",
+     "test-diagrams/golden/state/state_entry3_exit3.puml",
+     "test-diagrams/golden/state/state_entry_exit_both.puml",
+     "test-diagrams/golden/state/state_entry_exit_in_composite.puml",
+     "test-diagrams/golden/state/state_entry_in_composite.puml",
+     "test-diagrams/golden/state/state_exit_in_composite.puml",
+     "test-diagrams/golden/state/state_multiple_entry_points.puml",
+     "test-diagrams/golden/state/state_multiple_exit_points.puml",
+     "test-diagrams/golden/usecase/usecase_long_names.puml"
+    ]
+   },
+   "merge_to_tip": {},
+   "c1_to_tip": {}
+  },
+  "sweep_all": {
+   "sources": 16864,
+   "java_valid": 15352,
+   "java_error": 1512,
+   "base": {
+    "valid_strict_match": 12971,
+    "comments_exact": 14441,
+    "exit": {
+     "1": 171,
+     "0": 16683,
+     "101": 10
+    },
+    "panics": 10,
+    "timeouts": 0,
+    "java_error_rejected": 160,
+    "nonempty_stderr": 223
+   },
+   "merge": {
+    "valid_strict_match": 13825,
+    "comments_exact": 15462,
+    "exit": {
+     "1": 238,
+     "0": 16622,
+     "101": 4
+    },
+    "panics": 4,
+    "timeouts": 0,
+    "java_error_rejected": 231,
+    "nonempty_stderr": 242
+   },
+   "tip1": {
+    "valid_strict_match": 13841,
+    "comments_exact": 15462,
+    "exit": {
+     "1": 235,
+     "0": 16625,
+     "101": 4
+    },
+    "panics": 4,
+    "timeouts": 0,
+    "java_error_rejected": 231,
+    "nonempty_stderr": 239
+   },
+   "base_to_tip": {
+    "comments_gained": 1023,
+    "comments_lost": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+     "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+    ],
+    "error_now_renders_valid_ref": [
+     "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_colon_key.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_trailing_backslash.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_whitespace_lines.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_left_align.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_unknown_pair_escaped_tab.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+     "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+    ],
+    "gained_match": 873,
+    "lost_match_GET_provenance": [
+     "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+     "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+     "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+    ],
+    "outputs_changed": 2007,
+    "panic_removed": [
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+     "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+    ],
+    "rejection_gained": 71,
+    "stderr_changed": 138
+   },
+   "merge_to_tip": {
+    "error_now_renders_valid_ref": [
+     "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+    ],
+    "gained_match": [
+     "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_flow_escape.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_cr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_seq_arabic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1ad0.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1e6e3.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u18_05c8.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_end.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_nested.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_relative_indent.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_flow_seq_escapes.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_real_tab_value.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+    ],
+    "outputs_changed": [
+     "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_flow_escape.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_cr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_hebrew.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_menlo_hebrew.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_seq_arabic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1ad0.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1e6e3.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u18_05c8.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_end.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_nested.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_relative_indent.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_flow_seq_escapes.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_real_tab_value.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+    ],
+    "stderr_changed": [
+     "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+    ]
+   },
+   "c1_to_tip": {
+    "stderr_changed": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+    ]
+   }
+  },
+  "perturbations": {
+   "sources": 4314,
+   "java_valid": 4001,
+   "java_error": 313,
+   "base": {
+    "valid_strict_match": 1790,
+    "comments_exact": 2878,
+    "exit": {
+     "0": 4209,
+     "1": 95,
+     "101": 10
+    },
+    "panics": 10,
+    "timeouts": 0,
+    "java_error_rejected": 84,
+    "nonempty_stderr": 129
+   },
+   "merge": {
+    "valid_strict_match": 2644,
+    "comments_exact": 3681,
+    "exit": {
+     "0": 4148,
+     "1": 162,
+     "101": 4
+    },
+    "panics": 4,
+    "timeouts": 0,
+    "java_error_rejected": 155,
+    "nonempty_stderr": 166
+   },
+   "tip1": {
+    "valid_strict_match": 2660,
+    "comments_exact": 3681,
+    "exit": {
+     "0": 4151,
+     "1": 159,
+     "101": 4
+    },
+    "panics": 4,
+    "timeouts": 0,
+    "java_error_rejected": 155,
+    "nonempty_stderr": 163
+   },
+   "base_to_tip": {
+    "comments_gained": 805,
+    "comments_lost": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+     "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+    ],
+    "error_now_renders_valid_ref": [
+     "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_colon_key.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc6_yaml_trailing_backslash.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_whitespace_lines.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_left_align.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/yd7_unknown_pair_escaped_tab.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+     "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+    ],
+    "gained_match": 870,
+    "outputs_changed": 1611,
+    "panic_removed": [
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+     "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+    ],
+    "rejection_gained": 71,
+    "stderr_changed": 113
+   },
+   "merge_to_tip": {
+    "error_now_renders_valid_ref": [
+     "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+    ],
+    "gained_match": [
+     "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_flow_escape.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_cr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_seq_arabic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1ad0.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1e6e3.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u18_05c8.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_end.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_nested.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_relative_indent.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_flow_seq_escapes.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_real_tab_value.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+    ],
+    "outputs_changed": [
+     "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_flow_escape.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_cr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_helv_hebrew.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_menlo_hebrew.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_seq_arabic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1ad0.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1e6e3.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u18_05c8.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_end.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_nested.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_relative_indent.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_flow_seq_escapes.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_real_tab_value.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+    ],
+    "stderr_changed": [
+     "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+    ]
+   },
+   "c1_to_tip": {
+    "stderr_changed": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+    ]
+   }
+  },
+  "GET_goldens": {
+   "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+    "base": {
+     "exit": 0,
+     "strict": "MATCH"
+    },
+    "merge": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "c1": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "tip1": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   },
+   "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+    "base": {
+     "exit": 0,
+     "strict": "MATCH"
+    },
+    "merge": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "c1": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "tip1": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   },
+   "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+    "base": {
+     "exit": 0,
+     "strict": "MATCH"
+    },
+    "merge": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "c1": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "tip1": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   }
+  },
+  "batches": {
+   "BJ": {
+    "cases": 120,
+    "java_exit_0": 117,
+    "strict_base_merge_tip": [
+     25,
+     80,
+     94
+    ],
+    "strict_and_comments_base_merge_tip": [
+     15,
+     80,
+     94
+    ],
+    "lost_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_merge": [
+     "j8_decoded_cr",
+     "j8_tabsize4",
+     "mk8_lucida_arabic",
+     "mk8_seq_arabic",
+     "mk8_u17_1ad0",
+     "mk8_u17_1e6e3",
+     "mk8_u18_05c8",
+     "y8_block_inner_pipe",
+     "y8_block_inner_pipe_end",
+     "y8_block_inner_pipe_nested",
+     "y8_block_relative_indent",
+     "y8_flow_seq_escapes",
+     "y8_real_tab_value",
+     "y8_tabsize4"
+    ],
+    "new_valid_input_error_vs_merge": [],
+    "new_valid_input_error_vs_base": [],
+    "lost_rejection_vs_merge": [],
+    "lost_rejection_vs_base": [],
+    "new_panic_vs_merge": [],
+    "new_panic_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "stderr_changed_vs_merge": [
+     "j8_tabsize4",
+     "y8_tabsize4"
+    ],
+    "exact_viewbox_base_merge_tip_of_exit0_svg": [
+     24,
+     84,
+     97,
+     117
+    ],
+    "exact_viewbox_lost_vs_merge": [],
+    "exact_viewbox_gained_vs_merge": [
+     "j8_tabsize4",
+     "mk8_lucida_arabic",
+     "mk8_menlo_hebrew",
+     "mk8_seq_arabic",
+     "mk8_u17_1ad0",
+     "mk8_u17_1e6e3",
+     "mk8_u18_05c8",
+     "y8_block_inner_pipe",
+     "y8_block_inner_pipe_end",
+     "y8_block_relative_indent",
+     "y8_flow_seq_escapes",
+     "y8_real_tab_value",
+     "y8_tabsize4"
+    ],
+    "comment_list_exact_base_merge_tip": [
+     53,
+     116,
+     116
+    ],
+    "tip_failures": {
+     "y8_list_key_block": 3,
+     "y8_folded": 3,
+     "y8_escape_trailing": 7,
+     "s8_chr10_seq": 34,
+     "s8_chr13_seq": 34,
+     "s8_chr13_class": 11,
+     "m8_json_class": 28,
+     "m8_json_usecase": 8,
+     "m8_json_crlf": 15,
+     "mk8_helv_hebrew": 4,
+     "mk8_helv_hebrew_ctrl": 4,
+     "mk8_hebrew_lead_mark": 5,
+     "mk8_menlo_hebrew": 5,
+     "mk8_mono_9": 2,
+     "mk8_mono_23": 2,
+     "mk8_serif_9": 5,
+     "mk8_serif_23": 7,
+     "mk8_couriernew_9": 5,
+     "mk8_couriernew_23": 5,
+     "fe8_fe22_complex": 5,
+     "fe8_327e_simple": 4,
+     "fe8_fa2e_simple": 5,
+     "fe8_218a_simple": 4,
+     "fe8_f851_simple": 5,
+     "fe8_f8c0_simple": 5,
+     "fe8_f8fe_simple": 5
+    }
+   },
+   "BI": {
+    "cases": 48,
+    "java_exit_0": 48,
+    "strict_base_merge_tip": [
+     5,
+     39,
+     39
+    ],
+    "strict_and_comments_base_merge_tip": [
+     1,
+     39,
+     39
+    ],
+    "lost_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_valid_input_error_vs_base": [],
+    "lost_rejection_vs_merge": [],
+    "lost_rejection_vs_base": [],
+    "new_panic_vs_merge": [],
+    "new_panic_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "exact_viewbox_base_merge_tip_of_exit0_svg": [
+     7,
+     42,
+     42,
+     48
+    ],
+    "exact_viewbox_lost_vs_merge": [],
+    "exact_viewbox_gained_vs_merge": [],
+    "comment_list_exact_base_merge_tip": [
+     15,
+     48,
+     48
+    ],
+    "tip_failures": {
+     "yd7_raw_brackets": 6,
+     "mk7_after_hebrew": 4,
+     "mk7_after_bracket": 5,
+     "mk7_mono": 2,
+     "fe7_31d0_simple": 4,
+     "fe7_fe20_complex": 5,
+     "fe7_f8b7_simple": 5,
+     "fe7_20b7_simple": 4,
+     "fe7_f880_simple": 5
+    }
+   },
+   "BH": {
+    "cases": 99,
+    "java_exit_0": 96,
+    "strict_base_merge_tip": [
+     12,
+     78,
+     78
+    ],
+    "strict_and_comments_base_merge_tip": [
+     3,
+     78,
+     78
+    ],
+    "lost_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_valid_input_error_vs_base": [],
+    "lost_rejection_vs_merge": [],
+    "lost_rejection_vs_base": [],
+    "new_panic_vs_merge": [],
+    "new_panic_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "exact_viewbox_base_merge_tip_of_exit0_svg": [
+     14,
+     82,
+     82,
+     96
+    ],
+    "exact_viewbox_lost_vs_merge": [],
+    "exact_viewbox_gained_vs_merge": [],
+    "comment_list_exact_base_merge_tip": [
+     21,
+     92,
+     92
+    ],
+    "tip_failures": {
+     "w6_sans_211a": 5,
+     "w6_sans_22ad": 5,
+     "w6_sans_a8fb": 5,
+     "w6_sans_tag_flag": 5,
+     "w6_sans_hebrew_missing": 4,
+     "w6_mono_0870": 2,
+     "w6_mono_e0080": 2,
+     "w6_mono_1e900": 2,
+     "w6_times_e0080": 5,
+     "cm6_state_code": 2,
+     "cm6_object_code": 2,
+     "cm6_usecase_code": 7,
+     "cm6_component_code": 10,
+     "cm6_class_bare": 6,
+     "cm6_class_low": 1,
+     "no6_two_left_same": 20,
+     "no6_note_on_link_image": 26,
+     "no6_floating": 25,
+     "no6_top_depth2": 18,
+     "rp6_group_note_outer_anchor": 12,
+     "rp6_named_floating_in_group": 28
+    }
+   },
+   "BG": {
+    "cases": 53,
+    "java_exit_0": 52,
+    "strict_base_merge_tip": [
+     12,
+     41,
+     42
+    ],
+    "strict_and_comments_base_merge_tip": [
+     0,
+     41,
+     42
+    ],
+    "lost_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_merge": [
+     "dc5_yaml_flow_escape"
+    ],
+    "new_valid_input_error_vs_merge": [],
+    "new_valid_input_error_vs_base": [],
+    "lost_rejection_vs_merge": [],
+    "lost_rejection_vs_base": [],
+    "new_panic_vs_merge": [],
+    "new_panic_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "exact_viewbox_base_merge_tip_of_exit0_svg": [
+     16,
+     46,
+     47,
+     52
+    ],
+    "exact_viewbox_lost_vs_merge": [],
+    "exact_viewbox_gained_vs_merge": [
+     "dc5_yaml_flow_escape"
+    ],
+    "comment_list_exact_base_merge_tip": [
+     6,
+     49,
+     49
+    ],
+    "tip_failures": {
+     "no5_three_notes_image": 23,
+     "no5_note_top_image": 14,
+     "no5_note_bottom_image": 2,
+     "w5_sans_a500": 5,
+     "w5_mono_ctl": 1,
+     "w5_mono_10fffd": 2,
+     "w5_mono_10f800": 2,
+     "w5_mono_e0041": 2,
+     "cm_unit_class_code": 1,
+     "cm_unit_link_code": 20,
+     "cm_unit_package_code": 9
+    }
+   },
+   "BF": {
+    "cases": 46,
+    "java_exit_0": 45,
+    "strict_base_merge_tip": [
+     6,
+     32,
+     32
+    ],
+    "strict_and_comments_base_merge_tip": [
+     1,
+     32,
+     32
+    ],
+    "lost_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_valid_input_error_vs_base": [],
+    "lost_rejection_vs_merge": [],
+    "lost_rejection_vs_base": [],
+    "new_panic_vs_merge": [],
+    "new_panic_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "exact_viewbox_base_merge_tip_of_exit0_svg": [
+     8,
+     34,
+     34,
+     45
+    ],
+    "exact_viewbox_lost_vs_merge": [],
+    "exact_viewbox_gained_vs_merge": [],
+    "comment_list_exact_base_merge_tip": [
+     6,
+     42,
+     42
+    ],
+    "tip_failures": {
+     "cr_ent_dec_10fffd": 6,
+     "cr_wrap_seq_pua": 16,
+     "cr_id_code_pua": 12,
+     "cr_stereotype_pua": 6,
+     "w_courier_pua_b": 1,
+     "w_monospaced_pua_b": 2,
+     "st_bp_multiline_label": 29,
+     "st_bp_root_wide_multiline": 25,
+     "st_np_concurrent_regions": 48,
+     "st_np_link_note_in_cluster": 40,
+     "st_np_outer_floating_with_image": 31,
+     "st_np_outer_note_in_live_cluster_on_image": 38,
+     "st_np_outer_note_top_of_image": 14,
+     "st_np_three_notes_one_cluster": 26
+    }
+   },
+   "BE": {
+    "cases": 34,
+    "java_exit_0": 32,
+    "strict_base_merge_tip": [
+     0,
+     22,
+     22
+    ],
+    "strict_and_comments_base_merge_tip": [
+     0,
+     22,
+     22
+    ],
+    "lost_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_valid_input_error_vs_base": [],
+    "lost_rejection_vs_merge": [],
+    "lost_rejection_vs_base": [],
+    "new_panic_vs_merge": [],
+    "new_panic_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "exact_viewbox_base_merge_tip_of_exit0_svg": [
+     0,
+     22,
+     22,
+     24
+    ],
+    "exact_viewbox_lost_vs_merge": [],
+    "exact_viewbox_gained_vs_merge": [],
+    "comment_list_exact_base_merge_tip": [
+     2,
+     24,
+     24
+    ],
+    "tip_failures": {
+     "fmt_high_eps": -1,
+     "fmt_high_pdf": -1,
+     "fmt_high_png": -1,
+     "fmt_low_eps": -1,
+     "fmt_low_pdf": -1,
+     "fmt_low_png": -1,
+     "fmt_pua_png": -1,
+     "fmt_seq_high_txt": 1,
+     "fmt_seq_low_txt": 1,
+     "fmt_seq_pua_txt": 1,
+     "pua_b_after_lone_high": 0,
+     "pua_b_then_lone_low": 0
+    }
+   },
+   "BC": {
+    "cases": 19,
+    "java_exit_0": 19,
+    "strict_base_merge_tip": [
+     0,
+     18,
+     18
+    ],
+    "strict_and_comments_base_merge_tip": [
+     0,
+     18,
+     18
+    ],
+    "lost_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_valid_input_error_vs_base": [],
+    "lost_rejection_vs_merge": [],
+    "lost_rejection_vs_base": [],
+    "new_panic_vs_merge": [],
+    "new_panic_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "exact_viewbox_base_merge_tip_of_exit0_svg": [
+     0,
+     18,
+     18,
+     19
+    ],
+    "exact_viewbox_lost_vs_merge": [],
+    "exact_viewbox_gained_vs_merge": [],
+    "comment_list_exact_base_merge_tip": [
+     4,
+     18,
+     18
+    ],
+    "tip_failures": {
+     "pua_b_usecase": 12
+    }
+   },
+   "BB": {
+    "cases": 36,
+    "java_exit_0": 36,
+    "strict_base_merge_tip": [
+     2,
+     25,
+     25
+    ],
+    "strict_and_comments_base_merge_tip": [
+     2,
+     25,
+     25
+    ],
+    "lost_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_valid_input_error_vs_base": [],
+    "lost_rejection_vs_merge": [],
+    "lost_rejection_vs_base": [],
+    "new_panic_vs_merge": [],
+    "new_panic_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "exact_viewbox_base_merge_tip_of_exit0_svg": [
+     2,
+     25,
+     25,
+     36
+    ],
+    "exact_viewbox_lost_vs_merge": [],
+    "exact_viewbox_gained_vs_merge": [],
+    "comment_list_exact_base_merge_tip": [
+     11,
+     35,
+     35
+    ],
+    "tip_failures": {
+     "sur_activity_low_end": 0,
+     "sur_class_high_mid_valid": 0,
+     "sur_class_high_then_nonascii": 0,
+     "sur_class_low_end": 0,
+     "sur_class_low_mid": 0,
+     "sur_link_title_escape": 12,
+     "sur_removed_entity": 1,
+     "sur_sequence_high_space": 0,
+     "sur_sequence_participant_high": 0,
+     "sur_state_link_title_escape": 0,
+     "sur_tooltip_high_end": 0
+    }
+   },
+   "AW": {
+    "cases": 45,
+    "java_exit_0": 41,
+    "strict_base_merge_tip": [
+     6,
+     30,
+     30
+    ],
+    "strict_and_comments_base_merge_tip": [
+     6,
+     30,
+     30
+    ],
+    "lost_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_valid_input_error_vs_base": [],
+    "lost_rejection_vs_merge": [],
+    "lost_rejection_vs_base": [],
+    "new_panic_vs_merge": [],
+    "new_panic_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "exact_viewbox_base_merge_tip_of_exit0_svg": [
+     13,
+     30,
+     30,
+     41
+    ],
+    "exact_viewbox_lost_vs_merge": [],
+    "exact_viewbox_gained_vs_merge": [],
+    "comment_list_exact_base_merge_tip": [
+     22,
+     39,
+     39
+    ],
+    "tip_failures": {
+     "theme_plain_activity": 27,
+     "theme_mono_sequence": 19,
+     "theme_amiga_class": 19,
+     "theme_plain_state": 16,
+     "theme_mono_usecase": 12,
+     "theme_amiga_component": 17,
+     "theme_plain_variable": 15,
+     "theme_plain_then_cerulean": 9,
+     "intval_fullwidth_overflow": 0,
+     "intval_supplementary_digit": 0,
+     "intval_superscript_digit": 0,
+     "intval_double_sign": 0,
+     "surrogate_upper_sequence": 0,
+     "surrogate_activity_label": 0,
+     "rh_suffix_undeclared": 2
+    }
+   },
+   "AU": {
+    "cases": 32,
+    "java_exit_0": 29,
+    "strict_base_merge_tip": [
+     6,
+     21,
+     21
+    ],
+    "strict_and_comments_base_merge_tip": [
+     6,
+     21,
+     21
+    ],
+    "lost_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_valid_input_error_vs_base": [],
+    "lost_rejection_vs_merge": [],
+    "lost_rejection_vs_base": [],
+    "new_panic_vs_merge": [],
+    "new_panic_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "exact_viewbox_base_merge_tip_of_exit0_svg": [
+     19,
+     23,
+     23,
+     29
+    ],
+    "exact_viewbox_lost_vs_merge": [],
+    "exact_viewbox_gained_vs_merge": [],
+    "comment_list_exact_base_merge_tip": [
+     22,
+     29,
+     29
+    ],
+    "tip_failures": {
+     "cluster_concurrent_crossing": 19,
+     "delay_legacy_lead2_creole": 9,
+     "delay_legacy_multiline": 18,
+     "delay_teoz_lead3_multiline": 17,
+     "raw_blank_before_start": 7,
+     "raw_multi_blank_first_block": 0,
+     "raw_sequence_two_blanks": 16,
+     "stroke_per_state_css4": 12,
+     "theme_mono_class": 15,
+     "theme_plain_class_note": 18,
+     "theme_plain_sequence": 16
+    }
+   },
+   "AR": {
+    "cases": 20,
+    "java_exit_0": 20,
+    "strict_base_merge_tip": [
+     6,
+     17,
+     17
+    ],
+    "strict_and_comments_base_merge_tip": [
+     6,
+     17,
+     17
+    ],
+    "lost_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_valid_input_error_vs_base": [],
+    "lost_rejection_vs_merge": [],
+    "lost_rejection_vs_base": [],
+    "new_panic_vs_merge": [],
+    "new_panic_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "exact_viewbox_base_merge_tip_of_exit0_svg": [
+     13,
+     18,
+     18,
+     20
+    ],
+    "exact_viewbox_lost_vs_merge": [],
+    "exact_viewbox_gained_vs_merge": [],
+    "comment_list_exact_base_merge_tip": [
+     13,
+     19,
+     19
+    ],
+    "tip_failures": {
+     "delay_legacy_short": 40,
+     "delay_legacy_wide": 27,
+     "deploy_alias_reverse_up": 15
+    }
+   }
+  },
+  "BJ_java_valid_registered": "115 (5 Java error pages are evidence only: y8_folded, y8_list_key_block, s8_chr10_seq, s8_chr13_seq, s8_chr13_class); registered BJ pairs passing at the tip: 94 - 0 error pages = 94 of 115 (the five error pages fail at every tree)",
+  "gates": {
+   "golden_no_oracle": "11181/11251 at base and tip; per family base->tip activity 1299->1297, edge-cases 760->759 (the 3 GET goldens), preprocessing 285->286, state 895->897; CLI-sweep names: lost = act_skinparam2_shadowing_true, act_skinparam_shadowing, edge_whitespace_multiple_blank_lines (GET provenance); gained = preproc_complex_theme_override, state_history_shallow, state_note_composite; merge->tip: no golden output changed",
+   "golden_pairs": "12550 total, 10497 passed, 754 failed, 1299 skipped at base and tip",
+   "parity_perturbations": {
+    "failing": {
+     "base": 1365,
+     "merge": 1700,
+     "tip1": 1684
+    },
+    "new_vs_base_on_files_existing_at_base": [],
+    "new_vs_merge_on_files_existing_at_merge": [],
+    "new_vs_merge_total": 0,
+    "fixed_merge_to_tip": [
+     "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/family_json.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round5/dc5_yaml_flow_escape.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_decoded_cr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/j8_tabsize4.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_lucida_arabic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_seq_arabic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1ad0.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u17_1e6e3.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/mk8_u18_05c8.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_end.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_inner_pipe_nested.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_block_relative_indent.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_flow_seq_escapes.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_real_tab_value.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round6/y8_tabsize4.puml"
+    ]
+   },
+   "harness_guards": "failing tests decimal_literal_ratchet and parity_review_records_are_complete at base, merge and tip; categories identical merge->tip (evidence/gates/*.guard_cats.txt); T14.6.7 categories 98+98 escapes / 98 / 98 / 98 unchanged base->tip; decimal ratchet lines identical merge->tip",
+   "pipe_mode": "17/17 at tip (base 13/13)",
+   "workspace_lib": "1598/1598 at tip (base 1468/1468)",
+   "doc_claims": "2/2"
+  },
+  "clippy": "see obligation 6; evidence/clippy/clippy-diags.json"
+ },
+ "frozen_items": "unchanged: crates/rustuml-oracle (comparator slack, syntax markers, park list, error census, guard allow-lists, 14-entry strict-XML list), test-diagrams/no_oracle_baseline.txt, decimal_literal_baseline.txt, docs/reference-bootstrap.md, test-diagrams/",
+ "pending_relay_requests": {
+  "L7A": {
+   "dir": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round7-claude-maker/l7a",
+   "cases": 49,
+   "intended_invalid": [
+    "y9_skinparam_after_data"
+   ],
+   "reference-manifest.json": "cf8071ba477fbede6124889c0f0aba365526aab8f7aa4c9f4951db8ab1ffadc6",
+   "reference-input-bundle.json.gz": "65522daff0c8db953b374e385777da6e4f75be7d8d79b55f66afc7dc3bb2df9f",
+   "rust-predictions.json": "8b4ce1c0e9ab64fb9095bb07df099f4ddc93537a9cb27f18b06e61ad67f57367 (base, merge, tip builds; registered before Java)",
+   "invocation": "-pipe -tsvg from PRIVATE_CWD, timezone GMT+11:00"
+  },
+  "mm-font-hash": {
+   "dir": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round7-claude-maker/mm-font-hash",
+   "run.sh": "4cf4b0686a4c1800eb5511be8507635ef4a83f1df848b2bd6ab47138dced7891",
+   "purpose": "SHA256 of the nine primary-face font files on Monkey Man (read-only); resolves PENDING_REFERENCE_HASH (Verdana Bold)"
+  }
+ },
+ "out_of_scope_not_fixed": [
+  "T14.6.8 owner decision",
+  "JSON elements inside class/usecase diagrams (m8_json_class, m8_json_usecase, m8_json_crlf)",
+  "Courier New and Monospaced family-name handling (mk8_couriernew_*, mk8_mono_*)",
+  "y8_escape_trailing (Java trailing-backslash continuation)"
+ ],
+ "other_known_residue": [
+  "mk8_hebrew_lead_mark: HarfBuzz normalization decomposes U+FB1D into yod + hiriq in Lucida Grande (Java 54.2295 = 10.5 + 4.4434 + 39.2861); normalization is not modelled (unchanged at base, merge and tip)",
+  "mk8_serif_9/23: Serif measured with Lucida Grande (pre-existing family mapping)",
+  "BJ s8_chr13_class and s8_chr13_seq (Java syntax errors, exit 200; Rust renders at base, merge and tip: pre-existing lost rejections) change output only by the CR now written &#13;",
+  "Older relay batches (AR..BG) were captured before the 2026-10-28 HarfBuzz switch; none of their shaping-dependent results contradicts 15.0.0 here (0 changes vs merge outside BJ and BG dc5_yaml_flow_escape, a YAML case)"
+ ]
+}

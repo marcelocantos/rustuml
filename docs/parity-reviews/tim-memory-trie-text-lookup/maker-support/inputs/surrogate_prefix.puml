@@ -1,0 +1,5 @@
+@startuml
+!$x=%set_variable_value("ax","short")
+!$x=%set_variable_value("ax😀z","long")
+class "ax😁 / ax😀x / ax / ax😀z / 😀ax / ax²" as Astral
+@enduml

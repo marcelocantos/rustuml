@@ -1,0 +1,448 @@
+{
+ "rustuml-render": {
+  "merge": {
+   "count": 20,
+   "by_code": {
+    "dead_code": 1,
+    "clippy::filter_map_bool_then": 1,
+    "clippy::question_mark": 1,
+    "clippy::obfuscated_if_else": 1,
+    "clippy::chunks_exact_to_as_chunks": 5,
+    "clippy::if_same_then_else": 1,
+    "clippy::useless_borrows_in_formatting": 10
+   },
+   "diags": [
+    {
+     "level": "warning",
+     "code": "dead_code",
+     "file": "crates/rustuml-parser/src/parse/component.rs",
+     "line": 74,
+     "message": "function `looks_like_description_bracket_command` is never used"
+    },
+    {
+     "level": "error",
+     "code": "clippy::filter_map_bool_then",
+     "file": "crates/rustuml-render/src/class.rs",
+     "line": 4161,
+     "message": "usage of `bool::then` in `filter_map`"
+    },
+    {
+     "level": "error",
+     "code": "clippy::question_mark",
+     "file": "crates/rustuml-render/src/class.rs",
+     "line": 12008,
+     "message": "this `let...else` may be rewritten with the `?` operator"
+    },
+    {
+     "level": "error",
+     "code": "clippy::obfuscated_if_else",
+     "file": "crates/rustuml-render/src/class.rs",
+     "line": 13399,
+     "message": "this method chain can be written more clearly with `if .. else ..`"
+    },
+    {
+     "level": "error",
+     "code": "clippy::chunks_exact_to_as_chunks",
+     "file": "crates/rustuml-render/src/component.rs",
+     "line": 7042,
+     "message": "using `chunks_exact` with a constant chunk size"
+    },
+    {
+     "level": "error",
+     "code": "clippy::chunks_exact_to_as_chunks",
+     "file": "crates/rustuml-render/src/deployment.rs",
+     "line": 6033,
+     "message": "using `chunks_exact` with a constant chunk size"
+    },
+    {
+     "level": "error",
+     "code": "clippy::chunks_exact_to_as_chunks",
+     "file": "crates/rustuml-render/src/handwritten.rs",
+     "line": 487,
+     "message": "using `chunks_exact` with a constant chunk size"
+    },
+    {
+     "level": "error",
+     "code": "clippy::chunks_exact_to_as_chunks",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 376,
+     "message": "using `chunks_exact` with a constant chunk size"
+    },
+    {
+     "level": "error",
+     "code": "clippy::if_same_then_else",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 3705,
+     "message": "this `if` has identical blocks"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13630,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13644,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13682,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13767,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13777,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13797,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13827,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13837,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13847,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13873,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::chunks_exact_to_as_chunks",
+     "file": "crates/rustuml-render/src/state.rs",
+     "line": 6199,
+     "message": "using `chunks_exact` with a constant chunk size"
+    }
+   ]
+  },
+  "tip": {
+   "count": 20,
+   "by_code": {
+    "dead_code": 1,
+    "clippy::filter_map_bool_then": 1,
+    "clippy::question_mark": 1,
+    "clippy::obfuscated_if_else": 1,
+    "clippy::chunks_exact_to_as_chunks": 5,
+    "clippy::if_same_then_else": 1,
+    "clippy::useless_borrows_in_formatting": 10
+   },
+   "diags": [
+    {
+     "level": "warning",
+     "code": "dead_code",
+     "file": "crates/rustuml-parser/src/parse/component.rs",
+     "line": 74,
+     "message": "function `looks_like_description_bracket_command` is never used"
+    },
+    {
+     "level": "error",
+     "code": "clippy::filter_map_bool_then",
+     "file": "crates/rustuml-render/src/class.rs",
+     "line": 4161,
+     "message": "usage of `bool::then` in `filter_map`"
+    },
+    {
+     "level": "error",
+     "code": "clippy::question_mark",
+     "file": "crates/rustuml-render/src/class.rs",
+     "line": 12008,
+     "message": "this `let...else` may be rewritten with the `?` operator"
+    },
+    {
+     "level": "error",
+     "code": "clippy::obfuscated_if_else",
+     "file": "crates/rustuml-render/src/class.rs",
+     "line": 13399,
+     "message": "this method chain can be written more clearly with `if .. else ..`"
+    },
+    {
+     "level": "error",
+     "code": "clippy::chunks_exact_to_as_chunks",
+     "file": "crates/rustuml-render/src/component.rs",
+     "line": 7042,
+     "message": "using `chunks_exact` with a constant chunk size"
+    },
+    {
+     "level": "error",
+     "code": "clippy::chunks_exact_to_as_chunks",
+     "file": "crates/rustuml-render/src/deployment.rs",
+     "line": 6033,
+     "message": "using `chunks_exact` with a constant chunk size"
+    },
+    {
+     "level": "error",
+     "code": "clippy::chunks_exact_to_as_chunks",
+     "file": "crates/rustuml-render/src/handwritten.rs",
+     "line": 487,
+     "message": "using `chunks_exact` with a constant chunk size"
+    },
+    {
+     "level": "error",
+     "code": "clippy::chunks_exact_to_as_chunks",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 376,
+     "message": "using `chunks_exact` with a constant chunk size"
+    },
+    {
+     "level": "error",
+     "code": "clippy::if_same_then_else",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 3715,
+     "message": "this `if` has identical blocks"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13636,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13650,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13688,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13773,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13783,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13803,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13833,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13843,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13853,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_borrows_in_formatting",
+     "file": "crates/rustuml-render/src/sequence.rs",
+     "line": 13879,
+     "message": "redundant reference in `write!` argument"
+    },
+    {
+     "level": "error",
+     "code": "clippy::chunks_exact_to_as_chunks",
+     "file": "crates/rustuml-render/src/state.rs",
+     "line": 6203,
+     "message": "using `chunks_exact` with a constant chunk size"
+    }
+   ]
+  }
+ },
+ "rustuml-parser": {
+  "merge": {
+   "count": 1,
+   "by_code": {
+    "dead_code": 1
+   },
+   "diags": [
+    {
+     "level": "error",
+     "code": "dead_code",
+     "file": "crates/rustuml-parser/src/parse/component.rs",
+     "line": 74,
+     "message": "function `looks_like_description_bracket_command` is never used"
+    }
+   ]
+  },
+  "tip": {
+   "count": 1,
+   "by_code": {
+    "dead_code": 1
+   },
+   "diags": [
+    {
+     "level": "error",
+     "code": "dead_code",
+     "file": "crates/rustuml-parser/src/parse/component.rs",
+     "line": 74,
+     "message": "function `looks_like_description_bracket_command` is never used"
+    }
+   ]
+  }
+ },
+ "rustuml-layout": {
+  "merge": {
+   "count": 0,
+   "by_code": {},
+   "diags": []
+  },
+  "tip": {
+   "count": 0,
+   "by_code": {},
+   "diags": []
+  }
+ },
+ "rustuml-oracle": {
+  "merge": {
+   "count": 2,
+   "by_code": {
+    "dead_code": 1,
+    "clippy::useless_format": 1
+   },
+   "diags": [
+    {
+     "level": "warning",
+     "code": "dead_code",
+     "file": "crates/rustuml-parser/src/parse/component.rs",
+     "line": 74,
+     "message": "function `looks_like_description_bracket_command` is never used"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_format",
+     "file": "crates/rustuml-oracle/src/matrix/activity.rs",
+     "line": 24,
+     "message": "useless use of `format!`"
+    }
+   ]
+  },
+  "tip": {
+   "count": 2,
+   "by_code": {
+    "dead_code": 1,
+    "clippy::useless_format": 1
+   },
+   "diags": [
+    {
+     "level": "warning",
+     "code": "dead_code",
+     "file": "crates/rustuml-parser/src/parse/component.rs",
+     "line": 74,
+     "message": "function `looks_like_description_bracket_command` is never used"
+    },
+    {
+     "level": "error",
+     "code": "clippy::useless_format",
+     "file": "crates/rustuml-oracle/src/matrix/activity.rs",
+     "line": 24,
+     "message": "useless use of `format!`"
+    }
+   ]
+  }
+ },
+ "rustuml": {
+  "merge": {
+   "count": 1,
+   "by_code": {
+    "dead_code": 1
+   },
+   "diags": [
+    {
+     "level": "warning",
+     "code": "dead_code",
+     "file": "crates/rustuml-parser/src/parse/component.rs",
+     "line": 74,
+     "message": "function `looks_like_description_bracket_command` is never used"
+    }
+   ]
+  },
+  "tip": {
+   "count": 1,
+   "by_code": {
+    "dead_code": 1
+   },
+   "diags": [
+    {
+     "level": "warning",
+     "code": "dead_code",
+     "file": "crates/rustuml-parser/src/parse/component.rs",
+     "line": 74,
+     "message": "function `looks_like_description_bracket_command` is never used"
+    }
+   ]
+  }
+ },
+ "rustuml-math": {
+  "merge": {
+   "count": 0,
+   "by_code": {},
+   "diags": []
+  },
+  "tip": {
+   "count": 0,
+   "by_code": {},
+   "diags": []
+  }
+ }
+}

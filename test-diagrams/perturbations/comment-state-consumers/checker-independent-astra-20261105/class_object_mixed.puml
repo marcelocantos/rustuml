@@ -1,0 +1,7 @@
+@startuml
+class "Drawn Class" as Cobalt
+object "Stored Value" as Value
+interface "Drawn Port" as Port
+Cobalt --> Value
+Value --> Port
+@enduml

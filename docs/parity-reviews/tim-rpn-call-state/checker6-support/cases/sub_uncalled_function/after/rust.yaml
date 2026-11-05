@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class Survivor
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Survivor
+  entities:
+  - id: Survivor
+    label: Survivor
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 6
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

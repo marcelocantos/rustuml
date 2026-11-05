@@ -1,0 +1,10 @@
+@startuml
+Road --> Toll
+state Toll {
+  Booth --> Bar
+}
+state Toll {
+  note left of Booth : pay
+}
+Road --> Booth
+@enduml

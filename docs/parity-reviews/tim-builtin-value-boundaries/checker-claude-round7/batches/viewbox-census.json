@@ -1,0 +1,268 @@
+{
+ "AR": {
+  "exact_viewbox": {
+   "base": 13,
+   "merge": 18,
+   "tip": 18
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [],
+  "comments_exact": {
+   "base": 13,
+   "merge": 19,
+   "tip": 19
+  }
+ },
+ "AU": {
+  "exact_viewbox": {
+   "base": 19,
+   "merge": 23,
+   "tip": 23
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [],
+  "comments_exact": {
+   "base": 22,
+   "merge": 29,
+   "tip": 29
+  }
+ },
+ "AW": {
+  "exact_viewbox": {
+   "base": 13,
+   "merge": 30,
+   "tip": 30
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [],
+  "comments_exact": {
+   "base": 22,
+   "merge": 43,
+   "tip": 43
+  }
+ },
+ "BB": {
+  "exact_viewbox": {
+   "base": 2,
+   "merge": 25,
+   "tip": 25
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [],
+  "comments_exact": {
+   "base": 11,
+   "merge": 35,
+   "tip": 35
+  }
+ },
+ "BC": {
+  "exact_viewbox": {
+   "base": 0,
+   "merge": 18,
+   "tip": 18
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [],
+  "comments_exact": {
+   "base": 4,
+   "merge": 18,
+   "tip": 18
+  }
+ },
+ "BE": {
+  "exact_viewbox": {
+   "base": 0,
+   "merge": 22,
+   "tip": 22
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [],
+  "comments_exact": {
+   "base": 2,
+   "merge": 24,
+   "tip": 24
+  }
+ },
+ "BF": {
+  "exact_viewbox": {
+   "base": 8,
+   "merge": 34,
+   "tip": 34
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [],
+  "comments_exact": {
+   "base": 6,
+   "merge": 42,
+   "tip": 42
+  }
+ },
+ "BG": {
+  "exact_viewbox": {
+   "base": 16,
+   "merge": 46,
+   "tip": 47
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [
+   "dc5_yaml_flow_escape"
+  ],
+  "comments_exact": {
+   "base": 6,
+   "merge": 49,
+   "tip": 49
+  }
+ },
+ "BH": {
+  "exact_viewbox": {
+   "base": 14,
+   "merge": 82,
+   "tip": 82
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [],
+  "comments_exact": {
+   "base": 22,
+   "merge": 93,
+   "tip": 93
+  }
+ },
+ "BI": {
+  "exact_viewbox": {
+   "base": 7,
+   "merge": 42,
+   "tip": 42
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [],
+  "comments_exact": {
+   "base": 15,
+   "merge": 48,
+   "tip": 48
+  }
+ },
+ "BJ": {
+  "exact_viewbox": {
+   "base": 24,
+   "merge": 84,
+   "tip": 97
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [
+   "j8_tabsize4",
+   "mk8_lucida_arabic",
+   "mk8_menlo_hebrew",
+   "mk8_seq_arabic",
+   "mk8_u17_1ad0",
+   "mk8_u17_1e6e3",
+   "mk8_u18_05c8",
+   "y8_block_inner_pipe",
+   "y8_block_inner_pipe_end",
+   "y8_block_relative_indent",
+   "y8_flow_seq_escapes",
+   "y8_real_tab_value",
+   "y8_tabsize4"
+  ],
+  "comments_exact": {
+   "base": 55,
+   "merge": 118,
+   "tip": 118
+  }
+ },
+ "BK": {
+  "exact_viewbox": {
+   "base": 6,
+   "merge": 18,
+   "tip": 35
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [
+   "j9_skinparam_block",
+   "mk9_180f_thai",
+   "mk9_hangul_space",
+   "mk9_u17_10efa",
+   "mk9_u17_11b60",
+   "mk9_u17_1ad5",
+   "mk9_u18_10ecb",
+   "mk9_u18_1d127",
+   "mk9_u18_b53",
+   "y9_block_depth3",
+   "y9_block_text_dedent",
+   "y9_flow_seq_empty",
+   "y9_flow_seq_number",
+   "y9_flow_seq_quotes",
+   "y9_hide_then_data",
+   "y9_tab_indent",
+   "y9_tab_key"
+  ],
+  "comments_exact": {
+   "base": 16,
+   "merge": 49,
+   "tip": 49
+  }
+ },
+ "BL": {
+  "exact_viewbox": {
+   "base": 21,
+   "merge": 40,
+   "tip": 75
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [
+   "c7j_hide_pragma",
+   "c7j_skinparam_ws_block",
+   "c7m_180f_deva",
+   "c7m_180f_verdana",
+   "c7m_hangul_comma_1d167",
+   "c7m_hangul_helv",
+   "c7m_hangul_seq",
+   "c7m_u17_10efb_note",
+   "c7m_u17_11b66_activity",
+   "c7m_u17_1acf",
+   "c7m_u17_1ad9_mono_seq",
+   "c7m_u17_1ae5_seq",
+   "c7m_u17_1e6f5",
+   "c7m_u18_0b54_latin",
+   "c7m_u18_10ef9_state",
+   "c7m_u18_1d128_mono",
+   "c7m_u18_1d25b_helv",
+   "c7y_block_depths",
+   "c7y_block_key_tab",
+   "c7y_block_listlike_body",
+   "c7y_block_tab_body",
+   "c7y_block_text_col0",
+   "c7y_cr_block",
+   "c7y_flow_colon_inside",
+   "c7y_flow_escapes2",
+   "c7y_flow_nested_brackets",
+   "c7y_flow_quote_trailing",
+   "c7y_key_hide_space",
+   "c7y_pre_mix",
+   "c7y_pre_skinparam_indented",
+   "c7y_skinparam_brace_inline",
+   "c7y_tab_flow",
+   "c7y_tab_nested_key",
+   "c7y_tab_quoted",
+   "c7y_tab_value_multi"
+  ],
+  "comments_exact": {
+   "base": 71,
+   "merge": 141,
+   "tip": 141
+  }
+ },
+ "BM": {
+  "exact_viewbox": {
+   "base": 7,
+   "merge": 8,
+   "tip": 8
+  },
+  "viewbox_lost_vs_merge": [],
+  "viewbox_gained_vs_merge": [],
+  "comments_exact": {
+   "base": 0,
+   "merge": 26,
+   "tip": 26
+  }
+ }
+}

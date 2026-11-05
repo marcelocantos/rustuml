@@ -1,0 +1,25 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-builtin-value-boundaries",
+ "kind": "addendum after measurement (Monkey Man extraction and relay batch r6a = BI), before the change",
+ "amends": "maker-round6-claude/unmapped-mark-advance-account.json",
+ "measured": {
+  "extraction": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round6-monkeyman-fontchain/out/ (SHA256SUMS sha256 1c345cc384f0edb939dac3b87cf135db67ed7b6f8ffb76b586a8f9fd8480a6ed): jdk-fontmanager.txt shows the reference JDK's libfontmanager.dylib linked against /opt/homebrew/opt/harfbuzz/lib/libharfbuzz.0.dylib, compatibility version 61001.0.0; no HarfBuzz is bundled.",
+  "BI": "mk7_0897_u16 (U+0897, Mn from Unicode 16) and mk7_1e5ee_u16 (U+1E5EE) have zero advance in Java (49.7861 = 'Vault ' 39.2861 + U+10FFFD 10.5; 39.2861); the draft predicted .notdef. mk7_after_hebrew ('Vault ' + U+05D0 + U+1D17B) is 48.3164 = 39.2861 + alef 9.0303 + 0 (alef 9.0303 also in mk7_after_bracket); the draft kept .notdef for a mark in a Hebrew run."
+ },
+ "version": "HarfBuzz meson.build 27 (10.0.1): hb_version_int = 60000 + major*100 + minor*10 + micro; src/meson.build 595: darwin_versions = [hb_version_int, ...]. 61001 = 10.0.1 (10.1.0 would be 61010). hb-ucd-table.hh of 10.0.1: Unicode 16.0.0. The linked version is recorded at build time of the openjdk@21 bottle; the loaded file's own version is not in the extraction (residue; the Unicode 16 marks above are evidence for a Unicode-16 UCD).",
+ "sources": "https://github.com/harfbuzz/harfbuzz tag 10.0.1: hb-ot-shape.cc, hb-ot-shape-fallback.cc, hb-ot-shaper.hh, hb-ot-shaper-*.cc, hb-unicode.hh. Compared with the JDK-bundled 8.2.2: the planner (79-97, 136-209), hb_synthesize_glyph_classes, zero_mark_widths_by_gdef, hb_ot_position_plan, zero_mark_advances, position_cluster, _hb_ot_shape_fallback_mark_position and _hb_unicode_is_default_ignorable are identical except for whitespace; hb_ot_shaper_categorize only adds the Unicode 16 scripts.",
+ "rule_correction": [
+  "hb-ot-shape.cc 90-91: script_fallback_mark_positioning is the categorized shaper's fallback_position, taken before morx swaps a non-default shaper for dumber (94-96); 192-201: fallback_mark_positioning = adjust_mark_positioning_when_zeroing (no GPOS, no kerx, no kern or no cross-stream kern) && script_fallback_mark_positioning; 207-208 clears only adjust_mark_positioning_when_zeroing for morx.",
+  "hb-ot-shape.cc 1118-1120 then runs _hb_ot_shape_fallback_mark_position (hb-ot-shape-fallback.cc 440-462): each base (a glyph whose character is not a Unicode mark Mn/Mc/Me) with the Unicode marks after it is a cluster; position_cluster (412-437) -> position_around_base -> zero_mark_advances (188-205) zeroes every Mn of the cluster (by general category, whatever the glyph class).",
+  "Shapers' fallback_position (10.0.1): default, arabic, hebrew true; thai, indic, khmer, myanmar, use, hangul false.",
+  "So an unmapped Mn in complex text is zero when (a) its run is default-shaped and the face zeroes marks by GDEF (unchanged), or (b) the face has no GPOS/kerx/cross-stream kern, its run's categorized shaper is default, arabic (Arabic, Syriac) or hebrew, and a non-mark base precedes it in the run with only marks between."
+ ],
+ "face_fact": "Cross-stream kern: Helvetica and Helvetica-Bold have one Apple kern subtable, format 0, coverage bit 0x4000 clear (CoreText table read on colossus, same macOS build and system font file; the round-6 extraction records the format but not the bit). Lucida Grande and Menlo have no kern; faces with GPOS never take the fallback path.",
+ "change": [
+  "tools/font_chain_unicode.py: NONSPACING_MARKS and a new UNICODE_MARKS (Mn, Mc, Me) from UnicodeData 16.0.0; FALLBACK_POSITIONED_SCRIPTS = Arabic, Syriac, Hebrew.",
+  "font_chain: Complexity::Complex carries the run's shaper class and whether a base precedes the token in its run; FaceCoverage gains fallback_positions_marks (generated from #hb_plan plus the cross-stream fact).",
+  "The base must share the HarfBuzz buffer (script run and font slot run); the port checks the script run only (residue: a base from another slot font)."
+ ],
+ "expect": "BI mk7_0897_u16, mk7_1e5ee_u16 match; mk7_after_hebrew's mark zeroed (the case keeps the pre-existing Hebrew mapped-advance residue); BH 180F/1D17B/16FE4 and every BI/BH mark probe that matches keeps matching."
+}

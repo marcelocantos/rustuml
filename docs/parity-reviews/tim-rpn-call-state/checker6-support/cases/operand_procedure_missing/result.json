@@ -1,0 +1,164 @@
+{
+  "source": "/tmp/rustuml-checker6/new/operand_procedure_missing.puml",
+  "mechanism": "tim-call-operand-resolution",
+  "axes": [
+    "coverage",
+    "default argument"
+  ],
+  "negative": true,
+  "cwd": "/tmp/rustuml-checker6/new",
+  "zone": "GMT+11:00",
+  "debug": "date=1774210426000,tz=AEDT+1100",
+  "env": {},
+  "golden": "/tmp/rustuml-checker6/relay25/operand_procedure_missing/java.svg.stdout",
+  "reference_source": "/tmp/rustuml-checker6/relay25/operand_procedure_missing/java.source.stdout",
+  "java_exit": 200,
+  "java_probe_exit": 0,
+  "source_sha256": "3503bd8f1256efacf363ee182cec8ca8ee12bb0d6076629c7d3739371c97fd82",
+  "golden_sha256": "5d8cf286d9ece55f30decfa99208fe1040bf669e8a5cdcacd126fb588df05537",
+  "suite": "fresh25",
+  "capture_id": "0007-operand_procedure_missing",
+  "reference_valid": false,
+  "reference_xml_valid": true,
+  "phases": {
+    "before": {
+      "cli_exit": 1,
+      "comparison_exit": 2,
+      "svg_match": false,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "dfdb99ee2b8e65558a16ae01e7cc5b1a7e403b4c64a0a9b11f4c12a74296eaa6"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/before-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "dfdb99ee2b8e65558a16ae01e7cc5b1a7e403b4c64a0a9b11f4c12a74296eaa6"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay25/operand_procedure_missing/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh25/0007-operand_procedure_missing/before/rust.svg"
+      ],
+      "first_diagnostic": [
+        "parse error: line 4: Illegal call here. Is there a return directive in your function?"
+      ],
+      "source_equal": false
+    },
+    "after": {
+      "cli_exit": 1,
+      "comparison_exit": 2,
+      "svg_match": false,
+      "panic": false,
+      "calls": [
+        {
+          "mode": "svg",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "fded0ff2ae17d531376ffb6b52d2ad7859a89a110712294c3c48ce5dc509a9ec"
+        },
+        {
+          "mode": "yaml",
+          "argv": [
+            "/tmp/rustuml-checker6/after-rustuml",
+            "--yaml",
+            "-pipe"
+          ],
+          "cwd": "/tmp/rustuml-checker6/new",
+          "env_overrides": {
+            "TZ": "GMT+11:00",
+            "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+            "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+            "RAYON_NUM_THREADS": "4"
+          },
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "fded0ff2ae17d531376ffb6b52d2ad7859a89a110712294c3c48ce5dc509a9ec"
+        }
+      ],
+      "comparison_argv": [
+        "/tmp/rustuml-checker6/probe",
+        "compare",
+        "/tmp/rustuml-checker6/relay25/operand_procedure_missing/java.svg.stdout",
+        "/tmp/rustuml-checker6/replay/fresh25/0007-operand_procedure_missing/after/rust.svg"
+      ],
+      "first_diagnostic": [
+        "parse error: line 4: Unknown built-in function $emit"
+      ],
+      "source_equal": false
+    }
+  },
+  "actual_source": "/tmp/rustuml-checker6/new/operand_procedure_missing.puml",
+  "actual_golden": "/tmp/rustuml-checker6/relay25/operand_procedure_missing/java.svg.stdout",
+  "committed_source": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_missing.puml",
+  "committed_golden": "test-diagrams/perturbations/tim-call-operand-resolution/checker6/operand_procedure_missing.svg",
+  "committed_evidence": "docs/parity-reviews/tim-rpn-call-state/checker6-support/cases/operand_procedure_missing",
+  "java_svg_text": [
+    "Welcome to PlantUML!",
+    "\u00a0",
+    "You can start with a simple UML Diagram like:",
+    "\u00a0",
+    "Bob->Alice:\u00a0Hello",
+    "\u00a0",
+    "Or",
+    "\u00a0",
+    "class\u00a0Example",
+    "\u00a0",
+    "You will find more information about PlantUML syntax on",
+    "https://plantuml.com",
+    "\u00a0",
+    "(Details by typing",
+    "license",
+    "keyword)",
+    "\u00a0",
+    "PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]",
+    "[From string (line 5) ]",
+    "\u00a0",
+    "@startuml",
+    "!procedure $emit($a,$b=\"default\")",
+    "class Phantom",
+    "!endprocedure",
+    "!$x=$emit()",
+    "Unknown built-in function $emit"
+  ]
+}

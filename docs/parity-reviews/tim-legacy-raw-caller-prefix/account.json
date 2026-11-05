@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-legacy-raw-caller-prefix",
+  "rust_revision": "079c1bc1ffc325e8ebfa1719bc0ce2d3c71573c2",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/TContext.java:applyFunctionsAndVariables,pendingAdd,executeVoid3"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Multiline legacy expansion prefixes the first emitted line with the raw caller substring before the call, while procedure expansion uses the evaluated prefix; legacy suffix is discarded.",
+  "causal_divergence": "The scanner uses its evaluated result for both forms and changes the visible source when a variable or function precedes a multiline macro.",
+  "planned_change": "Use the immutable original caller slice at the macro position for LEGACY_DEFINELONG only. Keep evaluation effects already executed and preserve suffix dropping and procedure behavior.",
+  "perturbation_axes": [
+    "Variable and function expansion before macro",
+    "Indentation, repeated invocations, and suffix retention distinction"
+  ],
+  "prior_evidence": "5d37f60cbce90a3f3a9efb199c75285d6b7b859f (import 079c1bc1); prior accounts and rejected implementations remain immutable",
+  "oracle_plan": [
+    "Replay unchanged 1516/31/29 and maker15/prior17 memberships with overlap explicit; actual CLI, exact source/model, status/error/XML separate.",
+    "Compact source-guided remote relay controls; no local JVM or SSH. Preserve every failed iteration and negative reference.",
+    "Final main tiers, parser/CLI, guards/standing once stabilized. No acceptance claim; fresh independent checker required."
+  ]
+}

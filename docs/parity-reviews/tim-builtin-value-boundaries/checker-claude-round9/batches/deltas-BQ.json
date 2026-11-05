@@ -1,0 +1,94 @@
+{
+ "m9b_seqnote_p2029_pdf": {
+  "strict": {
+   "base": [
+    "DIFF",
+    "DIFF"
+   ],
+   "merge": [
+    "DIFF",
+    "DIFF"
+   ],
+   "tip": [
+    "DIFF",
+    "DIFF"
+   ]
+  },
+  "delta_java": 4.5703,
+  "delta_base": 17.5704,
+  "delta_merge": 17.5704,
+  "delta_tip": 4.5704,
+  "base_delta_eq_java": false,
+  "merge_delta_eq_java": false,
+  "tip_delta_eq_java": true
+ },
+ "m9b_seqnote_nel_pdf": {
+  "strict": {
+   "base": [
+    "DIFF",
+    "DIFF"
+   ],
+   "merge": [
+    "DIFF",
+    "DIFF"
+   ],
+   "tip": [
+    "DIFF",
+    "DIFF"
+   ]
+  },
+  "delta_java": 4.5703,
+  "delta_base": 17.5703,
+  "delta_merge": 17.5703,
+  "delta_tip": 4.5703,
+  "base_delta_eq_java": false,
+  "merge_delta_eq_java": false,
+  "tip_delta_eq_java": true
+ },
+ "m9b_act_p2029_pdf": {
+  "strict": {
+   "base": [
+    "DIFF",
+    "DIFF"
+   ],
+   "merge": [
+    "DIFF",
+    "DIFF"
+   ],
+   "tip": [
+    "DIFF",
+    "DIFF"
+   ]
+  },
+  "delta_java": 4.6142,
+  "delta_base": 16.2187,
+  "delta_merge": 16.2187,
+  "delta_tip": 4.2187,
+  "base_delta_eq_java": false,
+  "merge_delta_eq_java": false,
+  "tip_delta_eq_java": false
+ },
+ "m9b_seqnote_p2029_mixed": {
+  "strict": {
+   "base": [
+    "DIFF",
+    "DIFF"
+   ],
+   "merge": [
+    "DIFF",
+    "DIFF"
+   ],
+   "tip": [
+    "DIFF",
+    "DIFF"
+   ]
+  },
+  "delta_java": 0.0,
+  "delta_base": 20.1792,
+  "delta_merge": 7.1792,
+  "delta_tip": 7.1792,
+  "base_delta_eq_java": false,
+  "merge_delta_eq_java": false,
+  "tip_delta_eq_java": false
+ }
+}

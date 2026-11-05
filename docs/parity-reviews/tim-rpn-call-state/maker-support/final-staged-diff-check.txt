@@ -1,0 +1,5 @@
+docs/parity-reviews/tim-rpn-call-state/maker-support/relay18/hsl_bounds/before/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/maker-support/relay18/hsl_types/before/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/maker-support/relay18/keys_spelling/before/comparison.stdout:20: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/maker-support/relay18/macro_effect/before/comparison.stdout:35: new blank line at EOF.
+docs/parity-reviews/tim-rpn-call-state/maker-support/relay18/macro_raw/before/comparison.stdout:17: new blank line at EOF.

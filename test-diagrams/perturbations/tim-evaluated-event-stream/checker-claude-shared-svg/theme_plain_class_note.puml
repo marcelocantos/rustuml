@@ -1,0 +1,7 @@
+@startuml
+!theme plain
+class Heron
+class Egret
+Heron --> Egret
+note right of Egret : memo
+@enduml

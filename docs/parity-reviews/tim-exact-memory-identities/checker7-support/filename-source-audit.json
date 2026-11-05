@@ -1,0 +1,5 @@
+{
+  "restored_verbatim": true,
+  "before_and_after_block": "            \"filename\" => {\n                // PlantUML's `%filename()` returns the source file name (basename\n                // without extension) when called from a real file. The picoweb /\n                // \"From string\" pipeline used to generate our goldens produces\n                // empty for this builtin (no source file). Return empty to match\n                // that golden behaviour; file-API callers would need to thread\n                // the actual filename through a separate channel.\n                String::new()\n            }\n",
+  "intermediate_absent": true
+}

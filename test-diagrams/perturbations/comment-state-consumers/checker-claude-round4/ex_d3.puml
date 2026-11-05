@@ -1,0 +1,14 @@
+@startuml
+state Site {
+  state Hall {
+    state Bay {
+      state Rig {
+        Drill --> stop1
+        state stop1 <<exitPoint>>
+      }
+      stop1 --> Sort
+    }
+    Sort --> Pack
+  }
+}
+@enduml

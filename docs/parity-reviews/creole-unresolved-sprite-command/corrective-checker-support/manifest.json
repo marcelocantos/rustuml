@@ -1,0 +1,392 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/unknown_repeated.puml",
+    "source_sha256": "796436bb2d2f7ea0f8728ead1eeda678e1164d97a7be16a932c95dfdc6223fc9",
+    "mechanism": "creole-command-candidate-traversal",
+    "axes": [
+      "command/line content",
+      "style and boundary position"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/unknown_known.puml",
+    "source_sha256": "bdade2923514f656475b7787bc81b44680a4238ab257714519ef437a2bf07c1a",
+    "mechanism": "creole-command-candidate-traversal",
+    "axes": [
+      "command/line content",
+      "style and boundary position"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/unknown_escaped.puml",
+    "source_sha256": "21eebb1c222ea995a9e8ddb5e6fed3d41bd318a170377583be0ee5e8d0649d53",
+    "mechanism": "creole-command-candidate-traversal",
+    "axes": [
+      "command/line content",
+      "style and boundary position"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/no_close_inner.puml",
+    "source_sha256": "5054ca7ae8e7381eb134aa121e22fa2a57176b895833453d111263987c9c5bea",
+    "mechanism": "creole-command-candidate-traversal",
+    "axes": [
+      "command/line content",
+      "style and boundary position"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/unicode_edges.puml",
+    "source_sha256": "92470b46f7f2527431d9cd86017f3e324c752ec6c7bb6b5e21454e6064c0a9a9",
+    "mechanism": "creole-command-candidate-traversal",
+    "axes": [
+      "command/line content",
+      "style and boundary position"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/empty_bold_recognition.puml",
+    "source_sha256": "9a438796cb97f7bbb1acedd3615076a28dda7d89376a7fbc1a5a6227174aa331",
+    "mechanism": "creole-command-candidate-traversal",
+    "axes": [
+      "command/line content",
+      "style and boundary position"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/style_restore.puml",
+    "source_sha256": "89225c7dbcc41bdcc93889b619001cc635516488afbc49ee06daa4a0a3ef17d7",
+    "mechanism": "creole-command-candidate-traversal",
+    "axes": [
+      "command/line content",
+      "style and boundary position"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/malformed_controls.puml",
+    "source_sha256": "9259130b6072d6aad04b56d162f19286bf39c2b85020fc8215b090abae4170ee",
+    "mechanism": "creole-command-candidate-traversal",
+    "axes": [
+      "command/line content",
+      "style and boundary position"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/malformed_dot.puml",
+    "source_sha256": "81706b427552ac6c2887ae3154bcc8ea2abbe0796c358dc16bf37eb13435419f",
+    "mechanism": "creole-command-candidate-traversal",
+    "axes": [
+      "command/line content",
+      "style and boundary position"
+    ],
+    "negative": true,
+    "intended_validity": "intended_nonpositive",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/present_positions.puml",
+    "source_sha256": "3dab778ee8e39758a5c9dba9a32d9aae5a71d9d23cb683ee05c5393de18be9dc",
+    "mechanism": "creole-present-empty-stripe",
+    "axes": [
+      "command/line content",
+      "style and boundary position"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/present_style_restore.puml",
+    "source_sha256": "07f29366895af3b4a7b7178982e0248c72170f7f27386c224cda1625d92b2d0b",
+    "mechanism": "creole-present-empty-stripe",
+    "axes": [
+      "command/line content",
+      "style and boundary position"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/present_bold_empty.puml",
+    "source_sha256": "be999203114828ad000786dd2ddbd590700dabe617cbd7422c8614ec18cfc7c3",
+    "mechanism": "creole-present-empty-stripe",
+    "axes": [
+      "command/line content",
+      "style and boundary position"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/present_small.puml",
+    "source_sha256": "b70a11ece37a3c582c5d6403b91df493f75dda3f9a0fd7d2738162c7faf22eff",
+    "mechanism": "creole-present-empty-stripe",
+    "axes": [
+      "command/line content",
+      "style and boundary position"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/absent_class.puml",
+    "source_sha256": "78a00dde6ebb05c05cd8b8c96b61982da6650d7310f9ffe6add252c1bab29b0c",
+    "mechanism": "creole-present-empty-stripe",
+    "axes": [
+      "absent edge label",
+      "class consumer"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/absent_state.puml",
+    "source_sha256": "cca1e7961ac5597ec060ca07461987c1c76e0dc86673d1065099a23805c11b50",
+    "mechanism": "creole-present-empty-stripe",
+    "axes": [
+      "absent edge label",
+      "state consumer"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/absent_activity.puml",
+    "source_sha256": "5b3c1e8be4dd5aabfcc1d9e7ba58218ef5d12d9a99f267ff6dc030be1d62f45c",
+    "mechanism": "creole-present-empty-stripe",
+    "axes": [
+      "absent edge label",
+      "activity consumer"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/absent_sequence.puml",
+    "source_sha256": "a94ec36f76a50b0fe0512f98874455dd515fe78e16f78f06c9028aed43f06a68",
+    "mechanism": "creole-present-empty-stripe",
+    "axes": [
+      "absent versus empty",
+      "sequence consumer"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/wbs_plain_depth.puml",
+    "source_sha256": "d261fbc9fdb5a35134c4d54dafc221592eeb0b3dbd228067fa40c6fefb394193",
+    "mechanism": "wbs-semantic-text-measurement",
+    "axes": [
+      "label styles/empty/multiline",
+      "root-child/depth/direction/shape"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/wbs_mixed_depth.puml",
+    "source_sha256": "58edfc1566d2bad13596a2a4198160b6239e74003bf851d1ec0ef2f14f97baa8",
+    "mechanism": "wbs-semantic-text-measurement",
+    "axes": [
+      "label styles/empty/multiline",
+      "root-child/depth/direction/shape"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/wbs_multiline_root.puml",
+    "source_sha256": "3e8c0936ff8ce9891dec56232e7f18266f7c55935f39a582df53c967d0c0b903",
+    "mechanism": "wbs-semantic-text-measurement",
+    "axes": [
+      "label styles/empty/multiline",
+      "root-child/depth/direction/shape"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/wbs_multiline_child.puml",
+    "source_sha256": "5c0e352d844201cb12859658cc28c5efd4a6d066522f97680168782446e98707",
+    "mechanism": "wbs-semantic-text-measurement",
+    "axes": [
+      "label styles/empty/multiline",
+      "root-child/depth/direction/shape"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/wbs_empty_root.puml",
+    "source_sha256": "e0ca97c4e3eef89cd1aa8927af4304fce7a3504d47fdf42bc33e054d30a45517",
+    "mechanism": "wbs-semantic-text-measurement",
+    "axes": [
+      "label styles/empty/multiline",
+      "root-child/depth/direction/shape"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/wbs_empty_children.puml",
+    "source_sha256": "353b1b942b7281cb14bccd97c64ac4f3aea5d10f9533c0c6ad5ff51710fda286",
+    "mechanism": "wbs-semantic-text-measurement",
+    "axes": [
+      "label styles/empty/multiline",
+      "root-child/depth/direction/shape"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/wbs_boxless.puml",
+    "source_sha256": "2a7b782968977681fd74ff4df9e7f1ec3da15dc919c9b5b2c87e5e3cc12da383",
+    "mechanism": "wbs-semantic-text-measurement",
+    "axes": [
+      "label styles/empty/multiline",
+      "root-child/depth/direction/shape"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/wbs_mixed_baseline.puml",
+    "source_sha256": "aaac96f5d74069679068dc17f3137661996d3407cb0e09d989e2003af1c6290b",
+    "mechanism": "wbs-semantic-text-measurement",
+    "axes": [
+      "label styles/empty/multiline",
+      "root-child/depth/direction/shape"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/new/wbs_newline_empty.puml",
+    "source_sha256": "842e814c2790084840c4d0b4be0e5879fedc157aa6d842dcea63b888efb5d420",
+    "mechanism": "wbs-semantic-text-measurement",
+    "axes": [
+      "label styles/empty/multiline",
+      "root-child/depth/direction/shape"
+    ],
+    "negative": false,
+    "intended_validity": "intended_valid",
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  }
+]

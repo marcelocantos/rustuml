@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Lucida Grande
+state Quay
+Quay : <i>Wharf qr</i>
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+  
+	
+skinparam shadowing true
+class Heron
+Heron --> Egret
+@enduml

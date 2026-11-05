@@ -1,0 +1,11 @@
+@startuml
+!define MODE prod
+!if $MODE == "prod"
+class Wrong
+!else
+class Right
+!endif
+!foreach $x in ["first","last"]
+note "$MODE / $x" as N$x
+!endfor
+@enduml

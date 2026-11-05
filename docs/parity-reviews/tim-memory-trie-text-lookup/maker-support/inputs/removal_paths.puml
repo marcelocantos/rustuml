@@ -1,0 +1,7 @@
+@startuml
+!ab="short"
+!abcde="long"
+!$before="ab / abcdX / abcde"
+!undef abcde
+class "$before / ab / abcdX / abcde" as Removed
+@enduml

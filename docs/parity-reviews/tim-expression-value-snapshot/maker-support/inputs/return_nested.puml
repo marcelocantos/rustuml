@@ -1,0 +1,16 @@
+@startuml
+!$n=0
+!function $choose()
+!foreach $word in ["005","006"]
+!while $n < 3
+!$n=$n+1
+!return $word+2
+!$n=99
+!endwhile
+!$n=88
+!endfor
+!return "miss"
+!endfunction
+!$a=$choose()
+class "$a / $n" as Return
+@enduml

@@ -1,0 +1,7 @@
+@startyaml
+note: |
+  Moss line
+
+  Fern line
+after: x
+@endyaml

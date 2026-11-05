@@ -1,0 +1,8 @@
+@startuml
+state Hub {
+  note right of Spoke : turn
+  Rim --> Spoke
+  --
+  Axle --> Nut
+}
+@enduml

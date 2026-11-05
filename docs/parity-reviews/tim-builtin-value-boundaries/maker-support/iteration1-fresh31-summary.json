@@ -1,0 +1,17 @@
+{
+  "total": 31,
+  "matches": 21,
+  "invalid": 10,
+  "panics": 0,
+  "gains": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_chr_typed_numeric.puml",
+    "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_definelong.puml",
+    "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_newline_boundary.puml",
+    "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_local_end_marker.puml",
+    "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_registered_unimplemented.puml",
+    "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_named_global_snapshot.puml"
+  ],
+  "losses": [],
+  "new_valid_errors": []
+}

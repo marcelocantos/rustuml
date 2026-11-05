@@ -1,0 +1,11 @@
+type: Sequence
+diagram:
+  meta:
+    source: |
+      @startuml
+      @enduml
+  participants: []
+  events: []
+  autonumber: null
+  hide_footbox: false
+  teoz: false

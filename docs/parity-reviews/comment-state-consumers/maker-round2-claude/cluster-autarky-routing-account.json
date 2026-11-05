@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "mechanism": "comment-state-consumers",
+  "sub_mechanism": "state cluster-versus-image drawing routed through Entity.isAutarkic; nested clusters inside autarkic images; X[H]/X[H*] suffix history (rejection d539f9a08)",
+  "status": "maker causal account before draft; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "correction_to_previous_account": "e2431c84e said Cluster.drawU runs only for groups left in the root SVEK image. That premise is incomplete. GroupMakerState.getImage builds a nested SVEK (GeneralImageBuilder over the group's children) for every autarkic group, and a non-autarkic group inside it stays a group there, so Cluster.drawU also runs inside the image: Java writes 'cluster Shed' from inside the autarkic Works image (cluster_entry_inside_autarkic). The comment and the drawing are one decision: a group drawn by Cluster.drawU gets the comment; a group replaced by a GroupMakerState image does not.",
+  "java_locations": [
+    "svek/CucaDiagramSimplifierState.java#simplify/getOrdered: groups are visited deepest first; each autarkic group is replaced by GroupMakerState(diagram, g).getImage() (g.overrideImage), and the loop repeats until no group changes. A replaced group is a leaf to its parent.",
+    "abel/Entity.java#isAutarkic (lines 686-711): CONCURRENT_STATE is autarkic; otherwise every link of the diagram (diagram.getLinks(), note links included) must satisfy EntityUtils.isPureInnerLink3, and every direct leaf must have EntityPosition.NORMAL.",
+    "abel/EntityUtils.java#isPureInnerLink3 (lines 76-88): a link is pure inner when both or neither endpoint's parent container is inside the group.",
+    "abel/Entity.java#getEntityPosition (lines 324-345) -> EntityPosition.fromStereotype: entryPoint, exitPoint, inputPin, outputPin, expansionInput, expansionOutput (compared ignoring case) are non-NORMAL.",
+    "command/note/CommandFactoryNoteOnEntity: 'note right of X' creates a note entity in the current group plus a Link between note and X, so a root note on an inner leaf is a crossing link (cluster_root_note_on_inner).",
+    "svek/image/... GroupMakerState.getImage: a group with no children returns EntityImageState (an ordinary state box, no comment).",
+    "svek/Cluster.java#drawU (lines 309-311): writes 'cluster ' + group.getName() unless the name starts with ##.",
+    "statediagram/command/CommandLinkStateCommon.java (lines 75, 168-178) and StateDiagram.java#getHistorical(location, idShort)/getDeepHistory(location, idShort): 'X[H]'/'X[H*]' resolves X with quarkInContext(true, cleanId(X)), enters it as a STATE group (gotoGroup), creates *historical*X or *deephistory*X inside it, and leaves the group."
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs#java_state_group_is_autarkic (decision), autonomous_group_is_autarkic (links only, used for drawing), build_state_group_outcome, build_autonomous_composite, render_non_autarkic_root_clusters, emit_root_state_cluster.",
+    "crates/rustuml-parser/src/parse/state.rs#try_transition (endpoint regex), ensure_state, try_note."
+  ],
+  "causal_divergence": [
+    "Drawing and comment use different predicates: build_state_group_outcome draws by autonomous_group_is_autarkic (links only), the comment by java_state_group_is_autarkic.",
+    "render_non_autarkic_root_clusters, the only path that lays out border points, refuses diagrams without a root-scope transition (Mill, Press, Sluice) and treats every composite as a cluster, including a childless one Java draws as a state box (Canal); diagrams it refuses fall through to the flat path, which cannot draw a cluster at all.",
+    "Neither SVEK path accepts notes, and java_state_group_is_autarkic ignores note links (Kiln).",
+    "The autonomous path refuses any non-NORMAL leaf, so a non-autarkic group with an entry point inside an autarkic image (Shed in Works) cannot be drawn.",
+    "The transition regex has no X[H] / X[H*] endpoint, so both Vault links are dropped."
+  ],
+  "invariant": "For every state group, Rust draws a Cluster (with its comment) exactly when Java's CucaDiagramSimplifierState leaves it a group, at the root or inside an autarkic image, and draws an image or a state box (without comment) otherwise. The decision is java_state_group_is_autarkic everywhere.",
+  "planned_change": [
+    "java_state_group_is_autarkic also counts attached-note links, using the note's declaring group (new serde-defaulted StateNote.parent) and its resolved anchor.",
+    "build_state_group_outcome chooses Cluster or Image with java_state_group_is_autarkic; emit_root_state_cluster writes the comment for every drawn cluster (## names excepted).",
+    "render_non_autarkic_root_clusters accepts any diagram whose child-bearing groups are all non-autarkic (no root-scope-transition or two-group requirement); childless groups are ordinary state nodes; attached notes join its SVEK layout as nodes with the line0/minlen-0 opale edge and are painted with emit_attached_svek_note.",
+    "Image regions accept a non-autarkic child group whose border points are laid out as cluster source/sink nodes, as the root path does, when that is reachable without new geometry; otherwise the case is recorded as residual.",
+    "The parser accepts X[H] and X[H*] endpoints: X is resolved and marked composite as gotoGroup does, and the endpoint is the history marker scoped to X."
+  ],
+  "perturbation_axes": [
+    "entry/exit point and pin leaves, mixed-case stereotypes, at depth 1-3",
+    "root note on an inner leaf versus a note declared inside the group",
+    "a non-autarkic group inside an autarkic group, at depths 2 and 3",
+    "quark reuse with a childless group",
+    "X[H] and X[H*] from the root, from inside another group, and naming an undeclared X",
+    "renamed labels and changed child counts for each of the seven acceptance groups"
+  ],
+  "precommitted_measurement": {
+    "oracle": "the exact comment-list oracle (tools/comments.py) and strict compare on the seven acceptance groups (Mill, Sluice, Press, Kiln, Shed, Vault, Basin/Lock) plus renamed held-out probes; whole-output CLI on goldens and perturbations versus the merged base; golden_no_oracle failure names versus 9834a7194; parity_perturbations",
+    "expect_fixed": [
+      "comment lists exact for cluster_entry_point, quark_reuse_crossing, cluster_inputpin_mixed_case, cluster_root_note_on_inner, history_external_suffix_form, cluster_entry_inside_autarkic; history_depth2_crossing stays exact"
+    ],
+    "expect": "outputs change only for state diagrams that previously reached the flat path with a composite, or that use X[H]; zero lost strict matches; geometry (cluster size) may still differ and is reported per case"
+  }
+}

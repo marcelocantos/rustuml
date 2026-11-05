@@ -1,0 +1,10 @@
+@startuml
+!$p="expanded"
+!definelong ROWS()
+one
+two
+!enddefinelong
+note as N
+  $p ROWS() discarded
+end note
+@enduml

@@ -1,0 +1,15 @@
+{
+ "stats": {
+  "Arial/0/0/exact": 232,
+  "Arial/0/1/exact": 67,
+  "Arial/1/0/exact": 55,
+  "Arial/1/1/exact": 46,
+  "Verdana/0/0/exact": 494,
+  "Verdana/0/1/exact": 156,
+  "Verdana/0/1/only_own_slot_and_differs_from_upright": 147,
+  "Verdana/1/0/exact": 106,
+  "Verdana/1/1/exact": 101,
+  "Verdana/1/1/only_own_slot_and_differs_from_upright": 100
+ },
+ "misses": []
+}

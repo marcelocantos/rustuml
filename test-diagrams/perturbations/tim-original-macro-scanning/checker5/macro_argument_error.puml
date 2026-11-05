@@ -1,0 +1,6 @@
+@startuml
+!definelong MARK(x)
+x
+!enddefinelong
+class "MARK(%boolval("bad"),extra)" as Lost
+@enduml

@@ -1,0 +1,3 @@
+@startuml
+archimate #Business "L<back:transparent>Mist</back>R" as Ledger
+@enduml

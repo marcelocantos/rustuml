@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Courier New
+state "<i>Pier x𝅧</i>" as S
+S : <i>Desc d𝅧</i>
+[*] --> S : <i>Lbl l𝅧</i>
+@enduml

@@ -1,0 +1,3 @@
+@startuml
+Birch -> Larch : <size:31><color:red><b><$north>
+@enduml

@@ -51,6 +51,12 @@ unsafe extern "C" {
     pub static Agundirected: Agdesc_t;
     pub static Agstrictundirected: Agdesc_t;
 
+    // ── Diagnostics ──
+    /// Replace the function cgraph uses to report `agerr` messages.
+    pub fn agseterrf(
+        newf: Option<unsafe extern "C" fn(*mut c_char) -> c_int>,
+    ) -> Option<unsafe extern "C" fn(*mut c_char) -> c_int>;
+
     // ── GVC context ──
     pub fn gvContext() -> *mut GVC_t;
     pub fn gvFreeContext(gvc: *mut GVC_t) -> c_int;

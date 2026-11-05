@@ -1,0 +1,134 @@
+{
+ "c9a_fs_vd_i_uc": {
+  "strict_merge": "DIFF",
+  "strict_tip": "MATCH",
+  "changed_texts": [
+   {
+    "index": 0,
+    "text": "Wharf q𝅧r",
+    "family": "Verdana",
+    "style": "italic",
+    "weight": null,
+    "merge": "75.626",
+    "tip": "75.6465",
+    "java": null,
+    "tip_eq_java": false
+   }
+  ],
+  "every_changed_text_eq_java": false,
+  "len_merge_tip": [
+   1,
+   1
+  ]
+ },
+ "c9a_fs_vd_i_uc_ctrl": {
+  "strict_merge": "DIFF",
+  "strict_tip": "MATCH",
+  "changed_texts": [
+   {
+    "index": 0,
+    "text": "Wharf qr",
+    "family": "Verdana",
+    "style": "italic",
+    "weight": null,
+    "merge": "61.626",
+    "tip": "61.6465",
+    "java": "61.6465",
+    "tip_eq_java": true
+   }
+  ],
+  "every_changed_text_eq_java": true,
+  "len_merge_tip": [
+   1,
+   1
+  ]
+ },
+ "c9a_fs_vd_i_class": {
+  "strict_merge": "DIFF",
+  "strict_tip": "MATCH",
+  "changed_texts": [
+   {
+    "index": 1,
+    "text": "Wharf q𝅧r",
+    "family": "Verdana",
+    "style": "italic",
+    "weight": null,
+    "merge": "75.626",
+    "tip": "75.6465",
+    "java": null,
+    "tip_eq_java": false
+   }
+  ],
+  "every_changed_text_eq_java": false,
+  "len_merge_tip": [
+   2,
+   2
+  ]
+ },
+ "c9a_fs_vd_i_class_ctrl": {
+  "strict_merge": "DIFF",
+  "strict_tip": "MATCH",
+  "changed_texts": [
+   {
+    "index": 1,
+    "text": "Wharf qr",
+    "family": "Verdana",
+    "style": "italic",
+    "weight": null,
+    "merge": "61.626",
+    "tip": "61.6465",
+    "java": "61.6465",
+    "tip_eq_java": true
+   }
+  ],
+  "every_changed_text_eq_java": true,
+  "len_merge_tip": [
+   2,
+   2
+  ]
+ },
+ "c9a_ns_vd_interface": {
+  "strict_merge": "DIFF",
+  "strict_tip": "MATCH",
+  "changed_texts": [
+   {
+    "index": 0,
+    "text": "Wharf q𝅧r",
+    "family": "Verdana",
+    "style": "italic",
+    "weight": null,
+    "merge": "75.626",
+    "tip": "75.6465",
+    "java": null,
+    "tip_eq_java": false
+   }
+  ],
+  "every_changed_text_eq_java": false,
+  "len_merge_tip": [
+   1,
+   1
+  ]
+ },
+ "c9a_ns_vd_interface_ctrl": {
+  "strict_merge": "DIFF",
+  "strict_tip": "MATCH",
+  "changed_texts": [
+   {
+    "index": 0,
+    "text": "Wharf qr",
+    "family": "Verdana",
+    "style": "italic",
+    "weight": null,
+    "merge": "61.626",
+    "tip": "61.6465",
+    "java": "61.6465",
+    "tip_eq_java": true
+   }
+  ],
+  "every_changed_text_eq_java": true,
+  "len_merge_tip": [
+   1,
+   1
+  ]
+ }
+}

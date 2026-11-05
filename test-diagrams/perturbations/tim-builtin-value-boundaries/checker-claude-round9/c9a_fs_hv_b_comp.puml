@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Helvetica
+component "<b>Wharf q𝅧r</b>" as C1
+@enduml

@@ -1,0 +1,90 @@
+{
+  "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+  "build_jobs": 4,
+  "before": {
+    "reproducible_argv": [
+      "cargo",
+      "build",
+      "-p",
+      "rustuml",
+      "--release",
+      "--locked"
+    ],
+    "target": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/target-after",
+    "log": "logs/build-before.log",
+    "exit": 0,
+    "note": "Owned prior private target reused for unchanged before production; source tree differs only in imported evidence/test expectations."
+  },
+  "after": {
+    "argv": [
+      "cargo",
+      "build",
+      "-p",
+      "rustuml",
+      "--release",
+      "--locked"
+    ],
+    "env": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "log": "logs/build-final.log",
+    "exit": 0
+  },
+  "focused": [
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "rustuml-render",
+        "--lib",
+        "--release",
+        "state_fill_roles",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "log": "logs/focus-fill.log"
+    },
+    {
+      "argv": [
+        "cargo",
+        "test",
+        "-p",
+        "rustuml-render",
+        "--lib",
+        "--release",
+        "state_comment_names",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "log": "logs/focus-comment.log"
+    }
+  ],
+  "replay": "full_cli.py before/after; run_replay.py before/after <exact cohorts.json plus consumer16>; registered.py before/after. Every call argv/cwd/env/status/stream hash retained in raw result.json.",
+  "broad": "gates.json exact argv/env/cwd/status for final stable code; intermediate/gates.json is the complete earlier run before approved follow-on.",
+  "initial_measurement_note": "Initial preliminary focused captures predate the formatting rebuild and do not retain a distinct executable hash. They are non-headline diagnostics. The intermediate and final complete replays each have immutable saved binaries/hashes. A premature replay collided with binary copy and raised Exec format error; preserved initial captures/logs were replaced only in the final measurement location after build completion, never discarded.",
+  "account_index_guard": {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "harness_guards",
+      "parity_review_records_are_complete",
+      "--",
+      "--nocapture"
+    ],
+    "env": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-comment-state-consumers-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "exit": 101,
+    "log": "logs/account-index-final-guard.log",
+    "reason": "Only affected guard rerun for approved post-production canonical index; historical violations and missing independent review remain red."
+  }
+}

@@ -1,0 +1,4 @@
+@startuml
+!$s = "􏠽􏺀"
+class "n=%strlen($s) a=%substr($s, 2) b=%substr($s, 0, 2)" as Len
+@enduml

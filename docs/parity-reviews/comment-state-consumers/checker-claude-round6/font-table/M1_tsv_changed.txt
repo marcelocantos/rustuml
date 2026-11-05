@@ -1,0 +1,6 @@
+test font_chain::tests::coverage_table_is_the_stored_reference_host_extraction ... FAILED
+thread 'font_chain::tests::coverage_table_is_the_stored_reference_host_extraction' (53274633) panicked at crates/rustuml-render/src/font_chain.rs:546:13:
+assertion `left == right` failed: LucidaGrande.tsv
+  left: "8bf7d679fe712d84cf9748ecebd7a5cf7d8ddb08e65bc0bf24fa8e696c76c780"
+ right: "9f6c7f1f5c4d1ef3be2290c318c828399dd0b2cd52a49801f972ce8fb641f5f9"
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 846 filtered out; finished in 0.00s

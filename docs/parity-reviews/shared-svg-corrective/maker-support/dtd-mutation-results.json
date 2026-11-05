@@ -1,0 +1,113 @@
+{
+  "kind": "test-oracle stdout injection only; no product/Java claim",
+  "results": [
+    {
+      "phase": "before",
+      "name": "control",
+      "compile_argv": [
+        "rustc",
+        "--edition=2024",
+        "--test",
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/dtd-mutation/crates/rustuml/tests/dtd-before.rs",
+        "-L",
+        "dependency=/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/target-after/release/deps",
+        "--extern",
+        "roxmltree=/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/target-after/release/deps/libroxmltree-d396f0ab46122ad3.rlib",
+        "--extern",
+        "sha2=/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/target-after/release/deps/libsha2-7947d60afadbd894.rlib",
+        "-o",
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/dtd-before-oracle"
+      ],
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/dtd-before-oracle",
+        "every_cli_golden_and_registered_perturbation_svg_is_strict_xml",
+        "--nocapture"
+      ],
+      "test_source_sha256": "17ee4b437be36ca633a9e97f01230d6ad1655747be4fe010cae538d7d161421e",
+      "exit": 0,
+      "log_sha256": "79814ca95bd24c2e1a62bb8f7cfe71db7329e5446b7b2bd12bbfe26c5e1e9f00"
+    },
+    {
+      "phase": "before",
+      "name": "comment-decoy-internal-dtd",
+      "compile_argv": [
+        "rustc",
+        "--edition=2024",
+        "--test",
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/dtd-mutation/crates/rustuml/tests/dtd-before.rs",
+        "-L",
+        "dependency=/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/target-after/release/deps",
+        "--extern",
+        "roxmltree=/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/target-after/release/deps/libroxmltree-d396f0ab46122ad3.rlib",
+        "--extern",
+        "sha2=/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/target-after/release/deps/libsha2-7947d60afadbd894.rlib",
+        "-o",
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/dtd-before-oracle"
+      ],
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/dtd-before-oracle",
+        "every_cli_golden_and_registered_perturbation_svg_is_strict_xml",
+        "--nocapture"
+      ],
+      "test_source_sha256": "17ee4b437be36ca633a9e97f01230d6ad1655747be4fe010cae538d7d161421e",
+      "exit": 0,
+      "log_sha256": "5b671da246db8834e20e5d14cad7aa48813aea010975556bafd81ffe5e503054"
+    },
+    {
+      "phase": "after",
+      "name": "control",
+      "compile_argv": [
+        "rustc",
+        "--edition=2024",
+        "--test",
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/dtd-mutation/crates/rustuml/tests/dtd-after.rs",
+        "-L",
+        "dependency=/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/target-after/release/deps",
+        "--extern",
+        "roxmltree=/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/target-after/release/deps/libroxmltree-d396f0ab46122ad3.rlib",
+        "--extern",
+        "sha2=/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/target-after/release/deps/libsha2-7947d60afadbd894.rlib",
+        "-o",
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/dtd-after-oracle"
+      ],
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/dtd-after-oracle",
+        "every_cli_golden_and_registered_perturbation_svg_is_strict_xml",
+        "--nocapture"
+      ],
+      "test_source_sha256": "3c8df23c9e295f2e30c330164bd3cff74ea1ca4cffc963fcddd0b73a54a911bd",
+      "exit": 0,
+      "log_sha256": "ee328a349c985ea242926d889586dc7e6dab43cc228c7eff0b56ef812e950d1a"
+    },
+    {
+      "phase": "after",
+      "name": "comment-decoy-internal-dtd",
+      "compile_argv": [
+        "rustc",
+        "--edition=2024",
+        "--test",
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/dtd-mutation/crates/rustuml/tests/dtd-after.rs",
+        "-L",
+        "dependency=/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/target-after/release/deps",
+        "--extern",
+        "roxmltree=/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/target-after/release/deps/libroxmltree-d396f0ab46122ad3.rlib",
+        "--extern",
+        "sha2=/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/target-after/release/deps/libsha2-7947d60afadbd894.rlib",
+        "-o",
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/dtd-after-oracle"
+      ],
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/dtd-after-oracle",
+        "every_cli_golden_and_registered_perturbation_svg_is_strict_xml",
+        "--nocapture"
+      ],
+      "test_source_sha256": "3c8df23c9e295f2e30c330164bd3cff74ea1ca4cffc963fcddd0b73a54a911bd",
+      "exit": 101,
+      "log_sha256": "899f3d716b7bb38d51d545c9efaadabd367662e82166e6544361786de5807fd4"
+    }
+  ],
+  "control26_dot_passes_both": true,
+  "decoy_rejected_after": true,
+  "external_dtd_or_entity_resolved": false,
+  "scratch_removed": true
+}

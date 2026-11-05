@@ -1,0 +1,144 @@
+[
+  {
+    "id": "full-golden/creole/creole_in_stereotype_boundary",
+    "reference_valid": true,
+    "before_comments": [
+      "class **BoundaryClass** ?boundary?"
+    ],
+    "after_comments": [
+      "class C"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "after_comments_match_java": true
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_controller",
+    "reference_valid": true,
+    "before_comments": [
+      "class **ControllerClass** ?controller?"
+    ],
+    "after_comments": [
+      "class C"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "after_comments_match_java": true
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_entity",
+    "reference_valid": true,
+    "before_comments": [
+      "class **EntityClass** ?entity?"
+    ],
+    "after_comments": [
+      "class C"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "after_comments_match_java": true
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_repository",
+    "reference_valid": true,
+    "before_comments": [
+      "class **RepositoryClass** ?repository?"
+    ],
+    "after_comments": [
+      "class C"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "after_comments_match_java": true
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_service",
+    "reference_valid": true,
+    "before_comments": [
+      "class **ServiceClass** ?service?"
+    ],
+    "after_comments": [
+      "class C"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "after_comments_match_java": true
+  },
+  {
+    "id": "full-golden/creole/creole_in_stereotype_value",
+    "reference_valid": true,
+    "before_comments": [
+      "class **ValueClass** ?value object?"
+    ],
+    "after_comments": [
+      "class C"
+    ],
+    "java_comments": [
+      "class C"
+    ],
+    "after_comments_match_java": true
+  },
+  {
+    "id": "full-golden/deployment/deploy_unicode",
+    "reference_valid": true,
+    "before_comments": [
+      "entity ?????? ??????????",
+      "entity ???? ??????",
+      "entity ???-??????",
+      "link WS to SA",
+      "link SA to BD"
+    ],
+    "after_comments": [
+      "entity SA",
+      "entity BD",
+      "entity WS",
+      "link WS to SA",
+      "link SA to BD"
+    ],
+    "java_comments": [
+      "entity SA",
+      "entity BD",
+      "entity WS",
+      "link WS to SA",
+      "link SA to BD"
+    ],
+    "after_comments_match_java": true
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_hindi_class_diagram",
+    "reference_valid": false,
+    "before_comments": [
+      "class ??????????",
+      "class ???????",
+      "link ?????????? to ???????"
+    ],
+    "after_comments": [
+      "class ??????????",
+      "class ???????",
+      "link ?????????? to ???????"
+    ],
+    "java_comments": [],
+    "after_comments_match_java": false
+  },
+  {
+    "id": "full-golden/edge-cases/edge_unicode_thai_class_diagram",
+    "reference_valid": false,
+    "before_comments": [
+      "class ??????",
+      "class ????",
+      "link ?????? to ????"
+    ],
+    "after_comments": [
+      "class ??????",
+      "class ????",
+      "link ?????? to ????"
+    ],
+    "java_comments": [],
+    "after_comments_match_java": false
+  }
+]

@@ -1,0 +1,6 @@
+@startuml
+skinparam ArrowFontSize 16
+class A
+class B
+A --> B : one\ntwo wider line\nthree
+@enduml

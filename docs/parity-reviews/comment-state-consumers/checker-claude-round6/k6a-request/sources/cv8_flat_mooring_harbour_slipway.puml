@@ -1,0 +1,6 @@
+@startuml
+[*] --> Mooring
+Mooring --> Harbour : go
+Harbour --> Slipway
+Slipway --> [*]
+@enduml

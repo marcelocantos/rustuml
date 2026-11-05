@@ -1,0 +1,10 @@
+@startuml
+!function $unused()
+!startsub outer
+!$v=%intval("bad")
+!startsub inner
+!endsub
+!return 1
+!endfunction
+class Lost
+@enduml

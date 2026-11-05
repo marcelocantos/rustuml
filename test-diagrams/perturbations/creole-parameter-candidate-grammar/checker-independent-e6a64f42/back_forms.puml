@@ -1,0 +1,7 @@
+@startuml
+state Grove
+Grove : a<back:#4a7>seed</back>z
+Grove : a<back:#44aa77>seed</back>z
+Grove : a<back:#8044aa77>seed</back>z
+Grove : a<back:Grey>seed</back>z
+@enduml

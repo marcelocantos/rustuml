@@ -1,0 +1,1069 @@
+[
+  {
+    "id": "checker94/class_alias_bidirectional",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "class Lantern",
+      "class Beacon",
+      "link Lantern to Beacon",
+      "reverse link Lantern to Beacon"
+    ],
+    "rust_comments": [
+      "class Lantern",
+      "class Beacon",
+      "link Lantern to Beacon",
+      "reverse link Lantern to Beacon"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/class_quoted_spaces",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "class North Atrium",
+      "class South Gallery",
+      "link North Atrium to South Gallery"
+    ],
+    "rust_comments": [
+      "class North Atrium",
+      "class South Gallery",
+      "link North_Atrium to South_Gallery"
+    ],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/class_namespace_default",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "cluster Observatory",
+      "cluster Dome",
+      "class Sirius",
+      "class Lens",
+      "link Sirius to Lens"
+    ],
+    "rust_comments": [
+      "cluster Observatory",
+      "cluster Observatory.Dome",
+      "class Sirius",
+      "class Lens"
+    ],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/class_groups_bidirectional",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "cluster Hall",
+      "cluster Wing",
+      "class Seat",
+      "class Desk",
+      "link Hall to Wing",
+      "reverse link Hall to Wing"
+    ],
+    "rust_comments": [
+      "cluster Hall",
+      "cluster Wing",
+      "class Seat",
+      "class Desk",
+      "class Hall",
+      "class Wing",
+      "link Hall to Wing",
+      "reverse link Hall to Wing"
+    ],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/class_nested_default",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "cluster Upper",
+      "cluster Middle",
+      "class Branch",
+      "class Leaf",
+      "link Leaf to Branch"
+    ],
+    "rust_comments": [
+      "cluster Upper",
+      "cluster Upper.Middle",
+      "class Branch",
+      "class Leaf"
+    ],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/class_custom_separator_residue",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "cluster West",
+      "cluster Bay",
+      "class Tile"
+    ],
+    "rust_comments": [
+      "cluster West",
+      "cluster West..Bay",
+      "class Tile"
+    ],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/class_object_mixed",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "class Cobalt",
+      "class Port",
+      "link Cobalt to Value",
+      "link Value to Port"
+    ],
+    "rust_comments": [
+      "class Cobalt",
+      "class Port",
+      "link Cobalt to Value",
+      "link Value to Port"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/object_quoted_admission",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link North Fixture to South Fixture"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/deploy_alias_collision",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "entity Copper_Bay",
+      "entity Pier",
+      "link Copper_Bay to Pier",
+      "reverse link Copper_Bay to Pier"
+    ],
+    "rust_comments": [
+      "entity Copper Bay",
+      "entity Pier",
+      "link Copper Bay to Pier",
+      "link Copper Bay to Pier"
+    ],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/deploy_raw_spaces",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "entity Copper Bay",
+      "entity Far Pier",
+      "link Copper Bay to Far Pier"
+    ],
+    "rust_comments": [
+      "entity Copper Bay",
+      "entity Far Pier",
+      "link Copper Bay to Far Pier"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/deploy_nested_groups",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "cluster Vault",
+      "cluster Cage",
+      "cluster Pier",
+      "entity Key",
+      "entity Lock",
+      "link Vault to Pier",
+      "reverse link Cage to Pier"
+    ],
+    "rust_comments": [
+      "cluster Vault",
+      "cluster Cage",
+      "cluster Pier",
+      "entity Key",
+      "entity Lock",
+      "link Vault to Pier",
+      "reverse link Pier to Cage"
+    ],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/description_kinds",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "entity Pilot",
+      "entity Compass",
+      "entity Signal",
+      "link Pilot to Compass",
+      "reverse link Compass to Signal"
+    ],
+    "rust_comments": [
+      "entity Pilot",
+      "entity Compass",
+      "entity Signal",
+      "link Pilot to Compass",
+      "link Compass to Signal"
+    ],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/description_namespace",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "cluster Radio",
+      "cluster Quiet",
+      "entity Dial",
+      "entity Quiet.Wave",
+      "entity Wave",
+      "link Dial to Quiet.Wave"
+    ],
+    "rust_comments": [
+      "cluster Radio",
+      "cluster Quiet",
+      "entity Dial",
+      "entity Wave"
+    ],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/state_root_nested_identity",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link Dock to Water",
+      "link Harbor to Other"
+    ],
+    "rust_comments": [
+      "link Dock to Water",
+      "link Harbor to Other"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/state_history_nested_identity",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link *start*Lower to *historical*Lower",
+      "link *historical*Lower to First",
+      "link First to *deephistory*Lower",
+      "link *deephistory*Lower to Last"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/activity_alias_linear",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link start to Check",
+      "link Check to Release",
+      "link Release to end"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/activity_unicode_right",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link start to ?tage Nord",
+      "link ?tage Nord to ?bung S?d",
+      "link ?bung S?d to end"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/activity_unicode_left",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link start to ?tage Nord",
+      "reverse link ?bung S?d to ?tage Nord",
+      "link ?bung S?d to end"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/activity_unicode_up",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "reverse link ?tage Nord to start",
+      "reverse link ?bung S?d to ?tage Nord",
+      "reverse link end to ?bung S?d"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/activity_partition",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "cluster Copper Room",
+      "link start to Weigh brass",
+      "link Weigh brass to Polish silver",
+      "link Polish silver to end"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/activity_named_end",
+    "whole_comparator_pass": false,
+    "java_comments": [],
+    "rust_comments": [],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/activity_groups",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "cluster West Bench",
+      "cluster East Bench",
+      "link start to Turn wheel",
+      "link Turn wheel to Read gauge",
+      "link Read gauge to end"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_simple_transparent",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_composite_transparent",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_concurrent_transparent",
+    "whole_comparator_pass": true,
+    "java_comments": [],
+    "rust_comments": [],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_choice_transparent",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_fork_transparent",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_join_transparent",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_history_transparent",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_deep_history_transparent",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_simple_named",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_composite_named",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_concurrent_named",
+    "whole_comparator_pass": true,
+    "java_comments": [],
+    "rust_comments": [],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_choice_named",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_fork_named",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_join_named",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_history_named",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_deep_history_named",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_simple_unknown",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_composite_unknown",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_concurrent_unknown",
+    "whole_comparator_pass": true,
+    "java_comments": [],
+    "rust_comments": [],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_choice_unknown",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_fork_unknown",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_join_unknown",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_history_unknown",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_deep_history_unknown",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_simple_a00",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_composite_a00",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_concurrent_a00",
+    "whole_comparator_pass": true,
+    "java_comments": [],
+    "rust_comments": [],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_choice_a00",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_fork_a00",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_join_a00",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_history_a00",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_deep_history_a00",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_simple_a01",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_composite_a01",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_concurrent_a01",
+    "whole_comparator_pass": false,
+    "java_comments": [],
+    "rust_comments": [],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_choice_a01",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_fork_a01",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_join_a01",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_history_a01",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_deep_history_a01",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_simple_a7f",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_composite_a7f",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_concurrent_a7f",
+    "whole_comparator_pass": false,
+    "java_comments": [],
+    "rust_comments": [],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_choice_a7f",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_fork_a7f",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_join_a7f",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_history_a7f",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_deep_history_a7f",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_simple_afe",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_composite_afe",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_concurrent_afe",
+    "whole_comparator_pass": false,
+    "java_comments": [],
+    "rust_comments": [],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_choice_afe",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_fork_afe",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_join_afe",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_history_afe",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_deep_history_afe",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_simple_aff",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_composite_aff",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_concurrent_aff",
+    "whole_comparator_pass": true,
+    "java_comments": [],
+    "rust_comments": [],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_choice_aff",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_fork_aff",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_join_aff",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_history_aff",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_deep_history_aff",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_simple_short",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_composite_short",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [
+      "link Empty to Body"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_concurrent_short",
+    "whole_comparator_pass": true,
+    "java_comments": [],
+    "rust_comments": [],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker94/paint_choice_short",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_fork_short",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_join_short",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_history_short",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker94/paint_deep_history_short",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link Empty to Body"
+    ],
+    "rust_comments": [],
+    "producer_slots_equal": false
+  },
+  {
+    "id": "checker6/circle_root_rebecca",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link *start* to Harbor",
+      "link Harbor to *end*"
+    ],
+    "rust_comments": [
+      "link *start* to Harbor",
+      "link Harbor to *end*"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker6/circle_root_unknown",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link *start* to Harbor",
+      "link Harbor to *end*"
+    ],
+    "rust_comments": [
+      "link *start* to Harbor",
+      "link Harbor to *end*"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker6/circle_ineffective_legacy_keys",
+    "whole_comparator_pass": true,
+    "java_comments": [
+      "link *start* to Harbor",
+      "link Harbor to *end*"
+    ],
+    "rust_comments": [
+      "link *start* to Harbor",
+      "link Harbor to *end*"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker6/circle_root_alpha",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "link *start* to Harbor",
+      "link Harbor to *end*"
+    ],
+    "rust_comments": [
+      "link *start* to Harbor",
+      "link Harbor to *end*"
+    ],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker6/activity_named_end_corrected",
+    "whole_comparator_pass": false,
+    "java_comments": [],
+    "rust_comments": [],
+    "producer_slots_equal": true
+  },
+  {
+    "id": "checker6/group_identity_collision",
+    "whole_comparator_pass": false,
+    "java_comments": [
+      "cluster Copper_Bay",
+      "entity Metal_Case",
+      "entity Jetty",
+      "link Copper_Bay to Jetty"
+    ],
+    "rust_comments": [
+      "cluster Copper Bay",
+      "entity Jetty",
+      "link Copper Bay to Jetty"
+    ],
+    "producer_slots_equal": false
+  }
+]

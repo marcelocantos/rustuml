@@ -1,0 +1,55 @@
+{
+  "entries": 14757,
+  "identical": 14751,
+  "map_order_only": [
+    {
+      "cohort": "full-golden",
+      "id": "full-golden/dot/dot_graph_attributes",
+      "byte_identical": false,
+      "semantic_equal": true,
+      "before_sha256": "064599337a0b760f28c2f44c689fda5fa35d8ff6af2b17ad722080e160872bcb",
+      "after_sha256": "348a6b6fe439fc32b17c0d43559cdb1c06a406aec5328eb7bfc9156b31681dff"
+    },
+    {
+      "cohort": "full-golden",
+      "id": "full-golden/dot/dot_multi_edge",
+      "byte_identical": false,
+      "semantic_equal": true,
+      "before_sha256": "fdc48b2801748983d18d247e2526f456d39c4318d57bc3831a8ae8b97259a975",
+      "after_sha256": "0247c42e9fd5b26ab8786a4dd2aef56f67ad9f17ef15af6605dc8b03095f2250"
+    },
+    {
+      "cohort": "full-golden",
+      "id": "full-golden/dot/dot_node_colors",
+      "byte_identical": false,
+      "semantic_equal": true,
+      "before_sha256": "187f63e6517beb5a82a4d51150a0e75626bdea1b6ee130af1aa613b443de477d",
+      "after_sha256": "5396896f3c351a6220df85af9bf55649f0b4757eec4dbcffc1a3d58c410b903d"
+    },
+    {
+      "cohort": "full-golden",
+      "id": "full-golden/dot/dot_record_ports",
+      "byte_identical": false,
+      "semantic_equal": true,
+      "before_sha256": "8b2de1f8f1ed38cee748206d8eb1da5144e1c636f99b5e6fce73142e4dd27b89",
+      "after_sha256": "cf0448a3078fa604610208ccb2bb3fbe3589b6be535364fd4dabb03c4fdf2d5d"
+    },
+    {
+      "cohort": "full-golden",
+      "id": "full-golden/dot/dot_record_simple",
+      "byte_identical": false,
+      "semantic_equal": true,
+      "before_sha256": "70090792a847e3413fa2107c4ce8f481a0cd7da7a7d10969f7c915e49517e150",
+      "after_sha256": "b2c6093c9532a322fe538be2578fc0d68bd85a03d639d289bf1da825ea37c8af"
+    },
+    {
+      "cohort": "full-golden",
+      "id": "full-golden/dot/dot_weighted_edges",
+      "byte_identical": false,
+      "semantic_equal": true,
+      "before_sha256": "32100a20f74082c9513d8a32cac5a9e849a92ff3ba893801b423db2919c28a21",
+      "after_sha256": "4e60e529df23fd3081ed7bea06e0c30750cfb2513701c8d7fa5da976747a5f02"
+    }
+  ],
+  "semantic_changes": 0
+}

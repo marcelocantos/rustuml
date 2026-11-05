@@ -1,0 +1,178 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-empty-sub-iterator-termination",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A78227ae1-6e7a-4609-acf0-9f2049302acc",
+    "model": "gpt-6-astra/high",
+    "tool": "Codex harness through T3 Code; exec_command/rustc/cargo/Python; parent Monkey Man relay only",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-6ec78fcf",
+    "branch": "review/tim8-faf4634-independent-20261104",
+    "independence": "This task implemented none of the candidate; no children, Java/javac, own SSH, production edits, target edits or shipping."
+  },
+  "account_commit": "02fa49de2396c1445a4ddf1a783c973f883a82f4",
+  "implementation_commit": "2274e808433568aa1d8042bf9e3cb1f1de338b4b",
+  "candidate_revision": "faf463445591a53f17d25c5c16611f8e626ef93d",
+  "before_revision": "2cf6c7eeebae7354e7a3b7e53b86fb3754883e67",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-tim8-checker/target-after CARGO_BUILD_JOBS=4 cargo build -p rustuml --release",
+    "git switch --detach 2cf6c7eeebae7354e7a3b7e53b86fb3754883e67; CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-tim8-checker/target-before CARGO_BUILD_JOBS=4 cargo build -p rustuml --release; git switch review/tim8-faf4634-independent-20261104",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-tim8-checker/gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-tim8-checker/replay.py before",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-tim8-checker/replay.py after",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-tim8-checker/fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-tim8-checker/summarize.py",
+    "Remote SVG/probe argv/cwd/env for all 40 calls: checker8-support/cases/*/commands.json; immutable remote-request.json specifies only approved reference wrapper and <worker> placeholders."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_false.puml",
+      "golden": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_false.svg",
+      "axes": [
+        "empty collector before inactive condition",
+        "tail side-effect suppression"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_truncated_welcome",
+      "observed_reference_category": "welcome_truncation",
+      "reference_valid": false,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": false,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 2,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/empty_false/result.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_two.puml",
+      "golden": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_two.svg",
+      "axes": [
+        "two preceding model lines",
+        "comment-only body and end-tag suppression"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_truncated_valid",
+      "observed_reference_category": "positive_reference",
+      "reference_valid": true,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": true,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 0,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/empty_two/result.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/blank_replay.puml",
+      "golden": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/blank_replay.svg",
+      "axes": [
+        "blank body versus empty body",
+        "second includesub and tail continuation"
+      ],
+      "result": "pass",
+      "intended_validity": "intended_valid",
+      "observed_reference_category": "positive_reference",
+      "reference_valid": true,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": true,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 0,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/blank_replay/result.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_nested.puml",
+      "golden": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_nested.svg",
+      "axes": [
+        "nested includes with separate execution iterators",
+        "caller procedure continuation and side effects"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_valid",
+      "observed_reference_category": "positive_reference",
+      "reference_valid": true,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": true,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 1,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/empty_nested/result.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_return_include.puml",
+      "golden": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_return_include.svg",
+      "axes": [
+        "include stops within return function",
+        "return and caller effects continue"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_valid",
+      "observed_reference_category": "positive_reference",
+      "reference_valid": true,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": true,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 1,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/empty_return_include/result.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_selected.puml",
+      "golden": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_selected.svg",
+      "axes": [
+        "empty selected external sub versus empty collector",
+        "tail errors outside selected body"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_valid",
+      "observed_reference_category": "positive_reference",
+      "reference_valid": true,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": true,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 3,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/empty_selected/result.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_loop.puml",
+      "golden": "test-diagrams/perturbations/tim-empty-sub-iterator-termination/checker8/empty_loop.svg",
+      "axes": [
+        "empty collector upstream of loop",
+        "zero iterations versus termination"
+      ],
+      "result": "fail",
+      "intended_validity": "intended_truncated_welcome",
+      "observed_reference_category": "welcome_truncation",
+      "reference_valid": false,
+      "java_svg_exit": 0,
+      "java_probe_exit": 0,
+      "cli_svg_match": false,
+      "cli_source_exact": true,
+      "direct_source_exact": true,
+      "standing_algorithm_slice_exit": 2,
+      "evidence": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support/cases/empty_loop/result.json"
+    }
+  ],
+  "findings": [
+    "Rejected for whole-output acceptance: fresh empty_false/empty_loop and retained welcome truncations still select the wrong downstream factory; maker empty_include remains a source-line-zero renderer failure. Empty-iterator source behavior survived the valid controls, including nested caller continuation.",
+    "Independently reproduced retained1672: 1560 valid, 665 SVG before and after, 158/160 available valid sources exact. Total1710 entries/1631 distinct pairs/79 duplicate entries; no valid losses, new errors or valid model drops.",
+    "Fresh20 outcomes: 17 valid/16 CLI SVG matches, one syntax negative, two welcome truncations. Every nonnegative evaluated source is exact; negative diagnostic source is not. Original intended outcomes are retained separately.",
+    "Required exact-candidate gates ran once: parser622/CLI15 pass; main product11179/11251 and assisted10497/11251 exit101; standing609/1628 versus matching-environment CLI636 with27 discrepancies; guards4/6 and existing component dead-code clippy exit101. Touched rustfmt/diff pass. No gate/baseline/policy changes.",
+    "All9245 imported historical evidence files and129 original preprocessing test blocks unchanged. All19766 maker archive files and169 package hash entries verified, including failed iterations. Account chronology independently verified before code edits.",
+    "No unqualified Unicode-version/property/isolated-surrogate or global environment equivalence claim. See source-audit.json for exact boundary and next-step ownership."
+  ],
+  "verdict": "rejected",
+  "bounded_mechanism_result": "No new in-scope causal defect demonstrated on tested valid inputs; whole-output acceptance is not granted.",
+  "next_steps": [
+    "Route the already-exact stopped evaluated source through equivalent PSystemBuilder/PSystemWelcomeFactory selection (two total source lines), without manufacturing end tags/comments.",
+    "Correct downstream class source-line zero handling for preserved empty_include. Resolve standing include-base/environment ownership separately, preserving all current failures and resource hierarchy."
+  ],
+  "evidence_root": "docs/parity-reviews/tim-memory-trie-text-lookup/checker8-support"
+}

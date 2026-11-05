@@ -1,0 +1,2706 @@
+[
+ {
+  "name": "m8b_arial_heb_tail_space",
+  "axes": [
+   "bidi"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_arial_heb_tail_space.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_arial_heb_tail_space.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_arial_heb_tail_space_ctrl",
+  "axes": [
+   "bidi",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_arial_heb_tail_space_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_arial_heb_tail_space_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_helv_arabic_digit",
+  "axes": [
+   "bidi",
+   "AL+EN"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_helv_arabic_digit.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_helv_arabic_digit.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_helv_arabic_digit_ctrl",
+  "axes": [
+   "bidi",
+   "AL+EN",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_helv_arabic_digit_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_helv_arabic_digit_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_lucida_arabic_digit",
+  "axes": [
+   "bidi",
+   "AL+EN"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_arabic_digit.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_arabic_digit.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_lucida_arabic_digit_ctrl",
+  "axes": [
+   "bidi",
+   "AL+EN",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_arabic_digit_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_arabic_digit_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_lucida_fsi_hebrew",
+  "axes": [
+   "bidi",
+   "FSI"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_fsi_hebrew.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_fsi_hebrew.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_lucida_fsi_hebrew_ctrl",
+  "axes": [
+   "bidi",
+   "FSI",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_fsi_hebrew_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_fsi_hebrew_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_lucida_rle_digit",
+  "axes": [
+   "bidi",
+   "RLE"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rle_digit.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rle_digit.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_lucida_rle_digit_ctrl",
+  "axes": [
+   "bidi",
+   "RLE",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rle_digit_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rle_digit_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_lucida_rli_alone",
+  "axes": [
+   "bidi",
+   "RLI",
+   "requiresBidi"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rli_alone.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rli_alone.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_lucida_rli_alone_ctrl",
+  "axes": [
+   "bidi",
+   "RLI",
+   "requiresBidi",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rli_alone_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rli_alone_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_lucida_rli_with_hebrew",
+  "axes": [
+   "bidi",
+   "RLI"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rli_with_hebrew.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rli_with_hebrew.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_lucida_rli_with_hebrew_ctrl",
+  "axes": [
+   "bidi",
+   "RLI",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rli_with_hebrew_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rli_with_hebrew_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_lucida_rlo_digit",
+  "axes": [
+   "bidi",
+   "RLO"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rlo_digit.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rlo_digit.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_lucida_rlo_digit_ctrl",
+  "axes": [
+   "bidi",
+   "RLO",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rlo_digit_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_rlo_digit_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_lucida_thai_alm_digit",
+  "axes": [
+   "bidi",
+   "AL+EN",
+   "ALM"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_thai_alm_digit.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_thai_alm_digit.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_lucida_thai_alm_digit_ctrl",
+  "axes": [
+   "bidi",
+   "AL+EN",
+   "ALM",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_thai_alm_digit_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_thai_alm_digit_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_lucida_thai_arabic_digit",
+  "axes": [
+   "bidi",
+   "AL+EN"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_thai_arabic_digit.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_thai_arabic_digit.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_lucida_thai_arabic_digit_ctrl",
+  "axes": [
+   "bidi",
+   "AL+EN",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_thai_arabic_digit_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_lucida_thai_arabic_digit_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_verdana_arabic_digit",
+  "axes": [
+   "bidi",
+   "AL+EN"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_arabic_digit.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_arabic_digit.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_verdana_arabic_digit_ctrl",
+  "axes": [
+   "bidi",
+   "AL+EN",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_arabic_digit_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_arabic_digit_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_verdana_heb_alm_digit",
+  "axes": [
+   "bidi",
+   "AL+EN",
+   "ALM"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_alm_digit.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_alm_digit.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_verdana_heb_alm_digit_ctrl",
+  "axes": [
+   "bidi",
+   "AL+EN",
+   "ALM",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_alm_digit_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_alm_digit_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_verdana_heb_alm_es",
+  "axes": [
+   "bidi",
+   "AL+EN",
+   "W4"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_alm_es.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_alm_es.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_verdana_heb_alm_es_ctrl",
+  "axes": [
+   "bidi",
+   "AL+EN",
+   "W4",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_alm_es_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_alm_es_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_verdana_heb_bracket_latin",
+  "axes": [
+   "bidi",
+   "N0"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_bracket_latin.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_bracket_latin.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_verdana_heb_bracket_latin_ctrl",
+  "axes": [
+   "bidi",
+   "N0",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_bracket_latin_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_bracket_latin_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_verdana_heb_bracket_nsm",
+  "axes": [
+   "bidi",
+   "N0",
+   "NSM-after-bracket"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_bracket_nsm.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_bracket_nsm.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_verdana_heb_bracket_nsm_ctrl",
+  "axes": [
+   "bidi",
+   "N0",
+   "NSM-after-bracket",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_bracket_nsm_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_bracket_nsm_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_verdana_heb_digits_tail",
+  "axes": [
+   "bidi",
+   "EN"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_digits_tail.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_digits_tail.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_verdana_heb_digits_tail_ctrl",
+  "axes": [
+   "bidi",
+   "EN",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_digits_tail_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_heb_digits_tail_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_verdana_lre_hebrew",
+  "axes": [
+   "bidi",
+   "LRE"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_lre_hebrew.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_lre_hebrew.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_verdana_lre_hebrew_ctrl",
+  "axes": [
+   "bidi",
+   "LRE",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_lre_hebrew_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_lre_hebrew_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_verdana_lro_space",
+  "axes": [
+   "bidi",
+   "LRO"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_lro_space.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_lro_space.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_verdana_lro_space_ctrl",
+  "axes": [
+   "bidi",
+   "LRO",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_lro_space_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_lro_space_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_verdana_rlm_deva",
+  "axes": [
+   "bidi",
+   "RLM"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_rlm_deva.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_rlm_deva.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_verdana_rlm_deva_ctrl",
+  "axes": [
+   "bidi",
+   "RLM",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_rlm_deva_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdana_rlm_deva_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8b_verdanabold_heb_tail_comma",
+  "axes": [
+   "bidi",
+   "CS"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdanabold_heb_tail_comma.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdanabold_heb_tail_comma.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8b_verdanabold_heb_tail_comma_ctrl",
+  "axes": [
+   "bidi",
+   "CS",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdanabold_heb_tail_comma_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8b_verdanabold_heb_tail_comma_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8g_arial_deva",
+  "axes": [
+   "gdef-classes",
+   "control-face"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_arial_deva.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_arial_deva.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8g_arial_deva_ctrl",
+  "axes": [
+   "gdef-classes",
+   "control-face",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_arial_deva_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_arial_deva_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8g_cnew_arabic",
+  "axes": [
+   "gdef-blocklist",
+   "arabic",
+   "bidi"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_arabic.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_arabic.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8g_cnew_arabic_ctrl",
+  "axes": [
+   "gdef-blocklist",
+   "arabic",
+   "bidi",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_arabic_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_arabic_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8g_cnew_deva",
+  "axes": [
+   "gdef-blocklist",
+   "gsub-latn",
+   "indic"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_deva.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_deva.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8g_cnew_deva_ctrl",
+  "axes": [
+   "gdef-blocklist",
+   "gsub-latn",
+   "indic",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_deva_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_deva_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8g_cnew_hangul",
+  "axes": [
+   "gdef-blocklist",
+   "hangul"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_hangul.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_hangul.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8g_cnew_hangul_ctrl",
+  "axes": [
+   "gdef-blocklist",
+   "hangul",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_hangul_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_hangul_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8g_cnew_khmer",
+  "axes": [
+   "gdef-blocklist",
+   "khmer"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_khmer.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_khmer.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8g_cnew_khmer_ctrl",
+  "axes": [
+   "gdef-blocklist",
+   "khmer",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_khmer_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_khmer_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8g_cnew_mc_after_mark",
+  "axes": [
+   "gdef-blocklist",
+   "Mc"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_mc_after_mark.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_mc_after_mark.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8g_cnew_mc_after_mark_ctrl",
+  "axes": [
+   "gdef-blocklist",
+   "Mc",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_mc_after_mark_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_mc_after_mark_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8g_cnew_mymr",
+  "axes": [
+   "gdef-blocklist",
+   "gsub-latn",
+   "myanmar"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_mymr.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_mymr.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8g_cnew_mymr_ctrl",
+  "axes": [
+   "gdef-blocklist",
+   "gsub-latn",
+   "myanmar",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_mymr_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_mymr_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8g_cnew_sequence",
+  "axes": [
+   "gdef-blocklist",
+   "sequence"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_sequence.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_sequence.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8g_cnew_size13",
+  "axes": [
+   "gdef-blocklist",
+   "size"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_size13.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_size13.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8g_cnew_size13_ctrl",
+  "axes": [
+   "gdef-blocklist",
+   "size",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_size13_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_size13_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8g_cnew_syriac",
+  "axes": [
+   "gdef-blocklist",
+   "syriac",
+   "bidi"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_syriac.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_syriac.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "m8g_cnew_syriac_ctrl",
+  "axes": [
+   "gdef-blocklist",
+   "syriac",
+   "bidi",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_syriac_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_syriac_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8g_cnew_tibt",
+  "axes": [
+   "gdef-blocklist",
+   "gsub-latn",
+   "use"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_tibt.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_tibt.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8g_cnew_tibt_ctrl",
+  "axes": [
+   "gdef-blocklist",
+   "gsub-latn",
+   "use",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_tibt_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnew_tibt_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8g_cnewbold_deva",
+  "axes": [
+   "gdef-blocklist",
+   "bold"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnewbold_deva.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnewbold_deva.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "m8g_cnewbold_deva_ctrl",
+  "axes": [
+   "gdef-blocklist",
+   "bold",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnewbold_deva_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/m8g_cnewbold_deva_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BN)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_cnew_hangul_split",
+  "axes": [
+   "bidi",
+   "courier-regular",
+   "hangul"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_cnew_hangul_split.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_cnew_hangul_split.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_cnew_hangul_split_ctrl",
+  "axes": [
+   "bidi",
+   "courier-regular",
+   "hangul",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_cnew_hangul_split_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_cnew_hangul_split_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_cnew_khmer_split",
+  "axes": [
+   "bidi",
+   "courier-regular",
+   "khmer"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_cnew_khmer_split.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_cnew_khmer_split.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_bl_cnew_khmer_split_ctrl",
+  "axes": [
+   "bidi",
+   "courier-regular",
+   "khmer",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_cnew_khmer_split_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_cnew_khmer_split_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_bl_lucida_al_en_thai",
+  "axes": [
+   "bidi",
+   "W2"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_al_en_thai.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_al_en_thai.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_bl_lucida_al_en_thai_ctrl",
+  "axes": [
+   "bidi",
+   "W2",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_al_en_thai_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_al_en_thai_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_bl_lucida_al_then_thai_en",
+  "axes": [
+   "bidi",
+   "W2",
+   "W7"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_al_then_thai_en.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_al_then_thai_en.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_bl_lucida_al_then_thai_en_ctrl",
+  "axes": [
+   "bidi",
+   "W2",
+   "W7",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_al_then_thai_en_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_al_then_thai_en_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_bl_lucida_an_cs_an",
+  "axes": [
+   "bidi",
+   "W4",
+   "AN"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_an_cs_an.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_an_cs_an.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_bl_lucida_an_cs_an_ctrl",
+  "axes": [
+   "bidi",
+   "W4",
+   "AN",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_an_cs_an_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_an_cs_an_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_bl_lucida_an_digit_thai",
+  "axes": [
+   "bidi",
+   "AN",
+   "script-of-component"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_an_digit_thai.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_an_digit_thai.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_lucida_an_digit_thai_ctrl",
+  "axes": [
+   "bidi",
+   "AN",
+   "script-of-component",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_an_digit_thai_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_an_digit_thai_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_lucida_deva_digit_r",
+  "axes": [
+   "bidi",
+   "L-digit",
+   "deva"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_deva_digit_r.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_deva_digit_r.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_lucida_deva_digit_r_ctrl",
+  "axes": [
+   "bidi",
+   "L-digit",
+   "deva",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_deva_digit_r_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_deva_digit_r_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_lucida_en_cs_en",
+  "axes": [
+   "bidi",
+   "W4"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_en_cs_en.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_en_cs_en.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_lucida_en_cs_en_ctrl",
+  "axes": [
+   "bidi",
+   "W4",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_en_cs_en_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_en_cs_en_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_lucida_et_en",
+  "axes": [
+   "bidi",
+   "W5"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_et_en.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_et_en.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_lucida_et_en_ctrl",
+  "axes": [
+   "bidi",
+   "W5",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_et_en_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_et_en_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_lucida_ext_arabic_digit",
+  "axes": [
+   "bidi",
+   "EN",
+   "arabic-script-digit"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_ext_arabic_digit.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_ext_arabic_digit.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_lucida_ext_arabic_digit_ctrl",
+  "axes": [
+   "bidi",
+   "EN",
+   "arabic-script-digit",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_ext_arabic_digit_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_ext_arabic_digit_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_lucida_rli_digit",
+  "axes": [
+   "bidi",
+   "RLI",
+   "isolate"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_rli_digit.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_rli_digit.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_lucida_rli_digit_ctrl",
+  "axes": [
+   "bidi",
+   "RLI",
+   "isolate",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_rli_digit_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_rli_digit_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_lucida_thai_digit_after_r",
+  "axes": [
+   "bidi",
+   "L-digit"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_thai_digit_after_r.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_thai_digit_after_r.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_lucida_thai_digit_after_r_ctrl",
+  "axes": [
+   "bidi",
+   "L-digit",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_thai_digit_after_r_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_lucida_thai_digit_after_r_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_activity",
+  "axes": [
+   "bidi",
+   "activity"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_activity.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_activity.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_activity_ctrl",
+  "axes": [
+   "bidi",
+   "activity",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_activity_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_activity_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_angle_nsm_end",
+  "axes": [
+   "bidi",
+   "N0",
+   "canonical-bracket"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_angle_nsm_end.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_angle_nsm_end.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_angle_nsm_end_ctrl",
+  "axes": [
+   "bidi",
+   "N0",
+   "canonical-bracket",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_angle_nsm_end_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_angle_nsm_end_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_bracket_nsm_latin",
+  "axes": [
+   "bidi",
+   "N0",
+   "NSM-after-bracket",
+   "jdk-deviation"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_bracket_nsm_latin.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_bracket_nsm_latin.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_bracket_nsm_latin_ctrl",
+  "axes": [
+   "bidi",
+   "N0",
+   "NSM-after-bracket",
+   "jdk-deviation",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_bracket_nsm_latin_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_bracket_nsm_latin_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_bracket_nsm_r",
+  "axes": [
+   "bidi",
+   "N0",
+   "N1"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_bracket_nsm_r.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_bracket_nsm_r.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_bracket_nsm_r_ctrl",
+  "axes": [
+   "bidi",
+   "N0",
+   "N1",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_bracket_nsm_r_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_bracket_nsm_r_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_mark_then_digit",
+  "axes": [
+   "bidi",
+   "R-run"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_mark_then_digit.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_mark_then_digit.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_mark_then_digit_ctrl",
+  "axes": [
+   "bidi",
+   "R-run",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_mark_then_digit_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_mark_then_digit_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_open_l_context",
+  "axes": [
+   "bidi",
+   "N0",
+   "embedding-direction"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_open_l_context.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_open_l_context.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_open_l_context_ctrl",
+  "axes": [
+   "bidi",
+   "N0",
+   "embedding-direction",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_open_l_context_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_open_l_context_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_sequence",
+  "axes": [
+   "bidi",
+   "sequence",
+   "N0"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_sequence.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_sequence.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_sequence_ctrl",
+  "axes": [
+   "bidi",
+   "sequence",
+   "N0",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_sequence_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_sequence_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_square_nsm_end",
+  "axes": [
+   "bidi",
+   "N0",
+   "NSM-after-bracket"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_square_nsm_end.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_square_nsm_end.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_bl_verdana_square_nsm_end_ctrl",
+  "axes": [
+   "bidi",
+   "N0",
+   "NSM-after-bracket",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_square_nsm_end_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_bl_verdana_square_nsm_end_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_ci_abstract_hebrew",
+  "axes": [
+   "courier-italic",
+   "abstract",
+   "hebrew"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_hebrew.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_hebrew.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_ci_abstract_hebrew_ctrl",
+  "axes": [
+   "courier-italic",
+   "abstract",
+   "hebrew",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_hebrew_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_hebrew_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_ci_abstract_latin",
+  "axes": [
+   "courier-italic",
+   "abstract"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_latin.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_latin.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_ci_abstract_latin_ctrl",
+  "axes": [
+   "courier-italic",
+   "abstract",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_latin_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_latin_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_ci_abstract_leading",
+  "axes": [
+   "courier-italic",
+   "abstract",
+   "leading-mark"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_leading.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_leading.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_ci_abstract_leading_ctrl",
+  "axes": [
+   "courier-italic",
+   "abstract",
+   "leading-mark",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_leading_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_leading_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_ci_abstract_size11",
+  "axes": [
+   "courier-italic",
+   "abstract",
+   "size"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_size11.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_size11.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_ci_abstract_size11_ctrl",
+  "axes": [
+   "courier-italic",
+   "abstract",
+   "size",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_size11_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_size11_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_ci_creole_bolditalic",
+  "axes": [
+   "courier-bold-italic",
+   "creole-member"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_creole_bolditalic.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_creole_bolditalic.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_ci_creole_bolditalic_ctrl",
+  "axes": [
+   "courier-bold-italic",
+   "creole-member",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_creole_bolditalic_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_creole_bolditalic_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_ci_creole_italic",
+  "axes": [
+   "courier-italic",
+   "creole-member"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_creole_italic.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_creole_italic.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_ci_creole_italic_ctrl",
+  "axes": [
+   "courier-italic",
+   "creole-member",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_creole_italic_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_creole_italic_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_ci_fontstyle_italic",
+  "axes": [
+   "courier-italic",
+   "defaultFontStyle"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_fontstyle_italic.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_fontstyle_italic.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_ci_fontstyle_italic_ctrl",
+  "axes": [
+   "courier-italic",
+   "defaultFontStyle",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_fontstyle_italic_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_fontstyle_italic_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_ci_stereo_latin",
+  "axes": [
+   "courier-italic",
+   "stereotype"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_stereo_latin.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_stereo_latin.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_ci_stereo_latin_ctrl",
+  "axes": [
+   "courier-italic",
+   "stereotype",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_stereo_latin_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_stereo_latin_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_ci_usecase_italic",
+  "axes": [
+   "courier-italic",
+   "usecase"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_usecase_italic.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_usecase_italic.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_ci_usecase_italic_ctrl",
+  "axes": [
+   "courier-italic",
+   "usecase",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_usecase_italic_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_usecase_italic_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_cr_member_bold",
+  "axes": [
+   "courier-bold",
+   "creole-member"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_cr_member_bold.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_cr_member_bold.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_cr_member_bold_ctrl",
+  "axes": [
+   "courier-bold",
+   "creole-member",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_cr_member_bold_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_cr_member_bold_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_cr_member_plain",
+  "axes": [
+   "courier-regular",
+   "member"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_cr_member_plain.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_cr_member_plain.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_cr_member_plain_ctrl",
+  "axes": [
+   "courier-regular",
+   "member",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_cr_member_plain_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_cr_member_plain_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_cr_usecase_plain",
+  "axes": [
+   "courier-regular",
+   "usecase"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_cr_usecase_plain.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_cr_usecase_plain.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_cr_usecase_plain_ctrl",
+  "axes": [
+   "courier-regular",
+   "usecase",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_cr_usecase_plain_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_cr_usecase_plain_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_hm_ltr_left",
+  "axes": [
+   "mirroring",
+   "helvetica",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_hm_ltr_left.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_hm_ltr_left.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_hm_ltr_right",
+  "axes": [
+   "mirroring",
+   "helvetica",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_hm_ltr_right.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_hm_ltr_right.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_hm_lucida_parens",
+  "axes": [
+   "mirroring",
+   "lucida",
+   "equal-advance"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_hm_lucida_parens.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_hm_lucida_parens.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_hm_rtl_left",
+  "axes": [
+   "mirroring",
+   "helvetica"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_hm_rtl_left.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_hm_rtl_left.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_hm_rtl_right",
+  "axes": [
+   "mirroring",
+   "helvetica"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_hm_rtl_right.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_hm_rtl_right.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_lt_arial_tibetan",
+  "axes": [
+   "ltr-invariance"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_arial_tibetan.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_arial_tibetan.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_lt_cjk_usecase",
+  "axes": [
+   "ltr-invariance"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_cjk_usecase.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_cjk_usecase.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_lt_cnew_thai_stereo",
+  "axes": [
+   "ltr-invariance"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_cnew_thai_stereo.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_cnew_thai_stereo.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_lt_deva_participant",
+  "axes": [
+   "ltr-invariance"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_deva_participant.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_deva_participant.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_lt_emoji_title",
+  "axes": [
+   "ltr-invariance"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_emoji_title.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_emoji_title.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_lt_latin_marks_state",
+  "axes": [
+   "ltr-invariance"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_latin_marks_state.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_latin_marks_state.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "DIFF",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "fail"
+ },
+ {
+  "name": "c8a_lt_thai_note",
+  "axes": [
+   "ltr-invariance"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_thai_note.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_thai_note.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_lt_verdana_deva_link",
+  "axes": [
+   "ltr-invariance"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_verdana_deva_link.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_verdana_deva_link.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": true,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_tn_abstract_italic",
+  "axes": [
+   "times-italic",
+   "blocklisted"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_tn_abstract_italic.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_tn_abstract_italic.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_tn_abstract_italic_ctrl",
+  "axes": [
+   "times-italic",
+   "blocklisted",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_tn_abstract_italic_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_tn_abstract_italic_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "DIFF",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "DIFF",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_tn_regular",
+  "axes": [
+   "times-regular"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_tn_regular.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_tn_regular.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "c8a_tn_regular_ctrl",
+  "axes": [
+   "times-regular",
+   "control"
+  ],
+  "source": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_tn_regular_ctrl.puml",
+  "golden": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_tn_regular_ctrl.svg",
+  "cwd": "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8",
+  "batch": "re-measured at round 9 (BO)",
+  "base_dcf6d9076_strict_compare": "MATCH",
+  "base_dcf6d9076_comment_list_exact": false,
+  "merge_9d6af0a0e_strict_compare": "MATCH",
+  "merge_9d6af0a0e_comment_list_exact": true,
+  "tip_14dd5efae_strict_compare": "MATCH",
+  "tip_14dd5efae_comment_list_exact": true,
+  "result": "pass"
+ }
+]

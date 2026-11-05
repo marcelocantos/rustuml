@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Courier New
+object "<i>Pier x𝅧</i>" as O
+O : <i>f𝅧</i> = 1
+@enduml

@@ -1,0 +1,272 @@
+{
+ "schema_version": 1,
+ "mechanism": "comment-state-consumers",
+ "scope": "shared-SVG / comment-state / TIM packet, maker round 2 (claude), on rejection d539f9a08 merged with parity-recovery-2026-11-03 50f4f5414",
+ "status": "maker results; independent review required; nothing shipped",
+ "trees": {
+  "before": "50f4f5414 (merged base; code = 9834a7194)",
+  "previous_maker_tip": "55c92692d",
+  "after": "tip of maker/shared-svg-round2-claude (code identical to 2546ba755; tip build byte-identical to the measured outputs on all 16402 sources)",
+  "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+ },
+ "commands": [
+  "git archive 50f4f5414 / 55c92692d into ~/Library/Caches/rustuml-shared-svg-round2-claude-maker/src-{before,oldtip}; CARGO_TARGET_DIR=<private> cargo build --release -j 6 -p rustuml for before, previous tip and after",
+  "python3 -I tools/cwd_map.py <repo> cwd_map.json  (recorded cwd per cited source: '.' or a worktree root -> repo root; a test-diagrams path -> that dir; PRIVATE_CWD/worker -> source dir; unrecorded -> source dir)",
+  "python3 -I tools/sweep.py <bin> <out> <repo> cwd_map.json test-diagrams/golden test-diagrams/perturbations  (-pipe -tsvg, harness RUSTUML_DEBUG pin, each case from its recorded cwd)",
+  "checker-cmp (unchanged rustuml_oracle::compare::compare_svg_strict, oracle crate from the before tree) over every pair; python3 -I tools/classify.py; tools/comments.py; tools/cohorts.py",
+  "PLANTUML_STDLIB=... cargo test --release -j 6 --workspace --lib; -p rustuml --test pipe_mode; -p rustuml-oracle --test golden_no_oracle|golden_pairs|parity_perturbations|harness_guards (both trees)"
+ ],
+ "obligations": {
+  "1_theme_marker": {
+   "status": "done",
+   "commits": [
+    "a15b09dde account",
+    "1537ada52"
+   ],
+   "evidence": "docs/parity-reviews/tim-evaluated-event-stream/maker-round2-claude/theme-marker-results.json"
+  },
+  "2_intval_digits": {
+   "status": "done",
+   "commits": [
+    "a15b09dde account",
+    "441452686"
+   ],
+   "evidence": "docs/parity-reviews/tim-intval-conversion/maker-round2-claude/parseint-digits-results.json"
+  },
+  "3_lone_surrogate": {
+   "status": "done (structured error, nonzero exit)",
+   "commits": [
+    "a15b09dde account",
+    "61f3883ff"
+   ],
+   "evidence": "docs/parity-reviews/tim-builtin-value-boundaries/maker-round2-claude/lone-surrogate-export-results.json"
+  },
+  "4_unit_test_seed": {
+   "status": "done as authorized",
+   "commits": [
+    "33c7f2d49"
+   ],
+   "detail": "filter_registry::tests::parser_source_identity_matches_java_shadow_id_after_initial_blanks expects f1jczin02njk7, citing b62d8ce96 and batch AU results SHA256 44959f34ee5ecaa773827942b7e46fa98a66de7821a0abe946b66808f2a51c60 (the raw_unit_test_input SVG carries id f1jczin02njk7); nothing else in the test changed"
+  },
+  "5_state_clusters": {
+   "status": "6 of 7 acceptance groups strict match; Basin/Lock keeps exact comments with a pre-existing layout-order difference",
+   "commits": [
+    "066603e48 account",
+    "e86a4635d",
+    "ebdfd6e7f",
+    "1603cc54e",
+    "47cc04b28"
+   ],
+   "java_trace": [
+    "CucaDiagramSimplifierState.simplify (deepest first, until no change) replaces exactly the Entity.isAutarkic groups with GroupMakerState images; java_state_group_is_autarkic now drives both drawing and comment and counts attached-note links (CommandFactoryNoteOnEntity; StateNote.parent and anchor_id).",
+    "ClusterDotString.printInternal: the group special point and its a/i wrappers exist only when isThereALinkFromOrToGroup; p0/p1 protection is dropped when the group has non-NORMAL positions. Both SVEK paths now add the point only for linked groups.",
+    "GroupMakerState.getImage: a childless group is EntityImageState; nested non-autarkic groups stay Clusters inside the image (Shed), with border points on the cluster's source/sink rank, the frontier moved onto them (Cluster.drawU) and their labels in LimitFinder bounds.",
+    "StateDiagram.getHistorical/getDeepHistory(location, idShort) for X[H]/X[H*]; EntityImagePseudoState paints history leaves."
+   ],
+   "account_correction": "the previous account's premise (Cluster.drawU only in the root image) is amended in cluster-autarky-routing-account.json",
+   "acceptance": [
+    {
+     "group": "Mill",
+     "case": "cluster_entry_point",
+     "before_strict": "DIFF",
+     "after_strict": "MATCH",
+     "before_comments_exact": false,
+     "after_comments_exact": true
+    },
+    {
+     "group": "Sluice",
+     "case": "quark_reuse_crossing",
+     "before_strict": "DIFF",
+     "after_strict": "MATCH",
+     "before_comments_exact": false,
+     "after_comments_exact": true
+    },
+    {
+     "group": "Press",
+     "case": "cluster_inputpin_mixed_case",
+     "before_strict": "DIFF",
+     "after_strict": "MATCH",
+     "before_comments_exact": false,
+     "after_comments_exact": true
+    },
+    {
+     "group": "Kiln",
+     "case": "cluster_root_note_on_inner",
+     "before_strict": "DIFF",
+     "after_strict": "MATCH",
+     "before_comments_exact": false,
+     "after_comments_exact": true
+    },
+    {
+     "group": "Shed",
+     "case": "cluster_entry_inside_autarkic",
+     "before_strict": "DIFF",
+     "after_strict": "MATCH",
+     "before_comments_exact": false,
+     "after_comments_exact": true
+    },
+    {
+     "group": "Vault",
+     "case": "history_external_suffix_form",
+     "before_strict": "DIFF",
+     "after_strict": "MATCH",
+     "before_comments_exact": false,
+     "after_comments_exact": true
+    },
+    {
+     "group": "Basin/Lock (the group the checker found right)",
+     "case": "history_depth2_crossing",
+     "before_strict": "DIFF",
+     "after_strict": "DIFF",
+     "before_comments_exact": false,
+     "after_comments_exact": true
+    }
+   ]
+  },
+  "6_bracket_declaration": {
+   "status": "done",
+   "commits": [
+    "7dd3e5419 account",
+    "b0df8ed5d"
+   ],
+   "java_trace": "CommandCreateElementFull CODE1 bracket form -> quarkInContext(false, cleanId('[Grain Store]')); CucaDiagram.cleanId -> StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(s, \"\\\"([:\") removes one [ ] pair; parse_description_bracket_declaration keeps the text as the id",
+   "result": "deploy_unaliased_forms strict MATCH with one 'entity Grain Store'"
+  },
+  "7_strokes": {
+   "status": "done",
+   "commits": [
+    "8f3c59efd account",
+    "e01f9a6b9"
+   ],
+   "boundary_restated": "stroke-boundary-account.json: stereotype <style> and stereotype skinparam strokes changed with b27411107 (toward Java); per-state ##color remains residual",
+   "java_trace": "WithLinkType.applyOneStyle -> HColorSet.getColorOrWhite (the ValueImpl.asColor rule) for inline arrow colours; DriverDotPathSvg.draw writes nothing for a transparent colour; SvekEdge.drawRainbow -> ExtremityArrow.drawLineIfTransparent (one line, polygon point 0 to point 2, width only)",
+   "result": "stroke_per_arrow_css4 and stroke_arrow_skinparam_transparent strict MATCH; the five earlier stroke matches hold"
+  },
+  "8_process": {
+   "status": "done",
+   "detail": "the svg.rs fill-opacity test literal cites SvgGraphics.fillMe lines 894-895 (2546ba755 rewords it so the ratchet still counts one literal); sweeps run each case from its recorded cwd (tools/cwd_map.py + tools/sweep.py): the checker's 7 repo-root cases exit 0 and match, retained_sub_caller_relative runs in checker3-maker-resources"
+  }
+ },
+ "measurements": {
+  "cli_whole_output": {
+   "sources": 16402,
+   "goldens": 12550,
+   "perturbations": 3852,
+   "base_to_tip": {
+    "strict_matches": "12903 -> 13453",
+    "gained": 553,
+    "lost_matches": 0,
+    "lost_get_provenance": [
+     "golden/activity/act_skinparam_shadowing",
+     "golden/activity/act_skinparam2_shadowing_true",
+     "golden/edge-cases/edge_whitespace_multiple_blank_lines"
+    ],
+    "new_valid_input_errors": 0,
+    "lost_rejections": 0,
+    "new_panics": 0,
+    "panics_removed": 4,
+    "rejections_gained": 71,
+    "base_error_now_valid_render": 3,
+    "outputs_changed": 1350
+   },
+   "previous_maker_tip_to_tip": {
+    "strict_matches": "13433 -> 13453",
+    "gained": 20,
+    "lost": 0,
+    "new_valid_input_errors": 0,
+    "valid_input_errors_removed": [
+     "perturbations/tim-intval-conversion/checker6/intval_unicode_digits",
+     "perturbations/tim-intval-conversion/checker6/intval_unicode_json"
+    ],
+    "rejections_restored": [
+     "perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue",
+     "perturbations/tim-builtin-typed-contracts/checker4_surrogate_projection"
+    ],
+    "lost_rejections": 0,
+    "new_panics": 0,
+    "outputs_changed": 32
+   }
+  },
+  "comment_list_oracle": {
+   "pairs": 16402,
+   "base_to_tip": "14308 -> 15014 exact (gained 708, lost 2: shared-svg-corrective/checker-independent-astra/unicode_activity and tim-sub-marker-layers/checker5/sub_suffix_continuation, both Java crash or syntax-error references whose empty comment list base matched; inherited, unchanged this round)",
+   "previous_maker_tip_to_tip": "15003 -> 15014 exact (gained 11, lost 0)"
+  },
+  "golden_no_oracle": {
+   "before": "11181/11251",
+   "after": "11179/11251",
+   "failure_names_vs_9834a7194": {
+    "newly_failing": [
+     "activity/act_skinparam_shadowing",
+     "activity/act_skinparam2_shadowing_true",
+     "edge-cases/edge_whitespace_multiple_blank_lines"
+    ],
+    "newly_passing": [
+     "preprocessing/preproc_complex_theme_override"
+    ]
+   },
+   "note": "the 3 losses are the documented GET-provenance goldens (owner raw-input contract b62d8ce96); the ratchet test fails on them (activity 1299->1297, edge-cases 760->759) and the before tree fails its own ratchet on unlocked progress; no baseline was changed"
+  },
+  "golden_pairs": {
+   "before": "10497 passed / 754 failed / 1299 skipped of 12550",
+   "after": "10497 / 754 / 1299",
+   "failure_names_identical": true,
+   "failure_names_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b"
+  },
+  "parity_perturbations": {
+   "before_sources": 3008,
+   "before_failing": 1365,
+   "after_sources": 3852,
+   "after_failing": 1608,
+   "pre_existing_newly_failing": 0,
+   "pre_existing_newly_passing": 111,
+   "added_sources": 844,
+   "added_sources_failing": 354,
+   "note": "added sources are the packet's and the checker's registered pairs; this round registers none (batch r2a is pending)"
+  },
+  "harness_guards": {
+   "before": "4/6 (decimal_literal_ratchet, parity_review_records_are_complete fail)",
+   "after": "4/6 (same two)",
+   "decimal_ratchet": "identical to base except crates/rustuml-render/src/svg.rs 0 -> 1 (the packet's unit-test literal, now with provenance); state.rs is 62 at base and tip",
+   "review_record_categories_after": {
+    "latest accepted review cannot contain failing perturbations": 1235,
+    "perturbation is not named in any checker review": 306,
+    "latest checker review must be accepted": 198,
+    "T14.6.7 escape / same-stem / .puml-under / outside-walk": "98 each, unchanged from base"
+   },
+   "note": "category growth over base comes from the checker's d539f9a08 records and the packet's registered pairs; this round adds no review record"
+  },
+  "pipe_mode": {
+   "before": "13/13",
+   "after": "17/17 (every_cli_golden_and_registered_perturbation_svg_is_strict_xml passes; malformed list unchanged)"
+  },
+  "workspace_lib": {
+   "before": "1468 passed, 0 failed",
+   "after": "1561 passed, 0 failed"
+  },
+  "cohorts": {
+   "AR": {
+    "cases": 20,
+    "strict": "6 -> 16",
+    "comments_exact": "13 -> 19"
+   },
+   "AU": {
+    "cases": 32,
+    "strict": "6 -> 21",
+    "comments_exact": "22 -> 29"
+   },
+   "detail": "measurements/cohorts-ar-au.json"
+  }
+ },
+ "residuals": [
+  "history_depth2_crossing (Basin/Lock): comment list exact; strict DIFF in both trees (23 differences after): Graphviz places Pump right of the cluster where Java places it left (node order).",
+  "cluster_concurrent_crossing: Java rejects 'Stoker --> Blow' (CommandLinkStateCommon.getEntityEnd -> StateDiagram.checkConcurrentStateOk: 'The state Blow cannot be used here.', exit 200). This is state link-endpoint admission, outside the cluster drawing mechanism; Rust still renders.",
+  "stroke_per_state_css4: Java rejects '##RebeccaPurple' (CommandCreateState line 163 -> HColorSet.getColor -> NoSuchColorException 'No such color', exit 200). This is state command colour admission, outside the asColor stroke rule; Rust still renders.",
+  "raw_multi_blank_first_block and raw_blank_before_start are T14.26; delay_* are T14.25 (both out of scope).",
+  "Border points with short labels: Rust's SVEK edges name the P port, which exists only on the shielded HTML node, so Graphviz prints 'port P unrecognized' on stderr (pre-existing on the root cluster path; Java's dot names no port and lays out the same).",
+  "Formatting: cargo fmt reformatted three unrelated hunks of crates/rustuml-render/src/class.rs (no semantic change) in e01f9a6b9.",
+  "Held-out renamed variants have no Java reference yet; batch r2a is staged and pending relay."
+ ],
+ "relay_request": "batch r2a, see relay-request-r2a.json"
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-external-sub-selection",
+  "rust_revision": "b02ea9cba8e5724790eb767f8e7fa2052bc393a7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "preproc/Sub.java:fromFile",
+    "tim/TContext.java:executeIncludesub",
+    "tim/EaterStartsub.java:analyze"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/"
+  ],
+  "invariant": "External subblock selection buffers raw located selected lines before TIM execution. Unselected file contents cannot execute or fail; selected lines execute in caller memory with the included source/base context.",
+  "causal_divergence": "try_includesub executes the entire file in a temporary context, losing selected content after irrelevant prelude errors and discarding that error.",
+  "planned_change": "Select raw lines with Sub.fromFile start/end behavior, preserving file origins. Execute only selected lines in the caller, restore included base/depth/execution kind, and propagate selected errors without a throwaway context.",
+  "perturbation_axes": [
+    "Fatal or mutating unselected prelude/tail versus selected error",
+    "Repeated selected blocks, caller variables and nested relative includes"
+  ],
+  "oracle_plan": [
+    "Frozen checker counterexamples through actual CLI and unchanged SVG comparator; supplemental exact Java source",
+    "Focused fresh maker controls on at least two axes; ALL LOCAL JAVA PAUSED, references await verified Monkey Man environment",
+    "Once stable: parser/CLI suites, both main tiers, guards, format/clippy; explicitly scoped 1038=949+89 locally versus frozen955/checker1044 and parent1449"
+  ],
+  "pending": [
+    "Fresh independent checker; all ten prior claims remain rejected",
+    "No class/sequence renderer changes; no historical reference or baseline changes"
+  ],
+  "scope": "Preprocess and NEW maker evidence only. Root parse error checks and raw assertion preserved."
+}

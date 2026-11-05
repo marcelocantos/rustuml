@@ -1,0 +1,4 @@
+@startyaml
+- [a, b]
+- c
+@endyaml

@@ -1,0 +1,9 @@
+test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_div.puml
+test-diagrams/perturbations/tim-explicit-date-instant/checker3_negative_quotient.puml
+test-diagrams/perturbations/tim-explicit-date-instant/checker3_wrap_mul.puml
+test-diagrams/perturbations/tim-parser-error-propagation/checker3_default_first_error.puml
+test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_literal.puml
+test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_class_pattern.puml
+test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_literal.puml
+test-diagrams/perturbations/tim-parser-error-propagation/checker3_exact_root_sequence_pattern.puml
+test-diagrams/perturbations/tim-parser-error-propagation/checker3_literal_before_date.puml

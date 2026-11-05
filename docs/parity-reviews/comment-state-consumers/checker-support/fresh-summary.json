@@ -1,0 +1,36 @@
+{
+  "checker94": {
+    "entries": 94,
+    "valid": 93,
+    "before_pass": 18,
+    "after_pass": 23,
+    "comment_and_comparator_pass": 20,
+    "losses": [],
+    "gains": [
+      "checker94/paint_simple_transparent",
+      "checker94/paint_composite_a01",
+      "checker94/paint_composite_a7f",
+      "checker94/paint_composite_afe",
+      "checker94/paint_composite_aff"
+    ],
+    "new_errors": [],
+    "new_panics": [],
+    "errors": 0,
+    "panics": 0,
+    "malformed": 0
+  },
+  "checker6": {
+    "entries": 6,
+    "valid": 5,
+    "before_pass": 2,
+    "after_pass": 2,
+    "comment_and_comparator_pass": 2,
+    "losses": [],
+    "gains": [],
+    "new_errors": [],
+    "new_panics": [],
+    "errors": 0,
+    "panics": 0,
+    "malformed": 0
+  }
+}

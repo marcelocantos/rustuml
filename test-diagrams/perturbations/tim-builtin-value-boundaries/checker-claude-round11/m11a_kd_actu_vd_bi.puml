@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam actorFontStyle italic
+actor "<b>Ovo vow cove</b>" as E1
+usecase "x" as U1
+E1 --> U1
+@enduml

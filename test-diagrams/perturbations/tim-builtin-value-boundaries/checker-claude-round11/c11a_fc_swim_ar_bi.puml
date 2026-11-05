@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam swimlaneTitleFontStyle bold
+|<i>Avid Dawky Vow 4.7, gym kayak ovo!</i>|
+start
+:Ok;
+@enduml

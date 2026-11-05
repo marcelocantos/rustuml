@@ -1,0 +1,6 @@
+@startuml
+state Grove
+Grove : <size:13></size>X<color:black></color>
+Grove : A<size:13></size><color:black></color>B
+Grove : <color:blue><size:13></size></color>X<color:red>Q</color>
+@enduml

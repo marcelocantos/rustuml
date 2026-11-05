@@ -1,0 +1,8 @@
+@startuml
+participant Elm
+note right of Elm
+q<color:red>elm</color>r
+q<color:#112233>elm</color>r
+q<color:#123>elm</color>r
+end note
+@enduml

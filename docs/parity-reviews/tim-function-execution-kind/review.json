@@ -1,0 +1,403 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-function-execution-kind",
+  "reviewer": {
+    "task_id": "t3-bf706fe0-fresh-independent-typed-TIM-checker",
+    "model": "gpt-6-astra / high / Codex in T3 Code; no children; did not implement candidate"
+  },
+  "account_commit": "819485f4001a94056a192e4e8688729d4c9de3e8",
+  "implementation_commit": "0dd2de894fea40d5e9ed81efb6a54d837f80fa4c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "prepared_before": "ed0dcd3c9c11de50288f914947e6735005fb6bb5",
+  "combined_tested_commit": "579b9b1173fef9dd3d10afca05b6d688b9bbd2c2",
+  "parent_commit": "caae198aabd7a20a989e906b42749602a1d73cc5",
+  "root_test_only_followup": "6f52f87e532d549b047f7ccd3fe7fb577fc56df9",
+  "commands": [
+    "ssh -T -o BatchMode=yes marcelo@192.168.1.112 /Users/marcelo/rustuml-reference/bin/new-worker",
+    "ssh -T -o BatchMode=yes marcelo@192.168.1.112 '/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.l4Yx4xIn --timezone GMT+11:00 -- -pipe -tsvg' < SOURCE.puml",
+    "uv run --with pyyaml python docs/parity-reviews/tim-typed-values-and-binding/checker3-support/check.py before frozen",
+    "uv run --with pyyaml python docs/parity-reviews/tim-typed-values-and-binding/checker3-support/check.py after frozen",
+    "uv run --with pyyaml python docs/parity-reviews/tim-typed-values-and-binding/checker3-support/check.py reference fresh (also retained, supplement; each row records zone/cwd)",
+    "uv run --with pyyaml python docs/parity-reviews/tim-typed-values-and-binding/checker3-support/check.py after fresh (also before and retained/supplement)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker3.dRQvKH/target CARGO_BUILD_JOBS=4 RAYON_NUM_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs -- --nocapture",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker3.dRQvKH/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser --lib",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker3.dRQvKH/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml --bin rustuml --test pipe_mode",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-checker3.dRQvKH/target CARGO_BUILD_JOBS=4 cargo clippy --workspace -- -D warnings",
+    "rustfmt --edition 2024 --config skip_children=true --check crates/rustuml-parser/src/preprocess/mod.rs crates/rustuml-parser/src/preprocess/debug.rs crates/rustuml-parser/src/preprocess/date_format.rs crates/rustuml-parser/src/parse/mod.rs crates/rustuml/tests/pipe_mode.rs"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_recursive_plain.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_recursive_plain.svg",
+      "axes": [
+        "recursive return frames",
+        "nested emitting procedure versus plain suppression"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_loop_early_return.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_loop_early_return.svg",
+      "axes": [
+        "return inside while",
+        "post-return mutation"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_foreach_return.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_foreach_return.svg",
+      "axes": [
+        "typed foreach values",
+        "early return termination"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_procedure_expression.svg",
+      "axes": [
+        "procedure versus return call context",
+        "illegal expression invocation"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 200,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_no_return_extension.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_no_return_extension.svg",
+      "axes": [
+        "declaration kind",
+        "documented no-return extension"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 200,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.svg",
+      "axes": [
+        "external sub in return function",
+        "nested include and execution-kind restoration"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_nested_procedure.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_nested_procedure.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-function-execution-kind/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_theme_repeated.puml",
+      "golden": "test-diagrams/perturbations/tim-function-execution-kind/checker3_retained_kind_theme_repeated.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-function-execution-kind/checker3-maker-resources"
+    }
+  ],
+  "dependency_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_eager_recursion.puml",
+      "golden": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_eager_recursion.svg",
+      "axes": [
+        "recursive effects",
+        "AND and OR eager operand order"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_quoted_unicode.puml",
+      "golden": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_quoted_unicode.svg",
+      "axes": [
+        "Unicode literal function text",
+        "logical truth without reparsing"
+      ],
+      "result": "pass",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_snapshot_logical.puml",
+      "golden": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_snapshot_logical.svg",
+      "axes": [
+        "logical eager call",
+        "variable read timing"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": false,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr.puml",
+      "golden": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr.svg",
+      "axes": [
+        "builtin exception before date",
+        "first error cancellation"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 1,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 1,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown.puml",
+      "golden": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown.svg",
+      "axes": [
+        "unknown builtin before date",
+        "first error cancellation"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 1,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 200,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_nested.puml",
+      "golden": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_nested.svg",
+      "axes": [
+        "nested function origins",
+        "multiple fatal expressions"
+      ],
+      "result": "fail",
+      "kind": "fresh independent",
+      "cli_exit": 1,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 200,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_eager_and_or.puml",
+      "golden": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_eager_and_or.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_literal_truth.puml",
+      "golden": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_literal_truth.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "pass",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 0,
+      "reference_invalid": false,
+      "source_equal": true,
+      "java_exit": 0,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_arguments.puml",
+      "golden": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_arguments.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "fail",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 1,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 200,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_logical.puml",
+      "golden": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_retained_first_error_logical.svg",
+      "axes": [
+        "retained maker regression control",
+        "exact source and declared environment"
+      ],
+      "result": "fail",
+      "kind": "retained maker, remote reference rerun",
+      "cli_exit": 1,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 200,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3-maker-resources"
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr_only.puml",
+      "golden": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_substr_only.svg",
+      "axes": [
+        "first fatal builtin",
+        "later visible output cancellation"
+      ],
+      "result": "fail",
+      "kind": "fresh isolating counterexample",
+      "cli_exit": 0,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 1,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown_only.puml",
+      "golden": "test-diagrams/perturbations/tim-eager-operands-first-error/checker3_fatal_unknown_only.svg",
+      "axes": [
+        "first fatal builtin",
+        "later visible output cancellation"
+      ],
+      "result": "fail",
+      "kind": "fresh isolating counterexample",
+      "cli_exit": 0,
+      "reference_invalid": true,
+      "source_equal": false,
+      "java_exit": 200,
+      "reference_contract": "raw pipe for new cases; existing provenance unchanged",
+      "debug": "date=1774210426000,tz=AEDT+1100",
+      "zone": "GMT+11:00",
+      "cwd": "."
+    }
+  ],
+  "findings": [
+    "REJECTED. Recursive return plain suppression, nested procedure emission and include execution-kind restoration now match source and SVG. However checker3_loop_early_return yields Java 1 / 1 versus Rust 3 / 3; checker3_foreach_return yields Java 0052 / 1 versus Rust 0062 / 2. TContext.executeLines returns immediately when executeOneLineSafe yields a TValue. Rust try_while/try_foreach continue buffered body iteration and further iterations after return_signal is set, overwriting the first return and executing later mutations.",
+    "checker3_procedure_expression is rejected by Java TFunctionImpl.executeReturnFunction (illegal procedure call in value context), but Rust eval_function_call accepts it and emits Unexpected. This is distinct from the explicitly retained no-return !function extension, which is also Java-negative and is not positive parity evidence.",
+    "Bounded guidance: propagate return control flow through loop interpreters, and enforce call-context function kind. Keep the demonstrated simulatePlain/addPlain distinction and nested execution-kind save/restore. No production fix is included."
+  ],
+  "verdict": "rejected",
+  "packet_verdict": "rejected; no production changes accepted or integrated by this review",
+  "evidence": "docs/parity-reviews/tim-typed-values-and-binding/checker3-support/README.md",
+  "environment": "All Java remote Monkey Man: OpenJDK21.0.5, Graphviz12.2.0, en_AU, UTF8, headless wrapper; origin21.0.13/16.1.0 equivalence unproven. Local Rust and unchanged strict comparator; declared per-input timezone/cwd.",
+  "scope": "Evidence only; original accounts/reviews/reference data/frozen rules/targets unchanged. No class or sequence candidate production imported."
+}

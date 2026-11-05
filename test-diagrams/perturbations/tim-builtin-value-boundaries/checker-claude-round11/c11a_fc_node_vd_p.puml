@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Verdana
+node "Avid Dawky Vow 4.7, gym kayak ovo!" as E1
+component "Ok" as E2
+E1 --> E2
+@enduml

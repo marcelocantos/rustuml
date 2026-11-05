@@ -1,0 +1,128 @@
+[
+  {
+    "id": "new15/style_empty_families",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_empty_families.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_empty_families.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/style_empty_aliases",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_empty_aliases.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_empty_aliases.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/style_nested_candidates",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_nested_candidates.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_nested_candidates.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/style_parameter_contrast",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_parameter_contrast.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_parameter_contrast.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/style_escape_candidates",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_escape_candidates.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_escape_candidates.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/style_nonempty",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_nonempty.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_nonempty.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/style_eol",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_eol.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/style_eol.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/wbs_lines",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_lines.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_lines.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/wbs_blank_edges",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_blank_edges.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_blank_edges.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/wbs_escaped",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_escaped.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_escaped.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/wbs_boxless_tree",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_boxless_tree.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_boxless_tree.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/wbs_shape_color",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_shape_color.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_shape_color.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/wbs_literal_underscore",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_literal_underscore.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_literal_underscore.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/wbs_boxless_empty",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_boxless_empty.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/wbs_boxless_empty.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "new15/malformed_dot",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/malformed_dot.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/new15/malformed_dot.svg",
+    "reference_valid": false
+  },
+  {
+    "id": "delimiters4/empty",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/delimiters4/empty.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/delimiters4/empty.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "delimiters4/nonempty",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/delimiters4/nonempty.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/delimiters4/nonempty.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "delimiters4/unclosed",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/delimiters4/unclosed.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/delimiters4/unclosed.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "delimiters4/escaped",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/delimiters4/escaped.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/delimiters4/escaped.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "focused2/positioned_captures",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/focused2/positioned_captures.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/focused2/positioned_captures.svg",
+    "reference_valid": true
+  },
+  {
+    "id": "focused2/positioned_fallbacks",
+    "source": "test-diagrams/perturbations/creole-style-candidate-eligibility/focused2/positioned_fallbacks.puml",
+    "reference": "test-diagrams/perturbations/creole-style-candidate-eligibility/focused2/positioned_fallbacks.svg",
+    "reference_valid": true
+  }
+]

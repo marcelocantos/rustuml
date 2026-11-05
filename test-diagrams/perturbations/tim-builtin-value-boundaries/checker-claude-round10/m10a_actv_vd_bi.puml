@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam activityFontStyle bold italic
+start
+:Pylon vk;
+@enduml

@@ -1,0 +1,132 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_fractional_zone.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_long_zone.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_dynamic_selector.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_nested.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_relative.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_repeated.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-external-sub-selection/checker3_tabs.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-function-execution-kind/checker3_include_from_return.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_function_selector.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_include_theme.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_ramadan.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_casablanca_summer.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_dublin_winter.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_fixed_fraction.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_kathmandu.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_summer.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_london_winter.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_lord_howe.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_new_york_summer.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_tokyo_width.puml",
+    "builtin_match": false,
+    "cli_match": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-zone-display-width/checker3_retained_zone_utc_width.puml",
+    "builtin_match": false,
+    "cli_match": true
+  }
+]

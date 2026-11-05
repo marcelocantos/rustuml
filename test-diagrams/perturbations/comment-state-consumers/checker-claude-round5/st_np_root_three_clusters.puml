@@ -1,0 +1,17 @@
+@startuml
+state North {
+  Pine --> Fir
+  note right of Pine : tall
+}
+state South {
+  Palm --> Fern
+}
+state East {
+  Oak --> Elm
+  note left of Elm : wide
+}
+Start --> Pine
+Fir --> Palm
+Fern --> Oak
+Elm --> Stop
+@enduml

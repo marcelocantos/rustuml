@@ -1,0 +1,9 @@
+@startuml
+state "Outer Basin" as Basin {
+  state "Inner Lock" as Lock {
+    [*] --> Gate
+    Gate --> [H*]
+  }
+}
+Pump --> Gate
+@enduml

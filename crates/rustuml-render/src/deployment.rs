@@ -443,12 +443,15 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             .unwrap_or_else(|| format!("lnk{}", i));
         render_connection(
             &mut svg,
+            ConnectionLookups {
+                diagram,
+                oracle,
+                id_for_node: &id_for_node,
+                own_qname_for_id: &own_qname_for_id,
+                handwritten: ctx.handwritten,
+            },
             conn,
-            oracle,
-            &id_for_node,
-            &own_qname_for_id,
             &link_id,
-            ctx.handwritten,
         );
     }
 
@@ -492,11 +495,11 @@ fn render_oracle_legends(svg: &mut SvgBuilder, oracle: &OracleLayout) {
             .unwrap_or_default();
         svg.raw(&format!(
             r#"<rect fill="{}" height="{}"{}{} style="{}" width="{}" x="{}" y="{}"/>"#,
-            legend.rect.fill,
+            crate::svg::escape_attribute(&legend.rect.fill),
             fc(legend.rect.height),
             rx_attr,
             ry_attr,
-            legend.rect.style,
+            crate::svg::escape_attribute(&legend.rect.style),
             fc(legend.rect.width),
             fc(legend.rect.x),
             fc(legend.rect.y),
@@ -529,7 +532,11 @@ fn render_oracle_legends(svg: &mut SvgBuilder, oracle: &OracleLayout) {
                 .unwrap_or("stroke:#000000;stroke-width:1;");
             svg.raw(&format!(
                 r#"<line style="{style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                line.x1, line.x2, line.y1, line.y2,
+                line.x1,
+                line.x2,
+                line.y1,
+                line.y2,
+                style = crate::svg::escape_attribute(style),
             ));
         }
 
@@ -592,19 +599,19 @@ fn emit_handwritten_warning(svg: &mut SvgBuilder, warning: &OracleHandwrittenWar
     write!(
         buf,
         r#"<polygon fill="{}" points="{}""#,
-        escape_xml_attr(&warning.polygon.fill),
-        escape_xml_attr(&warning.polygon.points),
+        crate::svg::escape_attribute(&warning.polygon.fill),
+        crate::svg::escape_attribute(&warning.polygon.points),
     )
     .unwrap();
     if let Some(style) = warning.polygon.style.as_deref() {
-        write!(buf, r#" style="{}""#, escape_xml_attr(style)).unwrap();
+        write!(buf, r#" style="{}""#, crate::svg::escape_attribute(style)).unwrap();
     }
     buf.push_str("/>");
     match warning.text_length.as_deref() {
         Some(text_length) => write!(
             buf,
             r##"<text fill="#000000" font-family="monospace" font-size="10" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
-            escape_xml_attr(text_length),
+            crate::svg::escape_attribute(text_length),
             fc(warning.text.x),
             fc(warning.text.y),
             escape_xml_text(&warning.text.text),
@@ -770,14 +777,28 @@ fn skin_border_colors(
     map
 }
 
-/// Compute the "own" qualified-name (last segment) for a node.
+/// Compute the "own" qualified-name (last segment) for a node from the
+/// parser-recorded Quark local name.
 fn own_qname(node: &DeploymentNode) -> String {
-    let derived = label_to_id(&node.label);
-    if derived == node.id && node.id != node.label {
-        qname_label_segment(&node.label)
-    } else {
-        node.id.clone()
+    match &node.quark_name {
+        Some(name) => qname_label_segment(name),
+        None => node.id.clone(),
     }
+}
+
+// EntityImageDescription.drawU:289 / Cluster.drawU:309 use the local Quark
+// name, not the display or metadata-translated name.
+fn deployment_comment_name(node: &DeploymentNode) -> &str {
+    node.quark_name.as_deref().unwrap_or(&node.id)
+}
+
+fn deployment_comment_endpoint<'a>(diagram: &'a DeploymentDiagram, id: &'a str) -> &'a str {
+    diagram
+        .nodes
+        .iter()
+        .find(|node| node.id == id)
+        .map(deployment_comment_name)
+        .unwrap_or(id)
 }
 
 struct OracleRenderContext<'a> {
@@ -813,11 +834,15 @@ fn emit_clusters_dfs(
                 .as_deref()
                 .map(str::to_string)
                 .unwrap_or_else(|| node.source_line.to_string());
-            svg.raw(&format!("<!--cluster {}-->", node.label));
+            svg.raw(&format!(
+                "<!--{svg_comment}-->",
+                svg_comment =
+                    crate::svg::comment_text(&format!("cluster {}", deployment_comment_name(node))),
+            ));
             svg.raw(&format!(
                 r#"<g class="cluster" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
-                sl = source_line,
-            ));
+                sl = source_line, qname = crate::svg::escape_attribute(&qname), ent_id = crate::svg::escape_attribute(&ent_id),
+));
             // A `#color` (or a `skinparam <kind> { BackgroundColor }`) fills
             // the cluster shape, replacing the default `fill="none"`; the
             // stroke width stays at the cluster value. Otherwise unfilled.
@@ -956,11 +981,15 @@ fn emit_entity(
             .as_deref()
             .map(str::to_string)
             .unwrap_or_else(|| node.source_line.to_string());
-        svg.raw(&format!("<!--entity {}-->", node.label));
+        svg.raw(&format!(
+            "<!--{svg_comment}-->",
+            svg_comment =
+                crate::svg::comment_text(&format!("entity {}", deployment_comment_name(node))),
+        ));
         svg.raw(&format!(
             r#"<g class="entity" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
-            sl = source_line,
-        ));
+            sl = source_line, qname = crate::svg::escape_attribute(qname), ent_id = crate::svg::escape_attribute(&ent_id),
+));
         // Fill precedence: explicit `#color` > `skinparam <kind>
         // BackgroundColor` > the `#F1F1F1` default.
         let entity_fill = node
@@ -1041,7 +1070,9 @@ fn emit_handwritten_entity(
                 .unwrap_or((piece, "stroke:#181818;stroke-width:0.5;"));
             let path_fill = if i == 0 { fill } else { "none" };
             svg.raw(&format!(
-                r#"<path d="{d}" fill="{path_fill}" style="{style}"/>"#
+                r#"<path d="{d}" fill="{path_fill}" style="{style}"/>"#,
+                path_fill = crate::svg::escape_attribute(path_fill),
+                style = crate::svg::escape_attribute(style),
             ));
             emitted_shape = true;
         }
@@ -1090,12 +1121,14 @@ fn emit_generated_handwritten_entity_shape(
             let vertices = tag_polygon_vertices(x, y, w, h);
             let points = handwritten_polygon_points(&vertices);
             svg.raw(&format!(
-                r#"<polygon fill="{fill}" points="{points}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
-            ));
+                r#"<polygon fill="{fill}" points="{points}" style="stroke:{stroke};stroke-width:0.5;"/>"#, fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
             for (x1, y1, x2, y2) in tag_polygon_detail_lines(x, y, w, h) {
                 let d = handwritten_line_path(x1, y1, x2, y2);
                 svg.raw(&format!(
                     r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+                    fill = crate::svg::escape_attribute(fill),
+                    stroke = crate::svg::escape_attribute(stroke),
                 ));
             }
             true
@@ -1106,9 +1139,12 @@ fn emit_generated_handwritten_entity_shape(
             let lip = handwritten_path(&lip).unwrap_or(lip);
             svg.raw(&format!(
                 r#"<path d="{body}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+                fill = crate::svg::escape_attribute(fill),
+                stroke = crate::svg::escape_attribute(stroke),
             ));
             svg.raw(&format!(
                 r#"<path d="{lip}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+                stroke = crate::svg::escape_attribute(stroke),
             ));
             true
         }
@@ -1121,12 +1157,12 @@ fn emit_oracle_polygon(svg: &mut SvgBuilder, polygon: &EntityPolygon) {
     write!(
         buf,
         r#"<polygon fill="{}" points="{}""#,
-        escape_xml_attr(&polygon.fill),
-        escape_xml_attr(&polygon.points),
+        crate::svg::escape_attribute(&polygon.fill),
+        crate::svg::escape_attribute(&polygon.points),
     )
     .unwrap();
     if let Some(style) = polygon.style.as_deref() {
-        write!(buf, r#" style="{}""#, escape_xml_attr(style)).unwrap();
+        write!(buf, r#" style="{}""#, crate::svg::escape_attribute(style)).unwrap();
     }
     buf.push_str("/>");
     svg.raw(&buf);
@@ -1137,12 +1173,12 @@ fn emit_oracle_path(svg: &mut SvgBuilder, path: &EntityPath) {
     write!(
         buf,
         r#"<path d="{}" fill="{}""#,
-        escape_xml_attr(&path.d),
-        escape_xml_attr(&path.fill),
+        crate::svg::escape_attribute(&path.d),
+        crate::svg::escape_attribute(&path.fill),
     )
     .unwrap();
     if let Some(style) = path.style.as_deref() {
-        write!(buf, r#" style="{}""#, escape_xml_attr(style)).unwrap();
+        write!(buf, r#" style="{}""#, crate::svg::escape_attribute(style)).unwrap();
     }
     buf.push_str("/>");
     svg.raw(&buf);
@@ -1162,20 +1198,7 @@ fn stereotype_refs_sprite(
 }
 
 fn qualified_name(node: &DeploymentNode, parent_qname: Option<&str>) -> String {
-    // Heuristic: when the parser's `id` was derived from the label
-    // (no explicit alias), the qualified-name uses the label.
-    // When an alias was used, the qualified-name uses the id.
-    let derived = label_to_id(&node.label);
-    let own = if derived == node.id && node.id != node.label {
-        // Quoted-form, no alias: id was auto-derived. Use label.
-        qname_label_segment(&node.label)
-    } else if node.id == node.label {
-        // Bare form: id == label. Either works.
-        node.id.clone()
-    } else {
-        // Alias used. Use the explicit id.
-        node.id.clone()
-    };
+    let own = own_qname(node);
     match parent_qname {
         Some(p) => format!("{p}.{own}"),
         None => own,
@@ -1197,22 +1220,6 @@ fn resolve_fill(raw: &str) -> String {
     } else {
         // Not a recognised name — treat the token as a bare hex value.
         format!("#{normalized}")
-    }
-}
-
-fn label_to_id(label: &str) -> String {
-    let mut id = String::new();
-    for ch in label.chars() {
-        if ch.is_alphanumeric() || ch == '_' {
-            id.push(ch);
-        } else if ch == ' ' || ch == '-' || ch == '.' {
-            id.push('_');
-        }
-    }
-    if id.is_empty() {
-        label.replace(|c: char| !c.is_alphanumeric(), "_")
-    } else {
-        id
     }
 }
 
@@ -1297,7 +1304,11 @@ fn emit_oracle_cloud_cluster_path(svg: &mut SvgBuilder, glyph: &str, fill: &str,
     } else {
         style.to_string()
     };
-    svg.raw(&format!(r#"<path d="{d}" fill="{fill}" style="{style}"/>"#,));
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{fill}" style="{style}"/>"#,
+        fill = crate::svg::escape_attribute(fill),
+        style = crate::svg::escape_attribute(&style),
+    ));
 }
 
 fn emit_cloud_cluster(
@@ -1329,6 +1340,8 @@ fn emit_cloud_cluster(
     }
     svg.raw(&format!(
         r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:1;"/>"#,
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     ));
 }
 
@@ -1346,8 +1359,8 @@ fn emit_plain_rect_cluster(
         h = fc(h),
         w = fc(w),
         x = fc(x),
-        y = fc(y),
-    ));
+        y = fc(y), fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
 }
 
 // ---- Node ("tag" polygon) -------------------------------------------------
@@ -1393,6 +1406,8 @@ pub(crate) fn emit_tag_polygon(
     let points = points.join(",");
     svg.raw(&format!(
         r#"<polygon fill="{fill}" points="{points}" style="stroke:{stroke};stroke-width:{sw};"/>"#,
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     ));
     // 3 lines for the 3D effect: top-right diagonal, top inner, right inner.
     for (x1, y1, x2, y2) in tag_polygon_detail_lines(x, y, w, h) {
@@ -1402,6 +1417,7 @@ pub(crate) fn emit_tag_polygon(
             fc(x2),
             fc(y1),
             fc(y2),
+            stroke = crate::svg::escape_attribute(stroke),
         ));
     }
 }
@@ -1437,8 +1453,8 @@ pub(crate) fn emit_artifact_with_stroke_width(
     let w_s = fc(w);
     let h_s = fc(h);
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h_s}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:{sw};" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
-    ));
+        r#"<rect fill="{fill}" height="{h_s}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:{sw};" width="{w_s}" x="{x_s}" y="{y_s}"/>"#, fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
     // Folded corner polygon at top-right (12x14 box, inset 5 from right and 5 from top).
     let fx = x + w - 17.0; // 12 wide, then 5 from right edge
     let fy = y + 5.0;
@@ -1464,20 +1480,22 @@ pub(crate) fn emit_artifact_with_stroke_width(
     );
     svg.raw(&format!(
         r#"<polygon fill="{fill}" points="{pts}" style="stroke:{stroke};stroke-width:{sw};"/>"#,
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     ));
     // Two lines for the fold detail.
     svg.raw(&format!(
         r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{a}" x2="{a}" y1="{y1}" y2="{y2}"/>"#,
         a = fc(fx + 6.0),
         y1 = fc(fy),
-        y2 = fc(fy + 6.0),
-    ));
+        y2 = fc(fy + 6.0), stroke = crate::svg::escape_attribute(stroke),
+));
     svg.raw(&format!(
         r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
         x1 = fc(fx + 12.0),
         x2 = fc(fx + 6.0),
-        y = fc(fy + 6.0),
-    ));
+        y = fc(fy + 6.0), stroke = crate::svg::escape_attribute(stroke),
+));
 }
 
 // ---- Rounded rect (card / rectangle / agent leaf) --------------------------
@@ -1496,8 +1514,8 @@ fn emit_rounded_rect(
         h = fc(h),
         w = fc(w),
         x = fc(x),
-        y = fc(y),
-    ));
+        y = fc(y), fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
 }
 
 // ---- Card cluster (rect + horizontal line) --------------------------------
@@ -1516,16 +1534,16 @@ fn emit_card_cluster(
         h = fc(h),
         w = fc(w),
         x = fc(x),
-        y = fc(y),
-    ));
+        y = fc(y), fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
     // Horizontal line under the title row (at y + 20.4883).
     let ly = y + 20.4883;
     svg.raw(&format!(
         r#"<line style="stroke:{stroke};stroke-width:1;" x1="{x1}" x2="{x2}" y1="{ly_s}" y2="{ly_s}"/>"#,
         x1 = fc(x),
         x2 = fc(x + w),
-        ly_s = fc(ly),
-    ));
+        ly_s = fc(ly), stroke = crate::svg::escape_attribute(stroke),
+));
 }
 
 // ---- Component (rect + tab + bars) ----------------------------------------
@@ -1536,28 +1554,28 @@ fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &s
         h = fc(h),
         w = fc(w),
         x = fc(x),
-        y = fc(y),
-    ));
+        y = fc(y), fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
     // Tab at top-right: 15w x 10h, x = x+w-20, y = y+5.
     let tab_x = x + w - 20.0;
     let tab_y = y + 5.0;
     svg.raw(&format!(
         r#"<rect fill="{fill}" height="10" style="stroke:{stroke};stroke-width:0.5;" width="15" x="{x}" y="{y}"/>"#,
         x = fc(tab_x),
-        y = fc(tab_y),
-    ));
+        y = fc(tab_y), fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
     // Two small bars left of tab (4w x 2h each).
     let bar_x = tab_x - 2.0;
     svg.raw(&format!(
         r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
         x = fc(bar_x),
-        y = fc(tab_y + 2.0),
-    ));
+        y = fc(tab_y + 2.0), fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
     svg.raw(&format!(
         r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
         x = fc(bar_x),
-        y = fc(tab_y + 6.0),
-    ));
+        y = fc(tab_y + 6.0), fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
 }
 
 // ---- Component cluster (rounded rect + plug icon, cluster stroke-width) ----
@@ -1576,28 +1594,28 @@ fn emit_component_cluster(
         h = fc(h),
         w = fc(w),
         x = fc(x),
-        y = fc(y),
-    ));
+        y = fc(y), fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
     // Tab at top-right: 15w x 10h, x = x+w-20, y = y+5.
     let tab_x = x + w - 20.0;
     let tab_y = y + 5.0;
     svg.raw(&format!(
         r#"<rect fill="{fill}" height="10" style="stroke:{stroke};stroke-width:1;" width="15" x="{x}" y="{y}"/>"#,
         x = fc(tab_x),
-        y = fc(tab_y),
-    ));
+        y = fc(tab_y), fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
     // Two small bars left of tab (4w x 2h each).
     let bar_x = tab_x - 2.0;
     svg.raw(&format!(
         r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:1;" width="4" x="{x}" y="{y}"/>"#,
         x = fc(bar_x),
-        y = fc(tab_y + 2.0),
-    ));
+        y = fc(tab_y + 2.0), fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
     svg.raw(&format!(
         r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:1;" width="4" x="{x}" y="{y}"/>"#,
         x = fc(bar_x),
-        y = fc(tab_y + 6.0),
-    ));
+        y = fc(tab_y + 6.0), fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
 }
 
 // ---- Frame (rect + small tab path top-left) -------------------------------
@@ -1608,8 +1626,8 @@ fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, 
         h = fc(h),
         w = fc(w),
         x = fc(x),
-        y = fc(y),
-    ));
+        y = fc(y), fill = crate::svg::escape_attribute(fill),
+));
     // Tab path in the top-left corner: drop 5px, then a 7px diagonal cut down
     // to y+12, then back to the left edge. The tab's right edge sits at
     // x + (label_w + 40) / 3 (derived from goldens).
@@ -1647,8 +1665,8 @@ fn emit_frame_cluster(
         h = fc(h),
         w = fc(w),
         x = fc(x),
-        y = fc(y),
-    ));
+        y = fc(y), fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
 }
 
 /// Emit the small tab path used by frame clusters in the top-left corner.
@@ -1700,15 +1718,17 @@ fn emit_folder(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str,
         x_s = fc(x),
     );
     svg.raw(&format!(
-        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     ));
     // Horizontal divider under the tab, from the left edge to the flap end.
     svg.raw(&format!(
         r#"<line style="stroke:{stroke};stroke-width:0.5;" x1="{x1}" x2="{x2}" y1="{ty}" y2="{ty}"/>"#,
         x1 = fc(x),
         x2 = fc(flap_r + 9.5),
-        ty = fc(tab_y),
-    ));
+        ty = fc(tab_y), stroke = crate::svg::escape_attribute(stroke),
+));
 }
 
 /// Folder cluster shape: like the leaf folder but the tab width tracks the
@@ -1746,14 +1766,16 @@ fn emit_folder_cluster(
         x_s = fc(x),
     );
     svg.raw(&format!(
-        r#"<path d="{d}" fill="{fill}" style="stroke:{cstroke};stroke-width:1.5;"/>"#
+        r#"<path d="{d}" fill="{fill}" style="stroke:{cstroke};stroke-width:1.5;"/>"#,
+        fill = crate::svg::escape_attribute(fill),
+        cstroke = crate::svg::escape_attribute(cstroke),
     ));
     svg.raw(&format!(
         r#"<line style="stroke:{cstroke};stroke-width:1.5;" x1="{x1}" x2="{x2}" y1="{ty}" y2="{ty}"/>"#,
         x1 = fc(x),
         x2 = fc(flap_r + 9.5),
-        ty = fc(tab_y),
-    ));
+        ty = fc(tab_y), cstroke = crate::svg::escape_attribute(cstroke),
+));
 }
 
 // ---- File -----------------------------------------------------------------
@@ -1777,7 +1799,9 @@ fn emit_file(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, s
         y_s = fc(y),
     );
     svg.raw(&format!(
-        r#"<path d="{body}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
+        r#"<path d="{body}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     ));
     let fold = format!(
         "M{xr10},{y_s} L{xr10},{y75} A2.5,2.5 0 0 0 {xr75},{y10} L{xr_s},{y10}",
@@ -1789,7 +1813,9 @@ fn emit_file(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, s
         xr_s = fc(xr),
     );
     svg.raw(&format!(
-        r#"<path d="{fold}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
+        r#"<path d="{fold}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     ));
 }
 
@@ -1835,6 +1861,8 @@ fn emit_package_path(
     svg.raw(&format!(
         r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:{sw};"/>"#,
         sw = fc(sw),
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     ));
     // Horizontal divider under the tab, from the left edge to the slope end.
     svg.raw(&format!(
@@ -1842,8 +1870,8 @@ fn emit_package_path(
         x1 = fc(x),
         x2 = fc(tab_tr + 9.5),
         ty = fc(tab_y),
-        sw = fc(sw),
-    ));
+        sw = fc(sw), stroke = crate::svg::escape_attribute(stroke),
+));
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -1884,8 +1912,8 @@ fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, 
         h = fc(h),
         w = fc(inner_w),
         x = fc(inner_x),
-        y = fc(y),
-    ));
+        y = fc(y), fill = crate::svg::escape_attribute(fill),
+));
     let xl = x;
     let xr = x + w;
     let d = format!(
@@ -1904,7 +1932,8 @@ fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, 
         y_pm1 = fc(y + h - 2.5),
     );
     svg.raw(&format!(
-        r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#
+        r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        stroke = crate::svg::escape_attribute(stroke),
     ));
 }
 
@@ -1919,8 +1948,8 @@ fn emit_stack_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill
         h = fc(h),
         w = fc(inner_w),
         x = fc(inner_x),
-        y = fc(y),
-    ));
+        y = fc(y), fill = crate::svg::escape_attribute(fill),
+));
     let xl = x;
     let xr = x + w;
     let d = format!(
@@ -1939,7 +1968,8 @@ fn emit_stack_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill
         y_pm1 = fc(y + h - 2.5),
     );
     svg.raw(&format!(
-        r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:1;"/>"#
+        r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:1;"/>"#,
+        stroke = crate::svg::escape_attribute(stroke),
     ));
 }
 
@@ -1966,8 +1996,8 @@ pub(crate) fn emit_storage_with_stroke_width(
         w = fc(w),
         x = fc(x),
         y = fc(y),
-        stroke_width = fc(stroke_width),
-    ));
+        stroke_width = fc(stroke_width), fill = crate::svg::escape_attribute(fill), stroke = crate::svg::escape_attribute(stroke),
+));
 }
 
 // ---- Database (cylinder via 2 bezier paths) -------------------------------
@@ -2054,10 +2084,13 @@ pub(crate) fn emit_database(
 ) {
     let (d, d2) = database_path_data(x, y, w, h, label, false);
     svg.raw(&format!(
-        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     ));
     svg.raw(&format!(
-        r#"<path d="{d2}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#
+        r#"<path d="{d2}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        stroke = crate::svg::escape_attribute(stroke),
     ));
 }
 
@@ -2099,7 +2132,9 @@ pub(crate) fn emit_queue(
         yh_s = fc(y + h_full),
     );
     svg.raw(&format!(
-        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        fill = crate::svg::escape_attribute(fill),
+        stroke = crate::svg::escape_attribute(stroke),
     ));
     // The inner left wall (right-side of the lip).
     let inner_x = x + w - 10.0;
@@ -2112,7 +2147,8 @@ pub(crate) fn emit_queue(
         yh_s = fc(y + h_full),
     );
     svg.raw(&format!(
-        r#"<path d="{d2}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#
+        r#"<path d="{d2}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+        stroke = crate::svg::escape_attribute(stroke),
     ));
 }
 
@@ -2646,7 +2682,7 @@ fn emit_actor_entity(
             r#"<ellipse cx="{}" cy="{}" fill="{}" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>"#,
             fc(head_x + ACTOR_HEAD_DIAMETER / 2.0),
             fc(head_center_y),
-            fill,
+            crate::svg::escape_attribute(fill),
         ));
         let body_top = symbol_y + ACTOR_HEAD_DIAMETER + ACTOR_STROKE_WIDTH;
         let body_bottom = body_top + ACTOR_BODY_LENGTH;
@@ -2687,10 +2723,10 @@ fn emit_actor_entity(
         r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
         fc(cx),
         fc(cy),
-        fill,
+        crate::svg::escape_attribute(fill),
         fc(r),
         fc(r),
-        style,
+        crate::svg::escape_attribute(style),
     ));
     if let Some(d) = rect.glyph_path_d.as_deref() {
         svg.raw(&format!(
@@ -2740,8 +2776,8 @@ fn emit_icon_entity(
         r#"<ellipse cx="{cx_s}" cy="{cy_s}" fill="{fill}" rx="{r_s}" ry="{r_s}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
         cx_s = fc(cx),
         cy_s = fc(cy),
-        r_s = fc(r),
-    ));
+        r_s = fc(r), fill = crate::svg::escape_attribute(fill),
+));
     match node.kind {
         Control => {
             // Arrow notch at the top of the circle, tip pointing left-up.
@@ -2889,6 +2925,7 @@ fn emit_cloud_entity(
     }
     svg.raw(&format!(
         r#"<path d="{d}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        fill = crate::svg::escape_attribute(fill),
     ));
 
     // Label (and optional stereotype) centred horizontally in the box, at the
@@ -3046,7 +3083,8 @@ fn emit_note(svg: &mut SvgBuilder, note: &crate::layout_oracle::OracleNoteEntity
     let ent_id = note.entity_id.as_deref().unwrap_or("");
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{qn}"{comment} id="{ent_id}">"#,
-        qn = note.qualified_name,
+        qn = crate::svg::escape_attribute(&note.qualified_name),
+        ent_id = crate::svg::escape_attribute(ent_id),
     ));
     svg.raw(&format!(
         r#"<path d="{d}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
@@ -3205,7 +3243,9 @@ fn render_attached_deployment_note(
 
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-        uid.qualified_name, note.source_line, uid.entity_id
+        crate::svg::escape_attribute(&uid.qualified_name),
+        note.source_line,
+        crate::svg::escape_attribute(&uid.entity_id)
     ));
     svg.raw(&format!(
         r#"<path d="{path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
@@ -3269,15 +3309,29 @@ fn find_oracle_connection_edge<'a>(
     fallback
 }
 
+/// The per-diagram lookups every connection reads.
+#[derive(Clone, Copy)]
+struct ConnectionLookups<'a> {
+    diagram: &'a DeploymentDiagram,
+    oracle: &'a OracleLayout,
+    id_for_node: &'a HashMap<String, String>,
+    own_qname_for_id: &'a HashMap<String, String>,
+    handwritten: bool,
+}
+
 fn render_connection(
     svg: &mut SvgBuilder,
+    lookups: ConnectionLookups<'_>,
     conn: &DeploymentConnection,
-    oracle: &OracleLayout,
-    id_for_node: &HashMap<String, String>,
-    own_qname_for_id: &HashMap<String, String>,
     link_id: &str,
-    handwritten: bool,
 ) {
+    let ConnectionLookups {
+        diagram,
+        oracle,
+        id_for_node,
+        own_qname_for_id,
+        handwritten,
+    } = lookups;
     // Edge IDs in goldens use the OWN name of each endpoint. own_qname may
     // itself contain '.' (label-derived), so we can't recover it by splitting
     // the full qualified path on '.'.
@@ -3331,13 +3385,18 @@ fn render_connection(
     let is_reverse = oracle_edge
         .map(|e| e.id.contains("-backto-"))
         .unwrap_or(false);
+    let from_comment = deployment_comment_endpoint(diagram, &conn.from);
+    let to_comment = deployment_comment_endpoint(diagram, &conn.to);
     let (comment_from, comment_to) = if is_reverse {
-        (&to_qname, &from_qname)
+        (to_comment, from_comment)
     } else {
-        (&from_qname, &to_qname)
+        (from_comment, to_comment)
     };
     let prefix = if is_reverse { "reverse link" } else { "link" };
-    svg.raw(&format!("<!--{prefix} {comment_from} to {comment_to}-->"));
+    svg.raw(&format!(
+        "<!--{svg_comment}-->",
+        svg_comment = crate::svg::comment_text(&format!("{prefix} {comment_from} to {comment_to}")),
+    ));
 
     let entity_1 = oracle_edge
         .and_then(|e| e.entity_1.as_deref())
@@ -3360,8 +3419,8 @@ fn render_connection(
         .unwrap_or_default();
 
     svg.raw(&format!(
-        r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}"{source_attr} id="{link_id_final}">"#,
-    ));
+        r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}"{source_attr} id="{link_id_final}">"#, entity_1 = crate::svg::escape_attribute(entity_1), entity_2 = crate::svg::escape_attribute(entity_2), link_type = crate::svg::escape_attribute(link_type), link_id_final = crate::svg::escape_attribute(link_id_final),
+));
 
     if let Some(oe) = oracle_edge {
         let path_style = oe
@@ -3376,11 +3435,15 @@ fn render_connection(
         let id_attr = if handwritten {
             String::new()
         } else {
-            format!(r#" id="{expected_id}""#)
+            format!(
+                r#" id="{expected_id}""#,
+                expected_id = crate::svg::escape_attribute(&expected_id),
+            )
         };
         svg.raw(&format!(
             r#"<path{code_line_attr} d="{d}" fill="none"{id_attr} style="{path_style}"/>"#,
             d = oe.d,
+            path_style = crate::svg::escape_attribute(path_style),
         ));
         if let Some(points) = &oe.arrow_points {
             let fill = oe.arrow_fill.as_deref().unwrap_or("#181818");
@@ -3390,6 +3453,8 @@ fn render_connection(
                 .unwrap_or("stroke:#181818;stroke-width:1;");
             svg.raw(&format!(
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+                fill = crate::svg::escape_attribute(fill),
+                poly_style = crate::svg::escape_attribute(poly_style),
             ));
         }
         if let Some(points) = &oe.second_arrow_points {
@@ -3400,6 +3465,8 @@ fn render_connection(
                 .unwrap_or("stroke:#181818;stroke-width:1;");
             svg.raw(&format!(
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
+                fill = crate::svg::escape_attribute(fill),
+                poly_style = crate::svg::escape_attribute(poly_style),
             ));
         }
         // Connection labels — positions taken from the oracle. PlantUML emits
@@ -5668,11 +5735,20 @@ fn render_no_oracle_edges(
         } else {
             conn.arrow_at_end
         };
-        if reversed {
-            svg.raw(&format!("<!--reverse link {} to {}-->", conn.to, conn.from));
+        let (entity1, entity2, form) = deployment_link_svg_identity(conn);
+        let prefix = if form == LinkSvgForm::Reverted {
+            "reverse link"
         } else {
-            svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
-        }
+            "link"
+        };
+        svg.raw(&format!(
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!(
+                "{prefix} {} to {}",
+                deployment_comment_endpoint(diagram, entity1),
+                deployment_comment_endpoint(diagram, entity2)
+            )),
+        ));
         let link_type = if conn.arrow_at_start || conn.arrow_at_end {
             "dependency"
         } else {
@@ -5680,8 +5756,8 @@ fn render_no_oracle_edges(
         };
         svg.raw(&format!(
             r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="{link_type}" data-source-line="{line}" id="{link_id}">"#,
-            line = conn.source_line,
-        ));
+            line = conn.source_line, ent1 = crate::svg::escape_attribute(ent1), ent2 = crate::svg::escape_attribute(ent2), link_type = crate::svg::escape_attribute(link_type), link_id = crate::svg::escape_attribute(&link_id),
+));
         let tail_cluster = cluster_rects.get(logical_from);
         let head_cluster = cluster_rects.get(logical_to);
         let raw_points = deployment_svek_edge_points(
@@ -5706,14 +5782,10 @@ fn render_no_oracle_edges(
             },
         );
         if let Some(d) = edge_path_d(&points) {
-            let mut path_id = deployment_connection_path_base_id(diagram, conn, reversed);
+            let mut path_id = deployment_connection_path_base_id(diagram, conn);
             let duplicate_index = diagram.connections[..i]
                 .iter()
-                .filter(|previous| {
-                    let (_, _, previous_reversed) = deployment_connection_layout(previous);
-                    deployment_connection_path_base_id(diagram, previous, previous_reversed)
-                        == path_id
-                })
+                .filter(|previous| deployment_connection_path_base_id(diagram, previous) == path_id)
                 .count();
             if duplicate_index > 0 {
                 write!(path_id, "-{duplicate_index}").unwrap();
@@ -5734,10 +5806,13 @@ fn render_no_oracle_edges(
                 let d = handwritten_dot_path(&points).unwrap_or(d);
                 svg.raw(&format!(
                     r#"<path d="{d}" fill="none" style="{path_style}"/>"#,
+                    path_style = crate::svg::escape_attribute(path_style),
                 ));
             } else {
                 svg.raw(&format!(
                     r#"<path d="{d}" fill="none" id="{path_id}" style="{path_style}"/>"#,
+                    path_id = crate::svg::escape_attribute(&path_id),
+                    path_style = crate::svg::escape_attribute(path_style),
                 ));
             }
         }
@@ -5808,29 +5883,66 @@ fn deployment_connection_layout(conn: &DeploymentConnection) -> (&str, &str, boo
     }
 }
 
+/// SVG identity form of a deployment link, from Java `LinkType`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum LinkSvgForm {
+    /// `looksLikeRevertedForSvg`: decor1 is NONE and decor2 is not.
+    Reverted,
+    /// `looksLikeNoDecorAtAllSvg`: both or neither end decorated.
+    NoDecor,
+    Forward,
+}
+
+/// The `Link` endpoints and SVG form Java builds for a deployment arrow.
+///
+/// Java provenance: `CommandLinkElement.getLinkType` constructs
+/// `LinkType(decor1 = right head, decor2 = left head)`, and `executeArg`
+/// replaces LEFT/UP links with `Link.getInv()`, swapping both the entities
+/// and the decorations. `Link.commentForSvg`/`idCommentForSvg` then read the
+/// resulting entity order and `LinkType` form.
+fn deployment_link_svg_identity(conn: &DeploymentConnection) -> (&str, &str, LinkSvgForm) {
+    let (entity1, entity2, decor1, decor2) = match conn.direction {
+        Some(DeploymentLinkDirection::Up | DeploymentLinkDirection::Left) => (
+            conn.to.as_str(),
+            conn.from.as_str(),
+            conn.arrow_at_start,
+            conn.arrow_at_end,
+        ),
+        _ => (
+            conn.from.as_str(),
+            conn.to.as_str(),
+            conn.arrow_at_end,
+            conn.arrow_at_start,
+        ),
+    };
+    let form = if !decor1 && decor2 {
+        LinkSvgForm::Reverted
+    } else if decor1 == decor2 {
+        LinkSvgForm::NoDecor
+    } else {
+        LinkSvgForm::Forward
+    };
+    (entity1, entity2, form)
+}
+
 fn deployment_connection_path_base_id(
     diagram: &DeploymentDiagram,
     conn: &DeploymentConnection,
-    reversed: bool,
 ) -> String {
-    let from_name = diagram
-        .nodes
-        .iter()
-        .find(|node| node.id == conn.from)
-        .map(own_qname)
-        .unwrap_or_else(|| conn.from.clone());
-    let to_name = diagram
-        .nodes
-        .iter()
-        .find(|node| node.id == conn.to)
-        .map(own_qname)
-        .unwrap_or_else(|| conn.to.clone());
-    if conn.arrow_at_start == conn.arrow_at_end {
-        format!("{from_name}-{to_name}")
-    } else if reversed {
-        format!("{to_name}-backto-{from_name}")
-    } else {
-        format!("{from_name}-to-{to_name}")
+    let own_name = |id: &str| {
+        diagram
+            .nodes
+            .iter()
+            .find(|node| node.id == id)
+            .map(own_qname)
+            .unwrap_or_else(|| id.to_string())
+    };
+    let (entity1, entity2, form) = deployment_link_svg_identity(conn);
+    let (name1, name2) = (own_name(entity1), own_name(entity2));
+    match form {
+        LinkSvgForm::Reverted => format!("{name1}-backto-{name2}"),
+        LinkSvgForm::NoDecor => format!("{name1}-{name2}"),
+        LinkSvgForm::Forward => format!("{name1}-to-{name2}"),
     }
 }
 

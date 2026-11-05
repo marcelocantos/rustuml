@@ -1,0 +1,14 @@
+[
+  {
+    "name": "no_oracle_failure_names.txt",
+    "byte_equal": true,
+    "sha256": "7fe3bf366cbf6b4baa85b02e4a3bd7d42cfa0c514e0be05e619353930169710a",
+    "failure_names": 72
+  },
+  {
+    "name": "golden_failure_names.txt",
+    "byte_equal": true,
+    "sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+    "failure_names": 754
+  }
+]

@@ -1,0 +1,28 @@
+{
+  "base": "b160f41e2076b98805d4e3c9262a46030394e67c",
+  "argv": [
+    "cargo",
+    "build",
+    "-p",
+    "rustuml",
+    "--release"
+  ],
+  "env": {
+    "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-maker/target-after",
+    "CARGO_BUILD_JOBS": "4"
+  },
+  "exit": 0,
+  "binary_sha256": "6e4857e3d2401714b9d6da1c5bd518cd7b65f41240feff3b5cf49470ae09d2d2",
+  "sources": {
+    "crates/rustuml-render/src/creole.rs": "1808dc85c6efd65c97e35c24bd385d17d7ca4b766392295886111715f1ed6cae",
+    "crates/rustuml-render/src/text_render.rs": "03df40c764d78539d2679149cf61dbad83d90e31163740b6c3ea4d0dd2165c3a"
+  },
+  "production_diff_sha256": "2401e9dde5f62153bf197cd9a9b19be383fac603d79096529b0ab8bc1caacc42",
+  "source_revision": "78f06098b74a81d24efcc922b3116d03ad496132",
+  "source_tree": "f7cc27c6c89dd0805e8afeb502994029e1ec42d2",
+  "source_hashes": {
+    "crates/rustuml-render/src/creole.rs": "1808dc85c6efd65c97e35c24bd385d17d7ca4b766392295886111715f1ed6cae",
+    "crates/rustuml-render/src/text_render.rs": "03df40c764d78539d2679149cf61dbad83d90e31163740b6c3ea4d0dd2165c3a",
+    "crates/rustuml-parser/src/preprocess/mod.rs": "3d99e98125f55671b8e8b0f6353a2aece3c4f9106e99dccd0b5d9f2b588cb334"
+  }
+}

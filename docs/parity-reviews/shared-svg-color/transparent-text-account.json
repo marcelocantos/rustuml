@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "mechanism": "transparent-text-emission",
+  "base_revision": "3e0642c50",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "klimt/drawing/svg/DriverTextSvg.java:89-97 draw returns before text emission when FontConfiguration.getColor().isTransparent()",
+    "klimt/color/HColorSimple.java:132-150 isTransparent tests alpha zero"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/text_render.rs::write_text_element",
+    "crates/rustuml-render/src/text_render.rs::emit_segments"
+  ],
+  "invariant": "Transparent text still measures and advances the enclosing atom but emits no text element or background filter. Shape fill none remains separate.",
+  "causal_divergence": "The initial draft applied SvgGraphics fill-none serialization without the earlier DriverTextSvg transparent-text return. Fresh color_transparent retains three extra invisible text elements.",
+  "planned_change": "Return from shared write_text_element for resolved alpha zero before filter allocation or element emission; retain caller measurement and advance. No family or geometry changes.",
+  "production_files": [
+    "crates/rustuml-render/src/text_render.rs"
+  ],
+  "perturbation_axes": [
+    "transparent/background names versus explicit RRGGBBAA alpha zero and nonzero",
+    "surrounding runs and nested BACKCOLOR; measurement versus emission"
+  ],
+  "verification": "Retain initial draft fresh observations. Focused emission/advance control, exact compact22, full golden and all retained CLI cohorts; zero comparator losses required."
+}

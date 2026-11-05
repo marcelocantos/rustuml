@@ -1,0 +1,16 @@
+@startuml
+state Mill {
+  state Floor {
+    state Bay {
+      state Cell {
+        state inlet <<entryPoint>>
+        inlet --> Press
+        note right of Press : hot
+      }
+      Press --> Rack
+    }
+    Rack --> Cart
+  }
+  Cart --> Dock
+}
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+skinparam defaultFontName Courier New
+title <i>Title t𝅧</i>
+caption <i>Cap c𝅧</i>
+header <i>Hdr h𝅧</i>
+footer <i>Ftr f𝅧</i>
+legend
+<i>Leg g𝅧</i>
+endlegend
+Alice -> Bob : hi
+@enduml

@@ -1,0 +1,57 @@
+{
+  "collateral": {
+    "total": 1516,
+    "matches": 567,
+    "invalid": 57,
+    "cli_errors": 70,
+    "valid_cli_errors": 33,
+    "panics": 32
+  },
+  "fresh31": {
+    "total": 31,
+    "matches": 21,
+    "invalid": 10,
+    "cli_errors": 8,
+    "valid_cli_errors": 0,
+    "panics": 0
+  },
+  "union1547": {
+    "total": 1547,
+    "matches": 588,
+    "invalid": 67,
+    "cli_errors": 78,
+    "valid_cli_errors": 33,
+    "panics": 32
+  },
+  "cohorts": {
+    "cohort955": {
+      "total": 955,
+      "matches": 431,
+      "invalid": 10,
+      "cli_errors": 4,
+      "valid_cli_errors": 2,
+      "panics": 2
+    },
+    "cohort1044": {
+      "total": 1044,
+      "matches": 495,
+      "invalid": 32,
+      "cli_errors": 23,
+      "valid_cli_errors": 2,
+      "panics": 2
+    }
+  },
+  "parent1449": {
+    "total": 1449,
+    "matches": 520,
+    "invalid": 38,
+    "cli_errors": 54,
+    "valid_cli_errors": 33,
+    "panics": 32
+  },
+  "standing": {
+    "total": 1547,
+    "matches": 562,
+    "different_from_matching_environment_cli": 26
+  }
+}

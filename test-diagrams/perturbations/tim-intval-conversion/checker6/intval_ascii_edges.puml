@@ -1,0 +1,6 @@
+@startuml
+!$a=%intval("-000")
+!$b=%intval("+2147483647")
+!$c=%intval(%str2json("-2147483648"))
+class "$a/$b/$c" as Edges
+@enduml

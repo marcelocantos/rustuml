@@ -1,0 +1,10 @@
+@startuml
+skinparam defaultFontName Courier New
+start
+:quay;
+note right
+quay
+אב‬ 
+end note
+stop
+@enduml

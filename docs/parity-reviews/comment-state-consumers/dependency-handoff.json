@@ -1,0 +1,57 @@
+{
+  "parser_panics": {
+    "site": "crates/rustuml-parser/src/parse/class.rs:285 parts[0] after empty split_identity path",
+    "inputs": [
+      {
+        "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+        "source_sha256": "9d1da9ecd336b415f29d4918d692d79802ee36920b87e4455ed679eff472fc78",
+        "java_classification": "valid_diagram",
+        "before_panic": true,
+        "after_panic": true
+      },
+      {
+        "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+        "source_sha256": "6113664275486972cdbf16ad18c0e0e3c733c51809d2c02231f28bca6a794c01",
+        "java_classification": "valid_diagram",
+        "before_panic": true,
+        "after_panic": true
+      },
+      {
+        "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+        "source_sha256": "91fda965555bc7a9cc2325fa89167bf5e65a9183544fdba54665f01e25b93ea5",
+        "java_classification": "valid_diagram",
+        "before_panic": true,
+        "after_panic": true
+      },
+      {
+        "source": "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml",
+        "source_sha256": "bff1781c63ca1478236c61a0d73f869e484ce45af93f563550bef1953f217a18",
+        "java_classification": "valid_diagram",
+        "before_panic": true,
+        "after_panic": true
+      }
+    ],
+    "not_edited": true
+  },
+  "identity": {
+    "owner": "T14.23",
+    "source_boundary": "parse/class.rs:202\u2013205 path_id joins private path with configured separator;1340\u20131375 Package construction drops local Quark name except optional display",
+    "missing_fields": "lossless local Quark identity and namespace separator",
+    "affected": "nested package aliases/custom separators; ambiguous alias versus label-derived IDs; consumers cannot reconstruct from display and sanitized SVG metadata",
+    "no_source_reparse": true
+  },
+  "object": {
+    "owner": "T14.17",
+    "source": "safe_unicode_object.puml and unicode_object.puml",
+    "site": "parse/object.rs:173\u2013180 declaration grammar;302\u2013312 link grammar",
+    "actual_model": "objects=[], links=[]",
+    "no_synthesized_objects": true
+  },
+  "empty_state": {
+    "source": "checker-independent-astra/fill_empty_*.puml plus prior state_alpha_empty",
+    "java": "EntityImageStateEmptyDescription.calculateDimensionSlow and getShape",
+    "rust": "state.rs ordinary empty-description dimensions/STATE_BOX_HEIGHT minimum branch",
+    "measurement": "prior state_alpha_empty Java50x40, Rust59.7578x50; checker exact per-case dimensions retained in state-paint-observations.json",
+    "not_edited": true
+  }
+}

@@ -1,0 +1,6 @@
+@startuml
+state Kiln {
+  Load --> Fire
+}
+note right of Fire : hot
+@enduml

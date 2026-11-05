@@ -1,0 +1,46 @@
+{
+  "test_source_sha256": "d5f18f2f44e78d4b9eaf49b2fef78ddbb745bd7999d81bc4a1b18d1986ec4bad",
+  "unchanged_test_source": true,
+  "root": "/Users/marcelo/Library/Caches/rustuml-shared-svg-checker-astra/mutation",
+  "results": [
+    {
+      "name": "control",
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-checker-astra/xml-oracle-mutant-inputs",
+        "every_cli_golden_and_registered_perturbation_svg_is_strict_xml",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "required_diagnostics": [],
+      "log_sha256": "3f91228200293206a9c4fdef0d06daff3900fb5889fd13006b7ef97879999a36"
+    },
+    {
+      "name": "unlisted-malformed",
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-checker-astra/xml-oracle-mutant-inputs",
+        "every_cli_golden_and_registered_perturbation_svg_is_strict_xml",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "required_diagnostics": [
+        "unlisted malformed SVG: test-diagrams/golden/unlisted.puml"
+      ],
+      "log_sha256": "ddb240ba4b2340eb57f930e9b9ad52f9e85aa4c74b2f12fbcc255f1e6ade3a00"
+    },
+    {
+      "name": "listed-now-valid",
+      "argv": [
+        "/Users/marcelo/Library/Caches/rustuml-shared-svg-checker-astra/xml-oracle-mutant-inputs",
+        "every_cli_golden_and_registered_perturbation_svg_is_strict_xml",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "required_diagnostics": [
+        "stale source hash:",
+        "stale expected malformed output:"
+      ],
+      "log_sha256": "33f20f5461083fd9492c6312a57390af6574199fd7949497d212a74ceb7a5e7a"
+    }
+  ],
+  "mutations_discarded": true
+}

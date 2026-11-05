@@ -1,0 +1,7 @@
+@startuml
+state Hive {
+  Bee --> Comb
+}
+note left of Field : sunny
+Field --> Hive
+@enduml

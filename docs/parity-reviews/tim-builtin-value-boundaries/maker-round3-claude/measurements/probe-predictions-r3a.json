@@ -1,0 +1,542 @@
+{
+ "dot_root_before_groups": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "36530956871174bdc2b55b1264fbc6c4c8ded5dadd660db5c9ffd7cedd7c9843",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "6d1c937345733c6910fa2ad05ce6a8f66e6754322a0357d312f969c808be29c8",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "dot_root_both_sides": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "9764875b27151796db4a270d3250fd10943e193a609eaecb1b62100b73247aae",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "5ca378f9d01b0404431a6c3ec2cc16ea8504caba322a2ef51c0ea1950d683f51",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "dot_root_depth4": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "363a569910527fede902535a32735473823eb28a441e94173a679b75e14d908e",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "bf9c63a803894d46c543ebea69ea9e4ef18009e94adff49e82034b2bf341db84",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "img_cluster_depth2": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "c5fb4bf2d4ffe91b0ed35849d6e75500ddc5427b8db33762be213227bf662263",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "1b7bbb57fa0e32cd253a653c5deeb7367b33d9bbaf0c049f3d355d0b647520a1",
+   "stderr_head": "Warning: node Mine.Shaft.cage, port P unrecognized\n",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "img_cluster_depth3": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "e6ce92dbd0c810f876b122c8ccec526026b81c2f818960848faf8068590ce917",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "67ef7ed6bc7950829934b0bcef39648dcb7f80be90d4059831b3466ede64ac34",
+   "stderr_head": "Warning: node Mine.Shaft.Level.cage, port P unrecognized\n",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "img_cluster_depth4": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "dbb03bed7158552d301b4623c8e41d41dcc2658d9e65e1a0c03934d3b3d078bb",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "bc92d271c9a01ef5d0b7f5fcacd5e8ca92a62a0d39ad5239c8153f11e08d9460",
+   "stderr_head": "Warning: node Tower.Floor.Room.Desk.slot, port P unrecognized\n",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "img_cluster_exit_wide": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "dcb1c4937381e16194bc293075db9705b5679b90cd28aa967f74f605bee8ed2d",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "1c15ea5e04bacfdb4227816e0d72cd8262cdc90ae2a7706c8d9dd3f3d53f8096",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "img_note_before_later_state": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "819449957de439c18f2109d8f9fb2220abf7c98517d46296820c3444d22d9a10",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "2e89775951f2fd6ee5ba75fa2aece288ee824f99821b3e1ad69366626d7441ef",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "img_note_depth2": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "b3eee21e3291cfbde39dcb2a7a204ac33489ee70f731d6ab98ab6f399f124465",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "ea64a4f3310f952ad7ca725163c2b16e1720156520a07b46a32bd2367c579c3b",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "img_note_depth3": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "dd0e7cbe5b9343bae197fe6009cad65d6a4225e77971835924a432cb0d568871",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "59e77d1a84c04c1c522dcdf0aca8cbe5c2415c8a352116a17a74065b151d9db1",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "img_note_first_left": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "18513b58c34aedac2df89a961877153d191e59ded3a16a8b5878d07a505df7d6",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "eee48e78d04da157e7264b41516da2f89b2cd790540aba957149e1e0f7caca0c",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "img_note_in_cluster": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "86694be38cf393c9f66f46fa6fecf7d3b61c984cdba3253e8587a76da3e63f20",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "cfb79e58e0b347663942f669c4c687dfd892379117f4e619449d8b3f59bf7399",
+   "stderr_head": "Warning: node Works.Shed.gate, port P unrecognized\n",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "img_two_notes": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "495069fdacf2c9e756c64ea417831d68f84a3de0a2ce1f2c31a5e12302edceaa",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "a4fbf0fa42907c741d614f88e62e7c28da93a5bc2b6414dc1d40cfa092f0f2ec",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "note_link_only_to_group": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "b45b628fc66d6dbb82887f0155ad64d3308f5d9ecd468d67fe3c4ac06dd3c478",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "9ef9cac49d8c9ea438b42577a208d59d9e3cd15fd49deede30c8208af8f85f0a",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "sur_activity_high_end": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "f1e1043ec1bb5ebb19c954874dd466c523c93c1a889e4c7f88486e4486b90ada",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "10bcf0b422014f8d1fe0e2a20dfe477bf3e776d38c2a05a5eb86d3522add66ba",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "sur_activity_low_end": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "f1e1043ec1bb5ebb19c954874dd466c523c93c1a889e4c7f88486e4486b90ada",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+   "panic": false
+  },
+  "intended_valid": false
+ },
+ "sur_class_high_bold18": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "95f5bc3c7f3d41730639d235463c3f4e3f48316fba1eb00a4095bfbc4ae87d68",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "0e311f9cae7ab9015ef0bcfa5e940c416e0d35698b1497a1c03d4132b20f5fa9",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "sur_class_high_end": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "388ff2abdf72364f02c08bc24d33d00b5cb1367a8f06ec040e380f0c351595c6",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "69f50d6b777adebbbe73db6edef666c480d3a2debc23bb2a4f664118518bec37",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "sur_class_high_mid_valid": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "2ccc2f0770b99f74686f93bf36fd22958bc9bd17449a95e90e503f34f738f8d3",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: Invalid UTF-16 surrogate detected: d83e 77 ?\n",
+   "panic": false
+  },
+  "intended_valid": false
+ },
+ "sur_class_high_then_ascii_only": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "686c3d5e1cbc4c2ebbbbfb73c641ff0ec077d000a79397d8639ebfcfd6980982",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "f6b41776f37cb7e86b5cf431f144abc8d78cce5389af5875bc3196e3ca75daa5",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "sur_class_high_then_low_node": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "ca1eedaf833b24167f2ab939810034bc183f5f965f9ff3c348cb4934ce8db2ca",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "fb0affdc8c27e333048b993f2f864d9783bd62abdc24afe1483da5526b4a6570",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "sur_class_high_then_nonascii": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "02c8355f3fe0ca4ce3e16d2c9917f76e545dfe67e69c19c13cf135987c4536c1",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: Invalid UTF-16 surrogate detected: d83e e9 ?\n",
+   "panic": false
+  },
+  "intended_valid": false
+ },
+ "sur_class_low_end": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "d10bccd99f71928759c1e68c1803fedfe863a41eb14f5de16dbf8a87c5d7b382",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+   "panic": false
+  },
+  "intended_valid": false
+ },
+ "sur_class_low_mid": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "aa11932240655489715bbed4dd6d53afd477479940beb1812247dc6f63321fb9",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+   "panic": false
+  },
+  "intended_valid": false
+ },
+ "sur_hidden_member": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "f6414f6b2613658c61bc076d093bb4d57700078870f54ca257ccae6ec98c3d02",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "f6414f6b2613658c61bc076d093bb4d57700078870f54ca257ccae6ec98c3d02",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "sur_link_title_escape": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "9be5cd1b4b519ce23cf2c5e0ebabc20db9e133d98ea90796ab2f9b7044f9daff",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "9be5cd1b4b519ce23cf2c5e0ebabc20db9e133d98ea90796ab2f9b7044f9daff",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": false
+ },
+ "sur_removed_entity": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "36c3883ee39adb672e3d9f76891b0db893771f9da7a7849fefa2b85c3d0c83de",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "36c3883ee39adb672e3d9f76891b0db893771f9da7a7849fefa2b85c3d0c83de",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "sur_sequence_high_end": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "cb6ad3058cb47a8125df4e2ec1d52b127943deb8a72db03a7c36ac87a7527f21",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "6c49ee69d5fbf5b5c00b00dbc7b0c0dcf8758401d70305e2c37d264f3b7c100f",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "sur_sequence_high_space": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "9e56af5ef915a036ec7aba60b068895ae751d2160dc6c4fad0b7a2a7f90faf6d",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: Invalid UTF-16 surrogate detected: d83e 20 ?\n",
+   "panic": false
+  },
+  "intended_valid": false
+ },
+ "sur_sequence_participant_high": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "eca630a8b47cc7ac43e5727a9bfefe7ca8ebf9f88a130ae48f719a4833d294a4",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?\n",
+   "panic": false
+  },
+  "intended_valid": false
+ },
+ "sur_state_high_end": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "1f6eb17280f68bdd6ed51a497c149acc41a37666b39042875308cb97cb029fdc",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "096754aaa94eae507a971fb09c10628ecd8df7257be8a14829ad5a446e705b9a",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "sur_state_link_title_escape": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "ac97f7c2d80d9fce18a5459a65f0772a546c6d340365c3ff87630e47703246c9",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?\n",
+   "panic": false
+  },
+  "intended_valid": false
+ },
+ "sur_title_high_end": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "7dbf2a9ad53b0323ebc8e1db99b2dab43d9aaa4800f5103c4ba08f9f5965f133",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "35335d8e6b850b8491dd80d13d4c66dae5bc12f95f0573482f0d8c5e09af44b5",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "sur_tooltip_high_end": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "da179b57d6bc3ff90a119c68b8789423a90a828ca5a436da0be04483a623b55e",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?\n",
+   "panic": false
+  },
+  "intended_valid": false
+ },
+ "sur_unused_skinparam": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "fd98ad5f28f56675dd7db230e89787964de44855817cdfb1fd1af8051283ae5a",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "fd98ad5f28f56675dd7db230e89787964de44855817cdfb1fd1af8051283ae5a",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ },
+ "sur_usecase_high_end": {
+  "base": {
+   "exit": 0,
+   "stdout_sha256": "cf6989136af02ef80e1bc448c1fa29096f4e862083b7fdee451bde6cb9df84ed",
+   "stderr_head": "",
+   "panic": false
+  },
+  "tip": {
+   "exit": 0,
+   "stdout_sha256": "8c1a988e23d601343f8c04a486e2983969e0fb9a127a3a2181674456c9c227d2",
+   "stderr_head": "",
+   "panic": false
+  },
+  "intended_valid": true
+ }
+}

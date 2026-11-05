@@ -1,0 +1,7 @@
+@startuml
+state Tank {
+  Fish --> Weed
+}
+Pump --> Tank
+note left of Pump : flow
+@enduml

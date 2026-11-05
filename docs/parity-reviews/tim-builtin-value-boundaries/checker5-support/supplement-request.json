@@ -1,0 +1,203 @@
+{
+  "manifest_path": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement-manifest.json",
+  "manifest_sha256": "9f90b8af5f9b4e6d4a005856af4a56f8b70b1ae5f7cf1834e78917d1f3819773",
+  "case_count": 5,
+  "resources": [
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/adjacent_hsl_alpha.puml",
+      "remote_relative_path": "supplement/adjacent_hsl_alpha.puml",
+      "sha256": "98d25bca4dcf757f1867b367fea5ae8f9baf8abc9f3abb5b3b1dfb551dd19766",
+      "bytes": 126
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/json_empty_object.puml",
+      "remote_relative_path": "supplement/json_empty_object.puml",
+      "sha256": "eeda380989e95eff02c4cf0f3363c5eb0f0afe4a33986a0ae29993a1518ea0eb",
+      "bytes": 158
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/keys_nested_call.puml",
+      "remote_relative_path": "supplement/keys_nested_call.puml",
+      "sha256": "d6672b13889b9f977181200b677e2effc3cd8eff992dc00fe81d28a8aa3d39c0",
+      "bytes": 196
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/macro_original_prefix.puml",
+      "remote_relative_path": "supplement/macro_original_prefix.puml",
+      "sha256": "a1c3c3c1c09ac59d639f1f937521a15513fd2765152e9768852a84254530f4d3",
+      "bytes": 109
+    },
+    {
+      "local_path": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/sub_suffix_valid.puml",
+      "remote_relative_path": "supplement/sub_suffix_valid.puml",
+      "sha256": "45c1340f7fde956cd6b841f594e77e8c66cf87c280f59a47a8dd9fafdc18dae8",
+      "bytes": 165
+    },
+    {
+      "local_path": "/Users/marcelo/.t3/worktrees/rustuml/t3-04b6729a/docs/parity-reviews/tim-corrective-execution-maker/SourceProbe.java",
+      "remote_relative_path": "SourceProbe.java",
+      "sha256": "fa9dde4b9f18e337741c73fdc23fa8d94034d2341725566e378eab0ac95ad4b4",
+      "bytes": 689
+    }
+  ],
+  "wrapper": "/Users/marcelo/rustuml-reference/bin/reference",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "case_contracts": [
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/sub_suffix_valid.puml",
+      "source_sha256": "45c1340f7fde956cd6b841f594e77e8c66cf87c280f59a47a8dd9fafdc18dae8",
+      "cwd": "<worker>/supplement",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/supplement/sub_suffix_valid.puml",
+        "<worker>/supplement"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/macro_original_prefix.puml",
+      "source_sha256": "a1c3c3c1c09ac59d639f1f937521a15513fd2765152e9768852a84254530f4d3",
+      "cwd": "<worker>/supplement",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/supplement/macro_original_prefix.puml",
+        "<worker>/supplement"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/keys_nested_call.puml",
+      "source_sha256": "d6672b13889b9f977181200b677e2effc3cd8eff992dc00fe81d28a8aa3d39c0",
+      "cwd": "<worker>/supplement",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/supplement/keys_nested_call.puml",
+        "<worker>/supplement"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/adjacent_hsl_alpha.puml",
+      "source_sha256": "98d25bca4dcf757f1867b367fea5ae8f9baf8abc9f3abb5b3b1dfb551dd19766",
+      "cwd": "<worker>/supplement",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/supplement/adjacent_hsl_alpha.puml",
+        "<worker>/supplement"
+      ]
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-1703a272/supplement/json_empty_object.puml",
+      "source_sha256": "eeda380989e95eff02c4cf0f3363c5eb0f0afe4a33986a0ae29993a1518ea0eb",
+      "cwd": "<worker>/supplement",
+      "timezone": "GMT+11:00",
+      "env_overrides": {},
+      "svg_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--",
+        "-pipe",
+        "-tsvg"
+      ],
+      "probe_argv": [
+        "reference",
+        "--cwd",
+        "<worker>/supplement",
+        "--timezone",
+        "GMT+11:00",
+        "--probe",
+        "<worker>/SourceProbe.java",
+        "--classpath",
+        "<worker>",
+        "--",
+        "<worker>/supplement/json_empty_object.puml",
+        "<worker>/supplement"
+      ]
+    }
+  ],
+  "output_contract": "Preserve exact raw streams/statuses/hashes/actual argv/cwd/env as TIM24, no normalization."
+}

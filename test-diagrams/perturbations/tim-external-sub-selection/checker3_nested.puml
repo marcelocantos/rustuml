@@ -1,0 +1,5 @@
+@startuml
+!$counter=0
+!includesub test-diagrams/perturbations/tim-external-sub-selection/checker3-lib/nested.inc!chosen
+class "$counter" as Result
+@enduml

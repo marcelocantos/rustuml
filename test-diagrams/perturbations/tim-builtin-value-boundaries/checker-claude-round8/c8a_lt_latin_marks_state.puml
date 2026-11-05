@@ -1,0 +1,4 @@
+@startuml
+state "Pier á̂ x𝅧" as S
+[*] --> S : q𝅧̈
+@enduml

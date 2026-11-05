@@ -1,0 +1,3 @@
+@startuml
+class "%dirpath()" as D
+@enduml

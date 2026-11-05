@@ -1,0 +1,5 @@
+@startuml
+[Corn Crib] as CC
+node Silo
+CC --> Silo
+@enduml

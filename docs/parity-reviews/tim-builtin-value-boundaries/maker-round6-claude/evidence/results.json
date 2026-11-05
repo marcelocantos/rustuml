@@ -1,0 +1,631 @@
+{
+ "schema_version": 1,
+ "maker": "t3-0998c624 maker round 6 (claude-opus-5-5, Claude Code in T3 Code; no children; no Java run locally)",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "base": "8317cf006a18ba626a75824b13456934dbe8ce6c (code identical to 9834a719455308120c3289b59a260567f141b724)",
+ "merge": "fc44ee58cb74817e37bc1af843f2ba549ab63610 (code identical to 8dda18b1bf819f379c0c13d1cadd158400eed147)",
+ "tip": "6838ac4ea5cdb432f60f927122ebfe34800c31b5",
+ "measured_builds": {
+  "tip": "ad554600c (batches, sweep, golden_no_oracle, golden_pairs, parity_perturbations, harness_guards, pipe_mode, doc_claims, lib)",
+  "final_code_tip": "6838ac4ea5cdb432f60f927122ebfe34800c31b5 (test-only follow-up to ad554600c: CLI outputs identical to ad554600c on 16,701/16,701 sweep sources; harness_guards, parity_perturbations, lib and per-crate clippy re-run on it)"
+ },
+ "goldens_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+ "relays_answered": {
+  "BI (r6a)": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round6-r6a/",
+   "reference_results_sha256": "432b41840a07dc43319a76481b6353814a92601a31b856ccd11f2fb16523c493",
+   "manifest_sha256": "f65e0b2f02d9816abc543da172c899769054f84da9ee8eaf4ad3e4e598fa4257",
+   "bundle_sha256": "6ad04536e42a3cf69ba88ac512cf5e9cdefeef2d9164ef1e3eaeb7dbf1dcc4a8",
+   "held_out": "no longer: seen by the maker"
+  },
+  "monkeyman_fontchain_r6": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round6-monkeyman-fontchain/out/",
+   "SHA256SUMS_sha256": "1c345cc384f0edb939dac3b87cf135db67ed7b6f8ffb76b586a8f9fd8480a6ed",
+   "stored_at": "tools/font-chain-reference/monkeyman-round6"
+  }
+ },
+ "obligations": {
+  "1_yaml_json_display_escapes": {
+   "status": "implemented (account 56a67759b -> 85968418f; addenda 51687f9ad -> 11a9b1d0a, bd0f31ce1 -> 9aead23f0, 9bca8ab35 -> ad554600c)",
+   "java": "TextBlockJson.getTextBlock 341-350 -> Display.getWithNewlines 258-342; AtomText 80-87, 135-197; DriverTextSvg 115-125; YamlParser.getBlockStyleString 133-149; StyleExtractor 59-64; Lucida Grande glyph 2 (LF/CR) advance = space",
+   "held_out_result": "BH dc6_yaml_nested and the 7 pre-existing dc6_yaml_* failures (plain, key_newline, apostrophe, comment, hash_in_quotes, single, block) match; BH/BG/BF YAML/JSON pairs that matched keep matching",
+   "fresh": "BI yd7_*/jd7_*: 12/13 match; yd7_raw_brackets is a Java hyperlink ([[...]] in NO_CREOLE text, StripeSimple URL), not ported: residue"
+  },
+  "2_unmapped_nonspacing_marks": {
+   "status": "implemented (account 56a67759b -> 5ceb530db; addendum 9bca8ab35 -> 41bf60196)",
+   "trace": "reference JDK libfontmanager links Homebrew HarfBuzz 10.0.1 (otool -L, compatibility version 61001 = 60000 + 10*100 + 0*10 + 1); hb-ot-shape.cc 136-139 + 879-899 synthesized MARK, 183-189 + 1089-1100 zero_mark_widths_by_gdef (default shaper BY_GDEF_LATE), 94-96 morx -> dumber; 90-91 + 192-201 + 1118-1120 and hb-ot-shape-fallback.cc 188-205, 412-462 fallback mark zeroing after a base (default/arabic/hebrew); JDK GlyphLayout 408-431, ScriptRun 150-232 (ScriptRunData == Unicode Scripts-3.2.0, 0 differences); Unicode 16.0.0 Mn",
+   "held_out_result": "BH w6_sans_180f_complex, w6_sans_1d17b, w6_sans_16fe4 match; BH w6_sans_1ab0 (simple path) keeps matching",
+   "fresh": "BI mk7_*: 15/18 match, incl. Unicode-16 marks U+0897 and U+1E5EE, leading mark, bold, Helvetica, Arial (.notdef), sequence; mk7_after_hebrew and mk7_after_bracket have Java's zero mark but differ by the Hebrew alef mapped advance (Java 9.0303, Rust approximation 7.7314); mk7_mono width matches, differs by the Monospaced family name (pre-existing)"
+  },
+  "3_reference_host_font_table": {
+   "status": "implemented (account 56a67759b -> tool 9267aa105, interim 5ceb530db, final 41bf60196)",
+   "table_provenance": "crates/rustuml-render/src/font_chain_coverage.rs SOURCE_DIR tools/font-chain-reference/monkeyman-round6, SOURCE_SHA256SUMS_SHA256 1c345cc384f0edb939dac3b87cf135db67ed7b6f8ffb76b586a8f9fd8480a6ed",
+   "drift_gate": "font_chain::tests::coverage_table_is_the_stored_reference_host_extraction: SHA256SUMS hash, every stored file against SHA256SUMS, per-face runs, .notdef and plan facts; mutation drill: one changed run and one changed stored file each fail it",
+   "java_probes": "BI fe7_*: simple and complex coverage agrees with Java for every PingFang-asset (U+31BC, U+F817, U+31D0, U+FE20, U+1F101) and user-font/asset (U+F8B7, U+20B7, U+F880) scalar; 9/15 whole-output matches; failures are mapped-advance residue (31D0, F8B7, 20B7, F880 simple: the substituted glyph's advance is not modelled) and FE20 complex (a mapped mark zeroed by its slot font's HarfBuzz plan: not modelled)",
+   "extraction_delta": "round 6 vs round 5 on Monkey Man: +351 simple-path mapped BMP scalars per face (user fonts), 1-2 fewer, complex coverage unchanged (font-chain/round5-vs-round6-monkeyman.json)",
+   "residue": [
+    "cross-stream kern bit measured on colossus (cross-kern-facts-colossus.tsv), not in the extraction",
+    "the loaded libharfbuzz version is not recorded (only the link-time 10.0.1); Unicode-16 marks in BI agree",
+    "owner decision of T14.6.8 (keep the host environment as oracle or make it hermetic) and the census declaration in reference-bootstrap.md are not made here"
+   ]
+  },
+  "4_canvas_rounding": {
+   "status": "implemented (account 56a67759b -> 0861a51af; root path addendum c19eeac56 -> ef2f8c39e)",
+   "java": "SvgGraphics.ensureVisible 142-147; SvekResult.calculateDimension 130-136; CucaDiagram.getDefaultMargins",
+   "result": "BH no6_integer_canvas 108 (Java), rp6_root_and_group 259, pt6_note_outer_anchor_later_inner 171; sweep exact viewBox merge 12,970 -> tip 13,139 of 16,701 (+169, 0 lost); BI cv7_* 3/3"
+  },
+  "5_second_same_side_note_link": {
+   "status": "not attempted; residual (BG no5_three_notes_image, BH no6_two_left_same, BF st_np_three_notes_one_cluster)"
+  }
+ },
+ "bi_predictions": {
+  "registered": "rust-predictions.json sha256 38bc8cc7113973a2001333dcd740082a4f5046234854c01d0b0bc48d7d6d64d4 (recorded in relay-request-r6a.json at cbc695715 before results)",
+  "tip_r2_predictions_strict_match_java": 36,
+  "of": 48,
+  "held": [
+   "cv7_integer_outer",
+   "cv7_root_group_note",
+   "cv7_root_note_later_inner",
+   "fe7_1f101",
+   "fe7_20b7_complex",
+   "fe7_31bc_complex",
+   "fe7_31bc_simple",
+   "fe7_31d0_complex",
+   "fe7_f817_complex",
+   "fe7_f817_simple",
+   "fe7_f880_complex",
+   "fe7_f8b7_complex",
+   "fe7_fe20_simple",
+   "jd7_array_multiline_nested",
+   "jd7_decoded_newline",
+   "jd7_highlight_multiline",
+   "jd7_nested_encoded_newline",
+   "mk7_10efd",
+   "mk7_11f00",
+   "mk7_1ace_complex",
+   "mk7_1df6_complex",
+   "mk7_1dfa_complex",
+   "mk7_1e08f",
+   "mk7_1e4ec",
+   "mk7_arial",
+   "mk7_bold",
+   "mk7_helvetica",
+   "mk7_lead_mark",
+   "mk7_seq",
+   "yd7_left_align",
+   "yd7_list_newline",
+   "yd7_nested_key_value",
+   "yd7_padded_value",
+   "yd7_right_align",
+   "yd7_two_tabs",
+   "yd7_unknown_pair_escaped_tab"
+  ],
+  "missed": {
+   "yd7_block_mid_document": [
+    "DIFF",
+    6
+   ],
+   "yd7_raw_brackets": [
+    "DIFF",
+    6
+   ],
+   "mk7_0897_u16": [
+    "DIFF",
+    5
+   ],
+   "mk7_1e5ee_u16": [
+    "DIFF",
+    5
+   ],
+   "mk7_after_hebrew": [
+    "DIFF",
+    5
+   ],
+   "mk7_after_bracket": [
+    "DIFF",
+    5
+   ],
+   "mk7_mono": [
+    "DIFF",
+    2
+   ],
+   "fe7_31d0_simple": [
+    "DIFF",
+    4
+   ],
+   "fe7_fe20_complex": [
+    "DIFF",
+    5
+   ],
+   "fe7_f8b7_simple": [
+    "DIFF",
+    5
+   ],
+   "fe7_20b7_simple": [
+    "DIFF",
+    5
+   ],
+   "fe7_f880_simple": [
+    "DIFF",
+    5
+   ]
+  },
+  "final_tip_changed_from_prediction": [
+   "yd7_block_mid_document",
+   "mk7_0897_u16",
+   "mk7_1e5ee_u16",
+   "mk7_after_hebrew",
+   "fe7_f8b7_simple",
+   "fe7_20b7_simple"
+  ],
+  "merge_predictions_strict_match_java": 9
+ },
+ "batches": {
+  "BI": {
+   "cases": 48,
+   "java_exit_0": 48,
+   "strict_base_merge_tip": [
+    5,
+    9,
+    39
+   ],
+   "strict_and_comments_base_merge_tip": [
+    1,
+    9,
+    39
+   ],
+   "lost_vs_merge": [],
+   "gained_vs_merge": [
+    "yd7_nested_key_value",
+    "yd7_two_tabs",
+    "yd7_right_align",
+    "yd7_left_align",
+    "yd7_unknown_pair_escaped_tab",
+    "yd7_block_mid_document",
+    "yd7_list_newline",
+    "yd7_padded_value",
+    "jd7_nested_encoded_newline",
+    "jd7_decoded_newline",
+    "jd7_highlight_multiline",
+    "jd7_array_multiline_nested",
+    "mk7_1dfa_complex",
+    "mk7_1df6_complex",
+    "mk7_1ace_complex",
+    "mk7_11f00",
+    "mk7_1e4ec",
+    "mk7_10efd",
+    "mk7_1e08f",
+    "mk7_0897_u16",
+    "mk7_1e5ee_u16",
+    "mk7_lead_mark",
+    "mk7_bold",
+    "mk7_helvetica",
+    "mk7_seq",
+    "fe7_31bc_simple",
+    "fe7_31bc_complex",
+    "fe7_f817_simple",
+    "fe7_31d0_complex",
+    "fe7_1f101"
+   ],
+   "new_errors": [],
+   "new_panics": [],
+   "stderr_changed_vs_merge": [],
+   "tip_failures": {
+    "yd7_raw_brackets": 6,
+    "mk7_after_hebrew": 4,
+    "mk7_after_bracket": 5,
+    "mk7_mono": 2,
+    "fe7_31d0_simple": 4,
+    "fe7_fe20_complex": 5,
+    "fe7_f8b7_simple": 5,
+    "fe7_20b7_simple": 4,
+    "fe7_f880_simple": 5
+   }
+  },
+  "BH": {
+   "cases": 99,
+   "java_exit_0": 96,
+   "strict_base_merge_tip": [
+    12,
+    67,
+    78
+   ],
+   "strict_and_comments_base_merge_tip": [
+    3,
+    67,
+    78
+   ],
+   "lost_vs_merge": [],
+   "gained_vs_merge": [
+    "w6_sans_180f_complex",
+    "w6_sans_1d17b",
+    "w6_sans_16fe4",
+    "dc6_yaml_key_newline",
+    "dc6_yaml_apostrophe",
+    "dc6_yaml_comment",
+    "dc6_yaml_hash_in_quotes",
+    "dc6_yaml_nested",
+    "dc6_yaml_plain",
+    "dc6_yaml_single",
+    "dc6_yaml_block"
+   ],
+   "new_errors": [],
+   "new_panics": [],
+   "stderr_changed_vs_merge": [],
+   "tip_failures": {
+    "w6_sans_211a": 5,
+    "w6_sans_22ad": 5,
+    "w6_sans_a8fb": 5,
+    "w6_sans_tag_flag": 5,
+    "w6_sans_hebrew_missing": 4,
+    "w6_mono_0870": 2,
+    "w6_mono_e0080": 2,
+    "w6_mono_1e900": 2,
+    "w6_times_e0080": 5,
+    "cm6_state_code": 2,
+    "cm6_object_code": 2,
+    "cm6_usecase_code": 7,
+    "cm6_component_code": 10,
+    "cm6_class_bare": 6,
+    "cm6_class_low": 1,
+    "no6_two_left_same": 20,
+    "no6_note_on_link_image": 26,
+    "no6_floating": 25,
+    "no6_top_depth2": 18,
+    "rp6_group_note_outer_anchor": 12,
+    "rp6_named_floating_in_group": 28
+   }
+  },
+  "BG": {
+   "cases": 53,
+   "java_exit_0": 52,
+   "strict_base_merge_tip": [
+    12,
+    41,
+    41
+   ],
+   "strict_and_comments_base_merge_tip": [
+    0,
+    41,
+    41
+   ],
+   "lost_vs_merge": [],
+   "gained_vs_merge": [],
+   "new_errors": [],
+   "new_panics": [],
+   "stderr_changed_vs_merge": [],
+   "tip_failures": {
+    "no5_three_notes_image": 23,
+    "no5_note_top_image": 14,
+    "no5_note_bottom_image": 2,
+    "w5_sans_a500": 5,
+    "w5_mono_ctl": 1,
+    "w5_mono_10fffd": 2,
+    "w5_mono_10f800": 2,
+    "w5_mono_e0041": 2,
+    "dc5_yaml_flow_escape": 8,
+    "cm_unit_class_code": 1,
+    "cm_unit_link_code": 20,
+    "cm_unit_package_code": 9
+   }
+  },
+  "BF": {
+   "cases": 46,
+   "java_exit_0": 45,
+   "strict_base_merge_tip": [
+    6,
+    32,
+    32
+   ],
+   "strict_and_comments_base_merge_tip": [
+    1,
+    32,
+    32
+   ],
+   "lost_vs_merge": [],
+   "gained_vs_merge": [],
+   "new_errors": [],
+   "new_panics": [],
+   "stderr_changed_vs_merge": [],
+   "tip_failures": {
+    "cr_ent_dec_10fffd": 6,
+    "cr_wrap_seq_pua": 16,
+    "cr_id_code_pua": 12,
+    "cr_stereotype_pua": 6,
+    "w_courier_pua_b": 1,
+    "w_monospaced_pua_b": 2,
+    "st_bp_multiline_label": 29,
+    "st_bp_root_wide_multiline": 25,
+    "st_np_concurrent_regions": 48,
+    "st_np_link_note_in_cluster": 40,
+    "st_np_outer_floating_with_image": 31,
+    "st_np_outer_note_in_live_cluster_on_image": 38,
+    "st_np_outer_note_top_of_image": 14,
+    "st_np_three_notes_one_cluster": 26
+   }
+  },
+  "BE": {
+   "cases": 34,
+   "java_exit_0": 32,
+   "strict_base_merge_tip": [
+    0,
+    22,
+    22
+   ],
+   "strict_and_comments_base_merge_tip": [
+    0,
+    22,
+    22
+   ],
+   "lost_vs_merge": [],
+   "gained_vs_merge": [],
+   "new_errors": [],
+   "new_panics": [],
+   "stderr_changed_vs_merge": [],
+   "tip_failures": {
+    "fmt_high_eps": -1,
+    "fmt_high_pdf": -1,
+    "fmt_high_png": -1,
+    "fmt_low_eps": -1,
+    "fmt_low_pdf": -1,
+    "fmt_low_png": -1,
+    "fmt_pua_png": -1,
+    "fmt_seq_high_txt": 1,
+    "fmt_seq_low_txt": 1,
+    "fmt_seq_pua_txt": 1,
+    "pua_b_after_lone_high": 0,
+    "pua_b_then_lone_low": 0
+   }
+  },
+  "BC": {
+   "cases": 19,
+   "java_exit_0": 19,
+   "strict_base_merge_tip": [
+    0,
+    18,
+    18
+   ],
+   "strict_and_comments_base_merge_tip": [
+    0,
+    18,
+    18
+   ],
+   "lost_vs_merge": [],
+   "gained_vs_merge": [],
+   "new_errors": [],
+   "new_panics": [],
+   "stderr_changed_vs_merge": [],
+   "tip_failures": {
+    "pua_b_usecase": 12
+   }
+  },
+  "BB": {
+   "cases": 36,
+   "java_exit_0": 36,
+   "strict_base_merge_tip": [
+    2,
+    25,
+    25
+   ],
+   "strict_and_comments_base_merge_tip": [
+    2,
+    25,
+    25
+   ],
+   "lost_vs_merge": [],
+   "gained_vs_merge": [],
+   "new_errors": [],
+   "new_panics": [],
+   "stderr_changed_vs_merge": [],
+   "tip_failures": {
+    "sur_activity_low_end": 0,
+    "sur_class_high_mid_valid": 0,
+    "sur_class_high_then_nonascii": 0,
+    "sur_class_low_end": 0,
+    "sur_class_low_mid": 0,
+    "sur_link_title_escape": 12,
+    "sur_removed_entity": 1,
+    "sur_sequence_high_space": 0,
+    "sur_sequence_participant_high": 0,
+    "sur_state_link_title_escape": 0,
+    "sur_tooltip_high_end": 0
+   }
+  },
+  "AW": {
+   "cases": 45,
+   "java_exit_0": 41,
+   "strict_base_merge_tip": [
+    6,
+    30,
+    30
+   ],
+   "strict_and_comments_base_merge_tip": [
+    6,
+    30,
+    30
+   ],
+   "lost_vs_merge": [],
+   "gained_vs_merge": [],
+   "new_errors": [],
+   "new_panics": [],
+   "stderr_changed_vs_merge": [],
+   "tip_failures": {
+    "theme_plain_activity": 27,
+    "theme_mono_sequence": 19,
+    "theme_amiga_class": 19,
+    "theme_plain_state": 16,
+    "theme_mono_usecase": 12,
+    "theme_amiga_component": 17,
+    "theme_plain_variable": 15,
+    "theme_plain_then_cerulean": 9,
+    "intval_fullwidth_overflow": 0,
+    "intval_supplementary_digit": 0,
+    "intval_superscript_digit": 0,
+    "intval_double_sign": 0,
+    "surrogate_upper_sequence": 0,
+    "surrogate_activity_label": 0,
+    "rh_suffix_undeclared": 2
+   }
+  },
+  "AU": {
+   "cases": 32,
+   "java_exit_0": 29,
+   "strict_base_merge_tip": [
+    6,
+    21,
+    21
+   ],
+   "strict_and_comments_base_merge_tip": [
+    6,
+    21,
+    21
+   ],
+   "lost_vs_merge": [],
+   "gained_vs_merge": [],
+   "new_errors": [],
+   "new_panics": [],
+   "stderr_changed_vs_merge": [],
+   "tip_failures": {
+    "cluster_concurrent_crossing": 19,
+    "delay_legacy_lead2_creole": 9,
+    "delay_legacy_multiline": 18,
+    "delay_teoz_lead3_multiline": 17,
+    "raw_blank_before_start": 7,
+    "raw_multi_blank_first_block": 0,
+    "raw_sequence_two_blanks": 16,
+    "stroke_per_state_css4": 12,
+    "theme_mono_class": 15,
+    "theme_plain_class_note": 18,
+    "theme_plain_sequence": 16
+   }
+  },
+  "AR": {
+   "cases": 20,
+   "java_exit_0": 20,
+   "strict_base_merge_tip": [
+    6,
+    17,
+    17
+   ],
+   "strict_and_comments_base_merge_tip": [
+    6,
+    17,
+    17
+   ],
+   "lost_vs_merge": [],
+   "gained_vs_merge": [],
+   "new_errors": [],
+   "new_panics": [],
+   "stderr_changed_vs_merge": [],
+   "tip_failures": {
+    "delay_legacy_short": 40,
+    "delay_legacy_wide": 27,
+    "deploy_alias_reverse_up": 15
+   }
+  }
+ },
+ "sweep": {
+  "sources": 16701,
+  "strict_valid_match_base_merge_tip": [
+   12941,
+   13695,
+   13706
+  ],
+  "merge_to_tip": {
+   "gained_match": 11,
+   "outputs_changed": 192,
+   "stderr_changed": 4
+  },
+  "base_to_tip": {
+   "comments_gained": 927,
+   "comments_lost": 2,
+   "error_now_renders_valid_ref": 7,
+   "gained_match": 768,
+   "lost_match_GET_provenance": 3,
+   "outputs_changed": 1856,
+   "panic_removed": 6,
+   "rejection_gained": 71,
+   "stderr_changed": 132
+  },
+  "stderr_changed_merge_to_tip": "4 sources, panic thread ids only (dash_01/03/06/07 pre-existing panics)",
+  "exact_viewbox": {
+   "8317cf006": 12289,
+   "fc44ee58c": 12970,
+   "tip": 13139
+  },
+  "comments_exact": {
+   "8317cf006": 14375,
+   "fc44ee58c": 15300,
+   "tip": 15300
+  },
+  "comments_lost_merge_to_tip": [],
+  "goldens": {
+   "sources": 12550,
+   "java_valid": 11351,
+   "strict_base_merge_tip": [
+    11181,
+    11181,
+    11181
+   ],
+   "merge_to_tip": {
+    "outputs_changed": 91
+   }
+  },
+  "GET_goldens": {
+   "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+    "8317cf006": {
+     "exit": 0,
+     "strict": "MATCH"
+    },
+    "fc44ee58c": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "tip": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   },
+   "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+    "8317cf006": {
+     "exit": 0,
+     "strict": "MATCH"
+    },
+    "fc44ee58c": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "tip": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   },
+   "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+    "8317cf006": {
+     "exit": 0,
+     "strict": "MATCH"
+    },
+    "fc44ee58c": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "tip": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   }
+  }
+ },
+ "gates": {
+  "golden_no_oracle": "11181/11251 at base, merge and tip; per-family table identical merge -> tip; base -> tip: activity 1299 -> 1297 and edge-cases 760 -> 759 (the 3 GET goldens, raw-reader contract), preprocessing 285 -> 286, state 895 -> 897 (round 5); the test fails at all three on the unchanged ratchet (base: unlocked progress; merge/tip: the GET regression)",
+  "golden_pairs": "12550 total, 10497 passed, 754 failed, 1299 skipped at base, merge and tip",
+  "parity_perturbations": "failing perturbation sources base 1365, merge 1667, tip 1656; merge -> tip 0 new, 11 fixed",
+  "harness_guards": "violation categories identical merge -> tip (gates/*.guard_cats.txt); T14.6.7 categories 196 escapes / 98 / 98 unchanged; decimal ratchet lines identical to merge",
+  "pipe_mode": "17/17",
+  "doc_claims": "2/2",
+  "workspace_lib": "1591/1591 (final tip)",
+  "clippy": "workspace -D warnings stops at the pre-existing rustuml-parser dead-code error at base and tip; --no-deps per crate: base render 22, parser 3, oracle 3, layout 0; merge and tip render 35, layout 2 at identical locations (introduced by the round-5 packet code, none by round 6)"
+ },
+ "frozen_items": "unchanged: crates/rustuml-oracle (comparator slack, syntax markers, park list, error census, guard allow-lists, strict-XML list), decimal_literal_baseline.txt, no_oracle_baseline.txt, docs/reference-bootstrap.md"
+}

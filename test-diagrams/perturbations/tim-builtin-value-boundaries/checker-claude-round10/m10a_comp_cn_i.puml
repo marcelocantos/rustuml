@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Courier New
+skinparam componentFontStyle italic
+component "Pylon v𝅧k" as E1
+@enduml

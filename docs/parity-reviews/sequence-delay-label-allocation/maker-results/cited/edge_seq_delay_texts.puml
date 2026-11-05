@@ -1,0 +1,7 @@
+@startuml
+Alice -> Bob: start
+...
+Bob --> Alice: after unspecified delay
+...5 seconds later...
+Alice -> Bob: retry
+@enduml

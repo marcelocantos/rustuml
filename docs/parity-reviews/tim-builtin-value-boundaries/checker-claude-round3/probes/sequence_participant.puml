@@ -1,0 +1,4 @@
+@startuml
+participant "Desk%substr("🦉",0,1)" as D
+D -> D : ok
+@enduml

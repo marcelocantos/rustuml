@@ -1,0 +1,9 @@
+@startuml
+!$n=1
+!startsub leaf
+/' !startsub ignored '/
+!$n=$n*3
+!endsub
+!includesub leaf
+class "value $n" as Replay
+@enduml

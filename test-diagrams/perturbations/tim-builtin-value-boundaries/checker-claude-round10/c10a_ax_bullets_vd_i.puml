@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam activityFontStyle italic
+start
+:* first item
+* second longer item;
+@enduml

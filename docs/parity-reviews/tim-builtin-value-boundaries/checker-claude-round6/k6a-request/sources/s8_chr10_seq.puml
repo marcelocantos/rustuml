@@ -1,0 +1,3 @@
+@startuml
+Alice -> Bob : Moss%chr(10)Fern
+@enduml

@@ -1,0 +1,22 @@
+{
+  "account_commit": "819485f4001a94056a192e4e8688729d4c9de3e8",
+  "data": "crates/rustuml-parser/src/preprocess/zone_names.json",
+  "sha256": "1b99a8affbdcaba1600e0f18d39126e68a461b1c3040ffc9eed29606d7f87483",
+  "ids": 631,
+  "generator": "../tim-corrective-execution-maker/ZoneNames.java",
+  "command": [
+    "ssh",
+    "-T",
+    "-o",
+    "BatchMode=yes",
+    "marcelo@192.168.1.112",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.Bab5N6zr --timezone GMT+11:00 --probe /Users/marcelo/rustuml-reference/scratch/worker.Bab5N6zr/ZoneNames.java --classpath /Users/marcelo/rustuml-reference/scratch/worker.Bab5N6zr --"
+  ],
+  "exit": 0,
+  "locale": "en_AU",
+  "runtime": "Homebrew OpenJDK 21.0.5 on Monkey Man",
+  "origin_runtime": "Temurin 21.0.13; exact display-name equivalence across runtimes remains unproven",
+  "headless": "Wrapper forces java.awt.headless=true; generator asserts before reading zone names. All local Java launches disabled.",
+  "reference_setup_commit": "ccc1c02bc104d569edcc82cf901b4fc32e4255ae",
+  "scope": "Complete available-ID enumeration and both daylight states, not diagram output or fixture-name cases."
+}

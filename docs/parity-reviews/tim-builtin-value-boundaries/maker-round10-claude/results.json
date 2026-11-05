@@ -1,0 +1,3265 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-builtin-value-boundaries",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "status": "maker results; independent review required (the maker does not judge acceptance)",
+ "base": {
+  "branch": "parity-recovery-2026-11-03",
+  "tip": "95291dc6b",
+  "code_identical_to": "9834a7194"
+ },
+ "merge": "d06667af0e6cd326e8b22a65a2781130f6db41de",
+ "tested_revision": "df9365441fafb4e4af6763681eafe23934278ecb",
+ "binaries": "94c1ec2f7c89158e60f0372a7e25b6fdb453962f867c2997795ffd337130ecc0  rustuml-base\na721fd9c9662a70f0f37b4f3816b3dfe3721be5e1bb61ba30dbb4c219af0e4fe  rustuml-merge\ne44296424395849a546251b36fe68d60312d0c348e84f5a01f1a77c66f02404e  rustuml-tip",
+ "batches": {
+  "AR": {
+   "cases": 20,
+   "java_valid": 20,
+   "base": 6,
+   "merge": 17,
+   "tip": 17,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "AU": {
+   "cases": 32,
+   "java_valid": 29,
+   "base": 6,
+   "merge": 21,
+   "tip": 21,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "AW": {
+   "cases": 45,
+   "java_valid": 39,
+   "base": 6,
+   "merge": 30,
+   "tip": 30,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BB": {
+   "cases": 36,
+   "java_valid": 26,
+   "base": 2,
+   "merge": 25,
+   "tip": 25,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BC": {
+   "cases": 19,
+   "java_valid": 19,
+   "base": 0,
+   "merge": 18,
+   "tip": 18,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BE": {
+   "cases": 34,
+   "java_valid": 30,
+   "base": 0,
+   "merge": 22,
+   "tip": 22,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BF": {
+   "cases": 46,
+   "java_valid": 45,
+   "base": 6,
+   "merge": 32,
+   "tip": 32,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BG": {
+   "cases": 53,
+   "java_valid": 52,
+   "base": 12,
+   "merge": 42,
+   "tip": 42,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BH": {
+   "cases": 99,
+   "java_valid": 96,
+   "base": 12,
+   "merge": 78,
+   "tip": 78,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BI": {
+   "cases": 48,
+   "java_valid": 48,
+   "base": 5,
+   "merge": 39,
+   "tip": 39,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BJ": {
+   "cases": 120,
+   "java_valid": 117,
+   "base": 25,
+   "merge": 96,
+   "tip": 96,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BK": {
+   "cases": 49,
+   "java_valid": 49,
+   "base": 4,
+   "merge": 32,
+   "tip": 32,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BL": {
+   "cases": 142,
+   "java_valid": 142,
+   "base": 14,
+   "merge": 65,
+   "tip": 65,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BM": {
+   "cases": 26,
+   "java_valid": 26,
+   "base": 5,
+   "merge": 8,
+   "tip": 8,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BN": {
+   "cases": 63,
+   "java_valid": 63,
+   "base": 17,
+   "merge": 32,
+   "tip": 32,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BO": {
+   "cases": 81,
+   "java_valid": 81,
+   "base": 26,
+   "merge": 36,
+   "tip": 36,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BP": {
+   "cases": 60,
+   "java_valid": 50,
+   "base": 20,
+   "merge": 24,
+   "tip": 24,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BQ": {
+   "cases": 8,
+   "java_valid": 6,
+   "base": 0,
+   "merge": 0,
+   "tip": 0,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  },
+  "BR": {
+   "cases": 288,
+   "java_valid": 288,
+   "base": 48,
+   "merge": 91,
+   "tip": 92,
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [
+    "c9a_ns_cn_comp_italic"
+   ],
+   "lost_rejection_vs_merge": [],
+   "new_valid_error_vs_merge": [],
+   "panic_tip": [],
+   "changed_vs_merge": [
+    "c9a_ns_cn_comp_italic"
+   ],
+   "stderr_changed_vs_merge": [],
+   "comments_lost_vs_merge": []
+  }
+ },
+ "viewbox_and_comment_census": {
+  "AR": {
+   "cases_exit0_svg": 20,
+   "base_exact_viewbox": 13,
+   "base_comments_exact": 13,
+   "merge_exact_viewbox": 18,
+   "merge_comments_exact": 19,
+   "tip_exact_viewbox": 18,
+   "tip_comments_exact": 19,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "cluster_entry_point",
+    "deploy_unaliased_forms",
+    "history_depth1_autarkic",
+    "history_depth2_crossing",
+    "quark_reuse_crossing"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "delay_legacy_short": [
+     "0 0 148 193",
+     "0 0 332 179"
+    ],
+    "delay_legacy_wide": [
+     "0 0 184 193",
+     "0 0 148 193"
+    ]
+   }
+  },
+  "AU": {
+   "cases_exit0_svg": 29,
+   "base_exact_viewbox": 19,
+   "base_comments_exact": 22,
+   "merge_exact_viewbox": 23,
+   "merge_comments_exact": 29,
+   "tip_exact_viewbox": 23,
+   "tip_comments_exact": 29,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "cluster_entry_inside_autarkic",
+    "cluster_inputpin_mixed_case",
+    "cluster_root_note_on_inner",
+    "history_external_suffix_form"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "delay_legacy_multiline": [
+     "0 0 143 206",
+     "0 0 143 193"
+    ],
+    "delay_teoz_lead3_multiline": [
+     "0 0 148 214",
+     "0 0 148 201"
+    ],
+    "raw_sequence_two_blanks": [
+     "0 0 136 167",
+     "0 0 134 167"
+    ],
+    "theme_mono_class": [
+     "0 0 95 171",
+     "0 0 95 178"
+    ],
+    "theme_plain_class_note": [
+     "0 0 192 175",
+     "0 0 185 169"
+    ],
+    "theme_plain_sequence": [
+     "0 0 172 124",
+     "0 0 124 123"
+    ]
+   }
+  },
+  "AW": {
+   "cases_exit0_svg": 41,
+   "base_exact_viewbox": 13,
+   "base_comments_exact": 22,
+   "merge_exact_viewbox": 30,
+   "merge_comments_exact": 39,
+   "tip_exact_viewbox": 30,
+   "tip_comments_exact": 39,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "dep_bracket_in_node",
+    "dep_bracket_spaces_links",
+    "intval_arabic_indic_signed",
+    "intval_extended_arabic_bengali",
+    "intval_fullwidth_bounds",
+    "intval_myanmar_tai_laing",
+    "rc_entry_inside_autarkic_depth3",
+    "rc_exitpoint_depth1",
+    "rc_inner_note_autarkic",
+    "rc_outputpin_lowercase",
+    "rc_quark_reuse_renamed",
+    "rc_root_note_depth2",
+    "rc_two_entry_points",
+    "rh_deep_depth3",
+    "rh_suffix_nested",
+    "surrogate_high_class",
+    "surrogate_rejoined_pair"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "theme_plain_activity": [
+     "0 0 131 288",
+     "0 0 139 297"
+    ],
+    "theme_mono_sequence": [
+     "0 0 191 151",
+     "0 0 129 152"
+    ],
+    "theme_amiga_class": [
+     "0 0 111 175",
+     "0 0 107 178"
+    ],
+    "theme_plain_state": [
+     "0 0 84 347",
+     "0 0 76 342"
+    ],
+    "theme_mono_usecase": [
+     "0 0 102 190",
+     "0 0 69 183"
+    ],
+    "theme_amiga_component": [
+     "0 0 116 180",
+     "0 0 111 173"
+    ],
+    "theme_plain_variable": [
+     "0 0 93 175",
+     "0 0 88 169"
+    ],
+    "surrogate_upper_sequence": [
+     "0 0 1273 715",
+     null
+    ],
+    "surrogate_activity_label": [
+     "0 0 1517 715",
+     null
+    ],
+    "rh_suffix_undeclared": [
+     "0 0 97 129",
+     "0 0 100 50"
+    ],
+    "stroke_stereo_skinparam_renamed": [
+     "0 0 72 181",
+     "0 0 71 181"
+    ]
+   }
+  },
+  "BB": {
+   "cases_exit0_svg": 36,
+   "base_exact_viewbox": 2,
+   "base_comments_exact": 11,
+   "merge_exact_viewbox": 25,
+   "merge_comments_exact": 35,
+   "tip_exact_viewbox": 25,
+   "tip_comments_exact": 35,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "dot_root_before_groups",
+    "dot_root_both_sides",
+    "dot_root_depth4",
+    "img_cluster_depth2",
+    "img_cluster_depth3",
+    "img_cluster_depth4",
+    "img_cluster_exit_wide",
+    "img_note_before_later_state",
+    "img_note_depth2",
+    "img_note_depth3",
+    "img_note_first_left",
+    "img_note_in_cluster",
+    "img_two_notes",
+    "note_link_only_to_group",
+    "sur_activity_high_end",
+    "sur_class_high_bold18",
+    "sur_class_high_end",
+    "sur_class_high_then_ascii_only",
+    "sur_class_high_then_low_node",
+    "sur_sequence_high_end",
+    "sur_state_high_end",
+    "sur_title_high_end",
+    "sur_usecase_high_end"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "sur_activity_low_end": [
+     "0 0 1278 715",
+     null
+    ],
+    "sur_class_high_mid_valid": [
+     "0 0 1591 715",
+     null
+    ],
+    "sur_class_high_then_nonascii": [
+     "0 0 1510 727",
+     null
+    ],
+    "sur_class_low_end": [
+     "0 0 1276 715",
+     null
+    ],
+    "sur_class_low_mid": [
+     "0 0 1281 715",
+     null
+    ],
+    "sur_link_title_escape": [
+     "0 0 1590 727",
+     "0 0 91 68"
+    ],
+    "sur_removed_entity": [
+     "0 0 84 70",
+     "0 0 82 68"
+    ],
+    "sur_sequence_high_space": [
+     "0 0 1511 715",
+     null
+    ],
+    "sur_sequence_participant_high": [
+     "0 0 1545 727",
+     null
+    ],
+    "sur_state_link_title_escape": [
+     "0 0 1545 751",
+     null
+    ],
+    "sur_tooltip_high_end": [
+     "0 0 1540 727",
+     null
+    ]
+   }
+  },
+  "BC": {
+   "cases_exit0_svg": 19,
+   "base_exact_viewbox": 0,
+   "base_comments_exact": 4,
+   "merge_exact_viewbox": 18,
+   "merge_comments_exact": 18,
+   "tip_exact_viewbox": 18,
+   "tip_comments_exact": 18,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "en_wide_d2_image",
+    "ex_d2_renamed",
+    "ex_d2_widelabel",
+    "ex_d3",
+    "ex_wide_d1_image",
+    "ex_wide_noimage",
+    "nc_note_in_cluster_depth2",
+    "nc_note_in_cluster_renamed",
+    "nc_two_clusters_notes",
+    "pua_a_control",
+    "pua_b_activity",
+    "pua_b_class_first_carrier",
+    "pua_b_class_last",
+    "pua_b_pair_lookalike",
+    "pua_b_sequence",
+    "pua_b_state",
+    "pua_b_strlen",
+    "pua_b_title"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "pua_b_usecase": [
+     "0 0 63 185",
+     "0 0 56 183"
+    ]
+   }
+  },
+  "BE": {
+   "cases_exit0_svg": 24,
+   "base_exact_viewbox": 0,
+   "base_comments_exact": 2,
+   "merge_exact_viewbox": 22,
+   "merge_comments_exact": 24,
+   "tip_exact_viewbox": 22,
+   "tip_comments_exact": 24,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "bp_short_entry_d2",
+    "bp_short_exit_d1",
+    "bp_short_exit_d3",
+    "bp_threshold_labels",
+    "bp_wide_entry_d1",
+    "bp_wide_entry_d3",
+    "bp_wide_exit_d2",
+    "no_d1_left_renamed",
+    "no_d2_mid_leaves",
+    "no_d3_deep",
+    "no_outer_note_left_of_image",
+    "no_outer_note_on_leaf_beside_image",
+    "no_outer_two_notes_on_image",
+    "no_root_cluster_note",
+    "no_root_two_clusters_notes",
+    "no_two_clusters_three_notes",
+    "pua_b_sequence_message",
+    "pua_b_size12",
+    "pua_b_size18_bold",
+    "pua_b_state_note",
+    "pua_b_strlen_substr",
+    "pua_b_upper_escape_point"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "pua_b_after_lone_high": [
+     "0 0 1535 715",
+     null
+    ],
+    "pua_b_then_lone_low": [
+     "0 0 1266 715",
+     null
+    ]
+   }
+  },
+  "BF": {
+   "cases_exit0_svg": 45,
+   "base_exact_viewbox": 8,
+   "base_comments_exact": 6,
+   "merge_exact_viewbox": 34,
+   "merge_comments_exact": 42,
+   "tip_exact_viewbox": 34,
+   "tip_comments_exact": 42,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "cr_chr_10fffd",
+    "cr_creole_bold_pua",
+    "cr_json_u_escape",
+    "cr_json_var_pua",
+    "cr_tilde_10fffd",
+    "cr_yaml_u_escape",
+    "st_bp_d4_short_entry",
+    "st_bp_d4_wide_exit",
+    "st_bp_entry_exit_same_cluster_short",
+    "st_bp_entry_exit_same_cluster_wide",
+    "st_bp_wide_entry_with_note",
+    "st_np_note_before_target",
+    "st_np_note_declared_outer_anchor_inner",
+    "st_np_outer_note_left_multiline",
+    "st_np_outer_note_left_on_leaf_with_image",
+    "st_np_outer_note_right_renamed",
+    "st_np_root_note_before_states",
+    "st_np_root_three_clusters",
+    "w_arial_nonchar_10ffff",
+    "w_arial_pua_b",
+    "w_sans_bmp_pua_f000",
+    "w_sans_escape_10f7ff",
+    "w_sans_nonchar_10fffe",
+    "w_sans_nonchar_10ffff",
+    "w_sans_tag_e0041",
+    "w_sans_unassigned_3fffd"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "cr_ent_dec_10fffd": [
+     "0 0 131 68",
+     "0 0 206 68"
+    ],
+    "cr_wrap_seq_pua": [
+     "0 0 180 138",
+     "0 0 213 123"
+    ],
+    "cr_stereotype_pua": [
+     "0 0 71 76",
+     "0 0 69 76"
+    ],
+    "st_bp_multiline_label": [
+     "0 0 140 315",
+     "0 0 254 315"
+    ],
+    "st_bp_root_wide_multiline": [
+     "0 0 153 312",
+     "0 0 246 312"
+    ],
+    "st_np_concurrent_regions": [
+     "0 0 216 436",
+     "0 0 494 291"
+    ],
+    "st_np_link_note_in_cluster": [
+     "0 0 172 431",
+     "0 0 258 438"
+    ],
+    "st_np_outer_floating_with_image": [
+     "0 0 206 318",
+     "0 0 262 181"
+    ],
+    "st_np_outer_note_in_live_cluster_on_image": [
+     "0 0 233 406",
+     "0 0 348 291"
+    ],
+    "st_np_outer_note_top_of_image": [
+     "0 0 119 292",
+     "0 0 119 208"
+    ],
+    "st_np_three_notes_one_cluster": [
+     "0 0 330 371",
+     "0 0 264 371"
+    ]
+   }
+  },
+  "BG": {
+   "cases_exit0_svg": 52,
+   "base_exact_viewbox": 16,
+   "base_comments_exact": 6,
+   "merge_exact_viewbox": 47,
+   "merge_comments_exact": 49,
+   "tip_exact_viewbox": 47,
+   "tip_comments_exact": 49,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "dc5_json_nested",
+    "dc5_tim_json_array",
+    "dc5_tim_json_member",
+    "dc5_yaml_flow_escape",
+    "dc5_yaml_key_escape",
+    "dc5_yaml_list_escape",
+    "no5_left_note_depth2_region",
+    "no5_left_note_multiline_renamed",
+    "no5_left_note_renamed",
+    "no5_left_note_start_top",
+    "no5_right_note_nested_image",
+    "rp5_root_note_depth2",
+    "rp5_two_groups_sides",
+    "w5_arial_10f7ff",
+    "w5_arial_10f800",
+    "w5_arial_10fffd",
+    "w5_helvetica_10f800",
+    "w5_helvetica_10fffd",
+    "w5_helvetica_bold_10fffd",
+    "w5_mono_e0041",
+    "w5_sans_0378",
+    "w5_sans_12000",
+    "w5_sans_1bca0",
+    "w5_sans_1d173",
+    "w5_sans_20000",
+    "w5_sans_2fffd",
+    "w5_sans_a500_complex",
+    "w5_sans_bold18_10fffe",
+    "w5_sans_e0100",
+    "w5_sans_e123",
+    "w5_sans_fdd0"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "no5_three_notes_image": [
+     "0 0 387 250",
+     "0 0 387 208"
+    ],
+    "no5_note_top_image": [
+     "0 0 112 292",
+     "0 0 112 208"
+    ],
+    "no5_note_bottom_image": [
+     "0 0 114 294",
+     "0 0 114 208"
+    ],
+    "w5_sans_a500": [
+     "0 0 100 68",
+     "0 0 105 68"
+    ],
+    "cm_unit_package_code": [
+     "0 0 95 120",
+     "0 0 61 68"
+    ]
+   }
+  },
+  "BH": {
+   "cases_exit0_svg": 96,
+   "base_exact_viewbox": 14,
+   "base_comments_exact": 21,
+   "merge_exact_viewbox": 82,
+   "merge_comments_exact": 92,
+   "tip_exact_viewbox": 82,
+   "tip_comments_exact": 92,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "dc6_yaml_apostrophe",
+    "dc6_yaml_block",
+    "dc6_yaml_colon_key",
+    "dc6_yaml_comment",
+    "dc6_yaml_escaped_quote",
+    "dc6_yaml_hash_in_quotes",
+    "dc6_yaml_key_newline",
+    "dc6_yaml_listonly",
+    "dc6_yaml_nested",
+    "dc6_yaml_plain",
+    "dc6_yaml_single",
+    "dc6_yaml_trailing_backslash",
+    "no6_integer_canvas",
+    "no6_left_and_start",
+    "no6_left_depth2",
+    "no6_left_leaf_beside_image",
+    "no6_left_multiline_depth1",
+    "no6_left_right_both",
+    "no6_right_long",
+    "pt6_note_before_concurrent",
+    "pt6_note_before_nested_link",
+    "pt6_note_before_root_link_image",
+    "pt6_note_outer_anchor_later_inner",
+    "rp6_depth3",
+    "rp6_duplicate_text",
+    "rp6_root_and_group",
+    "w6_activity_10fffd",
+    "w6_arial_0870",
+    "w6_arial_1e900",
+    "w6_arial_e0080",
+    "w6_arial_size11_10fffd",
+    "w6_couriernew_e0080",
+    "w6_helvetica_0870",
+    "w6_helvetica_1e900",
+    "w6_helvetica_e0080",
+    "w6_mindmap_0378",
+    "w6_mono_e0080",
+    "w6_sans_0870",
+    "w6_sans_0d80",
+    "w6_sans_13430",
+    "w6_sans_16fe4",
+    "w6_sans_180f_complex",
+    "w6_sans_1ab0",
+    "w6_sans_1c80",
+    "w6_sans_1d17b",
+    "w6_sans_1e900",
+    "w6_sans_2065",
+    "w6_sans_2065_complex",
+    "w6_sans_2e5e",
+    "w6_sans_30000",
+    "w6_sans_31350",
+    "w6_sans_a69e",
+    "w6_sans_arabic_missing",
+    "w6_sans_bold_0870",
+    "w6_sans_combining",
+    "w6_sans_e0080",
+    "w6_sans_e01f0",
+    "w6_sans_fff0",
+    "w6_sans_fff0_complex",
+    "w6_sans_size23_0378",
+    "w6_sans_size23_10fffd",
+    "w6_sans_size9_0378",
+    "w6_sans_size9_10fffd",
+    "w6_sans_thai_missing",
+    "w6_seq_0870",
+    "w6_state_e0080",
+    "w6_verdana_0870",
+    "w6_verdana_e0080"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "w6_sans_211a": [
+     "0 0 102 68",
+     "0 0 99 68"
+    ],
+    "w6_sans_22ad": [
+     "0 0 102 68",
+     "0 0 99 68"
+    ],
+    "w6_sans_a8fb": [
+     "0 0 94 68",
+     "0 0 105 68"
+    ],
+    "w6_sans_tag_flag": [
+     "0 0 110 68",
+     "0 0 194 68"
+    ],
+    "w6_sans_hebrew_missing": [
+     "0 0 110 68",
+     "0 0 109 68"
+    ],
+    "w6_times_e0080": [
+     "0 0 86 68",
+     "0 0 97 68"
+    ],
+    "cm6_object_code": [
+     "0 0 78 56",
+     null
+    ],
+    "cm6_class_bare": [
+     "0 0 76 68",
+     "0 0 62 68"
+    ],
+    "no6_two_left_same": [
+     "0 0 266 247",
+     "0 0 266 208"
+    ],
+    "no6_note_on_link_image": [
+     "0 0 125 353",
+     "0 0 163 216"
+    ],
+    "no6_floating": [
+     "0 0 197 208",
+     "0 0 245 181"
+    ],
+    "no6_top_depth2": [
+     "0 0 146 344",
+     "0 0 146 259"
+    ],
+    "rp6_group_note_outer_anchor": [
+     "0 0 230 322",
+     "0 0 227 322"
+    ],
+    "rp6_named_floating_in_group": [
+     "0 0 214 307",
+     "0 0 267 291"
+    ]
+   }
+  },
+  "BI": {
+   "cases_exit0_svg": 48,
+   "base_exact_viewbox": 7,
+   "base_comments_exact": 15,
+   "merge_exact_viewbox": 42,
+   "merge_comments_exact": 48,
+   "tip_exact_viewbox": 42,
+   "tip_comments_exact": 48,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "cv7_integer_outer",
+    "cv7_root_group_note",
+    "cv7_root_note_later_inner",
+    "fe7_20b7_complex",
+    "fe7_31bc_complex",
+    "fe7_31d0_complex",
+    "fe7_f817_complex",
+    "fe7_f880_complex",
+    "fe7_f8b7_complex",
+    "jd7_array_multiline_nested",
+    "jd7_decoded_newline",
+    "jd7_highlight_multiline",
+    "jd7_nested_encoded_newline",
+    "mk7_0897_u16",
+    "mk7_10efd",
+    "mk7_11f00",
+    "mk7_1ace_complex",
+    "mk7_1df6_complex",
+    "mk7_1dfa_complex",
+    "mk7_1e08f",
+    "mk7_1e4ec",
+    "mk7_1e5ee_u16",
+    "mk7_arial",
+    "mk7_bold",
+    "mk7_helvetica",
+    "mk7_lead_mark",
+    "mk7_mono",
+    "mk7_seq",
+    "yd7_block_mid_document",
+    "yd7_left_align",
+    "yd7_list_newline",
+    "yd7_nested_key_value",
+    "yd7_right_align",
+    "yd7_two_tabs",
+    "yd7_unknown_pair_escaped_tab"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "yd7_raw_brackets": [
+     "0 0 59 58",
+     "0 0 101 42"
+    ],
+    "mk7_after_hebrew": [
+     "0 0 100 68",
+     "0 0 99 68"
+    ],
+    "mk7_after_bracket": [
+     "0 0 117 68",
+     "0 0 115 68"
+    ],
+    "fe7_fe20_complex": [
+     "0 0 101 68",
+     "0 0 115 68"
+    ],
+    "fe7_f8b7_simple": [
+     "0 0 99 68",
+     "0 0 105 68"
+    ],
+    "fe7_f880_simple": [
+     "0 0 92 68",
+     "0 0 105 68"
+    ]
+   }
+  },
+  "BJ": {
+   "cases_exit0_svg": 117,
+   "base_exact_viewbox": 24,
+   "base_comments_exact": 53,
+   "merge_exact_viewbox": 99,
+   "merge_comments_exact": 116,
+   "tip_exact_viewbox": 99,
+   "tip_comments_exact": 116,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "cv8_outer_buoy_mm_lighthouse",
+    "cv8_outer_dock_mm_harbour",
+    "cv8_outer_harbour_ko_pier",
+    "cv8_outer_mm_pier_il",
+    "cv8_outer_pier_jetty_mm",
+    "cv8_root_pier_jetty_mm",
+    "cv8_root_quay_dock_harbour",
+    "cv8_root_wharf_anchorage_pier",
+    "cv8_rootlate_mooring_pier_ko",
+    "cv8_rootlate_quay_mooring_wharf",
+    "fe8_1f105_complex",
+    "fe8_218a_complex",
+    "fe8_31b8_complex",
+    "fe8_324a_complex",
+    "fe8_327e_complex",
+    "fe8_f830_complex",
+    "fe8_f851_complex",
+    "fe8_f881_complex",
+    "fe8_f8c0_complex",
+    "fe8_f8fe_complex",
+    "fe8_fa2e_complex",
+    "j8_array_escapes",
+    "j8_crlf",
+    "j8_decoded_backslash",
+    "j8_decoded_cr",
+    "j8_decoded_crlf_tail",
+    "j8_decoded_tab",
+    "j8_highlight_tab_key",
+    "j8_nested_uneven",
+    "j8_tab_bold_key",
+    "j8_tabsize4",
+    "j8_unicode_lf",
+    "mk8_arial_23",
+    "mk8_arial_9",
+    "mk8_cjk_base",
+    "mk8_couriernew_23",
+    "mk8_couriernew_9",
+    "mk8_helv_23",
+    "mk8_helv_9",
+    "mk8_helv_hebrew_pres",
+    "mk8_lucida_arabic",
+    "mk8_lucida_devanagari",
+    "mk8_lucida_syriac",
+    "mk8_mc_11f03",
+    "mk8_me_1abe",
+    "mk8_mono_23",
+    "mk8_mono_9",
+    "mk8_sans_23",
+    "mk8_sans_9",
+    "mk8_sans_bold_23",
+    "mk8_seq_arabic",
+    "mk8_u16_10d69",
+    "mk8_u16_113bb",
+    "mk8_u16_1612d",
+    "mk8_u17_1ad0",
+    "mk8_u17_1e6e3",
+    "mk8_u18_05c8",
+    "y8_align_mixed",
+    "y8_block_comment_pipe",
+    "y8_block_dash_body",
+    "y8_block_inner_pipe",
+    "y8_block_inner_pipe_end",
+    "y8_block_nested_key",
+    "y8_block_relative_indent",
+    "y8_block_spaced_pipe",
+    "y8_block_two_blocks_end",
+    "y8_block_whitespace_lines",
+    "y8_crlf",
+    "y8_deep_nested_escape",
+    "y8_escape_key_tab",
+    "y8_escape_n_then_t",
+    "y8_flow_seq_escapes",
+    "y8_real_tab_value",
+    "y8_tabsize4",
+    "y8_whitespace_values"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "y8_list_key_block": [
+     "0 0 359 41",
+     "0 0 290 42"
+    ],
+    "y8_folded": [
+     "0 0 359 41",
+     "0 0 149 62"
+    ],
+    "y8_escape_trailing": [
+     "0 0 103 42",
+     "0 0 86 62"
+    ],
+    "y8_block_inner_pipe_nested": [
+     "0 0 228 62",
+     "0 0 227 62"
+    ],
+    "m8_json_class": [
+     "0 0 92 97",
+     "0 0 585 265"
+    ],
+    "m8_json_usecase": [
+     "0 0 185 136",
+     "0 0 81 68"
+    ],
+    "m8_json_crlf": [
+     "0 0 72 60",
+     "0 0 585 265"
+    ],
+    "mk8_helv_hebrew": [
+     "0 0 105 68",
+     "0 0 104 68"
+    ],
+    "mk8_helv_hebrew_ctrl": [
+     "0 0 96 68",
+     "0 0 95 68"
+    ],
+    "mk8_hebrew_lead_mark": [
+     "0 0 106 68",
+     "0 0 112 68"
+    ],
+    "mk8_serif_9": [
+     "0 0 88 64",
+     "0 0 78 64"
+    ],
+    "mk8_serif_23": [
+     "0 0 160 72",
+     "0 0 135 73"
+    ],
+    "fe8_fe22_complex": [
+     "0 0 101 68",
+     "0 0 115 68"
+    ],
+    "fe8_327e_simple": [
+     "0 0 104 68",
+     "0 0 105 68"
+    ],
+    "fe8_fa2e_simple": [
+     "0 0 103 68",
+     "0 0 105 68"
+    ],
+    "fe8_f851_simple": [
+     "0 0 99 68",
+     "0 0 105 68"
+    ],
+    "fe8_f8c0_simple": [
+     "0 0 99 68",
+     "0 0 105 68"
+    ],
+    "fe8_f8fe_simple": [
+     "0 0 99 68",
+     "0 0 105 68"
+    ]
+   }
+  },
+  "BK": {
+   "cases_exit0_svg": 49,
+   "base_exact_viewbox": 6,
+   "base_comments_exact": 16,
+   "merge_exact_viewbox": 36,
+   "merge_comments_exact": 49,
+   "tip_exact_viewbox": 36,
+   "tip_comments_exact": 49,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "j9_cr_key",
+    "j9_skinparam_block",
+    "mk9_180f_thai",
+    "mk9_arial_hebrew_space",
+    "mk9_couriernew_hebrew_space",
+    "mk9_hangul_base",
+    "mk9_hangul_space",
+    "mk9_hangul_space_ctrl",
+    "mk9_helv_syriac",
+    "mk9_lucida_arabic_space",
+    "mk9_lucida_deva_base",
+    "mk9_lucida_thai_base",
+    "mk9_mono_hebrew_space",
+    "mk9_u17_10efa",
+    "mk9_u17_11b60",
+    "mk9_u17_1ad5",
+    "mk9_u18_10ecb",
+    "mk9_u18_1d127",
+    "mk9_u18_b53",
+    "y9_block_depth3",
+    "y9_block_hash_lines",
+    "y9_block_quoted_key",
+    "y9_block_tab_inside",
+    "y9_block_text_dedent",
+    "y9_flow_seq_empty",
+    "y9_flow_seq_number",
+    "y9_flow_seq_quotes",
+    "y9_hide_then_data",
+    "y9_tab_indent",
+    "y9_tab_key"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "mk9_lucida_hebrew_space": [
+     "0 0 107 68",
+     "0 0 106 68"
+    ],
+    "mk9_lucida_hebrew_space_ctrl": [
+     "0 0 107 68",
+     "0 0 106 68"
+    ],
+    "mk9_helv_hebrew_space": [
+     "0 0 105 68",
+     "0 0 104 68"
+    ],
+    "mk9_helv_hebrew_space_ctrl": [
+     "0 0 105 68",
+     "0 0 104 68"
+    ],
+    "mk9_verdana_hebrew_space": [
+     "0 0 123 68",
+     "0 0 122 68"
+    ],
+    "mk9_verdana_hebrew_space_ctrl": [
+     "0 0 109 68",
+     "0 0 108 68"
+    ],
+    "mk9_helv_syriac_ctrl": [
+     "0 0 98 68",
+     "0 0 93 68"
+    ],
+    "mk9_lucida_hebrew_wj": [
+     "0 0 95 68",
+     "0 0 101 68"
+    ],
+    "mk9_lucida_hebrew_hiriq": [
+     "0 0 95 68",
+     "0 0 101 68"
+    ],
+    "mk9_lucida_hebrew_hiriq_ctrl": [
+     "0 0 95 68",
+     "0 0 101 68"
+    ],
+    "mk9_seq_hebrew": [
+     "0 0 123 123",
+     "0 0 121 123"
+    ],
+    "mk9_seq_hebrew_ctrl": [
+     "0 0 123 123",
+     "0 0 121 123"
+    ],
+    "y9_skinparam_after_data": [
+     "0 0 359 41",
+     null
+    ]
+   }
+  },
+  "BL": {
+   "cases_exit0_svg": 142,
+   "base_exact_viewbox": 21,
+   "base_comments_exact": 71,
+   "merge_exact_viewbox": 77,
+   "merge_comments_exact": 141,
+   "tip_exact_viewbox": 77,
+   "tip_comments_exact": 141,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "c7j_cr_array",
+    "c7j_cr_nested_key",
+    "c7j_crlf_file",
+    "c7j_hide_pragma",
+    "c7j_skinparam_ws_block",
+    "c7m_180e_deva_ctrl",
+    "c7m_180f_deva",
+    "c7m_180f_verdana",
+    "c7m_deva_1d167",
+    "c7m_hangul_comma_1d167",
+    "c7m_hangul_helv",
+    "c7m_hangul_seq",
+    "c7m_heb_arial_digit",
+    "c7m_heb_arial_letter",
+    "c7m_heb_arialbold_letter",
+    "c7m_heb_cnew_digit",
+    "c7m_heb_cnew_letter",
+    "c7m_khmer_fe2e",
+    "c7m_syriac_space_helvbold",
+    "c7m_thai_1d167",
+    "c7m_u17_10efb_note",
+    "c7m_u17_11b66_activity",
+    "c7m_u17_1acf",
+    "c7m_u17_1acf_simple",
+    "c7m_u17_1ad9_mono_seq",
+    "c7m_u17_1ae5_seq",
+    "c7m_u17_1e6f5",
+    "c7m_u17_mc_11b61",
+    "c7m_u18_05c9_arial",
+    "c7m_u18_0b54_latin",
+    "c7m_u18_10ef9_state",
+    "c7m_u18_1ade_verdana",
+    "c7m_u18_1d128_mono",
+    "c7m_u18_1d25b_helv",
+    "c7m_u18_mc_1d250",
+    "c7y_block_crlf",
+    "c7y_block_depths",
+    "c7y_block_in_list_map",
+    "c7y_block_key_tab",
+    "c7y_block_listlike_body",
+    "c7y_block_tab_body",
+    "c7y_block_text_col0",
+    "c7y_cr_block",
+    "c7y_flow_colon_inside",
+    "c7y_flow_escapes2",
+    "c7y_flow_list_item_key",
+    "c7y_flow_nested_brackets",
+    "c7y_flow_quote_trailing",
+    "c7y_key_hide_space",
+    "c7y_pre_mix",
+    "c7y_pre_skinparam_indented",
+    "c7y_skinparam_brace_inline",
+    "c7y_tab_flow",
+    "c7y_tab_nested_key",
+    "c7y_tab_quoted",
+    "c7y_tab_value_multi"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "c7m_ethiopic_1d167": [
+     "0 0 99 68",
+     "0 0 98 68"
+    ],
+    "c7m_ethiopic_ctrl": [
+     "0 0 99 68",
+     "0 0 98 68"
+    ],
+    "c7m_tamil_302a": [
+     "0 0 111 68",
+     "0 0 109 68"
+    ],
+    "c7m_tamil_ctrl": [
+     "0 0 101 68",
+     "0 0 98 68"
+    ],
+    "c7m_khmer_ctrl": [
+     "0 0 99 68",
+     "0 0 98 68"
+    ],
+    "c7m_jamo_1d167": [
+     "0 0 113 68",
+     "0 0 109 68"
+    ],
+    "c7m_jamo_dot_1d167": [
+     "0 0 107 68",
+     "0 0 103 68"
+    ],
+    "c7m_jamo_dot_ctrl": [
+     "0 0 107 68",
+     "0 0 103 68"
+    ],
+    "c7m_cjkcompat_1dfa": [
+     "0 0 113 68",
+     "0 0 115 68"
+    ],
+    "c7m_cjkcompat_ctrl": [
+     "0 0 113 68",
+     "0 0 115 68"
+    ],
+    "c7m_hangul_mono": [
+     "0 0 114 68",
+     "0 0 111 68"
+    ],
+    "c7m_hangul_mono_ctrl": [
+     "0 0 114 68",
+     "0 0 111 68"
+    ],
+    "c7m_heb_arial_digit_ctrl": [
+     "0 0 105 68",
+     "0 0 104 68"
+    ],
+    "c7m_heb_verdana_letter": [
+     "0 0 116 68",
+     "0 0 115 68"
+    ],
+    "c7m_heb_verdana_letter_ctrl": [
+     "0 0 102 68",
+     "0 0 101 68"
+    ],
+    "c7m_heb_verdana_digit": [
+     "0 0 125 68",
+     "0 0 124 68"
+    ],
+    "c7m_heb_verdana_digit_ctrl": [
+     "0 0 111 68",
+     "0 0 110 68"
+    ],
+    "c7m_heb_verdanabold_digit": [
+     "0 0 130 68",
+     "0 0 129 68"
+    ],
+    "c7m_heb_verdanabold_ctrl": [
+     "0 0 116 68",
+     "0 0 115 68"
+    ],
+    "c7m_heb_verdana_wj": [
+     "0 0 125 68",
+     "0 0 131 68"
+    ],
+    "c7m_heb_lucida_wj": [
+     "0 0 108 68",
+     "0 0 115 68"
+    ],
+    "c7m_heb_verdana_usecase": [
+     "0 0 124 50",
+     "0 0 121 49"
+    ],
+    "c7m_heb_verdana_usecase_ctrl": [
+     "0 0 104 50",
+     "0 0 101 49"
+    ],
+    "c7m_arabic_mappedmark": [
+     "0 0 110 68",
+     "0 0 118 68"
+    ],
+    "c7m_arabic_mappedmark_ctrl": [
+     "0 0 99 68",
+     "0 0 107 68"
+    ],
+    "c7m_heb_othermark": [
+     "0 0 110 68",
+     "0 0 117 68"
+    ],
+    "c7m_heb_othermark_ctrl": [
+     "0 0 100 68",
+     "0 0 106 68"
+    ],
+    "c7m_menlo_arabic": [
+     "0 0 110 68",
+     "0 0 111 68"
+    ],
+    "c7m_syriac_space_helvbold_ctrl": [
+     "0 0 103 68",
+     "0 0 99 68"
+    ],
+    "c7m_helv_heb_state": [
+     "0 0 97 71",
+     "0 0 95 71"
+    ],
+    "c7m_helv_heb_state_ctrl": [
+     "0 0 88 71",
+     "0 0 87 71"
+    ],
+    "c7m_u18_1af0_usecase": [
+     "0 0 96 49",
+     "0 0 100 50"
+    ],
+    "c7m_u18_11df0_component": [
+     "0 0 99 66",
+     "0 0 100 67"
+    ],
+    "c7m_u18_05c9_heb": [
+     "0 0 100 68",
+     "0 0 98 68"
+    ],
+    "c7m_u18_0b54_oriya": [
+     "0 0 110 68",
+     "0 0 109 68"
+    ],
+    "c7m_180f_khmer": [
+     "0 0 99 68",
+     "0 0 98 68"
+    ],
+    "c7m_180f_jamo_skip": [
+     "0 0 107 68",
+     "0 0 103 68"
+    ],
+    "c7m_tag_skip_heb": [
+     "0 0 100 68",
+     "0 0 98 68"
+    ],
+    "c7m_menlo_mapped_0301": [
+     "0 0 111 68",
+     "0 0 119 68"
+    ],
+    "c7y_block_quoted_colon_key": [
+     "0 0 359 41",
+     null
+    ],
+    "c7y_list_extra_spaces": [
+     "0 0 71 62",
+     "0 0 68 62"
+    ],
+    "c7y_flow_hash_inside": [
+     "0 0 63 42",
+     null
+    ],
+    "c7y_flow_junk_after": [
+     "0 0 93 42",
+     null
+    ],
+    "c7y_flow_list_item_plain": [
+     "0 0 66 62",
+     "0 0 100 72"
+    ],
+    "c7y_flow_map": [
+     "0 0 120 42",
+     "0 0 139 62"
+    ],
+    "c7y_scalar_typing": [
+     "0 0 82 124",
+     "0 0 99 124"
+    ],
+    "c7y_pre_skinparam_tab": [
+     "0 0 359 41",
+     null
+    ],
+    "c7y_between_hide": [
+     "0 0 359 41",
+     null
+    ],
+    "c7y_after_pragma": [
+     "0 0 359 41",
+     "0 0 58 42"
+    ],
+    "c7y_comment_then_skinparam": [
+     "0 0 359 41",
+     null
+    ],
+    "c7y_title_pre": [
+     "0 0 119 79",
+     null
+    ],
+    "c7y_scale_pre": [
+     "0 0 116 84",
+     null
+    ],
+    "c7y_skin_pre": [
+     "0 0 58 42",
+     null
+    ],
+    "c7y_handwritten": [
+     "0 0 77 41",
+     "0 0 58 42"
+    ],
+    "c7y_key_title_space": [
+     "0 0 73 79",
+     "0 0 98 62"
+    ],
+    "c7y_cr_value": [
+     "0 0 71 42",
+     null
+    ],
+    "c7y_cr_key": [
+     "0 0 71 42",
+     null
+    ],
+    "c7y_lf_value": [
+     "0 0 359 41",
+     null
+    ],
+    "c7j_title_pre": [
+     "0 0 92 79",
+     null
+    ],
+    "c7j_after_skinparam": [
+     "0 0 359 41",
+     null
+    ],
+    "c7j_comment_then_skinparam": [
+     "0 0 359 41",
+     null
+    ],
+    "c7r_class_amp13": [
+     "0 0 120 68",
+     "0 0 156 68"
+    ],
+    "c7r_seq_uplus": [
+     "0 0 112 123",
+     "0 0 173 123"
+    ],
+    "c7r_note_amp13": [
+     "0 0 99 45",
+     "0 0 133 45"
+    ],
+    "c7r_title_amp13": [
+     "0 0 108 105",
+     "0 0 145 105"
+    ]
+   }
+  },
+  "BM": {
+   "cases_exit0_svg": 26,
+   "base_exact_viewbox": 7,
+   "base_comments_exact": 0,
+   "merge_exact_viewbox": 12,
+   "merge_comments_exact": 26,
+   "tip_exact_viewbox": 12,
+   "tip_comments_exact": 26,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "c7b_arial_rtl_space",
+    "c7b_cnew_latin_mark",
+    "c7b_cnew_leading_mark",
+    "c7b_cnew_thai_run",
+    "c7b_cnewbold_latin_mark"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "c7b_verdana_rtl_space": [
+     "0 0 120 68",
+     "0 0 119 68"
+    ],
+    "c7b_verdana_rtl_space_ctrl": [
+     "0 0 120 68",
+     "0 0 119 68"
+    ],
+    "c7b_verdana_tail_space": [
+     "0 0 126 68",
+     "0 0 125 68"
+    ],
+    "c7b_verdana_tail_space_ctrl": [
+     "0 0 107 68",
+     "0 0 106 68"
+    ],
+    "c7b_verdanabold_rtl_space": [
+     "0 0 127 68",
+     "0 0 126 68"
+    ],
+    "c7b_verdanabold_rtl_space_ctrl": [
+     "0 0 127 68",
+     "0 0 126 68"
+    ],
+    "c7b_verdana_digit_rtl": [
+     "0 0 138 68",
+     "0 0 137 68"
+    ],
+    "c7b_verdana_digit_rtl_ctrl": [
+     "0 0 124 68",
+     "0 0 123 68"
+    ],
+    "c7b_helv_rtl_space": [
+     "0 0 114 68",
+     "0 0 112 68"
+    ],
+    "c7b_helv_rtl_space_ctrl": [
+     "0 0 114 68",
+     "0 0 112 68"
+    ],
+    "c7b_thai_rlm_digit": [
+     "0 0 112 68",
+     "0 0 120 68"
+    ],
+    "c7b_thai_rlm_digit_ctrl": [
+     "0 0 112 68",
+     "0 0 120 68"
+    ],
+    "c7b_deva_rlm_digit": [
+     "0 0 115 68",
+     "0 0 123 68"
+    ],
+    "c7b_deva_rlm_digit_ctrl": [
+     "0 0 115 68",
+     "0 0 123 68"
+    ]
+   }
+  },
+  "BN": {
+   "cases_exit0_svg": 63,
+   "base_exact_viewbox": 18,
+   "base_comments_exact": 1,
+   "merge_exact_viewbox": 33,
+   "merge_comments_exact": 63,
+   "tip_exact_viewbox": 33,
+   "tip_comments_exact": 63,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "m8b_helv_arabic_digit",
+    "m8b_lucida_arabic_digit",
+    "m8b_lucida_fsi_hebrew",
+    "m8b_lucida_fsi_hebrew_ctrl",
+    "m8b_lucida_rli_alone",
+    "m8b_lucida_rli_alone_ctrl",
+    "m8b_lucida_rli_with_hebrew",
+    "m8b_lucida_rli_with_hebrew_ctrl",
+    "m8b_lucida_thai_arabic_digit",
+    "m8g_arial_deva",
+    "m8g_cnew_arabic",
+    "m8g_cnew_mc_after_mark",
+    "m8g_cnew_sequence",
+    "m8g_cnew_size13",
+    "m8g_cnew_syriac"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "m8b_verdana_heb_alm_digit": [
+     "0 0 114 68",
+     "0 0 122 68"
+    ],
+    "m8b_verdana_heb_alm_digit_ctrl": [
+     "0 0 100 68",
+     "0 0 108 68"
+    ],
+    "m8b_lucida_thai_alm_digit": [
+     "0 0 98 68",
+     "0 0 106 68"
+    ],
+    "m8b_lucida_thai_alm_digit_ctrl": [
+     "0 0 98 68",
+     "0 0 106 68"
+    ],
+    "m8b_verdana_heb_alm_es": [
+     "0 0 134 68",
+     "0 0 142 68"
+    ],
+    "m8b_verdana_heb_alm_es_ctrl": [
+     "0 0 120 68",
+     "0 0 128 68"
+    ],
+    "m8b_lucida_rle_digit": [
+     "0 0 98 68",
+     "0 0 114 68"
+    ],
+    "m8b_lucida_rle_digit_ctrl": [
+     "0 0 98 68",
+     "0 0 114 68"
+    ],
+    "m8b_lucida_rlo_digit": [
+     "0 0 98 68",
+     "0 0 114 68"
+    ],
+    "m8b_lucida_rlo_digit_ctrl": [
+     "0 0 98 68",
+     "0 0 114 68"
+    ],
+    "m8b_verdana_lro_space": [
+     "0 0 116 68",
+     "0 0 133 68"
+    ],
+    "m8b_verdana_lro_space_ctrl": [
+     "0 0 102 68",
+     "0 0 119 68"
+    ],
+    "m8b_verdana_lre_hebrew": [
+     "0 0 116 68",
+     "0 0 133 68"
+    ],
+    "m8b_verdana_lre_hebrew_ctrl": [
+     "0 0 102 68",
+     "0 0 119 68"
+    ],
+    "m8b_verdana_rlm_deva": [
+     "0 0 117 68",
+     "0 0 124 68"
+    ],
+    "m8b_verdana_rlm_deva_ctrl": [
+     "0 0 103 68",
+     "0 0 110 68"
+    ],
+    "m8b_verdana_heb_bracket_nsm": [
+     "0 0 124 68",
+     "0 0 125 68"
+    ],
+    "m8b_verdana_heb_bracket_nsm_ctrl": [
+     "0 0 110 68",
+     "0 0 111 68"
+    ],
+    "m8b_arial_heb_tail_space": [
+     "0 0 102 68",
+     "0 0 103 68"
+    ],
+    "m8g_cnew_deva": [
+     "0 0 104 68",
+     "0 0 102 68"
+    ],
+    "m8g_cnew_deva_ctrl": [
+     "0 0 104 68",
+     "0 0 102 68"
+    ],
+    "m8g_cnew_mymr": [
+     "0 0 109 68",
+     "0 0 102 68"
+    ],
+    "m8g_cnew_mymr_ctrl": [
+     "0 0 109 68",
+     "0 0 102 68"
+    ],
+    "m8g_cnew_tibt": [
+     "0 0 101 68",
+     "0 0 102 68"
+    ],
+    "m8g_cnew_tibt_ctrl": [
+     "0 0 101 68",
+     "0 0 102 68"
+    ],
+    "m8g_cnew_hangul": [
+     "0 0 114 68",
+     "0 0 110 68"
+    ],
+    "m8g_cnew_hangul_ctrl": [
+     "0 0 106 68",
+     "0 0 102 68"
+    ],
+    "m8g_cnew_syriac_ctrl": [
+     "0 0 107 68",
+     "0 0 102 68"
+    ],
+    "m8g_cnewbold_deva": [
+     "0 0 105 68",
+     "0 0 102 68"
+    ],
+    "m8g_cnewbold_deva_ctrl": [
+     "0 0 105 68",
+     "0 0 102 68"
+    ]
+   }
+  },
+  "BO": {
+   "cases_exit0_svg": 81,
+   "base_exact_viewbox": 27,
+   "base_comments_exact": 25,
+   "merge_exact_viewbox": 39,
+   "merge_comments_exact": 81,
+   "tip_exact_viewbox": 39,
+   "tip_comments_exact": 81,
+   "viewbox_lost_vs_base": [
+    "c8a_bl_lucida_thai_digit_after_r"
+   ],
+   "viewbox_gained_vs_base": [
+    "c8a_bl_cnew_khmer_split",
+    "c8a_bl_lucida_al_en_thai",
+    "c8a_bl_lucida_al_then_thai_en",
+    "c8a_bl_lucida_an_cs_an",
+    "c8a_bl_lucida_ext_arabic_digit",
+    "c8a_bl_verdana_bracket_nsm_r",
+    "c8a_ci_fontstyle_italic",
+    "c8a_cr_member_bold",
+    "c8a_cr_member_plain",
+    "c8a_lt_cnew_thai_stereo",
+    "c8a_lt_thai_note",
+    "c8a_lt_verdana_deva_link",
+    "c8a_tn_abstract_italic"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "c8a_ci_stereo_latin": [
+     "0 0 112 75",
+     "0 0 93 75"
+    ],
+    "c8a_ci_stereo_latin_ctrl": [
+     "0 0 105 75",
+     "0 0 93 75"
+    ],
+    "c8a_ci_usecase_italic": [
+     "0 0 109 48",
+     "0 0 108 47"
+    ],
+    "c8a_ci_usecase_italic_ctrl": [
+     "0 0 97 48",
+     "0 0 96 47"
+    ],
+    "c8a_cr_usecase_plain": [
+     "0 0 97 48",
+     "0 0 96 47"
+    ],
+    "c8a_cr_usecase_plain_ctrl": [
+     "0 0 97 48",
+     "0 0 96 47"
+    ],
+    "c8a_hm_rtl_left": [
+     "0 0 226 106",
+     "0 0 347 106"
+    ],
+    "c8a_hm_rtl_right": [
+     "0 0 226 106",
+     "0 0 347 106"
+    ],
+    "c8a_hm_ltr_left": [
+     "0 0 220 106",
+     "0 0 347 106"
+    ],
+    "c8a_hm_ltr_right": [
+     "0 0 220 106",
+     "0 0 347 106"
+    ],
+    "c8a_hm_lucida_parens": [
+     "0 0 310 116",
+     "0 0 305 116"
+    ],
+    "c8a_bl_verdana_bracket_nsm_latin": [
+     "0 0 140 68",
+     "0 0 139 68"
+    ],
+    "c8a_bl_verdana_bracket_nsm_latin_ctrl": [
+     "0 0 126 68",
+     "0 0 125 68"
+    ],
+    "c8a_bl_verdana_square_nsm_end": [
+     "0 0 132 68",
+     "0 0 130 68"
+    ],
+    "c8a_bl_verdana_square_nsm_end_ctrl": [
+     "0 0 118 68",
+     "0 0 116 68"
+    ],
+    "c8a_bl_verdana_angle_nsm_end": [
+     "0 0 133 68",
+     "0 0 134 68"
+    ],
+    "c8a_bl_verdana_angle_nsm_end_ctrl": [
+     "0 0 119 68",
+     "0 0 120 68"
+    ],
+    "c8a_bl_verdana_mark_then_digit": [
+     "0 0 115 68",
+     "0 0 114 68"
+    ],
+    "c8a_bl_verdana_mark_then_digit_ctrl": [
+     "0 0 101 68",
+     "0 0 100 68"
+    ],
+    "c8a_bl_verdana_open_l_context": [
+     "0 0 119 68",
+     "0 0 117 68"
+    ],
+    "c8a_bl_verdana_open_l_context_ctrl": [
+     "0 0 105 68",
+     "0 0 103 68"
+    ],
+    "c8a_bl_lucida_an_digit_thai": [
+     "0 0 101 68",
+     "0 0 102 68"
+    ],
+    "c8a_bl_lucida_an_digit_thai_ctrl": [
+     "0 0 101 68",
+     "0 0 102 68"
+    ],
+    "c8a_bl_lucida_thai_digit_after_r": [
+     "0 0 124 68",
+     "0 0 120 68"
+    ],
+    "c8a_bl_lucida_thai_digit_after_r_ctrl": [
+     "0 0 114 68",
+     "0 0 110 68"
+    ],
+    "c8a_bl_lucida_en_cs_en": [
+     "0 0 125 68",
+     "0 0 124 68"
+    ],
+    "c8a_bl_lucida_en_cs_en_ctrl": [
+     "0 0 125 68",
+     "0 0 124 68"
+    ],
+    "c8a_bl_lucida_et_en": [
+     "0 0 121 68",
+     "0 0 120 68"
+    ],
+    "c8a_bl_lucida_et_en_ctrl": [
+     "0 0 121 68",
+     "0 0 120 68"
+    ],
+    "c8a_bl_lucida_rli_digit": [
+     "0 0 112 68",
+     "0 0 111 68"
+    ],
+    "c8a_bl_lucida_rli_digit_ctrl": [
+     "0 0 112 68",
+     "0 0 111 68"
+    ],
+    "c8a_bl_lucida_deva_digit_r": [
+     "0 0 125 68",
+     "0 0 122 68"
+    ],
+    "c8a_bl_lucida_deva_digit_r_ctrl": [
+     "0 0 115 68",
+     "0 0 112 68"
+    ],
+    "c8a_bl_cnew_hangul_split": [
+     "0 0 131 68",
+     "0 0 127 68"
+    ],
+    "c8a_bl_cnew_hangul_split_ctrl": [
+     "0 0 131 68",
+     "0 0 127 68"
+    ],
+    "c8a_bl_verdana_sequence": [
+     "0 0 144 137",
+     "0 0 142 137"
+    ],
+    "c8a_bl_verdana_sequence_ctrl": [
+     "0 0 124 137",
+     "0 0 122 137"
+    ],
+    "c8a_bl_verdana_activity": [
+     "0 0 122 206",
+     "0 0 121 206"
+    ],
+    "c8a_bl_verdana_activity_ctrl": [
+     "0 0 110 206",
+     "0 0 109 206"
+    ],
+    "c8a_lt_deva_participant": [
+     "0 0 90 136",
+     "0 0 102 136"
+    ],
+    "c8a_lt_latin_marks_state": [
+     "0 0 92 167",
+     "0 0 100 167"
+    ],
+    "c8a_lt_arial_tibetan": [
+     "0 0 98 68",
+     "0 0 99 68"
+    ]
+   }
+  },
+  "BP": {
+   "cases_exit0_svg": 50,
+   "base_exact_viewbox": 27,
+   "base_comments_exact": 44,
+   "merge_exact_viewbox": 36,
+   "merge_comments_exact": 50,
+   "tip_exact_viewbox": 36,
+   "tip_comments_exact": 50,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [
+    "m9a_ai_arial_italic",
+    "m9a_cb_bold_class",
+    "m9a_lt_arial_guru_link",
+    "m9a_lt_arial_guru_link_ctrl",
+    "m9a_lt_arrowfont_link",
+    "m9a_lt_arrowsize_link",
+    "m9a_lt_courier_telu_link",
+    "m9a_lt_courier_telu_link_ctrl",
+    "m9a_lt_verdana_size_link_ctrl"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "m9a_ci_act_note": [
+     "0 0 181 150",
+     "0 0 166 150"
+    ],
+    "m9a_ci_act_note_ctrl": [
+     "0 0 173 150",
+     "0 0 166 150"
+    ],
+    "m9a_ci_class_note": [
+     "0 0 96 154",
+     "0 0 87 155"
+    ],
+    "m9a_ci_class_note_ctrl": [
+     "0 0 88 154",
+     "0 0 87 155"
+    ],
+    "m9a_ci_note_left": [
+     "0 0 197 70",
+     "0 0 172 70"
+    ],
+    "m9a_ci_note_left_ctrl": [
+     "0 0 189 70",
+     "0 0 172 70"
+    ],
+    "m9a_ci_act_note_font": [
+     "0 0 181 150",
+     "0 0 163 150"
+    ],
+    "m9a_ci_act_note_font_ctrl": [
+     "0 0 173 150",
+     "0 0 163 150"
+    ],
+    "m9a_vi_hebrew_italic": [
+     "0 0 95 85",
+     "0 0 94 85"
+    ],
+    "m9a_vi_hebrew_italic_ctrl": [
+     "0 0 95 85",
+     "0 0 94 85"
+    ],
+    "m9a_mi_menlo_italic": [
+     "0 0 82 84",
+     "0 0 79 84"
+    ],
+    "m9a_mi_menlo_italic_ctrl": [
+     "0 0 82 84",
+     "0 0 79 84"
+    ],
+    "m9a_lt_verdana_beng_link": [
+     "0 0 94 195",
+     "0 0 89 195"
+    ],
+    "m9a_lt_verdana_size_link": [
+     "0 0 102 200",
+     "0 0 99 200"
+    ]
+   }
+  },
+  "BQ": {
+   "cases_exit0_svg": 6,
+   "base_exact_viewbox": 1,
+   "base_comments_exact": 6,
+   "merge_exact_viewbox": 1,
+   "merge_comments_exact": 6,
+   "tip_exact_viewbox": 1,
+   "tip_comments_exact": 6,
+   "viewbox_lost_vs_base": [],
+   "viewbox_gained_vs_base": [],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "m9b_seqnote_p2029_pdf": [
+     "0 0 61 130",
+     "0 0 70 130"
+    ],
+    "m9b_seqnote_p2029_pdf_ctrl": [
+     "0 0 61 130",
+     "0 0 65 130"
+    ],
+    "m9b_seqnote_nel_pdf": [
+     "0 0 66 130",
+     "0 0 75 130"
+    ],
+    "m9b_seqnote_nel_pdf_ctrl": [
+     "0 0 66 130",
+     "0 0 70 130"
+    ],
+    "m9b_seqnote_p2029_mixed": [
+     "0 0 57 130",
+     "0 0 58 130"
+    ]
+   }
+  },
+  "BR": {
+   "cases_exit0_svg": 288,
+   "base_exact_viewbox": 67,
+   "base_comments_exact": 274,
+   "merge_exact_viewbox": 113,
+   "merge_comments_exact": 286,
+   "tip_exact_viewbox": 113,
+   "tip_comments_exact": 286,
+   "viewbox_lost_vs_base": [
+    "c9a_sp_seqnote_pdf_N_ctrl",
+    "c9a_sv_actmid_N_sp_ctrl",
+    "c9a_sv_classnote_N_ctrl"
+   ],
+   "viewbox_gained_vs_base": [
+    "c9a_af_class_prefix_name",
+    "c9a_af_class_prefix_size",
+    "c9a_af_cn_italic_mark_ctrl",
+    "c9a_af_cn_name",
+    "c9a_af_creole_ar",
+    "c9a_af_default_size16",
+    "c9a_af_default_vd",
+    "c9a_af_hv_size15_mark",
+    "c9a_af_hv_size15_mark_ctrl",
+    "c9a_af_labelarrow_vd",
+    "c9a_af_lr_cn",
+    "c9a_af_ortho_vd",
+    "c9a_af_package_size15",
+    "c9a_af_polyline_size16",
+    "c9a_af_self_size17",
+    "c9a_af_style_arrow_size",
+    "c9a_af_style_class_arrow",
+    "c9a_af_two_links",
+    "c9a_af_vd_mark",
+    "c9a_af_vd_mark_ctrl",
+    "c9a_af_vd_name_size17",
+    "c9a_fs_ar_b_seq",
+    "c9a_fs_ar_i_act",
+    "c9a_fs_ar_p_class",
+    "c9a_fs_cn_b_seq",
+    "c9a_fs_cn_p_class",
+    "c9a_fs_hv_bi_class",
+    "c9a_fs_hv_i_state",
+    "c9a_fs_lg_b_act",
+    "c9a_fs_lg_b_note",
+    "c9a_fs_lg_p_seq",
+    "c9a_fs_mo_b_class",
+    "c9a_fs_mo_bi_act",
+    "c9a_fs_mo_i_seq",
+    "c9a_fs_mo_p_state",
+    "c9a_ns_ar_abstract",
+    "c9a_ns_ar_seq_dfs_italic",
+    "c9a_ns_hv_absmember",
+    "c9a_ns_hv_abstract",
+    "c9a_ns_mo_abstract",
+    "c9a_sp_legend_pdf_P",
+    "c9a_sp_seqnote_dg_N",
+    "c9a_sp_seqnote_mk_N",
+    "c9a_sp_seqnote_mk_P",
+    "c9a_sp_seqnote_mx_N",
+    "c9a_sp_seqnote_rr_N",
+    "c9a_sp_seqnote_sp_N",
+    "c9a_sp_seqnote_sp_P",
+    "c9a_sv_actmid_P"
+   ],
+   "comments_lost_vs_base": [],
+   "viewbox_lost_vs_merge": [],
+   "viewbox_gained_vs_merge": [],
+   "comments_lost_vs_merge": [],
+   "tip_viewbox_mismatch": {
+    "c9a_fs_ar_p_state": [
+     "0 0 97 71",
+     "0 0 91 71"
+    ],
+    "c9a_fs_ar_p_state_ctrl": [
+     "0 0 88 71",
+     "0 0 91 71"
+    ],
+    "c9a_fs_ar_b_uc": [
+     "0 0 122 48",
+     "0 0 121 47"
+    ],
+    "c9a_fs_ar_b_uc_ctrl": [
+     "0 0 107 48",
+     "0 0 106 47"
+    ],
+    "c9a_fs_ar_i_comp": [
+     "0 0 124 66",
+     "0 0 125 67"
+    ],
+    "c9a_fs_ar_i_comp_ctrl": [
+     "0 0 113 66",
+     "0 0 114 67"
+    ],
+    "c9a_fs_ar_bi_state": [
+     "0 0 100 71",
+     "0 0 95 71"
+    ],
+    "c9a_fs_ar_bi_state_ctrl": [
+     "0 0 91 71",
+     "0 0 95 71"
+    ],
+    "c9a_fs_ar_bi_note": [
+     "0 0 206 70",
+     "0 0 201 70"
+    ],
+    "c9a_fs_ar_bi_note_ctrl": [
+     "0 0 196 70",
+     "0 0 201 70"
+    ],
+    "c9a_fs_hv_p_seq": [
+     "0 0 128 116",
+     "0 0 128 115"
+    ],
+    "c9a_fs_hv_p_seq_ctrl": [
+     "0 0 128 116",
+     "0 0 128 115"
+    ],
+    "c9a_fs_hv_p_uc": [
+     "0 0 101 45",
+     "0 0 100 44"
+    ],
+    "c9a_fs_hv_p_uc_ctrl": [
+     "0 0 101 45",
+     "0 0 100 44"
+    ],
+    "c9a_fs_hv_b_act": [
+     "0 0 105 149",
+     "0 0 105 148"
+    ],
+    "c9a_fs_hv_b_act_ctrl": [
+     "0 0 105 149",
+     "0 0 105 148"
+    ],
+    "c9a_fs_hv_b_comp": [
+     "0 0 117 64",
+     "0 0 118 65"
+    ],
+    "c9a_fs_hv_b_comp_ctrl": [
+     "0 0 117 64",
+     "0 0 118 65"
+    ],
+    "c9a_fs_hv_i_note": [
+     "0 0 193 70",
+     "0 0 197 70"
+    ],
+    "c9a_fs_hv_i_note_ctrl": [
+     "0 0 193 70",
+     "0 0 197 70"
+    ],
+    "c9a_fs_hv_bi_uc": [
+     "0 0 107 45",
+     "0 0 106 44"
+    ],
+    "c9a_fs_hv_bi_uc_ctrl": [
+     "0 0 107 45",
+     "0 0 106 44"
+    ],
+    "c9a_fs_vd_p_comp": [
+     "0 0 135 67",
+     "0 0 136 68"
+    ],
+    "c9a_fs_vd_p_comp_ctrl": [
+     "0 0 121 67",
+     "0 0 122 68"
+    ],
+    "c9a_fs_vd_b_note": [
+     "0 0 224 70",
+     "0 0 204 70"
+    ],
+    "c9a_fs_vd_b_note_ctrl": [
+     "0 0 211 70",
+     "0 0 204 70"
+    ],
+    "c9a_fs_vd_i_uc": [
+     "0 0 132 50",
+     "0 0 131 49"
+    ],
+    "c9a_fs_vd_i_uc_ctrl": [
+     "0 0 113 50",
+     "0 0 112 49"
+    ],
+    "c9a_fs_vd_bi_comp": [
+     "0 0 143 67",
+     "0 0 144 68"
+    ],
+    "c9a_fs_vd_bi_comp_ctrl": [
+     "0 0 129 67",
+     "0 0 130 68"
+    ],
+    "c9a_fs_mo_p_note": [
+     "0 0 206 70",
+     "0 0 197 70"
+    ],
+    "c9a_fs_mo_p_note_ctrl": [
+     "0 0 206 70",
+     "0 0 197 70"
+    ],
+    "c9a_fs_mo_b_uc": [
+     "0 0 121 49",
+     "0 0 120 48"
+    ],
+    "c9a_fs_mo_b_uc_ctrl": [
+     "0 0 121 49",
+     "0 0 120 48"
+    ],
+    "c9a_fs_mo_i_comp": [
+     "0 0 127 66",
+     "0 0 128 67"
+    ],
+    "c9a_fs_mo_i_comp_ctrl": [
+     "0 0 127 66",
+     "0 0 128 67"
+    ],
+    "c9a_fs_mo_bi_note": [
+     "0 0 206 70",
+     "0 0 201 70"
+    ],
+    "c9a_fs_mo_bi_note_ctrl": [
+     "0 0 206 70",
+     "0 0 201 70"
+    ],
+    "c9a_fs_cn_p_uc": [
+     "0 0 121 48",
+     "0 0 120 47"
+    ],
+    "c9a_fs_cn_p_uc_ctrl": [
+     "0 0 121 48",
+     "0 0 120 47"
+    ],
+    "c9a_fs_cn_b_comp": [
+     "0 0 127 65",
+     "0 0 128 66"
+    ],
+    "c9a_fs_cn_b_comp_ctrl": [
+     "0 0 127 65",
+     "0 0 128 66"
+    ],
+    "c9a_fs_cn_i_note": [
+     "0 0 213 70",
+     "0 0 197 70"
+    ],
+    "c9a_fs_cn_i_note_ctrl": [
+     "0 0 206 70",
+     "0 0 197 70"
+    ],
+    "c9a_fs_lg_p_comp": [
+     "0 0 118 66",
+     "0 0 119 67"
+    ],
+    "c9a_fs_lg_p_comp_ctrl": [
+     "0 0 118 66",
+     "0 0 119 67"
+    ],
+    "c9a_fs_lg_i_class": [
+     "0 0 92 84",
+     "0 0 90 84"
+    ],
+    "c9a_fs_lg_i_state": [
+     "0 0 94 71",
+     "0 0 91 71"
+    ],
+    "c9a_fs_lg_bi_seq": [
+     "0 0 140 123",
+     "0 0 138 123"
+    ],
+    "c9a_fs_lg_bi_uc": [
+     "0 0 118 49",
+     "0 0 113 48"
+    ],
+    "c9a_fs_lg_bi_uc_ctrl": [
+     "0 0 114 49",
+     "0 0 113 48"
+    ],
+    "c9a_ns_lg_absmember": [
+     "0 0 102 84",
+     "0 0 99 84"
+    ],
+    "c9a_ns_vd_uc_dfs_bold": [
+     "0 0 132 50",
+     "0 0 131 49"
+    ],
+    "c9a_ns_vd_uc_dfs_bold_ctrl": [
+     "0 0 113 50",
+     "0 0 112 49"
+    ],
+    "c9a_ns_cn_comp_italic": [
+     "0 0 135 65",
+     "0 0 136 66"
+    ],
+    "c9a_ns_cn_comp_italic_ctrl": [
+     "0 0 127 65",
+     "0 0 128 66"
+    ],
+    "c9a_ns_menlo_p": [
+     "0 0 99 84",
+     "0 0 90 84"
+    ],
+    "c9a_ns_menlo_p_ctrl": [
+     "0 0 99 84",
+     "0 0 90 84"
+    ],
+    "c9a_ns_menlo_b": [
+     "0 0 99 84",
+     "0 0 94 84"
+    ],
+    "c9a_ns_menlo_b_ctrl": [
+     "0 0 99 84",
+     "0 0 94 84"
+    ],
+    "c9a_ns_menlo_i": [
+     "0 0 99 84",
+     "0 0 90 84"
+    ],
+    "c9a_ns_menlo_i_ctrl": [
+     "0 0 99 84",
+     "0 0 90 84"
+    ],
+    "c9a_ns_menlo_bi": [
+     "0 0 99 84",
+     "0 0 94 84"
+    ],
+    "c9a_ns_menlo_bi_ctrl": [
+     "0 0 99 84",
+     "0 0 94 84"
+    ],
+    "c9a_af_size9": [
+     "0 0 84 190",
+     "0 0 84 193"
+    ],
+    "c9a_af_multiline_vd": [
+     "0 0 162 211",
+     "0 0 201 195"
+    ],
+    "c9a_af_multiline3_size16": [
+     "0 0 153 236",
+     "0 0 259 198"
+    ],
+    "c9a_af_stereo_skinparam": [
+     "0 0 133 203",
+     "0 0 138 70"
+    ],
+    "c9a_af_stereo_global_vd": [
+     "0 0 105 195",
+     "0 0 138 70"
+    ],
+    "c9a_af_style_bold": [
+     "0 0 107 195",
+     "0 0 102 195"
+    ],
+    "c9a_af_roles_size16": [
+     "0 0 141 198",
+     "0 0 132 198"
+    ],
+    "c9a_af_object_vd": [
+     "0 0 98 170",
+     "0 0 92 171"
+    ],
+    "c9a_af_deploy_size16": [
+     "0 0 129 203",
+     "0 0 115 200"
+    ],
+    "c9a_af_component_vd": [
+     "0 0 109 190",
+     "0 0 106 190"
+    ],
+    "c9a_af_cn_italic_mark": [
+     "0 0 115 194",
+     "0 0 107 194"
+    ],
+    "c9a_af_ar_multiline_mark": [
+     "0 0 95 205",
+     "0 0 123 193"
+    ],
+    "c9a_af_ar_multiline_mark_ctrl": [
+     "0 0 87 205",
+     "0 0 115 193"
+    ],
+    "c9a_sp_seqnote_pdf_P": [
+     "0 0 68 146",
+     "0 0 70 146"
+    ],
+    "c9a_sp_seqnote_pdf_N": [
+     "0 0 74 143",
+     "0 0 81 143"
+    ],
+    "c9a_sp_seqnote_pdf_N_ctrl": [
+     "0 0 65 143",
+     "0 0 68 143"
+    ],
+    "c9a_sp_seqnote_rr_P": [
+     "0 0 67 144",
+     "0 0 72 144"
+    ],
+    "c9a_sp_seqnote_rr_P_ctrl": [
+     "0 0 67 144",
+     "0 0 72 144"
+    ],
+    "c9a_sp_seqnote_mx_P": [
+     "0 0 111 146",
+     "0 0 113 146"
+    ],
+    "c9a_sp_seqnote_mx_P_ctrl": [
+     "0 0 98 146",
+     "0 0 100 146"
+    ],
+    "c9a_sp_seqnote_mx_N_ctrl": [
+     "0 0 97 143",
+     "0 0 98 143"
+    ],
+    "c9a_sp_seqnote_dg_P": [
+     "0 0 69 144",
+     "0 0 75 144"
+    ],
+    "c9a_sp_seqnote_dg_P_ctrl": [
+     "0 0 69 144",
+     "0 0 75 144"
+    ],
+    "c9a_sp_seqnote_left_pdf_P": [
+     "0 0 94 146",
+     "0 0 95 146"
+    ],
+    "c9a_sp_classnote_mk_N": [
+     "0 0 177 70",
+     "0 0 173 70"
+    ],
+    "c9a_sp_classnote_mk_N_ctrl": [
+     "0 0 171 70",
+     "0 0 173 70"
+    ],
+    "c9a_sp_classnote_rr_P": [
+     "0 0 174 70",
+     "0 0 179 70"
+    ],
+    "c9a_sp_classnote_rr_P_ctrl": [
+     "0 0 174 70",
+     "0 0 179 70"
+    ],
+    "c9a_sp_floatnote_mx_P": [
+     "0 0 96 60",
+     "0 0 102 60"
+    ],
+    "c9a_sp_floatnote_mx_P_ctrl": [
+     "0 0 96 60",
+     "0 0 102 60"
+    ],
+    "c9a_sp_floatnote_dg_N": [
+     "0 0 80 59",
+     "0 0 81 60"
+    ],
+    "c9a_sp_floatnote_dg_N_ctrl": [
+     "0 0 80 59",
+     "0 0 81 60"
+    ],
+    "c9a_sp_actnote_pdf_N": [
+     "0 0 158 153",
+     "0 0 162 154"
+    ],
+    "c9a_sp_actnote_pdf_N_ctrl": [
+     "0 0 158 153",
+     "0 0 158 154"
+    ],
+    "c9a_sp_actnote_sp_P": [
+     "0 0 165 155",
+     "0 0 157 154"
+    ],
+    "c9a_sp_actnote_sp_P_ctrl": [
+     "0 0 159 155",
+     "0 0 157 154"
+    ],
+    "c9a_sp_actmid_rr_N": [
+     "0 0 98 178",
+     "0 0 100 178"
+    ],
+    "c9a_sp_actmid_rr_N_ctrl": [
+     "0 0 89 178",
+     "0 0 91 178"
+    ],
+    "c9a_sp_statenote_mx_N": [
+     "0 0 202 71",
+     "0 0 196 71"
+    ],
+    "c9a_sp_statenote_mx_N_ctrl": [
+     "0 0 192 71",
+     "0 0 196 71"
+    ],
+    "c9a_sp_statenote_dg_P": [
+     "0 0 164 71",
+     "0 0 170 71"
+    ],
+    "c9a_sp_statenote_dg_P_ctrl": [
+     "0 0 164 71",
+     "0 0 170 71"
+    ],
+    "c9a_sp_legend_sp_N": [
+     "0 0 85 134",
+     "0 0 85 135"
+    ],
+    "c9a_sp_legend_sp_N_ctrl": [
+     "0 0 85 134",
+     "0 0 85 135"
+    ],
+    "c9a_sp_ucnote_mk_N": [
+     "0 0 140 60",
+     "0 0 139 61"
+    ],
+    "c9a_sp_ucnote_mk_N_ctrl": [
+     "0 0 140 60",
+     "0 0 139 61"
+    ],
+    "c9a_sp_ucnote_rr_P": [
+     "0 0 156 62",
+     "0 0 146 61"
+    ],
+    "c9a_sp_ucnote_rr_P_ctrl": [
+     "0 0 143 62",
+     "0 0 146 61"
+    ],
+    "c9a_sv_seqnote_N": [
+     "0 0 70 146",
+     "0 0 76 146"
+    ],
+    "c9a_sv_seqnote_N_ctrl": [
+     "0 0 70 146",
+     "0 0 71 146"
+    ],
+    "c9a_sv_seqnote_N_sp": [
+     "0 0 70 146",
+     "0 0 83 146"
+    ],
+    "c9a_sv_seqnote_N_sp_ctrl": [
+     "0 0 70 146",
+     "0 0 78 146"
+    ],
+    "c9a_sv_seqnote_left_P": [
+     "0 0 94 146",
+     "0 0 95 146"
+    ],
+    "c9a_sv_seqnote_left_P_sp": [
+     "0 0 94 146",
+     "0 0 102 146"
+    ],
+    "c9a_sv_seqnote_left_P_sp_ctrl": [
+     "0 0 94 146",
+     "0 0 98 146"
+    ],
+    "c9a_sv_seqnote_left_N": [
+     "0 0 95 146",
+     "0 0 101 146"
+    ],
+    "c9a_sv_seqnote_left_N_ctrl": [
+     "0 0 95 146",
+     "0 0 97 146"
+    ],
+    "c9a_sv_seqnote_left_N_sp": [
+     "0 0 95 146",
+     "0 0 108 146"
+    ],
+    "c9a_sv_seqnote_left_N_sp_ctrl": [
+     "0 0 95 146",
+     "0 0 104 146"
+    ],
+    "c9a_sv_classnote_P": [
+     "0 0 178 70",
+     "0 0 179 70"
+    ],
+    "c9a_sv_classnote_P_ctrl": [
+     "0 0 178 70",
+     "0 0 179 70"
+    ],
+    "c9a_sv_classnote_P_sp": [
+     "0 0 178 70",
+     "0 0 186 70"
+    ],
+    "c9a_sv_classnote_P_sp_ctrl": [
+     "0 0 178 70",
+     "0 0 186 70"
+    ],
+    "c9a_sv_classnote_N": [
+     "0 0 179 70",
+     "0 0 182 70"
+    ],
+    "c9a_sv_classnote_N_ctrl": [
+     "0 0 179 70",
+     "0 0 182 70"
+    ],
+    "c9a_sv_classnote_N_sp": [
+     "0 0 179 70",
+     "0 0 189 70"
+    ],
+    "c9a_sv_classnote_N_sp_ctrl": [
+     "0 0 179 70",
+     "0 0 189 70"
+    ],
+    "c9a_sv_floatnote_P": [
+     "0 0 72 61",
+     "0 0 73 60"
+    ],
+    "c9a_sv_floatnote_P_ctrl": [
+     "0 0 72 61",
+     "0 0 73 60"
+    ],
+    "c9a_sv_floatnote_P_sp": [
+     "0 0 72 61",
+     "0 0 81 60"
+    ],
+    "c9a_sv_floatnote_P_sp_ctrl": [
+     "0 0 72 61",
+     "0 0 81 60"
+    ],
+    "c9a_sv_floatnote_N": [
+     "0 0 74 61",
+     "0 0 76 60"
+    ],
+    "c9a_sv_floatnote_N_ctrl": [
+     "0 0 74 61",
+     "0 0 76 60"
+    ],
+    "c9a_sv_floatnote_N_sp": [
+     "0 0 74 61",
+     "0 0 83 60"
+    ],
+    "c9a_sv_floatnote_N_sp_ctrl": [
+     "0 0 74 61",
+     "0 0 83 60"
+    ],
+    "c9a_sv_actnote_P": [
+     "0 0 159 155",
+     "0 0 160 154"
+    ],
+    "c9a_sv_actnote_P_ctrl": [
+     "0 0 159 155",
+     "0 0 157 154"
+    ],
+    "c9a_sv_actnote_P_sp": [
+     "0 0 159 155",
+     "0 0 167 154"
+    ],
+    "c9a_sv_actnote_P_sp_ctrl": [
+     "0 0 159 155",
+     "0 0 163 154"
+    ],
+    "c9a_sv_actnote_N": [
+     "0 0 160 155",
+     "0 0 162 154"
+    ],
+    "c9a_sv_actnote_N_ctrl": [
+     "0 0 160 155",
+     "0 0 158 154"
+    ],
+    "c9a_sv_actnote_N_sp": [
+     "0 0 160 155",
+     "0 0 170 154"
+    ],
+    "c9a_sv_actnote_N_sp_ctrl": [
+     "0 0 160 155",
+     "0 0 165 154"
+    ],
+    "c9a_sv_actmid_P_sp": [
+     "0 0 89 180",
+     "0 0 93 180"
+    ],
+    "c9a_sv_actmid_N": [
+     "0 0 89 180",
+     "0 0 92 180"
+    ],
+    "c9a_sv_actmid_N_sp": [
+     "0 0 89 180",
+     "0 0 98 180"
+    ],
+    "c9a_sv_actmid_N_sp_ctrl": [
+     "0 0 89 180",
+     "0 0 94 180"
+    ],
+    "c9a_sv_statenote_P": [
+     "0 0 166 71",
+     "0 0 167 71"
+    ],
+    "c9a_sv_statenote_P_ctrl": [
+     "0 0 166 71",
+     "0 0 164 71"
+    ],
+    "c9a_sv_statenote_P_sp": [
+     "0 0 166 71",
+     "0 0 174 71"
+    ],
+    "c9a_sv_statenote_P_sp_ctrl": [
+     "0 0 166 71",
+     "0 0 170 71"
+    ],
+    "c9a_sv_statenote_N": [
+     "0 0 167 71",
+     "0 0 170 71"
+    ],
+    "c9a_sv_statenote_N_ctrl": [
+     "0 0 167 71",
+     "0 0 165 71"
+    ],
+    "c9a_sv_statenote_N_sp": [
+     "0 0 167 71",
+     "0 0 177 71"
+    ],
+    "c9a_sv_statenote_N_sp_ctrl": [
+     "0 0 167 71",
+     "0 0 173 71"
+    ],
+    "c9a_sv_legend_P": [
+     "0 0 88 137",
+     "0 0 88 135"
+    ],
+    "c9a_sv_legend_P_ctrl": [
+     "0 0 88 137",
+     "0 0 88 135"
+    ],
+    "c9a_sv_legend_P_sp": [
+     "0 0 88 137",
+     "0 0 88 135"
+    ],
+    "c9a_sv_legend_P_sp_ctrl": [
+     "0 0 88 137",
+     "0 0 88 135"
+    ],
+    "c9a_sv_legend_N": [
+     "0 0 88 137",
+     "0 0 88 135"
+    ],
+    "c9a_sv_legend_N_ctrl": [
+     "0 0 88 137",
+     "0 0 88 135"
+    ],
+    "c9a_sv_legend_N_sp": [
+     "0 0 88 137",
+     "0 0 88 135"
+    ],
+    "c9a_sv_legend_N_sp_ctrl": [
+     "0 0 88 137",
+     "0 0 88 135"
+    ],
+    "c9a_sv_ucnote_P": [
+     "0 0 143 62",
+     "0 0 144 61"
+    ],
+    "c9a_sv_ucnote_P_ctrl": [
+     "0 0 143 62",
+     "0 0 141 61"
+    ],
+    "c9a_sv_ucnote_P_sp": [
+     "0 0 143 62",
+     "0 0 151 61"
+    ],
+    "c9a_sv_ucnote_P_sp_ctrl": [
+     "0 0 143 62",
+     "0 0 147 61"
+    ],
+    "c9a_sv_ucnote_N": [
+     "0 0 144 62",
+     "0 0 147 61"
+    ],
+    "c9a_sv_ucnote_N_ctrl": [
+     "0 0 144 62",
+     "0 0 143 61"
+    ],
+    "c9a_sv_ucnote_N_sp": [
+     "0 0 144 62",
+     "0 0 154 61"
+    ],
+    "c9a_sv_ucnote_N_sp_ctrl": [
+     "0 0 144 62",
+     "0 0 150 61"
+    ]
+   }
+  }
+ },
+ "sweep_cohorts": {
+  "goldens": {
+   "sources": 12550,
+   "java_valid": 11351,
+   "java_error": 1199,
+   "merge_valid_strict_match": 11181,
+   "merge_comments_exact": 11781,
+   "merge_exit": {
+    "1": 76,
+    "0": 12474
+   },
+   "merge_panics": 0,
+   "merge_timeouts": 0,
+   "merge_java_error_rejected": 76,
+   "merge_nonempty_stderr": 76,
+   "tip_valid_strict_match": 11181,
+   "tip_comments_exact": 11781,
+   "tip_exit": {
+    "1": 76,
+    "0": 12474
+   },
+   "tip_panics": 0,
+   "tip_timeouts": 0,
+   "tip_java_error_rejected": 76,
+   "tip_nonempty_stderr": 76,
+   "merge_to_tip": {
+    "outputs_changed": [
+     "test-diagrams/golden/skinparam/skin_usecase_fontStyle_bold.puml",
+     "test-diagrams/golden/skinparam/skin_usecase_fontStyle_italic.puml"
+    ]
+   },
+   "merge_to_tip_counts": {
+    "outputs_changed": 2
+   }
+  },
+  "perturbations": {
+   "sources": 4960,
+   "java_valid": 4647,
+   "java_error": 313,
+   "merge_valid_strict_match": 2926,
+   "merge_comments_exact": 4324,
+   "merge_exit": {
+    "0": 4789,
+    "1": 167,
+    "101": 4
+   },
+   "merge_panics": 4,
+   "merge_timeouts": 0,
+   "merge_java_error_rejected": 155,
+   "merge_nonempty_stderr": 171,
+   "tip_valid_strict_match": 2929,
+   "tip_comments_exact": 4324,
+   "tip_exit": {
+    "0": 4789,
+    "1": 167,
+    "101": 4
+   },
+   "tip_panics": 4,
+   "tip_timeouts": 0,
+   "tip_java_error_rejected": 155,
+   "tip_nonempty_stderr": 171,
+   "merge_to_tip": {
+    "gained_match": [
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_cn_comp_italic.puml",
+     "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.puml",
+     "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_supplementary_math_face_sizes_tb.puml"
+    ],
+    "outputs_changed": [
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_cn_comp_italic.puml",
+     "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_italic_lr_mixed_case.puml",
+     "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.puml",
+     "test-diagrams/perturbations/times-new-roman-unicode-advances/checker_cyrillic_italic_lr_nested.puml",
+     "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_mixed_scripts_four_faces_tb.puml",
+     "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_supplementary_math_face_sizes_tb.puml"
+    ],
+    "stderr_changed": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+    ]
+   },
+   "merge_to_tip_counts": {
+    "gained_match": 3,
+    "outputs_changed": 6,
+    "stderr_changed": 4
+   }
+  },
+  "all": {
+   "sources": 17510,
+   "java_valid": 15998,
+   "java_error": 1512,
+   "merge_valid_strict_match": 14107,
+   "merge_comments_exact": 16105,
+   "merge_exit": {
+    "1": 243,
+    "0": 17263,
+    "101": 4
+   },
+   "merge_panics": 4,
+   "merge_timeouts": 0,
+   "merge_java_error_rejected": 231,
+   "merge_nonempty_stderr": 247,
+   "tip_valid_strict_match": 14110,
+   "tip_comments_exact": 16105,
+   "tip_exit": {
+    "1": 243,
+    "0": 17263,
+    "101": 4
+   },
+   "tip_panics": 4,
+   "tip_timeouts": 0,
+   "tip_java_error_rejected": 231,
+   "tip_nonempty_stderr": 247,
+   "merge_to_tip": {
+    "gained_match": [
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_cn_comp_italic.puml",
+     "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.puml",
+     "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_supplementary_math_face_sizes_tb.puml"
+    ],
+    "outputs_changed": [
+     "test-diagrams/golden/skinparam/skin_usecase_fontStyle_bold.puml",
+     "test-diagrams/golden/skinparam/skin_usecase_fontStyle_italic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_cn_comp_italic.puml",
+     "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_italic_lr_mixed_case.puml",
+     "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.puml",
+     "test-diagrams/perturbations/times-new-roman-unicode-advances/checker_cyrillic_italic_lr_nested.puml",
+     "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_mixed_scripts_four_faces_tb.puml",
+     "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_supplementary_math_face_sizes_tb.puml"
+    ],
+    "stderr_changed": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+    ]
+   },
+   "merge_to_tip_counts": {
+    "gained_match": 3,
+    "outputs_changed": 8,
+    "stderr_changed": 4
+   },
+   "merge_to_tip_stderr_lines_lost": {
+    "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4
+   },
+   "merge_to_tip_stderr_lines_gained": {
+    "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4
+   },
+   "merge_to_tip_stderr_per_source": {
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml": {
+     "lost": [
+      "thread 'main' (60305981) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     ],
+     "gained": [
+      "thread 'main' (60796636) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     ]
+    },
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml": {
+     "lost": [
+      "thread 'main' (60305987) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     ],
+     "gained": [
+      "thread 'main' (60796648) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     ]
+    },
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml": {
+     "lost": [
+      "thread 'main' (60305993) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     ],
+     "gained": [
+      "thread 'main' (60796657) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     ]
+    },
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml": {
+     "lost": [
+      "thread 'main' (60305995) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     ],
+     "gained": [
+      "thread 'main' (60796660) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+     ]
+    }
+   }
+  },
+  "GET_goldens": {
+   "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+    "merge": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "tip": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   },
+   "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+    "merge": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "tip": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   },
+   "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+    "merge": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "tip": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   }
+  }
+ },
+ "gates": {
+  "tip": "lib exit 0\npipe_mode exit 0\ngolden_no_oracle exit 101\ngolden_pairs exit 101\nparity_perturbations exit 101\nharness_guards exit 101\ndoc_claims exit 0",
+  "merge": "golden_no_oracle exit 101\ngolden_pairs exit 101\nparity_perturbations exit 101\nharness_guards exit 101\nlib exit 0\npipe_mode exit 0\ndoc_claims exit 0",
+  "base": "golden_no_oracle exit 101"
+ },
+ "golden_pairs": {
+  "tip": "golden_pairs: 12550 total, 10497 passed, 754 failed, 1299 skipped",
+  "merge": "golden_pairs: 12550 total, 10497 passed, 754 failed, 1299 skipped"
+ },
+ "no_oracle": {
+  "tip": "golden_no_oracle: 11181/11251 eligible pairs pass per family:",
+  "merge": "golden_no_oracle: 11181/11251 eligible pairs pass per family:",
+  "base": "golden_no_oracle: 11181/11251 eligible pairs pass per family:"
+ },
+ "no_oracle_failure_names_diff_vs_9834a7194": "0a1,2\n> activity/act_skinparam2_shadowing_true\n> activity/act_skinparam_shadowing\n34a37\n> edge-cases/edge_whitespace_multiple_blank_lines\n40d42\n< preprocessing/preproc_complex_theme_override\n67d68\n< state/state_history_shallow\n69d69\n< state/state_note_composite",
+ "no_oracle_failure_names_diff_vs_merge": "(empty)",
+ "parity_perturbations_fail_counts": {
+  "tip": 2061,
+  "merge": 2064
+ },
+ "parity_perturbations_new_failures_tip_vs_merge": [],
+ "parity_perturbations_fixed_tip_vs_merge": [
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_cn_comp_italic.puml",
+  "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.puml",
+  "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_supplementary_math_face_sizes_tb.puml"
+ ],
+ "harness_guards": {
+  "tip": "comparator_constants_frozen ok\nparity_review_paths_reject_traversal ok\ndecimal_literal_ratchet FAILED\nno_golden_data_embedded_in_shipping_crates ok\nparity_review_records_are_complete FAILED\nerror_golden_census_is_frozen ok\n\n  1420 latest accepted review cannot contain failing perturbations\n   306 perturbation is not named in any checker review\n   197 latest checker review must be accepted\n    98 source must be a .puml under <path>\n    98 golden must be the source's same-stem .svg under <path>\n    98 referenced source escapes the mechanism directory: <path>\n    98 referenced golden escapes the mechanism directory: <path>\n    98 checker source is outside the executable perturbation walk\n    27 account_commit must be a N-character Git commit\n    27 task_id must be a non-empty string\n    24 perturbation result must be \"pass\" or \"fail\"\n    21 implementation_commit must be a N-character Git commit\n    15 No such file or directory (os error N)\n    11 result must be a non-empty string\n    10 perturbations must contain at least two entries\n     9 planned_change must be a non-empty string\n     9 account has no independent checker review\n     8 findings must contain at least N non-empty strings\n     8 axes must contain at least N non-empty strings\n     7 reviewer must be an object\n     7 java_revision must be a N-character Git commit\n     6 N -> N\n     5 source must be a non-empty string\n     5 golden must be a non-empty string\n     2 model must be a non-empty string\n     1 `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n     1 review must exercise at least two distinct source files\n     1 commands must contain at least N non-empty strings",
+  "merge": "parity_review_paths_reject_traversal ok\ncomparator_constants_frozen ok\ndecimal_literal_ratchet FAILED\nno_golden_data_embedded_in_shipping_crates ok\nparity_review_records_are_complete FAILED\nerror_golden_census_is_frozen ok\n\n  1420 latest accepted review cannot contain failing perturbations\n   306 perturbation is not named in any checker review\n   197 latest checker review must be accepted\n    98 source must be a .puml under <path>\n    98 golden must be the source's same-stem .svg under <path>\n    98 referenced source escapes the mechanism directory: <path>\n    98 referenced golden escapes the mechanism directory: <path>\n    98 checker source is outside the executable perturbation walk\n    27 account_commit must be a N-character Git commit\n    27 task_id must be a non-empty string\n    24 perturbation result must be \"pass\" or \"fail\"\n    21 implementation_commit must be a N-character Git commit\n    15 No such file or directory (os error N)\n    11 result must be a non-empty string\n    10 perturbations must contain at least two entries\n     9 planned_change must be a non-empty string\n     9 account has no independent checker review\n     8 findings must contain at least N non-empty strings\n     8 axes must contain at least N non-empty strings\n     7 reviewer must be an object\n     7 java_revision must be a N-character Git commit\n     6 N -> N\n     5 source must be a non-empty string\n     5 golden must be a non-empty string\n     2 model must be a non-empty string\n     1 `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default\n     1 review must exercise at least two distinct source files\n     1 commands must contain at least N non-empty strings"
+ },
+ "clippy": "merge/rustuml-render 19 {'rustuml-render': 19}\nmerge/rustuml-parser 1 {'rustuml-parser': 1}\nmerge/rustuml-layout 0 {}\nmerge/rustuml-oracle 1 {'rustuml-oracle': 1}\nmerge/rustuml 0 {}\nmerge/rustuml-math 0 {}\ntip/rustuml-render 19 {'rustuml-render': 19}\ntip/rustuml-parser 1 {'rustuml-parser': 1}\ntip/rustuml-layout 0 {}\ntip/rustuml-oracle 1 {'rustuml-oracle': 1}\ntip/rustuml 0 {}\ntip/rustuml-math 0 {}",
+ "drill": {
+  "M00_unmodified": "pass",
+  "Arial_face_italic_slot_to_plain": "caught",
+  "Arial_face_bolditalic_slot_to_bold": "caught",
+  "Helvetica_face_italic_slot_to_plain": "caught",
+  "Helvetica_face_bolditalic_slot_to_bold": "caught",
+  "Verdana_face_italic_slot_to_plain": "caught",
+  "Verdana_face_bolditalic_slot_to_bold": "caught",
+  "Menlo_face_italic_slot_to_plain": "caught",
+  "Menlo_face_bolditalic_slot_to_bold": "pass",
+  "CourierNew_face_italic_slot_to_plain": "caught",
+  "CourierNew_face_bolditalic_slot_to_bold": "caught",
+  "M15_checker_arial_italic_routed_plain": "caught",
+  "Mono_arm_italic_dropped": "caught",
+  "CourierNew_arm_italic_dropped": "caught",
+  "Helvetica_arm_italic_dropped": "caught"
+ },
+ "commit_roles": {
+  "d06667af0": "merge of parity-recovery-2026-11-03 95291dc6b (bullseye.yaml: both sides kept)",
+  "681fce4c4": "accounts (obligations 1-3) before code",
+  "e1ee5ce7f": "code, obligation 1 (component, activity, sequence, state, usecase)",
+  "2a352f67b": "gate + regeneration record, obligation 2",
+  "6f86bf825": "addendum (FontStyle value step) before change",
+  "df9365441": "code: style_cascade::font_face (ValueImpl.asFontFace) in the measured faces",
+  "(this commit)": "evidence and results"
+ },
+ "obligations": {
+  "1_drawn_face": {
+   "status": "implemented; held-out Java confirmation pending (M10A)",
+   "trace": "FromSkinparamToStyle addMagic 266-282/addConFont 420-425 -> Style.getUFont 203-215 (asFontFace: ValueImpl 159-178) -> getFontConfiguration 217-230 -> EntityImageDescription 167-207 / AbstractTextualComponent 73-95 / FtileBox 139-167 / EntityImageStateCommon 70-74 + EntityImageState 78-82 / EntityImageUseCase 88-106",
+   "br_target": "c9a_ns_cn_comp_italic MATCH at tip (DIFF5 at merge); its control matches at every tree",
+   "scan": "tools/style_scan.py over M10A at tip: remaining measured-vs-drawn differences are 14 state probes (only layout_node_size's shape-only call, sizes discarded; all 24 state probes have box = drawn textLength + 20) and 2 lone-node stereotypes (deployment.rs, proposed target)",
+   "t14_39": "No T14.39 path is claimed fixed. The state change keeps the family state_text_width_with_family already used; M10A state controls (tn/vd/cn _p) will show whether Java agrees."
+  },
+  "2_gate": {
+   "status": "implemented",
+   "test": "text_render::tests::every_italic_slot_measures_in_its_own_face",
+   "drill": "14/15 caught on an exact tip archive (incl. checker M15 literal); survivor Menlo_face_bolditalic_slot_to_bold is an equivalent mutant: Menlo Bold Italic and Menlo Bold hide the same scalars in every candidate context (cells only), listed in the test's EQUIVALENT, which fails when stale",
+   "m08": "survives only because monkeyman-round6 records still hash Helvetica.ttc (redundant record; no drift escapes); no fix",
+   "regeneration": "exact command in tools/font-chain-reference/monkeyman-round9/README.md and referenced from tools/font_chain_coverage.py; re-run byte-identical (eef8a552...3479)"
+  },
+  "3_process": {
+   "status": "recorded",
+   "file": "process-addendum-6413e26b4.json",
+   "measured": "lib gate at 6413e26b4 fails (font_chain coverage test: Arial-BoldMT.own.tsv missing), exit 101"
+  }
+ },
+ "deviations_from_precommitted_expectations": [
+  "Account expected no golden output changes. Two goldens changed: skinparam/skin_usecase_fontStyle_bold and _italic. Both Java goldens are error pages (rectangle 'System {{' syntax) that Rust renders at merge and tip (exit 0 both, no rejection lost); only the use-case labels now carry font-weight/font-style; DIFF19 -> DIFF19.",
+  "Perturbations: 6 outputs changed; 3 gains (c9a_ns_cn_comp_italic, times-new-roman-face-metrics/checker_unicode_fallback_italic_tb, times-new-roman-unicode-advances/review2_supplementary_math_face_sizes_tb), checker_flat_italic_lr_mixed_case DIFF14 -> DIFF8, checker_cyrillic_italic_lr_nested and review2_mixed_scripts_four_faces_tb DIFF -> DIFF with equal counts (Times New Roman italic, the account's named exception). 4 stderr changes are thread ids of 4 pre-existing parser panics (dash_01/03/06/07, panicking at merge too).",
+  "The FontStyle value step (asFontFace) was found after measuring; addendum 6f86bf825 precedes df9365441, which changed no golden, perturbation or batch output relative to 2a352f67b."
+ ],
+ "frozen_items": "crates/rustuml-oracle and test-diagrams unchanged d06667af0..tip; no new 3+-decimal literal; no golden data in shipping crates; guard categories identical tip vs merge",
+ "golden_get_cases": "act_skinparam_shadowing, act_skinparam2_shadowing_true, edge_whitespace_multiple_blank_lines: DIFF at merge and tip, exit 0 both (unchanged); they are the 3 names added in the no-oracle failure list vs 9834a7194",
+ "relay_request": {
+  "batch": "M10A",
+  "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round10-claude-maker/m10a",
+  "cases": 374,
+  "reference_manifest_sha256": "9539b2378edce57524f2ba419e6f6c0a756a75caf5ab49906183b18e6b42edb6",
+  "reference_input_bundle_sha256": "e94f947dc36058e44a24fe7092560179aab98ed10d24a7137fbba25a63ec76ea",
+  "rust_predictions_sha256": "126c372b77b8224eaa55ff5ee54cbe33a80b3b6172d4bc9c2a37518b250098f1",
+  "maker_expectations_sha256": "1e110d294f9bdd7cb2928bf0a3be6f43b37e4cb291809e0f8b78948f026d781d",
+  "note": "held out from evaluation until relayed; predictions and expectations registered before any Java run"
+ }
+}

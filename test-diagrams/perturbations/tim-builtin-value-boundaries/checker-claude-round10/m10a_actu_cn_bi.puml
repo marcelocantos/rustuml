@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Courier New
+skinparam actorFontStyle bold italic
+actor "Pylon v𝅧k" as E1
+usecase "Ok" as E2
+E1 --> E2
+@enduml

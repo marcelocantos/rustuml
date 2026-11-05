@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam arrowFontStyle bold
+class A
+class B
+A --> B : Avid Dawky Vow 4.7, gym kayak ovo!
+@enduml

@@ -1,0 +1,70 @@
+# HarfBuzz tag 15.0.0 (commit 35f656a1a2bab548ea7f54a6dd3fba2b09680d14), https://github.com/harfbuzz/harfbuzz
+3c4e62bc11c6ad2726b0898dc6c74437c1ad2327ffec561b2b09d24ffc204004  hb-ot-layout.cc
+ef1a744e97f3d355cb14baa3fd2013ca5c20fffa3b804a86c025be1e94b85598  GDEF.hh
+c50cabe89c03daf95c3b9e9b0994d92e44aa0dc3b1b57d30413c90a0a8429ef2  hb-ot-shape.cc
+ba8af8e70c35b1dc64cb710d7b527af3464873a5ff0b04937efdcba678792550  hb-ot-shape-fallback.cc
+8c15f338fe6e3cb11315d2cf9368abac64525c6d84f391353f78e9d4518655a4  hb-unicode.hh
+
+## src/hb-ot-layout.cc 153-160 and 249-266 (GDEF::is_blocklisted)
+OT::GDEF::is_blocklisted (hb_blob_t *blob,
+			  hb_face_t *face) const
+{
+#ifdef HB_NO_OT_LAYOUT_BLOCKLIST
+  return false;
+#endif
+  /* The ugly business of blocklisting individual fonts' tables happen here!
+   * See this thread for why we finally had to bend in and do this:
+...
+     *  "Padauk Regular" "Version 2.5", see https://crbug.com/681813 */
+    case HB_CODEPOINT_ENCODE3 (1004, 59092, 14836):
+    /* 88d2006ca084f04af2df1954ed714a8c71e8400f  Courier New.ttf from macOS 15 */
+    case HB_CODEPOINT_ENCODE3 (588, 5078, 14418):
+    /* 608e3ebb6dd1aee521cff08eb07d500a2c59df68  Courier New Bold.ttf from macOS 15 */
+    case HB_CODEPOINT_ENCODE3 (588, 5078, 14238):
+    /* d13221044ff054efd78f1cd8631b853c3ce85676  cour.ttf from Windows 10 */
+    case HB_CODEPOINT_ENCODE3 (894, 17162, 33960):
+    /* 68ed4a22d8067fcf1622ac6f6e2f4d3a2e3ec394  courbd.ttf from Windows 10 */
+    case HB_CODEPOINT_ENCODE3 (894, 17154, 34472):
+    /* 4cdb0259c96b7fd7c103821bb8f08f7cc6b211d7  cour.ttf from Windows 8.1 */
+    case HB_CODEPOINT_ENCODE3 (816, 7868, 17052):
+    /* 920483d8a8ed37f7f0afdabbe7f679aece7c75d8  courbd.ttf from Windows 8.1 */
+    case HB_CODEPOINT_ENCODE3 (816, 7868, 17138):
+      return true;
+  }
+  return false;
+}
+
+## src/OT/Layout/GDEF/GDEF.hh 974-985 (accelerator drops a blocklisted GDEF)
+  HB_INTERNAL bool is_blocklisted (hb_blob_t *blob,
+				   hb_face_t *face) const;
+
+  struct accelerator_t
+  {
+    accelerator_t (hb_face_t *face)
+    {
+      table = hb_sanitize_context_t ().reference_table<GDEF> (face);
+      if (unlikely (table->is_blocklisted (table.get_blob (), face)))
+      {
+	hb_blob_destroy (table.get_blob ());
+	table = hb_blob_get_empty ();
+
+## tag containment of 'ENCODE3 (588, 5078, 14418)'
+8.2.2 0
+10.0.1 0
+10.1.0 0
+11.0.0 1
+12.0.0 1
+12.2.0 1
+13.0.0 1
+13.2.1 1
+15.0.0 1
+
+## reference-host font table lengths (read from the files; SHA256 equal on Monkey Man)
+c886ca3172d8ce9189976992d145ec090500a4ff516ecb9d4df56b1a78336247 Courier New.ttf GDEF 588 GSUB 5078 GPOS 14418 False
+500df4e46b554ae7d646e8727952fd8c7e60e94423481f6b82325cfddba2ee6a Courier New Bold.ttf GDEF 588 GSUB 5078 GPOS 14238 False
+525979822591a3447cfc49d943d6f7683508e25543407871c0ed8fed05fd2bd9 Arial.ttf GDEF 706 GSUB 7064 GPOS 45346 True
+d72db21f9242aedd6b917d8549ad5921766b24d5f8d0becfda2ff4c620b3c2e0 Arial Bold.ttf GDEF 694 GSUB 7068 GPOS 44728 True
+0da8c12f3e15d95585434d2cf294b3113a3e3fc84bf9ba9d64f2ef834ef4bd98 Verdana.ttf GDEF 30 GSUB 148 GPOS 56 True
+480f66b66430bdfa6e9a2199e4bf8f79d915221e60d58e7a32b4ff50645de2e0 Verdana Bold.ttf GDEF 30 GSUB 148 GPOS 56 False
+88d2006ca084f04af2df1954ed714a8c71e8400f  /System/Library/Fonts/Supplemental/Courier New.ttf
+608e3ebb6dd1aee521cff08eb07d500a2c59df68  /System/Library/Fonts/Supplemental/Courier New Bold.ttf

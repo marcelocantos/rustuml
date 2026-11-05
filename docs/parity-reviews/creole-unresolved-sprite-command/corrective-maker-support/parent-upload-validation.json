@@ -1,0 +1,11 @@
+{
+  "remote_input": "/Users/marcelo/rustuml-reference/scratch/transfer.nsIN18MZ/input-bundle.json.gz",
+  "input_sha256": "1f7807fad5913da6218a8e36593297e05c96337cea312ad4c6208df1c5d5d566",
+  "original_input_sha256": "fbd17a1f3a75d4c78ad3f58f822fd5b29aa37d3fe9706610905b625bb8127347",
+  "request_sha256": "bac0571bf74abe11f413a8a6507de63d1de854089b4768b2a2337333981f987e",
+  "manifest_sha256": "4a2922bfc9e1a5c88cb6bece040dce368cb49846bc33bc3d4c883e4004fabf90",
+  "cases": 15,
+  "resources": 15,
+  "mapping": "files.base64 to resources.data using original request metadata; original request and manifest bytes embedded; no source changes",
+  "initial_validation": "Initial schema assumption request_base64 missing raised KeyError before upload or Java; inspected schema then lossless envelope adaptation."
+}

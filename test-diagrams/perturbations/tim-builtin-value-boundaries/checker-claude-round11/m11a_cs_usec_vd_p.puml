@@ -1,0 +1,9 @@
+@startuml
+skinparam defaultFontName Verdana
+<style>
+usecase {
+  FontStyle normal
+}
+</style>
+usecase "Gawky Vandyke mop" as E1
+@enduml

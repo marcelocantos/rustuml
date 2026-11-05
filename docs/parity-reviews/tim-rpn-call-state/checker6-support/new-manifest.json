@@ -1,0 +1,327 @@
+[
+  {
+    "source": "/tmp/rustuml-checker6/new/rpn_spelling_body.puml",
+    "mechanism": "tim-rpn-call-state",
+    "axes": [
+      "key spelling",
+      "body session"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/rpn_dual_parameters.puml",
+    "mechanism": "tim-rpn-call-state",
+    "axes": [
+      "declaration spelling",
+      "named and positional binding"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/rpn_nested_consumption.puml",
+    "mechanism": "tim-rpn-call-state",
+    "axes": [
+      "nested call",
+      "map clearing"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/rpn_duplicate_underflow.puml",
+    "mechanism": "tim-rpn-call-state",
+    "axes": [
+      "duplicate keys",
+      "surrounding operator"
+    ],
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/rpn_neighbor_calls.puml",
+    "mechanism": "tim-rpn-call-state",
+    "axes": [
+      "neighbor calls",
+      "computed key"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/operand_duplicate_effects.puml",
+    "mechanism": "tim-call-operand-resolution",
+    "axes": [
+      "duplicate named RHS",
+      "positional order"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/operand_rhs_first_error.puml",
+    "mechanism": "tim-call-operand-resolution",
+    "axes": [
+      "named RHS error",
+      "signature failure"
+    ],
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/operand_procedure_missing.puml",
+    "mechanism": "tim-call-operand-resolution",
+    "axes": [
+      "coverage",
+      "default argument"
+    ],
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/operand_procedure_covered.puml",
+    "mechanism": "tim-call-operand-resolution",
+    "axes": [
+      "coverage",
+      "eager operand"
+    ],
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/operand_plain_exact_shortcut.puml",
+    "mechanism": "tim-call-operand-resolution",
+    "axes": [
+      "exact signature",
+      "unknown named key"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/legacy_repeated_raw.puml",
+    "mechanism": "tim-legacy-raw-caller-prefix",
+    "axes": [
+      "prefix form",
+      "repeated invocations"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/legacy_procedure_control.puml",
+    "mechanism": "tim-legacy-raw-caller-prefix",
+    "axes": [
+      "procedure contrast",
+      "prefix and suffix"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/legacy_prefix_failure.puml",
+    "mechanism": "tim-legacy-raw-caller-prefix",
+    "axes": [
+      "prefix effect error",
+      "suffix drop"
+    ],
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/sub_collect_error_precedence.puml",
+    "mechanism": "tim-local-sub-collection",
+    "axes": [
+      "buffered error",
+      "inactive nested marker"
+    ],
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/sub_uncalled_function.puml",
+    "mechanism": "tim-local-sub-collection",
+    "axes": [
+      "function collection",
+      "nested marker"
+    ],
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/sub_comment_replay.puml",
+    "mechanism": "tim-local-sub-collection",
+    "axes": [
+      "comment markers",
+      "replay count"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/intval_ascii_edges.puml",
+    "mechanism": "tim-intval-conversion",
+    "axes": [
+      "signed boundary",
+      "typed display"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/intval_unicode_digits.puml",
+    "mechanism": "tim-intval-conversion",
+    "axes": [
+      "Unicode digit script",
+      "sign"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/intval_unicode_json.puml",
+    "mechanism": "tim-intval-conversion",
+    "axes": [
+      "Unicode mixed digits",
+      "JSON string display"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/intval_invalid_sign.puml",
+    "mechanism": "tim-intval-conversion",
+    "axes": [
+      "sign grammar",
+      "later error"
+    ],
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/intval_underflow_bound.puml",
+    "mechanism": "tim-intval-conversion",
+    "axes": [
+      "negative overflow",
+      "whole text"
+    ],
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/hsl_rounding_extremes.puml",
+    "mechanism": "tim-hsl-typed-alpha",
+    "axes": [
+      "hue float conversion",
+      "alpha rounding"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/hsl_typed_channels.puml",
+    "mechanism": "tim-hsl-typed-alpha",
+    "axes": [
+      "channel type",
+      "clamp"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/hsl_named_alpha.puml",
+    "mechanism": "tim-hsl-typed-alpha",
+    "axes": [
+      "plain named argument",
+      "alpha type"
+    ],
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/tmp/rustuml-checker6/new/hsl_bad_arity.puml",
+    "mechanism": "tim-hsl-typed-alpha",
+    "axes": [
+      "arity",
+      "operand error ordering"
+    ],
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  }
+]

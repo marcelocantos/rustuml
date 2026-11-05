@@ -1,0 +1,531 @@
+{
+ "schema_version": 1,
+ "status": "pending: parent relay to the pinned Monkey Man wrapper; Rust predictions recorded before any Java result",
+ "batch": "m5a",
+ "cache_dir": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round5-claude-maker/m5a",
+ "reference_manifest": {
+  "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round5-claude-maker/m5a/reference-manifest.json",
+  "sha256": "56fc05887f27cbcd00c2a0f0852ae7d4d054fce6fb703506709028cecf2a0fd8"
+ },
+ "reference_input_bundle": {
+  "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round5-claude-maker/m5a/reference-input-bundle.json.gz",
+  "sha256": "7f459f0e75b66656b6cbe3e82859d1822bec022b387f0ba6e24c9facf46044ae"
+ },
+ "rust_predictions": {
+  "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round5-claude-maker/m5a/rust-predictions.json",
+  "sha256": "b6eb5207152535e200d8043bc8993486cda67718c8ac75a31d4ea9f72ddcd4fb",
+  "rust_revision": "a18a76980"
+ },
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "invocation_prefix": [
+  "/Users/marcelo/rustuml-reference/bin/reference",
+  "--cwd",
+  "PRIVATE_CWD",
+  "--timezone",
+  "GMT+11:00",
+  "--",
+  "-pipe"
+ ],
+ "format_note": "Every case uses -tsvg; no resources.",
+ "held_out": "no source byte-equals a source in test-diagrams or in the round-2..4 maker/checker caches (checked by SHA256).",
+ "cases": [
+  {
+   "name": "no5_left_note_renamed",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "note left of an image at root, renamed"
+   ],
+   "source_sha256": "6d54dc8cd7434d23cd2b23fafd07b9f2f1e1fbc8b0455af4ed33efe0349cdc55"
+  },
+  {
+   "name": "no5_three_notes_image",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "three notes on one image, two on the left"
+   ],
+   "source_sha256": "a89c9cbb862a6edd2551c1c13fd9317fe03180b0feeecab124ee313ddc837ce6"
+  },
+  {
+   "name": "no5_left_note_start_top",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "note left of an image, start ellipse on the top rank"
+   ],
+   "source_sha256": "ec7cbc63c16afbd2b012148ad46290a5cc7772d2062575d4615ebfd02e0e9f0c"
+  },
+  {
+   "name": "no5_left_note_depth2_region",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "note left of a depth-2 image inside a region"
+   ],
+   "source_sha256": "cb5427486f354c19919a18f686ccd408cff28524a71782b97185094d8bd3721b"
+  },
+  {
+   "name": "no5_right_note_nested_image",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "note right of an image holding an image"
+   ],
+   "source_sha256": "7bde2e61e930a724906c2aa7486a54a1409a5d107a87b003ab097271329671ba"
+  },
+  {
+   "name": "no5_note_top_image",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "note above an image"
+   ],
+   "source_sha256": "feb5330b96ee1d29429ee41907ccdd7fdfd513e775119377102d478c2277f1cf"
+  },
+  {
+   "name": "no5_note_bottom_image",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "note below an image"
+   ],
+   "source_sha256": "ddb7fa0e59c7cd992f5c19998b0aca21e5ee855138612a5b88867de1499b37ab"
+  },
+  {
+   "name": "no5_left_note_multiline_renamed",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "multi-line note left of an image, three lines"
+   ],
+   "source_sha256": "3950269f6c72c15a52c7dd3531ffae95a7ba8e1ce4f5491aeb9940f1dd6405fe"
+  },
+  {
+   "name": "rp5_root_note_depth2",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "root cluster path, note at depth 2"
+   ],
+   "source_sha256": "bf5cb51fda6d316eccfdd39540b1fd02feff24273b43ff494dd80cf51a8c0aa6"
+  },
+  {
+   "name": "rp5_two_groups_sides",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "root cluster path, notes in two groups and at root"
+   ],
+   "source_sha256": "3464abe4001e24a24b12f7a439131a1a9489e838c122d9fc364b72822e26cfda"
+  },
+  {
+   "name": "w5_sans_0378",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+0378 BMP unassigned (Greek block)",
+    "SansSerif"
+   ],
+   "source_sha256": "aa5e1fe0c50f2d3207bbcd97eb3bf159f0c7d2eb3fc8631bf6ced49e0fc6cdc0"
+  },
+  {
+   "name": "w5_sans_fdd0",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+FDD0 BMP noncharacter",
+    "SansSerif"
+   ],
+   "source_sha256": "5b6af563a58ac8efb37b18965a788d16be14f34cbcb7d539e02583535d855a4b"
+  },
+  {
+   "name": "w5_sans_e123",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+E123 BMP private use",
+    "SansSerif"
+   ],
+   "source_sha256": "45b440b820c2159377c1528d659c30ecec322a8be9fe318beaecd4b9ff8ee578"
+  },
+  {
+   "name": "w5_sans_12000",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+12000 Cuneiform, outside the cascade",
+    "SansSerif"
+   ],
+   "source_sha256": "9812cafd401de840d6e6359c550d5779cc53483d0db4161180e44d7fad47e653"
+  },
+  {
+   "name": "w5_sans_2fffd",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+2FFFD plane-2 unassigned",
+    "SansSerif"
+   ],
+   "source_sha256": "2f50f6bbd4ed8523ace25e73181a7b501866a8483f136b4cf099461c02ad4ee7"
+  },
+  {
+   "name": "w5_sans_1bca0",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+1BCA0 shorthand format control, not hidden",
+    "SansSerif"
+   ],
+   "source_sha256": "c41b8e217ad24a2d0e7a6dcc36d8e40142a8ab80cf4dac07a6d6728bf7edec37"
+  },
+  {
+   "name": "w5_sans_e0100",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+E0100 variation selector 17 (hidden)",
+    "SansSerif"
+   ],
+   "source_sha256": "3f24d29262100c066e2f2edb156251818be699c8eba0ca18eee29772887a45f5"
+  },
+  {
+   "name": "w5_sans_1d173",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+1D173 musical formatting (hidden)",
+    "SansSerif"
+   ],
+   "source_sha256": "48799914f78342ffddf03f0d86b97ae1fd2b8ce2a1cb64379b783afe4df4a04a"
+  },
+  {
+   "name": "w5_sans_20000",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+20000 CJK Ext B, outside the Lucida cascade",
+    "SansSerif"
+   ],
+   "source_sha256": "79c8f6da782e0d8c8e6ba52a739264175139f66098131c0f860408b18f48e0f3"
+  },
+  {
+   "name": "w5_sans_a500",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+A500 Vai, CoreText substitution only",
+    "SansSerif"
+   ],
+   "source_sha256": "6a0ae6855e4c0cee7130a0080afd090fa3cf58e025098911a3759a5c66cad2e4"
+  },
+  {
+   "name": "w5_sans_a500_complex",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+A500 next to U+10FFFD (complex text)",
+    "SansSerif"
+   ],
+   "source_sha256": "a4af2809bad469dea8773b75dfd29d164eef2c190b7fd123ddb8742c90ec2500"
+  },
+  {
+   "name": "w5_sans_bold18_10fffe",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10FFFE",
+    "SansSerif bold 18"
+   ],
+   "source_sha256": "e9092ddb4552d29205ece21da3285605c358d37c045cfe5cc55f249ccefbd3e1"
+  },
+  {
+   "name": "w5_helvetica_ctl",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "control 'Ledger ' Helvetica"
+   ],
+   "source_sha256": "ecd787321e9d2849c188aa52cbbb4c5817137f1453ffd58ed08dffd4569558aa"
+  },
+  {
+   "name": "w5_helvetica_10fffd",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10FFFD Helvetica"
+   ],
+   "source_sha256": "2fbcdee95c6fa53fd91b491857536333cc7098bb6347fb0d2b9aed07f41f6a91"
+  },
+  {
+   "name": "w5_helvetica_10f800",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10F800 (carrier range, escaped) Helvetica"
+   ],
+   "source_sha256": "1de5a20aefe189b993bd2efd145e1c9ff12917a197308b9a4823798f53a85693"
+  },
+  {
+   "name": "w5_verdana_ctl",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "control 'Ledger ' Verdana"
+   ],
+   "source_sha256": "8cd821c72399327fd4e934336a7a5bf20125a911611439c6e637b9b21f971bae"
+  },
+  {
+   "name": "w5_verdana_10fffd",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10FFFD Verdana"
+   ],
+   "source_sha256": "7b12fba136de66462b6d2a3ba83edc9e401a35e1a93905b417ca4a6ac8e3bcba"
+  },
+  {
+   "name": "w5_verdana_10f800",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10F800 (carrier range, escaped) Verdana"
+   ],
+   "source_sha256": "90e00868b8936b1f8b8e23de1a5dc4fc2c408ad57e9d4b581d7bd9e0378bf70d"
+  },
+  {
+   "name": "w5_couriernew_ctl",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "control 'Ledger ' Courier New"
+   ],
+   "source_sha256": "4e6b55f8145fbc3f2baf70ea3a0f3711a49f7bebe262a0be4fe4063a4aca69f0"
+  },
+  {
+   "name": "w5_couriernew_10fffd",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10FFFD Courier New"
+   ],
+   "source_sha256": "cda2cc7f41f9c9c0022a8c6343a24d81823a2affae3f21460d7c94e5c779ab56"
+  },
+  {
+   "name": "w5_couriernew_10f800",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10F800 (carrier range, escaped) Courier New"
+   ],
+   "source_sha256": "102d7719e4e37644c3e6b28d761757018d802637befdf447138613b1334b7929"
+  },
+  {
+   "name": "w5_arial_ctl",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "control 'Ledger ' Arial"
+   ],
+   "source_sha256": "f1ab37dedddea34880583b1265d793b4e1518fd89e2ae94d6bf2c29dc476d2f2"
+  },
+  {
+   "name": "w5_arial_10fffd",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10FFFD Arial"
+   ],
+   "source_sha256": "4aab3034b4de41024d8407c7a09b6bcb7d1f7df6eafa201f80d449c6ceb08882"
+  },
+  {
+   "name": "w5_arial_10f800",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10F800 (carrier range, escaped) Arial"
+   ],
+   "source_sha256": "d69fb6cd1a0392fac52991593382b00c7f26e16266c58e7189ddb9278a2ec90e"
+  },
+  {
+   "name": "w5_times_ctl",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "control 'Ledger ' Times New Roman"
+   ],
+   "source_sha256": "01cb5953bb1f8118f40281d9ec208277334f0f5ef428b4a1c8a6f62b6a9d3117"
+  },
+  {
+   "name": "w5_times_10fffd",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10FFFD Times New Roman"
+   ],
+   "source_sha256": "90cf83d0b4d3b26e7541a1cd6636c4a92fd0117aec5eb760c359ee20ee212aef"
+  },
+  {
+   "name": "w5_times_10f800",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10F800 (carrier range, escaped) Times New Roman"
+   ],
+   "source_sha256": "47ceb0f86cafd3caa3267622f435619fd85c6d1870cc62cdaa764afbf11a6ff5"
+  },
+  {
+   "name": "w5_mono_ctl",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "control 'Ledger ' Monospaced"
+   ],
+   "source_sha256": "ab5bc3dea1cf3dce5c1f4cd60d8db44de92a7516e94178edd8f17a779e8b6ce1"
+  },
+  {
+   "name": "w5_mono_10fffd",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10FFFD Monospaced"
+   ],
+   "source_sha256": "cc293a5ef1159019691e34e5c5c07c726203a7f52948410d7dcf747c4b6a2ab2"
+  },
+  {
+   "name": "w5_mono_10f800",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10F800 (carrier range, escaped) Monospaced"
+   ],
+   "source_sha256": "5de90600b23eabbee82034ea4a6c2624aaea181f5c7ae91dab65cc1764461ae8"
+  },
+  {
+   "name": "w5_helvetica_bold_10fffd",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10FFFD Helvetica bold"
+   ],
+   "source_sha256": "52fad7a0ecabc65535da3d01322b814317a9c416026d8473c58581494f0b8940"
+  },
+  {
+   "name": "w5_mono_e0041",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+E0041 tag, Monospaced (hidden)"
+   ],
+   "source_sha256": "1a58de21aa9f8159bb0fca8c3884eb2573160a7f06bcb01cc55cbd7f977f5f4e"
+  },
+  {
+   "name": "w5_times_12000",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+12000 Times New Roman"
+   ],
+   "source_sha256": "f75ce440eeb8d55e6cd03f0d8a0356b8f49cda6654689589598a5b1bf5744f8c"
+  },
+  {
+   "name": "w5_arial_10f7ff",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "U+10F7FF (escape scalar) Arial"
+   ],
+   "source_sha256": "8dfff27cf191709d87f7641c483e5e1acdadb55d13e13017d92d766338190ad5"
+  },
+  {
+   "name": "dc5_yaml_key_escape",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "YAML double-quoted key and value with \\U escapes"
+   ],
+   "source_sha256": "cc6958e54554786a89ed87b84f44d28461e0b40ad2555f7909311412ab755571"
+  },
+  {
+   "name": "dc5_yaml_list_escape",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "YAML list item with \\U escape"
+   ],
+   "source_sha256": "9321d750505b8a678b9610c796cc67147360aede6a04c42f847199d328a18faf"
+  },
+  {
+   "name": "dc5_yaml_flow_escape",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "YAML flow sequence with \\U escape (residue)"
+   ],
+   "source_sha256": "e2126f5319dc467ccc8f81c7dea0fd136ef14b5d52ab18b2320be573b99c9fbd"
+  },
+  {
+   "name": "dc5_json_nested",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "JSON surrogate-pair escapes nested in arrays and as a key"
+   ],
+   "source_sha256": "030cfbe36dbd338b2f93360501d64bd80c0f49a5ea2260dcc887ffa3369e0345"
+  },
+  {
+   "name": "dc5_tim_json_member",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "TIM JSON nested member with a pair escape"
+   ],
+   "source_sha256": "5c8e6d73ed001f5a0105a1af224fe95c5fd35d92df579c882184a82542544caf"
+  },
+  {
+   "name": "dc5_tim_json_array",
+   "format": "-tsvg",
+   "intended_valid": true,
+   "axes": [
+    "TIM JSON array index with a pair escape"
+   ],
+   "source_sha256": "697c5936683711e7b66792e9ef00b12be71fb08c5ca591509f469c00d0b11764"
+  },
+  {
+   "name": "cm_unit_class_code",
+   "format": "-tsvg",
+   "intended_valid": false,
+   "axes": [
+    "unpaired unit in a class code only"
+   ],
+   "source_sha256": "bd393a7e6851914286239fc038c494aabbf10d5ee0617d15678945da94f66bc9"
+  },
+  {
+   "name": "cm_unit_link_code",
+   "format": "-tsvg",
+   "intended_valid": false,
+   "axes": [
+    "unpaired unit in a link endpoint code"
+   ],
+   "source_sha256": "1512b49a861b387269de5eff6f8f288842762a48e5fd693924281c26276cd0b2"
+  },
+  {
+   "name": "cm_unit_package_code",
+   "format": "-tsvg",
+   "intended_valid": false,
+   "axes": [
+    "unpaired unit in a package code"
+   ],
+   "source_sha256": "c4831c0fd5d9c84a9005e7b85742641f72adb3762d0e79b11a14723438d4bd54"
+  }
+ ],
+ "purpose": {
+  "no5_*": "outer notes left/right/above/below images at depths 1-2 (obligation 1 held-out)",
+  "rp5_*": "root-path note names at depth 1-2 (obligation 5 held-out)",
+  "w5_sans_*": "unmapped scalars from several blocks, simple vs complex path (obligation 2 held-out)",
+  "w5_<family>_*": "missing glyph and escape leak under Helvetica, Verdana, Courier New, Arial, Times New Roman, Monospaced with controls (obligations 2-3)",
+  "dc5_*": "post-entry decoders: YAML keys/lists/flow sequences, nested JSON, TIM JSON (obligation 4)",
+  "cm_unit_*": "an unpaired unit only in an entity code, to show Java's comment outcome (comment-unit-addendum.json)"
+ }
+}

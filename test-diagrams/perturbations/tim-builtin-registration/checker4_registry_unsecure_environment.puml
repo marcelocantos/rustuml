@@ -1,0 +1,5 @@
+@startuml
+!$a=%getenv("CHECKER4_PRIVATE")
+!$b=%getenv("plantuml.security.checker4")
+class "$a / [$b]" as Environment
+@enduml

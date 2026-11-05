@@ -1,0 +1,21 @@
+{
+ "oracle": "NON_ASCII_WIDTHS (Java SansSerif advances of corpus scalars)",
+ "entries": 409,
+ "agree": 407,
+ "disagreements": [
+  {
+   "code_point": "U+043C",
+   "java_plain_per_em": 0.72607421875,
+   "java_bold_per_em": 0.75,
+   "model_plain": "mapped",
+   "model_bold": "mapped"
+  },
+  {
+   "code_point": "U+FE0F",
+   "java_plain_per_em": 0.75,
+   "java_bold_per_em": 0.75,
+   "model_plain": "mapped",
+   "model_bold": "mapped"
+  }
+ ]
+}

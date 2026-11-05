@@ -1,0 +1,2 @@
+@startuml
+!$d=%intval("12.5")

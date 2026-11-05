@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Verdana
+database "Pylon vk" as E1
+@enduml

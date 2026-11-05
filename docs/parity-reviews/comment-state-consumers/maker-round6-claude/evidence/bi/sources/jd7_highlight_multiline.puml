@@ -1,0 +1,4 @@
+@startjson
+#highlight "k"
+{"k": "a\\nb\\nc", "j": "x"}
+@endjson

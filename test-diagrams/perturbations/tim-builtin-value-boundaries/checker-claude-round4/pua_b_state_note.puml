@@ -1,0 +1,4 @@
+@startuml
+state Lock
+note right of Lock : key 􏿽
+@enduml

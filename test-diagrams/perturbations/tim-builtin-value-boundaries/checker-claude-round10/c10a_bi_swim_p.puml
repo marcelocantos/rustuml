@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times New Roman
+|Kiln wq vista|
+start
+:Ok;
+@enduml

@@ -1,0 +1,103 @@
+{
+  "revision": "9874a537e3bf18628377f525692103815f429982",
+  "targets": {
+    "T14.16": {
+      "name": "SVG output is always well-formed XML: font-family and other user-derived attributes are escaped as Java does",
+      "status": "converging",
+      "value": 0.0,
+      "cost": 0.0,
+      "acceptance": [
+        "Every user-derived attribute value in emitted SVG (font-family, href/title/tooltips, ids, class names) is escaped or normalized at a single serialization point, and the Java rule is ported where Java has one (the double-to-single quote replacement in font-family).",
+        "A standing test parses every golden and perturbation SVG that the CLI emits with a strict XML parser and finds zero malformed outputs.",
+        "`font_empty_unknown`, `family_slash` and `alias_monospace_padded` produce well-formed SVG, with no previously passing case lost."
+      ],
+      "context": "On 2026-11-05 the independent creole parameter checker (`f6c84a62`) found that quoted font families, for example `font_empty_unknown`, `family_slash` and `alias_monospace_padded`, make Rust emit malformed SVG XML, both before and after the parameter packet. `text_render` writes the family into an attribute without escaping it, whereas Java replaces double quotes with single quotes. Malformed XML is a correctness failure for every SVG consumer, not just a parity difference.\n\n2026-11-05: the shared-SVG packet (production `a33dccc8e`) routed 901 user-string attribute sites through one Java-traced escaper (OpenJDK `ToStream.writeAttrString`). It added a two-way-ratcheted strict-XML standing test. The independent checker then found another malformed case. The Java-valid `comment_double_hyphen` input (`class \"Double--Tail-\"`) produces a malformed Rust XML comment both before and after the packet, because an interpolated comment contains `--` or ends with `-`. The packet's comment inventory lists 45 user-string comment sites. Those still need a source-traced rule: match whatever Java emits for comments, or omit or sanitize user text in comments only if Java does. Separately, four more C0 cases (`href_c0` U+0002, and raw tooltips U+0000/U+0001/U+001B) are malformed Rust output and belong to \ud83c\udfafT14.20.\n\nOracle weakness found by the independent shared-SVG checker (`astra`, 2026-11-05): the strict-XML standing test in `pipe_mode.rs` finds the DOCTYPE with `svg.find(\"<!DOCTYPE\")`. An XML comment placed before the real DOCTYPE and containing the exact approved SVG 1.1 DOCTYPE text satisfies that guard as a decoy. `allow_dtd: true` then parses a later, unapproved internal-entity DTD, and the 26-count guard still passes. Fix: identify the actual DOCTYPE token positionally (the first markup declaration in the prolog, after the XML declaration), require its exact approved bytes, and reject any internal subset (`[`). Add the comment-decoy mutation as a standing negative test of the oracle itself.\n\n2026-11-05: the strict-XML oracle's DOCTYPE correction was independently ACCEPTED within its oracle-policy scope by review `075f5095`. The guard now requires the declaration at its prolog position, with the exact SVG 1.1 PUBLIC bytes and no internal subset; it passed 25/25 mutation tests and 26/26 real DOT outputs, and both ratchet directions hold. The same review fixed all nine measured malformed comments. Comment content (label and alias selection) is still not fully Java-equivalent. The expected-malformed list is exactly 7 C0 cases owned by \ud83c\udfafT14.20.",
+      "tags": [
+        "parity",
+        "svg",
+        "correctness",
+        "fonts"
+      ],
+      "origin": "manual",
+      "discovered": "2026-11-05"
+    },
+    "T14.17": {
+      "name": "Lines no command accepts produce a Java-equivalent syntax error instead of being silently dropped",
+      "status": "converging",
+      "value": 0.0,
+      "cost": 0.0,
+      "acceptance": [
+        "For each diagram family, Rust tells apart a line that no Java command accepts (a syntax error, ported from Java's factory/command dispatch and error reporting) from a line whose Java command exists but is not yet implemented in Rust. The second kind is reported explicitly and never silently treated as valid output.",
+        "`message_gap_em_legacy`, `message_gap_narrow_legacy` and the sequence cohort's accepted invalid references are rejected with a Java-equivalent error outcome, and so are at least three held-out malformed inputs outside the golden corpus, in two or more families.",
+        "No valid no-oracle or standing case newly becomes an error. The inventory of 'command exists in Java but not Rust' lines is measured and recorded, not hidden."
+      ],
+      "context": "Java PlantUML runs each diagram line through the diagram factory's command list. If no command accepts a line, the diagram is a syntax error: Java returns an error SVG with exit 200. In Rust, `parse_sequence` marks such a line as unconsumed and still returns a diagram, so the malformed command just disappears.\n\nOn 2026-11-05 the sequence maker repaired its whitespace regex: `sequence_regex` now refuses EM SPACE and narrow NBSP separators, as Java's `Pattern2` `%s` does. Even so, `message_gap_em_legacy` and `message_gap_narrow_legacy` still render as successful diagrams, because the refused line falls through as unconsumed. Changing how unconsumed lines are handled globally inside a sequence-only packet would also reject commands that are valid but not yet supported, so this needs its own source-derived design. The same silent-drop pattern probably affects other families, and contributes to the invalid references Rust currently accepts (59 rejected / 20 accepted in the sequence cohort).",
+      "tags": [
+        "parity",
+        "parser",
+        "negative-diagnostics"
+      ],
+      "origin": "manual",
+      "discovered": "2026-11-05"
+    },
+    "T14.20": {
+      "name": "Java render/export failures have an explicit Rust error contract instead of silent normal output",
+      "status": "identified",
+      "value": 0.0,
+      "cost": 0.0,
+      "acceptance": [
+        "Rendering has a fallible error path. A Java-equivalent render/export failure gives a defined Rust outcome: a structured error with a nonzero CLI exit, or a crash-diagram output if Java-equivalent bytes are chosen deliberately and source-traced. That outcome is never a normal diagram and never malformed XML.",
+        "Each known case gets that outcome: C0 attribute and text controls, VT/FF divider and delay text, `<font color=invalid>`, size zero, size overflow and malformed DOT. So do at least two held-out inputs outside the golden corpus.",
+        "No valid golden or standing case newly errors, and the strict-XML oracle (\ud83c\udfafT14.16) reports zero malformed Rust outputs, with no expected-failure exemptions for these cases."
+      ],
+      "context": "Pinned Java turns several render-time and export-time failures into a crash SVG with exit 0. `UgDiagram.exportDiagram` catches any Throwable and emits the crash diagram. The known cases:\n- XML-1.0-invalid C0 control characters in attribute or text values: `ToStream.writeAttrString` / `accumDefaultEscape` throws SAXException at ToStream:1744\u20131751, and `UGraphicSvg.writeToStream` wraps it as an IOException.\n- VT/FF in divider and delay text (exporter invalid-character exceptions).\n- `NoSuchColorRuntimeException` from `CommandCreoleColorAndSizeChange` for `<font color=invalid>`.\n- `size_zero`: IllegalArgumentException in Slot.\n- `overflow`: NumberFormatException.\n- `malformed_dot`: NumberFormatException.\n\nThe Rust SVG serializer and every family renderer API are infallible and return `String`. So Rust emits a normal diagram in each case, and for C0 controls it can emit malformed XML. All of these are nonpositive for parity, but silently producing a diagram, or invalid XML, is wrong. Packet makers have refused, correctly, to fake crash SVGs, panic, or silently delete characters.\n\nSource trace by the shared-SVG corrective checker, 2026-11-05. In pinned Java, `CharHidder.unhideChar` (lines 87\u201388) maps every private-use code point U+E000..U+E0FF to U+0000..U+00FF. The `AtomText` constructor (line 80) always calls `CharHidder.unhide`. So a literal user U+E000 in label text becomes NUL inside Java, and the SVG exporter then crashes with a SAXException. Literal U+E001..U+E01F produce the other C0 controls the same way. This is a second route into the crash-SVG class, beyond C0 bytes present in the source. The Rust creole hiding port must apply the same unhide mapping for every user-supplied PUA character in that range, not only for its own hidden characters. When Java turns such text into an export failure, the outcome falls under this target's error contract.",
+      "tags": [
+        "parity",
+        "negative-diagnostics",
+        "rendering",
+        "errors"
+      ],
+      "origin": "manual",
+      "discovered": "2026-11-05"
+    },
+    "T14.21": {
+      "name": "Diagram-type dispatch follows Java PSystemBuilder factory order, falling through on factory syntax errors",
+      "status": "identified",
+      "value": 0.0,
+      "cost": 0.0,
+      "acceptance": [
+        "Rust dispatch uses the same factory order and syntax-error fall-through as Java's `PSystemBuilder`, traced from the source. No family-detection heuristic remains where Java uses fall-through.",
+        "The 13 misrouted sources listed in the sequence rejection candidate (`/Users/marcelo/Library/Caches/rustuml-sequence-rejection-dc438/candidate1/new-valid-errors.json`) render as their Java family, and so do at least three held-out mixed-case or direction-first inputs outside the golden corpus.",
+        "All 12,550 goldens are measured with the actual CLI before and after: no lost pass, no new valid-input error, and every family change is reported."
+      ],
+      "context": "Java's `PSystemBuilder` tries each registered diagram factory in a fixed order and moves on to the next factory when one reports a syntax error. Rust's dispatcher picks one family up front, using heuristics.\n\nThe sequence \ud83c\udfafT14.17 candidate made \"no registered sequence command accepts \u2026\" a real syntax error. Its replay (2026-11-05) then exposed 13 valid non-sequence sources that Rust misroutes to Sequence: class/description sources with mixed-case containers (`NoDe`) or a first line that is only a direction (`left to right direction`), and one state source with a stereotyped pseudostate. These sources were already wrong-family failures before the change. With strict sequence parsing they now fail with a CLI error.\n\nSource trace (sequence maker, 2026-11-05). Java's `PSystemBuilder` factory order is Welcome, Colors, Sequence, Class, Activity, Description, State, Activity3, and so on. `createPSystem` (lines 230\u2013255) moves to the next factory when one returns a `PSystemError`, and merges the errors if every factory fails. Fall-through cannot be ported faithfully yet, because Rust's non-sequence factories accept any input. `class::parse_class` (class.rs:32\u201351) always returns `Ok(parser.finish())`, and `ClassParser::parse_line` (674\u2013676) ignores every unrecognized line. Component and state behave the same way. A naive fall-through would let Class accept arbitrary malformed input and never reach Description or State. So this target depends on each family factory having a Java-equivalent command admission and syntax-error contract (the \ud83c\udfafT14.17 work, per family). The 13 misrouted sources are a parent-approved recorded exception in the sequence \ud83c\udfafT14.17 packet: they now fail with a CLI error instead of rendering as a Sequence diagram of the wrong family.",
+      "tags": [
+        "parity",
+        "parser",
+        "dispatch"
+      ],
+      "origin": "manual",
+      "discovered": "2026-11-05"
+    },
+    "T14.23": {
+      "name": "Class/description models retain Java Quark identity (local name and namespace separator) for every package and entity",
+      "status": "identified",
+      "value": 0.0,
+      "cost": 0.0,
+      "acceptance": [
+        "The class and description parsers store each package's and entity's Java Quark local name and the namespace separator in effect, traced from source. They do not derive it from the joined name or `display_name`.",
+        "Consumers that write identity text (comments, ids, data attributes) use the Quark identity exactly as Java does. Nested-alias and custom-separator held-out inputs, at least three of them outside the golden corpus, match pinned Java.",
+        "Model serialization stays compatible: new fields are serde-defaulted and omitted when they can be derived. No previously passing case is lost."
+      ],
+      "context": "Java `Cluster.drawU` writes `group.getName()`, which resolves through `Quark.getName` to the local identity, not an SVG-sanitized qualified name. Other consumers also need the Quark identity.\n\nThe Rust `Package` keeps the joined name, `display_name` and parent, but neither the local Quark name nor the namespace separator. `parse/class.rs:202\u2013205` joins the private path with the configured separator, and `:1340\u20131375` discards `prefix.last` except when it is used as a display. Root groups can be recovered from the raw name, but nested aliases with custom separators cannot be inverted source-faithfully, and `display_name` may be an unrelated alias display.\n\nThe shared-SVG comment maker (2026-11-05) recorded this as a missing-identity-data dependency rather than reparsing or guessing separators. It is why some comment label/alias selections cannot reach parity.",
+      "tags": [
+        "parity",
+        "parser",
+        "model",
+        "class"
+      ],
+      "origin": "manual",
+      "discovered": "2026-11-05"
+    }
+  }
+}

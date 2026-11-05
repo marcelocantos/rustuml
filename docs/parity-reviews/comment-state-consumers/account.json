@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "mechanism": "comment-state-consumers",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "docs/parity-reviews/comment-state-consumers/comment-selection-account.json at 42344228ed430c5678b46ec8f42f7f9018124247 / java_locations",
+    "docs/parity-reviews/comment-state-consumers/missing-comments-account.json at 42344228ed430c5678b46ec8f42f7f9018124247 / java_locations",
+    "docs/parity-reviews/comment-state-consumers/state-paint-account.json at 42344228ed430c5678b46ec8f42f7f9018124247 / java_locations",
+    "docs/parity-reviews/comment-state-consumers/follow-on-producers-account.json at dda0437c0ffa88fe975f54f3a784d3f3e3bdbda1 / java_locations"
+  ],
+  "rust_locations": [
+    "docs/parity-reviews/comment-state-consumers/comment-selection-account.json at 42344228ed430c5678b46ec8f42f7f9018124247 / rust_locations",
+    "docs/parity-reviews/comment-state-consumers/missing-comments-account.json at 42344228ed430c5678b46ec8f42f7f9018124247 / rust_locations",
+    "docs/parity-reviews/comment-state-consumers/state-paint-account.json at 42344228ed430c5678b46ec8f42f7f9018124247 / rust_locations",
+    "docs/parity-reviews/comment-state-consumers/follow-on-producers-account.json at dda0437c0ffa88fe975f54f3a784d3f3e3bdbda1 / rust_locations"
+  ],
+  "invariant": "Index only: the four predraft account invariant fields cited in record_chronology supply the causal invariants.",
+  "causal_divergence": "Index only: the four predraft causal_divergence fields supply the hypotheses; this index adds no causal claim.",
+  "planned_change": "No production change. This post-production canonical index references the four preserved predraft account files and their original commits.",
+  "perturbation_axes": [
+    "docs/parity-reviews/comment-state-consumers/comment-selection-account.json at 42344228ed430c5678b46ec8f42f7f9018124247 / perturbation_axes",
+    "docs/parity-reviews/comment-state-consumers/missing-comments-account.json at 42344228ed430c5678b46ec8f42f7f9018124247 / perturbation_axes",
+    "docs/parity-reviews/comment-state-consumers/state-paint-account.json at 42344228ed430c5678b46ec8f42f7f9018124247 / perturbation_axes",
+    "docs/parity-reviews/comment-state-consumers/follow-on-producers-account.json at dda0437c0ffa88fe975f54f3a784d3f3e3bdbda1 / perturbation_axes"
+  ],
+  "record_chronology": {
+    "canonical_index_written_after_production": "523a2d89226d764b818b7af2472593d2690e9c4b",
+    "not_a_pre_draft_account_claim": true,
+    "reason": "Pre-draft content was committed under separate filenames; two rust_locations fields used structured objects. This additive index supplies canonical schema strings without editing or backdating those artifacts. Independent checker must assess the process limitation.",
+    "pre_draft_records": [
+      {
+        "path": "docs/parity-reviews/comment-state-consumers/comment-selection-account.json",
+        "sha256": "0bcd324028b1a974eab3c2b51b9c99d610c571d3cd1c86fd74a23753b8bc8625",
+        "commit": "42344228ed430c5678b46ec8f42f7f9018124247"
+      },
+      {
+        "path": "docs/parity-reviews/comment-state-consumers/missing-comments-account.json",
+        "sha256": "2fa45481d8516901098c98d2ba2a6f845b5fb649bc73a34f55cf5da356866eef",
+        "commit": "42344228ed430c5678b46ec8f42f7f9018124247"
+      },
+      {
+        "path": "docs/parity-reviews/comment-state-consumers/state-paint-account.json",
+        "sha256": "294a6c42f9f6a4f4b0ca1aa3b73a8961ee9a415262cedf74f2773cfbe6566c91",
+        "commit": "42344228ed430c5678b46ec8f42f7f9018124247"
+      },
+      {
+        "path": "docs/parity-reviews/comment-state-consumers/follow-on-producers-account.json",
+        "sha256": "4e807660383c420fed1d9e2ed38fe8ea3894c5a8413d5535b99ff9450c1cefc8",
+        "commit": "dda0437c0ffa88fe975f54f3a784d3f3e3bdbda1"
+      }
+    ],
+    "source_correction_pre_draft_commit": "27bb1c3ff"
+  },
+  "not_independent_acceptance": true,
+  "format_deviations": [
+    "Four predraft accounts used descriptive filenames rather than the canonical account.json path.",
+    "missing-comments-account.json and follow-on-producers-account.json have object-shaped rust_locations arrays rather than schema string arrays; original bytes are preserved."
+  ]
+}

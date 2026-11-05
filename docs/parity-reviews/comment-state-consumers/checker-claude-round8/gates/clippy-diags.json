@@ -1,0 +1,533 @@
+{
+ "5d8b1f7c1/rustuml-render": [
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::filter_map_bool_then",
+   "file": "crates/rustuml-render/src/class.rs",
+   "line": 4130,
+   "text": ".filter_map(|(idx, role)| {",
+   "message": "usage of `bool::then` in `filter_map`"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::question_mark",
+   "file": "crates/rustuml-render/src/class.rs",
+   "line": 11894,
+   "text": "let Some((&start, &end)) = edge_points.first().zip(edge_points.last()) else {",
+   "message": "this `let...else` may be rewritten with the `?` operator"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::obfuscated_if_else",
+   "file": "crates/rustuml-render/src/class.rs",
+   "line": 13253,
+   "text": "(style.shadow > 0.0)",
+   "message": "this method chain can be written more clearly with `if .. else ..`"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/component.rs",
+   "line": 6989,
+   "text": ".chunks_exact(3)",
+   "message": "using `chunks_exact` with a constant chunk size"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/deployment.rs",
+   "line": 5921,
+   "text": ".chunks_exact(3)",
+   "message": "using `chunks_exact` with a constant chunk size"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/handwritten.rs",
+   "line": 487,
+   "text": "for chunk in rest.chunks_exact(3) {",
+   "message": "using `chunks_exact` with a constant chunk size"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 376,
+   "text": "Some(nums.chunks_exact(2).map(|p| (p[0], p[1])).collect())",
+   "message": "using `chunks_exact` with a constant chunk size"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::if_same_then_else",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 3700,
+   "text": "} else if matches!(message.to.as_str(), \"[\" | \"]\") {",
+   "message": "this `if` has identical blocks"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13620,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13634,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13672,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13757,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13767,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13787,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13817,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13827,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13837,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13863,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/state.rs",
+   "line": 5568,
+   "text": ".chunks_exact(3)",
+   "message": "using `chunks_exact` with a constant chunk size"
+  }
+ ],
+ "5d8b1f7c1/rustuml-parser": [
+  {
+   "pkg": "rustuml-parser",
+   "code": "dead_code",
+   "file": "crates/rustuml-parser/src/parse/component.rs",
+   "line": 72,
+   "text": "pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {",
+   "message": "function `looks_like_description_bracket_command` is never used"
+  }
+ ],
+ "5d8b1f7c1/rustuml-layout": [],
+ "5d8b1f7c1/rustuml-oracle": [
+  {
+   "pkg": "rustuml-oracle",
+   "code": "clippy::useless_format",
+   "file": "crates/rustuml-oracle/src/matrix/activity.rs",
+   "line": 24,
+   "text": "vec![format!(\"Action 1\"), format!(\"Action {n}\")]",
+   "message": "useless use of `format!`"
+  }
+ ],
+ "5d8b1f7c1/rustuml": [],
+ "5d8b1f7c1/rustuml-math": [],
+ "d6e9ffd94/rustuml-render": [
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::filter_map_bool_then",
+   "file": "crates/rustuml-render/src/class.rs",
+   "line": 4144,
+   "text": ".filter_map(|(idx, role)| {",
+   "message": "usage of `bool::then` in `filter_map`"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::question_mark",
+   "file": "crates/rustuml-render/src/class.rs",
+   "line": 12000,
+   "text": "let Some((&start, &end)) = edge_points.first().zip(edge_points.last()) else {",
+   "message": "this `let...else` may be rewritten with the `?` operator"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::obfuscated_if_else",
+   "file": "crates/rustuml-render/src/class.rs",
+   "line": 13359,
+   "text": "(style.shadow > 0.0)",
+   "message": "this method chain can be written more clearly with `if .. else ..`"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/component.rs",
+   "line": 7021,
+   "text": ".chunks_exact(3)",
+   "message": "using `chunks_exact` with a constant chunk size"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/deployment.rs",
+   "line": 6033,
+   "text": ".chunks_exact(3)",
+   "message": "using `chunks_exact` with a constant chunk size"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/handwritten.rs",
+   "line": 487,
+   "text": "for chunk in rest.chunks_exact(3) {",
+   "message": "using `chunks_exact` with a constant chunk size"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 376,
+   "text": "Some(nums.chunks_exact(2).map(|p| (p[0], p[1])).collect())",
+   "message": "using `chunks_exact` with a constant chunk size"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::if_same_then_else",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 3700,
+   "text": "} else if matches!(message.to.as_str(), \"[\" | \"]\") {",
+   "message": "this `if` has identical blocks"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13620,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13634,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13672,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13757,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13767,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13787,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13817,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13827,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13837,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13863,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/state.rs",
+   "line": 6205,
+   "text": ".chunks_exact(3)",
+   "message": "using `chunks_exact` with a constant chunk size"
+  }
+ ],
+ "d6e9ffd94/rustuml-parser": [
+  {
+   "pkg": "rustuml-parser",
+   "code": "dead_code",
+   "file": "crates/rustuml-parser/src/parse/component.rs",
+   "line": 74,
+   "text": "pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {",
+   "message": "function `looks_like_description_bracket_command` is never used"
+  }
+ ],
+ "d6e9ffd94/rustuml-layout": [],
+ "d6e9ffd94/rustuml-oracle": [
+  {
+   "pkg": "rustuml-oracle",
+   "code": "clippy::useless_format",
+   "file": "crates/rustuml-oracle/src/matrix/activity.rs",
+   "line": 24,
+   "text": "vec![format!(\"Action 1\"), format!(\"Action {n}\")]",
+   "message": "useless use of `format!`"
+  }
+ ],
+ "d6e9ffd94/rustuml": [],
+ "d6e9ffd94/rustuml-math": [],
+ "c3116f0b0/rustuml-render": [
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::filter_map_bool_then",
+   "file": "crates/rustuml-render/src/class.rs",
+   "line": 4144,
+   "text": ".filter_map(|(idx, role)| {",
+   "message": "usage of `bool::then` in `filter_map`"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::question_mark",
+   "file": "crates/rustuml-render/src/class.rs",
+   "line": 12000,
+   "text": "let Some((&start, &end)) = edge_points.first().zip(edge_points.last()) else {",
+   "message": "this `let...else` may be rewritten with the `?` operator"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::obfuscated_if_else",
+   "file": "crates/rustuml-render/src/class.rs",
+   "line": 13359,
+   "text": "(style.shadow > 0.0)",
+   "message": "this method chain can be written more clearly with `if .. else ..`"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/component.rs",
+   "line": 7021,
+   "text": ".chunks_exact(3)",
+   "message": "using `chunks_exact` with a constant chunk size"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/deployment.rs",
+   "line": 6033,
+   "text": ".chunks_exact(3)",
+   "message": "using `chunks_exact` with a constant chunk size"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/handwritten.rs",
+   "line": 487,
+   "text": "for chunk in rest.chunks_exact(3) {",
+   "message": "using `chunks_exact` with a constant chunk size"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 376,
+   "text": "Some(nums.chunks_exact(2).map(|p| (p[0], p[1])).collect())",
+   "message": "using `chunks_exact` with a constant chunk size"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::if_same_then_else",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 3700,
+   "text": "} else if matches!(message.to.as_str(), \"[\" | \"]\") {",
+   "message": "this `if` has identical blocks"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13620,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13634,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13672,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13757,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13767,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13787,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13817,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13827,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13837,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::useless_borrows_in_formatting",
+   "file": "crates/rustuml-render/src/sequence.rs",
+   "line": 13863,
+   "text": "&arrow_color,",
+   "message": "redundant reference in `write!` argument"
+  },
+  {
+   "pkg": "rustuml-render",
+   "code": "clippy::chunks_exact_to_as_chunks",
+   "file": "crates/rustuml-render/src/state.rs",
+   "line": 6205,
+   "text": ".chunks_exact(3)",
+   "message": "using `chunks_exact` with a constant chunk size"
+  }
+ ],
+ "c3116f0b0/rustuml-parser": [
+  {
+   "pkg": "rustuml-parser",
+   "code": "dead_code",
+   "file": "crates/rustuml-parser/src/parse/component.rs",
+   "line": 74,
+   "text": "pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {",
+   "message": "function `looks_like_description_bracket_command` is never used"
+  }
+ ],
+ "c3116f0b0/rustuml-layout": [],
+ "c3116f0b0/rustuml-oracle": [
+  {
+   "pkg": "rustuml-oracle",
+   "code": "clippy::useless_format",
+   "file": "crates/rustuml-oracle/src/matrix/activity.rs",
+   "line": 24,
+   "text": "vec![format!(\"Action 1\"), format!(\"Action {n}\")]",
+   "message": "useless use of `format!`"
+  }
+ ],
+ "c3116f0b0/rustuml": [],
+ "c3116f0b0/rustuml-math": []
+}

@@ -1,0 +1,32 @@
+{
+  "before": {
+    "argv": [
+      "cargo",
+      "build",
+      "-p",
+      "rustuml",
+      "--release",
+      "--locked"
+    ],
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-shared-svg-maker/target-after",
+    "binary_copy": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/before-rustuml",
+    "exit": 0,
+    "source_revision": "2ed88eb55ec5f0974ec2830deccfcc401f6d9885"
+  },
+  "after": {
+    "argv": [
+      "cargo",
+      "build",
+      "-p",
+      "rustuml",
+      "--release",
+      "--locked"
+    ],
+    "CARGO_BUILD_JOBS": "4",
+    "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/target-after",
+    "binary_copy": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-maker/after-rustuml",
+    "exit": 0,
+    "source_hashes": "production-source-hashes.json"
+  }
+}

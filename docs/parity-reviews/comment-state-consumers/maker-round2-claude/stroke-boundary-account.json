@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "mechanism": "comment-state-consumers",
+  "sub_mechanism": "StateSkin stroke boundary restated; per-arrow colour and transparent edge (rejection d539f9a08)",
+  "status": "maker causal account before draft; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "boundary_correction": "The previous account (7704a34c9) said stereotype, per-state and per-arrow strokes were outside its change. That was inaccurate: autonomous_state_style resolves a stereotype <style> lineColor and a 'skinparam state<<S>> BorderColor' through resolve_state_line_color, so both stereotype stroke routes changed with b27411107 (toward Java: stroke_stereo_style_css4 and stroke_stereo_skinparam_css4 match). The accurate boundary after b27411107 is: every state, pseudo-state and arrow stroke that comes from a skinparam or a <style> property (root, element, stereotype) goes through ValueImpl.asColor plus SvgGraphics.fixColor. Per-state '##color' and per-arrow '-[#color]->' strokes were not routed. This round routes the per-arrow colour; '##color' stays residual (see below).",
+  "java_locations": [
+    "decoration/WithLinkType.java#applyOneStyle (lines 139-166): an arrow style token that is not a keyword becomes HColorSet.instance().getColorOrWhite(s) and setSpecificColor. getColorOrWhite is the resolution ValueImpl.asColor uses, so an unknown or CSS4-only name such as RebeccaPurple is white.",
+    "svek/SvekEdge.java#drawU (lines 824-900): link.getSpecificColor() replaces both the line colour and arrowHeadColor.",
+    "klimt/drawing/svg/DriverDotPathSvg.java#draw: a DotPath whose colour isTransparent() (alpha 0) is not written at all.",
+    "svek/SvekEdge.java#drawRainbow (lines 1101-1132): when headColor isTransparent() an ExtremityArrow is replaced by ExtremityArrow.drawLineIfTransparent, which draws one ULine from polygon point 0 to point 2 with the transparent colour and stroke.onlyThickness(); SvgGraphics writes that stroke as none.",
+    "klimt/color/HColorSimple.java#isTransparent: alpha == 0."
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs#state_transition_paint: the inline colour goes through sequence::resolve_color (accepts CSS4 names, keeps lowercase).",
+    "crates/rustuml-render/src/state.rs: the three SVEK edge writers (autonomous scope links, legacy straight and curved paths) and render_arrowhead."
+  ],
+  "invariant": "A state transition's line and head colour resolve through getColorOrWhite and fixColor whatever their source (skinparam, <style>, inline). A zero-alpha line colour writes no <path>; its arrowhead is one <line> from the polygon tip (point 0) to its point 2, stroke none, width only.",
+  "planned_change": "state_transition_paint uses resolve_state_line_color for the inline colour. The edge writers skip <path> when the resolved colour is none, and render_arrowhead writes the drawLineIfTransparent line instead of the polygon for that colour.",
+  "residuals": [
+    "Per-state '##color' strokes still use the old resolution. stroke_per_state_css4 is a Java 'No such color' error (exit 200) from the state command's colour parser, a T14.20/negative-diagnostic class this packet does not port.",
+    "Edges whose head decoration is not ExtremityArrow (crossed start, circle end) keep drawing their decoration under a transparent colour."
+  ],
+  "perturbation_axes": [
+    "per-arrow palette, CSS4-only, 8-digit alpha and transparent colours",
+    "ArrowColor transparent and #00000000 through skinparam and <style> arrow LineColor",
+    "dashed and bold transparent arrows (width only)",
+    "transparent arrow with a label (label kept)"
+  ],
+  "precommitted_measurement": {
+    "oracle": "strict compare and comment lists for stroke_per_arrow_css4, stroke_arrow_skinparam_transparent and fresh stroke probes; whole-output CLI versus the merged base; golden_no_oracle",
+    "expect_fixed": [
+      "perturbations/comment-state-consumers/checker-claude-shared-svg/stroke_per_arrow_css4 (#FFFFFF line and head)",
+      "perturbations/comment-state-consumers/checker-claude-shared-svg/stroke_arrow_skinparam_transparent (no path, one line)"
+    ],
+    "expect": "only state outputs with an inline arrow colour or a zero-alpha arrow colour change; zero lost matches"
+  }
+}

@@ -1,0 +1,116 @@
+ crates/rustuml-render/src/class.rs | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+class_colors_apply_per_entity_and_leave_plain_defaults ... ok
+test plantuml_metrics::tests::matches_plantuml_golden_formatted ... ok
+test plantuml_metrics::tests::mono_height_constant ... ok
+test plantuml_metrics::tests::mono_widths_match_goldens ... ok
+test plantuml_metrics::tests::text_baseline_offset ... ok
+test plantuml_metrics::tests::shaped_widths_recombine_out_of_corpus_words ... ok
+test plantuml_metrics::tests::text_height_matches ... ok
+test skinparam::tests::class_skinparams ... ok
+test skinparam::tests::class_stereotype_pascal_case_aliases ... ok
+test plantuml_metrics::tests::times_new_roman_fractional_unicode_advances_accumulate_like_awt ... ok
+test class::tests::renamed_target_and_wildcard_selectors_apply_without_fixture_names ... ok
+test skinparam::tests::object_skinparams_map_to_class ... ok
+test class::tests::svek_node_stream_interleaves_empty_packages_after_cluster_paint ... ok
+test text_render::tests::atom_run_measurement_does_not_apply_the_empty_stripe_space ... ok
+test class::tests::strictuml_uses_the_iconless_header_measurement_model ... ok
+test layout_oracle::tests::class_object_component_do_not_replay_note_or_cluster_inner_xml ... ok
+test text_render::tests::awt_named_font_metrics_match_goldens ... ok
+test text_render::tests::courier_base_uses_monospace_metrics ... ok
+test text_render::tests::creole_link_normalizes_title_without_decoding_href ... ok
+test text_render::tests::emitted_baseline_count_tracks_mixed_font_sizes ... ok
+test font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15 ... ok
+test text_render::tests::explicit_font_monospace_inherits_surrounding_metrics ... ok
+test text_render::tests::inline_colors_use_the_legacy_plantuml_palette ... ok
+test text_render::tests::first_baseline_ascent_follows_first_mixed_family_run ... ok
+test text_render::tests::every_family_measures_java_characters_not_the_escape_prefix ... ok
+test text_render::tests::mixed_styles_split_into_multiple_elements ... ok
+test text_render::tests::plain_text_emits_one_element ... ok
+test text_render::tests::positioned_first_run_uses_sea_aligned_baseline_for_renamed_notes ... ok
+test text_render::tests::quoted_monospace_still_uses_monospace_metrics ... ok
+test text_render::tests::tabs_split_text_at_eight_space_stops ... ok
+test text_render::tests::uniform_bold_lifts_to_text_element ... ok
+test text_render::tests::transparent_text_advances_without_painting ... ok
+test text_render::tests::unmapped_supplementary_format_characters_are_hidden_in_every_family ... ok
+test text_render::tests::no_tspans_anywhere ... ok
+test text_render::tests::unresolved_sprite_commands_share_emission_and_measurement ... ok
+test text_render::tests::present_empty_lines_share_the_restored_space_atom ... ok
+test component::tests::note_text_rendered ... ok
+test java_bidi::tests::conformance_sample ... ok
+test java_bidi::tests::bidi_tables_are_jdk_ubidi_icu ... ok
+test font_chain::tests::coverage_table_is_the_stored_reference_host_extraction ... ok
+test font_chain::tests::unicode_mark_tables_are_ucd_18 ... ok
+test java_bidi::tests::java_bidi_oracle ... ok
+
+test result: ok. 182 passed; 0 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.29s
+
+warning: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:74:15
+   |
+74 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rustuml-parser` (lib) generated 1 warning
+   Compiling rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-checker/drill-tree/crates/rustuml-render)
+    Finished `release` profile [optimized] target(s) in 21.15s
+     Running unittests src/lib.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-checker/target-drill/release/deps/rustuml_render-64ddbe2e1fa0ea9b)
+
+==== parity_perturbations ====
+cing"), ("textLength", "21.8438"), ("x", "20"), ("y", "88.7344")]
+  [4] <text> text mismatch:
+    expected: Some("Please\u{a0}define\u{a0}Direction/Shape\u{a0}before\u{a0}Color/Id.")
+    actual:   Some("Ash")
+  [5] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "32.4219"), ("x2", "32.4219"), ("y1", "77.7734"), ("y2", "97.7734")]
+    actual:   [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "80.7813"), ("x2", "80.7813"), ("y1", "56.1328"), ("y2", "76.1328")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "21.8438"), ("x", "20"), ("y", "110.375")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "28.875"), ("x", "64.8438"), ("y", "88.7344")]
+  [6] <text> text mismatch:
+    expected: Some("Ash")
+    actual:   Some("Birch")
+  [7] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "80.7813"), ("x2", "80.7813"), ("y1", "77.7734"), ("y2", "97.7734")]
+    actual:   [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "80.7813"), ("x2", "90.7813"), ("y1", "115.332"), ("y2", "115.332")]
+  [8] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "28.875"), ("x", "64.8438"), ("y", "110.375")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "21.1758"), ("x", "90.7813"), ("y", "119.8672")]
+  [8] <text> text mismatch:
+    expected: Some("Birch")
+    actual:   Some("Elm")
+  [9] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "80.7813"), ("x2", "90.7813"), ("y1", "136.9727"), ("y2", "136.9727")]
+    actual:   [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "80.7813"), ("x2", "80.7813"), ("y1", "92.2656"), ("y2", "115.332")]
+  [10] tag mismatch: expected <text>, got <line>
+  [11] tag mismatch: expected <line>, got <text>
+  [12] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "32.4219"), ("x2", "80.7813"), ("y1", "77.7734"), ("y2", "77.7734")]
+    actual:   [("style", "stroke:#181818;stroke-width:1.5;"), ("x1", "56.6016"), ("x2", "56.6016"), ("y1", "36.1328"), ("y2", "56.1328")]
+
+  test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_direction_new.puml: checker preserved a Java error page instead of valid output
+  test-diagrams/perturbations/wbs-idea-shape-block-selection/checker-independent-20261105/shape_direction_old.puml: checker preserved a Java error page instead of valid output
+
+
+failures:
+    held_out_perturbations_match_java_without_oracle_layout
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 3.07s
+
+warning: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:74:15
+   |
+74 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rustuml-parser` (lib) generated 1 warning
+   Compiling rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-checker/drill-tree/crates/rustuml-render)
+   Compiling rustuml-oracle v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-checker/drill-tree/crates/rustuml-oracle)
+    Finished `release` profile [optimized] target(s) in 18.38s
+     Running tests/parity_perturbations.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-checker/target-drill/release/deps/parity_perturbations-21d256b3262cc816)
+error: test failed, to rerun pass `-p rustuml-oracle --test parity_perturbations`

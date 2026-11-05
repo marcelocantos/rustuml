@@ -1,0 +1,3 @@
+@startuml
+class "<size:20>Cedar <$absent> Grove</size> end" as A
+@enduml

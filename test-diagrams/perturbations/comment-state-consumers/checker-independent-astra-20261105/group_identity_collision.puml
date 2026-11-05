@@ -1,0 +1,7 @@
+@startuml
+node "Copper Bay" as Copper_Bay {
+artifact "Metal Case" as Metal_Case
+}
+node Jetty
+Copper_Bay --> Jetty
+@enduml

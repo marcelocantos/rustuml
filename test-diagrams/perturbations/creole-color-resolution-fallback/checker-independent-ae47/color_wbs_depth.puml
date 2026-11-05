@@ -1,0 +1,5 @@
+@startwbs
+* Nest
+** <color:teal>a<color:NoTint77>b</color>c
+***_ <back:NoTint77>leaf</back>
+@endwbs

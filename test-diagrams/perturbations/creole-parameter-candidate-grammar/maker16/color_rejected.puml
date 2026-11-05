@@ -1,0 +1,8 @@
+@startuml
+participant Juniper
+note right of Juniper
+L<color:~#123456>oak</color>R
+L<color:bl\~ue>oak</color>R
+L<color:red!>oak</color>R
+end note
+@enduml

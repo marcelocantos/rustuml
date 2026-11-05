@@ -1,0 +1,133 @@
+[
+  {
+    "id": "collateral/1162-review_root_quark_no_reparent",
+    "cohort": "retained",
+    "before_pass": false,
+    "after_pass": false,
+    "valid": true,
+    "comment_only": true,
+    "comments_before": [
+      "link *start*R3 to A3",
+      "link A3 to B3",
+      "link A3 to C3",
+      "link B3 to *end*R3",
+      "link C3 to *end*R3",
+      "link R3 to T3"
+    ],
+    "comments_after": [
+      "cluster R3",
+      "cluster O3",
+      "link *start*R3 to A3",
+      "link A3 to B3",
+      "link A3 to C3",
+      "link B3 to *end*R3",
+      "link C3 to *end*R3",
+      "link R3 to T3"
+    ],
+    "comments_java": [
+      "link *start*R3 to A3",
+      "link A3 to B3",
+      "link A3 to C3",
+      "link B3 to *end*R3",
+      "link C3 to *end*R3",
+      "link R3 to T3"
+    ],
+    "comments_match": false,
+    "source_sha256": "83981eb365fa34171532957fbfb735bcb01ead88fff75b9be4a45ce0e6ceee13",
+    "golden_sha256": "7e42f3d92e10ad02286e604782a4bad287d962044a6d73064f567a6ef4026c5b",
+    "membership": {
+      "suite": "collateral",
+      "index": 1162,
+      "membership": {
+        "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_root_quark_no_reparent.puml",
+        "source_sha256": "83981eb365fa34171532957fbfb735bcb01ead88fff75b9be4a45ce0e6ceee13",
+        "golden_sha256": "7e42f3d92e10ad02286e604782a4bad287d962044a6d73064f567a6ef4026c5b",
+        "cohort955": true,
+        "cohort1044": true,
+        "cohort": "frozen",
+        "capture_id": "1162-review_root_quark_no_reparent",
+        "reference_xml_valid": true,
+        "reference_valid": true,
+        "suite": "collateral",
+        "actual_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/state-parser-pass-entity-order/review_root_quark_no_reparent.puml",
+        "actual_golden": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/state-parser-pass-entity-order/review_root_quark_no_reparent.svg"
+      },
+      "original_classification": null,
+      "id": "collateral/1162-review_root_quark_no_reparent",
+      "source_capture": "/Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/maker-archive/frozen/83981eb365fa34171532957fbfb735bcb01ead88fff75b9be4a45ce0e6ceee13",
+      "source_sha256": "83981eb365fa34171532957fbfb735bcb01ead88fff75b9be4a45ce0e6ceee13",
+      "golden_capture": "/Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/maker-archive/frozen/7e42f3d92e10ad02286e604782a4bad287d962044a6d73064f567a6ef4026c5b",
+      "golden_sha256": "7e42f3d92e10ad02286e604782a4bad287d962044a6d73064f567a6ef4026c5b",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2f87fc19",
+      "original_source_capture": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/retained-inputs/collateral/1162-review_root_quark_no_reparent/input.puml",
+      "original_golden_capture": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/retained-inputs/collateral/1162-review_root_quark_no_reparent/java.svg",
+      "prior_source_capture": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/frozen/collateral/1162-review_root_quark_no_reparent/input.puml",
+      "prior_golden_capture": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/frozen/collateral/1162-review_root_quark_no_reparent/java.svg",
+      "upstream_source_capture": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/frozen/collateral/1162-review_root_quark_no_reparent/input.puml",
+      "upstream_golden_capture": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/frozen/collateral/1162-review_root_quark_no_reparent/java.svg",
+      "original_cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+      "cohort": "retained"
+    }
+  },
+  {
+    "id": "collateral/1164-root_quark_nested_reuse_control",
+    "cohort": "retained",
+    "before_pass": false,
+    "after_pass": false,
+    "valid": true,
+    "comment_only": true,
+    "comments_before": [
+      "link *start*SharedGate593 to NestedPulse593",
+      "link NestedPulse593 to *end*SharedGate593",
+      "link SharedGate593 to TerminalNode593"
+    ],
+    "comments_after": [
+      "cluster SharedGate593",
+      "cluster OuterShell593",
+      "link *start*SharedGate593 to NestedPulse593",
+      "link NestedPulse593 to *end*SharedGate593",
+      "link SharedGate593 to TerminalNode593"
+    ],
+    "comments_java": [
+      "link *start*SharedGate593 to NestedPulse593",
+      "link NestedPulse593 to *end*SharedGate593",
+      "link SharedGate593 to TerminalNode593"
+    ],
+    "comments_match": false,
+    "source_sha256": "47ede98780ec81f5edd6d8cf549f6e7aad01831dddcaea5cfd9bff73ff0cbc75",
+    "golden_sha256": "b0cdca9e400f4e7665376d9e4aff8add08adf59d2437def5daea411b40577524",
+    "membership": {
+      "suite": "collateral",
+      "index": 1164,
+      "membership": {
+        "source": "test-diagrams/perturbations/state-parser-pass-entity-order/root_quark_nested_reuse_control.puml",
+        "source_sha256": "47ede98780ec81f5edd6d8cf549f6e7aad01831dddcaea5cfd9bff73ff0cbc75",
+        "golden_sha256": "b0cdca9e400f4e7665376d9e4aff8add08adf59d2437def5daea411b40577524",
+        "cohort955": true,
+        "cohort1044": true,
+        "cohort": "frozen",
+        "capture_id": "1164-root_quark_nested_reuse_control",
+        "reference_xml_valid": true,
+        "reference_valid": true,
+        "suite": "collateral",
+        "actual_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/state-parser-pass-entity-order/root_quark_nested_reuse_control.puml",
+        "actual_golden": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/state-parser-pass-entity-order/root_quark_nested_reuse_control.svg"
+      },
+      "original_classification": null,
+      "id": "collateral/1164-root_quark_nested_reuse_control",
+      "source_capture": "/Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/maker-archive/frozen/47ede98780ec81f5edd6d8cf549f6e7aad01831dddcaea5cfd9bff73ff0cbc75",
+      "source_sha256": "47ede98780ec81f5edd6d8cf549f6e7aad01831dddcaea5cfd9bff73ff0cbc75",
+      "golden_capture": "/Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/maker-archive/frozen/b0cdca9e400f4e7665376d9e4aff8add08adf59d2437def5daea411b40577524",
+      "golden_sha256": "b0cdca9e400f4e7665376d9e4aff8add08adf59d2437def5daea411b40577524",
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2f87fc19",
+      "original_source_capture": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/retained-inputs/collateral/1164-root_quark_nested_reuse_control/input.puml",
+      "original_golden_capture": "/Users/marcelo/Library/Caches/rustuml-unresolved-sprite-checker/retained-inputs/collateral/1164-root_quark_nested_reuse_control/java.svg",
+      "prior_source_capture": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/frozen/collateral/1164-root_quark_nested_reuse_control/input.puml",
+      "prior_golden_capture": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-maker/frozen/collateral/1164-root_quark_nested_reuse_control/java.svg",
+      "upstream_source_capture": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/frozen/collateral/1164-root_quark_nested_reuse_control/input.puml",
+      "upstream_golden_capture": "/Users/marcelo/Library/Caches/rustuml-sprite-corrective-review-e09eee52/frozen/collateral/1164-root_quark_nested_reuse_control/java.svg",
+      "original_cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+      "cohort": "retained"
+    }
+  }
+]

@@ -1,0 +1,9 @@
+@startuml
+skinparam stateBackgroundColor #7a3c917f
+state "Harbor Box" as Harbor {
+state Empty
+state Body : cargo manifest
+Empty --> Body
+}
+Harbor : port authority
+@enduml

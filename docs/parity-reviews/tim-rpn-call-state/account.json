@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-rpn-call-state",
+  "rust_revision": "079c1bc1ffc325e8ebfa1719bc0ce2d3c71573c2",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/expression/ReversePolishInterpretor.java:constructor",
+    "tim/expression/ShuntingYard.java:constructor",
+    "tim/TFunctionImpl.java:getNewMemory,canCover",
+    "tim/TFunctionArgument.java"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Each evaluated expression has one operand stack and exact-spelling named map; argument assignment consumes two operands, calls subtract distinct named keys from syntactic arity, consume stack operands, and clear named state after execution. Function body expressions start independent evaluation sessions.",
+  "causal_divergence": "Prior named-key correction stripped dollars and used a fresh map and operand vector for each recursive call. It aliases b with $b and hides duplicate-key stack underflow and cross-nested-call state.",
+  "planned_change": "Keep declaration names verbatim for matching. Normalize only at the existing internal local-memory storage boundary. Execute prepared expression nodes in postorder against shared stack/map state, preserving snapshot preparation, eager effects, first-error termination, and separate body evaluation sessions. Represent underflow as a fatal preprocessing error rather than panicking or inventing values.",
+  "perturbation_axes": [
+    "Exact key spelling and prepared variable keys versus literal plain-call keys",
+    "Duplicate keys, nested calls, and neighboring operators sharing operand state"
+  ],
+  "prior_evidence": "5d37f60cbce90a3f3a9efb199c75285d6b7b859f (import 079c1bc1); prior accounts and rejected implementations remain immutable",
+  "oracle_plan": [
+    "Replay unchanged 1516/31/29 and maker15/prior17 memberships with overlap explicit; actual CLI, exact source/model, status/error/XML separate.",
+    "Compact source-guided remote relay controls; no local JVM or SSH. Preserve every failed iteration and negative reference.",
+    "Final main tiers, parser/CLI, guards/standing once stabilized. No acceptance claim; fresh independent checker required."
+  ]
+}

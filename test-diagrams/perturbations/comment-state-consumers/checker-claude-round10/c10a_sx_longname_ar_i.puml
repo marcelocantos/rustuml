@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam stateFontStyle italic
+state "A considerably longer state name" as E1
+E1 --> E2
+state "Second" as E2
+@enduml

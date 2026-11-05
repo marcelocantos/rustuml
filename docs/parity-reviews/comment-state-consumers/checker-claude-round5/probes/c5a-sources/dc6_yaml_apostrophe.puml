@@ -1,0 +1,3 @@
+@startyaml
+k: "it's \t ok"
+@endyaml

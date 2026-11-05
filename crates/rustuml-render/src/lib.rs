@@ -39,11 +39,16 @@ pub mod dot_diagram;
 pub mod ebnf;
 pub mod eps;
 pub mod filter_registry;
+pub(crate) mod font_chain;
+mod font_chain_coverage;
+mod font_chain_unicode;
 pub mod font_metrics;
 pub mod ftile;
 pub mod gantt;
 pub mod git_diagram;
 pub(crate) mod handwritten;
+mod java_bidi;
+mod java_bidi_data;
 pub mod json_diagram;
 pub mod layout_oracle;
 pub mod math;
@@ -66,6 +71,7 @@ pub mod state;
 pub mod style;
 pub mod style_cascade;
 pub mod svg;
+pub mod svg_export;
 pub mod text_render;
 mod times_new_roman_unicode;
 pub mod timing;
@@ -96,9 +102,33 @@ pub fn render_svg(diagram: &Diagram) -> String {
     render_svg_with_theme(diagram, &Theme::default())
 }
 
-/// Render a parsed diagram to SVG with a specific theme.
-/// Skinparams from the diagram's metadata override the theme.
+/// Render and export a parsed diagram to SVG with a specific theme, as
+/// PlantUML's `SvgGraphics.createXml` does: the export step can fail (🎯T14.20;
+/// see `svg_export`). Skinparams from the diagram's metadata override the theme.
+pub fn try_render_svg_with_theme(
+    diagram: &Diagram,
+    theme: &Theme,
+) -> Result<String, svg_export::SvgExportError> {
+    svg_export::serialize(render_document_with_theme(diagram, theme))
+}
+
+/// Infallible convenience over [`try_render_svg_with_theme`] for harnesses and
+/// tests. A Java export failure yields an empty document: never a normal
+/// diagram and never malformed XML. The CLI uses the fallible form.
 pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
+    try_render_svg_with_theme(diagram, theme).unwrap_or_default()
+}
+
+/// The rendered document for `-tpng`/`-tpdf`/`-teps`. Java draws text there
+/// through Graphics2D (`DriverTextG2d`) or TextLayout outlines
+/// (`DriverTextEps`), never `ToStream`, so the SVG export failure does not
+/// apply; carried text is shown plainly (`svg_export::show_carried`).
+pub fn render_svg_for_conversion(diagram: &Diagram, theme: &Theme) -> String {
+    svg_export::show_carried(render_document_with_theme(diagram, theme))
+}
+
+/// The rendered document before export (`svg_export::serialize`).
+fn render_document_with_theme(diagram: &Diagram, theme: &Theme) -> String {
     // Apply inline skinparam overrides from any diagram type.
     let meta_params = &diagram.meta().skinparams;
     let effective_theme = if meta_params.is_empty() {
@@ -148,6 +178,12 @@ pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
 /// class diagrams; other types ignore the oracle.
 #[cfg(feature = "oracle-layout")]
 pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) -> String {
+    // Same export step as render_svg_with_theme: empty on a Java export failure.
+    svg_export::serialize(render_document_with_oracle(diagram, oracle)).unwrap_or_default()
+}
+
+#[cfg(feature = "oracle-layout")]
+fn render_document_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) -> String {
     let meta_params = &diagram.meta().skinparams;
     let theme = if meta_params.is_empty() {
         Theme::default()

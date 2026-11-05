@@ -1,0 +1,21 @@
+{
+  "archive": "measurements.tar.gz",
+  "sha256": "181bc9dee35721997d150a65d16b59da9c17d84f8f5600fadca4eb559afb91ca",
+  "bytes": 15182915,
+  "members": 37476,
+  "readback_all_hashes_and_sizes_match": true,
+  "excluded_rebuildable": [
+    "source-before",
+    "source-after",
+    "source-initial",
+    "target-before",
+    "target-after",
+    "target-initial",
+    "before-rustuml",
+    "after-rustuml",
+    "initial-rustuml",
+    "probe",
+    "lexical",
+    "__pycache__"
+  ]
+}

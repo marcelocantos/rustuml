@@ -1,0 +1,4966 @@
+{
+ "carrier": {
+  "bmp_pua_f000": {
+   "source_sha256": "e19af354a4e2c24da7b21f2616166358f5134e83a20cfc563217811bacb3ae99",
+   "source_text": "@startuml\nclass \"Vault \" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f00f7d555c5b93e7b166132f3c3edf9c84a805f54262dbf433667be233235163",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "e97362893a3df651e559cb6a7449c782e9db1c0224c55d60101d131b42e53f18",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "bd0b7652aa1ea3afd6081b4af704e41cc73a8586731ddbbb901bad1d46087f5f",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "851c6db10c51d1588564745df23821584c2792772689bcd276cb9f67f2f3372e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f3857e8bd26bff60abf6779f7bfdfc2d1a45ef3680fcad1f5a5691b9893ed51a",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "e97362893a3df651e559cb6a7449c782e9db1c0224c55d60101d131b42e53f18",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "bd0b7652aa1ea3afd6081b4af704e41cc73a8586731ddbbb901bad1d46087f5f",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "851c6db10c51d1588564745df23821584c2792772689bcd276cb9f67f2f3372e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f3857e8bd26bff60abf6779f7bfdfc2d1a45ef3680fcad1f5a5691b9893ed51a",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "e97362893a3df651e559cb6a7449c782e9db1c0224c55d60101d131b42e53f18",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "bd0b7652aa1ea3afd6081b4af704e41cc73a8586731ddbbb901bad1d46087f5f",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "851c6db10c51d1588564745df23821584c2792772689bcd276cb9f67f2f3372e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "chr_10fffd": {
+   "source_sha256": "764af6d4ef189e73bc46daa92f7ee0840095a0a1e31cae2ba4ff290e80c7da92",
+   "source_text": "@startuml\nclass \"Vault %chr(1114109) end\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "2b77ed6ee60147d8b7d8624d31dff85bc6ba7daa088bace8ab3a602d66596fff",
+    "stderr_head": "",
+    "textLength": [
+     "83.0156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "4ab1c859f45b8a274aa59263901196b46ad94e3f97c8d718b13a47eca9ea313d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "ed7372cbe4ebb9b2253eec975181dd2ae964b865aec0da3b472b88f47bc3efba",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "e8b7720f4c2d62263d2d5a63f2e10d954c58496b6948377b0feaf18ca3691cd9",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "4ab1c859f45b8a274aa59263901196b46ad94e3f97c8d718b13a47eca9ea313d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "ed7372cbe4ebb9b2253eec975181dd2ae964b865aec0da3b472b88f47bc3efba",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "e8b7720f4c2d62263d2d5a63f2e10d954c58496b6948377b0feaf18ca3691cd9",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "797fb4f2941b366936ae7b53d875403e4933132449b44c8f7d53422b620b674d",
+    "stderr_head": "",
+    "textLength": [
+     "79.5156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "4ab1c859f45b8a274aa59263901196b46ad94e3f97c8d718b13a47eca9ea313d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "ed7372cbe4ebb9b2253eec975181dd2ae964b865aec0da3b472b88f47bc3efba",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "e8b7720f4c2d62263d2d5a63f2e10d954c58496b6948377b0feaf18ca3691cd9",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "creole_bold_pua": {
+   "source_sha256": "7a049c40855119836d6de1d5cd6b3c333e4a7fd276d01d65e001e022eaab214c",
+   "source_text": "@startuml\nclass \"**􏿽** __􏠀__\" as C\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "71c39ec9078db3345dd9b8177500f0e5a2154bb80411db45362e0e58fef4504f",
+    "stderr_head": "",
+    "textLength": [
+     "14",
+     "42"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "dfab028a94c7a59f398bc4f6a8f2b27cc99e4cb21520b1358b15c030a985fd48",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "696036de2a66a7bf318f7af8784f63572fecc07734989f7acc75021edffe6094",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "09bd0b68fe26fe4da8cf0f520d96805422fd6b4cc04dfc27f09152c2f94f34e6",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "dfab028a94c7a59f398bc4f6a8f2b27cc99e4cb21520b1358b15c030a985fd48",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "696036de2a66a7bf318f7af8784f63572fecc07734989f7acc75021edffe6094",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "09bd0b68fe26fe4da8cf0f520d96805422fd6b4cc04dfc27f09152c2f94f34e6",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c25523cfe348042294d9b2d3887a1b73d943b973fb73db8c32f09a204b29cacf",
+    "stderr_head": "",
+    "textLength": [
+     "10.5",
+     "38.5"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "dfab028a94c7a59f398bc4f6a8f2b27cc99e4cb21520b1358b15c030a985fd48",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "696036de2a66a7bf318f7af8784f63572fecc07734989f7acc75021edffe6094",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "09bd0b68fe26fe4da8cf0f520d96805422fd6b4cc04dfc27f09152c2f94f34e6",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "define_pua": {
+   "source_sha256": "058abc6e3b18e3dba439bb98045aaf38d7fd80375722bd7bcd4d8111a034b739",
+   "source_text": "@startuml\n!define V 􏿽\nclass \"V V\" as D\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "b7f7641c36e5c160516f4b9dc61daa826b2e71bb49845edeabd409b91891b7d4",
+    "stderr_head": "",
+    "textLength": [
+     "32.4297"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "7d46b05338493eb80363be2e38de58f7fc816175937ac2b58920d11bcb6d0f8e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "47cf711de41d76e9792da5350dfea2253de7390401ec481f3b67f1d4ca9e975d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "508832aaec8aefb8ba8fe3a123f1aa185533069965a3b66ad8ebcf6b4cf50dab",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "7d46b05338493eb80363be2e38de58f7fc816175937ac2b58920d11bcb6d0f8e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "47cf711de41d76e9792da5350dfea2253de7390401ec481f3b67f1d4ca9e975d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "508832aaec8aefb8ba8fe3a123f1aa185533069965a3b66ad8ebcf6b4cf50dab",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "475497ef5b61e43294649feaa503a110e78c1d7e99c49327ea0a8a3aa34eaa0c",
+    "stderr_head": "",
+    "textLength": [
+     "25.4297"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "7d46b05338493eb80363be2e38de58f7fc816175937ac2b58920d11bcb6d0f8e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "47cf711de41d76e9792da5350dfea2253de7390401ec481f3b67f1d4ca9e975d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "508832aaec8aefb8ba8fe3a123f1aa185533069965a3b66ad8ebcf6b4cf50dab",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "dirpath_file": {
+   "source_sha256": "3bd3ab4554bb42f6eb726cb59f12ad3b407f7fc47743fec489c86485d467d8d6",
+   "source_text": "@startuml\nclass \"%dirpath()\" as D\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "7edd58b8740aaa6063326e46897971a414d6f213ed66c69d32c6c0b15668ea42",
+    "stderr_head": "",
+    "textLength": [
+     "4.4297"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "9e43eb2ec2dc47639322a827845b014cce40b0401a7deb1e5e6b8393f74f1e62",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "060f46cff65c6250a8c78fc374844bf396e117fa0611476f8e2fcd6092531c1a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "b366701b34edf039eff94510a628305240145ee839097ebb7ceed83f64b97309",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "e8581b0ae34c2ebc0cfc9f4cc81705453979bdfba40008a04ca6d3de04f87e38",
+    "stderr_head": "",
+    "textLength": [
+     "4.4297"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "9e43eb2ec2dc47639322a827845b014cce40b0401a7deb1e5e6b8393f74f1e62",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "060f46cff65c6250a8c78fc374844bf396e117fa0611476f8e2fcd6092531c1a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "b366701b34edf039eff94510a628305240145ee839097ebb7ceed83f64b97309",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "e8581b0ae34c2ebc0cfc9f4cc81705453979bdfba40008a04ca6d3de04f87e38",
+    "stderr_head": "",
+    "textLength": [
+     "4.4297"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "9e43eb2ec2dc47639322a827845b014cce40b0401a7deb1e5e6b8393f74f1e62",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "060f46cff65c6250a8c78fc374844bf396e117fa0611476f8e2fcd6092531c1a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "b366701b34edf039eff94510a628305240145ee839097ebb7ceed83f64b97309",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "ent_dec_10fffd": {
+   "source_sha256": "12f6faf70f435f7655e410b5e0022c357633b8f6f293e64b019545e9fe388ab0",
+   "source_text": "@startuml\nclass \"Vault &#1114109; end\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "1af25461669fb8d1a7d99a18e46ebfc60d49a45381045f5723d90d00290f5fac",
+    "stderr_head": "",
+    "textLength": [
+     "154.0273"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "4513c53327c995253e174f70ff9b039140638805776011f58c8bbe728b598004",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "1422f89c30e264dd0aa955730f8add8bec1e033f0494a434814ca4e5065d3060",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "dfe2ae4f28513e4fd029c9b0476ff4667cb0444f9efca19fa2fd2dbc10e548f3",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f3775a117554106e01310f165d96b8601493dca1ac423a6f9bff335279d263f8",
+    "stderr_head": "",
+    "textLength": [
+     "154.0273"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "4513c53327c995253e174f70ff9b039140638805776011f58c8bbe728b598004",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "1422f89c30e264dd0aa955730f8add8bec1e033f0494a434814ca4e5065d3060",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "dfe2ae4f28513e4fd029c9b0476ff4667cb0444f9efca19fa2fd2dbc10e548f3",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f3775a117554106e01310f165d96b8601493dca1ac423a6f9bff335279d263f8",
+    "stderr_head": "",
+    "textLength": [
+     "154.0273"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "4513c53327c995253e174f70ff9b039140638805776011f58c8bbe728b598004",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "1422f89c30e264dd0aa955730f8add8bec1e033f0494a434814ca4e5065d3060",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "dfe2ae4f28513e4fd029c9b0476ff4667cb0444f9efca19fa2fd2dbc10e548f3",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "ent_dec_1f680": {
+   "source_sha256": "4ce69e0672140e84f9a3477d37baab8eb5231427373c85c87b7097ca320d7ac2",
+   "source_text": "@startuml\nclass \"Vault &#128640; end\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "64e7ff0d36cf1e8dee195fd0199b983a98fed4dee205808931e1811008ba03e9",
+    "stderr_head": "",
+    "textLength": [
+     "145.1748"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "75c3785d3e0bf85cf7c381f0179f7cae0c035ad92b631e5aa90312c71d429cf4",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "d5f28e45ba44395c2031637777131ad64d93cc17950675af7e558462261126d0",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "ac28ef4682827acae4f689d76ecb00c576a6645b11cb5e4dff040df4b542688f",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "84b9469d453d994b290bd2d2a5eebb326bb4af9f9695e7ed0b26eae51c154507",
+    "stderr_head": "",
+    "textLength": [
+     "145.1748"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "75c3785d3e0bf85cf7c381f0179f7cae0c035ad92b631e5aa90312c71d429cf4",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "d5f28e45ba44395c2031637777131ad64d93cc17950675af7e558462261126d0",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "ac28ef4682827acae4f689d76ecb00c576a6645b11cb5e4dff040df4b542688f",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "84b9469d453d994b290bd2d2a5eebb326bb4af9f9695e7ed0b26eae51c154507",
+    "stderr_head": "",
+    "textLength": [
+     "145.1748"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "75c3785d3e0bf85cf7c381f0179f7cae0c035ad92b631e5aa90312c71d429cf4",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "d5f28e45ba44395c2031637777131ad64d93cc17950675af7e558462261126d0",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "ac28ef4682827acae4f689d76ecb00c576a6645b11cb5e4dff040df4b542688f",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "ent_hex_10fffd": {
+   "source_sha256": "f75e6607c28f36979af0a94bf19a70c979660953b522b01876c6c496b74ef9af",
+   "source_text": "@startuml\nclass \"Vault &#x10FFFD; end\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "52be49bd8dd5887ca036134620d9d0305132d9d14124995a4524a7f9b52b6d94",
+    "stderr_head": "",
+    "textLength": [
+     "151.3545"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "b87634c4e4e97eb99613c25416067dbdd055f64d25ab5f08f5d60790ddf07948",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "8487e2944aa81b1ebc3c6959c48f2997cdf3c52c0f0b0b369a323e123cc80f15",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "214c338a64ac2c449574b58adc4d84c7beb403793e914a57de6717d860cefafa",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "313bf1cbcb9d25ce2661afa5a45594e2b8f73e302ea65e5588b2ed28e1438149",
+    "stderr_head": "",
+    "textLength": [
+     "151.3545"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "b87634c4e4e97eb99613c25416067dbdd055f64d25ab5f08f5d60790ddf07948",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "8487e2944aa81b1ebc3c6959c48f2997cdf3c52c0f0b0b369a323e123cc80f15",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "214c338a64ac2c449574b58adc4d84c7beb403793e914a57de6717d860cefafa",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "313bf1cbcb9d25ce2661afa5a45594e2b8f73e302ea65e5588b2ed28e1438149",
+    "stderr_head": "",
+    "textLength": [
+     "151.3545"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "b87634c4e4e97eb99613c25416067dbdd055f64d25ab5f08f5d60790ddf07948",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "8487e2944aa81b1ebc3c6959c48f2997cdf3c52c0f0b0b369a323e123cc80f15",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "214c338a64ac2c449574b58adc4d84c7beb403793e914a57de6717d860cefafa",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "escape_alone": {
+   "source_sha256": "1723e8f6fe84b3a43ac26541725149e434cca8c3320e75222e43ccd4590ddb73",
+   "source_text": "@startuml\nclass \"x 􏟿\" as E\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "262909a10fb1d79fe04e81064ca48e0f108b793e6f9f68e07cae84a5f3658b2d",
+    "stderr_head": "",
+    "textLength": [
+     "27.0156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "c7ea5b7de62626e64ae2bd4fc82ff5a07c6df2669ed22bd60ae491ce500b487a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "b7e08d75c5f56bc6b61d6d6251f0856a3742062c94a8319d56d6f30d8c5f4c06",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "9ba828aa8397fcd4ca904627f347b486e19be71cb9855713f62ab56538ec9ef1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "d8c520784544ea079c1f5e6d61f0d3942022f2119ad90da0d8e8a6d3400cf302",
+    "stderr_head": "",
+    "textLength": [
+     "27.0156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "c7ea5b7de62626e64ae2bd4fc82ff5a07c6df2669ed22bd60ae491ce500b487a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "b7e08d75c5f56bc6b61d6d6251f0856a3742062c94a8319d56d6f30d8c5f4c06",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "9ba828aa8397fcd4ca904627f347b486e19be71cb9855713f62ab56538ec9ef1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f0edc476a9fefffa2169f6d10b74f79d1751f4043cb8bcf9f0371b5c7004e2f5",
+    "stderr_head": "",
+    "textLength": [
+     "23.5156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "c7ea5b7de62626e64ae2bd4fc82ff5a07c6df2669ed22bd60ae491ce500b487a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "b7e08d75c5f56bc6b61d6d6251f0856a3742062c94a8319d56d6f30d8c5f4c06",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "9ba828aa8397fcd4ca904627f347b486e19be71cb9855713f62ab56538ec9ef1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "escape_then_ascii_from_chr": {
+   "source_sha256": "be7a91d998d16040f811736290758d25b0a00e8371e01d641fd3ad83f614a020",
+   "source_text": "@startuml\nclass \"x %chr(1112063)a\" as E\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "465c5ac5a12338532229491939bddc7d1819139bbd1c08a1968bfa38bcae224e",
+    "stderr_head": "",
+    "textLength": [
+     "34.7471"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "baad3275b36c99b7855261162d6cac0bd2a556b6e185e4a3eb851c2a88ac77e1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "bb8c4882d12337452695799aa5735c5b70bfd4f6035cb11e533e3ce55b138513",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "b4916916c654c54bab846ae084ae356e93ea5d528cfca145696ebb8dfc975384",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "022335cf27e25bb0c3a42d0ca7cf49a355558623007a92aa8db5f5ce6626909b",
+    "stderr_head": "",
+    "textLength": [
+     "34.7471"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "baad3275b36c99b7855261162d6cac0bd2a556b6e185e4a3eb851c2a88ac77e1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "bb8c4882d12337452695799aa5735c5b70bfd4f6035cb11e533e3ce55b138513",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "b4916916c654c54bab846ae084ae356e93ea5d528cfca145696ebb8dfc975384",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "4c26201f52b1541a60b48224dfa237c52336819e4a70c0fd4efc42b446c84933",
+    "stderr_head": "",
+    "textLength": [
+     "31.2471"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "baad3275b36c99b7855261162d6cac0bd2a556b6e185e4a3eb851c2a88ac77e1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "bb8c4882d12337452695799aa5735c5b70bfd4f6035cb11e533e3ce55b138513",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "b4916916c654c54bab846ae084ae356e93ea5d528cfca145696ebb8dfc975384",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "id_code_pua": {
+   "source_sha256": "26ed80bf4900b8f52b61dc54811dd50449cff40624dd15729011065d1f0f96f7",
+   "source_text": "@startuml\nclass 􏿽\nclass B\n􏿽 --> B\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "b0a59e5279e528c9810b8a96a588970bc4e8688d8fa2f03ac9badbc3161fe42f",
+    "stderr_head": "",
+    "textLength": [
+     "8.0527"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "612435fc9d151eff3b583ce957f01d2015d8254e21c83b7bed5d0cdf275be262",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "bdf74258a318de4ea6d1b37d927de483e04fb5001ace09af46c1bd9c855bdc02",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "b155d7d57e4cd6369ec2ff3fadc2f7b9e9566288f93c457802a6110ffaaacbea",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "b0a59e5279e528c9810b8a96a588970bc4e8688d8fa2f03ac9badbc3161fe42f",
+    "stderr_head": "",
+    "textLength": [
+     "8.0527"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "612435fc9d151eff3b583ce957f01d2015d8254e21c83b7bed5d0cdf275be262",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "bdf74258a318de4ea6d1b37d927de483e04fb5001ace09af46c1bd9c855bdc02",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "b155d7d57e4cd6369ec2ff3fadc2f7b9e9566288f93c457802a6110ffaaacbea",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "b0a59e5279e528c9810b8a96a588970bc4e8688d8fa2f03ac9badbc3161fe42f",
+    "stderr_head": "",
+    "textLength": [
+     "8.0527"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "612435fc9d151eff3b583ce957f01d2015d8254e21c83b7bed5d0cdf275be262",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "bdf74258a318de4ea6d1b37d927de483e04fb5001ace09af46c1bd9c855bdc02",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "b155d7d57e4cd6369ec2ff3fadc2f7b9e9566288f93c457802a6110ffaaacbea",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "json_lit": {
+   "source_sha256": "a0ca4609ebf291fb185cbd7c9525ae2e01a657769ada64dec699de142185414e",
+   "source_text": "@startjson\n{\"k\": \"Vault 􏿽 end\"}\n@endjson\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "dd9159730e11732839b3fec25f8992f233c7bbe969b6c59523c1bd1f10f50fd7",
+    "stderr_head": "",
+    "textLength": [
+     "8.8594",
+     "83.0156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "589c083095082d59f818c99ec332e8f539808d5a19215ba4286c6fbf663b9636",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "bca0a860c75fccfcd3304fa5f750d5ddd627974c77e3f5615f1847902028dc29",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "589c083095082d59f818c99ec332e8f539808d5a19215ba4286c6fbf663b9636",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "bca0a860c75fccfcd3304fa5f750d5ddd627974c77e3f5615f1847902028dc29",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "00c736af597581e685f93b714bf88ddee3d0fe8297cf1ee2aed428bc6c57435a",
+    "stderr_head": "",
+    "textLength": [
+     "8.8594",
+     "79.5156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "589c083095082d59f818c99ec332e8f539808d5a19215ba4286c6fbf663b9636",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "bca0a860c75fccfcd3304fa5f750d5ddd627974c77e3f5615f1847902028dc29",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "json_u_1f680": {
+   "source_sha256": "9dcd866e316995222a0ac3f8427fd4660a6f3d117bb615c518abc8767b8717e6",
+   "source_text": "@startjson\n{\"k\": \"Vault \\uD83D\\uDE80 end\"}\n@endjson\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "0f7dc50e980262c46574e9ba67eb9bae36d11b216ad1fe1c618f420d82e87227",
+    "stderr_head": "",
+    "textLength": [
+     "8.8594",
+     "88.0156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "de86a75c25af6992afb79504b36fbe4dbfd7cd8d80bdebcae621c6ccdf4664d2",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "0882848074cc9fbcdea4be2a46be9eb73f8ae0a2d0a7fb932f5646a342dc7982",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "0f7dc50e980262c46574e9ba67eb9bae36d11b216ad1fe1c618f420d82e87227",
+    "stderr_head": "",
+    "textLength": [
+     "8.8594",
+     "88.0156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "de86a75c25af6992afb79504b36fbe4dbfd7cd8d80bdebcae621c6ccdf4664d2",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "0882848074cc9fbcdea4be2a46be9eb73f8ae0a2d0a7fb932f5646a342dc7982",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "0f7dc50e980262c46574e9ba67eb9bae36d11b216ad1fe1c618f420d82e87227",
+    "stderr_head": "",
+    "textLength": [
+     "8.8594",
+     "88.0156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "de86a75c25af6992afb79504b36fbe4dbfd7cd8d80bdebcae621c6ccdf4664d2",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "0882848074cc9fbcdea4be2a46be9eb73f8ae0a2d0a7fb932f5646a342dc7982",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "json_u_escape": {
+   "source_sha256": "705b1f654dd41b933476d13472af156a618a00409b36fad0300ed31279957d9c",
+   "source_text": "@startjson\n{\"k\": \"Vault \\uDBFF\\uDFFD end\"}\n@endjson\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "dd9159730e11732839b3fec25f8992f233c7bbe969b6c59523c1bd1f10f50fd7",
+    "stderr_head": "",
+    "textLength": [
+     "8.8594",
+     "83.0156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "f1e247be49b3348ba94daac31e9588bb177eb65833283933dbd5bc55c493d5b6",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "4f5bde6ca643a0995ec9aa2f393dc4c5a8997391a0466bb36b8fb3b7ed5dcb9d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "f1e247be49b3348ba94daac31e9588bb177eb65833283933dbd5bc55c493d5b6",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "4f5bde6ca643a0995ec9aa2f393dc4c5a8997391a0466bb36b8fb3b7ed5dcb9d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "4169122755645619b06acf7ed1d1fe3e8d76ec4b79bcf85aad129e76e7d69adb",
+    "stderr_head": "",
+    "u_fffd_present": true,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "40ec718f5bbf2295fa9d1c168046905bf08977f9c80a1e793fc3e67e5dd07604",
+    "stderr_head": "",
+    "u_fffd_present": true,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "json_var_pua": {
+   "source_sha256": "8e8ec5484724493bd0f147cf1d31d18dd4130952f04071ffd7582920c8cc8438",
+   "source_text": "@startuml\n!$j = { \"a\": \"􏿽\" }\nclass \"$j.a\" as J\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "7fccae2fd15397875abfa1d7a37f76ded7ae4aff424e29b17bbf7b025b517c09",
+    "stderr_head": "",
+    "textLength": [
+     "4.5527"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "30a77cbc8bcd4ae3ec7bf8e657f801b102c4dc2c20d8570de9fe8cc5f37a52c2",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "520576b3673ad515e34d58e5f8033a91ee948f93a40e2ac07da1a24c5c39a4ea",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "100107939863f982234b9a668b10f3cdd6b563aef0428b5e75b6286e9ebe5bd3",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "488625d4a74e43005938bd4ed173b646bc550fdd4307919fed4732da5ae92bfa",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "28c9b0f2489e74e328ecb5cac68b14afefca4eca42cde4e4c116bc8828b41552",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "4f5af05611c761c6e7a58eb4af1e7c9ed47a83b306f31c2932655c51d51ce1ff",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "14bfb8248d64c78be7bcb8f0d4f30edab738520dcd56e58a54f42e20d51d5651",
+    "stderr_head": "",
+    "textLength": [
+     "10.5"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "488625d4a74e43005938bd4ed173b646bc550fdd4307919fed4732da5ae92bfa",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "28c9b0f2489e74e328ecb5cac68b14afefca4eca42cde4e4c116bc8828b41552",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "4f5af05611c761c6e7a58eb4af1e7c9ed47a83b306f31c2932655c51d51ce1ff",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "mindmap_pua": {
+   "source_sha256": "8a245184e653a296bd4b755e51716e93cc4596aa7b251f211f70dccd756b823e",
+   "source_text": "@startmindmap\n* 􏿽\n** 􏠀 x\n@endmindmap\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "5076a874baad86e5f1e9786e7b0d53c4b6d0d93f9ea9e0aedb93b219e312eec3",
+    "stderr_head": "",
+    "textLength": [
+     "14",
+     "27.0156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "abdcd60df2854a14606b3dda3365f6c63d83cec628661f79ddabded0dac912b1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "48ac8904b251604b91d06b106e5c7984bc2a8efbfd7b08f31581bfc49f1404c0",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "abdcd60df2854a14606b3dda3365f6c63d83cec628661f79ddabded0dac912b1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "48ac8904b251604b91d06b106e5c7984bc2a8efbfd7b08f31581bfc49f1404c0",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "8831c5a814923af118835eb1ead6bfaab2495d060259d30e598ea034e73e25fe",
+    "stderr_head": "",
+    "textLength": [
+     "10.5",
+     "23.5156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "abdcd60df2854a14606b3dda3365f6c63d83cec628661f79ddabded0dac912b1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "48ac8904b251604b91d06b106e5c7984bc2a8efbfd7b08f31581bfc49f1404c0",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "noncharacter_fffe": {
+   "source_sha256": "f9c75f503a1c48566369f540e55948b054a2cc8bc1e20e23db5fc71a37161ebe",
+   "source_text": "@startuml\nclass \"Vault 􏿾\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ca2bedaf53dff7f9bb2ce88e6f86857cb36c9ca6ecc138b81fd337999fb15a1a",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "ad52e0c337515d015a99e98f68f5d08a9c0962005209affd1125058a89e30778",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "81c44953dbfee5a9512405f4b6c4c87334d8d4ceaaa16d0697251356ed4d080a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "396a96139ed7b5fd25f1b2aee0c261f9692f51850ac7dba3859f7798fe95cae1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffe) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "ad52e0c337515d015a99e98f68f5d08a9c0962005209affd1125058a89e30778",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "81c44953dbfee5a9512405f4b6c4c87334d8d4ceaaa16d0697251356ed4d080a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "396a96139ed7b5fd25f1b2aee0c261f9692f51850ac7dba3859f7798fe95cae1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "beda3a6d7ed86b070e69109f26a594c5fb6b650169bfb640321f3ccb06de02ef",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "ad52e0c337515d015a99e98f68f5d08a9c0962005209affd1125058a89e30778",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "81c44953dbfee5a9512405f4b6c4c87334d8d4ceaaa16d0697251356ed4d080a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "396a96139ed7b5fd25f1b2aee0c261f9692f51850ac7dba3859f7798fe95cae1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "note_multiline_pua": {
+   "source_sha256": "09f1b4061ca13e2378fd157ffff8ecd82c4b143f711e657bb390d542af364a2b",
+   "source_text": "@startuml\nclass A\nnote right of A\n􏿽 line\n􏠀\nend note\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "0daa1ed1995d76c5b597d0ad8ab0180ac384f150033fb6541e8d5bcc4ba967fc",
+    "stderr_head": "",
+    "textLength": [
+     "9.6592",
+     "39.9395",
+     "13"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "3c4297714d24a2521050365ecabb9bf1456b3ee238cb15f5de52ee41c4079c79",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "3c713a8c771527fec1f14d2853632718d787f3187ddebfa6afac6f7f3669c1ed",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "1d10844e7327e07a6567674e8d4c9bc04ff8376f34b219219f087f4f495cda7e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "3c4297714d24a2521050365ecabb9bf1456b3ee238cb15f5de52ee41c4079c79",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "3c713a8c771527fec1f14d2853632718d787f3187ddebfa6afac6f7f3669c1ed",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "1d10844e7327e07a6567674e8d4c9bc04ff8376f34b219219f087f4f495cda7e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "29d6ab9c3a591b642ee2775da374569f96dcb4ba8bdde5a4e386a8e1a4e7713c",
+    "stderr_head": "",
+    "textLength": [
+     "9.6592",
+     "36.6895",
+     "9.75"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "3c4297714d24a2521050365ecabb9bf1456b3ee238cb15f5de52ee41c4079c79",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "3c713a8c771527fec1f14d2853632718d787f3187ddebfa6afac6f7f3669c1ed",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "1d10844e7327e07a6567674e8d4c9bc04ff8376f34b219219f087f4f495cda7e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "plane14_tag": {
+   "source_sha256": "9a4407c70ed9a43d0a621a19d2e7bb1f2e187dea897a657f495d991ce9781922",
+   "source_text": "@startuml\nclass \"Vault 󠁁\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c2250522d0b8f563ea82e02e9448b92ae47bba6931e1ed90619509d4f20201cd",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "02bc634be6cbdc91a145d6ee48c77b07f90d629e171252abb7c62722cb7b9deb",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "e183652f6becf7080f52f7a450c6af3fe31dd9eabfa5d6473a892cb7bb01f44a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "84e888384987e72c8ab723a887d47d0103f2f0392a28f55f4b3068154e84c5f8",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "d65b17530c91e06c62e49822868a458768ddc8b7859341e3a1fb5d4912a748de",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "02bc634be6cbdc91a145d6ee48c77b07f90d629e171252abb7c62722cb7b9deb",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "e183652f6becf7080f52f7a450c6af3fe31dd9eabfa5d6473a892cb7bb01f44a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "84e888384987e72c8ab723a887d47d0103f2f0392a28f55f4b3068154e84c5f8",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "d65b17530c91e06c62e49822868a458768ddc8b7859341e3a1fb5d4912a748de",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "02bc634be6cbdc91a145d6ee48c77b07f90d629e171252abb7c62722cb7b9deb",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "e183652f6becf7080f52f7a450c6af3fe31dd9eabfa5d6473a892cb7bb01f44a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "84e888384987e72c8ab723a887d47d0103f2f0392a28f55f4b3068154e84c5f8",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "procedure_pua": {
+   "source_sha256": "0145f018551dda9a60fd03d3551f4ffb91f5e19bdc6a8048bdc52550efed3a0c",
+   "source_text": "@startuml\n!procedure $p($x)\nclass \"$x\" as P\n!endprocedure\n$p(\"􏿽\")\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "3ccf4099ab88f30a28771aedb7424ee1097025fac91ec14ff048b2e7cdf67651",
+    "stderr_head": "",
+    "textLength": [
+     "14"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "5cdeb028e79b3429be615cb68eeb269172c3f183b48580b8f430e33b9602375c",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "7ca4f53dc1172bcde8c90fac1ea4fdf784f95b96e631d876722c021434c5bcae",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "4f5af05611c761c6e7a58eb4af1e7c9ed47a83b306f31c2932655c51d51ce1ff",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "5cdeb028e79b3429be615cb68eeb269172c3f183b48580b8f430e33b9602375c",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "7ca4f53dc1172bcde8c90fac1ea4fdf784f95b96e631d876722c021434c5bcae",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "4f5af05611c761c6e7a58eb4af1e7c9ed47a83b306f31c2932655c51d51ce1ff",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "24c4eaef009b29b7be37c2efc5743c9562e9b43f5378432fc0ca9a4739710fe8",
+    "stderr_head": "",
+    "textLength": [
+     "10.5"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "5cdeb028e79b3429be615cb68eeb269172c3f183b48580b8f430e33b9602375c",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "7ca4f53dc1172bcde8c90fac1ea4fdf784f95b96e631d876722c021434c5bcae",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "4f5af05611c761c6e7a58eb4af1e7c9ed47a83b306f31c2932655c51d51ce1ff",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "salt_pua": {
+   "source_sha256": "fd3fbd353f84bb621dd1773e9d4c307bdc4008c0438b0c5d76bed00963e6b2bc",
+   "source_text": "@startsalt\n{\n[􏿽]\n}\n@endsalt\n",
+   "base_3992971a7-tsvg": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48526920) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 4 is not a char b",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48526922) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 4 is not a char b",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48526924) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 4 is not a char b",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48526927) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 4 is not a char b",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48526929) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 4 is not a char b",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48526931) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 4 is not a char b",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48526933) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 4 is not a char b",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48526935) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 4 is not a char b",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48526937) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 4 is not a char b",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48526939) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 4 is not a char b",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48526941) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 4 is not a char b",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48526943) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 4 is not a char b",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "sprite_pua": {
+   "source_sha256": "a44bef067c8945894ba3033fd51cb52dc7ed6b4d5a55afcce1bfe3818daeb68f",
+   "source_text": "@startuml\nsprite $s [4x4/16] {\n0000\n0F00\n0F00\n0000\n}\nclass \"<$s> 􏿽\" as S\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "aace4c5e2afceadd7428ae431eb86fd2dac953efe6f02c68b063af9db8444637",
+    "stderr_head": "",
+    "textLength": [
+     "56.6768"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "746ca74b7dbc0d578728c9a099377fd2bb42eed1da3f18c1e8485092383e712e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "ba1cbd10e81980f68115ab0f1d61b5d0455fecf4256754b917fbf78633d64611",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "16a18d3e106d990249cca09fcf15b1629d8036a7a3ac9c4b23ec548584a6f48a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "32bb1466a1f7d61ba88e67e93abf9ff6642f9a4c469ac79b5f664c80b805f357",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "d132363011101f4af3bd1fb74272b4afe0cd7f5e5b3ed89fba4a49c6f8eb5ea2",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "16a18d3e106d990249cca09fcf15b1629d8036a7a3ac9c4b23ec548584a6f48a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "5fd6fa17fe546b36d0c8bd8ba92095ff3c100d5217f4179f0256e9a61978d37d",
+    "stderr_head": "",
+    "textLength": [
+     "10.5"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "32bb1466a1f7d61ba88e67e93abf9ff6642f9a4c469ac79b5f664c80b805f357",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "d132363011101f4af3bd1fb74272b4afe0cd7f5e5b3ed89fba4a49c6f8eb5ea2",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "16a18d3e106d990249cca09fcf15b1629d8036a7a3ac9c4b23ec548584a6f48a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "stereotype_pua": {
+   "source_sha256": "e73cc2b813b6187e3237d30fb9cd50a7d2df8213b83ec0691381968c297bd69f",
+   "source_text": "@startuml\nclass A <<􏿽>>\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6be68ad4b1fff7e8f3058ada40b1b91772c93a086999ac76622573f434a39d2e",
+    "stderr_head": "",
+    "textLength": [
+     "24.5742",
+     "9.6592"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "9f91e4aafbb3f3d1a25421bca60af92d6de36b4c09d98e050226b1fed9b103bb",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "1fd749b5d817f49990203675e31ed3c27768933bcc2b7a02c8422b3cb3195831",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "1d10844e7327e07a6567674e8d4c9bc04ff8376f34b219219f087f4f495cda7e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "9f91e4aafbb3f3d1a25421bca60af92d6de36b4c09d98e050226b1fed9b103bb",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "1fd749b5d817f49990203675e31ed3c27768933bcc2b7a02c8422b3cb3195831",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "1d10844e7327e07a6567674e8d4c9bc04ff8376f34b219219f087f4f495cda7e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "819e7064430cf2fc7403274672aa38ca6226e725f2356640f0ab0aeca8c89c3f",
+    "stderr_head": "",
+    "textLength": [
+     "21.5742",
+     "9.6592"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "9f91e4aafbb3f3d1a25421bca60af92d6de36b4c09d98e050226b1fed9b103bb",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "1fd749b5d817f49990203675e31ed3c27768933bcc2b7a02c8422b3cb3195831",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "1d10844e7327e07a6567674e8d4c9bc04ff8376f34b219219f087f4f495cda7e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "strlen_mix": {
+   "source_sha256": "445a91593c75d19a4bc741d8aa4b5338e852149bc3fee4fde4f36fea8f000bfe",
+   "source_text": "@startuml\nclass \"%strlen(\"􏟿􏿿🚀\")\" as L\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48527003) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2589:80:\nstart byte index 21 is not a char boundary; it is inside '\\u{10ffff}'",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48527006) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2589:80:\nstart byte index 21 is not a char boundary; it is inside '\\u{10ffff}'",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48527008) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2589:80:\nstart byte index 21 is not a char boundary; it is inside '\\u{10ffff}'",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48527010) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2589:80:\nstart byte index 21 is not a char boundary; it is inside '\\u{10ffff}'",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "db2a87d6ac3bbda091cb043dfb08ad8e30272446b991cad91908e401bc8299dd",
+    "stderr_head": "",
+    "textLength": [
+     "8.8525"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "d15e232b5a612e9565920ccd9a35e55158a73c264ad5f25cd699ae58ad3b4a10",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "b42ba563c14880c3021a10a2b8bfed9dca5c1d78b18b34d93bf27d679241c5b4",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "87714fc6f0a53a569e46ded95a13a221292060c958e366f3a55943cab4d5af10",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "5ad2ac44e12a62f33abc39ff374f37f1f712626f811010b9a318d4092fc92841",
+    "stderr_head": "",
+    "textLength": [
+     "8.8525"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "08ae45052d82fa2b91fc1177723f921318bba08c0fb666cb4e015bbecb574480",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "1b97f26fd6c38f4464e43e9c653f2782d4c4fd0f344d5412822e9ad7863fbbbe",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "16c61edb8ed0c9139de5e1186182b59d47c22290fc023784cfed5784ed6b50d2",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "tilde_10fffd": {
+   "source_sha256": "933e2260a65a57b26d6c0b31c00bdc6e3ba06db296aadd2eef52692ad4905f8e",
+   "source_text": "@startuml\nclass \"Vault ~􏿽 end\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "2c9a25dd864aa671452d21fa8c5335b521969ff1c2678812970925bf871484e6",
+    "stderr_head": "",
+    "textLength": [
+     "91.8682"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "d6fd5c9c222492e0dfb46ea95bec1b9b28ff4835e58e01fdfc879c8956f5e2be",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "c28db6e6e3e2b9e473ab02782afb3a3e14ccc18b60be83b0bbd2b6247ed7140a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "bbfd63e069da700979c5310cf81dd6e6940ecfa9b1b141b9b5b20322f9011d63",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "d6fd5c9c222492e0dfb46ea95bec1b9b28ff4835e58e01fdfc879c8956f5e2be",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "c28db6e6e3e2b9e473ab02782afb3a3e14ccc18b60be83b0bbd2b6247ed7140a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "bbfd63e069da700979c5310cf81dd6e6940ecfa9b1b141b9b5b20322f9011d63",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "8bb6719064f9bffc3b767a744f50ca6c37e5b6e9fc791d284c3a591449bc8a02",
+    "stderr_head": "",
+    "textLength": [
+     "88.3682"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "d6fd5c9c222492e0dfb46ea95bec1b9b28ff4835e58e01fdfc879c8956f5e2be",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "c28db6e6e3e2b9e473ab02782afb3a3e14ccc18b60be83b0bbd2b6247ed7140a",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "bbfd63e069da700979c5310cf81dd6e6940ecfa9b1b141b9b5b20322f9011d63",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "tilde_1f680": {
+   "source_sha256": "48aa528184f8dd86211e9920fcce248530b61c0065c9a7d815281661285539c0",
+   "source_text": "@startuml\nclass \"Vault ~🚀 end\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "1a85183c89b43d6421fcb1df246c53aad51d5425965d2fdc38bdd45b95543403",
+    "stderr_head": "",
+    "textLength": [
+     "96.8682"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "bfc3f2f0f1b11422de368de7e5e8d499aa24cc9795adefeef4d5e2b6523c20e4",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "492e10ca1982c906e094cfb0443fb5da2f14ca4b11568b12015da3731e3a2018",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "445a841bf1547537d8a38e95c4f088bc3da93131d3169d075e72d7e23952451d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "7f01ada5de954a964055c2b2f0d5df128b6744d137447e457c98489922d3e1f2",
+    "stderr_head": "",
+    "textLength": [
+     "96.8682"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "bfc3f2f0f1b11422de368de7e5e8d499aa24cc9795adefeef4d5e2b6523c20e4",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "492e10ca1982c906e094cfb0443fb5da2f14ca4b11568b12015da3731e3a2018",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "445a841bf1547537d8a38e95c4f088bc3da93131d3169d075e72d7e23952451d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "7f01ada5de954a964055c2b2f0d5df128b6744d137447e457c98489922d3e1f2",
+    "stderr_head": "",
+    "textLength": [
+     "96.8682"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "bfc3f2f0f1b11422de368de7e5e8d499aa24cc9795adefeef4d5e2b6523c20e4",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "492e10ca1982c906e094cfb0443fb5da2f14ca4b11568b12015da3731e3a2018",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "445a841bf1547537d8a38e95c4f088bc3da93131d3169d075e72d7e23952451d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "unassigned_3ffff": {
+   "source_sha256": "328ad22bd2861489a5d26a69f1d8ada54c83563e6c0182b736883c0d90b9d044",
+   "source_text": "@startuml\nclass \"Vault 𿿽\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "7590eba1ebde7be2eb9f3d677e27dbc7857f8d717ebfa19e4491392059b6b2de",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "a8e34e052db0652434cd840851cb9257d6646be5f0ccccf11ed9d85a26089971",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "b22a431562a87a5c1ed1bc8b27d8347e12dbcc7900fb889510ba795fec00e489",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "9333972779e79c02a1a4d9db630dc0b28f4b05a3ebee1d9591da1aeb8c48577f",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "1f7c3a45bcde4f81c89b37ceae7d7ed74bd572f5617cd432a47a0eefe1d44cdf",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "a8e34e052db0652434cd840851cb9257d6646be5f0ccccf11ed9d85a26089971",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "b22a431562a87a5c1ed1bc8b27d8347e12dbcc7900fb889510ba795fec00e489",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "9333972779e79c02a1a4d9db630dc0b28f4b05a3ebee1d9591da1aeb8c48577f",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "1f7c3a45bcde4f81c89b37ceae7d7ed74bd572f5617cd432a47a0eefe1d44cdf",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "a8e34e052db0652434cd840851cb9257d6646be5f0ccccf11ed9d85a26089971",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "b22a431562a87a5c1ed1bc8b27d8347e12dbcc7900fb889510ba795fec00e489",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "9333972779e79c02a1a4d9db630dc0b28f4b05a3ebee1d9591da1aeb8c48577f",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "unassigned_e0fff": {
+   "source_sha256": "24463c829beeb74d2ee7dc4d539ec1ad5b3d7982c4b3165eb8ebf458bf09ca19",
+   "source_text": "@startuml\nclass \"Vault 󠿿\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "49e3333fc87efb2eaf749b8ca8a1a0801c8e4ee3ce1b8692052024e243836b63",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "110b15cbce945d77628d47987aa0613e159cad3a41f3a163c219e4eff438d15b",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "a6f38655372988c1f384cf7782431bb277ef3fcef34f443cace926e36668f96d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "c8dd8fd7b1b7a41171b8e4ae6a22931d0446077e33c7ccca6e1020339e4bca89",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "e64f38fc0e0f4c99a9bd595174cfc6e8c7a733eb96eb2fa705feb4251b238169",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "110b15cbce945d77628d47987aa0613e159cad3a41f3a163c219e4eff438d15b",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "a6f38655372988c1f384cf7782431bb277ef3fcef34f443cace926e36668f96d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "c8dd8fd7b1b7a41171b8e4ae6a22931d0446077e33c7ccca6e1020339e4bca89",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "e64f38fc0e0f4c99a9bd595174cfc6e8c7a733eb96eb2fa705feb4251b238169",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "110b15cbce945d77628d47987aa0613e159cad3a41f3a163c219e4eff438d15b",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "a6f38655372988c1f384cf7782431bb277ef3fcef34f443cace926e36668f96d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "c8dd8fd7b1b7a41171b8e4ae6a22931d0446077e33c7ccca6e1020339e4bca89",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "uplus_10fffd": {
+   "source_sha256": "7a19bea369cad072a900314888d69c71f1cb55935e063caeff4e780d569bc5d6",
+   "source_text": "@startuml\nclass \"Vault <U+10FFFD> end\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ae13a07e7de1ab26ae7923c6769b4f4daf34fd6067744407b850d0ef828c5899",
+    "stderr_head": "",
+    "textLength": [
+     "162.8115"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "d89122fb5305584c5d5fc77ca3763aa100708eda2f2aa49d3d6053f260535326",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "e7390863c18767bbb5103cc5b49e2601bc7fa0a380dbaeeb29d77bbf6133d1a4",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "357933b3cc4c40ea624962c5cc7eb1c953cb677ebfaf42f03bf1d1880a399ee8",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "0708400e3abd0d11b256be13cda4358e078736e3bfe6fcc6c78caa0f2ba95841",
+    "stderr_head": "",
+    "textLength": [
+     "162.8115"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "d89122fb5305584c5d5fc77ca3763aa100708eda2f2aa49d3d6053f260535326",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "e7390863c18767bbb5103cc5b49e2601bc7fa0a380dbaeeb29d77bbf6133d1a4",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "357933b3cc4c40ea624962c5cc7eb1c953cb677ebfaf42f03bf1d1880a399ee8",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "0708400e3abd0d11b256be13cda4358e078736e3bfe6fcc6c78caa0f2ba95841",
+    "stderr_head": "",
+    "textLength": [
+     "162.8115"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "d89122fb5305584c5d5fc77ca3763aa100708eda2f2aa49d3d6053f260535326",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "e7390863c18767bbb5103cc5b49e2601bc7fa0a380dbaeeb29d77bbf6133d1a4",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "357933b3cc4c40ea624962c5cc7eb1c953cb677ebfaf42f03bf1d1880a399ee8",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "uplus_1f680": {
+   "source_sha256": "1ef151b9e0c120e12d3296ea633dd6c043e472523186d0899d8fd6c8e89dd011",
+   "source_text": "@startuml\nclass \"Vault <U+1F680> end\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "687accaacc0c7d560be57947cfdba9012fa3213d9a7f9ee417b7005b979b81c7",
+    "stderr_head": "",
+    "textLength": [
+     "155.0186"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "cea7573f565c83017b0e950c856ad9ef2170820727fb44ebff384fde7e863537",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "5344b5bed3d1b25906126a2ecc8fa5a2c1d4dcc9f0f33cad89f6317d4fb87ad8",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "204389051d78f0045fb1b60cbbe758cf88ad6947aae4494310e7c89deefa0ad7",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "e6bee1c93530ad84ca523bed3dbfc12e89439e1ed644609058206c0b1efeb7a9",
+    "stderr_head": "",
+    "textLength": [
+     "155.0186"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "cea7573f565c83017b0e950c856ad9ef2170820727fb44ebff384fde7e863537",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "5344b5bed3d1b25906126a2ecc8fa5a2c1d4dcc9f0f33cad89f6317d4fb87ad8",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "204389051d78f0045fb1b60cbbe758cf88ad6947aae4494310e7c89deefa0ad7",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "e6bee1c93530ad84ca523bed3dbfc12e89439e1ed644609058206c0b1efeb7a9",
+    "stderr_head": "",
+    "textLength": [
+     "155.0186"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "cea7573f565c83017b0e950c856ad9ef2170820727fb44ebff384fde7e863537",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "5344b5bed3d1b25906126a2ecc8fa5a2c1d4dcc9f0f33cad89f6317d4fb87ad8",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "204389051d78f0045fb1b60cbbe758cf88ad6947aae4494310e7c89deefa0ad7",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "upper_10ffff_alone": {
+   "source_sha256": "7c50d8033a8cef57876c4aaf385d8d82cf574a5b6ff07e248621d81605829b4c",
+   "source_text": "@startuml\nclass \"%upper(\"􏿿\")\" as U\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48527212) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 17 is not a char boundary; it is inside '\\u{10ffff}' (",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48527214) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 17 is not a char boundary; it is inside '\\u{10ffff}' (",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48527223) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 17 is not a char boundary; it is inside '\\u{10ffff}' (",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (48527225) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 17 is not a char boundary; it is inside '\\u{10ffff}' (",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdfff) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "239ca80a80e67a4e9e82618fa3a13f8324bfe2d43a35753b0c1756de836274ec",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "d5d963bdbe47f49c02d5289847df24b055c3a01573779a6b85f6143e347f6213",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "4cd4cba87274613a5cf8ef31a08bfc2d612560477a5e0fda50468cc84c1e8bd7",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "4dfc136c737fc6d4f80a3bacf9b8ee14739bcf42ba800b2b1cbb10db3b53172d",
+    "stderr_head": "",
+    "textLength": [
+     "14"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "239ca80a80e67a4e9e82618fa3a13f8324bfe2d43a35753b0c1756de836274ec",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "d5d963bdbe47f49c02d5289847df24b055c3a01573779a6b85f6143e347f6213",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "4cd4cba87274613a5cf8ef31a08bfc2d612560477a5e0fda50468cc84c1e8bd7",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "url_tooltip_pua": {
+   "source_sha256": "75e72f9587707be2ab6a187886d043ae24daf8a7693288580a11d91d725998af",
+   "source_text": "@startuml\nclass A [[http://x.example/􏿽{tip 􏿽}]]\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "e0c49e450c419310666b2c7ee61c98b885740057ef9dd8708cd52b6188933317",
+    "stderr_head": "",
+    "textLength": [
+     "9.6592"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "f238d23e1283bb1bf71f139b76897bb0e5b8cd51ef9b8b741648f9230597c09c",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "842dcbb54a769eec6c482cfbf56c8538bb1d268ffba918bfc07dbe9c2b2b86ed",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "1d10844e7327e07a6567674e8d4c9bc04ff8376f34b219219f087f4f495cda7e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "f238d23e1283bb1bf71f139b76897bb0e5b8cd51ef9b8b741648f9230597c09c",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "842dcbb54a769eec6c482cfbf56c8538bb1d268ffba918bfc07dbe9c2b2b86ed",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "1d10844e7327e07a6567674e8d4c9bc04ff8376f34b219219f087f4f495cda7e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "792f91875ea6d19dd3d1dfde7404dbe21492904dae93418b9b6ddd2627062e2b",
+    "stderr_head": "",
+    "textLength": [
+     "9.6592"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "f238d23e1283bb1bf71f139b76897bb0e5b8cd51ef9b8b741648f9230597c09c",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "842dcbb54a769eec6c482cfbf56c8538bb1d268ffba918bfc07dbe9c2b2b86ed",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "1d10844e7327e07a6567674e8d4c9bc04ff8376f34b219219f087f4f495cda7e",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "wrap_seq_pua": {
+   "source_sha256": "3f1b71931ed1a357bcd65aba564bf4cffa00e5d67569a23af2d020b5eea79bd3",
+   "source_text": "@startuml\nskinparam maxMessageSize 20\nAlice -> Bob : aaaa 􏿽􏿽􏿽􏿽􏿽􏿽􏿽􏿽􏿽􏿽\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "71bb58a6984c6bf4fb4e23dc72700428aed4caa8b771a272e4e2db533b0ccba3",
+    "stderr_head": "",
+    "textLength": [
+     "32.7236",
+     "32.7236",
+     "25.4639"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "082a482eee4a3e4e10c8d1f100db75ffa2cf5caba3153ce7a9f4f6c833211d4f",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "2001e50dd6508802b30e97db3f6665f0c0c97ab269d22ccb292697be2869e503",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "592ffdfd4e543302543c830be56da71c380290b6081f9e67b6a05dee992c46c1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "082a482eee4a3e4e10c8d1f100db75ffa2cf5caba3153ce7a9f4f6c833211d4f",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "2001e50dd6508802b30e97db3f6665f0c0c97ab269d22ccb292697be2869e503",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "592ffdfd4e543302543c830be56da71c380290b6081f9e67b6a05dee992c46c1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ac75b7ef58bafa884509147a114b168850b71579fad88e6198243c0625255821",
+    "stderr_head": "",
+    "textLength": [
+     "32.7236",
+     "32.7236",
+     "25.4639"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "082a482eee4a3e4e10c8d1f100db75ffa2cf5caba3153ce7a9f4f6c833211d4f",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "2001e50dd6508802b30e97db3f6665f0c0c97ab269d22ccb292697be2869e503",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "592ffdfd4e543302543c830be56da71c380290b6081f9e67b6a05dee992c46c1",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "yaml_lit": {
+   "source_sha256": "d4838aca87a78fa7d2e3ffb13f61dcf7368ddfc93d8f674626e2abb8a5da3a7d",
+   "source_text": "@startyaml\nk: Vault 􏿽 end\n@endyaml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "0b3e0c6258a009241e0f7bb250dbcbae1b8417ff573e0df80baa780e1f0eb247",
+    "stderr_head": "",
+    "textLength": [
+     "8.8594",
+     "83.0156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "9ebc2955ff9b65cd54976c7eff0d2d99c1bcdf69b7cd63aeec9ed53de7005955",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "6a4554a9e2614e7413d85b41187d969a3f323ad876724c22810faa0e1cfd5311",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "9ebc2955ff9b65cd54976c7eff0d2d99c1bcdf69b7cd63aeec9ed53de7005955",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "6a4554a9e2614e7413d85b41187d969a3f323ad876724c22810faa0e1cfd5311",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "d37deb3e11e669a46ada05e3c32ccc1b3311b7fbc54dabc6e665d88fbfc08f2e",
+    "stderr_head": "",
+    "textLength": [
+     "8.8594",
+     "79.5156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "9ebc2955ff9b65cd54976c7eff0d2d99c1bcdf69b7cd63aeec9ed53de7005955",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "6a4554a9e2614e7413d85b41187d969a3f323ad876724c22810faa0e1cfd5311",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  },
+  "yaml_u_escape": {
+   "source_sha256": "352689f872c9dc611634287003ff4df1f0029d9ec6556ffad047dae34f9cd33a",
+   "source_text": "@startyaml\nk: \"Vault \\U0010FFFD end\"\n@endyaml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "0b3e0c6258a009241e0f7bb250dbcbae1b8417ff573e0df80baa780e1f0eb247",
+    "stderr_head": "",
+    "textLength": [
+     "8.8594",
+     "83.0156"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "base_3992971a7--ast": {
+    "exit": 0,
+    "stdout_sha256": "53968ee42754a58b0c660e6793ca4b603040c2b5be7ab3fba475c101887e46d3",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7--yaml": {
+    "exit": 0,
+    "stdout_sha256": "927e2d79139a87bc417ba693e10c1d593e66bd7c20d1ec6c03cdf36c1273187d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "base_3992971a7-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a--ast": {
+    "exit": 0,
+    "stdout_sha256": "53968ee42754a58b0c660e6793ca4b603040c2b5be7ab3fba475c101887e46d3",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a--yaml": {
+    "exit": 0,
+    "stdout_sha256": "927e2d79139a87bc417ba693e10c1d593e66bd7c20d1ec6c03cdf36c1273187d",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "round3_71d16da4a-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8--ast": {
+    "exit": 0,
+    "stdout_sha256": "021bbeadbb9b75ab264a95e590f2853ed9c1b5f462222356873a3e7a5ed16674",
+    "stderr_head": "",
+    "u_fffd_present": true,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "64eeb453a2378ceaec31e66c06a33aa7ddbbf3fbd836f31b3b075096d83663a9",
+    "stderr_head": "",
+    "u_fffd_present": true,
+    "escape_visible": false
+   },
+   "tip_7ec2e5af8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "d0ff24c51464fccf2debd18da676af244d204a5270cbbd6dcedf6281e6d14052",
+    "stderr_head": "",
+    "u_fffd_present": false,
+    "escape_visible": false
+   }
+  }
+ },
+ "width": {
+  "w_arial_nonchar_10ffff": {
+   "source_sha256": "185d5a09ba5a9da9f41e91240b9efde939c3d1f9561d6d23e2ba7b741e4937ed",
+   "source_text": "@startuml\nskinparam defaultFontName Arial\nclass \"Vault 􏿿\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f3bce54e2a3f16c56e148e4115d1f5cfdbabb50fe51c70cc160c922da1dcf196",
+    "stderr_head": "",
+    "textLength": [
+     "49.7998"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdfff) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "990e18cbf7afba1ad7ed742083496763a197785fb9524697265b8676ed006128",
+    "stderr_head": "",
+    "textLength": [
+     "60.2998"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_arial_pua_b": {
+   "source_sha256": "d8140a466ff17a116bfc8772f1b20983c9ac07ea0def8a83b4675de60aa1921a",
+   "source_text": "@startuml\nskinparam defaultFontName Arial\nclass \"Vault 􏿽\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6110c892ae328f0d95926881c4e10d041bb5d1427210f7ec530db810a32fa7e0",
+    "stderr_head": "",
+    "textLength": [
+     "49.7998"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "4395260db6b358ea695870261f2aab8236691067f663d110a6e1e74d78858051",
+    "stderr_head": "",
+    "textLength": [
+     "60.2998"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_arial_pua_b_ctl": {
+   "source_sha256": "5e61757ce0c5ec773b651e213cbbabdac3a5c426caf22e02857de70afa98ee6a",
+   "source_text": "@startuml\nskinparam defaultFontName Arial\nclass \"Vault \" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f406b4ca09a8847fd09de6b1e98914fcc691020b13522c7c1001119197944bd0",
+    "stderr_head": "",
+    "textLength": [
+     "31.9102"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "e2a592c9c7bba705a413b7d282eaa70642cd44c11e0d8d8ee555a929a4259955",
+    "stderr_head": "",
+    "textLength": [
+     "31.9102"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "e2a592c9c7bba705a413b7d282eaa70642cd44c11e0d8d8ee555a929a4259955",
+    "stderr_head": "",
+    "textLength": [
+     "31.9102"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_courier_nonchar_10ffff": {
+   "source_sha256": "5af8a542c6aa20d1e357eb58af82e0dd37793133c1c4d923f66738a35b45796a",
+   "source_text": "@startuml\nskinparam defaultFontName Courier\nclass \"Vault 􏿿\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "3b2990f3691b948ae16a12c51dd06d280fe008cfd2b2028f511fd4d2d98af741",
+    "stderr_head": "",
+    "textLength": [
+     "59.001"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdfff) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "3e24c10444a7130db96a5b47d7a7583f91b631dab69dab9cffaddb423a8fbdef",
+    "stderr_head": "",
+    "textLength": [
+     "67.4297"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_courier_pua_b": {
+   "source_sha256": "1ac0b057b1ea859a366b8e1e4412ab08c07da3af17392faedb9c623f81f5bcf8",
+   "source_text": "@startuml\nskinparam defaultFontName Courier\nclass \"Vault 􏿽\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "af9a39d965982287b9c778c054d6c65a56f5b64f2baaf1b5025de776889fe7f4",
+    "stderr_head": "",
+    "textLength": [
+     "59.001"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6981e48715e6f63908f9c1d3dc8ee217d2accc77233f3f6d2ccdc84131a3f74d",
+    "stderr_head": "",
+    "textLength": [
+     "67.4297"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_courier_pua_b_ctl": {
+   "source_sha256": "9831288c34f2592d52b5f71416e6f2eae7a18d611498fbd3f7d043c6a17a94a2",
+   "source_text": "@startuml\nskinparam defaultFontName Courier\nclass \"Vault \" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "1ee19edb0b9596983704d7e1c9d70b87db3b726e2935695667125501c14ac919",
+    "stderr_head": "",
+    "textLength": [
+     "42.1436"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "00dcaec1a5fb760951f2db3bd40c4f15d399f67a86ad2a71527fe9c07314ea06",
+    "stderr_head": "",
+    "textLength": [
+     "42.1436"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "00dcaec1a5fb760951f2db3bd40c4f15d399f67a86ad2a71527fe9c07314ea06",
+    "stderr_head": "",
+    "textLength": [
+     "42.1436"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_monospaced_nonchar_10ffff": {
+   "source_sha256": "4dc15b706777d42a2643b7f404306a30a8b20559fbf6a268cc096b7a745fb059",
+   "source_text": "@startuml\nskinparam defaultFontName Monospaced\nclass \"Vault 􏿿\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6de348ff6dbfb7a497dbd72a284b00b1e98e6c30ddc2e915098e83fd4f1720f9",
+    "stderr_head": "",
+    "textLength": [
+     "59.001"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdfff) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "a26f15e596962aec06e463d3774a6f49e852ec638108f133c17ee2a2fd364455",
+    "stderr_head": "",
+    "textLength": [
+     "67.4297"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_monospaced_pua_b": {
+   "source_sha256": "6b3e2c7f4177e57ae0f9e03e05c711409d823831b739d67824d64b6899a5522b",
+   "source_text": "@startuml\nskinparam defaultFontName Monospaced\nclass \"Vault 􏿽\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "3e2b64e96fc0ba6df2146c25c7ca0f6282214637bd8403ccc1c2e0571c9eb6b2",
+    "stderr_head": "",
+    "textLength": [
+     "59.001"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "eaad1b6300fc558e85453df76e956ee2a3fa9333cc9579c05cc9b5563cd7cfb6",
+    "stderr_head": "",
+    "textLength": [
+     "67.4297"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_monospaced_pua_b_ctl": {
+   "source_sha256": "211ff7ab4f0528a107e79783bc0500aac0eec69d0f2ee83ca55f0a08aa160d66",
+   "source_text": "@startuml\nskinparam defaultFontName Monospaced\nclass \"Vault \" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "9dc64ffe4a3afd12e0eb8ad2f97be465832cf62d04c070d8710fe94e2fcf7c0e",
+    "stderr_head": "",
+    "textLength": [
+     "42.1436"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "b860ab434efd1d15ce8e7bf879b3b9a9f87ada036d1e3519470f5bc25d861279",
+    "stderr_head": "",
+    "textLength": [
+     "42.1436"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "b860ab434efd1d15ce8e7bf879b3b9a9f87ada036d1e3519470f5bc25d861279",
+    "stderr_head": "",
+    "textLength": [
+     "42.1436"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_sans_bmp_pua_f000": {
+   "source_sha256": "e19af354a4e2c24da7b21f2616166358f5134e83a20cfc563217811bacb3ae99",
+   "source_text": "@startuml\nclass \"Vault \" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f00f7d555c5b93e7b166132f3c3edf9c84a805f54262dbf433667be233235163",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f3857e8bd26bff60abf6779f7bfdfc2d1a45ef3680fcad1f5a5691b9893ed51a",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f3857e8bd26bff60abf6779f7bfdfc2d1a45ef3680fcad1f5a5691b9893ed51a",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_sans_escape_10f7ff": {
+   "source_sha256": "13d5443d8202a4ae9ec015eacba94a0949f37e19de83f071c9c8b2dfbafbe186",
+   "source_text": "@startuml\nclass \"Vault 􏟿\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "a9907f40fb5e4be7c034433d304c82fbace9ffbd7f49a6e02a7cf46f65b56e24",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "3eca3ae98049e76c72f899b6d44d0fb06df9f9b44237cdb9c60571f4845855d1",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "50f4734a22ec6568672567d8eef396ccc03ebc327b917fd7a26cc383fc9da967",
+    "stderr_head": "",
+    "textLength": [
+     "49.7861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_sans_nonchar_10fffe": {
+   "source_sha256": "f9c75f503a1c48566369f540e55948b054a2cc8bc1e20e23db5fc71a37161ebe",
+   "source_text": "@startuml\nclass \"Vault 􏿾\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ca2bedaf53dff7f9bb2ce88e6f86857cb36c9ca6ecc138b81fd337999fb15a1a",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffe) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "beda3a6d7ed86b070e69109f26a594c5fb6b650169bfb640321f3ccb06de02ef",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_sans_nonchar_10ffff": {
+   "source_sha256": "ee9190295da363aa1a52b51383e8735c3bf31f0d98a9e777ae061089a356c646",
+   "source_text": "@startuml\nclass \"Vault 􏿿\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "e35ccf371abe7af32675044ebe25a85a96e29ff90eeec6ef24b05830f855b290",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdfff) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "663b878cc8c24d633cbc045087f6a4d9e50a6e9ca060cc0adaedc4fff8d18726",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_sans_pua_a": {
+   "source_sha256": "3ac9e19ba45245ffe488945f18ca36651301b586f090c931ed106917f8ed6869",
+   "source_text": "@startuml\nclass \"Vault 󰀀\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ceb2883deaf1e7bcfc112e9d57fd8b2839e41bb943a96f1ba2fa24c710c9daeb",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "54ffb08c555cad57e3cc5cb86ae83116c0245db6ef9504ab9bbfd955e42d2b2d",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "4b13d96f68f4a30771c51177159d7a608025ccb9033cb324a90aeab75671950f",
+    "stderr_head": "",
+    "textLength": [
+     "49.7861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_sans_pua_b": {
+   "source_sha256": "906d43fc10aa6790f24c7979ab8f3739f430338f95c16d1044ed9b8026c31970",
+   "source_text": "@startuml\nclass \"Vault 􏿽\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "1c3e619acb1a8aaaa128ff916acb399cd12148e6368cd991ac84b6135aab10a3",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "26c76376aa1794356a713b647169147773686bde01c8636d471b213e0bdd9e51",
+    "stderr_head": "",
+    "textLength": [
+     "49.7861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_sans_pua_b_ctl": {
+   "source_sha256": "be95ff431c02060a8f12e7e1e8b3c3568e1f19d2b49e7e6ee4269c2558dfb8db",
+   "source_text": "@startuml\nclass \"Vault \" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "cb3012e340c177f65f76d5e6e664707c9d2c39b13fc0e279bb04a375d766eeed",
+    "stderr_head": "",
+    "textLength": [
+     "34.8564"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c5784691dc4f93ec5448622804395652cf15c57fe5dd855d271a93da585a2351",
+    "stderr_head": "",
+    "textLength": [
+     "34.8564"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c5784691dc4f93ec5448622804395652cf15c57fe5dd855d271a93da585a2351",
+    "stderr_head": "",
+    "textLength": [
+     "34.8564"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_sans_tag_e0041": {
+   "source_sha256": "9a4407c70ed9a43d0a621a19d2e7bb1f2e187dea897a657f495d991ce9781922",
+   "source_text": "@startuml\nclass \"Vault 󠁁\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c2250522d0b8f563ea82e02e9448b92ae47bba6931e1ed90619509d4f20201cd",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "d65b17530c91e06c62e49822868a458768ddc8b7859341e3a1fb5d4912a748de",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "d65b17530c91e06c62e49822868a458768ddc8b7859341e3a1fb5d4912a748de",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_sans_unassigned_3fffd": {
+   "source_sha256": "328ad22bd2861489a5d26a69f1d8ada54c83563e6c0182b736883c0d90b9d044",
+   "source_text": "@startuml\nclass \"Vault 𿿽\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "7590eba1ebde7be2eb9f3d677e27dbc7857f8d717ebfa19e4491392059b6b2de",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "1f7c3a45bcde4f81c89b37ceae7d7ed74bd572f5617cd432a47a0eefe1d44cdf",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "1f7c3a45bcde4f81c89b37ceae7d7ed74bd572f5617cd432a47a0eefe1d44cdf",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_serif_nonchar_10ffff": {
+   "source_sha256": "ca1a6b979655be47169fe552dfd170db648a876efb6b1ff58748443bb04768e0",
+   "source_text": "@startuml\nskinparam defaultFontName Serif\nclass \"Vault 􏿿\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "5aa9c21ea621478ea6382213e76730d6b7cb7e03ee9412feef06cc0b5322dd5b",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdfff) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "73de2ca83b93d5046fa0ed37522e0dad0ca4492d15571e77c57810d1c74d833a",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_serif_pua_b": {
+   "source_sha256": "71e189d9162ba820890da8830492b9e24c2b604bff702336f791e964c21c5b53",
+   "source_text": "@startuml\nskinparam defaultFontName Serif\nclass \"Vault 􏿽\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "0acdadc6bef16da0a2713c098b212995ab13973c25c80c8ddea9456c7a56a86c",
+    "stderr_head": "",
+    "textLength": [
+     "53.2861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "e3f93c4dfe5a2dc203c29829f8a03be4d182ad6d0864d9990991a99d7dd08183",
+    "stderr_head": "",
+    "textLength": [
+     "49.7861"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_serif_pua_b_ctl": {
+   "source_sha256": "0bc74db9939adde69349c7a93b07043257e29b5587f2b831b5566673d02a43d5",
+   "source_text": "@startuml\nskinparam defaultFontName Serif\nclass \"Vault \" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "d7a64ddd5b101adbce90b13a5cc5c4a8f63e6719cb793f7b7e304c3aa1eb68b0",
+    "stderr_head": "",
+    "textLength": [
+     "34.8564"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "b622163ae7896dcbfe383ad4716df38bdb8afe0c27b358673ecac558df7f80ff",
+    "stderr_head": "",
+    "textLength": [
+     "34.8564"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "b622163ae7896dcbfe383ad4716df38bdb8afe0c27b358673ecac558df7f80ff",
+    "stderr_head": "",
+    "textLength": [
+     "34.8564"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_times_nonchar_10ffff": {
+   "source_sha256": "20ed3f582602b8a7bc82e4cf940e7903cf421ee665e869091c9a724ba6cd7cdf",
+   "source_text": "@startuml\nskinparam defaultFontName Times New Roman\nclass \"Vault 􏿿\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6598433ecbe866c58cb4b7be1c2b95ed5d9537e45d4ebda8c6e32eda5f23a910",
+    "stderr_head": "",
+    "textLength": [
+     "45.4932"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdfff) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "58b93a77e3518674f064d102785b4acec2e6c4625934c0d06fd1db40365949d7",
+    "stderr_head": "",
+    "textLength": [
+     "56.3828"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_times_pua_b": {
+   "source_sha256": "776d1eaf8cedcc4aa1332b6e69737f4d0f0c89621106658cff30b56b2b1db78e",
+   "source_text": "@startuml\nskinparam defaultFontName Times New Roman\nclass \"Vault 􏿽\" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "b2304c44bf21701d4c74ab61286c919220b57cc0df8b4c5df1635d5d9c6ff2dc",
+    "stderr_head": "",
+    "textLength": [
+     "45.4932"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "textLength": [],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "2f9538f5432e21089f38e83b078bb159f0d925064b5028ee024c51d0bedf8d04",
+    "stderr_head": "",
+    "textLength": [
+     "56.3828"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "w_times_pua_b_ctl": {
+   "source_sha256": "41fa91aa83f25240e983b32c0fc6497c9bfec742a52dbd1f4810610fa19178a3",
+   "source_text": "@startuml\nskinparam defaultFontName Times New Roman\nclass \"Vault \" as V\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "26b3d13ee287dcb04bf4ed80d8dbb19b4364793710ecc23fd392dc53907a9499",
+    "stderr_head": "",
+    "textLength": [
+     "31.1035"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f6c36227cb779cba54bc31b02531a86a3a3a4440aad3ef05a69f2554748a4380",
+    "stderr_head": "",
+    "textLength": [
+     "31.1035"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f6c36227cb779cba54bc31b02531a86a3a3a4440aad3ef05a69f2554748a4380",
+    "stderr_head": "",
+    "textLength": [
+     "31.1035"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  }
+ },
+ "state": {
+  "bp_d4_short_entry": {
+   "source_sha256": "b288e4d5392d0b7073d66b96ad97de8600f2ca5a61e2ddc61fdf99e724999a7f",
+   "source_text": "@startuml\nstate Site {\n  state Block {\n    state Floor {\n      state Room {\n        state in1 <<entryPoint>>\n        in1 --> Desk\n      }\n      Corridor --> in1\n    }\n    Lift --> Corridor\n  }\n  Gate --> Lift\n}\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "22873d29ab82a8a237655f2264bdaf13b29ebe06c037e098a38569695bf37307",
+    "stderr_head": "",
+    "textLength": [
+     "24.623",
+     "36.0527",
+     "34.4805"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c4cceb8ec171dd371377df7657fc30035d04161fae822147df133335f2bb3b40",
+    "stderr_head": "Warning: node Site.Block.Floor.Room.in1, port P unrecognized\nWarning: node Site.Block.Floor.Room.in1, port P unrecognized\n",
+    "textLength": [
+     "24.623",
+     "36.0527",
+     "34.4805"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c4cceb8ec171dd371377df7657fc30035d04161fae822147df133335f2bb3b40",
+    "stderr_head": "",
+    "textLength": [
+     "24.623",
+     "36.0527",
+     "34.4805"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "bp_d4_wide_exit": {
+   "source_sha256": "d0393b93ab47ae5b8c870cfd89d44d843f37737ee6774fd145d8ef08c856bec9",
+   "source_text": "@startuml\nstate Site {\n  state Block {\n    state Floor {\n      state Room {\n        Desk --> leave\n        state \"Leaving The Room Now\" as leave <<exitPoint>>\n      }\n      leave --> Corridor\n    }\n    Corridor --> Lift\n  }\n  Lift --> Exit\n}\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "b8cb45280701670f008ff983560a0f42bd4321f5d0679fd932ae8dc4753c61f2",
+    "stderr_head": "",
+    "textLength": [
+     "159.1885",
+     "24.623",
+     "36.0527"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "bc3814ce4cf968650154df24ddd846650d211959246117549e1a24ef52f1b49e",
+    "stderr_head": "",
+    "textLength": [
+     "24.623",
+     "36.0527",
+     "34.4805"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f2cccf87ade47667ec12e23de7d97ec906d8c7f03e21b6a94e2ab51bab47bcf6",
+    "stderr_head": "",
+    "textLength": [
+     "24.623",
+     "36.0527",
+     "34.4805"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "bp_entry_exit_same_cluster_short": {
+   "source_sha256": "d8906208993396cdd29c4cdd8e22ccccbd043a088f52d27ff59e70054c5d7402",
+   "source_text": "@startuml\nstate Works {\n  state Oven {\n    state i <<entryPoint>>\n    state o <<exitPoint>>\n    i --> Bake\n    Bake --> o\n  }\n  Mix --> i\n  o --> Pack\n}\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "19c42678a9d8c2410dc1a5f26471fbef150e3266b29747e58344ce62c7cb5fa9",
+    "stderr_head": "",
+    "textLength": [
+     "41.624",
+     "34.6104",
+     "4.0469"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ccd61227c53366a566bf756a202f5180a44f1d3365721f6d369600cba0d8b7a2",
+    "stderr_head": "Warning: node Works.Oven.i, port P unrecognized\nWarning: node Works.Oven.i, port P unrecognized\nWarning: node Works.Oven.o, port P unrecognized\nWarning: node Wo",
+    "textLength": [
+     "41.624",
+     "34.6104",
+     "4.0469"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ccd61227c53366a566bf756a202f5180a44f1d3365721f6d369600cba0d8b7a2",
+    "stderr_head": "",
+    "textLength": [
+     "41.624",
+     "34.6104",
+     "4.0469"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "bp_entry_exit_same_cluster_wide": {
+   "source_sha256": "1e311a88ab77b9df8fabc0addaab4d64d61386d742c96f046abc80d3719a8bd3",
+   "source_text": "@startuml\nstate Works {\n  state Oven {\n    state \"Raw Dough Arrives\" as raw <<entryPoint>>\n    state \"Baked Loaves Leave\" as baked <<exitPoint>>\n    raw --> Bake\n    Bake --> baked\n  }\n  Mix --> raw\n  baked --> Pack\n}\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "cc6cc1d34d0fdb801753a315cbf4b404f5b6bb4b0ad34c1860efac2d7a550347",
+    "stderr_head": "",
+    "textLength": [
+     "41.624",
+     "34.6104",
+     "128.7686"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "7b27768f6edd226e367bece0548275530ba44863051821366aee75fee7e3a4e5",
+    "stderr_head": "",
+    "textLength": [
+     "41.624",
+     "34.6104",
+     "128.7686"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ad9779a6a1400891bdecf248ce4f29b33b4fb6bb7303cbedbef8e8bb3a06e435",
+    "stderr_head": "",
+    "textLength": [
+     "41.624",
+     "34.6104",
+     "128.7686"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "bp_multiline_label": {
+   "source_sha256": "eae80dccb8e960ed482544544156631a540aa36ff06eaeb273e627c67ab2e8b0",
+   "source_text": "@startuml\nstate Yard {\n  state Shed {\n    Saw --> out1\n    state \"Outgoing\\nTimber\\nStack\" as out1 <<exitPoint>>\n  }\n  out1 --> Truck\n}\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "accd89bcd16ca070cda556cfcbde0ff6ba8717eafc6e44206d033b6714d089ff",
+    "stderr_head": "",
+    "textLength": [
+     "179.8262",
+     "30.9941",
+     "32.8398"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "7376a1efe54c7a5d07f6ea7c1224a95ab94aa16ea1ebefee6fef9148ce4fb713",
+    "stderr_head": "",
+    "textLength": [
+     "30.9941",
+     "32.8398",
+     "179.8262"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ca1b68815efcbb619676a8b613f77ab60f864499210fd216fbbb0675d6f3e394",
+    "stderr_head": "",
+    "textLength": [
+     "30.9941",
+     "32.8398",
+     "179.8262"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "bp_root_wide_multiline": {
+   "source_sha256": "5a8bd48a4ccbc7d571e5640449718d639bb6a39ae06d597175c821914c26a331",
+   "source_text": "@startuml\nstate Shed {\n  Saw --> out1\n  state \"Outgoing\\nTimber Stack Here\" as out1 <<exitPoint>>\n}\nout1 --> Truck\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c23fd54471508dae708a853b2eff8b4d47799563493a9e1dc83b09a34b57bfdb",
+    "stderr_head": "",
+    "textLength": [
+     "204.2715",
+     "32.8398",
+     "26.0586"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "a05e2943a2350c49db701fcb1ae97bfed711110e3a16faf824717200a062db54",
+    "stderr_head": "",
+    "textLength": [
+     "32.8398",
+     "204.2715",
+     "26.0586"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "a05e2943a2350c49db701fcb1ae97bfed711110e3a16faf824717200a062db54",
+    "stderr_head": "",
+    "textLength": [
+     "32.8398",
+     "204.2715",
+     "26.0586"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "bp_wide_entry_with_note": {
+   "source_sha256": "b6e6fa2431ef7b7d7bbc1a0c74bd873a27d99e05e38f1818509ac725b5fd0bbd",
+   "source_text": "@startuml\nstate Works {\n  state Oven {\n    state \"Raw Dough Arrives\" as raw <<entryPoint>>\n    raw --> Bake\n    note right of Bake : warm\n  }\n  Mix --> raw\n  Bake --> Pack\n}\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "8bf7416c5d0d607b623073beeef2e7cf7d7902b1d46982aa5f4d35d79b13c726",
+    "stderr_head": "",
+    "textLength": [
+     "41.624",
+     "34.6104",
+     "128.7686"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ffad15bcc9cf809f905cf7253415f94073e250287d30fdd54ff8f99bd66fb66e",
+    "stderr_head": "",
+    "textLength": [
+     "41.624",
+     "34.6104",
+     "128.7686"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "742c58f82758aa4875c8d3d0b3a630687f2e395456afcc6a0801583d2ef78f8c",
+    "stderr_head": "",
+    "textLength": [
+     "41.624",
+     "34.6104",
+     "128.7686"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "np_concurrent_regions": {
+   "source_sha256": "2b6c973f943c4357943e6019a63065cc377c117231d04f1eda7c0a05ed226fd3",
+   "source_text": "@startuml\nstate Plant {\n  state Pump {\n    state inlet <<entryPoint>>\n    inlet --> Valve\n    note right of Valve : open\n  }\n  Valve --> Tank\n  --\n  Fan --> Duct\n  note left of Duct : cold\n}\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "61085c547faa1bf416def56c8156699a90d5ce67e64c8a1515f8603f95b6b9de",
+    "stderr_head": "",
+    "textLength": [
+     "33.4414",
+     "38.3086",
+     "29.8184"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6451211991a6aba36c18a4b358886fadab6040144bda2b550a850af2b6b687af",
+    "stderr_head": "Warning: node Plant.Pump.inlet, port P unrecognized\n",
+    "textLength": [
+     "33.4414",
+     "38.3086",
+     "29.8184"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6451211991a6aba36c18a4b358886fadab6040144bda2b550a850af2b6b687af",
+    "stderr_head": "",
+    "textLength": [
+     "33.4414",
+     "38.3086",
+     "29.8184"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "np_link_note_in_cluster": {
+   "source_sha256": "80121a1dc951b43f30cdaae58b54901d19e9194bf532b338c9281e89b16728cb",
+   "source_text": "@startuml\nstate Mill {\n  state Gear {\n    state feed <<entryPoint>>\n    feed --> Cog\n    Cog --> Axle\n    note on link : spins\n  }\n  Axle --> Belt\n}\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c469542c1c80afa4a6fdc047e1df0702294a9a6df9d2f2f32a4166b87a2e5d1a",
+    "stderr_head": "",
+    "textLength": [
+     "24.1992",
+     "31.377",
+     "29.5586"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "228e86e6a979cc266168e7894dce7185e8d54560f8ee3f81897830837d902071",
+    "stderr_head": "Warning: node Mill.Gear.feed, port P unrecognized\n",
+    "textLength": [
+     "24.1992",
+     "31.377",
+     "29.5586"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "228e86e6a979cc266168e7894dce7185e8d54560f8ee3f81897830837d902071",
+    "stderr_head": "",
+    "textLength": [
+     "24.1992",
+     "31.377",
+     "29.5586"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "np_note_before_target": {
+   "source_sha256": "fec0d97bb346602027ff4728f1d77fcd961c6b193df8fd940c99a55d5cebd4a8",
+   "source_text": "@startuml\nstate Lab {\n  state Bench {\n    note right of Flask : hot\n    state tap <<entryPoint>>\n    tap --> Flask\n  }\n  Flask --> Shelf\n}\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ba0460ea4ad4cd962f468139081871ea18a4a3c948bbe32160fb3cc222c1f753",
+    "stderr_head": "",
+    "textLength": [
+     "24.0078",
+     "40.4004",
+     "21.7793"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "9232c0d0f6679332763169e42ecab836d79856f45c1944ea3a8fa526fcb89efc",
+    "stderr_head": "",
+    "textLength": [
+     "24.0078",
+     "40.4004",
+     "21.7793"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "9232c0d0f6679332763169e42ecab836d79856f45c1944ea3a8fa526fcb89efc",
+    "stderr_head": "",
+    "textLength": [
+     "24.0078",
+     "40.4004",
+     "21.7793"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "np_note_declared_outer_anchor_inner": {
+   "source_sha256": "1535b42807a039aa75b5306f856411a374c4930bf87b4592a609e0e464737059",
+   "source_text": "@startuml\nstate Lab {\n  state Bench {\n    state tap <<entryPoint>>\n    tap --> Flask\n  }\n  note right of Flask : hot\n  Flask --> Shelf\n}\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "788b6192aeb6b3dbb1d3dd6070920fc426dc858311f14aaa0038b3b878803c3f",
+    "stderr_head": "",
+    "textLength": [
+     "24.0078",
+     "40.4004",
+     "21.7793"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "41578a06646680159244530afd811e6a842d5720460f7ea924df6f9fca4c76d4",
+    "stderr_head": "Warning: node Lab.Bench.tap, port P unrecognized\n",
+    "textLength": [
+     "24.0078",
+     "40.4004",
+     "21.7793"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "41578a06646680159244530afd811e6a842d5720460f7ea924df6f9fca4c76d4",
+    "stderr_head": "",
+    "textLength": [
+     "24.0078",
+     "40.4004",
+     "21.7793"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "np_outer_floating_with_image": {
+   "source_sha256": "ab304807f1f82bd9252afda31923bb1902b29d7366ada8a0f15ae34a9d45a09d",
+   "source_text": "@startuml\nstate Cellar {\n  Cask --> Barrel\n}\nnote \"loose\" as N1\nCellar --> Door\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "09013c6f7d5bc885cc90b883a7c03c275be645bc1f3d7a3e84d219dfae294c8b",
+    "stderr_head": "",
+    "textLength": [
+     "39.04",
+     "33.5981",
+     "32.7373"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "160f1caed742df36172d67857627f68c1eb08a0a6464d1a1a6cde978c8211339",
+    "stderr_head": "",
+    "textLength": [
+     "39.04",
+     "33.5981",
+     "32.7373"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "160f1caed742df36172d67857627f68c1eb08a0a6464d1a1a6cde978c8211339",
+    "stderr_head": "",
+    "textLength": [
+     "39.04",
+     "33.5981",
+     "32.7373"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "np_outer_note_in_live_cluster_on_image": {
+   "source_sha256": "83c81b80fb86a5a0a5970b5f0fb478bcea6ffa92edce583c1a504303cb6f8765",
+   "source_text": "@startuml\nstate Estate {\n  state Manor {\n    Hall --> Stair\n  }\n  note right of Manor : grand\n  state gate <<entryPoint>>\n  gate --> Manor\n}\nRoad --> gate\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "be0812f49ac56f05d23f673a51226e839c7628a19814ee21151a23d7b18257fc",
+    "stderr_head": "",
+    "textLength": [
+     "40.7285",
+     "42.8066",
+     "26.1133"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ea4504e023e14f3f98ca9ca1d14eff6a4ce393577c535ecf5085d90785027cbf",
+    "stderr_head": "",
+    "textLength": [
+     "40.7285",
+     "42.8066",
+     "26.1133"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ea4504e023e14f3f98ca9ca1d14eff6a4ce393577c535ecf5085d90785027cbf",
+    "stderr_head": "",
+    "textLength": [
+     "40.7285",
+     "42.8066",
+     "26.1133"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "np_outer_note_left_multiline": {
+   "source_sha256": "45b32feaceb12423d0719aa2438befa9990915d2302bbe9f2583b607dc80c3ee",
+   "source_text": "@startuml\nstate Granary {\n  Wheat --> Flour\n}\nnote left of Granary\n  dusty\n  and dry\nend note\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "855af6f0ca304815f943da32a5a834dd9a726c9af0b62c767b823f6d6e49f7e9",
+    "stderr_head": "",
+    "textLength": [
+     "53.04",
+     "41.4326",
+     "34.5693"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6c422aa700ab261e99484e382969df16148246dad7c27884843617867c0d20dd",
+    "stderr_head": "",
+    "textLength": [
+     "53.04",
+     "41.4326",
+     "34.5693"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "1bcbc68966b0256063f179962435d7ca84695244db05b42365638fa363fb95ee",
+    "stderr_head": "",
+    "textLength": [
+     "53.04",
+     "41.4326",
+     "34.5693"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "np_outer_note_left_on_leaf_with_image": {
+   "source_sha256": "4cbcf77deca3a62f1fe11e8968d4de423bb435fc4c615e3f3c56d1dce4b8ec64",
+   "source_text": "@startuml\nstate Hive {\n  Bee --> Comb\n}\nnote left of Field : sunny\nField --> Hive\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "3df58760b81299a1028c63f451545de7d69721c1985859ca7967b877e9fa9ccf",
+    "stderr_head": "",
+    "textLength": [
+     "29.3809",
+     "23.6523",
+     "40.168"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "9b292d8c53e88d72bbf2301a28dfeb4650f149c61a37477028dbc51f0eb3e77d",
+    "stderr_head": "",
+    "textLength": [
+     "29.3809",
+     "23.6523",
+     "40.168"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "9b292d8c53e88d72bbf2301a28dfeb4650f149c61a37477028dbc51f0eb3e77d",
+    "stderr_head": "",
+    "textLength": [
+     "29.3809",
+     "23.6523",
+     "40.168"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "np_outer_note_right_renamed": {
+   "source_sha256": "0f6ccb6b9cb733788cc78a25b865e002124c48721029605b5952fa839d67a810",
+   "source_text": "@startuml\nstate Cellar {\n  Cask --> Barrel\n}\nnote right of Cellar : damp\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c573d1e4d5bef7e5420f4f443517d9d5d255f0f10b31a0c3935240b96df050a9",
+    "stderr_head": "",
+    "textLength": [
+     "39.04",
+     "32.7373",
+     "39.0879"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f55a80c561257f95dfc923c8e40ff6a4dc074f2af3b774dc7cefde98e7dc3c9c",
+    "stderr_head": "",
+    "textLength": [
+     "39.04",
+     "32.7373",
+     "39.0879"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "9ce4f5ba484c11d922d4d1199a8da8ab79122a49d37a3210d7bcea2193e95ef1",
+    "stderr_head": "",
+    "textLength": [
+     "39.04",
+     "32.7373",
+     "39.0879"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "np_outer_note_top_of_image": {
+   "source_sha256": "c613f3be4c3896d610a038f9e1ea29f3a7e0af3e03af6a69bd6d0a173e0ee521",
+   "source_text": "@startuml\nstate Kiosk {\n  Coin --> Ticket\n}\nnote top of Kiosk : paid\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "8da6f262a0143ee05dae276c1efd939309394d8a22e7fe1a94dc766e75d44d0f",
+    "stderr_head": "",
+    "textLength": [
+     "37.1055",
+     "31.0215",
+     "41.2891"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ed8159cda4d5f347d20176d42d1a09066925c93a22555aab5c7328279c7e9575",
+    "stderr_head": "",
+    "textLength": [
+     "37.1055",
+     "31.0215",
+     "41.2891"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ed8159cda4d5f347d20176d42d1a09066925c93a22555aab5c7328279c7e9575",
+    "stderr_head": "",
+    "textLength": [
+     "37.1055",
+     "31.0215",
+     "41.2891"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "np_root_note_before_states": {
+   "source_sha256": "272741122a2432492d821c37640d2f6b009ac8a4b6545461d0543d712d2894b4",
+   "source_text": "@startuml\nnote left of Quay : wet\nstate Port {\n  Ship --> Pier\n}\nQuay --> Port\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "8e1920c8cf5bd9f6996384a8e80a30dcc7065f70bc4bc5bf3b54708b38b41167",
+    "stderr_head": "",
+    "textLength": [
+     "27.3027",
+     "29.0869",
+     "25.3135"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "2b8acb8e2f1395ce6e5aac5a21c71f6610d09681ba39416a20f21b775bebb133",
+    "stderr_head": "",
+    "textLength": [
+     "27.3027",
+     "29.0869",
+     "25.3135"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "2b8acb8e2f1395ce6e5aac5a21c71f6610d09681ba39416a20f21b775bebb133",
+    "stderr_head": "",
+    "textLength": [
+     "27.3027",
+     "29.0869",
+     "25.3135"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "np_root_three_clusters": {
+   "source_sha256": "2c554d827a35cd3695d5dfb17596f412f1022c37839537bcfbc7e565ef34af45",
+   "source_text": "@startuml\nstate North {\n  Pine --> Fir\n  note right of Pine : tall\n}\nstate South {\n  Palm --> Fern\n}\nstate East {\n  Oak --> Elm\n  note left of Elm : wide\n}\nStart --> Pine\nFir --> Palm\nFern --> Oak\nElm --> Stop\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "5364bbe68783f1eebc946ee4fbf2e19302d4c3e12aa4671fc0452bc0de522599",
+    "stderr_head": "",
+    "textLength": [
+     "38.5957",
+     "28.2734",
+     "17.2813"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c5c954587843b0c044cf3abb4ad24218a4e241ea13aef25d93a6b2ddcbcfcc4c",
+    "stderr_head": "",
+    "textLength": [
+     "38.5957",
+     "38.7529",
+     "27.6924"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "4f3263c90041c564569de8aad7f0ee5bf46b458d5430ccdb8b22ad18d51ece7b",
+    "stderr_head": "",
+    "textLength": [
+     "38.5957",
+     "38.7529",
+     "27.6924"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  },
+  "np_three_notes_one_cluster": {
+   "source_sha256": "37138354660f1e4bd9c04c3f244271e15af471abe9147492ea3ace9384d17909",
+   "source_text": "@startuml\nstate Dock {\n  state Crane {\n    state hook <<entryPoint>>\n    hook --> Lift\n    note right of Lift : one\n    note left of Lift : two\n    note bottom of Lift : three\n  }\n  Lift --> Barge\n  Barge --> Sea\n}\n@enduml\n",
+   "base_3992971a7-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "8f77f13a58a4c26aa47b5c1195acf24dde1e538b6e04ebaaaf17c9ce0d38d206",
+    "stderr_head": "",
+    "textLength": [
+     "34.4395",
+     "39.6348",
+     "34.0703"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "round3_71d16da4a-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "126b6d3365770929f2320361ba7afc2ec2ca6bd03c8a722034a70454fbd39f3a",
+    "stderr_head": "Warning: node Dock.Crane.hook, port P unrecognized\n",
+    "textLength": [
+     "34.4395",
+     "39.6348",
+     "34.0703"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   },
+   "tip_7ec2e5af8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "27d823158007994a592c223a09d1b738b5b943c2f69dc0b788c35a9430b02bd0",
+    "stderr_head": "",
+    "textLength": [
+     "34.4395",
+     "39.6348",
+     "34.0703"
+    ],
+    "raw_escape_visible": false,
+    "escape_ref_visible": false
+   }
+  }
+ }
+}

@@ -1,0 +1,10 @@
+{
+  "entries": 1992,
+  "all_full_yaml_byte_equal": false,
+  "raw_byte_changes": [
+    "sprites/sprite_multiple"
+  ],
+  "semantic_changes": [],
+  "UID_identity_factory_source_topology_changes": [],
+  "serialization": "Full YAML semantic models unchanged, including UID/identity/factory/source/topology and existing None shapes. Raw bytes differ once: sprites/sprite_multiple has only server/user sprite-map order swapped (DiagramMeta.sprites is unchanged HashMap at parser diagram/mod.rs:225). Both raw streams retained; no rerun to force equality. Parser and WBS renderer unchanged."
+}

@@ -64,8 +64,8 @@ impl FilterRegistry {
         for (color, id) in &self.entries {
             write!(
                 &mut out,
-                r#"<filter height="1" id="{id}" width="1" x="0" y="0"><feFlood flood-color="{color}" result="flood"/><feComposite in="SourceGraphic" in2="flood" operator="over"/></filter>"#,
-            )
+                r#"<filter height="1" id="{id}" width="1" x="0" y="0"><feFlood flood-color="{color}" result="flood"/><feComposite in="SourceGraphic" in2="flood" operator="over"/></filter>"#, color = crate::svg::escape_attribute(color),
+)
             .unwrap();
         }
         out
@@ -404,7 +404,9 @@ pub fn id_for_current(color: &str) -> Option<String> {
 /// resolved to upper-case `#RRGGBB`; explicit hex is upper-cased. Anything
 /// we don't recognise is passed through.
 fn normalize_back_color(color: &str) -> String {
-    let resolved = text_render::normalize_color(color);
+    // DriverTextSvg.draw uses HColor.toRGB for BACKCOLOR, including alpha
+    // colors. Its feFlood receives RGB, not the text fill's opacity.
+    let (resolved, _) = text_render::color_with_opacity(color);
     if let Some(rest) = resolved.strip_prefix('#') {
         format!("#{}", rest.to_ascii_uppercase())
     } else {
@@ -420,12 +422,11 @@ fn plantuml_seed(s: &str) -> i64 {
     // post-TIM source line, including blank lines, before `StringUtils.seed`
     // hashes the resulting string.
     let mut h: u64 = 1_125_899_906_842_597;
-    for c in s.chars() {
-        // Java's `long h = 31 * h + s.charAt(i)` — `charAt` returns a 16-bit
-        // UTF-16 unit. For characters outside the BMP this would need
-        // surrogate-pair splitting, but the diagram source never hits that
-        // path (all creole tokens are ASCII or BMP code points).
-        h = h.wrapping_mul(31).wrapping_add(c as u32 as u64);
+    // Java's `long h = 31 * h + s.charAt(i)`: `charAt` returns a 16-bit
+    // UTF-16 unit, so astral characters contribute their surrogate pair and
+    // carried unpaired units their own unit (rustuml_parser::java_utf16).
+    for unit in rustuml_parser::java_utf16::units(s) {
+        h = h.wrapping_mul(31).wrapping_add(u64::from(unit));
     }
     h as i64
 }
@@ -458,6 +459,15 @@ fn abs_base36(seed: i64) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn backcolor_uses_rgb_even_when_text_fill_would_be_transparent() {
+        assert_eq!(normalize_back_color("transparent"), "#000000");
+        assert_eq!(normalize_back_color("background"), "#000000");
+        assert_eq!(normalize_back_color("#8044aa77"), "#8044AA");
+        assert_eq!(normalize_back_color("#abcdef00"), "#ABCDEF");
+        assert_eq!(normalize_back_color("#2ad"), "#22AADD");
+    }
 
     #[test]
     fn registry_scope_returns_body_value_and_collected_filters() {
@@ -565,7 +575,13 @@ mod tests {
         let source = diagram.meta().source.as_deref().unwrap();
 
         // `SvgGraphics.shadowId`: StringUtils.seed over the post-reader source.
-        assert_eq!(shadow_id_for(source), "fbdz2fx1jlqnt");
+        // Raw-reader seed under the owner raw-input contract
+        // (docs/reference-bootstrap.md, b62d8ce96): pinned Java `-pipe` keeps
+        // the two blank lines and emits f1jczin02njk7 for this exact input
+        // (relay batch AU, reference-results.json SHA256
+        // 44959f34ee5ecaa773827942b7e46fa98a66de7821a0abe946b66808f2a51c60,
+        // case raw_unit_test_input). fbdz2fx1jlqnt was the GET-stripped seed.
+        assert_eq!(shadow_id_for(source), "f1jczin02njk7");
     }
 
     #[test]

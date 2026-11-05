@@ -1,0 +1,5 @@
+@startuml
+!$ignored=%set_variable_value("twiǵ","spruce")
+!$answer=%get_variable_value("twiǵ")
+class "$answer / twiǵ / %variable_exists("twiǵ")" as Node
+@enduml

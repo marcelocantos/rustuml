@@ -1,0 +1,2 @@
+java    13815 marcelo  txt    REG   1,15    113856           130298121 /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/lib/libfontmanager.dylib
+java    13815 marcelo  txt    REG   1,15   1427648           151459072 /opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib

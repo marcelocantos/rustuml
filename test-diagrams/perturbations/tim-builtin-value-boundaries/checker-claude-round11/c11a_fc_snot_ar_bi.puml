@@ -1,0 +1,11 @@
+@startuml
+skinparam defaultFontName Arial
+<style>
+note {
+  FontStyle italic
+  FontWeight bold
+}
+</style>
+participant A
+note right of A : Avid Dawky Vow 4.7, gym kayak ovo!
+@enduml

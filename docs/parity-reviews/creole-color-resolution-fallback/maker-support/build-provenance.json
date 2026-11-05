@@ -1,0 +1,89 @@
+{
+  "base": "bdfeba117c7af6a527fc66b0acda6d8273fa6d74",
+  "production": "1ffb930b7b56decb15208121db5e70d252ed3c1b",
+  "builds": [
+    {
+      "phase": "before",
+      "revision": "f977806cef5a90a868175e8e707a89d4d791d29d",
+      "source_tree": "6b39aefc0eb2bc90d0422c3e35c32c7091a0fb0d",
+      "source_hashes": {
+        "crates/rustuml-render/src/creole.rs": "56d19352e693f44a54734bbf98b873587e7a5be73a53a8b246fb74559a71058f",
+        "crates/rustuml-render/src/text_render.rs": "a24772ef9b0167d84b4e44aa38963380a438b4231794d032b1e667b21b76e49f",
+        "crates/rustuml-render/src/wbs.rs": "9266be9a568908fa51fe025eed61a11b1bd2f00257a80fbc458f152a04f67d4a",
+        "crates/rustuml-parser/src/diagram/wbs.rs": "3915f7a06eb0f5bb369b59b94831502c1fa600aec790188f4500dc6d299058a9",
+        "crates/rustuml-parser/src/parse/wbs.rs": "d57cc6840af28925e85b441b108465a1a437afc0e96840a4ee0db3b1751b0cd2",
+        "crates/rustuml-render/src/class.rs": "3dcd6a57d46892a5ef6aa73a0205610b1d2485a4422d5f4d0adeb2913c53a9aa",
+        "crates/rustuml-render/src/sequence.rs": "4950fd8388388990b323ec04ea5899ead6cff69dec4eee92cffa91734cd7d95b",
+        "crates/rustuml-parser/src/parse/class.rs": "434ee97977df8071b7140af7fb0b621b2fea01b92919f34e84b9dc22ad2d314d",
+        "crates/rustuml-parser/src/preprocess/mod.rs": "3d99e98125f55671b8e8b0f6353a2aece3c4f9106e99dccd0b5d9f2b588cb334"
+      },
+      "binary": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/before-rustuml",
+      "binary_sha256": "5387645dbab0e0858229d2111f683db69c7709c2604d3620fde3a8bc1598e0d4",
+      "argv": [
+        "cargo",
+        "build",
+        "-p",
+        "rustuml",
+        "--release",
+        "-j",
+        "4"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/target-before",
+        "CARGO_BUILD_JOBS": "4"
+      },
+      "exit": 0,
+      "log": "logs/build-before.log",
+      "status_provenance": "Captured successful Finished release log. Separate private target seeded with APFS clone; no shell worktree."
+    },
+    {
+      "phase": "after",
+      "revision": "1ffb930b7b56decb15208121db5e70d252ed3c1b",
+      "source_tree": "a620e5895f4dd772d19e782d04783bc36603bc0c",
+      "source_hashes": {
+        "crates/rustuml-render/src/creole.rs": "d9d6ef11ac6476b9f3572b2eaa9fcb47f2818558eb51b619cb030f8996a19177",
+        "crates/rustuml-render/src/text_render.rs": "a24772ef9b0167d84b4e44aa38963380a438b4231794d032b1e667b21b76e49f",
+        "crates/rustuml-render/src/wbs.rs": "9266be9a568908fa51fe025eed61a11b1bd2f00257a80fbc458f152a04f67d4a",
+        "crates/rustuml-parser/src/diagram/wbs.rs": "3915f7a06eb0f5bb369b59b94831502c1fa600aec790188f4500dc6d299058a9",
+        "crates/rustuml-parser/src/parse/wbs.rs": "d57cc6840af28925e85b441b108465a1a437afc0e96840a4ee0db3b1751b0cd2",
+        "crates/rustuml-render/src/class.rs": "3dcd6a57d46892a5ef6aa73a0205610b1d2485a4422d5f4d0adeb2913c53a9aa",
+        "crates/rustuml-render/src/sequence.rs": "4950fd8388388990b323ec04ea5899ead6cff69dec4eee92cffa91734cd7d95b",
+        "crates/rustuml-parser/src/parse/class.rs": "434ee97977df8071b7140af7fb0b621b2fea01b92919f34e84b9dc22ad2d314d",
+        "crates/rustuml-parser/src/preprocess/mod.rs": "3d99e98125f55671b8e8b0f6353a2aece3c4f9106e99dccd0b5d9f2b588cb334"
+      },
+      "binary": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/after-rustuml",
+      "binary_sha256": "6c4dc0c10e855c8c4e16b0e3168ca6de202e91f7a6341e391e050bfe28890ead",
+      "argv": [
+        "cargo",
+        "build",
+        "-p",
+        "rustuml",
+        "--release",
+        "-j",
+        "4"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+      "env_overrides": {
+        "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/target-after",
+        "CARGO_BUILD_JOBS": "4"
+      },
+      "exit": 0,
+      "log": "logs/build-after.log",
+      "status_provenance": "Captured successful Finished release log. Separate private target seeded with APFS clone; no shell worktree."
+    }
+  ],
+  "only_production_file": "crates/rustuml-render/src/creole.rs",
+  "legacy_prefix_unchanged": true,
+  "public_style_and_shared_signatures_unchanged": true,
+  "candidate_grammars_unchanged": true,
+  "toolchain": {
+    "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)\nbinary: rustc\ncommit-hash: 58cf8f9c35b355199727627d07ae34a4e2846d67\ncommit-date: 2026-10-13\nhost: aarch64-apple-darwin\nrelease: 1.99.1\nLLVM version: 23.1.3\n",
+    "cargo": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)\n"
+  },
+  "diagnostic": {
+    "source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+    "binary_sha256": "ff7b3a8656b6565734d11e4aaa3f7fecc27ebe9aa9d10faa5ae36a61af578f21",
+    "origin": "Unchanged prior maker diagnostic using unchanged compare_svg_strict"
+  }
+}

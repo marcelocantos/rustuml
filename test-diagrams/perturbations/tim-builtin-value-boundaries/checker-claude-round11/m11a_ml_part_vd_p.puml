@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+participant "Avowed yak\nkindly Wigmore dew" as E1
+E1 -> E1 : ok
+@enduml

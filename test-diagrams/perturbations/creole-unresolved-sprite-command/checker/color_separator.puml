@@ -1,0 +1,3 @@
+@startuml
+class "A<#BLUE$north> B<$southcolor red> C<$east{color:green}>!" as Review
+@enduml

@@ -1,0 +1,319 @@
+{
+  "schema_version": 1,
+  "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A838a6cea-7fc2-451c-a6b0-6d978445e767",
+    "model": "gpt-6-astra; high reasoning; Codex harness in T3 Code",
+    "independence": "New independent checker; no earlier involvement in this packet; no children, extra worktrees, local JVM, SSH, new runners, maker/parent edits or shipping",
+    "branch": "review/creole-parameters-independent-e6a64f42"
+  },
+  "account_commit": "5652ec397eab87fb9449beefb7e2368179ae1919",
+  "account_path": "docs/parity-reviews/creole-parameter-candidate-grammar/alias-account.json",
+  "implementation_commit": "8ca73318f584dc29d7d8ab1c91f25a21718ca713",
+  "initial_implementation_commit": "3d92268c4aae5f8bfd3a0e271758b6a8e5442e47",
+  "base_revision": "2608469dace1f680a7e90c0895e44e657f8aaf7f",
+  "base_production": "a6e1718c4eb693aec99c3a107fd654afb8a4e4e3",
+  "evidence_tip": "bdfeba117c7af6a527fc66b0acda6d8273fa6d74",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/creole-parameters-independent-e6a64f42 bdfeba117c7af6a527fc66b0acda6d8273fa6d74",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/setup.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/build.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/build_probe.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/audit.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/validate_fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/complete_library.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/initial_diagnostics.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/observations.py",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/run_all.py",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/run_replay.py before checker36",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/run_replay.py after checker36",
+    "uv run --no-project --with pyyaml python /Users/marcelo/Library/Caches/rustuml-creole-parameter-checker-e6a64f42/run_replay.py initial golden-regressions",
+    "Parent existing Monkey Man: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.x45WQ0CO/new --timezone GMT+11:00 -- -pipe -tsvg"
+  ],
+  "perturbations": [
+    {
+      "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_upper.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_upper.svg",
+      "axes": [
+        "family 'COURIER'",
+        "plain versus bold/size/color nesting",
+        "act"
+      ],
+      "result": "pass",
+      "before_result": "pass",
+      "source_sha256": "d23e20a1bdf53e9968bd22e6d098fe0a40f9398aa182ebc6bdd750adf541a64a",
+      "golden_sha256": "ce339fb6217e3b132a6d22216f1d1129cca7d1d68d4ec6a7cf941c45d0eeda64",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_new.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_new.svg",
+      "axes": [
+        "family 'Courier New'",
+        "plain versus bold/size/color nesting",
+        "note"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "f39decf5b1d532e45fdf512879b64cf97d2217ad1a140582161acf2eb55849dd",
+      "golden_sha256": "abf52baaa64dd608402b9d4e3d0095f85aa465cdaba8cfe7d2d8729046807feb",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospace_padded.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospace_padded.svg",
+      "axes": [
+        "family '\" monospace \"'",
+        "plain versus bold/size/color nesting",
+        "seq"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "c03cd22f1d38d1bb27649752ff0e1863581504f94ccdbc66c95f685281c7ef48",
+      "golden_sha256": "7b7f0293cc50e9ce726f49035ec7fa7be23cc469628d44cc1798610709aabb68",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 3
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_trailing.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_courier_trailing.svg",
+      "axes": [
+        "family 'Courier '",
+        "plain versus bold/size/color nesting",
+        "seq"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "5deefb2e1133683b0863ba2f3b435cfa47cf480ad03101c4d4f5d9a805a40892",
+      "golden_sha256": "c9894830bb532758ff6b0484738eed6c32b3de4da7e5702bbfc85d4787e3f9e4",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_mono.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_mono.svg",
+      "axes": [
+        "family 'mono'",
+        "plain versus bold/size/color nesting",
+        "state"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "f73804441711e8c42826f76bc889391ea3aadb20d7170312996abbd62e0813f9",
+      "golden_sha256": "13e271daa046ac693a49202475cfcc31224582a3c83ab9e8cae73af9235b19c2",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_dialoginput.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_dialoginput.svg",
+      "axes": [
+        "family 'DialogInput'",
+        "plain versus bold/size/color nesting",
+        "seq"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "4730f54bba5d995e85511ea568953ae199d9ca7d93ad853e9d8e38fb2fe3b42c",
+      "golden_sha256": "3c7712d9cbce37b277b91ffcfdae4d8ac030a1f7e170e5be435faca442b649d8",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_lucida.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_lucida.svg",
+      "axes": [
+        "family 'Lucida Console'",
+        "plain versus bold/size/color nesting",
+        "wbs"
+      ],
+      "result": "pass",
+      "before_result": "fail",
+      "source_sha256": "02676bf32c49eaffdb675c03eea06a992b15e013aaaf30160b910ff40badba2d",
+      "golden_sha256": "5fc74992a238b0dcfc8051565312f48901579b1eed4070157553a16d174f9ca0",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_logical.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_logical.svg",
+      "axes": [
+        "family 'Serif'",
+        "plain versus bold/size/color nesting",
+        "cls"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "2d02cfd2add1721aee24ca8a51e71e188dd0551dfe7abec28133932fd979f8ca",
+      "golden_sha256": "9ec8a5a207a76b68725cba90b0f5c3f80651d3ba903d0f0f92c17adf86a2f2cb",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_dialog.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_dialog.svg",
+      "axes": [
+        "family 'Dialog'",
+        "plain versus bold/size/color nesting",
+        "note"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "5cb80173bdc1c5ac19c0907d7f5c926df671490f28a38b35df6694010fbd59f1",
+      "golden_sha256": "ad3048443b84e0e1cbeb7cef517d042de4e8c611b80a7449a1f2258bfc4f6b51",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_sansserif.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_sansserif.svg",
+      "axes": [
+        "family 'SansSerif'",
+        "plain versus bold/size/color nesting",
+        "act"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "7c3e7eb3c3f03b8aba4499c81166f8d3a096f47ecacd9f660a16f247f4e3e279",
+      "golden_sha256": "787a79a50291fcf5de3060344c0c4cbd80f00e80fdda97ba424643ab576036be",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospaced_case.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospaced_case.svg",
+      "axes": [
+        "family 'mOnOsPaCeD'",
+        "plain versus bold/size/color nesting",
+        "seq"
+      ],
+      "result": "fail",
+      "before_result": "fail",
+      "source_sha256": "fb69cd4344ff8d2ba6cf1dacb165c79159ce5c9685ced9965870fb5e738cc189",
+      "golden_sha256": "03b0e619148c676c047647c79c01af531497facc9a288365227562ea6c1aa811",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 1
+    },
+    {
+      "mechanism": "creole-parameter-candidate-grammar-alias-compatibility",
+      "source": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospace_case.puml",
+      "golden": "test-diagrams/perturbations/creole-parameter-candidate-grammar-alias-compatibility/checker-independent-e6a64f42/alias_monospace_case.svg",
+      "axes": [
+        "family 'MONOSPACE'",
+        "plain versus bold/size/color nesting",
+        "wbs"
+      ],
+      "result": "pass",
+      "before_result": "pass",
+      "source_sha256": "917d1fb22cd05d6e940819acaba287a3485d47b7ccc8bb096406f510c28afc8d",
+      "golden_sha256": "1d09567158c882b276099be603e0bc3cf7ec6b6fa9c429493cb67486d333aedb",
+      "reference_valid": true,
+      "intended_validity": "intended_valid",
+      "reference_classification": "valid_diagram",
+      "reference_exit": 0,
+      "cli_svg_exit": 0,
+      "cli_yaml_exit": 0,
+      "comparison_exit": 0
+    }
+  ],
+  "findings": [
+    "The flag predicate exactly matches the unchanged resolver quote-trimmed ASCII-case-folded Courier/monospace/Monospaced set. Every tested member retains the flag with nested bold/size/color; Courier New, mono, DialogInput, Lucida Console, Serif, Dialog and SansSerif do not gain that flag. Courier New uses its preexisting dedicated CourierNew metric family, not the compatibility flag.",
+    "The word trimmed must be qualified. Rust trims quotes only; it does not trim whitespace. FontStack.getFonts uses trimWhitespaceOrDoubleQuote before Font.decode. Quoted padded monospace and trailing-space Courier therefore are not Rust aliases although Java metrics trim them. The maker account explicitly limits compatibility to the existing resolver normalization; it does not establish Java whitespace-normalized family parity. A padded family is also not normalized for Java SVG NBSP selection, which compares the preserved string.",
+    "Unpadded Courier preserves the Mono metric branch. Monospace/Monospaced set the flag but text_render explicit_monospace_font_uses_surrounding_metrics chooses surrounding metrics; the flag is not evidence that a monospaced metric table was selected. The restored Monospaced metric difference is real and reproduced. No shared resolver change was made.",
+    "Fresh alias whole outputs: 2 to4 passes /12 valid observations. COURIER and MONOSPACE controls remain passing; mono and Lucida Console improve. Quoted padding, trailing spaces, logical families, mixed size baselines and note height produce failures. Whole-output rule rejects this mechanism despite restored compatibility flags.",
+    "Six separate golden controls reproduce6 to0 to6 actual CLI passes: activity/act_creole_monospace and creole/creole_font_name_in_activity,class,note,sequence,title. All six source hashes are absent from every1992 replay membership. They were found by the first draft broad unit/library gates, not its replay or focused creole-only membership; this is an explicit replay-coverage finding.",
+    "Independent initial product diagnostics reproduce11173/11251 (six lost baseline names) and assisted10492/11251 (five lost names, note excluded). Final product11179 and assisted10497 reproduce; their72/754 failure-name files are byte-identical to both the freshly built baseline and maker baseline. All six extra YAML models are byte-equal before/initial/final.",
+    "Java provenance is CommandCreoleFontFamilyChange.executeAndGetRemaining -> FontConfiguration.changeFamily preserving face/size -> FontStack.getFonts/Font.decode -> UFontImpl.getFamily(SVG) and SvgGraphics697-708 logical-name/NBSP handling. The production alias predicate does not change font assets or geometry and does not add aliases."
+  ],
+  "verdict": "rejected",
+  "whole_output_measurement": {
+    "entries": 12,
+    "valid": 12,
+    "before_pass": 2,
+    "after_pass": 4
+  },
+  "bounded_support_is_not_acceptance": true,
+  "residue": [
+    "Warning chrome T14.12; stripe classifier T14.13; plain/code registry/reset T14.14 remain explicit failures.",
+    "Sequence mixed-size baselines and note heights are owned by concurrent sequence work; no sibling implementation imported.",
+    "Forced alignment; Unicode/Omega widths; URL/italic/legacy tspan; negative diagnostics remain explicit failures.",
+    "malformed_dot, both shape_direction syntax-error SVGs and Batik-limited math references T14.6.5 remain nonpositive.",
+    "Java argv is derived from wrapper construction, not process-traced. Historical font and Graphviz environment equivalence remains unproved.",
+    "Broad gate results precede checker-only registration; guard remains red. No acceptance, no scope waiver, no baseline/comparator/allow-list/target changes."
+  ],
+  "evidence_support": "docs/parity-reviews/creole-parameter-candidate-grammar/checker-support",
+  "broad_gates": "docs/parity-reviews/creole-parameter-candidate-grammar/checker-support/gate-summary.json",
+  "record_layout": "Subordinate review lives beside the canonical precommitted alias-account.json packet; no account copy/rewrite. Current guard enumerates top-level account.json/direct reviews, so this subordinate alias attestation is not separately enumerated by it. Fresh alias pairs are in the standing recursive perturbation walk; no guard-green or acceptance claim."
+}

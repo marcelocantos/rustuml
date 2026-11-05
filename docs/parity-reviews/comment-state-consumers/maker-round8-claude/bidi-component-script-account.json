@@ -1,0 +1,44 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-8.json and comment-state-consumers/review-9.json (98ddcfc9d) bounded_next_obligations",
+ "sub_mechanism": "HarfBuzz buffers are bidi component x script run x font-slot run (round-8 obligation 1, BLOCKING)",
+ "sources": [
+  "OpenJDK jdk21u tag jdk-21.0.5-ga (https://github.com/openjdk/jdk21u; the reference JVM is Homebrew openjdk@21 21.0.5), raw files, sha256: TextLine.java 4568ae07, TextLayout.java 3a1f3346, Font.java 06e4691d, java/text/Bidi.java e80d3188, jdk/internal/icu/text/BidiBase.java df973a5f, BidiLine.java 15910df5, sun/font/BidiUtils.java 1ebac3a8, TextLabelFactory.java f22871a7, ExtendedTextSourceLabel.java 82e68fbd, GlyphLayout.java cb95ae86, ScriptRun.java ae8c4d2f, HBShaper.c 2fbbde51, hb-jdk-font.cc 8027d83a, AWTFont.m 8f834825, CFont.java 6ab8feb0, UBiDiProps.java 61ba59a6, Trie2.java 1dc311fe, Trie2_16.java a5a4d9bf, scriptMapping.c 0a329fea, icudt72b/ubidi.icu 3d394ff3 (data version 15.0.0.0)"
+ ],
+ "java_locations": [
+  "Font.getStringBounds(char[],int,int,FontRenderContext) 2629-2650: complex text (FontUtilities.isComplexText) is measured as new TextLayout(str, this, frc).getAdvance().",
+  "TextLayout(String, Font, FontRenderContext) 371-399: a font without layout attributes passes attributes null; sameBaselineUpTo is the whole string, so fastInit (589-612) -> TextLine.fastCreateTextLine(frc, chars, font, cm, null).",
+  "TextLine.fastCreateTextLine 897-980: with attributes null, requiresBidi = Bidi.requiresBidi(chars, 0, chars.length); if so, bidi = new Bidi(chars, 0, null, 0, len, Bidi.DIRECTION_DEFAULT_LEFT_TO_RIGHT) and, when !bidi.isLeftToRight(), levels = BidiUtils.getLevels(bidi); createComponentsOnRun(0, len, ...).",
+  "TextLine.createComponentsOnRun 994-1039 and firstVisualChunk 1296-1305: one TextLineComponent per maximal run of equal levels (one for the whole string when levels is null).",
+  "TextLabelFactory.createExtended 116-134: the component's flags carry LAYOUT_RIGHT_TO_LEFT for an odd level; ExtendedTextSourceLabel.createGV 325-335 lays out [start, start+length) with GlyphLayout.layout.",
+  "GlyphLayout.layout 353-431: _scriptRuns.init(text, offset, count) and _fontRuns.init(font, text, offset, offset+count): ScriptRun (init 103-117 resets parenSP) and FontRunIterator run over the component only; one engine record (HarfBuzz buffer) per script run x slot run inside it.",
+  "HBShaper.c 253-293: buffer script = getHBScriptCode(script) (scriptMapping.c), direction RTL iff TYPO_RTL, no buffer flags (no BOT, so no dotted circle), features -kern -liga.",
+  "BidiBase.requiresBidi 4534-4561: true only if some code point is R, AL, RLE, RLO or AN (an isolate initiator alone does not require bidi).",
+  "BidiBase(char[],int,byte[],int,int,int) 4278-4325: DIRECTION_DEFAULT_LEFT_TO_RIGHT -> paraLevel LEVEL_DEFAULT_LTR; setPara(char[]) 3526-3710 with REORDER_DEFAULT and no options: getDirProps 1476-1677 (P2-P3, FSI resolution, paragraphs at B, CR LF), resolveExplicitLevels 2090-2340 (X1-X8 with the overflow counters and the bracket pairing N0 of bracketProcessChar/Closing 1708-2020), the same-level-run loop of setPara with sor/eor, resolveImplicitLevels 3014-3165 (impTabProps 2470-2497, impTab_DEFAULT 2565-2613, processPropertySeq actions 1-4 2819-3012), adjustWSLevels 3167-3199 (L1; BN and explicit codes take the level of the following character).",
+  "BidiBase.getCustomizedClass 3971-3978 (class >= 23 -> ON) over UBiDiProps.getClass (Trie2_16.get on icudt72b/ubidi.icu); UCharacter.getBidiPairedBracket/getIntPropertyValue(BIDI_PAIRED_BRACKET_TYPE) -> UBiDiProps.getPairedBracket/getPairedBracketType.",
+  "BidiBase.isLeftToRight 4354-4368 and BidiLine.getRuns 475-590: for direction LTR/RTL all levels are paraLevel; for MIXED the runs are the maximal runs of levels[] (trailingWSStart = length), so BidiUtils.getLevels returns levels[]."
+ ],
+ "rust_locations": [
+  "crates/rustuml-render/src/font_chain.rs ChainFace::complexity_per_token: script runs over the whole string (script_run_codes(&codes)), then slot runs; no bidi."
+ ],
+ "planned_change": [
+  "tools/java_bidi_data.py: decode JDK 21.0.5's ubidi.icu (Trie2_16, mirrors[]) into BIDI_CLASSES and BRACKETS (crates/rustuml-render/src/java_bidi_data.rs); checked equal to Unicode 15.0.0 DerivedBidiClass.txt and BidiBrackets.txt for every code point; ubidi.icu stored under tools/font-chain-reference/jdk-21.0.5/ with SHA256SUMS.",
+  "crates/rustuml-render/src/java_bidi.rs: port of BidiBase.setPara for REORDER_DEFAULT without options (getDirProps, resolveExplicitLevels with brackets, resolveImplicitLevels/processPropertySeq with impTab_DEFAULT, adjustWSLevels), requiresBidi and isLeftToRight; text_line_levels(units) -> Option<levels> as TextLine.fastCreateTextLine.",
+  "font_chain.rs complexity_per_token: split complex text into components at level changes; ScriptRun and slot runs per component; the planner and fallback per buffer as before.",
+  "Unit tests: the JDK paths above on the BK/BL/BM strings; conformance of java_bidi against a sample of Unicode 15.0.0 BidiCharacterTest.txt lines (stored with provenance), levels compared where the file gives one (not 'x')."
+ ],
+ "precommitted_measurement": {
+  "oracle": "BK (L7A), BL (C7A), BM (C7B) Java references (HarfBuzz 15.0.0); BJ..AR; goldens; fresh M8A probes (relay)",
+  "expect": [
+   "Keep the mark (Verdana .notdef 1 em, text width = control + 1 em; whole-output back to the merge result, failing only by the control's residue): BK mk9_verdana_hebrew_space; BL c7m_heb_verdana_digit, c7m_heb_verdanabold_digit, c7m_heb_verdana_usecase; BM c7b_verdana_tail_space, c7b_verdana_digit_rtl.",
+   "Keep zeroing (one RTL component, hebrew shaper): BM c7b_verdana_rtl_space, c7b_verdanabold_rtl_space.",
+   "Zero (RLM splits; the EN+NSM component is COMMON: default shaper, Lucida Grande GDEF-synthesized MARK zeroed): BM c7b_thai_rlm_digit, c7b_deva_rlm_digit; their text width equals the control's.",
+   "No other BK/BL/BM/BJ..AR case or golden changes result unless its measured string is complex and has a bidi level change; each such change is listed and traced.",
+   "Fresh probes (staged for relay, predictions committed first): AL + EN (W2), RLE/LRE/RLO/LRO/PDF, RLI/LRI/FSI/PDI (requiresBidi ignores isolates), trailing whitespace (L1), brackets (N0)."
+  ]
+ }
+}

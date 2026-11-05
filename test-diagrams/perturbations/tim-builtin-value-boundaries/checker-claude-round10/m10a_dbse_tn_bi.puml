@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam databaseFontStyle bold italic
+database "Pylon vk" as E1
+@enduml

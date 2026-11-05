@@ -1,0 +1,3 @@
+review tree = 7ec2e5af8 + this review (records and 41 registered pairs)
+harness_guards: same 2 failing tests; category diff vs tip: latest accepted review cannot contain failing perturbations 1221 -> 1223; no other category changes (0 path/escape/same-stem/not-named additions)
+parity_perturbations: 41 new pairs, 35 pass, 6 fail (review-tree.round4_failing.txt); pre-existing failing set identical to tip.pert_fail.txt (1616)

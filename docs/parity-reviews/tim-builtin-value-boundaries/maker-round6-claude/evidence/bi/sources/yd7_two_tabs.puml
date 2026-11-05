@@ -1,0 +1,4 @@
+@startyaml
+row: "a\tb\tc"
+wide: "a long first token\tz"
+@endyaml

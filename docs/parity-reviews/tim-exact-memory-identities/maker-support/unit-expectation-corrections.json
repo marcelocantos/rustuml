@@ -1,0 +1,92 @@
+[
+  {
+    "test": "define_substitution",
+    "old_block": "    fn define_substitution() {\n        let input = \"@startuml\\n!define NAME Alice\\n$NAME -> Bob : hello\\n@enduml\";\n        let lines = pp(input);\n        assert_eq!(lines, vec![\"Alice -> Bob : hello\"]);\n    }\n\n",
+    "new_block": "    fn define_substitution() {\n        let input = \"@startuml\\n!define NAME Alice\\n$NAME -> Bob : hello\\n@enduml\";\n        let lines = pp(input);\n        // EaterAffectationDefine stores NAME only; ShuntingYard resolves\n        // $NAME independently, while VariableManager scans bare NAME after '$'.\n        // TIM7 supplement2 define_spelling/define_condition confirms this;\n        // the original input and prior assertion are preserved in maker evidence.\n        assert_eq!(lines, vec![\"$Alice -> Bob : hello\"]);\n    }\n\n",
+    "previous_assertion": "vec![\"Alice -> Bob : hello\"]",
+    "corrected_assertion": "vec![\"$Alice -> Bob : hello\"]",
+    "unchanged_input": true,
+    "java": [
+      "EaterAffectationDefine.analyze",
+      "ShuntingYard constructor",
+      "VariableManager.getVarnameAt"
+    ],
+    "captures": [
+      "supplement/define_spelling.puml",
+      "supplement/define_condition.puml"
+    ],
+    "verifies": "Bare define expands inside text; dollar is not part of its key."
+  },
+  {
+    "test": "multiple_vars",
+    "old_block": "    fn multiple_vars() {\n        let input = \"@startuml\\n!define FROM Alice\\n!define TO Bob\\n!define MSG hello\\n$FROM -> $TO : $MSG\\n@enduml\";\n        let lines = pp(input);\n        assert_eq!(lines, vec![\"Alice -> Bob : hello\"]);\n    }\n\n",
+    "new_block": "    fn multiple_vars() {\n        let input = \"@startuml\\n!define FROM Alice\\n!define TO Bob\\n!define MSG hello\\n$FROM -> $TO : $MSG\\n@enduml\";\n        let lines = pp(input);\n        // EaterAffectationDefine stores NAME only; ShuntingYard resolves\n        // $NAME independently, while VariableManager scans bare NAME after '$'.\n        // TIM7 supplement2 define_spelling/define_condition confirms this;\n        // the original input and prior assertion are preserved in maker evidence.\n        assert_eq!(lines, vec![\"$Alice -> $Bob : $hello\"]);\n    }\n\n",
+    "previous_assertion": "vec![\"Alice -> Bob : hello\"]",
+    "corrected_assertion": "vec![\"$Alice -> $Bob : $hello\"]",
+    "unchanged_input": true,
+    "java": [
+      "EaterAffectationDefine.analyze",
+      "ShuntingYard constructor",
+      "VariableManager.getVarnameAt"
+    ],
+    "captures": [
+      "supplement/define_spelling.puml",
+      "supplement/define_condition.puml"
+    ],
+    "verifies": "Independent substitutions keep their literal dollar prefixes."
+  },
+  {
+    "test": "include_with_defines",
+    "old_block": "    fn include_with_defines() {\n        let dir = std::env::temp_dir().join(\"rustuml_test_include_defines\");\n        let _ = std::fs::create_dir_all(&dir);\n        std::fs::write(dir.join(\"defs.puml\"), \"!define AUTHOR Alice\\n\").unwrap();\n\n        let input = \"@startuml\\n!include defs.puml\\n$AUTHOR -> Bob : hi\\n@enduml\";\n        let lines = preprocess_with_base(input, &dir);\n        assert_eq!(lines, vec![\"Alice -> Bob : hi\"]);\n\n        let _ = std::fs::remove_dir_all(&dir);\n    }\n\n",
+    "new_block": "    fn include_with_defines() {\n        let dir = std::env::temp_dir().join(\"rustuml_test_include_defines\");\n        let _ = std::fs::create_dir_all(&dir);\n        std::fs::write(dir.join(\"defs.puml\"), \"!define AUTHOR Alice\\n\").unwrap();\n\n        let input = \"@startuml\\n!include defs.puml\\n$AUTHOR -> Bob : hi\\n@enduml\";\n        let lines = preprocess_with_base(input, &dir);\n        // EaterAffectationDefine stores NAME only; ShuntingYard resolves\n        // $NAME independently, while VariableManager scans bare NAME after '$'.\n        // TIM7 supplement2 define_spelling/define_condition confirms this;\n        // the original input and prior assertion are preserved in maker evidence.\n        assert_eq!(lines, vec![\"$Alice -> Bob : hi\"]);\n\n        let _ = std::fs::remove_dir_all(&dir);\n    }\n\n",
+    "previous_assertion": "vec![\"Alice -> Bob : hi\"]",
+    "corrected_assertion": "vec![\"$Alice -> Bob : hi\"]",
+    "unchanged_input": true,
+    "java": [
+      "EaterAffectationDefine.analyze",
+      "ShuntingYard constructor",
+      "VariableManager.getVarnameAt"
+    ],
+    "captures": [
+      "supplement/define_spelling.puml",
+      "supplement/define_condition.puml"
+    ],
+    "verifies": "Included bare global definition is visible without inventing a dollar alias."
+  },
+  {
+    "test": "foreach_preserves_other_vars",
+    "old_block": "    fn foreach_preserves_other_vars() {\n        let input = \"@startuml\\n!define WHO Alice\\n!foreach $x in [\\\"hello\\\", \\\"world\\\"]\\n$WHO -> Bob : $x\\n!endfor\\n@enduml\";\n        let lines = pp(input);\n        assert_eq!(lines, vec![\"Alice -> Bob : hello\", \"Alice -> Bob : world\"]);\n    }\n\n",
+    "new_block": "    fn foreach_preserves_other_vars() {\n        let input = \"@startuml\\n!define WHO Alice\\n!foreach $x in [\\\"hello\\\", \\\"world\\\"]\\n$WHO -> Bob : $x\\n!endfor\\n@enduml\";\n        let lines = pp(input);\n        // EaterAffectationDefine stores NAME only; ShuntingYard resolves\n        // $NAME independently, while VariableManager scans bare NAME after '$'.\n        // TIM7 supplement2 define_spelling/define_condition confirms this;\n        // the original input and prior assertion are preserved in maker evidence.\n        assert_eq!(lines, vec![\"$Alice -> Bob : hello\", \"$Alice -> Bob : world\"]);\n    }\n\n",
+    "previous_assertion": "vec![\"Alice -> Bob : hello\", \"Alice -> Bob : world\"]",
+    "corrected_assertion": "vec![\"$Alice -> Bob : hello\", \"$Alice -> Bob : world\"]",
+    "unchanged_input": true,
+    "java": [
+      "EaterAffectationDefine.analyze",
+      "ShuntingYard constructor",
+      "VariableManager.getVarnameAt"
+    ],
+    "captures": [
+      "supplement/define_spelling.puml",
+      "supplement/define_condition.puml"
+    ],
+    "verifies": "Loop bindings preserve independent bare definitions and literal prefixes."
+  },
+  {
+    "test": "if_else",
+    "old_block": "    fn if_else() {\n        let input = \"@startuml\\n!define MODE prod\\n!if $MODE == \\\"prod\\\"\\nA -> B : production\\n!else\\nA -> B : dev\\n!endif\\n@enduml\";\n        let lines = pp(input);\n        assert_eq!(lines, vec![\"A -> B : production\"]);\n    }\n\n",
+    "new_block": "    fn if_else() {\n        let input = \"@startuml\\n!define MODE prod\\n!if $MODE == \\\"prod\\\"\\nA -> B : production\\n!else\\nA -> B : dev\\n!endif\\n@enduml\";\n        let lines = pp(input);\n        // EaterAffectationDefine stores NAME only; ShuntingYard resolves\n        // $NAME independently, while VariableManager scans bare NAME after '$'.\n        // TIM7 supplement2 define_spelling/define_condition confirms this;\n        // the original input and prior assertion are preserved in maker evidence.\n        assert_eq!(lines, vec![\"A -> B : dev\"]);\n    }\n\n",
+    "previous_assertion": "vec![\"A -> B : production\"]",
+    "corrected_assertion": "vec![\"A -> B : dev\"]",
+    "unchanged_input": true,
+    "java": [
+      "EaterAffectationDefine.analyze",
+      "ShuntingYard constructor",
+      "VariableManager.getVarnameAt"
+    ],
+    "captures": [
+      "supplement/define_spelling.puml",
+      "supplement/define_condition.puml"
+    ],
+    "verifies": "Dollar name missing from memory is a literal operand, so the else branch executes."
+  }
+]

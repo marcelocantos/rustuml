@@ -1,0 +1,4 @@
+@startyaml
+outer:
+	in	ner: v
+@endyaml

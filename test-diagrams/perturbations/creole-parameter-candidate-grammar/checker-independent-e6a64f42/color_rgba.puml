@@ -1,0 +1,3 @@
+@startuml
+Alder -> Birch : a<color:#8044aa77>seed</color>z
+@enduml

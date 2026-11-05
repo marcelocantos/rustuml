@@ -1,0 +1,7 @@
+@startuml
+class Quay
+note right of Quay
+quay
+אב גד
+end note
+@enduml

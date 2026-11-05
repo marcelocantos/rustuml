@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-eager-operands-first-error",
+  "rust_revision": "b02ea9cba8e5724790eb767f8e7fa2052bc393a7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/expression/ReversePolishInterpretor.java:constructor",
+    "tim/expression/TokenOperator.java:operate",
+    "tim/expression/TValue.java:toBoolean/logicalAnd/logicalOr",
+    "tim/TContext.java:executeOneLineSafe/executeLines"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/"
+  ],
+  "invariant": "Expression operands execute in source order before their operator. Values never re-enter source evaluation. The first fatal evaluation stops subsequent execution and remains the reported diagnostic.",
+  "causal_divergence": "Host boolean short-circuit skips operands; eval_bool reparses string values; later evaluator errors overwrite the first.",
+  "planned_change": "Unify boolean and value expression semantics, eagerly evaluate operands left-to-right, convert values to truth directly, and guard all expression/call/mutation boundaries after the first fatal error. Preserve the existing correct parse error handoffs.",
+  "perturbation_axes": [
+    "AND/OR with nested state changes and quoted function-like values",
+    "Error order across argument/default/log/compound expressions, effects after error"
+  ],
+  "oracle_plan": [
+    "Frozen checker counterexamples through actual CLI and unchanged SVG comparator; supplemental exact Java source",
+    "Focused fresh maker controls on at least two axes; ALL LOCAL JAVA PAUSED, references await verified Monkey Man environment",
+    "Once stable: parser/CLI suites, both main tiers, guards, format/clippy; explicitly scoped 1038=949+89 locally versus frozen955/checker1044 and parent1449"
+  ],
+  "pending": [
+    "Fresh independent checker; all ten prior claims remain rejected",
+    "No class/sequence renderer changes; no historical reference or baseline changes"
+  ],
+  "scope": "Preprocess and NEW maker evidence only. Root parse error checks and raw assertion preserved."
+}

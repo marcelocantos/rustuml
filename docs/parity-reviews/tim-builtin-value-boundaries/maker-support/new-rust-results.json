@@ -1,0 +1,1142 @@
+[
+  {
+    "source": "/tmp/rustuml-tim5/new/case_units.puml",
+    "mechanism": "tim-builtin-value-boundaries",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "825372630fbde8e2268f97c469f6ffb8f3d20a919a36b71ccf6cfdb92517cde0",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/boolean_values.puml",
+    "mechanism": "tim-builtin-value-boundaries",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "9e951533decba231e09aeaf03cae2ba9f04f03301772f2b6e218fa7c508e9d89",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/boolean_error.puml",
+    "mechanism": "tim-builtin-value-boundaries",
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "2f13eebd79710bf31f61f4793642f06f0539a868e61d1fa9cf924f2ed37b8579",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/arity_missing.puml",
+    "mechanism": "tim-call-resolution-arity",
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "054ff6d8abbdf029f545b1291ac2863c47c1efe75b2a6c815a1fb0920841caa3",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/arity_user_excess.puml",
+    "mechanism": "tim-call-resolution-arity",
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "e45cf9f5f4b83b1545b3565bc3cbdd9f2d456796bfd00d9c7ed0a32c90fe7db0",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/named_global_effect.puml",
+    "mechanism": "tim-named-key-operands",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "8ce1f9c3d4020f38a2da6a9d6cf830a58b4f3c594079df16184c40decf093519",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/named_local.puml",
+    "mechanism": "tim-named-key-operands",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "a3742c9c1fe799beab8ecec21a18c471e0486fae47506d4bb0d39368ecbfe298",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/macro_call_literals.puml",
+    "mechanism": "tim-original-macro-scanning",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "985f30f8e3b0be35bd6941cffc9c0bff0b661b014191203c9d7be510725d06c3",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/macro_boundary_parameters.puml",
+    "mechanism": "tim-original-macro-scanning",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "520545a69cc1e8f1c5609e74b5c31d9cdd3855e7b8f9c57b53472feacf49721c",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/sub_suffix.puml",
+    "mechanism": "tim-sub-marker-layers",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "604a9411620de44549e00049bdb70ffb20fbc950d08ea29bc5e0aafd98627402",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/sub_selected_comments.puml",
+    "mechanism": "tim-sub-marker-layers",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "b8cc6aecbe81a95e30603f8a4cbe6b4bbcfa3c78e20c6336579b3beae7f1a8ad",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/sub_raw_bad_comment.puml",
+    "mechanism": "tim-sub-marker-layers",
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "7fc644ae51146ee08cbaa56385dca44e12abd187d6628bff43b73b851b1af804",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/foreach_non_json.puml",
+    "mechanism": "tim-json-container-validation",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "e785c19dd5d86f5fd2ec68793c3e8084d6a5367a97274c2657b80511321465c1",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/foreach_json_boolean.puml",
+    "mechanism": "tim-json-container-validation",
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "87e1dea38f64a8e25c01f2c197a0b15489b7469e2c83fa7667c005cd12e2457e",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/json_missing_traversal.puml",
+    "mechanism": "tim-json-container-validation",
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "before",
+    "source_sha256": "0fd70e6ddb8f22974746ae300959b49ad943497d95791f982cdbc26aad3bb16b",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/before-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/case_units.puml",
+    "mechanism": "tim-builtin-value-boundaries",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "825372630fbde8e2268f97c469f6ffb8f3d20a919a36b71ccf6cfdb92517cde0",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/boolean_values.puml",
+    "mechanism": "tim-builtin-value-boundaries",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "9e951533decba231e09aeaf03cae2ba9f04f03301772f2b6e218fa7c508e9d89",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/boolean_error.puml",
+    "mechanism": "tim-builtin-value-boundaries",
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "2f13eebd79710bf31f61f4793642f06f0539a868e61d1fa9cf924f2ed37b8579",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/arity_missing.puml",
+    "mechanism": "tim-call-resolution-arity",
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "054ff6d8abbdf029f545b1291ac2863c47c1efe75b2a6c815a1fb0920841caa3",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/arity_user_excess.puml",
+    "mechanism": "tim-call-resolution-arity",
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "e45cf9f5f4b83b1545b3565bc3cbdd9f2d456796bfd00d9c7ed0a32c90fe7db0",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/named_global_effect.puml",
+    "mechanism": "tim-named-key-operands",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "8ce1f9c3d4020f38a2da6a9d6cf830a58b4f3c594079df16184c40decf093519",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/named_local.puml",
+    "mechanism": "tim-named-key-operands",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "a3742c9c1fe799beab8ecec21a18c471e0486fae47506d4bb0d39368ecbfe298",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/macro_call_literals.puml",
+    "mechanism": "tim-original-macro-scanning",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "985f30f8e3b0be35bd6941cffc9c0bff0b661b014191203c9d7be510725d06c3",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/macro_boundary_parameters.puml",
+    "mechanism": "tim-original-macro-scanning",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "520545a69cc1e8f1c5609e74b5c31d9cdd3855e7b8f9c57b53472feacf49721c",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/sub_suffix.puml",
+    "mechanism": "tim-sub-marker-layers",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "604a9411620de44549e00049bdb70ffb20fbc950d08ea29bc5e0aafd98627402",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/sub_selected_comments.puml",
+    "mechanism": "tim-sub-marker-layers",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "b8cc6aecbe81a95e30603f8a4cbe6b4bbcfa3c78e20c6336579b3beae7f1a8ad",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/sub_raw_bad_comment.puml",
+    "mechanism": "tim-sub-marker-layers",
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "7fc644ae51146ee08cbaa56385dca44e12abd187d6628bff43b73b851b1af804",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/foreach_non_json.puml",
+    "mechanism": "tim-json-container-validation",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "e785c19dd5d86f5fd2ec68793c3e8084d6a5367a97274c2657b80511321465c1",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 0
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/foreach_json_boolean.puml",
+    "mechanism": "tim-json-container-validation",
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "87e1dea38f64a8e25c01f2c197a0b15489b7469e2c83fa7667c005cd12e2457e",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      }
+    ]
+  },
+  {
+    "source": "/tmp/rustuml-tim5/new/json_missing_traversal.puml",
+    "mechanism": "tim-json-container-validation",
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "phase": "iteration1",
+    "source_sha256": "0fd70e6ddb8f22974746ae300959b49ad943497d95791f982cdbc26aad3bb16b",
+    "calls": [
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      },
+      {
+        "argv": [
+          "/tmp/rustuml-tim5/iteration1-rustuml",
+          "--yaml",
+          "-pipe"
+        ],
+        "cwd": "/tmp/rustuml-tim5/new",
+        "environment_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "TZ": "GMT+11:00"
+        },
+        "exit_code": 1
+      }
+    ]
+  }
+]

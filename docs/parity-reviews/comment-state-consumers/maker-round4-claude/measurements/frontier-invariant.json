@@ -1,0 +1,116 @@
+{
+ "rule": "tools/borderinv.py: every entry/exit circle (rx=ry=6, stroke-width 1.5) centred on some drawn cluster rectangle border (0.02 px)",
+ "sweep": {
+  "java_references": {
+   "files": 53,
+   "on_frontier": 51,
+   "exceptions": {
+    "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.puml": {
+     "points": 5,
+     "off_frontier": [
+      [
+       597.0,
+       247.9414
+      ]
+     ]
+    },
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.puml": {
+     "points": 6,
+     "off_frontier": [
+      [
+       647.0,
+       507.0
+      ]
+     ]
+    }
+   }
+  },
+  "base_3992971a7": {
+   "files": 42,
+   "off_frontier_files": [
+    "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.puml"
+   ],
+   "java_exceptions_identical": true
+  },
+  "round3_71d16da4a": {
+   "files": 52,
+   "off_frontier_files": [
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+    "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.puml"
+   ],
+   "java_exceptions_identical": true
+  },
+  "tip": {
+   "files": 52,
+   "off_frontier_files": [
+    "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.puml"
+   ],
+   "java_exceptions_identical": true
+  }
+ },
+ "BC": {
+  "java": {
+   "files": 9,
+   "off_frontier": {}
+  },
+  "base": {
+   "files": 0,
+   "off_frontier": {}
+  },
+  "r3": {
+   "files": 9,
+   "off_frontier": {
+    "en_wide_d2_image": [
+     [
+      94.43,
+      175.9766
+     ]
+    ],
+    "ex_d2_widelabel": [
+     [
+      69.67,
+      207.4883
+     ]
+    ],
+    "ex_wide_d1_image": [
+     [
+      69.67,
+      172.4883
+     ]
+    ]
+   }
+  },
+  "tip": {
+   "files": 9,
+   "off_frontier": {}
+  }
+ },
+ "BB": {
+  "java": {
+   "files": 5,
+   "off_frontier": {}
+  },
+  "base": {
+   "files": 0,
+   "off_frontier": {}
+  },
+  "r3": {
+   "files": 5,
+   "off_frontier": {
+    "img_cluster_exit_wide": [
+     [
+      70.0,
+      207.4883
+     ]
+    ]
+   }
+  },
+  "tip": {
+   "files": 5,
+   "off_frontier": {}
+  }
+ }
+}

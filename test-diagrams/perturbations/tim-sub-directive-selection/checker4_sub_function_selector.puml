@@ -1,0 +1,8 @@
+@startuml
+!$n=0
+!function $select()
+!return "checker4-resources/blocks.inc!chosen"
+!endfunction
+!includesub	$select()
+class "n=$n" as Selected
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class Grove {
+a<b><color:~#44aa77>seed</color></b>z
+a<size:~14><u>seed</u></size>z
+}
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+note right of Gate : shut
+state Fort {
+  Wall --> Tower
+}
+Gate --> Fort
+@enduml

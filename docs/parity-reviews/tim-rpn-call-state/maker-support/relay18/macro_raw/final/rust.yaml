@@ -1,0 +1,25 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      note as N
+        $p one
+      two
+      end note
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Note 0
+  entities: []
+  relationships: []
+  packages: []
+  notes:
+  - lines:
+    - '  $p one'
+    - two
+    target: null
+    position: null
+    alias: 'N'
+    source_line: 3
+  hide_show: []

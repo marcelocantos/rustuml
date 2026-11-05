@@ -1,0 +1,21 @@
+{
+  "original": {
+    "entries": 1719,
+    "harness_pass": 674,
+    "cli_before": 693,
+    "cli_after": 704
+  },
+  "fresh_registered": {
+    "entries": 26,
+    "harness_pass": 19,
+    "cli_before": 6,
+    "cli_after": 19
+  },
+  "whole": {
+    "entries": 1745,
+    "harness_pass": 693,
+    "cli_before": 699,
+    "cli_after": 723
+  },
+  "discrepancy_count": 30
+}

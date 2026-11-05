@@ -1,0 +1,2590 @@
+{
+ "batch": "C11A",
+ "registered_before_java": true,
+ "hypotheses": {
+  "H1": "Verdana italic / bold-italic cases whose tip output differs from merge move toward Java; each such case MATCHes at tip whenever its same-consumer upright control (plain, or the creole ctl) MATCHes at tip, and is not a lost match vs merge.",
+  "H2": "Verdana italic / bold-italic cases whose tip output equals merge: the consumer does not measure the italic slot; their Java status equals merge's (no gain, no loss); any failure with a matching control is a consumer gap outside the packet.",
+  "H3": "Arial (all faces), other families (Times, Courier New, Helvetica, SansSerif, Monospaced, Lucida Grande): tip == merge byte-identical (already true in the predictions), so no lost match or gain.",
+  "H4": "StateNodeFont italic removal (C5): every stateFontStyle form in Times / SansSerif gives tip == merge (true in predictions); Verdana sx cases change only through the italic tables.",
+  "H5": "Queue pill (C3): Times queue cases tip == merge; Verdana queue cases change only in italic text widths, not in pill height.",
+  "H6": "Sizes 9 and 23: per-glyph units x size reproduce Java widths for Verdana italic/bold-italic exactly where the plain control matches.",
+  "H7": "Non-ASCII (na): T14.55 residue, no claim beyond 'no lost match vs merge'."
+ },
+ "cases": [
+  {
+   "name": "c11a_fc_comp_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_comp_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_comp_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_comp_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_comp_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_comp_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_comp_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_comp_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_node_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_node_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_node_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_node_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_node_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_node_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_node_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_node_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_dbse_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_dbse_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_dbse_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_dbse_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_dbse_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_dbse_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_dbse_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_dbse_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clou_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clou_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_clou_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clou_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_clou_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clou_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clou_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clou_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_rect_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_rect_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_rect_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_rect_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_rect_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_rect_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_rect_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_rect_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_pack_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_pack_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_pack_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_pack_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_pack_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_pack_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_pack_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_pack_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clss_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clss_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_clss_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clss_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_clss_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clss_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clss_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clss_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_catt_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_catt_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_catt_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_catt_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_catt_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_catt_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_catt_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_catt_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_objc_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_objc_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_objc_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_objc_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_objc_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_objc_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_objc_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_objc_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_part_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_part_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_part_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_part_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_part_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_part_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_part_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_part_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_smsg_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_smsg_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_smsg_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_smsg_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_smsg_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_smsg_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_smsg_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_smsg_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_snot_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_snot_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_snot_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_snot_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_snot_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_snot_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_snot_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_snot_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sgrp_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sgrp_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sgrp_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sgrp_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_sgrp_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sgrp_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sgrp_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sgrp_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sdiv_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sdiv_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sdiv_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sdiv_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_sdiv_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sdiv_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sdiv_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sdiv_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_actv_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_actv_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_actv_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_actv_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_actv_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_actv_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_actv_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_actv_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_diam_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_diam_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_diam_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_diam_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_diam_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_diam_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_diam_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_diam_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_swim_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_swim_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_swim_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_swim_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_swim_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_swim_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_swim_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_swim_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_anot_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_anot_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_anot_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_anot_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_anot_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_anot_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_anot_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_anot_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_stat_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_stat_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_stat_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_stat_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_stat_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_stat_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_stat_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_stat_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sdsc_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sdsc_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_sdsc_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sdsc_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_sdsc_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sdsc_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sdsc_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_sdsc_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_usec_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_usec_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_usec_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_usec_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_usec_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_usec_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_usec_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_usec_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_actu_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_actu_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_actu_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_actu_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_actu_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_actu_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_actu_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_actu_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clnk_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clnk_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clnk_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clnk_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clnk_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clnk_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clnk_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_clnk_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_kcls_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_kcls_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_kcls_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_kcls_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_kcls_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_kcls_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_kcls_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_kcls_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_ulnk_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_ulnk_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_ulnk_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_ulnk_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_ulnk_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_ulnk_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_ulnk_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_ulnk_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_tlnk_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_tlnk_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_tlnk_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_tlnk_vd_bi",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_fc_tlnk_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_tlnk_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_tlnk_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_tlnk_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_titl_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_titl_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_titl_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_titl_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_titl_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_titl_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_titl_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_titl_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_lgnd_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_lgnd_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_lgnd_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_lgnd_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_lgnd_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_lgnd_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_lgnd_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_lgnd_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_cnot_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_cnot_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_cnot_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_cnot_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_cnot_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_cnot_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_cnot_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_cnot_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_knot_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_knot_vd_i",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_knot_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_knot_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_knot_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_knot_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_knot_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_fc_knot_ar_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_comp_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_comp_vd_i",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz9_comp_vd_bi",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz9_comp_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_comp_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_comp_vd_i",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz23_comp_vd_bi",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz23_comp_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_part_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_part_vd_i",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz9_part_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_part_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_part_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_part_vd_i",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz23_part_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_part_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_clss_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_clss_vd_i",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz9_clss_vd_bi",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz9_clss_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_clss_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_clss_vd_i",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz23_clss_vd_bi",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz23_clss_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_actv_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_actv_vd_i",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz9_actv_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_actv_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_actv_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_actv_vd_i",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz23_actv_vd_bi",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_actv_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_stat_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_stat_vd_i",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz9_stat_vd_bi",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz9_stat_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_stat_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_stat_vd_i",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz23_stat_vd_bi",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz23_stat_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_usec_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz9_usec_vd_i",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz9_usec_vd_bi",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz9_usec_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_usec_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sz23_usec_vd_i",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz23_usec_vd_bi",
+   "hypothesis": "H6",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sz23_usec_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_comp_ir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_comp_ir_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_comp_br_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_comp_br_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_comp_bir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_comp_bir_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_comp_md_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_comp_md_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_comp_bl_i_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_comp_bl_i_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_comp_il_b_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_comp_il_b_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_comp_ctl_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_comp_ctl_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_part_ir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_part_ir_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_part_br_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_part_br_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_part_bir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_part_bir_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_part_md_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_part_md_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_part_bl_i_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_part_bl_i_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_part_il_b_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_part_il_b_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_part_ctl_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_part_ctl_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_clss_ir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_clss_br_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_clss_bir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_clss_md_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_clss_bl_i_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_clss_il_b_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_clss_ctl_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_actv_ir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_actv_ir_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_actv_br_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_actv_br_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_actv_bir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_actv_bir_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_actv_md_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_actv_md_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_actv_bl_i_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_actv_bl_i_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_actv_il_b_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_actv_il_b_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_actv_ctl_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_actv_ctl_ar",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_usec_ir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_usec_br_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_usec_bir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_usec_md_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_usec_bl_i_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_usec_il_b_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_usec_ctl_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_stat_ir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_stat_br_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_stat_bir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_stat_md_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_stat_bl_i_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_stat_il_b_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_stat_ctl_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_smsg_ir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_smsg_br_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_smsg_bir_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_smsg_md_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_smsg_bl_i_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_smsg_il_b_vd",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_cr_smsg_ctl_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_cnot_ir_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_cnot_br_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_cnot_bir_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_cnot_md_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_cnot_bl_i_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_cnot_il_b_vd",
+   "hypothesis": "H2",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_cr_cnot_ctl_vd",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_tn_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_tn_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_tn_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_tn_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_tn_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_tn_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_tn_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_tn_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_cn_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_cn_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_cn_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_cn_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_cn_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_cn_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_cn_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_cn_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_hv_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_hv_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_hv_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_hv_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_hv_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_hv_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_hv_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_hv_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_ss_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_ss_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_ss_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_ss_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_ss_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_ss_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_ss_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_ss_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_mo_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_mo_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_mo_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_mo_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_mo_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_mo_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_mo_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_mo_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_lg_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_lg_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_lg_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_comp_lg_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_lg_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_lg_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_lg_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_of_part_lg_bi",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_comp_vd_p",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_comp_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_st_comp_vd_b",
+   "hypothesis": "unchanged",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_comp_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_comp_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_comp_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_clss_vd_p",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_st_clss_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_st_clss_vd_b",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_st_clss_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_clss_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_clss_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_part_vd_p",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_st_part_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_st_part_vd_b",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_st_part_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_part_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_part_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_usec_vd_p",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_st_usec_vd_i",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_st_usec_vd_b",
+   "hypothesis": "H1",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_st_usec_ar_p",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_usec_ar_i",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_st_usec_ar_b",
+   "hypothesis": "H3",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_sp_tn",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_sp_ss",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_sp_vd",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sx_spcap_tn",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spcap_ss",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spcap_vd",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sx_spblk_tn",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spblk_ss",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spblk_vd",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sx_spblkcap_tn",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spblkcap_ss",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spblkcap_vd",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sx_spster_tn",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spster_ss",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spster_vd",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spbi_tn",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spbi_ss",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spbi_vd",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spobl_tn",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spobl_ss",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spobl_vd",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spattr_tn",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spattr_ss",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spattr_vd",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sx_sptwice_tn",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_sptwice_ss",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_sptwice_vd",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sx_spmono_tn",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spmono_ss",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spmono_vd",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spsize_tn",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spsize_ss",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_spsize_vd",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_sx_ctl_tn",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_ctl_ss",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_sx_ctl_vd",
+   "hypothesis": "H4",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_plain_vd_p",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_plain_vd_i",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_qu_plain_vd_b",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_plain_tn_p",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_plain_tn_i",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_plain_tn_b",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_stereo_vd_p",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_qu_stereo_vd_i",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_qu_stereo_vd_b",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_qu_stereo_tn_p",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_stereo_tn_i",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_stereo_tn_b",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_multi_vd_p",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_multi_vd_i",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_qu_multi_vd_b",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_multi_tn_p",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_multi_tn_i",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_multi_tn_b",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_multist_vd_p",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_qu_multist_vd_i",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_qu_multist_vd_b",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_qu_multist_tn_p",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_multist_tn_i",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_multist_tn_b",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_empty_vd_p",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_empty_vd_i",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_qu_empty_vd_b",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_empty_tn_p",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_empty_tn_i",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_qu_empty_tn_b",
+   "hypothesis": "H5",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_na_guil_vd_p",
+   "hypothesis": "H7",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_na_guil_vd_i",
+   "hypothesis": "H7",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_na_guil_vd_bi",
+   "hypothesis": "H7",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_na_acc_vd_p",
+   "hypothesis": "H7",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_na_acc_vd_i",
+   "hypothesis": "H7",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_na_acc_vd_bi",
+   "hypothesis": "H7",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_na_heb_vd_p",
+   "hypothesis": "H7",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_na_heb_vd_i",
+   "hypothesis": "H7",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_na_heb_vd_bi",
+   "hypothesis": "H7",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_na_nst_vd_p",
+   "hypothesis": "H7",
+   "tip_differs_from_merge": false
+  },
+  {
+   "name": "c11a_na_nst_vd_i",
+   "hypothesis": "H7",
+   "tip_differs_from_merge": true
+  },
+  {
+   "name": "c11a_na_nst_vd_bi",
+   "hypothesis": "H7",
+   "tip_differs_from_merge": true
+  }
+ ]
+}

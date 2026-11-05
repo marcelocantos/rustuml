@@ -1,0 +1,3 @@
+@startuml
+Elm -> Cedar : q<color:navy>a<color:#GGHHII>elm</color>b</color>r\nq<color:red><color:UnknownTone></color>r</color>s
+@enduml

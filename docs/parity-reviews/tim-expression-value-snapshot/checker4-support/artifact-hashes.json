@@ -1,0 +1,217 @@
+[
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/README.md",
+    "bytes": 12063,
+    "sha256": "bd48441d2462a90d2af2606de455c55ecdf3d409530b2d8e0476c2c01601899b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/analyze.py",
+    "bytes": 5295,
+    "sha256": "74c8f5ed30c2bd5bdb0edcdb400de2780943da7dad51792f079e8a5f68aa28a3"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/baseline-results.json.gz",
+    "bytes": 146100,
+    "sha256": "4fd3178000b42f8f0359835aeed22677f5152f375a050dd8d4f91b5aaaf1288c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/builtin-results.json.gz",
+    "bytes": 16944,
+    "sha256": "3b209432e50cd11f60021ae29e54706b33215798845de86c9e42f2b48d892f1d"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/builtin-versus-cli.json",
+    "bytes": 4181,
+    "sha256": "67ca3be49ccbebd97a95e29918c959571fb81b04dee879fcb1a41bd33c44379e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/collateral-manifest.json.gz",
+    "bytes": 143086,
+    "sha256": "87752895d8b1d422ee7ace377424dda422e73b439c97e48b086b3c71d15ac60a"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/collateral-results.json.gz",
+    "bytes": 151340,
+    "sha256": "1eb68ed3984c03fa316a263f4cd3d980fb45a8c2a75c9c192b1fe5bd72fa680c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/collateral-source-models.json.gz",
+    "bytes": 3516,
+    "sha256": "d73c902c0b51c60d789a5f2a0b0d1f2edbe711b72a20fa0b9fa2392367171794"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/collateral-summary.json",
+    "bytes": 4160,
+    "sha256": "155e33e88b2c07879989677691eea21d1fcea026d8a34ef38484fa62f827d106"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/controls.json",
+    "bytes": 3525,
+    "sha256": "d0eadcedbd4c1a37a0092b5e67071da811a1d8f45c9ae14539284314dcf89555"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/evaluate.py",
+    "bytes": 5819,
+    "sha256": "ff679e7ef2eb90dbc9e12e9621410ecb711044633a625d7dbd33d966e41a1005"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/evaluate_supplement.py",
+    "bytes": 5860,
+    "sha256": "9c26152f40c76988efc2779b041fc67f5ca040bbbac5108c6b10c118c9d2c532"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/fresh-baseline.json",
+    "bytes": 58482,
+    "sha256": "d0555f1a35a8bde671f6c6be557130105aff25c6fd7130a21fec919340dd8a76"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/fresh-candidate.json",
+    "bytes": 57673,
+    "sha256": "a1d3c10173433f362c5a296f3b707bdb85ba9d643a63b26435c0893e0e743bc0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/fresh-manifest.json",
+    "bytes": 17459,
+    "sha256": "c71c2f7e3314ba186f0fab87676333f1c45158496ce3425a366a058f23c18eba"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/fresh-summary.json",
+    "bytes": 3600,
+    "sha256": "f33589b6057da0d9e9d48109b0240923baf6d4b44a92c791ca8c5de28ea65406"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/generate.py",
+    "bytes": 11692,
+    "sha256": "7e2be723c229384d19946eec5d29289b3d21bc58cb7e3a513f53d42669b1c739"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/maker17-reuse.json",
+    "bytes": 4899,
+    "sha256": "c14ca9430d8f670d8749ed346842cde0a3d2e4314248d46e501cfcace0c7fce8"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/measurement-artifacts.tar.gz",
+    "bytes": 2492689,
+    "sha256": "0ef22da528589796b187cf87bbdd7f594622b0f6d3e2ae51dd7209f2164f18a0"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/membership.json.gz",
+    "bytes": 3082,
+    "sha256": "c47557da9608dc66201caec6b5ac69794c59d0a5e734fd3c58852a6209cd8e58"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/package.py",
+    "bytes": 2992,
+    "sha256": "d58aa37c306f321e082c532ba399ad52a5c0e5a7413939931c1b8a56ee937804"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/panic-groups.json",
+    "bytes": 3577,
+    "sha256": "3f3039732f9f8a6efed19c0c9d56b4ef1b41b83f460f572cacaf3736615c2be1"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/prepare.py",
+    "bytes": 3854,
+    "sha256": "b6276d2e2544d1612230cb7cc04a7e1092d18649d11a615f896fad05256af89e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/preservation-final.json",
+    "bytes": 334,
+    "sha256": "5eaa47c29316d136d06c4fabdfe53d0b1eae4ad5eadb7c8d9872453f19e509e1"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/preservation-initial.json.gz",
+    "bytes": 241161,
+    "sha256": "60622e13e8da8b2338d8062951130a9aa8a50b9c016141640cb2c4806c9cc697"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/probe-build.json",
+    "bytes": 848,
+    "sha256": "81f92f96dfdeab7697fc1248e812d793290dad79b02da40642a1f3cace2f0953"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/provenance.json.gz",
+    "bytes": 24767,
+    "sha256": "3be142204405203ad0df1e90d4797655e4997852aa6846200eb3846fdc7e75e8"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/provenance.py",
+    "bytes": 4264,
+    "sha256": "5414693f05faec0a362cc6944420c6ebb7c59741b3dae8076aa8aafef1f5096e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/records.py",
+    "bytes": 12978,
+    "sha256": "b72e8eba30047639d641989eb512a5246e93a9e07df497fe0436c5bc2260b602"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/relay-verification.json",
+    "bytes": 3145,
+    "sha256": "c77184cd087f5d6375da1360ed97f7bd510cd49b1337c3da2a9f3b25821f0893"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/remote-request.json",
+    "bytes": 15205,
+    "sha256": "a41e842750cf64c8febede602241855ec822f7289d38f084c01dad57eb2c67b8"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/replay.py",
+    "bytes": 2161,
+    "sha256": "dd94c24583a17f1ad7ab94a5ffafddaba2169f932a240a1a8096183d8c9fe024"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/supplement-baseline.json",
+    "bytes": 3925,
+    "sha256": "6881f3bc27c3a36e3a5f2cd14862028ee7805de46ecda4e2d9273e556b417b6c"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/supplement-candidate.json",
+    "bytes": 3871,
+    "sha256": "6ae0d2a5473eb6c3f201befdd8ebb11f1c9c90b938f9de45c5a14a639774e7c1"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/supplement-manifest.json",
+    "bytes": 1156,
+    "sha256": "39af001e697e8f4e17b9423b6fc6f746cae098bf33ad191bc74942c38ee93087"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/supplement-relay-verification.json",
+    "bytes": 3143,
+    "sha256": "6266fd47cd7669ad702edb184a9c7469d42a89b282d7087e6d2ff26ae49a0a4b"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/supplement-request.json",
+    "bytes": 2409,
+    "sha256": "ae09ba1ecdd4a3f02cb3b49e6d412f2b1392d5f393d7c54c0bb9deb12eda46d8"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/tim2-results.json.gz",
+    "bytes": 8539,
+    "sha256": "fb262269257ef9bcfd9994a3ec7caf4f53f55524cf39119df51a7c21cff6c060"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/tim29-results.json.gz",
+    "bytes": 41640,
+    "sha256": "1562e919a0c83969fa7cd3b27ca68a57d15b7ba1a892b87d00f5f8b31891758e"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/validate.py",
+    "bytes": 1717,
+    "sha256": "e3ba2e4a484026aea1c7da7ac92bfc96f3139e8153352f05ad0f0af5fa4d0da5"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/validation-basic.json",
+    "bytes": 802,
+    "sha256": "6ac21174984a541abfe1189412a014c503d3d0a6ebf1c4806585022659f801ad"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/validation-final.json",
+    "bytes": 538,
+    "sha256": "d98bf08674c0fad2c06518ea98dc0c5750abdeac6387c01d670510e5ca02d7ff"
+  },
+  {
+    "path": "docs/parity-reviews/tim-expression-value-snapshot/checker4-support/validation-main.json",
+    "bytes": 539,
+    "sha256": "58e5860ea6f7cffcaffa77dc34fbeed30dba39524215155a2fef38380e4d2f90"
+  }
+]

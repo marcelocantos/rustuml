@@ -1,0 +1,9 @@
+@startuml
+!definelong LINES()
+first
+second
+!enddefinelong
+note as N
+  LINES() trailing
+end note
+@enduml

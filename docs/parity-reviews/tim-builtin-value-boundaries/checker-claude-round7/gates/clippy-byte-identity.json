@@ -1,0 +1,29 @@
+{
+ "sources": 16864,
+ "stdout_identical": 16864,
+ "exit_identical": 16864,
+ "stderr_changed": [
+  "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+  "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+  "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+  "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+ ],
+ "stderr_heads": {
+  "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml": [
+   "\nthread 'main' (55479213) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0",
+   "\nthread 'main' (54980140) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0"
+  ],
+  "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml": [
+   "\nthread 'main' (55479219) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0",
+   "\nthread 'main' (54980146) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0"
+  ],
+  "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml": [
+   "\nthread 'main' (55479228) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0",
+   "\nthread 'main' (54980148) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0"
+  ],
+  "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml": [
+   "\nthread 'main' (55479225) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0",
+   "\nthread 'main' (54980153) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:\nindex out of bounds: the len is 0"
+  ]
+ }
+}

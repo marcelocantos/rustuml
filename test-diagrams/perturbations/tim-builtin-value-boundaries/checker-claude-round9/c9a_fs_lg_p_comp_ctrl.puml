@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Lucida Grande
+component "Wharf qr" as C1
+@enduml

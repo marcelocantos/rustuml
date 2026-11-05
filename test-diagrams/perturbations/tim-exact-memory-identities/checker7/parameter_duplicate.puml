@@ -1,0 +1,6 @@
+@startuml
+!function $same(b="one",b="two")
+!return b
+!endfunction
+class "$same(b="named") / $same("left","right")" as Node
+@enduml

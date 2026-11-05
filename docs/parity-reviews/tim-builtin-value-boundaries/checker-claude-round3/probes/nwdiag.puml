@@ -1,0 +1,7 @@
+@startuml
+nwdiag {
+  network lan {
+    web [description = "Web%substr("🦉",0,1)"];
+  }
+}
+@enduml

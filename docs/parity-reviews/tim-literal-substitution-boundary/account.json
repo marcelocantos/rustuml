@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-literal-substitution-boundary",
+  "rust_revision": "7bb210e9f7578705638c8f3b7c3b43d8b4b906c3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/TContext.java:applyFunctionsAndVariables",
+    "tim/VariableManager.java:replaceVariables",
+    "tim/EaterAffectationDefine.java:analyze"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Text replacement scans original source once. Appended variable and function return values are literal output, not new source. Legacy define values expand at declaration.",
+  "causal_divergence": "Rust repeatedly scans the completed output for token defines, re-expanding quoted/returned values and retroactively resolving defines.",
+  "planned_change": "Perform bare-token substitution in the original-input scan alongside dollar variables/functions. Expand legacy define values once at declaration and remove the whole-output fixed-point reconstruction loop.",
+  "perturbation_axes": [
+    "Returned versus directly written token names",
+    "Declaration-time define ordering and later redefinition"
+  ],
+  "oracle_plan": [
+    "Reuse checker3 exact references and unchanged shipped CLI comparator; source diagnostics supplementary.",
+    "Bounded new axes via remote headless Monkey Man only, preserving every success/failure.",
+    "Parser/CLI, guards, touched format and both main tiers once stabilized; report actual local cohort and all invalid/error/renderer dependencies."
+  ],
+  "constraints": [
+    "No renderer/parser handoff edits; timezone width implementation unchanged.",
+    "No fixture/reference/comparator/baseline/review/target changes; no self-review.",
+    "All prior evidence retained; new independent checker required."
+  ]
+}

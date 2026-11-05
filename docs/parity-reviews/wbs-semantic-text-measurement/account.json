@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "base_revision": "246ff6396b538843143ee9d2cc9a569b67f614dd",
+  "imported_rejection": "83469a4832cf20b8e2e57514841e5c46adf63a6e",
+  "import_commit": "6b0ca33e88127a44bad1e564544db7d746816d6d",
+  "verification": "Actual source-only CLI before/after on immutable retained1730, maker18, sprites50 and checker38 memberships, preserving duplicates, errors and panics. YAML/model diagnostics remain separate. Compact fresh controls use parent existing reference runner only. Required gates once stable. No baselines, comparator, acceptance contract or historical review edits; new independent checker required.",
+  "mechanism": "wbs-semantic-text-measurement",
+  "java_locations": [
+    "net.sourceforge.plantuml.wbs.WBSTextBlock#buildMain (87)",
+    "net.sourceforge.plantuml.wbs.ITFLeaf#constructor (58)/calculateDimension (75)/drawU",
+    "net.sourceforge.plantuml.activitydiagram3.ftile.vertical.FtileBoxOld#createWbs (134), constructor (145-173), drawU (180), calculateDimensionFtile (225)",
+    "net.sourceforge.plantuml.klimt.creole.SheetBlock1#constructor (78), calculateDimensionSlow (196), drawU (207)",
+    "net.sourceforge.plantuml.wbs.ITFComposed#calculateDimension/drawU/getF1/getF2",
+    "net.sourceforge.plantuml.wbs.Fork#calculateDimension/drawU",
+    "src/main/resources/skin/plantuml.skin::wbsDiagram (339-345): Padding 10 and FontSize 12"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/wbs.rs::Itf/measure (90)/emit_box (147)/draw_itf/draw_fork/f_y",
+    "crates/rustuml-render/src/text_render.rs::measure/label_height/label_first_baseline_ascent_with_family/emit_text"
+  ],
+  "invariant": "The WBS preferred component dimension and painted content derive from the same parsed text runs. Node box width and height are semantic text dimensions plus existing default padding; attachment and subtree formulas consume those measured component dimensions. Removing unresolved commands changes text dimensions without changing layout rules.",
+  "causal_divergence": "Rust measures raw label bytes with plantuml_metrics::text_width but paints via text_render::emit_text. It also freezes node height and baseline to a single plain size-12 line. Java WBS builds one Creole SheetBlock in FtileBoxOld, delegates preferred dimensions to it, and draws that same block. Unknown sprite tokens therefore vanish in Java measurement as well as paint, and size styles affect preferred height.",
+  "planned_change": "Use existing shared text_render width/height/first-baseline projection on the same label sent to emission. Store node main height and baseline with width; substitute measured node height for fixed BOX_H in existing subtree and attachment equations. Preserve padding (Java default WBS Padding 10), font size, colors, topology, child order, spacing and layout algorithm. No new WBS syntax, multiline features, registry behavior or coordinate corrections; no parser/model edits.",
+  "perturbation_axes": [
+    "missing sprite commands versus plain and recognized bold/size runs",
+    "root versus child label and depth/left-right placement",
+    "empty consumed label versus surrounding punctuation/Unicode"
+  ]
+}

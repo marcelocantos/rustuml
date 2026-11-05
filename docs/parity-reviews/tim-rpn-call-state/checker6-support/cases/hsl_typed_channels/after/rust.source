@@ -1,0 +1,3 @@
+@startuml
+class "#808080/#000000/#000000" as Channels
+@enduml

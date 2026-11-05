@@ -1,0 +1,52 @@
+{
+  "before": {
+    "inputs": 2069,
+    "emitted": 1958,
+    "errors": 111,
+    "panics": 32,
+    "malformed": [
+      "test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_escape.puml",
+      "test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_one.puml",
+      "test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_zero.puml",
+      "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/comment_double_hyphen.puml",
+      "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_c0.puml",
+      "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_escape.puml",
+      "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_one.puml",
+      "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_zero.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/comment_class_links.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/comment_class_runs.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/comment_class_symbols.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/comment_class_unicode.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/comment_component.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/comment_deployment.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/comment_package.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/comment_usecase.puml"
+    ]
+  },
+  "after": {
+    "inputs": 2069,
+    "emitted": 1958,
+    "errors": 111,
+    "panics": 32,
+    "malformed": [
+      "test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_escape.puml",
+      "test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_one.puml",
+      "test-diagrams/perturbations/shared-svg-attributes/attr_link_c0_zero.puml",
+      "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/href_c0.puml",
+      "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_escape.puml",
+      "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_one.puml",
+      "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/raw_c0_zero.puml"
+    ]
+  },
+  "repaired": [
+    "test-diagrams/perturbations/shared-svg-attributes/checker-independent-astra/comment_double_hyphen.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/comment_class_links.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/comment_class_runs.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/comment_class_symbols.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/comment_class_unicode.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/comment_component.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/comment_deployment.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/comment_package.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/comment_usecase.puml"
+  ]
+}

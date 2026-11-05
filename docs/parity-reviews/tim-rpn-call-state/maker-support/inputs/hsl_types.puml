@@ -1,0 +1,6 @@
+@startuml
+!$a=%hsl_color("240",100,50,25)
+!$b=%hsl_color(%str2json("240"),100,50,75)
+!$c=%hsl_color(240,100,50,"75")
+class "$a/$b/$c" as Typed
+@enduml

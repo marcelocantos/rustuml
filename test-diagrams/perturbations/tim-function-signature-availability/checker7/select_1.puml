@@ -1,0 +1,10 @@
+@startuml
+!function pick(a)
+!return "single "+a
+!endfunction
+!function pick(a,b="two")
+!return a+"/"+b
+!endfunction
+!$answer=pick("elm")
+class "$answer / pick(a="fir",b="yew") / xpick("skip") / $pick("cash")" as Node
+@enduml

@@ -13,18 +13,39 @@
 //! JVM's font metrics at full IEEE 754 precision (all values are exact
 //! multiples of powers of 2, so they round-trip perfectly through f64).
 
+use crate::font_chain::{ChainFace, ChainFamily, ChainGlyph, Complexity};
+use rustuml_parser::java_utf16::{self, Token};
+
 /// Compute the width of `text` at the given `font_size` using
 /// PlantUML-compatible metrics.
 ///
 /// This matches `java.awt.FontMetrics.getStringBounds(text, g).getWidth()`
 /// on the JVM that generated the golden SVGs.
 pub fn text_width(text: &str, font_size: f64, bold: bool) -> f64 {
-    if let Some(width) = shaped_text_width(text, font_size, bold) {
+    let table = char_width_table(font_size, bold);
+    // SansSerif italic is Lucida Grande's derived italic: the same faces.
+    let face = ChainFace::for_style(ChainFamily::LucidaGrande, bold, false);
+    // One complexity per Java token; without an escape, tokens are chars.
+    let complexity = face.complexity_per_token(text);
+    if text.contains(rustuml_parser::java_utf16::ESCAPE) {
+        // Escaped legitimate scalars of the carrier range measure as
+        // themselves; unpaired units keep their one-em advance.
+        return rustuml_parser::java_utf16::tokens(text)
+            .zip(&complexity)
+            .map(|(token, &complexity)| match token {
+                rustuml_parser::java_utf16::Token::Char(c) => {
+                    literal_char_width(c, table, bold, font_size, face, complexity)
+                }
+                rustuml_parser::java_utf16::Token::Unit(_) => font_size,
+            })
+            .sum();
+    }
+    if let Some(width) = shaped_text_width(text, font_size, bold, face, &complexity) {
         return width;
     }
-    let table = char_width_table(font_size, bold);
     text.chars()
-        .map(|c| char_width(c, table, bold, font_size))
+        .zip(&complexity)
+        .map(|(c, &complexity)| char_width(c, table, bold, font_size, face, complexity))
         .sum()
 }
 
@@ -80,11 +101,33 @@ const MONO_ASCENT_PER_SIZE: f64 = 0.92822265625;
 const MONO_DESCENT_PER_SIZE: f64 = 0.23583984375;
 const MONO_HEIGHT_PER_SIZE: f64 = 1.1640625;
 
-/// Width of `text` rendered in PlantUML's `Monospaced` font at the given
-/// size. Every character contributes the same advance, so the result is
-/// `char_count * size * ratio`. Bold doesn't change the width.
+/// Width of `text` rendered in PlantUML's plain `Monospaced` font at the
+/// given size. Every character contributes the same advance, so the result
+/// is `char_count * size * ratio`.
 pub fn mono_text_width(text: &str, font_size: f64) -> f64 {
-    text.chars().count() as f64 * font_size * MONO_WIDTH_PER_SIZE
+    mono_text_width_styled(text, font_size, false, false)
+}
+
+/// [`mono_text_width`] in a style: the cell advance is the same in every
+/// Menlo face, but which characters take a cell depends on the face JDK
+/// measures (its cmap, cascade and HarfBuzz plan).
+pub fn mono_text_width_styled(text: &str, font_size: f64, bold: bool, italic: bool) -> f64 {
+    let face = ChainFace::for_style(ChainFamily::Menlo, bold, italic);
+    cell_count(text, face) as f64 * font_size * MONO_WIDTH_PER_SIZE
+}
+
+/// Java characters of `text` that advance one cell of a monospaced face: an
+/// unpaired unit and every scalar but a hidden default-ignorable (Menlo's and
+/// Courier New's `.notdef` advance equals their cell, 1233 and 1229 units).
+fn cell_count(text: &str, face: ChainFace) -> usize {
+    let complexity = face.complexity_per_token(text);
+    java_utf16::tokens(text)
+        .zip(complexity)
+        .filter(|(token, complexity)| match token {
+            Token::Unit(_) => true,
+            Token::Char(c) => face.resolve(*c, *complexity) != ChainGlyph::Hidden,
+        })
+        .count()
 }
 
 /// Monospaced ascent (size * ratio).
@@ -109,8 +152,12 @@ const COURIER_NEW_WIDTH_PER_SIZE: f64 = 0.60009765625;
 const COURIER_NEW_ASCENT_PER_SIZE: f64 = 0.83251953125;
 const COURIER_NEW_HEIGHT_PER_SIZE: f64 = 1.1328125;
 
-pub fn courier_new_text_width(text: &str, font_size: f64) -> f64 {
-    text.chars().count() as f64 * font_size * COURIER_NEW_WIDTH_PER_SIZE
+/// Courier New width in a style: one cell per character the face JDK
+/// measures for that style draws (each face has its own cmap, cascade and
+/// HarfBuzz plan; the GDEF blocklist is decided per font file).
+pub fn courier_new_text_width(text: &str, font_size: f64, bold: bool, italic: bool) -> f64 {
+    let face = ChainFace::for_style(ChainFamily::CourierNew, bold, italic);
+    cell_count(text, face) as f64 * font_size * COURIER_NEW_WIDTH_PER_SIZE
 }
 
 pub fn courier_new_ascent(font_size: f64) -> f64 {
@@ -188,8 +235,14 @@ pub fn times_new_roman_text_width(text: &str, font_size: f64, bold: bool, italic
 
     // AWT stores glyph positions as float. Scaling each exact source advance
     // to the requested font size and accumulating in source order as f32
-    // reproduces `Font.getStringBounds` for scalar-additive text.
-    text.chars()
+    // reproduces `Font.getStringBounds` for scalar-additive text. An unpaired
+    // unit is measured as its carrier scalar was before (the table's
+    // missing advance); the escape prefix is not a character.
+    java_utf16::tokens(text)
+        .map(|token| match token {
+            Token::Char(c) => c,
+            Token::Unit(unit) => java_utf16::carrier(unit),
+        })
         .fold(0.0_f32, |width, c| {
             let code = c as u32;
             let fixed_units = if (32..=126).contains(&code) {
@@ -262,7 +315,11 @@ fn serif_char_units(c: char) -> f64 {
 
 /// Width of `text` rendered in PlantUML's `Serif` font at the given size.
 pub fn serif_text_width(text: &str, font_size: f64) -> f64 {
-    text.chars()
+    java_utf16::tokens(text)
+        .map(|token| match token {
+            Token::Char(c) => c,
+            Token::Unit(unit) => java_utf16::carrier(unit),
+        })
         .map(|c| serif_char_units(c) / SERIF_UPM * font_size)
         .sum()
 }
@@ -289,10 +346,41 @@ fn char_width_table(font_size: f64, bold: bool) -> &'static [f64; 95] {
     }
 }
 
-fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
+fn char_width(
+    c: char,
+    table: &[f64; 95],
+    bold: bool,
+    font_size: f64,
+    face: ChainFace,
+    complexity: Complexity,
+) -> f64 {
+    if rustuml_parser::java_utf16::carried_unit(c).is_some() {
+        // An unpaired UTF-16 unit advances one em in Java's SansSerif: in AW
+        // surrogate_high_class, Java's textLength for 'x' + a lone high unit
+        // at size 14 exceeds CHAR_WIDTHS_14's 'x' advance by exactly 14.
+        return font_size;
+    }
+    literal_char_width(c, table, bold, font_size, face, complexity)
+}
+
+/// Advance of a legitimate scalar (never an unpaired-unit carrier).
+fn literal_char_width(
+    c: char,
+    table: &[f64; 95],
+    bold: bool,
+    font_size: f64,
+    face: ChainFace,
+    complexity: Complexity,
+) -> f64 {
     let code = c as u32;
     if (32..=126).contains(&code) {
         return table[(code - 32) as usize];
+    }
+    if matches!(c, '\n' | '\r') {
+        // Lucida Grande maps LF and CR to glyph 2 (nonmarkingreturn), whose
+        // advance equals the space glyph's (648/2048 em regular, 675/2048
+        // bold; CoreText on the reference fonts).
+        return table[0];
     }
     if matches!(c, '\u{200D}' | '\u{FE0E}' | '\u{FE0F}') || is_emoji_modifier(code) {
         return 0.0;
@@ -309,6 +397,14 @@ fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
     if let Ok(i) = crate::non_ascii_widths::NON_ASCII_WIDTHS.binary_search_by(|e| e.0.cmp(&code)) {
         let (_, plain, bold_w) = crate::non_ascii_widths::NON_ASCII_WIDTHS[i];
         return (if bold { bold_w } else { plain }) * font_size;
+    }
+    // A scalar no font of SansSerif's chain maps is Lucida Grande's
+    // .notdef (1536/2048 em, regular and bold); HarfBuzz hides unmapped
+    // default-ignorables in complex text (font_chain).
+    match face.resolve(c, complexity) {
+        ChainGlyph::Missing => return face.notdef_per_em() * font_size,
+        ChainGlyph::Hidden => return 0.0,
+        ChainGlyph::Mapped => {}
     }
     // Fallback approximations for codepoints not in the corpus table (e.g. the
     // CLI rendering arbitrary user text).
@@ -377,7 +473,13 @@ enum ArabicForm {
     Medial = 3,
 }
 
-fn shaped_text_width(text: &str, font_size: f64, bold: bool) -> Option<f64> {
+fn shaped_text_width(
+    text: &str,
+    font_size: f64,
+    bold: bool,
+    face: ChainFace,
+    complexity: &[Complexity],
+) -> Option<f64> {
     let table = char_width_table(font_size, bold);
     let characters: Vec<(usize, char)> = text.char_indices().collect();
     let mut width = 0.0;
@@ -450,7 +552,7 @@ fn shaped_text_width(text: &str, font_size: f64, bold: bool) -> Option<f64> {
             }
         }
 
-        width += char_width(current, table, bold, font_size);
+        width += char_width(current, table, bold, font_size, face, complexity[index]);
         index += 1;
     }
 
@@ -1610,6 +1712,34 @@ const CHAR_WIDTHS_14_BOLD: [f64; 95] = [
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn carrier_range_text_measures_as_java() {
+        use rustuml_parser::java_utf16;
+        // Batch BC, size 14 plain: Java's textLength for "Vault U+10FFFD" and
+        // for "Vault U+FFFFD" exceeds the ASCII advance of "Vault " by 10.5;
+        // an unpaired unit keeps one em.
+        let vault = text_width("Vault ", 14.0, false);
+        assert_eq!(
+            text_width(&java_utf16::escape("Vault \u{10FFFD}"), 14.0, false),
+            vault + 10.5
+        );
+        assert_eq!(text_width("Vault \u{FFFFD}", 14.0, false), vault + 10.5);
+        let rocket: Vec<u16> = "🚀".encode_utf16().collect();
+        let unit = java_utf16::text(&rocket[..1]);
+        assert_eq!(
+            text_width(&format!("Vault {unit}"), 14.0, false),
+            vault + 14.0
+        );
+        assert_eq!(
+            text_width(
+                &format!("Vault {unit}{}", java_utf16::escape("\u{10F83D}")),
+                14.0,
+                false
+            ),
+            vault + 14.0 + 10.5
+        );
+    }
 
     #[test]
     fn times_new_roman_fractional_unicode_advances_accumulate_like_awt() {

@@ -1,0 +1,26 @@
+test font_chain::tests::complexity_follows_java_units ... ok
+test font_chain::tests::planner_ports_harfbuzz_15 ... ok
+test font_chain::tests::unmapped_scalars_take_the_primary_notdef_on_both_paths ... ok
+test java_bidi::tests::conformance_bidi_character_test ... ignored
+test font_chain::tests::fallback_port_follows_position_cluster ... ok
+test font_chain::tests::script_runs_follow_jdk_script_run ... ok
+test font_chain::tests::harfbuzz_hides_unmapped_default_ignorables ... ok
+test font_chain::tests::harfbuzz_buffers_split_at_bidi_level_changes ... ok
+test font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef ... ok
+test font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer ... ok
+test font_chain::tests::gsub_chosen_script_categorizes_the_shaper ... FAILED
+test font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15 ... FAILED
+test java_bidi::tests::conformance_sample ... ok
+test java_bidi::tests::bidi_tables_are_jdk_ubidi_icu ... ok
+test font_chain::tests::coverage_table_is_the_stored_reference_host_extraction ... ok
+test font_chain::tests::unicode_mark_tables_are_ucd_18 ... ok
+thread 'font_chain::tests::gsub_chosen_script_categorizes_the_shaper' (56435867) panicked at crates/rustuml-render/src/font_chain.rs:1327:13:
+assertion `left == right` failed
+  left: Default
+ right: Hangul
+thread 'font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15' (56435872) panicked at crates/rustuml-render/src/font_chain.rs:1516:9:
+assertion `left == right` failed
+  left: [(2, Arabic), (4, Indic), (10, Indic), (15, Indic), (16, Indic), (18, Hangul), (19, Hebrew), (21, Indic), (23, Khmer), (24, Thai), (26, Indic), (27, Use), (28, Myanmar), (31, Indic), (33, Use), (34, Arabic), (35, Indic), (36, Indic), (38, Thai), (39, Use), (42, Use), (43, Use), (44, Use), (45, Use)]
+ right: [(2, Arabic), (4, Indic), (10, Indic), (15, Indic), (16, Indic), (18, Indic), (19, Hebrew), (21, Indic), (23, Khmer), (24, Thai), (26, Indic), (27, Use), (28, Myanmar), (31, Indic), (33, Use), (34, Arabic), (35, Indic), (36, Indic), (38, Thai), (39, Use), (42, Use), (43, Use), (44, Use), (45, Use)]
+test result: FAILED. 13 passed; 2 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.03s
+error: test failed, to rerun pass `-p rustuml-render --lib`

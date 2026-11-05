@@ -1,0 +1,14 @@
+{
+  "candidate": "2cf6c7eeebae7354e7a3b7e53b86fb3754883e67",
+  "final": "55de7dd6cb090d86febc1e5e3f57804134429a19",
+  "before": "4a288dd47fe925a792f7cb672ca294f6ef6fdcf3",
+  "account": "4652860936464f02d80584ef158a29a4a1c13cd1",
+  "production_diff": "crates/rustuml-parser/src/preprocess/mod.rs\n",
+  "candidate_after_final_diff": "",
+  "chronology": "2cf6c7eeebae7354e7a3b7e53b86fb3754883e67 2026-11-04T21:25:38+11:00 docs: preserve TIM exact-key signature and sub iterator maker evidence\n55de7dd6cb090d86febc1e5e3f57804134429a19 2026-11-04T21:19:35+11:00 fix: retain existing filename dispatch during TIM memory correction\n329c39f48eccddfbb4896f1710dd97ddd1c1f2e8 2026-11-04T21:12:40+11:00 fix: preserve exact TIM memory keys and available function signatures\n4652860936464f02d80584ef158a29a4a1c13cd1 2026-11-04T20:59:41+11:00 docs: account for TIM memory identity signature availability and sub iterator order\nba57d3c7275a688b1f1ac565551cdff08fc52d32 2026-11-04T20:47:49+11:00 docs: record independent TIM call-state corrective review\n",
+  "binaries": {
+    "before": "97ccfc761472aba2d530a7d4102987322407085527a05cfcd31b9a7eb6a6aa8b",
+    "after": "43d564a4c6f5bd3b80469c158ba6840089be2ed3954996ee614295d323959608"
+  },
+  "comparator": "43ce27167f6ad8697a8043edbb4f580ddbf9ab68b4e0ea4db15f2a69e3fc97b5"
+}

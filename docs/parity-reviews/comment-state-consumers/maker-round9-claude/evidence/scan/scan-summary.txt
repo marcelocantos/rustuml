@@ -1,0 +1,12 @@
+Private probe build (tip + eprintln in family_text_width for text holding U+1D167); input: skinparam defaultFontName Courier New; each .puml here.
+act: 31 calls, 6 texts; measured both italic and not: []; measured in two families: ['"Cond c\\u{1d167}"']
+cls2: 16 calls, 4 texts; measured both italic and not: []; measured in two families: []
+comp: 18 calls, 5 texts; measured both italic and not: []; measured in two families: ['"Lbl l\\u{1d167}"']
+mind: 8 calls, 2 texts; measured both italic and not: []; measured in two families: []
+misc: 19 calls, 5 texts; measured both italic and not: []; measured in two families: ['"Title t\\u{1d167}"']
+note: 10 calls, 2 texts; measured both italic and not: []; measured in two families: []
+obj: 7 calls, 2 texts; measured both italic and not: []; measured in two families: []
+seq: 42 calls, 7 texts; measured both italic and not: []; measured in two families: []
+state: 20 calls, 3 texts; measured both italic and not: []; measured in two families: ['"Pier x\\u{1d167}"', '"Desc d\\u{1d167}"']
+timing: 0 calls, 0 texts; measured both italic and not: []; measured in two families: []
+wbs: 6 calls, 2 texts; measured both italic and not: []; measured in two families: []

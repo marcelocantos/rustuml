@@ -1,0 +1,5 @@
+thread 'font_chain::tests::coverage_table_is_the_stored_reference_host_extraction' (54052827) panicked at crates/rustuml-render/src/font_chain.rs:959:9:
+assertion `left == right` failed: faces awaiting reference hashes
+  left: ["Verdana-Bold"]
+ right: []
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 850 filtered out; finished in 0.06s

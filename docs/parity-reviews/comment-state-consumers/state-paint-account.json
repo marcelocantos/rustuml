@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "base_revision": "3875fee3b164d63d4b39df4bc6c13ca8ace89169",
+  "review_revision": "075f5095520bb1dc85a32c1f051a98421522419d",
+  "import_revision": "138ca3e5f",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "mechanism": "State fill role resolution and shared serialization",
+  "java_locations": [
+    "style/ValueImpl.java:90\u2013109 none/transparent special handling; HColorSet.getColorOrWhite",
+    "klimt/color/HColorSet.java:59\u201362,75\u2013154 color validity, transparent/background, RGB alpha, ColorTrieNode registry; RebeccaPurple absent",
+    "svek/image/AbstractEntityImage.java applyColor / EntityImageState.java:99\u2013118; EntityImageStateEmptyDescription.java:62\u201375",
+    "svek/image/EntityImageStateConcurrent.java and svek/Cluster.java composite consumers",
+    "klimt/drawing/svg/DriverRectangleSvg.java,DriverEllipseSvg.java,DriverPolygonSvg.java,DriverPathSvg.java \u2192 SvgGraphics.fillMe"
+  ],
+  "rust_locations": [
+    "state.rs:48\u201366 resolve_state_paint/resolve_pseudo_state_color; state_gradient_fill non-gradient branch103",
+    "state.rs direct fill producers inventoried in state-fill-sites.json",
+    "creole.rs:1347 is_resolvable_color existing Java palette predicate; text_render.rs normalize_color and svg.rs fill_attributes unchanged"
+  ],
+  "invariant": "All non-gradient state fill values retain role semantics until shared serialization: valid Java registry names/hex, transparent none, invalid style colors white. Partial RRGGBBAA produces RGB plus fill-opacity. Constant and url paints remain identical. Stroke, geometry and element topology unchanged.",
+  "causal_divergence": "sequence::resolve_color converts transparent to white and accepts CSS4 RebeccaPurple; direct shape writers serialize raw8digit fill and miss opacity. The two ordinary rectangles alone do not cover nested/composite/pseudostate writers.",
+  "planned_change": "Expose existing creole is_resolvable_color crate-locally and use it in a state fill resolver with ValueImpl/getColorOrWhite semantics. Retain automatic and gradient behavior as explicit dependencies. Route variable state shape/header fills through existing svg::fill_attributes, including ordinary nested/composite/concurrent/pseudostate and supplied oracle paints; leave fixed constants/none and stroke-only paths with an explicit remaining-path census. Do not modify sequence.rs, shared font/style metrics or empty-state geometry.",
+  "production_files": [
+    "crates/rustuml-render/src/creole.rs",
+    "crates/rustuml-render/src/state.rs"
+  ],
+  "perturbation_axes": [
+    "transparent/named/unknown/short/full/alpha endpoints",
+    "ordinary empty/body,nested/composite/concurrent/choice/history/start/end consumers"
+  ],
+  "residuals": [
+    "Automatic active/default background plumbing T14.15 and gradients T14.18 unchanged",
+    "Empty-state geometry separate handoff; no compensation",
+    "Choice/history shape/dispatch mismatches not corrected by serialization alone"
+  ]
+}

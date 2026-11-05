@@ -1,0 +1,17 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "86px"), ("preserveAspectRatio", "none"), ("style", "width:510px;height:86px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 510 86"), ("width", "510px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "86px"), ("preserveAspectRatio", "none"), ("style", "width:500px;height:86px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 500 86"), ("width", "500px"), ("zoomAndPan", "magnify")]
+  [12] <path> attr mismatch:
+    expected: [("d", "M120.46,26.59 L120.46,51.9005 L495.875,51.9005 L495.875,36.59 L485.875,26.59 L120.46,26.59"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("d", "M120.5313,26.5889 L120.5313,51.8994 L485.8027,51.8994 L485.8027,36.5889 L475.8027,26.5889 L120.5313,26.5889"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [13] <path> attr mismatch:
+    expected: [("d", "M485.875,26.59 L485.875,36.59 L495.875,36.59 L485.875,26.59"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M475.8027,26.5889 L475.8027,36.5889 L485.8027,36.5889 L475.8027,26.5889"), ("fill", "#FEFFDD"), ("style", "stroke:#181818;stroke-width:1;")]
+  [14] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "354.415"), ("x", "126.46"), ("y", "44.1584")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "344.2715"), ("x", "126.5313"), ("y", "44.1573")]
+  [14] <text> text mismatch:
+    expected: Some("MARK(cloud) /  [rain] / MARK / north\\nbright / preFLAG")
+    actual:   Some("[cloud] / MARK(rain) / MARK / north\\nFLAG / preFLAG")
+

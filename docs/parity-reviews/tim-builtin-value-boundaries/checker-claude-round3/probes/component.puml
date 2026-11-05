@@ -1,0 +1,4 @@
+@startuml
+component "Pump%substr("🦉",0,1)" as P
+[Valve] --> P
+@enduml

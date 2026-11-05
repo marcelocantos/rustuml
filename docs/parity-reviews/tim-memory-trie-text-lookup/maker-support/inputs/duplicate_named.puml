@@ -1,0 +1,6 @@
+@startuml
+!procedure $draw(b="left",$b="dollar",b="last",$tail="end")
+class "b / $b / $tail" as Bound
+!endprocedure
+$draw(b="named","pos",$tail="tail")
+@enduml

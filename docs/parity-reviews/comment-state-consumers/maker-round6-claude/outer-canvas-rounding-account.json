@@ -1,0 +1,30 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "comment-state-consumers",
+ "sub_mechanism": "outer image canvas rounding (round-6 obligation 4)",
+ "answers": "docs/parity-reviews/comment-state-consumers/review-6.json (bounded_next_obligations[0])",
+ "java_locations": [
+  "klimt/drawing/svg/SvgGraphics.java 142-147 ensureVisible: maxX = (int)(x + 1), maxY = (int)(y + 1) of the image dimension; the root svg width/height are maxX/maxY."
+ ],
+ "rust_locations": [
+  "crates/rustuml-render/src/state.rs 5097-5098 (outer image path SVG size): outer.width.ceil(), outer.height.ceil(); state.rs 266-268 svg_ensure_visible_dimension already ports ensureVisible."
+ ],
+ "planned_change": [
+  "state.rs 5097-5098: svg_ensure_visible_dimension(outer.width / outer.height)."
+ ],
+ "second_trace": "The opposite +1 on the root/flat path (BH pt6_note_outer_anchor_later_inner 172 vs 171, rp6_root_and_group 260 vs 259) is traced separately after this draft; fixed only if bounded, else residual.",
+ "perturbation_axes": [
+  "integral-extent outer image canvas (end ellipse on an integer y), renamed states, width and height"
+ ],
+ "precommitted_measurement": {
+  "oracle": "unchanged strict comparator plus exact viewBox census over the 16,508-source sweep",
+  "expect_fixed": [
+   "BH no6_integer_canvas",
+   "checker_history_font_state_channel exact canvas"
+  ],
+  "expect": "exact viewBox on 98 more sweep outputs (the round-5 checker's evidence build), 0 exact canvases lost, 0 strict matches lost"
+ }
+}

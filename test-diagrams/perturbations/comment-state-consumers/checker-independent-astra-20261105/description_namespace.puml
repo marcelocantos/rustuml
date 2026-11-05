@@ -1,0 +1,9 @@
+@startuml
+package "Radio Rooms" as Radio {
+component "North Dial" as Dial
+package "Quiet Room" as Quiet {
+component "Long Wave" as Wave
+}
+Dial --> Quiet.Wave
+}
+@enduml

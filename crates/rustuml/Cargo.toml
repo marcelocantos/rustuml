@@ -8,3 +8,7 @@ license.workspace = true
 rustuml-parser = { path = "../rustuml-parser" }
 rustuml-render = { path = "../rustuml-render" }
 serde_yml = "0.0.12"
+
+[dev-dependencies]
+roxmltree = "0.20"
+sha2 = "0.10"

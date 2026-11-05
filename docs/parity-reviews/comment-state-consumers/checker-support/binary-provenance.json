@@ -1,0 +1,22 @@
+{
+  "before": {
+    "evidence_revision": "3875fee3b164d63d4b39df4bc6c13ca8ace89169",
+    "production_revision": "346f6b3f680895d3eb457041ed88ae224c583d95",
+    "build_cwd": "/Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/before-source",
+    "target": "/Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/target-before",
+    "binary_sha256": "c4e9a7bca11da8d4d4a7bc965e23038391436b2147c46da93ce9b1e25309a1ce"
+  },
+  "after": {
+    "evidence_revision": "2a791353c998e4c34bbf0f16699c7ffd21d50cea",
+    "production_revision": "523a2d89226d764b818b7af2472593d2690e9c4b",
+    "build_cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2f87fc19",
+    "target": "/Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/target-after",
+    "binary_sha256": "6ed54fadad44b8696cade58bbe96494d515f41e04e50f7303f5fdd51f0d7a310"
+  },
+  "build_jobs": 4,
+  "both_build_exit": 0,
+  "probe_sha256": "ff7b3a8656b6565734d11e4aaa3f7fecc27ebe9aa9d10faa5ae36a61af578f21",
+  "probe_source_sha256": "f1d0ae0e053dfc379f7c9dd524fc033430cf235bf63356ca959e1e62522b83be",
+  "probe_origin": "Unmodified hash-verified maker comparator executable using unchanged compare_svg_strict; used only for comparison, never to render CLI output.",
+  "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a"
+}

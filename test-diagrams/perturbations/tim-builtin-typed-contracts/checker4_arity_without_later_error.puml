@@ -1,0 +1,4 @@
+@startuml
+!$v=%strlen("a","b")
+class After
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+skinparam ArrowFontSize 16
+class A
+class B
+A "1" --> "many" B : Pier quay
+@enduml

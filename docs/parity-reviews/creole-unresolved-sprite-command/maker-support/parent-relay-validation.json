@@ -1,0 +1,14 @@
+{
+  "validated": true,
+  "cases": 18,
+  "resources": 19,
+  "calls": 36,
+  "gzip_sha256": "ee508b14b86386b5c3d52edeafb3f50475c5bd4815f523dfa67a6299a907ca2c",
+  "classification_performed": false,
+  "checks": [
+    "all source/resource bytes and hashes",
+    "membership and transport/stream hashes",
+    "exact wrapper and Java argv",
+    "cwd/TZ/env/pinned JAR/headless"
+  ]
+}

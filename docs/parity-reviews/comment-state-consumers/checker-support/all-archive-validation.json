@@ -1,0 +1,56 @@
+[
+  {
+    "archive": "metadata.tar.gz",
+    "entries": 146,
+    "sha256": "b54df940fef409c36de94969541186cd5b964fbeddc80daeef094a71252adae6",
+    "all_entries_verified": true
+  },
+  {
+    "archive": "logs.tar.gz",
+    "entries": 40,
+    "sha256": "191bfafc9343ca2e117778836a527ec50de0aecc9f21957a690fd8c86cc34af1",
+    "all_entries_verified": true
+  },
+  {
+    "archive": "frozen-inputs.tar.gz",
+    "entries": 28352,
+    "sha256": "afe5d5eeef0d7565ddc420265133fbf9e2146bb95ee933dca2dfb93cd7b20fe9",
+    "all_entries_verified": true
+  },
+  {
+    "archive": "intermediate.tar.gz",
+    "entries": 122614,
+    "sha256": "5c7bc4df86902964359d0010546aebbcae7eb73c58328a69ea30990828adcde4",
+    "all_entries_verified": true
+  },
+  {
+    "archive": "initial-after.tar.gz",
+    "entries": 3642,
+    "sha256": "a12ca64dcca7af2ddc4c0e57a9e8544082fbe8b04cd2ec05f1471648d77f995f",
+    "all_entries_verified": true
+  },
+  {
+    "archive": "fresh-relay.tar.gz",
+    "entries": 119,
+    "sha256": "050100cddf3fee3aed4b4216a13842befb6a1b4711992b2f5f83f44f64735c17",
+    "all_entries_verified": true
+  },
+  {
+    "archive": "registered-cli.tar.gz",
+    "entries": 8524,
+    "sha256": "713b24851c6bae39fc944e461acee23cf0ceb1eb3833e34e8b66db05e4ef50bc",
+    "all_entries_verified": true
+  },
+  {
+    "archive": "captures-before.tar.gz",
+    "entries": 118261,
+    "sha256": "9a88ba02ff3d1571abedfae84fe81fcccbb6051f128edf25c4d89b316641e278",
+    "all_entries_verified": true
+  },
+  {
+    "archive": "captures-after.tar.gz",
+    "entries": 118261,
+    "sha256": "5d41a153ae3bf1732f5a48d384da10ca6b565740b7bddd6aed737a3562d22bd2",
+    "all_entries_verified": true
+  }
+]

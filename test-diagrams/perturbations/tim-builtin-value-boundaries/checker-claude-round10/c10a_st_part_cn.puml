@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Courier New
+participant "Kiln" as E1 <<Ferrous gauge vista>>
+E1 -> E1 : ok
+@enduml

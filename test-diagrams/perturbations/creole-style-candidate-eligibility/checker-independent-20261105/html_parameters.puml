@@ -1,0 +1,3 @@
+@startuml
+Kestrel -> Otter : q<size:19></size>r<color:navy></color>s<b></B>t\n<size:31><i></I></size>
+@enduml

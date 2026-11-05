@@ -1,0 +1,132 @@
+# HarfBuzz official repository https://github.com/harfbuzz/harfbuzz (blobless clone), tags 8.2.2=1b4d1c0a9c755cc07ae3e30fb88a54b318dd7e80 10.0.1=5d1030f5618e0b0d595de4be0116b89dc1054692 15.0.0=66946f52d6c27f635c0b9c23d55fa1df6b76a5fc
+######## src/hb-ot-shape.cc 8.2.2 -> 10.0.1
+88c88
+<   shaper = hb_ot_shaper_categorize (this);
+---
+>   shaper = hb_ot_shaper_categorize (props.script, props.direction, map.chosen_script[0]);
+158c158
+<     ;
+---
+>     {}
+169a170
+>     if (false) {}
+171c172
+<     if (has_kerx)
+---
+>     else if (has_kerx)
+173d173
+<     else
+176c176
+<     if (hb_ot_layout_has_kerning (face))
+---
+>     else if (hb_ot_layout_has_kerning (face))
+178a179
+>     else {}
+839a841,863
+> hb_ot_deal_with_variation_selectors (hb_buffer_t *buffer)
+> {
+>   if (!(buffer->scratch_flags & HB_BUFFER_SCRATCH_FLAG_HAS_VARIATION_SELECTOR_FALLBACK) ||
+> 	buffer->not_found_variation_selector == HB_CODEPOINT_INVALID)
+>     return;
+> 
+>   unsigned int count = buffer->len;
+>   hb_glyph_info_t *info = buffer->info;
+>   hb_glyph_position_t *pos = buffer->pos;
+> 
+>   for (unsigned int i = 0; i < count; i++)
+>   {
+>     if (_hb_glyph_info_get_general_category (&info[i]) ==
+> 	_HB_UNICODE_GENERAL_CATEGORY_VARIATION_SELECTOR)
+>     {
+>       info[i].codepoint = buffer->not_found_variation_selector;
+>       pos[i].x_advance = pos[i].y_advance = pos[i].x_offset = pos[i].y_offset = 0;
+>       _hb_glyph_info_set_general_category (&info[i], HB_UNICODE_GENERAL_CATEGORY_NON_SPACING_MARK);
+>     }
+>   }
+> }
+> 
+> static void
+967a992
+>   hb_ot_deal_with_variation_selectors (c->buffer);
+######## src/hb-ot-shaper-hebrew.cc 8.2.2 -> 10.0.1
+81c81
+<   if (!found && !c->plan->has_gpos_mark)
+---
+>   if (!found && (c->plan && !c->plan->has_gpos_mark))
+######## src/hb-unicode.hh 8.2.2 -> 10.0.1
+36a37,39
+> // Hack. See: https://github.com/harfbuzz/harfbuzz/pull/4529#discussion_r1769638033
+> #define _HB_UNICODE_GENERAL_CATEGORY_VARIATION_SELECTOR ((hb_unicode_general_category_t) 30)
+> 
+######## src/hb-ot-shaper.hh 8.2.2 -> 10.0.1
+177c177,179
+< hb_ot_shaper_categorize (const hb_ot_shape_planner_t *planner)
+---
+> hb_ot_shaper_categorize (hb_script_t script,
+> 			 hb_direction_t direction,
+> 			 hb_tag_t gsub_script)
+179c181
+<   switch ((hb_tag_t) planner->props.script)
+---
+>   switch ((hb_tag_t) script)
+195,197c197,198
+<       if ((planner->map.chosen_script[0] != HB_OT_TAG_DEFAULT_SCRIPT ||
+< 	   planner->props.script == HB_SCRIPT_ARABIC) &&
+< 	  HB_DIRECTION_IS_HORIZONTAL(planner->props.direction))
+---
+>       if ((gsub_script != HB_OT_TAG_DEFAULT_SCRIPT || script == HB_SCRIPT_ARABIC) &&
+> 	  HB_DIRECTION_IS_HORIZONTAL (direction))
+238,239c239,240
+<       if (planner->map.chosen_script[0] == HB_TAG ('D','F','L','T') ||
+< 	  planner->map.chosen_script[0] == HB_TAG ('l','a','t','n'))
+---
+>       if (gsub_script == HB_TAG ('D','F','L','T') ||
+> 	  gsub_script == HB_TAG ('l','a','t','n'))
+241c242
+<       else if ((planner->map.chosen_script[0] & 0x000000FF) == '3')
+---
+>       else if ((gsub_script & 0x000000FF) == '3')
+257,259c258,260
+<       if (planner->map.chosen_script[0] == HB_TAG ('D','F','L','T') ||
+< 	  planner->map.chosen_script[0] == HB_TAG ('l','a','t','n') ||
+< 	  planner->map.chosen_script[0] == HB_TAG ('m','y','m','r'))
+---
+>       if (gsub_script == HB_TAG ('D','F','L','T') ||
+> 	  gsub_script == HB_TAG ('l','a','t','n') ||
+> 	  gsub_script == HB_TAG ('m','y','m','r'))
+388a390,398
+>     /* Unicode-16.0 additions */
+>     case HB_SCRIPT_GARAY:
+>     case HB_SCRIPT_GURUNG_KHEMA:
+>     case HB_SCRIPT_KIRAT_RAI:
+>     case HB_SCRIPT_OL_ONAL:
+>     case HB_SCRIPT_SUNUWAR:
+>     case HB_SCRIPT_TODHRI:
+>     case HB_SCRIPT_TULU_TIGALARI:
+> 
+394,395c404,405
+<       if (planner->map.chosen_script[0] == HB_TAG ('D','F','L','T') ||
+< 	  planner->map.chosen_script[0] == HB_TAG ('l','a','t','n'))
+---
+>       if (gsub_script == HB_TAG ('D','F','L','T') ||
+> 	  gsub_script == HB_TAG ('l','a','t','n'))
+######## src/hb-ot-shape-fallback.cc 8.2.2 -> 10.0.1
+######## src/hb-ot-shaper-default.cc 8.2.2 -> 10.0.1
+######## src/hb-ot-shaper-arabic.cc 8.2.2 -> 10.0.1
+236d235
+<    {
+238,239d236
+<      map->enable_feature (HB_TAG('r','c','l','t'), F_MANUAL_ZWJ);
+<    }
+563,565c560,562
+<       DEBUG_MSG (ARABIC, nullptr, "rest of word:    count=%u width %d", start - context, w_total);
+<       DEBUG_MSG (ARABIC, nullptr, "fixed tiles:     count=%d width=%d", n_fixed, w_fixed);
+<       DEBUG_MSG (ARABIC, nullptr, "repeating tiles: count=%d width=%d", n_repeating, w_repeating);
+---
+>       DEBUG_MSG (ARABIC, nullptr, "rest of word:    count=%u width %" PRId32, start - context, w_total);
+>       DEBUG_MSG (ARABIC, nullptr, "fixed tiles:     count=%d width=%" PRId32, n_fixed, w_fixed);
+>       DEBUG_MSG (ARABIC, nullptr, "repeating tiles: count=%d width=%" PRId32, n_repeating, w_repeating);
+605c602
+< 	  DEBUG_MSG (ARABIC, nullptr, "appending %u copies of glyph %u; j=%u",
+---
+> 	  DEBUG_MSG (ARABIC, nullptr, "appending %u copies of glyph %" PRIu32 "; j=%u",

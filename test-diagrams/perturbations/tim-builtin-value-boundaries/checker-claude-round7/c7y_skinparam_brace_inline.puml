@@ -1,0 +1,6 @@
+@startyaml
+skinparam x {y}
+k: v
+}
+m: n
+@endyaml

@@ -1,0 +1,232 @@
+    Checking bitflags v2.11.0
+    Checking libquickjs-sys v0.9.0
+   Compiling rustuml-layout v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round6-claude-maker/src/8317cf006/crates/rustuml-layout)
+    Checking rustuml-parser v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round6-claude-maker/src/8317cf006/crates/rustuml-parser)
+    Checking quick-js v0.4.1
+    Checking rustybuzz v0.20.1
+    Checking png v0.18.1
+    Checking pdf-writer v0.12.1
+    Checking katex v0.4.6
+    Checking rustuml-math v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round6-claude-maker/src/8317cf006/crates/rustuml-math)
+    Checking image v0.25.10
+    Checking tiny-skia v0.12.0
+    Checking usvg v0.45.1
+    Checking usvg v0.47.0
+    Checking resvg v0.45.1
+    Checking resvg v0.47.0
+    Checking svg2pdf v0.13.0
+warning: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:72:15
+   |
+72 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rustuml-parser` (lib) generated 1 warning
+    Checking rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round6-claude-maker/src/8317cf006/crates/rustuml-render)
+error: usage of `bool::then` in `filter_map`
+    --> crates/rustuml-render/src/class.rs:4130:10
+     |
+4130 |           .filter_map(|(idx, role)| {
+     |  __________^
+4131 | |             (*role == PackageRenderRole::Cluster).then(|| package_cluster_id(idx))
+4132 | |         })
+     | |__________^ help: use `filter` then `map` instead: `filter(|&(idx, role)| (*role == PackageRenderRole::Cluster)).map(|(idx, role)| package_cluster_id(idx))`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#filter_map_bool_then
+     = note: `-D clippy::filter-map-bool-then` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(clippy::filter_map_bool_then)]`
+
+error: this `let...else` may be rewritten with the `?` operator
+     --> crates/rustuml-render/src/class.rs:11894:5
+      |
+11894 | /     let Some((&start, &end)) = edge_points.first().zip(edge_points.last()) else {
+11895 | |         return None;
+11896 | |     };
+      | |______^ help: replace it with: `let (&start, &end) = edge_points.first().zip(edge_points.last())?;`
+      |
+      = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#question_mark
+      = note: `-D clippy::question-mark` implied by `-D warnings`
+      = help: to override `-D warnings` add `#[allow(clippy::question_mark)]`
+
+error: this method chain can be written more clearly with `if .. else ..`
+     --> crates/rustuml-render/src/class.rs:13253:5
+      |
+13253 | /     (style.shadow > 0.0)
+13254 | |         .then(|| {
+13255 | |             let filter_id =
+13256 | |                 crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""));
+13257 | |             format!(r#" filter="url(#{filter_id})""#)
+13258 | |         })
+13259 | |         .unwrap_or_default()
+      | |____________________________^
+      |
+      = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#obfuscated_if_else
+      = note: `-D clippy::obfuscated-if-else` implied by `-D warnings`
+      = help: to override `-D warnings` add `#[allow(clippy::obfuscated_if_else)]`
+help: try
+      |
+13253 ~     if style.shadow > 0.0 { {
+13254 +             let filter_id =
+13255 +                 crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""));
+13256 +             format!(r#" filter="url(#{filter_id})""#)
+13257 +         } } else { Default::default() }
+      |
+
+error: using `chunks_exact` with a constant chunk size
+    --> crates/rustuml-render/src/component.rs:6989:14
+     |
+6989 |             .chunks_exact(3)
+     |              ^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<3>().0.iter()`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#chunks_exact_to_as_chunks
+     = note: `-D clippy::chunks-exact-to-as-chunks` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(clippy::chunks_exact_to_as_chunks)]`
+
+error: using `chunks_exact` with a constant chunk size
+    --> crates/rustuml-render/src/deployment.rs:5921:14
+     |
+5921 |             .chunks_exact(3)
+     |              ^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<3>().0.iter()`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#chunks_exact_to_as_chunks
+
+error: using `chunks_exact` with a constant chunk size
+   --> crates/rustuml-render/src/handwritten.rs:487:23
+    |
+487 |     for chunk in rest.chunks_exact(3) {
+    |                       ^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<3>().0`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#chunks_exact_to_as_chunks
+
+error: using `chunks_exact` with a constant chunk size
+   --> crates/rustuml-render/src/sequence.rs:376:15
+    |
+376 |     Some(nums.chunks_exact(2).map(|p| (p[0], p[1])).collect())
+    |               ^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<2>().0.iter()`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#chunks_exact_to_as_chunks
+
+error: this `if` has identical blocks
+    --> crates/rustuml-render/src/sequence.rs:3700:72
+     |
+3700 |                       } else if matches!(message.to.as_str(), "[" | "]") {
+     |  ________________________________________________________________________^
+3701 | |                         &message.from
+3702 | |                     } else if matches!(change, ActivationChange::Deactivate) {
+     | |_____________________^
+     |
+note: same as this
+    --> crates/rustuml-render/src/sequence.rs:3702:78
+     |
+3702 |                       } else if matches!(change, ActivationChange::Deactivate) {
+     |  ______________________________________________________________________________^
+3703 | |                         &message.from
+3704 | |                     } else {
+     | |_____________________^
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#if_same_then_else
+     = note: `-D clippy::if-same-then-else` implied by `-D warnings`
+     = help: to override `-D warnings` add `#[allow(clippy::if_same_then_else)]`
+
+error: redundant reference in `write!` argument
+     --> crates/rustuml-render/src/sequence.rs:13620:25
+      |
+13620 |                         &arrow_color,
+      |                         ^^^^^^^^^^^^ help: remove the redundant `&`: `arrow_color`
+      |
+      = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#useless_borrows_in_formatting
+      = note: `-D clippy::useless-borrows-in-formatting` implied by `-D warnings`
+      = help: to override `-D warnings` add `#[allow(clippy::useless_borrows_in_formatting)]`
+
+error: redundant reference in `write!` argument
+     --> crates/rustuml-render/src/sequence.rs:13634:25
+      |
+13634 |                         &arrow_color,
+      |                         ^^^^^^^^^^^^ help: remove the redundant `&`: `arrow_color`
+      |
+      = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#useless_borrows_in_formatting
+
+error: redundant reference in `write!` argument
+     --> crates/rustuml-render/src/sequence.rs:13672:25
+      |
+13672 |                         &arrow_color,
+      |                         ^^^^^^^^^^^^ help: remove the redundant `&`: `arrow_color`
+      |
+      = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#useless_borrows_in_formatting
+
+error: redundant reference in `write!` argument
+     --> crates/rustuml-render/src/sequence.rs:13757:29
+      |
+13757 | ...                   &arrow_color,
+      |                       ^^^^^^^^^^^^ help: remove the redundant `&`: `arrow_color`
+      |
+      = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#useless_borrows_in_formatting
+
+error: redundant reference in `write!` argument
+     --> crates/rustuml-render/src/sequence.rs:13767:29
+      |
+13767 | ...                   &arrow_color,
+      |                       ^^^^^^^^^^^^ help: remove the redundant `&`: `arrow_color`
+      |
+      = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#useless_borrows_in_formatting
+
+error: redundant reference in `write!` argument
+     --> crates/rustuml-render/src/sequence.rs:13787:33
+      |
+13787 | ...                   &arrow_color,
+      |                       ^^^^^^^^^^^^ help: remove the redundant `&`: `arrow_color`
+      |
+      = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#useless_borrows_in_formatting
+
+error: redundant reference in `write!` argument
+     --> crates/rustuml-render/src/sequence.rs:13817:33
+      |
+13817 | ...                   &arrow_color,
+      |                       ^^^^^^^^^^^^ help: remove the redundant `&`: `arrow_color`
+      |
+      = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#useless_borrows_in_formatting
+
+error: redundant reference in `write!` argument
+     --> crates/rustuml-render/src/sequence.rs:13827:29
+      |
+13827 | ...                   &arrow_color,
+      |                       ^^^^^^^^^^^^ help: remove the redundant `&`: `arrow_color`
+      |
+      = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#useless_borrows_in_formatting
+
+error: redundant reference in `write!` argument
+     --> crates/rustuml-render/src/sequence.rs:13837:29
+      |
+13837 | ...                   &arrow_color,
+      |                       ^^^^^^^^^^^^ help: remove the redundant `&`: `arrow_color`
+      |
+      = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#useless_borrows_in_formatting
+
+error: redundant reference in `write!` argument
+     --> crates/rustuml-render/src/sequence.rs:13863:29
+      |
+13863 | ...                   &arrow_color,
+      |                       ^^^^^^^^^^^^ help: remove the redundant `&`: `arrow_color`
+      |
+      = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#useless_borrows_in_formatting
+
+error: using `chunks_exact` with a constant chunk size
+    --> crates/rustuml-render/src/state.rs:5568:10
+     |
+5568 |         .chunks_exact(3)
+     |          ^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<3>().0.iter()`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#chunks_exact_to_as_chunks
+
+error: could not compile `rustuml-render` (lib) due to 19 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: using `chunks_exact` with a constant chunk size
+    --> crates/rustuml-render/src/component.rs:8371:14
+     |
+8371 |             .chunks_exact(2)
+     |              ^^^^^^^^^^^^^^^ help: consider using `as_chunks` instead: `as_chunks::<2>().0.iter()`
+     |
+     = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.99.0/index.html#chunks_exact_to_as_chunks
+
+error: could not compile `rustuml-render` (lib test) due to 20 previous errors

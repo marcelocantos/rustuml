@@ -1,0 +1,4 @@
+@startyaml
+- k: [x, 'y,z']
+- m: n
+@endyaml

@@ -1,0 +1,4 @@
+@startuml
+title A<$north>B
+class Birch
+@enduml

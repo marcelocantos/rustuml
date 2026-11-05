@@ -1,0 +1,441 @@
+{
+ "schema_version": 1,
+ "scope": "independent checker measurements for maker round 3 (claude), tip e6f629944, versus merged base 6617e48b8 (code = 9834a7194) and round-2 tip 6c52f2cfd",
+ "identities": {
+  "base": "6617e48b8751d2316c4e847bf1507c5c5f04c5ba",
+  "base_code_identical_to": "9834a719455308120c3289b59a260567f141b724",
+  "round2_tip": "6c52f2cfd073be4c904a88db283ff2694cb0b8f0",
+  "maker_merge": "89fb6e93eff0577887251a66224492dcf028734e",
+  "tip": "e6f6299449bfba8faefa845563deedf92f310fde",
+  "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "jdk_serializer_source": "Temurin 21.0.13 lib/src.zip java.xml/com/sun/org/apache/xml/internal/serializer/ToStream.java sha256 ec8b179ec40e358980f7143327c874a7443692290dc7a3b3ed555b5b7cda3ed7 (read-only)",
+  "binaries": "git archive <rev> | tar -x into ~/Library/Caches/rustuml-shared-svg-round3-claude-checker/src/<rev>; CARGO_TARGET_DIR=<private>/target/<rev> cargo build --release -j 6 -p rustuml",
+  "comparator": "rustuml_oracle::compare::compare_svg_strict from the 6617e48b8 export (crates/rustuml-oracle byte-identical 6617e48b8..e6f629944; GEOM_EPS 0.02) via tools/checker-cmp-main.rs"
+ },
+ "references": {
+  "BB": {
+   "dir": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round3-r3a",
+   "reference_results_sha256": "c0379c640071f97fa848d5cd497a3c87cfe7605c2309d7f59b117ca6de0184ef",
+   "reference_results_gz_sha256": "418a77d16237cf83fa7c0d6582cb67a6c3c0675fd10144157abd0f8308b93f28",
+   "reference_manifest_sha256": "2a5074779e0e8bd2d4840acc3b1f24c8a1d4fa6f6f11cd2af8a6dcc8ecfc95ce",
+   "reference_input_bundle_sha256": "9abe533d5d78fb5e4b5c1366b6871778aa2cbecc380610d9fb6af53ec2b34a01",
+   "copies": "checker-claude-round3/references/bb-* (byte-identical, same SHA256)",
+   "maker_prediction_hashes_match_checker_builds": "36/36 base and tip stdout SHA256 equal the maker's measurements/probe-predictions-r3a.json"
+  },
+  "AW": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round2-r2a",
+  "AU": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-checker-c1",
+  "AR": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-claude-batch1"
+ },
+ "cli_whole_output_sweep": {
+  "env": "RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100, PLANTUML_STDLIB=~/work/github.com/plantuml/plantuml-stdlib/stdlib, -pipe -tsvg, 30 s timeout, each case from its recorded cwd (tools/cwd_map.py: 892 repo sources mapped; agrees with the maker's recorded-cwd-map.json except one stale private cwd that both resolve to the source dir)",
+  "goldens": {
+   "sources": 12550,
+   "java_valid": 11351,
+   "java_error": 1199,
+   "valid_strict_matches": {
+    "6617e48b8": 11181,
+    "6c52f2cfd": 11179,
+    "e6f629944": 11180
+   },
+   "comment_lists_exact": {
+    "6617e48b8": 11563,
+    "6c52f2cfd": 11781,
+    "e6f629944": 11781
+   },
+   "exit_status_counts": {
+    "6617e48b8": {
+     "1": 76,
+     "0": 12474
+    },
+    "6c52f2cfd": {
+     "1": 76,
+     "0": 12474
+    },
+    "e6f629944": {
+     "1": 76,
+     "0": 12474
+    }
+   },
+   "panics": {
+    "6617e48b8": 0,
+    "6c52f2cfd": 0,
+    "e6f629944": 0
+   },
+   "timeouts": {
+    "6617e48b8": 0,
+    "6c52f2cfd": 0,
+    "e6f629944": 0
+   },
+   "base_to_tip": {
+    "comments_gained": 218,
+    "gained_match": [
+     "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+     "test-diagrams/golden/state/state_history_shallow.puml"
+    ],
+    "lost_match_GET_provenance": [
+     "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+     "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+     "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+    ],
+    "outputs_changed": 309
+   },
+   "round2_to_tip": {
+    "gained_match": [
+     "test-diagrams/golden/state/state_history_shallow.puml"
+    ],
+    "outputs_changed": 65
+   }
+  },
+  "perturbations": {
+   "sources": 3891,
+   "java_valid": 3578,
+   "java_error": 313,
+   "valid_strict_matches": {
+    "6617e48b8": 1728,
+    "6c52f2cfd": 2300,
+    "e6f629944": 2306
+   },
+   "comment_lists_exact": {
+    "6617e48b8": 2765,
+    "6c52f2cfd": 3269,
+    "e6f629944": 3270
+   },
+   "exit_status_counts": {
+    "6617e48b8": {
+     "0": 3795,
+     "1": 88,
+     "101": 8
+    },
+    "6c52f2cfd": {
+     "0": 3726,
+     "1": 161,
+     "101": 4
+    },
+    "e6f629944": {
+     "0": 3727,
+     "1": 160,
+     "101": 4
+    }
+   },
+   "panics": {
+    "6617e48b8": 8,
+    "6c52f2cfd": 4,
+    "e6f629944": 4
+   },
+   "timeouts": {
+    "6617e48b8": 0,
+    "6c52f2cfd": 0,
+    "e6f629944": 0
+   },
+   "base_to_tip": {
+    "comments_gained": 507,
+    "comments_lost": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+     "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+    ],
+    "error_now_renders_valid_ref": [
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+     "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+    ],
+    "gained_match": 578,
+    "outputs_changed": 1199,
+    "rejection_gained": 71
+   },
+   "round2_to_tip": {
+    "comments_gained": [
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+    ],
+    "error_now_renders_valid_ref": [
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+    ],
+    "gained_match": [
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_entry_inside_autarkic_depth3.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_inner_note_autarkic.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rh_deep_depth3.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/history_depth2_crossing.puml",
+     "test-diagrams/perturbations/state-recursive-group-simplification/review3_nested_live_cluster_leaves_around_multiple_solved_images.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+    ],
+    "outputs_changed": 112
+   }
+  },
+  "all_16441": {
+   "sources": 16441,
+   "java_valid": 14929,
+   "java_error": 1512,
+   "valid_strict_matches": {
+    "6617e48b8": 12909,
+    "6c52f2cfd": 13479,
+    "e6f629944": 13486
+   },
+   "comment_lists_exact": {
+    "6617e48b8": 14328,
+    "6c52f2cfd": 15050,
+    "e6f629944": 15051
+   },
+   "exit_status_counts": {
+    "6617e48b8": {
+     "1": 164,
+     "0": 16269,
+     "101": 8
+    },
+    "6c52f2cfd": {
+     "1": 237,
+     "0": 16200,
+     "101": 4
+    },
+    "e6f629944": {
+     "1": 236,
+     "0": 16201,
+     "101": 4
+    }
+   },
+   "panics": {
+    "6617e48b8": 8,
+    "6c52f2cfd": 4,
+    "e6f629944": 4
+   },
+   "timeouts": {
+    "6617e48b8": 0,
+    "6c52f2cfd": 0,
+    "e6f629944": 0
+   },
+   "base_to_tip": {
+    "comments_gained": 725,
+    "comments_lost": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+     "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+    ],
+    "error_now_renders_valid_ref": [
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+     "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+    ],
+    "gained_match": 580,
+    "lost_match_GET_provenance": [
+     "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+     "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+     "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+    ],
+    "outputs_changed": 1508,
+    "rejection_gained": 71
+   },
+   "round2_to_tip": {
+    "comments_gained": [
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+    ],
+    "error_now_renders_valid_ref": [
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+    ],
+    "gained_match": [
+     "test-diagrams/golden/state/state_history_shallow.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_entry_inside_autarkic_depth3.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_inner_note_autarkic.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rh_deep_depth3.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/history_depth2_crossing.puml",
+     "test-diagrams/perturbations/state-recursive-group-simplification/review3_nested_live_cluster_leaves_around_multiple_solved_images.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class.puml"
+    ],
+    "outputs_changed": 177
+   }
+  },
+  "GET_provenance_goldens": {
+   "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+    "6617e48b8": {
+     "exit": 0,
+     "strict": "MATCH"
+    },
+    "6c52f2cfd": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "e6f629944": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   },
+   "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+    "6617e48b8": {
+     "exit": 0,
+     "strict": "MATCH"
+    },
+    "6c52f2cfd": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "e6f629944": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   },
+   "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+    "6617e48b8": {
+     "exit": 0,
+     "strict": "MATCH"
+    },
+    "6c52f2cfd": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "e6f629944": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   }
+  },
+  "round2_to_tip_changed_outputs_by_family": {
+   "STATE": 176,
+   "CLASS": 1,
+   "CLASS_case": "tim-builtin-value-boundaries/checker-claude-round2/surrogate_high_class (gained)",
+   "component_activity_usecase_other": 0
+  },
+  "carrier_scalars_or_carrier_char_refs_in_any_tip_svg": 0
+ },
+ "batches": {
+  "BB": {
+   "cases": 36,
+   "base_strict_match": 2,
+   "base_comment_lists_exact": 11,
+   "r2_strict_match": 2,
+   "r2_comment_lists_exact": 23,
+   "tip_strict_match": 22,
+   "tip_comment_lists_exact": 35,
+   "lost_vs_round2": [],
+   "lost_vs_base": [],
+   "gained_vs_round2": [
+    "dot_root_both_sides",
+    "dot_root_depth4",
+    "img_cluster_depth3",
+    "img_cluster_depth4",
+    "img_note_before_later_state",
+    "img_note_depth2",
+    "img_note_depth3",
+    "img_note_first_left",
+    "img_two_notes",
+    "sur_activity_high_end",
+    "sur_class_high_bold18",
+    "sur_class_high_end",
+    "sur_class_high_then_ascii_only",
+    "sur_class_high_then_low_node",
+    "sur_hidden_member",
+    "sur_sequence_high_end",
+    "sur_state_high_end",
+    "sur_title_high_end",
+    "sur_unused_skinparam",
+    "sur_usecase_high_end"
+   ],
+   "new_tip_errors_vs_round2": [
+    "sur_state_link_title_escape"
+   ],
+   "tip_panics": []
+  },
+  "AW": {
+   "cases": 45,
+   "base_strict_match": 6,
+   "base_comment_lists_exact": 22,
+   "r2_strict_match": 26,
+   "r2_comment_lists_exact": 42,
+   "tip_strict_match": 30,
+   "tip_comment_lists_exact": 43,
+   "lost_vs_round2": [],
+   "lost_vs_base": [],
+   "gained_vs_round2": [
+    "surrogate_high_class",
+    "rc_inner_note_autarkic",
+    "rc_entry_inside_autarkic_depth3",
+    "rh_deep_depth3"
+   ],
+   "new_tip_errors_vs_round2": [],
+   "tip_panics": []
+  },
+  "AU": {
+   "cases": 32,
+   "base_strict_match": 6,
+   "base_comment_lists_exact": 22,
+   "r2_strict_match": 21,
+   "r2_comment_lists_exact": 29,
+   "tip_strict_match": 21,
+   "tip_comment_lists_exact": 29,
+   "lost_vs_round2": [],
+   "lost_vs_base": [],
+   "gained_vs_round2": [],
+   "new_tip_errors_vs_round2": [],
+   "tip_panics": []
+  },
+  "AR": {
+   "cases": 20,
+   "base_strict_match": 6,
+   "base_comment_lists_exact": 13,
+   "r2_strict_match": 16,
+   "r2_comment_lists_exact": 19,
+   "tip_strict_match": 17,
+   "tip_comment_lists_exact": 19,
+   "lost_vs_round2": [],
+   "lost_vs_base": [],
+   "gained_vs_round2": [
+    "history_depth2_crossing"
+   ],
+   "new_tip_errors_vs_round2": [],
+   "tip_panics": []
+  }
+ },
+ "gates_run_once": {
+  "workspace_lib": "tip exit 0; base exit 0 (one pre-existing dead_code warning parse/component.rs:74 in both)",
+  "pipe_mode": "tip exit 0 (strict-XML census with the unchanged 14-entry EXPECTED_MALFORMED list; 0 unexpected malformed); base exit 0",
+  "golden_no_oracle_failure_names_vs_9834a7194": {
+   "base": 70,
+   "tip": 71,
+   "added": [
+    "activity/act_skinparam_shadowing",
+    "activity/act_skinparam2_shadowing_true",
+    "edge-cases/edge_whitespace_multiple_blank_lines"
+   ],
+   "removed": [
+    "preprocessing/preproc_complex_theme_override",
+    "state/state_history_shallow"
+   ],
+   "note": "the three added are the documented GET-provenance goldens (T14.24); exit 101 in both trees from the ratchet (base: progress not locked in; tip: those GET losses)"
+  },
+  "golden_pairs": {
+   "base_failures": 754,
+   "tip_failures": 754,
+   "name_diff": []
+  },
+  "parity_perturbations": {
+   "tip_failing": 1615,
+   "base_failing": 1365,
+   "added_in_preexisting_dirs": 9,
+   "added_in_preexisting_dirs_note": "the same 9 sources as the round-2 review (rejected-review counterexamples from 7bb210e9f carried on the maker lineage; no pre-existing source newly fails)",
+   "round2_review_tip_list_to_tip": {
+    "added": "9 pairs registered by the round-2 review after its gate run (8 theme_*, rh_suffix_undeclared), all DIFF at 6c52f2cfd too",
+    "removed": [
+     "comment-state-consumers/checker-claude-shared-svg/history_depth2_crossing",
+     "state-recursive-group-simplification/review3_nested_live_cluster_leaves_around_multiple_solved_images"
+    ]
+   }
+  },
+  "harness_guards": {
+   "tests": "comparator_constants_frozen ok, error_golden_census_is_frozen ok, no_golden_data_embedded_in_shipping_crates ok, parity_review_paths_reject_traversal ok, decimal_literal_ratchet FAILED in base and tip (identical per-file counts: class 578, deployment 44, plantuml_metrics 1055, state 62, text_render 419 in base; svg.rs 0->1 from round 2; round 3 adds 0), parity_review_records_are_complete FAILED in base and tip",
+   "category_deltas_base_to_tip": {
+    "latest accepted review cannot contain failing perturbations": "1012 -> 1222",
+    "perturbation is not named in any checker review": "198 -> 306",
+    "latest checker review must be accepted": "151 -> 197",
+    "No such file (account.json missing)": "13 -> 15 (shared-svg-corrective, tim-corrective-execution-maker; created before round 3)",
+    "T14.6.7 escape/same-stem/.puml-under categories": "98/98/98/98/98 in both (unchanged)"
+   },
+   "measured_before_this_review_was_registered": true
+  },
+  "doc_claims": "exit 0 in both"
+ },
+ "frozen_items": "crates/rustuml-oracle (comparator, GEOM_EPS, syntax-error markers, park list, error census, guard allow-lists) is byte-identical 6617e48b8..e6f629944; test-diagrams/no_oracle_baseline.txt and ulp_parked.txt unchanged; crates/rustuml/tests/pipe_mode.rs EXPECTED_MALFORMED (14 entries) unchanged 6c52f2cfd..e6f629944 and 89fb6e93e..e6f629944",
+ "staged_reference_request_c3a": {
+  "dir": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a",
+  "reference_manifest_sha256": "06da22a973562260c8358898a9054e8739163fda55ecb5d0732dc419b62e6e62",
+  "reference_input_bundle_sha256": "2e1e29f2f8322d4c3f1dd8da45cde0b1160ec4c246bd59a267466608eeda6497",
+  "cases": 19,
+  "rust_predictions": "checker-claude-round3/c3a-staged/rust-predictions.json (sha256 b09e5852ac06f915e7bd2e16b3e11aa23bf31a6132cb3e27ab3adb3b03bca504), written before any c3a Java result exists"
+ }
+}

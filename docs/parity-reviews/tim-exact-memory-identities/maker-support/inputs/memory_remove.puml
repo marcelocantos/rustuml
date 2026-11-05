@@ -1,0 +1,11 @@
+@startuml
+!b="birch"
+!$b="beech"
+!function $drop(b="local",$b="locald")
+!undef b
+!return b+"/"+$b
+!endfunction
+!$v=$drop()
+!undef $b
+class "$v / b / %variable_exists("$b")" as Removed
+@enduml

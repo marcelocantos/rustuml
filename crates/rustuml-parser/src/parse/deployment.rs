@@ -97,6 +97,7 @@ fn kind_from_keyword(keyword: &str) -> DeploymentNodeKind {
 fn push_node(
     nodes: &mut Vec<DeploymentNode>,
     id: String,
+    quark_name: Option<String>,
     label: String,
     kind: DeploymentNodeKind,
     stereotype: Option<String>,
@@ -105,8 +106,10 @@ fn push_node(
     source_line: usize,
 ) -> bool {
     if !nodes.iter().any(|n| n.id == id) {
+        let quark_name = quark_name.filter(|name| *name != id);
         nodes.push(DeploymentNode {
             id,
+            quark_name,
             label,
             kind,
             stereotype,
@@ -585,9 +588,12 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 .unwrap_or_else(|| label_to_id(&label));
             let stereotype = caps.get(3).map(|m| m.as_str().trim().to_string());
             let color = caps.get(4).map(|m| m.as_str().to_string());
+            // Without `as ALIAS` the bracket text is the Quark code.
+            let quark_name = caps.get(2).is_none().then(|| label.clone());
             let created = push_node(
                 &mut nodes,
                 id.clone(),
+                quark_name,
                 label,
                 DeploymentNodeKind::Component,
                 stereotype,
@@ -700,6 +706,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     if !nodes.iter().any(|n| n.id == *id) {
                         nodes.push(DeploymentNode {
                             id: id.clone(),
+                            quark_name: (*lbl != *id).then(|| lbl.clone()),
                             label: lbl.clone(),
                             kind: DeploymentNodeKind::Default,
                             stereotype: None,
@@ -746,6 +753,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     let created = push_node(
                         &mut nodes,
                         id.clone(),
+                        None,
                         label,
                         kind,
                         stereotype,
@@ -773,6 +781,9 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         .get(3)
                         .map(|m| m.as_str().to_string())
                         .unwrap_or_else(|| label_to_id(&label));
+                    // Without `as ALIAS` the quoted text, as written, is the
+                    // Quark code; the display is its escape-processed form.
+                    let quark_name = caps.get(3).is_none().then(|| caps[2].to_string());
                     let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
                     let color = caps.get(5).map(|m| m.as_str().to_string());
                     let kind = kind_from_keyword(&keyword);
@@ -781,6 +792,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     let created = push_node(
                         &mut nodes,
                         id.clone(),
+                        quark_name,
                         label,
                         kind,
                         stereotype,
@@ -821,6 +833,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 if !nodes.iter().any(|n| n.id == *id) {
                     nodes.push(DeploymentNode {
                         id: id.clone(),
+                        quark_name: (*lbl != *id).then(|| lbl.clone()),
                         label: lbl.clone(),
                         kind: DeploymentNodeKind::Node,
                         stereotype: None,

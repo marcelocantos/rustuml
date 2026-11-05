@@ -1,0 +1,7 @@
+@startuml
+note left of Quay : wet
+state Port {
+  Ship --> Pier
+}
+Quay --> Port
+@enduml

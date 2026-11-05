@@ -1,0 +1,449 @@
+[
+  {
+    "cohort": "checker28",
+    "phase": "before",
+    "inputs": 28,
+    "emitted": 28,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "checker28",
+    "phase": "after",
+    "inputs": 28,
+    "emitted": 28,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "checker30",
+    "phase": "before",
+    "inputs": 30,
+    "emitted": 30,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "checker30",
+    "phase": "after",
+    "inputs": 30,
+    "emitted": 30,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "checker32",
+    "phase": "before",
+    "inputs": 32,
+    "emitted": 32,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "checker32",
+    "phase": "after",
+    "inputs": 32,
+    "emitted": 32,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "checker36",
+    "phase": "before",
+    "inputs": 36,
+    "emitted": 36,
+    "malformed": 3,
+    "malformed_cases": [
+      {
+        "id": "checker36/font_empty_unknown",
+        "error": "not well-formed (invalid token): line 1, column 2335"
+      },
+      {
+        "id": "checker36/family_slash",
+        "error": "not well-formed (invalid token): line 1, column 2329"
+      },
+      {
+        "id": "checker36/alias_monospace_padded",
+        "error": "not well-formed (invalid token): line 1, column 3215"
+      }
+    ],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "checker36",
+    "phase": "after",
+    "inputs": 36,
+    "emitted": 36,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "checker38",
+    "phase": "before",
+    "inputs": 38,
+    "emitted": 38,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "checker38",
+    "phase": "after",
+    "inputs": 38,
+    "emitted": 38,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "delimiters4",
+    "phase": "before",
+    "inputs": 4,
+    "emitted": 4,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "delimiters4",
+    "phase": "after",
+    "inputs": 4,
+    "emitted": 4,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "fallback16",
+    "phase": "before",
+    "inputs": 16,
+    "emitted": 16,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "fallback16",
+    "phase": "after",
+    "inputs": 16,
+    "emitted": 16,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "focused2",
+    "phase": "before",
+    "inputs": 2,
+    "emitted": 2,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "focused2",
+    "phase": "after",
+    "inputs": 2,
+    "emitted": 2,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "fresh12",
+    "phase": "before",
+    "inputs": 12,
+    "emitted": 12,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "fresh12",
+    "phase": "after",
+    "inputs": 12,
+    "emitted": 12,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "fresh15",
+    "phase": "before",
+    "inputs": 15,
+    "emitted": 15,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "fresh15",
+    "phase": "after",
+    "inputs": 15,
+    "emitted": 15,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "fresh16",
+    "phase": "before",
+    "inputs": 16,
+    "emitted": 16,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "fresh16",
+    "phase": "after",
+    "inputs": 16,
+    "emitted": 16,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "fresh26",
+    "phase": "before",
+    "inputs": 26,
+    "emitted": 26,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "fresh26",
+    "phase": "after",
+    "inputs": 26,
+    "emitted": 26,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "full-golden",
+    "phase": "before",
+    "inputs": 12550,
+    "emitted": 12470,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 80,
+    "panics": 0
+  },
+  {
+    "cohort": "full-golden",
+    "phase": "after",
+    "inputs": 12550,
+    "emitted": 12470,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 80,
+    "panics": 0
+  },
+  {
+    "cohort": "golden-regressions",
+    "phase": "before",
+    "inputs": 6,
+    "emitted": 6,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "golden-regressions",
+    "phase": "after",
+    "inputs": 6,
+    "emitted": 6,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "maker18",
+    "phase": "before",
+    "inputs": 18,
+    "emitted": 18,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "maker18",
+    "phase": "after",
+    "inputs": 18,
+    "emitted": 18,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "new15",
+    "phase": "before",
+    "inputs": 15,
+    "emitted": 15,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "new15",
+    "phase": "after",
+    "inputs": 15,
+    "emitted": 15,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "retained",
+    "phase": "before",
+    "inputs": 1730,
+    "emitted": 1605,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 125,
+    "panics": 32
+  },
+  {
+    "cohort": "retained",
+    "phase": "after",
+    "inputs": 1730,
+    "emitted": 1605,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 125,
+    "panics": 32
+  },
+  {
+    "cohort": "shared22",
+    "phase": "before",
+    "inputs": 22,
+    "emitted": 22,
+    "malformed": 5,
+    "malformed_cases": [
+      {
+        "id": "shared22/attr_font_quotes",
+        "error": "not well-formed (invalid token): line 1, column 3180"
+      },
+      {
+        "id": "shared22/attr_link_c0_one",
+        "error": "not well-formed (invalid token): line 1, column 3220"
+      },
+      {
+        "id": "shared22/attr_link_c0_zero",
+        "error": "not well-formed (invalid token): line 1, column 3220"
+      },
+      {
+        "id": "shared22/attr_link_c0_escape",
+        "error": "not well-formed (invalid token): line 1, column 3220"
+      },
+      {
+        "id": "shared22/attr_actor_metadata",
+        "error": "not well-formed (invalid token): line 2, column 44"
+      }
+    ],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "shared22",
+    "phase": "after",
+    "inputs": 22,
+    "emitted": 22,
+    "malformed": 3,
+    "malformed_cases": [
+      {
+        "id": "shared22/attr_link_c0_one",
+        "error": "not well-formed (invalid token): line 1, column 3220"
+      },
+      {
+        "id": "shared22/attr_link_c0_zero",
+        "error": "not well-formed (invalid token): line 1, column 3220"
+      },
+      {
+        "id": "shared22/attr_link_c0_escape",
+        "error": "not well-formed (invalid token): line 1, column 3220"
+      }
+    ],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "sprites50",
+    "phase": "before",
+    "inputs": 50,
+    "emitted": 50,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "sprites50",
+    "phase": "after",
+    "inputs": 50,
+    "emitted": 50,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "supplement8",
+    "phase": "before",
+    "inputs": 8,
+    "emitted": 8,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  },
+  {
+    "cohort": "supplement8",
+    "phase": "after",
+    "inputs": 8,
+    "emitted": 8,
+    "malformed": 0,
+    "malformed_cases": [],
+    "process_errors": 0,
+    "panics": 0
+  }
+]

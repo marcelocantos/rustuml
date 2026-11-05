@@ -1,0 +1,3 @@
+@startuml
+class "seed/inner/spruce" as Nested
+@enduml

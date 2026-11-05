@@ -1,0 +1,5 @@
+@startuml
+class "Gone%substr("🦉",1,1)" as Gone
+class Kept
+remove Gone
+@enduml

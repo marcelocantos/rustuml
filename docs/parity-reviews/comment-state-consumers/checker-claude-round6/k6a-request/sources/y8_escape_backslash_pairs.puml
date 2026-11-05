@@ -1,0 +1,4 @@
+@startyaml
+path: "C:\\dock\\new"
+plain: a\\b
+@endyaml

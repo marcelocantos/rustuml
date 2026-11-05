@@ -1,0 +1,3 @@
+@startuml
+Alder -> Birch : a<font:" monospace ">Wi mi</font>z\na<b><size:14><color:navy><font:" monospace ">Wi mi</font></color></size></b>z
+@enduml

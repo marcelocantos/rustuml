@@ -1,0 +1,34 @@
+[
+  {
+    "name": "main-product",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "golden_no_oracle",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 33.51116991043091
+  },
+  {
+    "name": "main-assisted",
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-oracle",
+      "--release",
+      "--test",
+      "golden_pairs",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "seconds": 4.3768720626831055
+  }
+]

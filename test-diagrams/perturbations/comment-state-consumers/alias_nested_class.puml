@@ -1,0 +1,7 @@
+@startuml
+package "Visible Grove" as G {
+class "Visible Leaf" as L
+}
+class Peer
+G.L --> Peer
+@enduml

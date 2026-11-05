@@ -1,0 +1,61 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft (round 11); independent review required",
+ "mechanism": "comment-state-consumers (shared-SVG packet; reviews also filed under tim-builtin-value-boundaries)",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-11.json and comment-state-consumers/review-12.json (a7bd62c86) bounded_next_obligations 1 and 2",
+ "base": "merge of parity-recovery-2026-11-03 4b431ab3e (code identical to 9834a7194) into a7bd62c86 (code identical to e24240b35): 879d166f4",
+ "obligation_1": {
+  "finding": "text_render.rs family_table_text_width picks VERDANA_WIDTH / VERDANA_BOLD_WIDTH (and ARIAL_WIDTH / ARIAL_BOLD_WIDTH) by `bold` only, so printable ASCII in an italic or bold-italic face is measured with the upright face's advances; the italic face (ChainFace::for_style) reaches only characters outside U+0020..U+007E.",
+  "java_mechanism": [
+   "JDK 21 CFontManager.loadFonts 209-235 registers Verdana-Italic and Verdana-BoldItalic as the family's own italic and bold-italic CFonts (no derived italic: FontFamily.getFont 320-360 returns them); tools/font-chain-reference/monkeyman-round9/Verdana-Italic.italic.own.tsv and Verdana-BoldItalic.bolditalic.own.tsv record #java_face Verdana-Italic / Verdana-BoldItalic and own cmap runs covering U+0020..U+007E.",
+   "A simple-Latin string is measured by PlantUML's StringBounder through Font.getStringBounds (logical bounds = sum of glyph advances); CStrike.getGlyphAdvance gives the face's design advance (CTFontGetAdvancesForGlyphs) scaled by the point size under fractional metrics. The existing upright tables are exactly hmtx/2048 multiples (see source below)."
+  ],
+  "source_and_provenance": {
+   "extractor": "tools/AsciiAdvanceExtract.swift (new; resolves the face exactly as tools/PrimaryFaceExtract.swift / AWTFont.m awtFontForName, prints glyph id and CTFontGetAdvancesForGlyphs advance at size 2048 = font units for U+0020..U+007E)",
+   "run": "relay script ~/Library/Caches/rustuml-shared-svg-round11-claude-maker/relay/mm-ascii/run.sh, 28 (family, style) slots of the seven table-measured families (Lucida Grande, Arial, Helvetica, Verdana, Menlo, Courier New, Times New Roman)",
+   "host": "extracted on this host (colossus, macOS 27.2 build 26B123, the reference host's build). Every font file the round-9 Monkey Man extraction hashed (monkeyman-round9/font-hashes.txt, 15 files incl. all four Verdana and Arial files) has the identical SHA256 here; Times New Roman files are hashed in the same output. T14.6.8 admits data 'hash-validated against the declared reference environment'. The same run.sh is requested on Monkey Man through the relay; pre-registered expectation: all 28 <face>.<style>.ascii.tsv byte-identical to the local ones.",
+   "stored_at": "tools/font-chain-reference/ascii-advances-round11/ (with SHA256SUMS, font-hashes.txt, host.txt, extractor.sha256)"
+  },
+  "data_facts_from_extraction": [
+   "Verdana (plain) and Verdana-Bold: every advance equals VERDANA_WIDTH / VERDANA_BOLD_WIDTH x 2048 exactly; ArialMT and Arial-BoldMT equal ARIAL_WIDTH / ARIAL_BOLD_WIDTH x 2048 exactly (the upright tables are these faces' hmtx).",
+   "Verdana-Italic differs from Verdana in 9 code points: A 1398 (1400), D 1568 (1578), V 1398 (1400), W 2028 (2025), g 1273 (1276), k 1202 (1212), m 1993 (1992), v 1210 (1212), y 1210 (1212). Verdana-BoldItalic differs from Verdana-Bold in 2: o 1404 (1406), v 1329 (1331). These reproduce the checker's Java BT 14 pt sums exactly: italic A-M -12 units (119.4717 vs 119.5537), N-Z +1 (130.3477 vs 130.3408), a-m -12 (98.3145 vs 98.3965), n-z -4 (106.0869 vs 106.1143); bold italic n-z -4 (120.3945 vs 120.4219).",
+   "Arial-ItalicMT and Arial-BoldItalicMT equal ArialMT / Arial-BoldMT on all 95 code points.",
+   "Courier New (4 faces), Menlo (4 faces), Times New Roman (4 faces, pm::times_new_roman_text_width already italic-aware) and Lucida Grande (derived italics keep the upright face) equal what Rust measures through measure_with_family_and_face on every letter, digit and punctuation tested (a lone '`' differs in every family: the public path parses it as creole, the tables themselves agree).",
+   "Helvetica-Oblique / BoldOblique equal Helvetica / Helvetica-Bold, so the oblique slots have no upright-table fallback error of their own; Rust's upright Helvetica tables themselves differ from the faces (' 391 vs 455, % 1821 vs 1820, W 1933 vs 1934; bold k 1139 vs 1251, z 1024 vs 1251): that is T14.49, out of scope, reported only."
+  ],
+  "planned_change": [
+   "text_render.rs: the Verdana and Arial ASCII advances become per-face tables in font units (2048/em) for all four slots, from the stored extraction (integer data, no decimal literal); family_table_text_width takes the face's own table, selected by (bold, italic) together with ChainFace::for_style. The old f64 upright tables are replaced by the same values (proved equal by the new gate), so upright output is byte-identical.",
+   "Gate (lib test): every stored table equals its slot's stored extraction file code point by code point, the extraction directory's SHA256SUMS hash is pinned, and the router returns the slot's own table for each (bold, italic).",
+   "every_italic_slot_measures_in_its_own_face: the own-table branch measures with the face's own table (not the public width path), and the candidate strings include printable-ASCII letters and digits, so dropping the italic table (Verdana italic -> regular, bold italic -> bold) fails it.",
+   "No change to Helvetica (T14.49), Times, Courier New, Menlo or Lucida Grande measurement."
+  ],
+  "precommitted_measurement": {
+   "oracle": "relay batches BT, BS, BR and earlier; all 12,550 goldens byte-level; sweep incl. registered pairs; fresh renamed held-out Verdana probes (new relay, Rust predictions pre-registered)",
+   "expect": [
+    "BS m10a_{comp,nodc,artc,dbsc,actu,usec,stat,part,clss,actv}_vd_i, BT c10a_ml_part_vd_i and c10a_ft_vd_creolebi MATCH.",
+    "BT Verdana ft_* face tables: every Verdana italic / bold-italic per-label width equals Java's.",
+    "Output changes only where Verdana italic or bold-italic text containing A D V W g k m v y (italic) or o v (bold italic) is measured; no Arial output changes; no lost match, rejection, exact viewBox or comment list; no new error or panic.",
+    "Goldens: no golden combines Verdana with an italic element style; theme-driven Verdana text drawn italic (stereotypes, <i>) may change, each such change listed and expected to move toward Java."
+   ]
+  }
+ },
+ "obligation_2": {
+  "sites": {
+   "C3 sequence.rs queue_shape (5652-5665 at e24240b35)": "ParticipantTextBlock::new(text, size, family, !stereotype && participant_font_bold, *stereotype || participant_font_italic): `blocks` is read only by `pill_h = sum(block.height)`, and ParticipantTextBlock height is the sum of rendered_line_metrics_with_family(line, size, family).height, which takes no bold or italic. The face arguments therefore cannot reach the output; the text itself is drawn by participant_display, which carries its own face. Unobservable by construction.",
+   "C5 state.rs StateNodeFont.italic": "set from the last `stateFontStyle` skinparam; read only by layout_node_size_with_font through state_node_size, which runs only when `oracle.is_some() || diagram.meta.style_program.is_empty()`. A `stateFontStyle` skinparam always adds a style declaration (parse/style.rs legacy_mappings FONT_PREFIXES (\"state\", [\"state\"]) x fontstyle -> push_legacy_mapping), so in the CLI (no oracle) italic=true implies a non-empty style program and the autonomous_layout_node_size path (AutonomousTextStyle, which carries its own italic) is taken instead. Reachable only in the oracle-assisted tier, and there only for an entity the oracle does not position."
+  },
+  "planned_change": [
+   "C3: remove the dead face arguments: the queue pill height is computed from the display lines' heights directly (same split, same empty-line substitution, same rendered_line_metrics_with_family), so no face is constructed there.",
+   "C5: first measure observability: the italic-dropped mutant on a private copy over the whole CLI corpus (goldens, perturbations, registered pairs, AR..BT) and golden_pairs (oracle tier). If no output changes anywhere, remove StateNodeFont's italic (the CLI-unreachable face) per the structural proof above; if any output changes, pin the site with a lib test whose expected width is Java's (cited SVG) instead. The decision is recorded in an addendum before the change."
+  ],
+  "precommitted_measurement": {
+   "expect": [
+    "C3 removal: whole CLI output byte-identical on every cohort (goldens, perturbations, AR..BT).",
+    "C5 mutant: no CLI output change in any cohort (structural proof); golden_pairs result names unchanged."
+   ]
+  }
+ },
+ "frozen": "comparator slack (GEOM_EPS), syntax markers, park list, error census, guard allow-lists and the 14-entry strict-XML list stay unchanged; no perturbation edited or deleted."
+}

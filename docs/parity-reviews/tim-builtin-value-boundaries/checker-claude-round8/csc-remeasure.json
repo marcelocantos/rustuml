@@ -1,0 +1,344 @@
+[
+ {
+  "name": "cv7_integer_outer",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv7_integer_outer.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv7_integer_outer.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "MATCH",
+  "base_5d8b1f7c1_comment_list_exact": true,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv7_root_group_note",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv7_root_group_note.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv7_root_group_note.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "DIFF",
+  "base_5d8b1f7c1_comment_list_exact": false,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv7_root_note_later_inner",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv7_root_note_later_inner.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv7_root_note_later_inner.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "DIFF",
+  "base_5d8b1f7c1_comment_list_exact": false,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_activity",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_activity.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_activity.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "MATCH",
+  "base_5d8b1f7c1_comment_list_exact": true,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_class_note",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_class_note.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_class_note.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "MATCH",
+  "base_5d8b1f7c1_comment_list_exact": true,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_component",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_component.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_component.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "MATCH",
+  "base_5d8b1f7c1_comment_list_exact": true,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_flat_ko_jetty_mm",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_flat_ko_jetty_mm.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_flat_ko_jetty_mm.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "MATCH",
+  "base_5d8b1f7c1_comment_list_exact": true,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_flat_mooring_harbour_slipway",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_flat_mooring_harbour_slipway.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_flat_mooring_harbour_slipway.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "MATCH",
+  "base_5d8b1f7c1_comment_list_exact": true,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_outer_buoy_mm_lighthouse",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_buoy_mm_lighthouse.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_buoy_mm_lighthouse.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "MATCH",
+  "base_5d8b1f7c1_comment_list_exact": true,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_outer_dock_mm_harbour",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_dock_mm_harbour.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_dock_mm_harbour.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "MATCH",
+  "base_5d8b1f7c1_comment_list_exact": true,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_outer_harbour_ko_pier",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_harbour_ko_pier.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_harbour_ko_pier.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "MATCH",
+  "base_5d8b1f7c1_comment_list_exact": true,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_outer_mm_pier_il",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_mm_pier_il.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_mm_pier_il.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "MATCH",
+  "base_5d8b1f7c1_comment_list_exact": true,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_outer_pier_jetty_mm",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_pier_jetty_mm.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_pier_jetty_mm.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "MATCH",
+  "base_5d8b1f7c1_comment_list_exact": true,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_root_pier_jetty_mm",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_root_pier_jetty_mm.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_root_pier_jetty_mm.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "DIFF",
+  "base_5d8b1f7c1_comment_list_exact": false,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_root_quay_dock_harbour",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_root_quay_dock_harbour.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_root_quay_dock_harbour.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "DIFF",
+  "base_5d8b1f7c1_comment_list_exact": false,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_root_wharf_anchorage_pier",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_root_wharf_anchorage_pier.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_root_wharf_anchorage_pier.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "DIFF",
+  "base_5d8b1f7c1_comment_list_exact": false,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_rootlate_mooring_pier_ko",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_rootlate_mooring_pier_ko.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_rootlate_mooring_pier_ko.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "DIFF",
+  "base_5d8b1f7c1_comment_list_exact": false,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_rootlate_quay_mooring_wharf",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_rootlate_quay_mooring_wharf.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_rootlate_quay_mooring_wharf.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "DIFF",
+  "base_5d8b1f7c1_comment_list_exact": false,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ },
+ {
+  "name": "cv8_usecase",
+  "axes": [
+   "canvas",
+   "do-not-regress"
+  ],
+  "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_usecase.puml",
+  "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_usecase.svg",
+  "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+  "batch": "re-measured at round 8 (BI/BJ (round-6 checker pairs re-measured at the tip))",
+  "base_5d8b1f7c1_strict_compare": "MATCH",
+  "base_5d8b1f7c1_comment_list_exact": true,
+  "merge_d6e9ffd94_strict_compare": "MATCH",
+  "merge_d6e9ffd94_comment_list_exact": true,
+  "tip_c3116f0b0_strict_compare": "MATCH",
+  "tip_c3116f0b0_comment_list_exact": true,
+  "result": "pass"
+ }
+]

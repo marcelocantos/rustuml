@@ -1,0 +1,5 @@
+@startuml
+!$a = %substr("🚀",1,1)
+' note $a
+class Commented
+@enduml

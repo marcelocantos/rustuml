@@ -1,0 +1,33 @@
+family	style	java_font_name	java_ps	java_family	java_with_mark	java_without	rust_tip_with_mark	rust_tip_without	equal
+SansSerif	plain	SansSerif	SansSerif	SansSerif	38.3291015625	38.3291015625	38.3291015625	38.3291015625	yes
+SansSerif	bold	SansSerif	SansSerif	SansSerif	40.591796875	40.591796875	40.591796875	40.591796875	yes
+SansSerif	italic	SansSerif	SansSerif	SansSerif	41.0361328125	38.3291015625	38.3291015625	38.3291015625	NO
+SansSerif	bolditalic	SansSerif	SansSerif	SansSerif	43.298828125	40.591796875	40.591796875	40.591796875	NO
+Lucida Grande	plain	LucidaGrande	LucidaGrande	Lucida Grande	38.3291015625	38.3291015625	38.3291015625	38.3291015625	yes
+Lucida Grande	bold	LucidaGrande-Bold	LucidaGrande-Bold	Lucida Grande	40.591796875	40.591796875	40.591796875	40.591796875	yes
+Lucida Grande	italic	LucidaGrande-Italic-Derived	LucidaGrande-Italic-Derived	Lucida Grande	41.0361328125	38.3291015625	38.3291015625	38.3291015625	NO
+Lucida Grande	bolditalic	LucidaGrande-BoldItalic-Derived	LucidaGrande-BoldItalic-Derived	Lucida Grande	43.298828125	40.591796875	40.591796875	40.591796875	NO
+Arial	plain	ArialMT	ArialMT	Arial	46.2861328125	35.7861328125	46.2861328125	35.7861328125	yes
+Arial	bold	Arial-BoldMT	Arial-BoldMT	Arial	48.6376953125	38.1376953125	48.6376953125	38.1376953125	yes
+Arial	italic	Arial-ItalicMT	Arial-ItalicMT	Arial	46.2861328125	35.7861328125	46.2861328125	35.7861328125	yes
+Arial	bolditalic	Arial-BoldItalicMT	Arial-BoldItalicMT	Arial	48.6376953125	38.1376953125	48.6376953125	38.1376953125	yes
+Helvetica	plain	Helvetica	Helvetica	Helvetica	35.7861328125	35.7861328125	35.7861328125	35.7861328125	yes
+Helvetica	bold	Helvetica-Bold	Helvetica-Bold	Helvetica	38.1376953125	38.1376953125	38.1376953125	38.1376953125	yes
+Helvetica	italic	Helvetica-Oblique	Helvetica-Oblique	Helvetica	35.7861328125	35.7861328125	35.7861328125	35.7861328125	yes
+Helvetica	bolditalic	Helvetica-BoldOblique	Helvetica-BoldOblique	Helvetica	38.1376953125	38.1376953125	38.1376953125	38.1376953125	yes
+Verdana	plain	Verdana	Verdana	Verdana	53.8056640625	39.8056640625	53.8056640625	39.8056640625	yes
+Verdana	bold	Verdana-Bold	Verdana-Bold	Verdana	59.4521484375	45.4521484375	59.4521484375	45.4521484375	yes
+Verdana	italic	Verdana-Italic	Verdana-Italic	Verdana	53.8056640625	39.8056640625	53.8056640625	39.8056640625	yes
+Verdana	bolditalic	Verdana-BoldItalic	Verdana-BoldItalic	Verdana	59.4521484375	45.4521484375	59.4521484375	45.4521484375	yes
+Monospaced	plain	Monospaced	Monospaced	Monospaced	50.572265625	50.572265625	50.572265625	50.572265625	yes
+Monospaced	bold	Monospaced	Monospaced	Monospaced	50.572265625	50.572265625	50.572265625	50.572265625	yes
+Monospaced	italic	Monospaced	Monospaced	Monospaced	50.572265625	50.572265625	50.572265625	50.572265625	yes
+Monospaced	bolditalic	Monospaced	Monospaced	Monospaced	50.572265625	50.572265625	50.572265625	50.572265625	yes
+Menlo	plain	Menlo-Regular	Menlo-Regular	Menlo	50.572265625	50.572265625	38.3291015625	38.3291015625	NO
+Menlo	bold	Menlo-Bold	Menlo-Bold	Menlo	50.572265625	50.572265625	40.591796875	40.591796875	NO
+Menlo	italic	Menlo-Italic	Menlo-Italic	Menlo	50.572265625	50.572265625	38.3291015625	38.3291015625	NO
+Menlo	bolditalic	Menlo-BoldItalic	Menlo-BoldItalic	Menlo	50.572265625	50.572265625	40.591796875	40.591796875	NO
+Courier New	plain	CourierNewPSMT	CourierNewPSMT	Courier New	50.408203125	50.408203125	50.408203125	50.408203125	yes
+Courier New	bold	CourierNewPS-BoldMT	CourierNewPS-BoldMT	Courier New	50.408203125	50.408203125	50.408203125	50.408203125	yes
+Courier New	italic	CourierNewPS-ItalicMT	CourierNewPS-ItalicMT	Courier New	58.8095703125	50.408203125	58.8095703125	50.408203125	yes
+Courier New	bolditalic	CourierNewPS-BoldItalicMT	CourierNewPS-BoldItalicMT	Courier New	58.8095703125	50.408203125	58.8095703125	50.408203125	yes

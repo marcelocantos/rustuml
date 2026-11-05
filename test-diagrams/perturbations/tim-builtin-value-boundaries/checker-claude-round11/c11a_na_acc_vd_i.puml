@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam componentFontStyle italic
+component "Dåwky Vöw gym é" as E1
+@enduml

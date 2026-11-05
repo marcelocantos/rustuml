@@ -1,0 +1,9 @@
+@startuml
+participant Elm
+note right of Elm
+q<back:transparent>fir</back>r
+q<back:background>fir</back>r
+q<back:#8044aa77>fir</back>r
+q<back:#2ad>fir</back>r
+end note
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+!procedure $pick($a,$b)
+class "$a/$b" as Kept
+!endprocedure
+!function $pick($a)
+!return "value "+$a
+!endfunction
+$pick("alder","beech")
+@enduml

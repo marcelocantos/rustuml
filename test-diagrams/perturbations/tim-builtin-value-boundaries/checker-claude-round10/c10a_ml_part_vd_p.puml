@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+participant "Kiln wq\nlonger second line" as E1
+E1 -> E1 : ok
+@enduml

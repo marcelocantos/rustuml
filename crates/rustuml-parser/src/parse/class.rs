@@ -352,9 +352,8 @@ impl ClassParser {
             if let Some(&idx) = self.package_by_path.get(&path) {
                 if self.packages[idx].phantom && self.packages[idx].source_line == 0 {
                     self.packages[idx].source_line = self.current_line;
-                    self.uid_events.push(ClassUidEvent::Package(
-                        self.packages[idx].name.clone(),
-                    ));
+                    self.uid_events
+                        .push(ClassUidEvent::Package(self.packages[idx].name.clone()));
                 }
                 continue;
             }

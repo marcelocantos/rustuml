@@ -1,0 +1,44 @@
+[
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "creole::"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-hide-flush-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "log": "logs/focused-creole.log",
+    "exit": 101,
+    "passed": 86,
+    "failed": 1,
+    "note": "New test incorrectly expected nested size tags to match balanced closes. Java uses first closing match, not a balanced parser. Production was not changed to fit this expectation."
+  },
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "creole::"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-hide-flush-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "log": "logs/focused-creole-corrected.log",
+    "exit": 0,
+    "passed": 87,
+    "failed": 0,
+    "note": "Use source-defined nested EOL size candidates to isolate equal-style flush boundaries. Previous failed test retained in edit.py and log."
+  }
+]

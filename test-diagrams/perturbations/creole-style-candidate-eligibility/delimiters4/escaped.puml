@@ -1,0 +1,3 @@
+@startuml
+Maple -> Alder : ~**Fir**\n**Fir~**Elm**\nA<outer**Ash<$twig>End**>B
+@enduml

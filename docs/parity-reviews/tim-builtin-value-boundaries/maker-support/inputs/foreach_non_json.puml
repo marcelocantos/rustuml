@@ -1,0 +1,13 @@
+@startuml
+!$n=0
+!foreach $x in 4
+!$n=99
+!endfor
+!foreach $x in []
+!$n=88
+!endfor
+!foreach $x in {"a":1,"b":2}
+!$n=$n+1
+!endfor
+class "$n / $x" as Collection
+@enduml

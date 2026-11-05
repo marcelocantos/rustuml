@@ -1,0 +1,7 @@
+@startuml
+skinparam ArrowFontName Courier New
+skinparam ArrowFontStyle italic
+class A
+class B
+A --> B : Wharf qr
+@enduml

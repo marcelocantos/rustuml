@@ -1,0 +1,9 @@
+@startuml
+!ab="root"
+!procedure $draw(a="short",abcd="long")
+!log materialize
+!undef abcd
+class "a / ab / abc / abcd" as Eager
+!endprocedure
+$draw()
+@enduml

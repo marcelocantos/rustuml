@@ -1,0 +1,7 @@
+@startuml
+participant Grove
+note right of Grove
+X~___cedar__Y
+X<b>~___birch__</b>Y
+end note
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+!startsub notempty
+
+!endsub
+class Continued
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+skinparam defaultFontName Verdana
+<style>
+activity {
+  FontStyle italic
+  FontWeight bold
+}
+</style>
+start
+:Avid Dawky Vow 4.7, gym kayak ovo!;
+stop
+@enduml

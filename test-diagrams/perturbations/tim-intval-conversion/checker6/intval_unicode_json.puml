@@ -1,0 +1,4 @@
+@startuml
+!$a=%intval(%str2json('"1२3"'))
+class "$a" as Mixed
+@enduml

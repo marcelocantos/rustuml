@@ -1,0 +1,3 @@
+@startjson
+{"outer": {"list": ["Reed \uDBFF\uDFFD", {"\uDBFF\uDC00": true}]}}
+@endjson

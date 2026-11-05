@@ -1,0 +1,50 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "sub_mechanism": "YAML/JSON keys and values pass through Display.getWithNewlines (round-6 obligation 1, BLOCKING)",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-5.json (attributed_regressions BH dc6_yaml_nested; bounded_next_obligations[0])",
+ "java_locations": [
+  "jsondiagram/TextBlockJson.java 117-135: every member key, every member value (getShortString) and every array item goes through getTextBlock.",
+  "jsondiagram/TextBlockJson.java 341-350 getTextBlock: Display.getWithNewlines(pragma, key), then display.create0(fontConfiguration, style horizontal alignment, ..., CreoleMode.NO_CREOLE), then TextBlockUtils.withMargin(result, 5, 2).",
+  "klimt/creole/Display.java 258-342 getWithNewlines (Pragma.legacyReplaceBackslashNByNewline() is constant true, skin/Pragma.java 90-92): outside <math>/<latex>/[[ raw mode, backslash-n, backslash-r and backslash-l end a line (r and l also set the natural alignment RIGHT/LEFT), backslash-t appends a TAB, a doubled backslash appends one backslash, any other backslash pair is kept as both characters; U+E100 (BLOCK_E1_NEWLINE, not in raw mode), U+E101 (LEFT), U+E102 (RIGHT), U+E103 (BREAKLINE) and BackSlash.hiddenNewLine() end a line; U+E110 appends a backslash; U+E121 is dropped; %newline() and %n() end a line only under JawsFlags.SPECIAL_NEWLINE_IN_DISPLAY_CLASS.",
+  "klimt/creole/Display.java 640-646 create0: a natural alignment overrides the style's.",
+  "klimt/creole/legacy/CreoleStripeSimpleParser.java 86-90: NO_CREOLE keeps each line as plain text; StripeSimple 292 builds AtomTextUtils.createLegacy (AtomText with manageSpecialChars true, AtomTextUtils.java 71-73), whose constructor (AtomText.java 80-87) applies StringUtils.manageEscapedTabs (StringUtils.java 491-493): a remaining backslash-t becomes a TAB.",
+  "klimt/creole/legacy/AtomText.java 135-158 drawU and 165-180 getWidth: the line is tokenized at TAB; a TAB advances x to the next multiple of getTabSize = the width of tabString() (8 spaces; FontConfiguration tab size 8, 183-197); every other token is drawn as its own UText at x and advances by its width.",
+  "klimt/drawing/svg/DriverTextSvg.java 115-125: an all-whitespace text becomes NBSPs; leading spaces shift x by the space width and are removed; StringUtils.trin removes trailing whitespace before the SVG text is written.",
+  "Multi-line block: each line is one stripe of the sheet (font height 16.4883 at size 14); the TextBlockJson row height is the taller of key and value blocks plus the 2+2 margin; lines are top-aligned in the row."
+ ],
+ "rust_locations": [
+  "crates/rustuml-render/src/json_diagram.rs: FlatRow key/value strings are measured with text_width as one line (render_single_box, render_box_at, render_box_rows_at, box_layout_metrics); every row is text_height + ROW_EXTRA high; key_text/value_text emit one <text> per cell without the driver's space trimming.",
+  "crates/rustuml-parser/src/parse/json_diagram.rs keep_quoted_backslashes (round 5, a18a76980): unchanged; YamlLine.unquote stays literal."
+ ],
+ "planned_change": [
+  "json_diagram.rs: a cell is the Display.getWithNewlines lines of its key or value (port of 258-342 for the characters above, plus AtomText's manageEscapedTabs), with its natural alignment.",
+  "Cell width = max over lines of AtomText.getWidth (TAB stops at the measured width of eight spaces); cell height = lines x text_height; row height = max(key cell, value cell) + ROW_EXTRA; box widths, record row heights (dimensional record node) and the canvas follow.",
+  "Emission: per line, per TAB-delimited token, one <text> at the token's x with DriverTextSvg's leading-space shift and trailing trim; the line baseline is row top + 2 + ascent + line index x text_height; RIGHT/CENTER natural alignment offsets a line by (block - line) or half of it."
+ ],
+ "unchanged": [
+  "YAML parsing (YamlLine literal escapes), JSON decoding, scalar display strings (null/bool glyphs, empty -> NBSP), highlight and separator geometry.",
+  "AtomText's other special-character rules (manageAmpDiese, manageUnicodeNotationUplus, showComparatorCharacters, manageTildeArobaseStart) are not ported here; declared residue."
+ ],
+ "perturbation_axes": [
+  "YAML plain, single-quoted, double-quoted and block scalars holding backslash-n, backslash-t and doubled backslashes, in keys and values, at depth 1 and 2 and in lists",
+  "JSON string holding an encoded backslash-n (\\\\n) and a decoded newline, in a nested object",
+  "two tabs and a tab past the first stop",
+  "backslash-r and backslash-l natural alignment with lines of different width",
+  "an unknown pair (backslash-q) kept literal"
+ ],
+ "precommitted_measurement": {
+  "oracle": "unchanged strict comparator, whole CLI output, exact comment list; goldens, sweep, BH BG BF BE BC BB AW AU AR; before = merge fc44ee58c, after = this draft",
+  "expect_fixed": [
+   "BH dc6_yaml_nested",
+   "BH dc6_yaml_plain, dc6_yaml_key_newline, dc6_yaml_apostrophe, dc6_yaml_comment, dc6_yaml_hash_in_quotes, dc6_yaml_single, dc6_yaml_block (the 7 pre-existing failures sharing the cause)"
+  ],
+  "expect_kept": [
+   "BG dc5_yaml_key_escape, dc5_yaml_list_escape, BF cr_yaml_u_escape, BH dc6_yaml_escaped_quote, dc6_yaml_trailing_backslash, dc6_yaml_colon_key, dc6_yaml_listonly, BG dc5_json_nested, BF cr_json_u_escape, BH dc6_json_control and every golden YAML/JSON pair that matches at merge"
+  ],
+  "expect": "outputs change only for YAML/JSON sources whose keys or values hold a backslash pair, a TAB, a Jaws E1 character or leading/trailing spaces; zero lost matches, zero new errors"
+ }
+}

@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "#5900C4/#AFA828/#FFFFFF" as Bounds
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Bounds
+  entities:
+  - id: Bounds
+    label: '#5900C4/#AFA828/#FFFFFF'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

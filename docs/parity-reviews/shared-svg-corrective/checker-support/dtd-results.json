@@ -1,0 +1,325 @@
+{
+  "compile_argv": [
+    "rustc",
+    "--edition=2024",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/dtd-scratch/parse.rs",
+    "-L",
+    "dependency=/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/target-after/release/deps",
+    "--extern",
+    "roxmltree=/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/target-after/release/deps/libroxmltree-d396f0ab46122ad3.rlib",
+    "-o",
+    "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/xml-probe"
+  ],
+  "exact_helper_sha256": "0c87c0e396055b8eb0d2cd9647d8145748b6946fbf247642648fce7b362992df",
+  "mutations": [
+    {
+      "name": "bare",
+      "expected_accept": true,
+      "accepted": true,
+      "result": "Ok(true)",
+      "input_sha256": "cd2a1f8708bd1e08e0487ebfe76dfa463c1025db88a2d57e259192946edfa613"
+    },
+    {
+      "name": "xml",
+      "expected_accept": true,
+      "accepted": true,
+      "result": "Ok(true)",
+      "input_sha256": "182cc9593aa16894cb0b15df3719a3fba9cbd231bd066315653b28bd29179b26"
+    },
+    {
+      "name": "xml_space",
+      "expected_accept": true,
+      "accepted": true,
+      "result": "Ok(true)",
+      "input_sha256": "873380b7da2210e4b02ac9956ed4db91545eae7b3e02224c2b7a1f086c708831"
+    },
+    {
+      "name": "leading_space",
+      "expected_accept": true,
+      "accepted": true,
+      "result": "Ok(true)",
+      "input_sha256": "2b6f2cae9cd9f2cada36f7a117086f7fda2dde7b04d498c266d67e6afdaa6e0b"
+    },
+    {
+      "name": "comment_decoy",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"XML with DTD detected\")",
+      "input_sha256": "c2eb8fecb0cd9a770af43ca609ec346b3c0af0725c3d21a739058b0649a80f4d"
+    },
+    {
+      "name": "pi_decoy",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"XML with DTD detected\")",
+      "input_sha256": "e120f1eeff810f1227417c6c89bccc2caf1eaf5975303ba7b0984d1aad357571"
+    },
+    {
+      "name": "comment_prefix",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"XML with DTD detected\")",
+      "input_sha256": "d2a40deee3b9c4eb179f12f067c45fa5bb27c7e727298c4a7e5d5939bf93c301"
+    },
+    {
+      "name": "pi_prefix",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"XML with DTD detected\")",
+      "input_sha256": "9386efddb9219cd5ae7880c812d6485e831a03ddb92290972383d618df1d1f85"
+    },
+    {
+      "name": "bom",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"XML with DTD detected\")",
+      "input_sha256": "72692c5f598991e848e520c0bd7732916978e8431d83329a0f154e60392bcc50"
+    },
+    {
+      "name": "bom_xml",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"XML with DTD detected\")",
+      "input_sha256": "bd3abcf7de7be8885cb4047cc67ebdc7b26c8ba259f41e7658874b5de2932dcc"
+    },
+    {
+      "name": "space_xml",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"unexpected XML declaration at 1:2\")",
+      "input_sha256": "0fd9a87a4b6e52286c05162dac40e435dbb5fa8faf1beb277051dcf90673c50e"
+    },
+    {
+      "name": "newline_collapsed",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"unapproved DOCTYPE bytes or internal subset\")",
+      "input_sha256": "77149703ed690fb0d8f082b623cbe8980f30639efd3dbd636902c47645abcfcf"
+    },
+    {
+      "name": "crlf",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"unapproved DOCTYPE bytes or internal subset\")",
+      "input_sha256": "705312bc75cd6d2982507b51227108c23c33acb44ba6565fc3d57094a8e056f2"
+    },
+    {
+      "name": "double_space",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"unapproved DOCTYPE bytes or internal subset\")",
+      "input_sha256": "ec285da724ddbc597bc3af10a58e663bad233db8d26ce88510c8198030c98809"
+    },
+    {
+      "name": "public_altered",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"unapproved DOCTYPE bytes or internal subset\")",
+      "input_sha256": "9b4cfd784daf8dbcb028a7e08a37ab8a2230f0e539498a8078bdde192db1bb73"
+    },
+    {
+      "name": "system_altered",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"unapproved DOCTYPE bytes or internal subset\")",
+      "input_sha256": "b219f3e4f4bfd5669bd1e03ec329ff3e1d03e26021b9a177a6e11139e7af0367"
+    },
+    {
+      "name": "system_only",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"unapproved DOCTYPE bytes or internal subset\")",
+      "input_sha256": "78443d62c1ea0185baded9e6f58d397276e59951189a3dc7397fa59044e0fbe4"
+    },
+    {
+      "name": "subset_empty",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"unapproved DOCTYPE bytes or internal subset\")",
+      "input_sha256": "280b30db887835489e73330a962377857e65080e385e22757299c6379ded5475"
+    },
+    {
+      "name": "subset_entity",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"unapproved DOCTYPE bytes or internal subset\")",
+      "input_sha256": "bc810696cd5410f4b3c58ecfd96697965b7041e7ccffba2d02d01b7c2e4984c0"
+    },
+    {
+      "name": "two",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"invalid name token at 2:54\")",
+      "input_sha256": "f056c84bc07f8befa895b55429b054ed878f24c971d65ec352abf683cbf4448b"
+    },
+    {
+      "name": "after_root",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"unknown token at 1:7\")",
+      "input_sha256": "3522e2bed33b73161bf3e7f12472498e7adff6b39566237f23b9ee09e8b0683a"
+    },
+    {
+      "name": "external_entity_ref",
+      "expected_accept": false,
+      "accepted": false,
+      "result": "Err(\"unknown entity reference 'external' at 2:58\")",
+      "input_sha256": "8844154a9d5a6db443ec0a94600331ede042a01644ae4e05b7118ea2ea89aabd"
+    },
+    {
+      "name": "comment_only",
+      "expected_accept": true,
+      "accepted": true,
+      "result": "Ok(false)",
+      "input_sha256": "f994bfac21986020d76ee88615828a68b89c041b90322b19bfa2e94a43d22e56"
+    },
+    {
+      "name": "pi_only",
+      "expected_accept": true,
+      "accepted": true,
+      "result": "Ok(false)",
+      "input_sha256": "15211b2c2395d111ba8bb1a915f65df9b1c65b7dfc3e3f20c00d365a29a67f08"
+    },
+    {
+      "name": "normal",
+      "expected_accept": true,
+      "accepted": true,
+      "result": "Ok(false)",
+      "input_sha256": "d4dc56669143034f31aa309635d4113d9ad76a02b1739da22c965ed2049be9e6"
+    }
+  ],
+  "actual_dot": [
+    {
+      "source": "test-diagrams/golden/dot/dot_cluster_single.puml",
+      "sha256": "c10258b8c40917766184a4cb37ca3921bbde1973ca67cf5484531b8b4c523c52",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_cluster_two.puml",
+      "sha256": "aba7ba633ee30c4480c6d2582734f22f2357f3a68c1f748fc183bdd5069753b4",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_edge_arrowhead.puml",
+      "sha256": "2179f70fa8f0577eb3dffc6b2bc46b289373c2892eef16b8e5290389f7b1bda4",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_edge_colors.puml",
+      "sha256": "9459d6bfb2361d5d78ac1f296a257e2e5268043271a4cedc32fd210d469931bd",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_edge_labels.puml",
+      "sha256": "0efa5db466ed5ea92e370fefa18fbf38e0790a81b0891a5d1341bf84f19975c9",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_edge_styles.puml",
+      "sha256": "ad8ee1955136a15f68bf808de58e1a3a3749357ed2cf79cb158ac2fd42e21ffc",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_graph_attributes.puml",
+      "sha256": "8cc7d0309242d77c3259fccbf3aa169455fe21a0220160cdb98453f080c2fbec",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_multi_edge.puml",
+      "sha256": "1de84fc70a2e5ace5a0b4f395fec29c397f4c2e19b222acf0ef2fb624ed0b1ab",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_node_colors.puml",
+      "sha256": "58cdb25639cc6754e942010143f5aa025f83353d1ed752e48bf296d16974d9f9",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_node_labels.puml",
+      "sha256": "b3d06f4a298248316cedff9b5c84c6c69268fa36e97ed9f7268b2440d717ec8c",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_node_shapes.puml",
+      "sha256": "802b9102d676c4e1b1ca2ce5c42575f606da0e44ce3b06e33c58a9427fb80d29",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_node_url.puml",
+      "sha256": "73072282256c7ab2337f60b8c15b784996c93bac1ca38d8a5099844fe68460dc",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_rankdir_lr.puml",
+      "sha256": "f5211cb5077ab4fec5f5b222cabccc1cc2fcdb861761e9448fbcbfedcb51d4cc",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_rankdir_tb.puml",
+      "sha256": "0e6f25bb40c911621322a12b0a8c3587ba7ba7e083194efc7e95ee3ad12a3ced",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_record_ports.puml",
+      "sha256": "263716d1443fd698c5677a5e97f5c4c861991d58681794c1d28871feaaca4fb0",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_record_simple.puml",
+      "sha256": "7181e351236657250102a715ad817bdd12add85dd83ecb10e74d7defb0c03f65",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_simple_2nodes.puml",
+      "sha256": "daacc6e92416b02613433e2007523c7636c3052570a7d98f6770a64a321ef139",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_simple_3nodes_chain.puml",
+      "sha256": "f3d30bd492cd8c5730ef2bb598a49cabb47996d8bf03ecab70a5fb205a21a289",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_simple_4nodes_star.puml",
+      "sha256": "92a02b4392a6e6f7feebe922de84d02e80fc559d8b4dd602e0533c99f28bcf22",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_simple_5nodes_diamond.puml",
+      "sha256": "007e944668da472f2d38f14be1f0e5ef082964aa3a0b7a746ae6cfe2172cbe67",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_simple_cycle.puml",
+      "sha256": "9a9db965e0e92aad480ff15a592260d594e375a883519b2b88ba5f030cbd0286",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_subgraph_no_cluster.puml",
+      "sha256": "051c150e4648eb75bd99d1343ac07c848173626786452b7d8e16a2868bc3ae2b",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_undirected_path.puml",
+      "sha256": "60b95bef8c9de884f9440f316bcfc6af62aedbb0aae9d24f09e15de0c6214868",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_undirected_simple.puml",
+      "sha256": "4046e0a6941adf7063dc58ebc45b6a3a1e7db9a990bee0ecd27c33edde0fbd67",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/dot/dot_weighted_edges.puml",
+      "sha256": "d34f8bfe33072ee9e7e72ba952edf1b71f1303b2a99b867c39f114327e595a37",
+      "exit": 0
+    },
+    {
+      "source": "test-diagrams/golden/type-detection/explicit_startdot.puml",
+      "sha256": "63b4ba49d76196a9b56bb3197f1c6e9d883ec3f6c683a15f7d55629c194ce9ef",
+      "exit": 0
+    }
+  ],
+  "malformed_ratchet_unchanged": true,
+  "mutation_inputs_discarded": true
+}

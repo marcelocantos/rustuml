@@ -1,0 +1,9 @@
+@startuml
+state Sluice
+state Canal {
+  state Sluice {
+    [*] --> Rise
+  }
+}
+Rise --> Weir
+@enduml

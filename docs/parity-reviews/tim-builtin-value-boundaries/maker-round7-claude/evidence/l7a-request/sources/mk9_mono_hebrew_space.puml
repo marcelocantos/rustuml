@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Monospaced
+class "Reef א 𝅻z" as V
+@enduml

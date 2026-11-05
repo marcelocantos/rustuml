@@ -1,0 +1,1504 @@
+{
+ "cases": 36,
+ "trees": {
+  "base": {
+   "java_valid": 26,
+   "strict_match_valid": 2,
+   "viewBox_exact": 2,
+   "comments_exact": 11,
+   "nonzero_exit": 0,
+   "panics": 0,
+   "nonempty_stderr": 0
+  },
+  "merge": {
+   "java_valid": 26,
+   "strict_match_valid": 25,
+   "viewBox_exact": 25,
+   "comments_exact": 35,
+   "nonzero_exit": 9,
+   "panics": 0,
+   "nonempty_stderr": 9
+  },
+  "tip": {
+   "java_valid": 26,
+   "strict_match_valid": 25,
+   "viewBox_exact": 25,
+   "comments_exact": 35,
+   "nonzero_exit": 9,
+   "panics": 0,
+   "nonempty_stderr": 9
+  }
+ },
+ "deltas": {
+  "base->tip": {
+   "gained_match": [
+    "dot_root_before_groups",
+    "dot_root_both_sides",
+    "dot_root_depth4",
+    "img_cluster_depth2",
+    "img_cluster_depth3",
+    "img_cluster_depth4",
+    "img_cluster_exit_wide",
+    "img_note_before_later_state",
+    "img_note_depth2",
+    "img_note_depth3",
+    "img_note_first_left",
+    "img_note_in_cluster",
+    "img_two_notes",
+    "note_link_only_to_group",
+    "sur_activity_high_end",
+    "sur_class_high_bold18",
+    "sur_class_high_end",
+    "sur_class_high_then_ascii_only",
+    "sur_class_high_then_low_node",
+    "sur_sequence_high_end",
+    "sur_state_high_end",
+    "sur_title_high_end",
+    "sur_usecase_high_end"
+   ],
+   "viewBox_gained": [
+    "dot_root_before_groups",
+    "dot_root_both_sides",
+    "dot_root_depth4",
+    "img_cluster_depth2",
+    "img_cluster_depth3",
+    "img_cluster_depth4",
+    "img_cluster_exit_wide",
+    "img_note_before_later_state",
+    "img_note_depth2",
+    "img_note_depth3",
+    "img_note_first_left",
+    "img_note_in_cluster",
+    "img_two_notes",
+    "note_link_only_to_group",
+    "sur_activity_high_end",
+    "sur_class_high_bold18",
+    "sur_class_high_end",
+    "sur_class_high_then_ascii_only",
+    "sur_class_high_then_low_node",
+    "sur_sequence_high_end",
+    "sur_state_high_end",
+    "sur_title_high_end",
+    "sur_usecase_high_end"
+   ],
+   "output_changed": [
+    "dot_root_before_groups",
+    "dot_root_both_sides",
+    "dot_root_depth4",
+    "img_cluster_depth2",
+    "img_cluster_depth3",
+    "img_cluster_depth4",
+    "img_cluster_exit_wide",
+    "img_note_before_later_state",
+    "img_note_depth2",
+    "img_note_depth3",
+    "img_note_first_left",
+    "img_note_in_cluster",
+    "img_two_notes",
+    "note_link_only_to_group",
+    "sur_activity_high_end",
+    "sur_activity_low_end",
+    "sur_class_high_bold18",
+    "sur_class_high_end",
+    "sur_class_high_mid_valid",
+    "sur_class_high_then_ascii_only",
+    "sur_class_high_then_low_node",
+    "sur_class_high_then_nonascii",
+    "sur_class_low_end",
+    "sur_class_low_mid",
+    "sur_sequence_high_end",
+    "sur_sequence_high_space",
+    "sur_sequence_participant_high",
+    "sur_state_high_end",
+    "sur_state_link_title_escape",
+    "sur_title_high_end",
+    "sur_tooltip_high_end",
+    "sur_usecase_high_end"
+   ],
+   "stderr_changed": [
+    "sur_activity_low_end",
+    "sur_class_high_mid_valid",
+    "sur_class_high_then_nonascii",
+    "sur_class_low_end",
+    "sur_class_low_mid",
+    "sur_sequence_high_space",
+    "sur_sequence_participant_high",
+    "sur_state_link_title_escape",
+    "sur_tooltip_high_end"
+   ]
+  },
+  "base->tip_counts": {
+   "gained_match": 23,
+   "viewBox_gained": 23,
+   "output_changed": 32,
+   "stderr_changed": 9
+  },
+  "merge->tip": {},
+  "merge->tip_counts": {},
+  "base->merge": {
+   "gained_match": [
+    "dot_root_before_groups",
+    "dot_root_both_sides",
+    "dot_root_depth4",
+    "img_cluster_depth2",
+    "img_cluster_depth3",
+    "img_cluster_depth4",
+    "img_cluster_exit_wide",
+    "img_note_before_later_state",
+    "img_note_depth2",
+    "img_note_depth3",
+    "img_note_first_left",
+    "img_note_in_cluster",
+    "img_two_notes",
+    "note_link_only_to_group",
+    "sur_activity_high_end",
+    "sur_class_high_bold18",
+    "sur_class_high_end",
+    "sur_class_high_then_ascii_only",
+    "sur_class_high_then_low_node",
+    "sur_sequence_high_end",
+    "sur_state_high_end",
+    "sur_title_high_end",
+    "sur_usecase_high_end"
+   ],
+   "viewBox_gained": [
+    "dot_root_before_groups",
+    "dot_root_both_sides",
+    "dot_root_depth4",
+    "img_cluster_depth2",
+    "img_cluster_depth3",
+    "img_cluster_depth4",
+    "img_cluster_exit_wide",
+    "img_note_before_later_state",
+    "img_note_depth2",
+    "img_note_depth3",
+    "img_note_first_left",
+    "img_note_in_cluster",
+    "img_two_notes",
+    "note_link_only_to_group",
+    "sur_activity_high_end",
+    "sur_class_high_bold18",
+    "sur_class_high_end",
+    "sur_class_high_then_ascii_only",
+    "sur_class_high_then_low_node",
+    "sur_sequence_high_end",
+    "sur_state_high_end",
+    "sur_title_high_end",
+    "sur_usecase_high_end"
+   ],
+   "output_changed": [
+    "dot_root_before_groups",
+    "dot_root_both_sides",
+    "dot_root_depth4",
+    "img_cluster_depth2",
+    "img_cluster_depth3",
+    "img_cluster_depth4",
+    "img_cluster_exit_wide",
+    "img_note_before_later_state",
+    "img_note_depth2",
+    "img_note_depth3",
+    "img_note_first_left",
+    "img_note_in_cluster",
+    "img_two_notes",
+    "note_link_only_to_group",
+    "sur_activity_high_end",
+    "sur_activity_low_end",
+    "sur_class_high_bold18",
+    "sur_class_high_end",
+    "sur_class_high_mid_valid",
+    "sur_class_high_then_ascii_only",
+    "sur_class_high_then_low_node",
+    "sur_class_high_then_nonascii",
+    "sur_class_low_end",
+    "sur_class_low_mid",
+    "sur_sequence_high_end",
+    "sur_sequence_high_space",
+    "sur_sequence_participant_high",
+    "sur_state_high_end",
+    "sur_state_link_title_escape",
+    "sur_title_high_end",
+    "sur_tooltip_high_end",
+    "sur_usecase_high_end"
+   ],
+   "stderr_changed": [
+    "sur_activity_low_end",
+    "sur_class_high_mid_valid",
+    "sur_class_high_then_nonascii",
+    "sur_class_low_end",
+    "sur_class_low_mid",
+    "sur_sequence_high_space",
+    "sur_sequence_participant_high",
+    "sur_state_link_title_escape",
+    "sur_tooltip_high_end"
+   ]
+  },
+  "base->merge_counts": {
+   "gained_match": 23,
+   "viewBox_gained": 23,
+   "output_changed": 32,
+   "stderr_changed": 9
+  }
+ },
+ "per_case": {
+  "dot_root_before_groups": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 179 337",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 28,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "36530956871174bdc2b55b1264fbc6c4c8ded5dadd660db5c9ffd7cedd7c9843"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "6d1c937345733c6910fa2ad05ce6a8f66e6754322a0357d312f969c808be29c8"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "6d1c937345733c6910fa2ad05ce6a8f66e6754322a0357d312f969c808be29c8"
+   }
+  },
+  "dot_root_both_sides": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 218 354",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 25,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "9764875b27151796db4a270d3250fd10943e193a609eaecb1b62100b73247aae"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "c0ef4fb5b1c11c3a2f3ab9c354e76143549172a22b2c521b8cb2ecc76996a42a"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "c0ef4fb5b1c11c3a2f3ab9c354e76143549172a22b2c521b8cb2ecc76996a42a"
+   }
+  },
+  "dot_root_depth4": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 314 418",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 28,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "363a569910527fede902535a32735473823eb28a441e94173a679b75e14d908e"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "df086c91200467206d97a6fcec4b085083f4381d3b894ece18603bcf38221521"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "df086c91200467206d97a6fcec4b085083f4381d3b894ece18603bcf38221521"
+   }
+  },
+  "img_cluster_depth2": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 140 285",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 30,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "c5fb4bf2d4ffe91b0ed35849d6e75500ddc5427b8db33762be213227bf662263"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "a3afccebab7498157ac7b04ad9e21bb6aee15ae5d8e8b2532bcd79ecfb1ff2d0"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "a3afccebab7498157ac7b04ad9e21bb6aee15ae5d8e8b2532bcd79ecfb1ff2d0"
+   }
+  },
+  "img_cluster_depth3": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 172 385",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 38,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "e6ce92dbd0c810f876b122c8ccec526026b81c2f818960848faf8068590ce917"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "01cf97b824ef221bd895de8275746c37a0250f708f7596caf9693172b1181ace"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "01cf97b824ef221bd895de8275746c37a0250f708f7596caf9693172b1181ace"
+   }
+  },
+  "img_cluster_depth4": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 220 514",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 55,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "dbb03bed7158552d301b4623c8e41d41dcc2658d9e65e1a0c03934d3b3d078bb"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "576cbeaf01f819db3c215d9bc8f6c8cd4831c049ec8f8691441242d888b14d0e"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "576cbeaf01f819db3c215d9bc8f6c8cd4831c049ec8f8691441242d888b14d0e"
+   }
+  },
+  "img_cluster_exit_wide": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 202 436",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 43,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "dcb1c4937381e16194bc293075db9705b5679b90cd28aa967f74f605bee8ed2d"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "21724dfbdcaee5b8fc49e5e40e623adcb832b4e71b185f6730e13a00519e06ef"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "21724dfbdcaee5b8fc49e5e40e623adcb832b4e71b185f6730e13a00519e06ef"
+   }
+  },
+  "img_note_before_later_state": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 184 404",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 34,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "819449957de439c18f2109d8f9fb2220abf7c98517d46296820c3444d22d9a10"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "507d9499755cf5c6e5d0e9e499c0ba390d5662ca01745c9ff46a970a9abb3fe9"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "507d9499755cf5c6e5d0e9e499c0ba390d5662ca01745c9ff46a970a9abb3fe9"
+   }
+  },
+  "img_note_depth2": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 205 455",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 42,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "b3eee21e3291cfbde39dcb2a7a204ac33489ee70f731d6ab98ab6f399f124465"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "69eda207d0331b39b1c595ae581da38b9ebf8b44d2d397563572bd03043ad9c9"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "69eda207d0331b39b1c595ae581da38b9ebf8b44d2d397563572bd03043ad9c9"
+   }
+  },
+  "img_note_depth3": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 249 593",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 56,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "dd0e7cbe5b9343bae197fe6009cad65d6a4225e77971835924a432cb0d568871"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "6381e552bdafa71e72aa63714881c926c46afb03132cab678a9f765512614ba1"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "6381e552bdafa71e72aa63714881c926c46afb03132cab678a9f765512614ba1"
+   }
+  },
+  "img_note_first_left": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 194 318",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 28,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "18513b58c34aedac2df89a961877153d191e59ded3a16a8b5878d07a505df7d6"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "a85e4999b86e9b7c84ab8676db0a40506c1472a757ec274f4e9e75d424d217e4"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "a85e4999b86e9b7c84ab8676db0a40506c1472a757ec274f4e9e75d424d217e4"
+   }
+  },
+  "img_note_in_cluster": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 214 285",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 34,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "86694be38cf393c9f66f46fa6fecf7d3b61c984cdba3253e8587a76da3e63f20"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "5220e9532a718db432b60014e586cc45fbe3ae96429df4637bd3ecc68f698f63"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "5220e9532a718db432b60014e586cc45fbe3ae96429df4637bd3ecc68f698f63"
+   }
+  },
+  "img_two_notes": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 234 318",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 33,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "495069fdacf2c9e756c64ea417831d68f84a3de0a2ce1f2c31a5e12302edceaa"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "3f654d933bb2235ebf45cb14205218edeebf7bd5951b2e751bc5af3fb9f60868"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "3f654d933bb2235ebf45cb14205218edeebf7bd5951b2e751bc5af3fb9f60868"
+   }
+  },
+  "note_link_only_to_group": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 190 208",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 21,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "b45b628fc66d6dbb82887f0155ad64d3308f5d9ecd468d67fe3c4ac06dd3c478"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "b8328ab9d71af90d5cd39f025218677b6b432132cc57da291b322293bb3b4746"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "b8328ab9d71af90d5cd39f025218677b6b432132cc57da291b322293bb3b4746"
+   }
+  },
+  "sur_activity_high_end": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 95 151",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 11,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "f1e1043ec1bb5ebb19c954874dd466c523c93c1a889e4c7f88486e4486b90ada"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "10bcf0b422014f8d1fe0e2a20dfe477bf3e776d38c2a05a5eb86d3522add66ba"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "10bcf0b422014f8d1fe0e2a20dfe477bf3e776d38c2a05a5eb86d3522add66ba"
+   }
+  },
+  "sur_activity_low_end": {
+   "java_valid": false,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:174)\n\tat net.sourceforge.plantu",
+   "java_viewBox": "0 0 1278 715",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "f1e1043ec1bb5ebb19c954874dd466c523c93c1a889e4c7f88486e4486b90ada"
+   },
+   "merge": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_class_high_bold18": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 106 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "95f5bc3c7f3d41730639d235463c3f4e3f48316fba1eb00a4095bfbc4ae87d68"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "0e311f9cae7ab9015ef0bcfa5e940c416e0d35698b1497a1c03d4132b20f5fa9"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "0e311f9cae7ab9015ef0bcfa5e940c416e0d35698b1497a1c03d4132b20f5fa9"
+   }
+  },
+  "sur_class_high_end": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 117 68",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 6,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "388ff2abdf72364f02c08bc24d33d00b5cb1367a8f06ec040e380f0c351595c6"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "69f50d6b777adebbbe73db6edef666c480d3a2debc23bb2a4f664118518bec37"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "69f50d6b777adebbbe73db6edef666c480d3a2debc23bb2a4f664118518bec37"
+   }
+  },
+  "sur_class_high_mid_valid": {
+   "java_valid": false,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 77 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e 77 ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter1",
+   "java_viewBox": "0 0 1591 715",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 11,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "2ccc2f0770b99f74686f93bf36fd22958bc9bd17449a95e90e503f34f738f8d3"
+   },
+   "merge": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e 77 ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e 77 ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_class_high_then_ascii_only": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 96 286",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 22,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "686c3d5e1cbc4c2ebbbbfb73c641ff0ec077d000a79397d8639ebfcfd6980982"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "f6b41776f37cb7e86b5cf431f144abc8d78cce5389af5875bc3196e3ca75daa5"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "f6b41776f37cb7e86b5cf431f144abc8d78cce5389af5875bc3196e3ca75daa5"
+   }
+  },
+  "sur_class_high_then_low_node": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 93 178",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 13,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "ca1eedaf833b24167f2ab939810034bc183f5f965f9ff3c348cb4934ce8db2ca"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "fb0affdc8c27e333048b993f2f864d9783bd62abdc24afe1483da5526b4a6570"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "fb0affdc8c27e333048b993f2f864d9783bd62abdc24afe1483da5526b4a6570"
+   }
+  },
+  "sur_class_high_then_nonascii": {
+   "java_valid": false,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e e9 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e e9 ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter1",
+   "java_viewBox": "0 0 1510 727",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 23,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "02c8355f3fe0ca4ce3e16d2c9917f76e545dfe67e69c19c13cf135987c4536c1"
+   },
+   "merge": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e e9 ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e e9 ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_class_low_end": {
+   "java_valid": false,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:174)\n\tat net.sourceforge.plantu",
+   "java_viewBox": "0 0 1276 715",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 11,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "d10bccd99f71928759c1e68c1803fedfe863a41eb14f5de16dbf8a87c5d7b382"
+   },
+   "merge": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_class_low_mid": {
+   "java_valid": false,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:174)\n\tat net.sourceforge.plantu",
+   "java_viewBox": "0 0 1281 715",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 11,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "aa11932240655489715bbed4dd6d53afd477479940beb1812247dc6f63321fb9"
+   },
+   "merge": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_hidden_member": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 88 52",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "f6414f6b2613658c61bc076d093bb4d57700078870f54ca257ccae6ec98c3d02"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "f6414f6b2613658c61bc076d093bb4d57700078870f54ca257ccae6ec98c3d02"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "f6414f6b2613658c61bc076d093bb4d57700078870f54ca257ccae6ec98c3d02"
+   }
+  },
+  "sur_link_title_escape": {
+   "java_valid": false,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExpor",
+   "java_viewBox": "0 0 1590 727",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "9be5cd1b4b519ce23cf2c5e0ebabc20db9e133d98ea90796ab2f9b7044f9daff"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "9be5cd1b4b519ce23cf2c5e0ebabc20db9e133d98ea90796ab2f9b7044f9daff"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "9be5cd1b4b519ce23cf2c5e0ebabc20db9e133d98ea90796ab2f9b7044f9daff"
+   }
+  },
+  "sur_removed_entity": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 84 70",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "36c3883ee39adb672e3d9f76891b0db893771f9da7a7849fefa2b85c3d0c83de"
+   },
+   "merge": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "36c3883ee39adb672e3d9f76891b0db893771f9da7a7849fefa2b85c3d0c83de"
+   },
+   "tip": {
+    "strict": "DIFF",
+    "ndiff": 1,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "36c3883ee39adb672e3d9f76891b0db893771f9da7a7849fefa2b85c3d0c83de"
+   }
+  },
+  "sur_sequence_high_end": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 124 123",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 11,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "cb6ad3058cb47a8125df4e2ec1d52b127943deb8a72db03a7c36ac87a7527f21"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "6c49ee69d5fbf5b5c00b00dbc7b0c0dcf8758401d70305e2c37d264f3b7c100f"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "6c49ee69d5fbf5b5c00b00dbc7b0c0dcf8758401d70305e2c37d264f3b7c100f"
+   }
+  },
+  "sur_sequence_high_space": {
+   "java_valid": false,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter1",
+   "java_viewBox": "0 0 1511 715",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 36,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "9e56af5ef915a036ec7aba60b068895ae751d2160dc6c4fad0b7a2a7f90faf6d"
+   },
+   "merge": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e 20 ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e 20 ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_sequence_participant_high": {
+   "java_valid": false,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExpor",
+   "java_viewBox": "0 0 1545 727",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 24,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "eca630a8b47cc7ac43e5727a9bfefe7ca8ebf9f88a130ae48f719a4833d294a4"
+   },
+   "merge": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_state_high_end": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 90 150",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 8,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "1f6eb17280f68bdd6ed51a497c149acc41a37666b39042875308cb97cb029fdc"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "096754aaa94eae507a971fb09c10628ecd8df7257be8a14829ad5a446e705b9a"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "096754aaa94eae507a971fb09c10628ecd8df7257be8a14829ad5a446e705b9a"
+   }
+  },
+  "sur_state_link_title_escape": {
+   "java_valid": false,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExpor",
+   "java_viewBox": "0 0 1545 751",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 21,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "ac97f7c2d80d9fce18a5459a65f0772a546c6d340365c3ff87630e47703246c9"
+   },
+   "merge": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_title_high_end": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 107 105",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 9,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "7dbf2a9ad53b0323ebc8e1db99b2dab43d9aaa4800f5103c4ba08f9f5965f133"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "35335d8e6b850b8491dd80d13d4c66dae5bc12f95f0573482f0d8c5e09af44b5"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "35335d8e6b850b8491dd80d13d4c66dae5bc12f95f0573482f0d8c5e09af44b5"
+   }
+  },
+  "sur_tooltip_high_end": {
+   "java_valid": false,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExpor",
+   "java_viewBox": "0 0 1540 727",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 12,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": false,
+    "viewBox_exact": false,
+    "sha256": "da179b57d6bc3ff90a119c68b8789423a90a828ca5a436da0be04483a623b55e"
+   },
+   "merge": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "strict": "ERR",
+    "ndiff": 0,
+    "exit": 1,
+    "panic": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_unused_skinparam": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 84 68",
+   "base": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "fd98ad5f28f56675dd7db230e89787964de44855817cdfb1fd1af8051283ae5a"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "fd98ad5f28f56675dd7db230e89787964de44855817cdfb1fd1af8051283ae5a"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "fd98ad5f28f56675dd7db230e89787964de44855817cdfb1fd1af8051283ae5a"
+   }
+  },
+  "sur_usecase_high_end": {
+   "java_valid": true,
+   "java_stderr": "",
+   "java_viewBox": "0 0 95 185",
+   "base": {
+    "strict": "DIFF",
+    "ndiff": 9,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": false,
+    "sha256": "cf6989136af02ef80e1bc448c1fa29096f4e862083b7fdee451bde6cb9df84ed"
+   },
+   "merge": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "8c1a988e23d601343f8c04a486e2983969e0fb9a127a3a2181674456c9c227d2"
+   },
+   "tip": {
+    "strict": "MATCH",
+    "ndiff": 0,
+    "exit": 0,
+    "panic": false,
+    "stderr": "",
+    "comments_exact": true,
+    "viewBox_exact": true,
+    "sha256": "8c1a988e23d601343f8c04a486e2983969e0fb9a127a3a2181674456c9c227d2"
+   }
+  }
+ }
+}

@@ -1,0 +1,58 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "sub_mechanism": "zero advance of an unmapped nonspacing mark in complex text (round-6 obligation 2, BLOCKING)",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-5.json (findings[3]; held_out_failures w6_sans_180f_complex, w6_sans_1d17b, w6_sans_16fe4; bounded_next_obligations[1])",
+ "sources": "OpenJDK jdk21u tag jdk-21.0.5-ga (https://github.com/openjdk/jdk21u), bundled HarfBuzz 8.2.2 (hb-version.h 63); Unicode Scripts-3.2.0.txt and UnicodeData-15.1.0.txt from https://www.unicode.org/Public/",
+ "java_locations": [
+  "sun/font/GlyphLayout.java 408-431: text of a CompositeFont is split into ScriptRun runs, each into FontRunIterator slot runs; each piece is shaped by its slot's physical font with the run's script.",
+  "sun/font/FontRunIterator.java next: a character's slot is that of CCompositeGlyphMapper.charToGlyph; an unmapped character is missingGlyph, slot 0 (the primary CFont), so the primary face shapes it.",
+  "sun/font/ScriptRun.java 150-232 and ScriptRunData.java: COMMON (0) and INHERITED (1) characters join the run of the strong script before them (or the first strong script after them at the start); a closing paired character takes the script of its opener. ScriptRunData equals Unicode Scripts-3.2.0.txt for every code point (checked; 0 differences, unassigned -> COMMON): U+180F and U+16FE4 are COMMON, U+1D17B INHERITED.",
+  "libfontmanager/scriptMapping.c 30-89 getHBScriptCode: ICU codes 0-45 to hb_script_t; libfontmanager/HBShaper.c 237-311: hb_buffer_set_script(getHBScriptCode(script)), no buffer flags (no dotted circle), features kern/liga on or off, hb_shape_full.",
+  "libharfbuzz/hb-ot-shape.cc 136-139: a face without GDEF glyph classes takes fallback_glyph_classes; 879-899 hb_synthesize_glyph_classes: a glyph whose character has general category Mn and is not default-ignorable is a MARK; 933-934 applies it.",
+  "hb-ot-shape.cc 79-97 and hb-ot-shaper.hh 176-410: hb_ot_shaper_categorize picks the shaper from the script (default for Latin, Common, Greek, Cyrillic, Han, ...; arabic/indic/USE/thai/hebrew/khmer/myanmar/hangul for the listed scripts; with no GSUB the chosen script is HB_TAG_NONE, so the Arabic and Indic branches choose their complex shapers); with morx (_hb_apply_morx 54-61) any shaper other than default becomes _hb_ot_shaper_dumber (zero_width_marks NONE).",
+  "hb-ot-shape.cc 183-189: zero_marks = shaper zero_width_marks != NONE && !apply_kerx && (!apply_kern || !machine kerning); hb-ot-shaper-default.cc: default shaper zero_width_marks = BY_GDEF_LATE; hb-ot-shape.cc 1089-1100 then zero_mark_widths_by_gdef (997-1009) sets the MARK glyph's x_advance to 0.",
+  "hb-unicode.hh 167-197 _hb_unicode_is_default_ignorable (unchanged from round 5): U+180F and U+1D17B are not default-ignorable in 8.2.2.",
+  "Face facts (sfnt tables, CTFontCopyTable; tools/FontChainExtract.swift #hb_plan): Lucida Grande (regular, bold), Helvetica (regular, bold) and Menlo: no GDEF, no GSUB/GPOS, morx, no kerx, kern absent or OpenType format 0 (no state machine) -> synthesized classes and zero_marks in default-shaped runs. Arial, Verdana, Courier New, Times New Roman: GDEF glyph classes with glyph 0 in class 1 (base) -> never a mark."
+ ],
+ "rust_locations": [
+  "crates/rustuml-render/src/font_chain.rs ChainFace::resolve: an unmapped scalar in complex text is Missing (.notdef) unless HarfBuzz-default-ignorable (Hidden)."
+ ],
+ "planned_change": [
+  "font_chain_coverage.rs carries per face the extracted HarfBuzz plan fact zeroes_unmapped_marks (no GDEF glyph classes or glyph 0 a GDEF mark; no kerx; no machine kern) and whether morx swaps non-default shapers for dumber.",
+  "font_chain.rs: a generated table of Unicode 15.1 general category Mn (HarfBuzz 8.2.2 UCD) and a generated table of Unicode 3.2 strong scripts split into default-shaped and complex-shaped by hb_ot_shaper_categorize (ICU codes 0-45 as scriptMapping.c).",
+  "A port of ScriptRun (with the paired-character stack) gives each character's run script; an unmapped, non-default-ignorable Mn character in complex text has zero advance when its face zeroes unmapped marks and its run is default-shaped; otherwise it stays the primary .notdef.",
+  "Every width path that consults the chain (SansSerif table path, Arial/Verdana/Helvetica, Monospaced/Courier New cell count) uses the per-character answer."
+ ],
+ "unchanged": [
+  "Simple text (no surrogate, no isComplexCharCode character) never reaches HarfBuzz: BH w6_sans_1ab0 keeps .notdef.",
+  "Mapped marks keep their measured or approximated advances.",
+  "Mc and Me are not marks under synthesized classes (only Mn)."
+ ],
+ "declared_residue": [
+  "Unmapped Mn after a strong script whose HarfBuzz shaper is not default (Arabic, Hebrew, Indic, Thai, ...) keeps .notdef by the dumber-shaper rule; no Java probe exercises it this round unless the batch below returns one.",
+  "Faces without morx and without GDEF glyph classes would use the complex shaper's own mark rule; none of RustUML's faces is such a face."
+ ],
+ "perturbation_axes": [
+  "unmapped Mn from other blocks in complex text: U+1E5EE (Unicode 16, unassigned in 15.1 -> not a mark), U+0897 (Arabic, Unicode 14), U+1DFA (Combining Diacritical Marks Supplement, Unicode 14), U+11F00 (Kawi, Unicode 15), U+1E4EC (Nag Mundari, Unicode 15), U+10EFD (Arabic Extended-C, Unicode 15), each checked unmapped on the reference host before use",
+  "Mn at the start of the text and after a closing bracket",
+  "Mn after a Hebrew or Arabic letter (dumber shaper: .notdef)",
+  "bold SansSerif, Helvetica, Arial (GDEF: .notdef) and Monospaced"
+ ],
+ "precommitted_measurement": {
+  "oracle": "unchanged strict comparator, whole CLI output; held-out probes in the round-6 Java batch; goldens, sweep, BH BG BF BE BC BB AW AU AR",
+  "expect_fixed": [
+   "BH w6_sans_180f_complex",
+   "BH w6_sans_1d17b",
+   "BH w6_sans_16fe4"
+  ],
+  "expect_kept": [
+   "BH w6_sans_1ab0 (simple path)",
+   "BH w6_sans_combining, w6_sans_2065_complex and every BG/BH width probe that matches at merge"
+  ],
+  "expect": "outputs change only for sources whose complex text holds an unmapped Mn character; zero lost matches"
+ }
+}

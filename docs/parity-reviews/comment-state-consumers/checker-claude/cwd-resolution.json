@@ -1,0 +1,25 @@
+{
+ "rule": "A case is a new valid-input error only if it newly exits nonzero under the cwd its reference was generated with (recorded in that mechanism's review). The maker's tool (cwd = source dir) and a repo-root sweep disagree on 23 sources; each is resolved against its recorded cwd.",
+ "maker_reported_10": {
+  "tim-external-sub-selection/checker3_dynamic_selector": "recorded cwd '.'; after exit 0 and strict MATCH at repo root (before DIFF). Not an error.",
+  "tim-external-sub-selection/checker3_nested": "recorded cwd '.'; after MATCH at repo root. Not an error.",
+  "tim-external-sub-selection/checker3_relative": "recorded cwd '.'; after MATCH at repo root. Not an error.",
+  "tim-external-sub-selection/checker3_repeated": "recorded cwd '.'; after MATCH at repo root. Not an error.",
+  "tim-external-sub-selection/checker3_tabs": "recorded cwd '.'; after MATCH at repo root. Not an error.",
+  "tim-function-execution-kind/checker3_include_from_return": "recorded cwd '.'; after MATCH at repo root. Not an error.",
+  "tim-parser-error-propagation/checker2_sub_ignored_prelude": "recorded cwd '.'; after MATCH at repo root. Not an error.",
+  "tim-external-sub-selection/checker3_retained_sub_caller_relative": "recorded cwd checker3-maker-resources; before and after exit 0 there, both strict DIFF (18 -> 32 differences). Pre-existing mismatch, not a new error.",
+  "tim-intval-conversion/checker6/intval_unicode_digits": "GENUINE new valid-input error in every cwd: Java Integer.parseInt (Character.digit) gives 123/-42; Rust str::parse::<i32> is ASCII-only (f663c083d).",
+  "tim-intval-conversion/checker6/intval_unicode_json": "GENUINE new valid-input error in every cwd: Java gives 123; Rust rejects Devanagari digit (f663c083d)."
+ },
+ "repo_root_only_errors_resolved": {
+  "tim-empty-sub-iterator-termination/checker8/empty_selected": "no recorded cwd; after MATCH at source dir (the only cwd at which its relative include resolves).",
+  "tim-sub-directive-selection/checker4_sub_function_selector": "recorded cwd = its directory; after MATCH there.",
+  "tim-sub-marker-layers/checker5/sub_repeated_comments": "recorded staged cwd mirrors its directory; after MATCH there.",
+  "golden/preprocessing/preproc_include_{main,startsub,dark_theme,light_theme}": "Java golden is the Welcome error page; after exit 1 at repo root is a rejection, not a valid-input error."
+ },
+ "genuine_new_valid_input_errors": [
+  "perturbations/tim-intval-conversion/checker6/intval_unicode_digits.puml",
+  "perturbations/tim-intval-conversion/checker6/intval_unicode_json.puml"
+ ]
+}

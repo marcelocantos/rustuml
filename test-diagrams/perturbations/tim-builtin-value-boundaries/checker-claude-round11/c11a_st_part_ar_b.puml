@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam participantFontStyle bold
+participant "Gym Dawk" as E1 <<Vivid kayak Wovo>>
+E1 -> E1 : ok
+@enduml

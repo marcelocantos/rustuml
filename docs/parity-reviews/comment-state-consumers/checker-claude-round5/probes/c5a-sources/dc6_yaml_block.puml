@@ -1,0 +1,5 @@
+@startyaml
+k: |
+  "a\nb"
+  c
+@endyaml

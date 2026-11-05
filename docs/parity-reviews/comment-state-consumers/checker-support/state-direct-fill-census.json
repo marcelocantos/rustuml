@@ -1,0 +1,179 @@
+{
+  "dynamic_template_sites": [
+    {
+      "line": 1342,
+      "function": "emit_attached_svek_note",
+      "expressions": [
+        "NOTE_FILL"
+      ],
+      "template": "{NOTE_FILL}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 1372,
+      "function": "emit_attached_svek_note",
+      "expressions": [
+        "NOTE_FILL"
+      ],
+      "template": "{NOTE_FILL}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 1402,
+      "function": "emit_attached_svek_note",
+      "expressions": [
+        "NOTE_FILL"
+      ],
+      "template": "{NOTE_FILL}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 1452,
+      "function": "emit_plain_note_body",
+      "expressions": [
+        "NOTE_FILL"
+      ],
+      "template": "{NOTE_FILL}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 1469,
+      "function": "emit_plain_note_body",
+      "expressions": [
+        "NOTE_FILL"
+      ],
+      "template": "{NOTE_FILL}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 3789,
+      "function": "emit_autonomous_scope_entities",
+      "expressions": [
+        "PSEUDO_COLOR"
+      ],
+      "template": "{PSEUDO_COLOR}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 3798,
+      "function": "emit_autonomous_scope_entities",
+      "expressions": [
+        "PSEUDO_COLOR"
+      ],
+      "template": "{PSEUDO_COLOR}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 6833,
+      "function": "render_with_oracle",
+      "expressions": [
+        "TEXT_COLOR"
+      ],
+      "template": "{TEXT_COLOR}",
+      "scope": "text paint bypass; upstream text color may be dynamic"
+    },
+    {
+      "line": 7083,
+      "function": "render_with_oracle",
+      "expressions": [
+        "TEXT_COLOR"
+      ],
+      "template": "{TEXT_COLOR}",
+      "scope": "text paint bypass; upstream text color may be dynamic"
+    },
+    {
+      "line": 7232,
+      "function": "render_with_oracle",
+      "expressions": [
+        "BAR_COLOR"
+      ],
+      "template": "{BAR_COLOR}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 7278,
+      "function": "render_with_oracle",
+      "expressions": [
+        "TEXT_COLOR"
+      ],
+      "template": "{TEXT_COLOR}",
+      "scope": "text paint bypass; upstream text color may be dynamic"
+    },
+    {
+      "line": 7316,
+      "function": "render_with_oracle",
+      "expressions": [
+        "TEXT_COLOR"
+      ],
+      "template": "{TEXT_COLOR}",
+      "scope": "text paint bypass; upstream text color may be dynamic"
+    },
+    {
+      "line": 7806,
+      "function": "render_with_oracle",
+      "expressions": [
+        "NOTE_FILL"
+      ],
+      "template": "{NOTE_FILL}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 7974,
+      "function": "render_with_oracle",
+      "expressions": [
+        "NOTE_FILL"
+      ],
+      "template": "{NOTE_FILL}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 7994,
+      "function": "render_with_oracle",
+      "expressions": [
+        "NOTE_FILL"
+      ],
+      "template": "{NOTE_FILL}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 8959,
+      "function": "render_oracle_transitions",
+      "expressions": [
+        "NOTE_FILL"
+      ],
+      "template": "{NOTE_FILL}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 9037,
+      "function": "emit_oracle_state_note",
+      "expressions": [
+        "NOTE_FILL"
+      ],
+      "template": "{NOTE_FILL}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 9280,
+      "function": "render_composite_with_oracle",
+      "expressions": [
+        "PSEUDO_COLOR"
+      ],
+      "template": "{PSEUDO_COLOR}",
+      "scope": "fixed shape constant"
+    },
+    {
+      "line": 9477,
+      "function": "render_composite_with_oracle",
+      "expressions": [
+        "BAR_COLOR"
+      ],
+      "template": "{BAR_COLOR}",
+      "scope": "fixed shape constant"
+    }
+  ],
+  "sites": 19,
+  "fixed_shapes": 15,
+  "text_sites": 4,
+  "shared_fill_calls": 38
+}

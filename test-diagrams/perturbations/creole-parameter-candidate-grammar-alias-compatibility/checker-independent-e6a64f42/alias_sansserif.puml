@@ -1,0 +1,5 @@
+@startuml
+start
+:a<font:SansSerif>Wi mi</font>z\na<b><size:14><color:navy><font:SansSerif>Wi mi</font></color></size></b>z;
+stop
+@enduml

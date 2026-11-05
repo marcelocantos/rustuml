@@ -1,0 +1,47 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-10.json and comment-state-consumers/review-11.json (d8242a8dc) bounded_next_obligations",
+ "base": "merge of parity-recovery-2026-11-03 95291dc6b (code identical to 9834a7194) into d8242a8dc (code identical to 14dd5efae): d06667af0",
+ "sub_mechanism": "obligation 1 (BLOCKING): layout measures element text in the face it is drawn in, style included: <kind>FontStyle / style FontStyle -> FontConfiguration -> the one measured TextBlock",
+ "java_locations": [
+  "FromSkinparamToStyle 420-425 addConFont: '<kind>FontStyle' converts to PName.FontStyle on the kind's SName; addMagic 266-282 registers it (and '<kind>StereotypeFontStyle' on SName.stereotype) for participant, actor, database, artifact, component, node, rectangle, usecase, ...; 144 'activity', 206 'state', 186 'classFontStyle'.",
+  "Style.getUFont 203-215: FontStyle gives the UFontFace (italic and weight), FontWeight may override only the weight; UFontFactory.build(fontName, face, size). Style.getFontConfiguration 217-230 wraps that UFont.",
+  "EntityImageDescription 143-207 (component, node, artifact, database, actor ... in description diagrams): fcTitle/fc/fcStereo from styleTitle/style/styleStereo.getFontConfiguration (167-169); desc = BodyFactory.create3(display, .., fc or fcTitle, ..) (182/185) and stereo = Display.create(labels).create(fcStereo, ..) (194-196) are passed to symbol.asSmall (207), which both measures (calculateDimension) and draws (drawU) those same TextBlocks. The stereotype face is the stereotype style's (plantuml.skin: stereotype FontStyle italic).",
+  "AbstractTextualComponent 73-95 (sequence ComponentRoseParticipant 66-68, ComponentRoseActor 57-59): fc = style FontConfiguration, the stereotype lines use stereo.getUFont(); the one textBlock is measured (getTextWidth/Height) and drawn.",
+  "FtileBox 139-167 (activity action box): fc = style.getFontConfiguration; the box is sized from the TextBlock built with fc and draws it.",
+  "EntityImageStateCommon 70-74 (state title: getStyleStateTitle(..).getFontConfiguration -> display.create8(titleFontConfiguration, ..)) and EntityImageState 78-82 (fields: getStyleStateHeader FontConfiguration -> list.create8): calculateDimension and drawU use those TextBlocks.",
+  "EntityImageUseCase 88-106: the use-case body is BodyFactory.create2(.., getStyle()) (the style's FontConfiguration); the actor of a use-case diagram is EntityImageDescription."
+ ],
+ "rust_locations_measured_not_as_drawn": [
+  "component.rs component_text_metrics (4638-4684): label measured with measure_with_family (italic dropped) while emission (2958-2975) draws render_style.font_bold/font_italic; stereotypes measured bold=false italic=false while drawn italic (2935-2948). Covers component, node, artifact, database, queue, storage, collections and actor of component diagrams (one ComponentEntityRenderStyle per element, apply_component_entity_style resolves the kind's style incl. legacy skinparams). emit_cloud_component (4116-4135) re-measures the label and stereotype in sans-serif FONT_SIZE plain while the label is drawn in render_style.",
+  "activity.rs action_text_width / action_line_width_with_family / action_table_col_widths (8876-8996) and the three direct measure_with_family calls (2896, 19316, 34211) take palette.action_text_bold only; the action is drawn with palette.action_text_italic (LayoutNode::Action italic). The table emission (12926) measures columns the same way.",
+  "sequence.rs ParticipantTextBlock::new (1324-1330) measures each display line with measure_with_family(bold) only; participant_display (4994-5022) draws the label italic when participant_font_italic and every stereotype line italic. Callers: 4997, 5652, 7751, 7761, 7772.",
+  "state.rs state_text_width_with_family (1599-1620) has no italic and its monospace branch uses mono_text_width (Menlo plain); callers: layout_node_size_with_font (693, 697; StateNodeFont carries bold only), AutonomousTextStyle::width (2219), the title emission textLength (7979, 8099) and description lines (8236), all drawn with title_style/attribute_style.italic."
+ ],
+ "rust_locations_style_not_applied": [
+  "usecase.rs SkinColors (195-320, 380-460) resolves family and size for actors and use cases but not FontStyle: actorFontStyle/usecaseFontStyle and style FontStyle are ignored in both measurement (1204, 1274, 1294, use_case_footprint_atoms base style) and drawing (actor label 2899-2902 bold=false italic=false; use-case body).",
+  "Out of this packet (proposed targets): deployment.rs (description diagrams without component-family elements: lone node/rectangle/artifact/folder/frame/cloud) hardcodes sans-serif FONT_SIZE plain for every label (no defaultFontName, <kind>FontName/Size/Style); rectangle elements inside component diagrams ignore rectangleFontStyle; sequence actor/database/... take participant_font_* instead of their own SName style (Java ParticipantType style signatures)."
+ ],
+ "planned_change": [
+  "component.rs: component_text_metrics(comp, style) measures the label with measure_with_family_and_face(label, size, font_bold, font_italic, family) and each stereotype with (bold=false, italic=true), the face its emission draws; emit_cloud_component measures label and stereotype in the element's render style (family, size, label style; stereotype italic).",
+  "activity.rs: action_text_width, action_line_width_with_family and action_table_col_widths take the face's italic and measure with measure_with_family_and_face; every caller passes the italic it draws with (palette.action_text_italic, or the node's italic at emission).",
+  "sequence.rs: ParticipantTextBlock::new takes italic; callers pass the face participant_display draws (label: participant_font_bold/participant_font_italic; stereotype: bold=false, italic=true).",
+  "state.rs: state_text_width_with_family takes italic (monospace branch: mono_text_width_styled); StateNodeFont carries italic from stateFontStyle exactly as it carries bold; every caller passes the italic of the style it draws with.",
+  "usecase.rs: SkinColors gains actor_font_bold/italic and uc_font_bold/italic from actorFontStyle/usecaseFontStyle (FromSkinparamToStyle addMagic) and the resolved style's fontStyle (Style.getUFont), applied to measurement and drawing of actor labels and use-case bodies.",
+  "No fitted constant, no fixture-keyed branch; text_render::measure_with_family_and_face already exists (round 9)."
+ ],
+ "t14_39_overlap": "The state change routes the monospace branch through the drawn style only; it does not change which family state boxes are measured in (T14.39 'state box widths measured in SansSerif' is a family path and stays open unless Java confirms otherwise).",
+ "precommitted_measurement": {
+  "oracle": "BR (C9A) and earlier relay batches; all 12,550 goldens; fresh relayed M10A probes (294 cases: 13 element kinds x {Courier New + U+1D167 and its mark-free control, SansSerif, Times New Roman, Verdana} x {no style, italic, bold, bold italic}; <style> FontStyle for 7 kinds; stereotypes of component, node and database with and without a mark)",
+  "expect": [
+   "BR c9a_ns_cn_comp_italic MATCH (box 115.6123, text 75.6123); no other BR/BQ/BP..AR case changes except Courier New italic/bold-italic cases with marks in the touched consumers, each traced to the drawn face.",
+   "No golden output changes (no golden draws an unmapped mark in an italic Courier New element label, participant, action, state or stereotype; italic and plain SansSerif/Arial/Verdana/Helvetica/Menlo widths agree for mark-free text in the Rust tables). Times New Roman italic labels (four face tables) are the exception if any golden carries one: each such change is listed.",
+   "Probe scan (private probe build logging family_text_width; tools/style_scan.py): no element text measured in a style it is not drawn in for comp, node/artifact/database/actor of component diagrams, actv, part, stat (skinparam and <style>), usec, actu and component stereotypes.",
+   "M10A (relayed, held out): every probe whose control matches matches, for the kinds this change covers; lone node/rectangle/artifact (deployment.rs) and sequence actor/database probes with a style are predicted to fail (style not applied: proposed targets)."
+  ]
+ }
+}

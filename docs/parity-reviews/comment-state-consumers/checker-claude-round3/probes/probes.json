@@ -1,0 +1,293 @@
+{
+ "note": "Rust-only state probes; border_invariant = Java-derived check tools/borderinv.py (holds on 46/48 Java state references, the 2 exceptions recur identically in every tree)",
+ "svg": {
+  "en_d2": {
+   "source_sha256": "d8a8b71d25c7f958e33bbc6f5173c89dc8872012798a2d2f51fc1609b10f501e",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "5eae16cfcf6a72949b134b11f9df228fdffa9dd3e4aae21ebb5bca6534cee6ed",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "60abcf5cbcb7bf6111d3904197102a141d8714f244d9c41409c9e15f162a0dc2",
+    "stderr_head": "Warning: node Plant.Line.Cell.start1, port P unrecognized\nWarning: node Plant.Line.Cell.start1, port P unrecognized\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f0d48477e15ef2b87628df3f01d6810db7e3ce1276c8ab6a1a6d2b192c265240",
+    "stderr_head": "Warning: node Plant.Line.Cell.start1, port P unrecognized\nWarning: node Plant.Line.Cell.start1, port P unrecognized\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   }
+  },
+  "en_wide_d2_image": {
+   "source_sha256": "8740bcb6f29a305d1eb377624ec727a80804275a1395720a4ae2184fa7ad657b",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "879786b81ce41b2bbd8cda48d32f930b1eed3504485b0db9a9edd69989f53cbf",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "1c7627a23ca9d85963e31111a41b123f53b3133078ee033c58cdcc0697022a81",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "VIOLATION"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "bbaecbd0c4fdcb0907e94337df891b519a4874e1c5f902a29bf52be764678b3e",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "VIOLATION"
+   }
+  },
+  "ex_d1": {
+   "source_sha256": "ebe3c210d955c719b3dcf0b7c26e8a735c31c4b4a88b2b433a1ed77b3092acc7",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "04437583909904d0c998010c9fa433742ea188ccedfe14d9c634f6d2e6a829f7",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "29544170916f14a775b84f6af265acc30ea64390bc1ea9fad9c964bb11fecc8d",
+    "stderr_head": "Warning: node Yard.Gate.out, port P unrecognized\nWarning: node Yard.Gate.out, port P unrecognized\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "00849ababb92e09f6dc87e8021c9d453b2c9be8249ceac4c0e75cd5056f2c2fd",
+    "stderr_head": "Warning: node Yard.Gate.out, port P unrecognized\nWarning: node Yard.Gate.out, port P unrecognized\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   }
+  },
+  "ex_d2_renamed": {
+   "source_sha256": "7685394bbd9ace0a0d55bedecf47f2276819d68770ab797dfaead5ccbdda7cd2",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c63c570332f0ba1b8aa53d80281b3935e950680917004a5655aafbdcf3a95b53",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "44e0bb6304addbf1bed84723ed3b7e1eff9a99beb7c33a9254fd96971383d863",
+    "stderr_head": "Warning: node Plant.Line.Cell.done, port P unrecognized\nWarning: node Plant.Line.Cell.done, port P unrecognized\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "4e2cfe84851d7c1a8619974763a0a0ac4e220c96367417b3ab33aee469f31cad",
+    "stderr_head": "Warning: node Plant.Line.Cell.done, port P unrecognized\nWarning: node Plant.Line.Cell.done, port P unrecognized\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   }
+  },
+  "ex_d2_root_image": {
+   "source_sha256": "f1ed3480ed7615ec280843b7ad43996f6ae1b1534aab16adcef246300043dd25",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "1f6e84269a53f80837f6be30d9e9aa445e7ff9b090afa077755a0df10d2d93e2",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "fd8751d624d9951a9e37b72c8649f3682f82438ec523b6c6e21bf28e5ec853b1",
+    "stderr_head": "Warning: node Plant.Line.Cell.done, port P unrecognized\nWarning: node Plant.Line.Cell.done, port P unrecognized\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "10495ece59d28a0cea28d74e61f0fefc91d4cd46135c3591ac4faa1256405be1",
+    "stderr_head": "Warning: node Plant.Line.Cell.done, port P unrecognized\nWarning: node Plant.Line.Cell.done, port P unrecognized\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   }
+  },
+  "ex_d2_widelabel": {
+   "source_sha256": "cdf7fe28977bccf8e2ac187cae75b246f8d88156f6418e0ffad8ca89b7c0ed47",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "3bd5073ebd1e36eefcb2bc5d621c21c5b87fec2d8eb4c16445ca730060a8e3a0",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "b251a3dd37210cc37f696827f0aef83de158792810389acec4f3085308402c35",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "VIOLATION"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "019706a4ef95dada1be14bbe7d09a4a1b372476a86beceb192a2c306fc5be1bd",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "VIOLATION"
+   }
+  },
+  "ex_d3": {
+   "source_sha256": "9088aec1f69547edea2ec502f8dd0634ce07d3a2558ffe27f7c3fec242df0f37",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "341c97bcca18ffcbbb605498abc4519e55f2c9c6f066b9bb940a99c2a97449e6",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "3abd0f28d7eabb6eb130c3020d30b417f1b078c1cc1c0b275eeef515271706eb",
+    "stderr_head": "Warning: node Site.Hall.Bay.Rig.stop1, port P unrecognized\nWarning: node Site.Hall.Bay.Rig.stop1, port P unrecognized\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "390da115b1ee8d74c2b8c317ac9bfc2b6a4e07bd2eb6a5808f83fe46efe90d2b",
+    "stderr_head": "Warning: node Site.Hall.Bay.Rig.stop1, port P unrecognized\nWarning: node Site.Hall.Bay.Rig.stop1, port P unrecognized\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   }
+  },
+  "ex_wide_d1_image": {
+   "source_sha256": "89f8e68546db89dcfdd4a10affaf171b380222cfade47067e0ff4ba24eea24ed",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "7dad203b248c8cd77eb12b3c81ec85f7e00f748edae66f49dc45736e77e23e10",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "246485e93e747e2e7f6bca06f11b89be73c03e0a933de1a780f0fbe8da150e76",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "VIOLATION"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "3741119f6e5461d3d8774993427bf395dd69112dee4611e623185095c3f37a57",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "VIOLATION"
+   }
+  },
+  "ex_wide_noimage": {
+   "source_sha256": "cc9137909ac08282609c7667714d70c057bc807a7023aa532a062c35f7ae2c64",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "51508646ab53c342abde1434cfb752494ac1a2925737b3acce0d1fe0cdc2d5ab",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ba9891bc2cbcc5883b921f33f8d4ddcc72061c0b525f6fb92e13c77dc815e81c",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "7c731917793bdcb037516e5027e84a24fd72d0b83d270a04911f50dd84f7412c",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   }
+  },
+  "nc_note_in_cluster_depth2": {
+   "source_sha256": "a44192c6a34759b990a60067666bf8e25341fa26eea607a4462871515467a9bf",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "90384dd89137ee8e05603fbf3ac7f8d89e9e5ca7872832243489398227c5a4a5",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "188ca09ecc43b182168c54f026b3ab085c095da8dbd32ec6d7211deff60d2538",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "b979fcfd05a33d052339d634954dddbc15ba9b035c0951f7a23422c3ea255786",
+    "stderr_head": "Warning: node Depot.Wing.Bay.dock, port P unrecognized\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   }
+  },
+  "nc_note_in_cluster_renamed": {
+   "source_sha256": "d5abc6437887c6203a70068f48c221d0d1648853a3127f1bc5c2f592bbf49a0c",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "566ad5cb4712f5c19e690cc6e1f1b2b2fa4dd35834a711624c9e9ffa73d12eef",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "fc3bb29d0fbdaa18991c97c7bba6896539abe4b9243de9f03f0c8ab6da9e3a00",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "654504262358739a264d266f9adaf46fb1847ffb8b54439e085446a0c62b2ba9",
+    "stderr_head": "Warning: node Depot.Bay.dock, port P unrecognized\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   }
+  },
+  "nc_two_clusters_notes": {
+   "source_sha256": "94d730c4132c164f11cef18630b6df8165fbe8fba4344901227f35b4ca722f1a",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6552e77a8d3449b0b3aa1112a475557f5ce8426d55c6e77dfce57217fbbbb581",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "0db95d825e5b3a265e1240030b8379e9f70fa06245ce5061ebec52f0450542bf",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "22eea8036a0c373e6ba458eaf628b864bc5e20c76b4c049523275f741c7d4a2d",
+    "stderr_head": "Warning: node Depot.Bay.dock, port P unrecognized\nWarning: node Depot.Yard.gate, port P unrecognized\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "OK"
+   }
+  }
+ }
+}

@@ -1,0 +1,7 @@
+{
+  "archive": "measurements.tar.gz",
+  "sha256": "433611cfe8290f8842c2b7d65ebb20e19da5acaedbbd559327e5f0c0131348b3",
+  "bytes": 14524065,
+  "members": 36273,
+  "readback_all_hashes_and_sizes_match": true
+}

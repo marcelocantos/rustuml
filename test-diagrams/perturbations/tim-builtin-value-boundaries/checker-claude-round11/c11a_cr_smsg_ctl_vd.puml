@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Verdana
+participant A
+participant B
+A -> B : Wavy Dog kim Vay 9 ovo
+@enduml

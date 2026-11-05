@@ -1,0 +1,19 @@
+{
+ "pairs": 16402,
+ "exact_before": 15003,
+ "exact_after": 15014,
+ "gained": [
+  "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_entry_inside_autarkic.puml",
+  "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_entry_point.puml",
+  "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_inputpin_mixed_case.puml",
+  "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_root_note_on_inner.puml",
+  "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/deploy_unaliased_forms.puml",
+  "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/history_external_suffix_form.puml",
+  "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/quark_reuse_crossing.puml",
+  "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_projection.puml",
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+  "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_digits.puml",
+  "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_json.puml"
+ ],
+ "lost": []
+}

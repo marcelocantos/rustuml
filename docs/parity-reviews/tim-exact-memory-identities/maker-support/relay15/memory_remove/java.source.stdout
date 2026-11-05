@@ -1,0 +1,3 @@
+@startuml
+class "birch/locald / birch / 0" as Removed
+@enduml

@@ -1,0 +1,107 @@
+[
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "creole::"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "log": "logs/focused-initial.log",
+    "exit": 101,
+    "passed": 86,
+    "failed": 1,
+    "note": "Initial parameter draft introduced an icon barrier; existing segments_xml_escaping exposed changed empty-icon projection."
+  },
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "creole::"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "log": "logs/focused-grammar.log",
+    "exit": 101,
+    "passed": 89,
+    "failed": 1,
+    "note": "Three source-guided tests added; existing icon projection still failed. No existing expectation changed."
+  },
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "creole::"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "log": "logs/focused-final.log",
+    "exit": 0,
+    "passed": 90,
+    "failed": 0,
+    "note": "Restored existing icon empty handoff while retaining candidate validation. Production corrected, existing test unchanged. Initial draft, binary hash and all first-iteration replay outputs retained in iteration1."
+  },
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "creole::"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "log": "logs/focused-alias.log",
+    "exit": 0,
+    "passed": 91,
+    "failed": 0,
+    "note": "After narrow alias account5652ec397 and correction8ca73318f; existing consumer expectation unchanged."
+  },
+  {
+    "argv": [
+      "cargo",
+      "test",
+      "-p",
+      "rustuml-render",
+      "--lib",
+      "--release",
+      "explicit_font_monospace_inherits_surrounding_metrics"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-a295df45",
+    "env_overrides": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/Library/Caches/rustuml-creole-parameter-maker/target-after",
+      "CARGO_BUILD_JOBS": "4"
+    },
+    "log": "logs/focused-alias-consumer.log",
+    "exit": 0,
+    "passed": 1,
+    "failed": 0,
+    "note": "After narrow alias account5652ec397 and correction8ca73318f; existing consumer expectation unchanged."
+  }
+]

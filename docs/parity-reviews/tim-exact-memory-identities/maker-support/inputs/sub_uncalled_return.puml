@@ -1,0 +1,9 @@
+@startuml
+!function $unused()
+!startsub saved
+class Cedar
+!endsub
+!return 1
+!endfunction
+!includesub saved
+@enduml

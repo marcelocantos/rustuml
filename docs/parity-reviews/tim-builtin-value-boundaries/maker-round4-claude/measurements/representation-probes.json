@@ -1,0 +1,3804 @@
+{
+ "note": "Rust-only representation probes (checker round-3 sources): per output mode, count of ESCAPE scalars (U+10F7FF, raw/&#N;/\\u{..}), of U+10F800..U+10FFFF scalars, and of U+FFFD. Legitimate PUA-B text appears as itself; the source literal count is given.",
+ "cases": {
+  "activity_old.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/activity_old.puml",
+   "source_sha256": "d4e2bc63e3dc0726d862c3742b02f29306f23b58766c042453e08bf05f8b9e28",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 3,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 3,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 1,
+     "stderr": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-tpdf": {
+     "exit": 1,
+     "stderr": "PDF error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-teps": {
+     "exit": 1,
+     "stderr": "EPS error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 3
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 3
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "class_link_label.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/class_link_label.puml",
+   "source_sha256": "10120e53cf814bdd0015fc42ba0883bccee8788b5801d0df71e0c58c2b1e2223",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "component.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/component.puml",
+   "source_sha256": "4424a0634c8911c369be545087eebb7989e8da4b73da611e20efde1cc6da37a6",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "deployment.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/deployment.puml",
+   "source_sha256": "8a6bc52ef7526a38bf0f1fc1c203d584847e3265eb161d46bbdf6d9398b37f92",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "sur_activity_low_end.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/formats/sur_activity_low_end.puml",
+   "source_sha256": "43e1790e8ee48598c7e15cbcb72e1bf2117a42abf700252cae0dc791b2b348ab",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 1,
+     "stderr": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-tpdf": {
+     "exit": 1,
+     "stderr": "PDF error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-teps": {
+     "exit": 1,
+     "stderr": "EPS error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "sur_class_high_end.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/formats/sur_class_high_end.puml",
+   "source_sha256": "f58ca6015980f82f3c75cd827a68677003927a015ca5c7f411b53488065f1b85",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "sur_class_low_end.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/formats/sur_class_low_end.puml",
+   "source_sha256": "38de46af67fe931a100b9e45a516087a08fbb060122ef82744b65b03c33f5b12",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 1,
+     "stderr": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-tpdf": {
+     "exit": 1,
+     "stderr": "PDF error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-teps": {
+     "exit": 1,
+     "stderr": "EPS error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "gantt.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/gantt.puml",
+   "source_sha256": "40c2231b8434295198d05740d168d6621c7d341ec7597e3a3b559ebf19e180e2",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 3,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 3,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 3
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 3
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "json.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/json.puml",
+   "source_sha256": "6a19f8de3a134d26b31f9934d05e52340c2315a91551c99964db68cb8b0c7137",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "mindmap.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/mindmap.puml",
+   "source_sha256": "ad15cb209ec1cafcf76e0493d8d9a8c51d5949f1eea51b1ed0403cc794b2051a",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "nwdiag.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/nwdiag.puml",
+   "source_sha256": "7b33d94a07c289ab45ff60e2c59038f5a5579cf834cc68dfbd71df1ac4d07191",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 1
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 1
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "object.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/object.puml",
+   "source_sha256": "b1dd82e054ab40f6ea3052e9bb0a6cc1c4a4562a54d3f7ccf79b1586807cb7c5",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "pua_a_control.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/pua_a_control.puml",
+   "source_sha256": "a8c949515c9e5e1e932372cd2166b890c8a7a88c47a633629789cbc52854f92f",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "pua_b_activity.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/pua_b_activity.puml",
+   "source_sha256": "11f41fa692f414765222efa6a878b8d64b8a3e60a09e8cc186d8c0de40df9764",
+   "literal_reserved_scalars_in_source": 1,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: An invalid XML character (Unicode: 0xdc10) was found in the node's character data content.",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 1,
+     "stderr": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-tpdf": {
+     "exit": 1,
+     "stderr": "PDF error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-teps": {
+     "exit": 1,
+     "stderr": "EPS error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "pua_b_class_first_carrier.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/pua_b_class_first_carrier.puml",
+   "source_sha256": "386f3e565dea90feabe126e361ebc756128af9a0d86c9a1df67bdae168ab6476",
+   "literal_reserved_scalars_in_source": 1,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: Invalid UTF-16 surrogate detected: d800 20 ?",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 1,
+     "stderr": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-tpdf": {
+     "exit": 1,
+     "stderr": "PDF error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-teps": {
+     "exit": 1,
+     "stderr": "EPS error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "pua_b_class_last.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/pua_b_class_last.puml",
+   "source_sha256": "6e4e631aeef7f400085708582d2b07d3cd9f4933b217e2db061ded52241ba986",
+   "literal_reserved_scalars_in_source": 1,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 1,
+     "stderr": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-tpdf": {
+     "exit": 1,
+     "stderr": "PDF error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-teps": {
+     "exit": 1,
+     "stderr": "EPS error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "pua_b_comment_only.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/pua_b_comment_only.puml",
+   "source_sha256": "36d7818522af1c010d2fb12c55db4759e6f60c8c883e7e6841667cf04ff734b2",
+   "literal_reserved_scalars_in_source": 1,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "pua_b_pair_lookalike.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/pua_b_pair_lookalike.puml",
+   "source_sha256": "02840169a5cc56de601dffec8e9ee9b1d9fae77dbd788514a0f1cc26dc33c931",
+   "literal_reserved_scalars_in_source": 2,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 4,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 4,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 4,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 4,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 4,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "pua_b_sequence.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/pua_b_sequence.puml",
+   "source_sha256": "4a742f17fadf45bdd24155e9d697cbf4c6688f02401da59671f5b4795bafb5f9",
+   "literal_reserved_scalars_in_source": 1,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: An invalid XML character (Unicode: 0xdff0) was found in the node's character data content.",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 1,
+     "stderr": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-tpdf": {
+     "exit": 1,
+     "stderr": "PDF error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-teps": {
+     "exit": 1,
+     "stderr": "EPS error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "pua_b_state.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/pua_b_state.puml",
+   "source_sha256": "22efadcfacb44d4dbb761e5aff9b342203d10b5b70a31439fcb25c3e0045b2db",
+   "literal_reserved_scalars_in_source": 1,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "pua_b_strlen.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/pua_b_strlen.puml",
+   "source_sha256": "e2ec20f2b64ca166d284cf0da9ad4f9d997ed028c2d77110f4996982817e5155",
+   "literal_reserved_scalars_in_source": 1,
+   "base": {
+    "-tsvg": {
+     "exit": 101,
+     "stderr": "thread 'main' (48055864) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 20 is not a char boundary; it is inside '\\u{10fffd}' (b",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 101,
+     "stderr": "thread 'main' (48055866) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 20 is not a char boundary; it is inside '\\u{10fffd}' (b",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 101,
+     "stderr": "thread 'main' (48055868) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 20 is not a char boundary; it is inside '\\u{10fffd}' (b",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 101,
+     "stderr": "thread 'main' (48055870) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 20 is not a char boundary; it is inside '\\u{10fffd}' (b",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 101,
+     "stderr": "thread 'main' (48055872) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 20 is not a char boundary; it is inside '\\u{10fffd}' (b"
+    },
+    "-tpdf": {
+     "exit": 101,
+     "stderr": "thread 'main' (48055874) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 20 is not a char boundary; it is inside '\\u{10fffd}' (b"
+    },
+    "-teps": {
+     "exit": 101,
+     "stderr": "thread 'main' (48055877) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 20 is not a char boundary; it is inside '\\u{10fffd}' (b"
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "pua_b_title.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/pua_b_title.puml",
+   "source_sha256": "1d17135c89b1ac49455e1a983de63654dcae2a58d0568f802a8ba82942f98c1a",
+   "literal_reserved_scalars_in_source": 1,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "pua_b_usecase.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/pua_b_usecase.puml",
+   "source_sha256": "2180806ddfeddd0b6f6c2d71d3f5f676ca1de4228d794fc93b9e1f2b86ce751c",
+   "literal_reserved_scalars_in_source": 1,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 3,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: Invalid UTF-16 surrogate detected: db00 db00 ?",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 1,
+     "stderr": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-tpdf": {
+     "exit": 1,
+     "stderr": "PDF error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-teps": {
+     "exit": 1,
+     "stderr": "EPS error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 3,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "salt.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/salt.puml",
+   "source_sha256": "48f88d5422f611567cf64486d4f2327e76c2fc1f0edcea94b14c43cc96c6c084",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056019) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056021) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056023) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056025) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056028) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo"
+    },
+    "-tpdf": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056030) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo"
+    },
+    "-teps": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056032) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo"
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056035) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056037) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056039) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056041) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056043) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo"
+    },
+    "-tpdf": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056045) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo"
+    },
+    "-teps": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056047) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo"
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056049) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056051) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056053) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056055) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056057) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo"
+    },
+    "-tpdf": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056059) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo"
+    },
+    "-teps": {
+     "exit": 101,
+     "stderr": "thread 'main' (48056061) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char bo"
+    }
+   }
+  },
+  "sequence_participant.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/sequence_participant.puml",
+   "source_sha256": "cd94d11c081147763a35d6f466d4969502082b76e71d5e5de1a48f75d1fe8bae",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 1,
+     "stderr": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-tpdf": {
+     "exit": 1,
+     "stderr": "PDF error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-teps": {
+     "exit": 1,
+     "stderr": "EPS error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "state_comment.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/state_comment.puml",
+   "source_sha256": "f6d19960630b96eb506c1b3e216aec8b99b4f7ac9b8696fe3eacd7423c901d2b",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 1,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "timing.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/timing.puml",
+   "source_sha256": "59f593a596d614ba1213c531315f1b8b140105b16d74d12a2642866c0be93a44",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "usecase_actor.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/usecase_actor.puml",
+   "source_sha256": "bdc1812933fe175856276dd6424afd292a48e71fab12abf52d5987f57be60306",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 1,
+     "stderr": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-tpdf": {
+     "exit": 1,
+     "stderr": "PDF error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    },
+    "-teps": {
+     "exit": 1,
+     "stderr": "EPS error: SVG parse error: SVG data parsing failed cause the document does not have a root node"
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 1,
+     "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  },
+  "wbs.puml": {
+   "source": "docs/parity-reviews/tim-builtin-value-boundaries/checker-claude-round3/probes/wbs.puml",
+   "source_sha256": "ae21fb15ed58534a54adcd3e6468adbcf40f763e382c3ceec83c099f39d09bb2",
+   "literal_reserved_scalars_in_source": 0,
+   "base": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "r3": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 2,
+     "replacement": 0
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   },
+   "tip": {
+    "-tsvg": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "-ttxt": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 0
+    },
+    "--ast": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "--yaml": {
+     "exit": 0,
+     "stderr": "",
+     "escape": 0,
+     "carrier_range": 0,
+     "replacement": 2
+    },
+    "-tpng": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-tpdf": {
+     "exit": 0,
+     "stderr": ""
+    },
+    "-teps": {
+     "exit": 0,
+     "stderr": ""
+    }
+   }
+  }
+ }
+}

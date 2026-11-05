@@ -1,0 +1,5 @@
+@startuml
+Kestrel -> Osprey : ping
+...after a considerably longer pause...
+Osprey -> Kestrel : pong
+@enduml

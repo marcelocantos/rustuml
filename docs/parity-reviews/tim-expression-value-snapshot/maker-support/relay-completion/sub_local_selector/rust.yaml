@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "3" as Replayed
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Replayed
+  entities:
+  - id: Replayed
+    label: '3'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 8
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

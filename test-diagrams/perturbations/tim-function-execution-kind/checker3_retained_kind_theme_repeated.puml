@@ -1,0 +1,12 @@
+@startuml
+!$n = 0
+!function $setup($theme)
+!theme $theme
+!$n = $n + 1
+class Phantom
+!return $n
+!endfunction
+!log $setup(cerulean)
+!$v = $setup(cerulean)
+class "count $v" as Actual
+@enduml

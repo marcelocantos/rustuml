@@ -1,0 +1,10 @@
+@startuml
+!$n=0
+!function $tick($v)
+!$n = $n * 10 + $v
+!return $v
+!endfunction
+!$a = (0 && $tick(1)) || (1 || $tick(2))
+!$b = (1 || $tick(3)) && $tick(4)
+class "$n / $a / $b" as Effects
+@enduml

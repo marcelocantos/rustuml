@@ -1,0 +1,7 @@
+@startuml
+!function $braid($a="maple",$b="spruce")
+!return $a+"/"+$b
+!endfunction
+!$x=$braid($a="seed",$b=$braid("inner"))
+class "$x" as Nested
+@enduml

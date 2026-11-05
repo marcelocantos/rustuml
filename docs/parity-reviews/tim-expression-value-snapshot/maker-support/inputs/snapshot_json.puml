@@ -1,0 +1,11 @@
+@startuml
+!$data=%str2json('{"rows":["009","008"]}')
+!$i=0
+!function $advance()
+!$i=1
+!return "pick "
+!endfunction
+!$a=$advance()+$data.rows[$i]
+!$b=$data.rows[$i]+2
+class "$a / $b" as Selected
+@enduml

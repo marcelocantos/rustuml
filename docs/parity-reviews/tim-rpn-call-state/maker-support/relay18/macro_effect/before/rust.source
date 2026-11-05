@@ -1,0 +1,7 @@
+@startuml
+note as N
+expanded one
+two
+end note
+class "1" as Count
+@enduml

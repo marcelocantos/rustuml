@@ -1,0 +1,8 @@
+@startuml
+participant Grove
+note right of Grove
+~***fir**Z
+<b>~***fir**Z\~</b>~
+X<i>\~<u>~_fir</u>~</i>Y
+end note
+@enduml

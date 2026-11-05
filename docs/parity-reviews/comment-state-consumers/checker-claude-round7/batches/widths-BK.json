@@ -1,0 +1,1129 @@
+{
+ "mk9_u17_1ad5": {
+  "java": [
+   61.8174,
+   "113x68"
+  ],
+  "base": [
+   73.0488,
+   "125x68"
+  ],
+  "merge": [
+   72.3174,
+   "124x68"
+  ],
+  "tip": [
+   61.8174,
+   "113x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "MATCH0"
+  ]
+ },
+ "mk9_u17_10efa": {
+  "java": [
+   49.54,
+   "101x68"
+  ],
+  "base": [
+   67.04,
+   "119x68"
+  ],
+  "merge": [
+   60.04,
+   "112x68"
+  ],
+  "tip": [
+   49.54,
+   "101x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "MATCH0"
+  ]
+ },
+ "mk9_u17_11b60": {
+  "java": [
+   null,
+   "92x68"
+  ],
+  "base": [
+   null,
+   "109x68"
+  ],
+  "merge": [
+   null,
+   "102x68"
+  ],
+  "tip": [
+   null,
+   "92x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "MATCH0"
+  ]
+ },
+ "mk9_u18_b53": {
+  "java": [
+   null,
+   "101x68"
+  ],
+  "base": [
+   null,
+   "112x68"
+  ],
+  "merge": [
+   null,
+   "111x68"
+  ],
+  "tip": [
+   null,
+   "101x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "MATCH0"
+  ]
+ },
+ "mk9_u18_1d127": {
+  "java": [
+   null,
+   "91x68"
+  ],
+  "base": [
+   null,
+   "108x68"
+  ],
+  "merge": [
+   null,
+   "101x68"
+  ],
+  "tip": [
+   null,
+   "91x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "MATCH0"
+  ]
+ },
+ "mk9_u18_10ecb": {
+  "java": [
+   null,
+   "99x68"
+  ],
+  "base": [
+   null,
+   "116x68"
+  ],
+  "merge": [
+   null,
+   "109x68"
+  ],
+  "tip": [
+   null,
+   "99x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "MATCH0"
+  ]
+ },
+ "mk9_180f_thai": {
+  "java": [
+   null,
+   "94x68"
+  ],
+  "base": [
+   null,
+   "102x68"
+  ],
+  "merge": [
+   null,
+   "104x68"
+  ],
+  "tip": [
+   null,
+   "94x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "MATCH0"
+  ]
+ },
+ "mk9_180f_thai_ctrl": {
+  "java": [
+   null,
+   "94x68"
+  ],
+  "base": [
+   null,
+   "94x68"
+  ],
+  "merge": [
+   null,
+   "94x68"
+  ],
+  "tip": [
+   null,
+   "94x68"
+  ],
+  "strict": [
+   "MATCH0",
+   "MATCH0",
+   "MATCH0"
+  ]
+ },
+ "mk9_lucida_hebrew_space": {
+  "java": [
+   null,
+   "107x68"
+  ],
+  "base": [
+   null,
+   "120x68"
+  ],
+  "merge": [
+   null,
+   "106x68"
+  ],
+  "tip": [
+   null,
+   "106x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF4",
+   "DIFF4"
+  ]
+ },
+ "mk9_lucida_hebrew_space_ctrl": {
+  "java": [
+   null,
+   "107x68"
+  ],
+  "base": [
+   null,
+   "106x68"
+  ],
+  "merge": [
+   null,
+   "106x68"
+  ],
+  "tip": [
+   null,
+   "106x68"
+  ],
+  "strict": [
+   "DIFF4",
+   "DIFF4",
+   "DIFF4"
+  ]
+ },
+ "mk9_helv_hebrew_space": {
+  "java": [
+   null,
+   "105x68"
+  ],
+  "base": [
+   null,
+   "118x68"
+  ],
+  "merge": [
+   null,
+   "104x68"
+  ],
+  "tip": [
+   null,
+   "104x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF4",
+   "DIFF4"
+  ]
+ },
+ "mk9_helv_hebrew_space_ctrl": {
+  "java": [
+   null,
+   "105x68"
+  ],
+  "base": [
+   null,
+   "104x68"
+  ],
+  "merge": [
+   null,
+   "104x68"
+  ],
+  "tip": [
+   null,
+   "104x68"
+  ],
+  "strict": [
+   "DIFF4",
+   "DIFF4",
+   "DIFF4"
+  ]
+ },
+ "mk9_verdana_hebrew_space": {
+  "java": [
+   null,
+   "123x68"
+  ],
+  "base": [
+   null,
+   "122x68"
+  ],
+  "merge": [
+   null,
+   "122x68"
+  ],
+  "tip": [
+   null,
+   "108x68"
+  ],
+  "strict": [
+   "DIFF4",
+   "DIFF4",
+   "DIFF5"
+  ]
+ },
+ "mk9_verdana_hebrew_space_ctrl": {
+  "java": [
+   null,
+   "109x68"
+  ],
+  "base": [
+   null,
+   "108x68"
+  ],
+  "merge": [
+   null,
+   "108x68"
+  ],
+  "tip": [
+   null,
+   "108x68"
+  ],
+  "strict": [
+   "DIFF4",
+   "DIFF4",
+   "DIFF4"
+  ]
+ },
+ "mk9_arial_hebrew_space": {
+  "java": [
+   null,
+   "114x68"
+  ],
+  "base": [
+   null,
+   "118x68"
+  ],
+  "merge": [
+   null,
+   "114x68"
+  ],
+  "tip": [
+   null,
+   "114x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF4",
+   "DIFF4"
+  ]
+ },
+ "mk9_arial_hebrew_space_ctrl": {
+  "java": [
+   null,
+   "104x68"
+  ],
+  "base": [
+   null,
+   "104x68"
+  ],
+  "merge": [
+   null,
+   "104x68"
+  ],
+  "tip": [
+   null,
+   "104x68"
+  ],
+  "strict": [
+   "DIFF4",
+   "DIFF4",
+   "DIFF4"
+  ]
+ },
+ "mk9_couriernew_hebrew_space": {
+  "java": [
+   null,
+   "119x68"
+  ],
+  "base": [
+   null,
+   "127x68"
+  ],
+  "merge": [
+   null,
+   "127x68"
+  ],
+  "tip": [
+   null,
+   "127x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "DIFF5"
+  ]
+ },
+ "mk9_couriernew_hebrew_space_ctrl": {
+  "java": [
+   null,
+   "119x68"
+  ],
+  "base": [
+   null,
+   "119x68"
+  ],
+  "merge": [
+   null,
+   "119x68"
+  ],
+  "tip": [
+   null,
+   "119x68"
+  ],
+  "strict": [
+   "MATCH0",
+   "MATCH0",
+   "MATCH0"
+  ]
+ },
+ "mk9_mono_hebrew_space": {
+  "java": [
+   null,
+   "119x68"
+  ],
+  "base": [
+   null,
+   "127x68"
+  ],
+  "merge": [
+   null,
+   "119x68"
+  ],
+  "tip": [
+   null,
+   "119x68"
+  ],
+  "strict": [
+   "DIFF6",
+   "DIFF5",
+   "DIFF5"
+  ]
+ },
+ "mk9_mono_hebrew_space_ctrl": {
+  "java": [
+   null,
+   "119x68"
+  ],
+  "base": [
+   null,
+   "119x68"
+  ],
+  "merge": [
+   null,
+   "119x68"
+  ],
+  "tip": [
+   null,
+   "119x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "DIFF5"
+  ]
+ },
+ "mk9_lucida_arabic_space": {
+  "java": [
+   null,
+   "102x68"
+  ],
+  "base": [
+   null,
+   "116x68"
+  ],
+  "merge": [
+   null,
+   "102x68"
+  ],
+  "tip": [
+   null,
+   "102x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "MATCH0",
+   "MATCH0"
+  ]
+ },
+ "mk9_lucida_arabic_space_ctrl": {
+  "java": [
+   null,
+   "102x68"
+  ],
+  "base": [
+   null,
+   "102x68"
+  ],
+  "merge": [
+   null,
+   "102x68"
+  ],
+  "tip": [
+   null,
+   "102x68"
+  ],
+  "strict": [
+   "MATCH0",
+   "MATCH0",
+   "MATCH0"
+  ]
+ },
+ "mk9_helv_syriac": {
+  "java": [
+   null,
+   "94x68"
+  ],
+  "base": [
+   null,
+   "107x68"
+  ],
+  "merge": [
+   null,
+   "94x68"
+  ],
+  "tip": [
+   null,
+   "94x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "MATCH0",
+   "MATCH0"
+  ]
+ },
+ "mk9_helv_syriac_ctrl": {
+  "java": [
+   null,
+   "98x68"
+  ],
+  "base": [
+   null,
+   "93x68"
+  ],
+  "merge": [
+   null,
+   "93x68"
+  ],
+  "tip": [
+   null,
+   "93x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "DIFF5"
+  ]
+ },
+ "mk9_lucida_thai_base": {
+  "java": [
+   null,
+   "104x68"
+  ],
+  "base": [
+   null,
+   "108x68"
+  ],
+  "merge": [
+   null,
+   "104x68"
+  ],
+  "tip": [
+   null,
+   "104x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "MATCH0",
+   "MATCH0"
+  ]
+ },
+ "mk9_lucida_deva_base": {
+  "java": [
+   null,
+   "107x68"
+  ],
+  "base": [
+   null,
+   "110x68"
+  ],
+  "merge": [
+   null,
+   "107x68"
+  ],
+  "tip": [
+   null,
+   "107x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "MATCH0",
+   "MATCH0"
+  ]
+ },
+ "mk9_lucida_deva_ctrl": {
+  "java": [
+   null,
+   "96x68"
+  ],
+  "base": [
+   null,
+   "96x68"
+  ],
+  "merge": [
+   null,
+   "96x68"
+  ],
+  "tip": [
+   null,
+   "96x68"
+  ],
+  "strict": [
+   "MATCH0",
+   "MATCH0",
+   "MATCH0"
+  ]
+ },
+ "mk9_lucida_hebrew_wj": {
+  "java": [
+   null,
+   "95x68"
+  ],
+  "base": [
+   null,
+   "115x68"
+  ],
+  "merge": [
+   null,
+   "101x68"
+  ],
+  "tip": [
+   null,
+   "101x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "DIFF5"
+  ]
+ },
+ "mk9_lucida_hebrew_hiriq": {
+  "java": [
+   null,
+   "95x68"
+  ],
+  "base": [
+   null,
+   "115x68"
+  ],
+  "merge": [
+   null,
+   "101x68"
+  ],
+  "tip": [
+   null,
+   "101x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "DIFF5"
+  ]
+ },
+ "mk9_lucida_hebrew_hiriq_ctrl": {
+  "java": [
+   null,
+   "95x68"
+  ],
+  "base": [
+   null,
+   "101x68"
+  ],
+  "merge": [
+   null,
+   "101x68"
+  ],
+  "tip": [
+   null,
+   "101x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "DIFF5"
+  ]
+ },
+ "mk9_hangul_space": {
+  "java": [
+   null,
+   "121x68"
+  ],
+  "base": [
+   null,
+   "138x68"
+  ],
+  "merge": [
+   null,
+   "131x68"
+  ],
+  "tip": [
+   null,
+   "121x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "DIFF5",
+   "MATCH0"
+  ]
+ },
+ "mk9_hangul_space_ctrl": {
+  "java": [
+   null,
+   "121x68"
+  ],
+  "base": [
+   null,
+   "124x68"
+  ],
+  "merge": [
+   null,
+   "121x68"
+  ],
+  "tip": [
+   null,
+   "121x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "MATCH0",
+   "MATCH0"
+  ]
+ },
+ "mk9_hangul_base": {
+  "java": [
+   null,
+   "119x68"
+  ],
+  "base": [
+   null,
+   "126x68"
+  ],
+  "merge": [
+   null,
+   "119x68"
+  ],
+  "tip": [
+   null,
+   "119x68"
+  ],
+  "strict": [
+   "DIFF5",
+   "MATCH0",
+   "MATCH0"
+  ]
+ },
+ "mk9_seq_hebrew": {
+  "java": [
+   null,
+   "123x123"
+  ],
+  "base": [
+   null,
+   "134x123"
+  ],
+  "merge": [
+   null,
+   "121x123"
+  ],
+  "tip": [
+   null,
+   "121x123"
+  ],
+  "strict": [
+   "DIFF10",
+   "DIFF10",
+   "DIFF10"
+  ]
+ },
+ "mk9_seq_hebrew_ctrl": {
+  "java": [
+   null,
+   "123x123"
+  ],
+  "base": [
+   null,
+   "121x123"
+  ],
+  "merge": [
+   null,
+   "121x123"
+  ],
+  "tip": [
+   null,
+   "121x123"
+  ],
+  "strict": [
+   "DIFF10",
+   "DIFF10",
+   "DIFF10"
+  ]
+ },
+ "y9_block_depth3": {
+  "java": [
+   null,
+   "401x62"
+  ],
+  "base": [
+   null,
+   "407x62"
+  ],
+  "merge": [
+   null,
+   "412x62"
+  ],
+  "tip": [
+   null,
+   "401x62"
+  ],
+  "strict": [
+   "DIFF7",
+   "DIFF8",
+   "MATCH0"
+  ]
+ },
+ "y9_block_text_dedent": {
+  "java": [
+   null,
+   "201x62"
+  ],
+  "base": [
+   null,
+   null
+  ],
+  "merge": [
+   null,
+   null
+  ],
+  "tip": [
+   null,
+   "201x62"
+  ],
+  "strict": [
+   "ERR0",
+   "ERR0",
+   "MATCH0"
+  ]
+ },
+ "y9_block_hash_lines": {
+  "java": [
+   null,
+   "242x62"
+  ],
+  "base": [
+   null,
+   "248x62"
+  ],
+  "merge": [
+   null,
+   "242x62"
+  ],
+  "tip": [
+   null,
+   "242x62"
+  ],
+  "strict": [
+   "DIFF5",
+   "MATCH0",
+   "MATCH0"
+  ]
+ },
+ "y9_block_tab_inside": {
+  "java": [
+   null,
+   "124x62"
+  ],
+  "base": [
+   null,
+   "108x62"
+  ],
+  "merge": [
+   null,
+   "124x62"
+  ],
+  "tip": [
+   null,
+   "124x62"
+  ],
+  "strict": [
+   "DIFF12",
+   "MATCH0",
+   "MATCH0"
+  ]
+ },
+ "y9_block_quoted_key": {
+  "java": [
+   null,
+   "178x62"
+  ],
+  "base": [
+   null,
+   "184x62"
+  ],
+  "merge": [
+   null,
+   "178x62"
+  ],
+  "tip": [
+   null,
+   "178x62"
+  ],
+  "strict": [
+   "DIFF5",
+   "MATCH0",
+   "MATCH0"
+  ]
+ },
+ "y9_tab_indent": {
+  "java": [
+   null,
+   "199x62"
+  ],
+  "base": [
+   null,
+   null
+  ],
+  "merge": [
+   null,
+   null
+  ],
+  "tip": [
+   null,
+   "199x62"
+  ],
+  "strict": [
+   "ERR0",
+   "ERR0",
+   "MATCH0"
+  ]
+ },
+ "y9_tab_key": {
+  "java": [
+   null,
+   "121x42"
+  ],
+  "base": [
+   null,
+   "101x42"
+  ],
+  "merge": [
+   null,
+   "141x42"
+  ],
+  "tip": [
+   null,
+   "121x42"
+  ],
+  "strict": [
+   "DIFF8",
+   "DIFF9",
+   "MATCH0"
+  ]
+ },
+ "y9_flow_seq_quotes": {
+  "java": [
+   null,
+   "144x103"
+  ],
+  "base": [
+   null,
+   "144x83"
+  ],
+  "merge": [
+   null,
+   "144x83"
+  ],
+  "tip": [
+   null,
+   "144x103"
+  ],
+  "strict": [
+   "DIFF12",
+   "DIFF12",
+   "MATCH0"
+  ]
+ },
+ "y9_flow_seq_empty": {
+  "java": [
+   null,
+   "115x62"
+  ],
+  "base": [
+   null,
+   "130x62"
+  ],
+  "merge": [
+   null,
+   "130x62"
+  ],
+  "tip": [
+   null,
+   "115x62"
+  ],
+  "strict": [
+   "DIFF7",
+   "DIFF7",
+   "MATCH0"
+  ]
+ },
+ "y9_flow_seq_number": {
+  "java": [
+   null,
+   "146x83"
+  ],
+  "base": [
+   null,
+   "138x83"
+  ],
+  "merge": [
+   null,
+   "138x83"
+  ],
+  "tip": [
+   null,
+   "146x83"
+  ],
+  "strict": [
+   "DIFF11",
+   "DIFF11",
+   "MATCH0"
+  ]
+ },
+ "j9_skinparam_block": {
+  "java": [
+   null,
+   "59x42"
+  ],
+  "base": [
+   null,
+   null
+  ],
+  "merge": [
+   null,
+   null
+  ],
+  "tip": [
+   null,
+   "59x42"
+  ],
+  "strict": [
+   "ERR0",
+   "ERR0",
+   "MATCH0"
+  ]
+ },
+ "y9_hide_then_data": {
+  "java": [
+   null,
+   "58x42"
+  ],
+  "base": [
+   null,
+   null
+  ],
+  "merge": [
+   null,
+   null
+  ],
+  "tip": [
+   null,
+   "58x42"
+  ],
+  "strict": [
+   "ERR0",
+   "ERR0",
+   "MATCH0"
+  ]
+ },
+ "y9_skinparam_after_data": {
+  "java": [
+   null,
+   "359x41"
+  ],
+  "base": [
+   null,
+   null
+  ],
+  "merge": [
+   null,
+   null
+  ],
+  "tip": [
+   null,
+   null
+  ],
+  "strict": [
+   "ERR0",
+   "ERR0",
+   "ERR0"
+  ]
+ },
+ "j9_cr_key": {
+  "java": [
+   null,
+   "85x62"
+  ],
+  "base": [
+   null,
+   "92x62"
+  ],
+  "merge": [
+   null,
+   "85x62"
+  ],
+  "tip": [
+   null,
+   "85x62"
+  ],
+  "strict": [
+   "DIFF11",
+   "DIFF2",
+   "MATCH0"
+  ]
+ }
+}

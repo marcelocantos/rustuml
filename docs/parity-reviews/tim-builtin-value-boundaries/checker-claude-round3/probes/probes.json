@@ -1,0 +1,1027 @@
+{
+ "note": "Rust-only probes, no Java reference yet (staged as batch c3a where listed); run with -pipe from the probe directory",
+ "svg": {
+  "pua_a_control": {
+   "source_sha256": "a8c949515c9e5e1e932372cd2166b890c8a7a88c47a633629789cbc52854f92f",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "0a5a22b7b19de9e9d69bbf08128b5269a1b5739cbda6ca8d4e608c3e772ffd6c",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "a560d235937ac19e021f02563b4a974fc9f4b721ba8d1c93f078c0881afe2a4c",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "a560d235937ac19e021f02563b4a974fc9f4b721ba8d1c93f078c0881afe2a4c",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "pua_b_activity": {
+   "source_sha256": "11f41fa692f414765222efa6a878b8d64b8a3e60a09e8cc186d8c0de40df9764",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "32420e4566d9f0f2ef3767068aaa2e7d95241debf16b5e216ca597f13e183b68",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 1,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "32420e4566d9f0f2ef3767068aaa2e7d95241debf16b5e216ca597f13e183b68",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 1,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdc10) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "pua_b_class_first_carrier": {
+   "source_sha256": "386f3e565dea90feabe126e361ebc756128af9a0d86c9a1df67bdae168ab6476",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "77dd711d25c99d00b31d13c30eef4953c921c05d08e4eaff78b7d483dc72cfec",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 2,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "9c26151518460ab42cf214a53c2d6b46504d171a735a6671ee7948e46f8d3927",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 1,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: Invalid UTF-16 surrogate detected: d800 20 ?\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "pua_b_class_last": {
+   "source_sha256": "6e4e631aeef7f400085708582d2b07d3cd9f4933b217e2db061ded52241ba986",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "325f4ff19d16ee5421d9e1a6eae12192405c9982d6b1ad7072bf8b2baf9126dd",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 2,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "3a14de15acbf40a11b16c5a571ba5a3125a2a5f10e74f991586dd7f4bd41cd73",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 1,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "pua_b_comment_only": {
+   "source_sha256": "36d7818522af1c010d2fb12c55db4759e6f60c8c883e7e6841667cf04ff734b2",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "fd98ad5f28f56675dd7db230e89787964de44855817cdfb1fd1af8051283ae5a",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "fd98ad5f28f56675dd7db230e89787964de44855817cdfb1fd1af8051283ae5a",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "fd98ad5f28f56675dd7db230e89787964de44855817cdfb1fd1af8051283ae5a",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "pua_b_pair_lookalike": {
+   "source_sha256": "02840169a5cc56de601dffec8e9ee9b1d9fae77dbd788514a0f1cc26dc33c931",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "93c0d371a92900bb79a727655bd668945f076d69ffbcb55eb0483d108f755a0f",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 4,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f7c7ffa1b79b87d213dfc8499176e7c682f5b040282f93960823714eff8666af",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 2,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "22468cd36a987d650beb32e647a9dfa3e7140970cc2ced7cc19255ea006cfe4b",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "pua_b_sequence": {
+   "source_sha256": "4a742f17fadf45bdd24155e9d697cbf4c6688f02401da59671f5b4795bafb5f9",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "fb5709446b98ac519b4ed0ce758886565d4b89b895006ac0eb3a8a9fe8abf381",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 1,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "fb5709446b98ac519b4ed0ce758886565d4b89b895006ac0eb3a8a9fe8abf381",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 1,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdff0) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "pua_b_state": {
+   "source_sha256": "22efadcfacb44d4dbb761e5aff9b342203d10b5b70a31439fcb25c3e0045b2db",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "04f06f390387aa5aae6f30737b2a2928590e84a887fe90698b3b6f98fef267d5",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 1,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "04f06f390387aa5aae6f30737b2a2928590e84a887fe90698b3b6f98fef267d5",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 1,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "5c687b39ff36a179d48abc6c375c0f1999ad20c74f245175c7b9403f605e9de6",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "pua_b_strlen": {
+   "source_sha256": "e2ec20f2b64ca166d284cf0da9ad4f9d997ed028c2d77110f4996982817e5155",
+   "6617e48b8-tsvg": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (46033861) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 20 is not a char boundary; it is inside '\\u{10fffd}' (",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "94ba8549c9dd7c37aca8acb744f1240981719b1d34516b89f5ca3f20ac7f01c6",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "9a2137be63e463f67cf94428ca34c7837aa433e700f2566500b4dacc4defddc4",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "pua_b_title": {
+   "source_sha256": "1d17135c89b1ac49455e1a983de63654dcae2a58d0568f802a8ba82942f98c1a",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6f028e611bb114a00cf43664112f1de0272b730ed2af031fb481280e0d19386a",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 1,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6f028e611bb114a00cf43664112f1de0272b730ed2af031fb481280e0d19386a",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 1,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "df55897fecde4cdb3d8eda469ad0cd5c682dd6276f3bfc70279bb64c6d548e1f",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "pua_b_usecase": {
+   "source_sha256": "2180806ddfeddd0b6f6c2d71d3f5f676ca1de4228d794fc93b9e1f2b86ce751c",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ab64433e199b4c28024b15e554495e8dfbc4cfdd2dbe8805c549c7e1ec39ebc4",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 3,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ab64433e199b4c28024b15e554495e8dfbc4cfdd2dbe8805c549c7e1ec39ebc4",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 3,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: Invalid UTF-16 surrogate detected: db00 db00 ?\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "activity_old": {
+   "source_sha256": "d4e2bc63e3dc0726d862c3742b02f29306f23b58766c042453e08bf05f8b9e28",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c16ba613df1bce8a0c12abd6f650192ac545d57c989323dd7debd1528add3b76",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "class_link_label": {
+   "source_sha256": "10120e53cf814bdd0015fc42ba0883bccee8788b5801d0df71e0c58c2b1e2223",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6d78b88b7ba6b398be768f41d7540c0f9c9b9aec70c611dd9e622ebf48ce5038",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 3: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "9587910733d74549a99f3e6debf09e77a7b00dd16c5a6383674edac555db8751",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "component": {
+   "source_sha256": "4424a0634c8911c369be545087eebb7989e8da4b73da611e20efde1cc6da37a6",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "cd837cf68742d18c3216c14ed216d91724b6678d867d0a61f45653d47a2e80ec",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "4226ea3b063fdceb4f13c544e205fc70e1e980a385cb1a4a10b8bd9ffa14879d",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "deployment": {
+   "source_sha256": "8a6bc52ef7526a38bf0f1fc1c203d584847e3265eb161d46bbdf6d9398b37f92",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ffd6f3380f497b361ffdb4945b843a841d65b3cd7bf9260e7e0d0e48efeb1bfd",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ebe6c02013e07c92aaf3ce2a11fd5e38bcf7cf0c54eb1050459ad8975fe035c5",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "gantt": {
+   "source_sha256": "40c2231b8434295198d05740d168d6621c7d341ec7597e3a3b559ebf19e180e2",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f19f248dc17fb45712ab5535aa759af38bb83eb2973ff8e432f4a91a26e53217",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ef9ab8ed6007efec4c97ade9c9d6ada735a212d0dd001dd85459691df0762802",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "json": {
+   "source_sha256": "6a19f8de3a134d26b31f9934d05e52340c2315a91551c99964db68cb8b0c7137",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "ff095ed433737303dcbb67d4500dc121b4406962a73c3097e29e864019b6fbc0",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "7becf1f8a3e86cc0a4b2baeb9dd756dc2237f06557550029ce25c256f53edaba",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "mindmap": {
+   "source_sha256": "ad15cb209ec1cafcf76e0493d8d9a8c51d5949f1eea51b1ed0403cc794b2051a",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "8b55189d9d37059fa650cd8ae44af0e42a28b668e70d088c0d9fc60e0f29929c",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "852286ffbca20b2820f1d6820e05fca3cbd2eaa930599963c6180c6de724dbe7",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "nwdiag": {
+   "source_sha256": "7b33d94a07c289ab45ff60e2c59038f5a5579cf834cc68dfbd71df1ac4d07191",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 3: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "object": {
+   "source_sha256": "b1dd82e054ab40f6ea3052e9bb0a6cc1c4a4562a54d3f7ccf79b1586807cb7c5",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f716a62d9e99d0d8b68c294a627662da2e8ab78f658c78fd25ccf2d4ca6bbf09",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "36df9b0b1822df9d27da3929f4f339c57a76ec7c920fcf134e791f23d3165503",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "salt": {
+   "source_sha256": "48f88d5422f611567cf64486d4f2327e76c2fc1f0edcea94b14c43cc96c6c084",
+   "6617e48b8-tsvg": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (46036010) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char b",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (46036024) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char b",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 101,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "\nthread 'main' (46036048) panicked at /opt/homebrew/Cellar/rust/1.99.1/lib/rustlib/src/rust/library/core/src/str/mod.rs:862:21:\nend byte index 6 is not a char b",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "sequence_participant": {
+   "source_sha256": "cd94d11c081147763a35d6f466d4969502082b76e71d5e5de1a48f75d1fe8bae",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "5308230f162fa52e493e019525f613c28390a73518f2041f28e6dec39f1462b1",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "state_comment": {
+   "source_sha256": "f6d19960630b96eb506c1b3e216aec8b99b4f7ac9b8696fe3eacd7423c901d2b",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "a26cce1bea2e590356b27ddc9c37f1ea26c65dca6f99485a34598c9b54bd87c4",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "84ffc47095f36f5663850f7a09f5512a4b2b45b4c118db6f95660ef15f44ca78",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "timing": {
+   "source_sha256": "59f593a596d614ba1213c531315f1b8b140105b16d74d12a2642866c0be93a44",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f50c2e241f050bdf716ab3a7040088e8da4de3365c96b19181f716395a96f84b",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "c6684d8c8629f5fde4873b0513ec7032f57732b401a1bf3166ff9ceec3bf8a33",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "usecase_actor": {
+   "source_sha256": "bdc1812933fe175856276dd6424afd292a48e71fab12abf52d5987f57be60306",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "a476ae4a17e45e2980f674b22415f2c91c44f8f9fb58eee6427f924dcf63cadc",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  },
+  "wbs": {
+   "source_sha256": "ae21fb15ed58534a54adcd3e6468adbcf40f763e382c3ceec83c099f39d09bb2",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "afd2154755a265be58b9923997970ba438c3841c857fb7051f0a2d109a0f16e0",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "76e4c4f77d6dbd07507736924be350debb759d1ddd0f69228a3958f2bbecb777",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   }
+  }
+ },
+ "formats": {
+  "sur_class_low_end": {
+   "source_sha256": "38de46af67fe931a100b9e45a516087a08fbb060122ef82744b65b03c33f5b12",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "d10bccd99f71928759c1e68c1803fedfe863a41eb14f5de16dbf8a87c5d7b382",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6617e48b8-tpng": {
+    "exit": 0,
+    "stdout_sha256": "dc1197f5ce39aa2385edc0cd5953d2478b95d73d8fe3037adb70ab3518ad0292",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8-tpdf": {
+    "exit": 0,
+    "stdout_sha256": "b35ee38a0806408a287656b29094921312823c9613e87e12d88c2e60eebe73fa",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8-teps": {
+    "exit": 0,
+    "stdout_sha256": "7037b846cb70ae6b3606df0b9dd4852e53d0e756bb0304cf47b447cb1b724970",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8--ast": {
+    "exit": 0,
+    "stdout_sha256": "fcce020c33399979c77e32df6fbbf6d1de59c2270d6f4c51f2296aedad40b9f1",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "da907fcb2df9e9d2f7fc5ed3ef21cd3e13694fd313cebe314809bbb34648bba3",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "4a85499f495a84fcb2e59bf3252a0f720d965839b5d19a8f14c62e765b539e9a",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tpng": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd-tpdf": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd-teps": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd--ast": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd--yaml": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd-ttxt": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tpng": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944-tpdf": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "PDF error: SVG parse error: SVG data parsing failed cause the document does not have a root node\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944-teps": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "EPS error: SVG parse error: SVG data parsing failed cause the document does not have a root node\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944--ast": {
+    "exit": 0,
+    "stdout_sha256": "75cbfa3f3ea6ad6d8b5facf8da2fe416559c1934b3d3a8fa50d64398c55a574f",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944--yaml": {
+    "exit": 0,
+    "stdout_sha256": "4fb7bb90edca6dfd5a6296a523e37b1a55d3645aaef9effb25c3d1745c2cf4b7",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 2
+   },
+   "e6f629944-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "5533ab2e2856b9c2f87ea3de4b5d41483664d0080955eb31b85489b9911074cc",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 1
+   }
+  },
+  "sur_class_high_end": {
+   "source_sha256": "f58ca6015980f82f3c75cd827a68677003927a015ca5c7f411b53488065f1b85",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "388ff2abdf72364f02c08bc24d33d00b5cb1367a8f06ec040e380f0c351595c6",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6617e48b8-tpng": {
+    "exit": 0,
+    "stdout_sha256": "60b258d342ae272feabae502651b86c587a11a893a2b937dc2472ce0cd10922e",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8-tpdf": {
+    "exit": 0,
+    "stdout_sha256": "d25638f58207442cd6e0d1551e68965c16c1080f8724f21dbc59daa9808d95aa",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8-teps": {
+    "exit": 0,
+    "stdout_sha256": "e64a0ac0c4e90815ff87a20a73fd7bce5933f78f5f2205897af2d65d50de5ec0",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8--ast": {
+    "exit": 0,
+    "stdout_sha256": "bf714cba0961ed399f2087f63be63b3fb113d1a6faad75af019a7e2cb3e00dc4",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "9d4d5491bc8fc9756fdb1450b4018507e99b411548e21d05fca5a227badd2f9f",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "e3fc6338f2dcd245b0938040470ac59c1a712f6fefcf25c3e35fb3c6eb4964bb",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tpng": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd-tpdf": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd-teps": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd--ast": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd--yaml": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd-ttxt": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 1: An invalid XML character (Unicode: 0xd83e) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "69f50d6b777adebbbe73db6edef666c480d3a2debc23bb2a4f664118518bec37",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tpng": {
+    "exit": 0,
+    "stdout_sha256": "088d299a85b68fce7254ea0091b719eb2a4fbce1e1846dab1dfbd8e366450f81",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944-tpdf": {
+    "exit": 0,
+    "stdout_sha256": "6359f27d21799a94757c758a56753c2b2fe09e9db948b92bd45ec2d5e1ce3ce9",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944-teps": {
+    "exit": 0,
+    "stdout_sha256": "b37cfdfaef310e0976bc7173850086d4e336f8523e3802b934c7dff61167cab6",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944--ast": {
+    "exit": 0,
+    "stdout_sha256": "3a49e66cdb2c328e458be4d8b00544d7d6ffd04153c0820f7f0f0df4608b3c1d",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944--yaml": {
+    "exit": 0,
+    "stdout_sha256": "65a5ab8152a9b9db19ed5319168e0b365377a72331ac320e66dd558f959d796b",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 2
+   },
+   "e6f629944-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "721f4e29134ddc3c334962bb78c87aeb0c85a6e4fd6be5d83468319b2af418da",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 1
+   }
+  },
+  "sur_activity_low_end": {
+   "source_sha256": "43e1790e8ee48598c7e15cbcb72e1bf2117a42abf700252cae0dc791b2b348ab",
+   "6617e48b8-tsvg": {
+    "exit": 0,
+    "stdout_sha256": "f1e1043ec1bb5ebb19c954874dd466c523c93c1a889e4c7f88486e4486b90ada",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6617e48b8-tpng": {
+    "exit": 0,
+    "stdout_sha256": "afecc647a1f27f000562ba66c4965efe3a31fd788fdd32f51bb434ab7a43d911",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8-tpdf": {
+    "exit": 0,
+    "stdout_sha256": "2239fc9545930ccad188bc9f799649846f2826823288a1a133379d19a7e3b564",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8-teps": {
+    "exit": 0,
+    "stdout_sha256": "3a7d64c840ccd9b30155309ec4b676ee476b73ee27b02d810e43d9c6ce8f3d5c",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8--ast": {
+    "exit": 0,
+    "stdout_sha256": "92807039023c121fb1118aa0c91f2bbc1ed0e11a6c13651e5669a473746b41e8",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8--yaml": {
+    "exit": 0,
+    "stdout_sha256": "06145485aad98b5c3c599b736f77a61dc5072d400f9414d861b84b05981293de",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6617e48b8-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "349324a0d10f74d00fb6696cb6a36b1ef9d5a5a28b6a0988789974628f46f911",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 2: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "6c52f2cfd-tpng": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 2: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd-tpdf": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 2: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd-teps": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 2: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd--ast": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 2: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd--yaml": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 2: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "6c52f2cfd-ttxt": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "parse error: line 2: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944-tsvg": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n",
+    "carrier_scalars_in_stdout": 0,
+    "border_invariant": "n/a"
+   },
+   "e6f629944-tpng": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "PNG error: SVG parse error: SVG data parsing failed cause the document does not have a root node\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944-tpdf": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "PDF error: SVG parse error: SVG data parsing failed cause the document does not have a root node\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944-teps": {
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_head": "EPS error: SVG parse error: SVG data parsing failed cause the document does not have a root node\n",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944--ast": {
+    "exit": 0,
+    "stdout_sha256": "9216fbe755455c5e191a4f77c58c77b2e56ccbdb66237eac06190f9d2cf62b9f",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 0
+   },
+   "e6f629944--yaml": {
+    "exit": 0,
+    "stdout_sha256": "62a74059add93ff752bf9038796d55567e6e3c5c6f941fce6198d324e1ca2835",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 2
+   },
+   "e6f629944-ttxt": {
+    "exit": 0,
+    "stdout_sha256": "7630c009334baae083ead46133fb185e55c4637b818ac944bb146121c9f3b5cb",
+    "stderr_head": "",
+    "carrier_scalars_in_stdout": 1
+   }
+  }
+ }
+}

@@ -1,0 +1,709 @@
+[
+ {
+  "name": "theme_plain_activity",
+  "intended_valid": true,
+  "axes": [
+   "unshipped theme plain",
+   "activity"
+  ],
+  "source": [
+   "@startuml",
+   "!theme plain",
+   "start",
+   ":Knead dough;",
+   "if (risen?) then (yes)",
+   "  :Bake;",
+   "endif",
+   "stop",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "theme_mono_sequence",
+  "intended_valid": true,
+  "axes": [
+   "unshipped theme mono",
+   "sequence"
+  ],
+  "source": [
+   "@startuml",
+   "!theme mono",
+   "Miller -> Baker : flour",
+   "Baker --> Miller : loaf",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "theme_amiga_class",
+  "intended_valid": true,
+  "axes": [
+   "unshipped theme amiga",
+   "class"
+  ],
+  "source": [
+   "@startuml",
+   "!theme amiga",
+   "class Granary",
+   "class Mill",
+   "Granary --> Mill",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "theme_plain_state",
+  "intended_valid": true,
+  "axes": [
+   "unshipped theme plain",
+   "state"
+  ],
+  "source": [
+   "@startuml",
+   "!theme plain",
+   "[*] --> Sift",
+   "Sift --> Store",
+   "Store --> [*]",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "theme_mono_usecase",
+  "intended_valid": true,
+  "axes": [
+   "unshipped theme mono",
+   "usecase"
+  ],
+  "source": [
+   "@startuml",
+   "!theme mono",
+   "actor Farmer",
+   "Farmer --> (Thresh)",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "theme_amiga_component",
+  "intended_valid": true,
+  "axes": [
+   "unshipped theme amiga",
+   "component"
+  ],
+  "source": [
+   "@startuml",
+   "!theme amiga",
+   "[Hopper] --> [Chute]",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "theme_plain_variable",
+  "intended_valid": true,
+  "axes": [
+   "unshipped theme name from a TIM variable"
+  ],
+  "source": [
+   "@startuml",
+   "!$look = \"plain\"",
+   "!theme $look",
+   "class Sieve",
+   "class Sack",
+   "Sieve --> Sack",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "theme_mono_inactive",
+  "intended_valid": true,
+  "axes": [
+   "unshipped theme inside an inactive !if (no marker)"
+  ],
+  "source": [
+   "@startuml",
+   "!if 0",
+   "!theme mono",
+   "!endif",
+   "class Quern",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "theme_plain_then_cerulean",
+  "intended_valid": true,
+  "axes": [
+   "unshipped then bundled theme"
+  ],
+  "source": [
+   "@startuml",
+   "!theme plain",
+   "!theme cerulean",
+   "class Kiln",
+   "class Oast",
+   "Kiln --> Oast",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "intval_arabic_indic_signed",
+  "intended_valid": true,
+  "axes": [
+   "Arabic-Indic digits",
+   "leading minus and plus"
+  ],
+  "source": [
+   "@startuml",
+   "!$a = %intval(\"-٣٢١\")",
+   "!$b = %intval(\"+٧\")",
+   "class \"$a / $b\" as Signed",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "intval_extended_arabic_bengali",
+  "intended_valid": true,
+  "axes": [
+   "extended Arabic-Indic",
+   "Bengali",
+   "Thai",
+   "mixed scripts"
+  ],
+  "source": [
+   "@startuml",
+   "!$a = %intval(\"۴۵\")",
+   "!$b = %intval(\"১๒3\")",
+   "class \"$a and $b\" as Mixed",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "intval_fullwidth_bounds",
+  "intended_valid": true,
+  "axes": [
+   "fullwidth digits",
+   "Integer.MAX_VALUE and MIN_VALUE"
+  ],
+  "source": [
+   "@startuml",
+   "!$a = %intval(\"２１４７４８３６４７\")",
+   "!$b = %intval(\"-２１４７４８３６４８\")",
+   "class \"$a $b\" as Bounds",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "intval_myanmar_tai_laing",
+  "intended_valid": true,
+  "axes": [
+   "U+A9F0 block (Unicode 7)"
+  ],
+  "source": [
+   "@startuml",
+   "!$a = %intval(\"꧱꧲\")",
+   "class \"$a\" as Laing",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "intval_fullwidth_overflow",
+  "intended_valid": false,
+  "axes": [
+   "fullwidth MAX_VALUE+1 overflow"
+  ],
+  "source": [
+   "@startuml",
+   "!$a = %intval(\"２１４７４８３６４８\")",
+   "class \"$a\" as Over",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "intval_supplementary_digit",
+  "intended_valid": false,
+  "axes": [
+   "supplementary Nd digit U+1D7CF rejected by Character.digit(char)"
+  ],
+  "source": [
+   "@startuml",
+   "!$a = %intval(\"𝟏\")",
+   "class \"$a\" as Math",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "intval_superscript_digit",
+  "intended_valid": false,
+  "axes": [
+   "No category superscript two"
+  ],
+  "source": [
+   "@startuml",
+   "!$a = %intval(\"²\")",
+   "class \"$a\" as Super",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "intval_double_sign",
+  "intended_valid": false,
+  "axes": [
+   "sign then sign"
+  ],
+  "source": [
+   "@startuml",
+   "!$a = %intval(\"+-٥\")",
+   "class \"$a\" as Twice",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "surrogate_high_class",
+  "intended_valid": false,
+  "axes": [
+   "lone high surrogate",
+   "class display"
+  ],
+  "source": [
+   "@startuml",
+   "class \"x%substr(\"🚀\",0,1)\" as High",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "surrogate_upper_sequence",
+  "intended_valid": false,
+  "axes": [
+   "lone low surrogate",
+   "%upper",
+   "sequence message"
+  ],
+  "source": [
+   "@startuml",
+   "Alice -> Bob : %upper(%substr(\"𝒜\",1,1))",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "surrogate_activity_label",
+  "intended_valid": false,
+  "axes": [
+   "lone high surrogate",
+   "activity label",
+   "concatenation"
+  ],
+  "source": [
+   "@startuml",
+   "start",
+   ":%substr(\"😀\",0,1)tail;",
+   "stop",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "surrogate_unused_variable",
+  "intended_valid": true,
+  "axes": [
+   "lone surrogate held in a variable never displayed"
+  ],
+  "source": [
+   "@startuml",
+   "!$a = %substr(\"🚀\",1,1)",
+   "class Quiet",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "surrogate_rejoined_pair",
+  "intended_valid": true,
+  "axes": [
+   "high and low units re-joined"
+  ],
+  "source": [
+   "@startuml",
+   "!$a = %substr(\"🚀\",0,1) + %substr(\"🚀\",1,1)",
+   "class \"$a\" as Joined",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "surrogate_in_comment_line",
+  "intended_valid": true,
+  "axes": [
+   "residue probe: lone surrogate only in a ' comment line"
+  ],
+  "source": [
+   "@startuml",
+   "!$a = %substr(\"🚀\",1,1)",
+   "' note $a",
+   "class Commented",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "rc_exitpoint_depth1",
+  "intended_valid": true,
+  "axes": [
+   "cluster autarky",
+   "exitPoint leaf",
+   "crossing links"
+  ],
+  "source": [
+   "@startuml",
+   "state Forge {",
+   "  state vent <<exitPoint>>",
+   "  Melt --> vent",
+   "}",
+   "[*] --> Melt",
+   "vent --> Cool",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "rc_outputpin_lowercase",
+  "intended_valid": true,
+  "axes": [
+   "cluster autarky",
+   "outputpin lowercase stereotype",
+   "no root links"
+  ],
+  "source": [
+   "@startuml",
+   "state Lathe {",
+   "  state chips <<outputpin>>",
+   "  state Turn",
+   "  Turn --> chips",
+   "}",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "rc_root_note_depth2",
+  "intended_valid": true,
+  "axes": [
+   "cluster autarky",
+   "root note on a depth-2 leaf"
+  ],
+  "source": [
+   "@startuml",
+   "state Yard {",
+   "  state Dock {",
+   "    Load --> Ship",
+   "  }",
+   "}",
+   "note left of Ship : crate",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "rc_inner_note_autarkic",
+  "intended_valid": true,
+  "axes": [
+   "note declared inside the group (pure inner link, image)"
+  ],
+  "source": [
+   "@startuml",
+   "state Loft {",
+   "  Dry --> Bale",
+   "  note right of Bale : tied",
+   "}",
+   "Loft --> Cart",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "rc_entry_inside_autarkic_depth3",
+  "intended_valid": true,
+  "axes": [
+   "non-autarkic groups inside an autarkic image at depth 3",
+   "entryPoint"
+  ],
+  "source": [
+   "@startuml",
+   "state Plant {",
+   "  state Hall {",
+   "    state Bay {",
+   "      state door <<entryPoint>>",
+   "      door --> Weld",
+   "    }",
+   "    Weld --> Paint",
+   "  }",
+   "  Paint --> Pack",
+   "}",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "rc_quark_reuse_renamed",
+  "intended_valid": true,
+  "axes": [
+   "root quark reuse",
+   "childless outer group"
+  ],
+  "source": [
+   "@startuml",
+   "state Pier",
+   "state Harbor {",
+   "  state Pier {",
+   "    [*] --> Moor",
+   "    Moor --> Cast",
+   "  }",
+   "}",
+   "Cast --> Sea",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "rc_two_entry_points",
+  "intended_valid": true,
+  "axes": [
+   "two entryPoint leaves",
+   "root start links"
+  ],
+  "source": [
+   "@startuml",
+   "state Gatehouse {",
+   "  state north <<entryPoint>>",
+   "  state south <<entryPoint>>",
+   "  north --> Hall",
+   "  south --> Hall",
+   "}",
+   "[*] --> north",
+   "[*] --> south",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "rh_suffix_nested",
+  "intended_valid": true,
+  "axes": [
+   "X[H] on a nested group",
+   "X[H*] on its parent"
+  ],
+  "source": [
+   "@startuml",
+   "state Archive {",
+   "  state Stacks {",
+   "    [*] --> Shelf",
+   "  }",
+   "}",
+   "Clerk --> Stacks[H]",
+   "Clerk --> Archive[H*]",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "rh_suffix_undeclared",
+  "intended_valid": true,
+  "axes": [
+   "X[H] naming an undeclared group"
+  ],
+  "source": [
+   "@startuml",
+   "Visitor --> Gallery[H]",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "rh_deep_depth3",
+  "intended_valid": true,
+  "axes": [
+   "[H*] at depth 3",
+   "crossing link into the innermost group"
+  ],
+  "source": [
+   "@startuml",
+   "state Ring1 {",
+   "  state Ring2 {",
+   "    state Ring3 {",
+   "      [*] --> Core",
+   "      Core --> [H*]",
+   "    }",
+   "  }",
+   "}",
+   "Probe --> Core",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "dep_bracket_spaces_links",
+  "intended_valid": true,
+  "axes": [
+   "bare bracket declaration with spaces",
+   "quoted and bracket endpoints"
+  ],
+  "source": [
+   "@startuml",
+   "node \"Grist Hall\"",
+   "[Flour Bin]",
+   "[Flour Bin] --> \"Grist Hall\"",
+   "\"Flour Bin\" ..> [Sack Room]",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "dep_bracket_in_node",
+  "intended_valid": true,
+  "axes": [
+   "bracket declaration inside a node container"
+  ],
+  "source": [
+   "@startuml",
+   "node Barn {",
+   "  [Hay Loft]",
+   "}",
+   "[Hay Loft] --> [Stable Door]",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "dep_bracket_alias",
+  "intended_valid": true,
+  "axes": [
+   "bracket declaration with alias (unchanged)"
+  ],
+  "source": [
+   "@startuml",
+   "[Corn Crib] as CC",
+   "node Silo",
+   "CC --> Silo",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "dep_bracket_nospace",
+  "intended_valid": true,
+  "axes": [
+   "bracket declaration without spaces (unchanged)"
+  ],
+  "source": [
+   "@startuml",
+   "[Mash]",
+   "[Mash] --> [Still]",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "stroke_arrow_palette",
+  "intended_valid": true,
+  "axes": [
+   "per-arrow palette name"
+  ],
+  "source": [
+   "@startuml",
+   "state Rinse",
+   "state Spin",
+   "Rinse -[#Teal]-> Spin",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "stroke_arrow_alpha",
+  "intended_valid": true,
+  "axes": [
+   "per-arrow 8-digit alpha"
+  ],
+  "source": [
+   "@startuml",
+   "state Rinse",
+   "state Spin",
+   "Rinse -[#80FF0000]-> Spin",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "stroke_arrow_transparent_label",
+  "intended_valid": true,
+  "axes": [
+   "per-arrow transparent",
+   "label kept"
+  ],
+  "source": [
+   "@startuml",
+   "state Rinse",
+   "state Spin",
+   "Rinse -[#transparent]-> Spin : quiet",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "stroke_arrow_css4_dashed",
+  "intended_valid": true,
+  "axes": [
+   "per-arrow CSS4-only name",
+   "dashed"
+  ],
+  "source": [
+   "@startuml",
+   "state Rinse",
+   "state Spin",
+   "Rinse -[#RebeccaPurple,dashed]-> Spin",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "stroke_style_arrow_transparent",
+  "intended_valid": true,
+  "axes": [
+   "<style> arrow LineColor transparent"
+  ],
+  "source": [
+   "@startuml",
+   "<style>",
+   "arrow {",
+   "  LineColor transparent",
+   "}",
+   "</style>",
+   "state Rinse",
+   "state Spin",
+   "Rinse --> Spin",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "stroke_skinparam_zero_alpha_bold",
+  "intended_valid": true,
+  "axes": [
+   "skinparam ArrowColor zero alpha",
+   "bold arrow"
+  ],
+  "source": [
+   "@startuml",
+   "skinparam ArrowColor #00FF0000",
+   "state Rinse",
+   "state Spin",
+   "Rinse -[bold]-> Spin",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "stroke_stereo_style_renamed",
+  "intended_valid": true,
+  "axes": [
+   "<style> stereotype LineColor CSS4-only"
+  ],
+  "source": [
+   "@startuml",
+   "<style>",
+   ".Ember {",
+   "  LineColor RebeccaPurple",
+   "}",
+   "</style>",
+   "state Coal <<Ember>>",
+   "state Ash",
+   "Coal --> Ash",
+   "@enduml"
+  ]
+ },
+ {
+  "name": "stroke_stereo_skinparam_renamed",
+  "intended_valid": true,
+  "axes": [
+   "skinparam state<<S>> BorderColor CSS4-only"
+  ],
+  "source": [
+   "@startuml",
+   "skinparam state<<Frost>> BorderColor RebeccaPurple",
+   "state Ice <<Frost>>",
+   "state Melt",
+   "Ice --> Melt",
+   "@enduml"
+  ]
+ }
+]

@@ -1,0 +1,4 @@
+@startwbs
+* Plan%substr("🦉",0,1)
+** Task
+@endwbs

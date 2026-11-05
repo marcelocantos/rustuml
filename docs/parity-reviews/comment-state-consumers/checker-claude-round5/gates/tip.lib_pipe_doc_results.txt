@@ -1,0 +1,7 @@
+tip.doc_claims.log:test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+tip.pipe_mode.log:test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 55.36s
+tip.lib.log:test result: ok. 41 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+tip.lib.log:test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+tip.lib.log:test result: ok. 31 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.36s
+tip.lib.log:test result: ok. 660 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+tip.lib.log:test result: ok. 842 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s

@@ -1,0 +1,5 @@
+@startuml
+object Oak
+object Fir
+Oak --> Fir
+@enduml

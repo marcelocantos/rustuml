@@ -1,0 +1,12 @@
+merge/rustuml-render 19 {'rustuml-render': 19}
+merge/rustuml-parser 1 {'rustuml-parser': 1}
+merge/rustuml-layout 0 {}
+merge/rustuml-oracle 1 {'rustuml-oracle': 1}
+merge/rustuml 0 {}
+merge/rustuml-math 0 {}
+tip/rustuml-render 19 {'rustuml-render': 19}
+tip/rustuml-parser 1 {'rustuml-parser': 1}
+tip/rustuml-layout 0 {}
+tip/rustuml-oracle 1 {'rustuml-oracle': 1}
+tip/rustuml 0 {}
+tip/rustuml-math 0 {}

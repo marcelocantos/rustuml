@@ -1,0 +1,16 @@
+@startuml
+state Depot {
+  state Bay {
+    state dock <<entryPoint>>
+    dock --> Lift
+    note right of Lift : one
+  }
+  state Yard {
+    state gate <<entryPoint>>
+    gate --> Crane
+    note right of Crane : two
+  }
+  Lift --> Crane
+  Crane --> Exit
+}
+@enduml

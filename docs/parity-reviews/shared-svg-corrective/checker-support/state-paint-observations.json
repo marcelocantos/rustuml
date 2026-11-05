@@ -1,0 +1,2170 @@
+[
+  {
+    "id": "fresh/fill_empty_7a3c9100",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "40",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "63.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c9100",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_empty_7a3c9101",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.00392",
+          "height": "40",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "63.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c9101",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.00392",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_empty_7a3c917f",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "40",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "63.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_empty_7a3c91fe",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.99608",
+          "height": "40",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "63.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c91fe",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.99608",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_empty_7a3c91ff",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "height": "40",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "63.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c91ff",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_empty_9b4",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#99BB44",
+          "height": "40",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "63.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#99BB44",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#99BB44",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_empty_rebeccapurple",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#FFFFFF",
+          "height": "40",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "63.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#663399",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#663399",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_empty_transparent",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "40",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "63.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#FFFFFF",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#FFFFFF",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_body_7a3c9100",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c9100",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_body_7a3c9101",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.00392",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c9101",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.00392",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_body_7a3c917f",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_body_7a3c91fe",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.99608",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c91fe",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.99608",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_body_7a3c91ff",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c91ff",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_body_9b4",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#99BB44",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#99BB44",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#99BB44",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_body_rebeccapurple",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#FFFFFF",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#663399",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#663399",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/fill_body_transparent",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#FFFFFF",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#FFFFFF",
+          "height": "64.7539",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "73.6143",
+          "x": "7",
+          "y": "7"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/shape_composite",
+    "java": [
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M19.5,7 L80.5,7 A12.5,12.5 0 0 1 93,19.5 L93,33.4883 L7,33.4883 L7,19.5 A12.5,12.5 0 0 1 19.5,7",
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "102.1094",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "86",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "50.6211",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "19",
+          "y": "45.4883"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M19.5,7 L80.5,7 A12.5,12.5 0 0 1 93,19.5 L93,33.4883 L7,33.4883 L7,19.5 A12.5,12.5 0 0 1 19.5,7",
+          "fill": "#7a3c917f"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "102.1094",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "86",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50.6211",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "19",
+          "y": "45.4883"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M19.5,7 L80.5,7 A12.5,12.5 0 0 1 93,19.5 L93,33.4883 L7,33.4883 L7,19.5 A12.5,12.5 0 0 1 19.5,7",
+          "fill": "#7a3c917f"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "102.1094",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "86",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50.6211",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "19",
+          "y": "45.4883"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/shape_concurrent",
+    "java": [
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M19.5,7 L85.4316,7 A12.5,12.5 0 0 1 97.9316,19.5 L97.9316,33.4883 L7,33.4883 L7,19.5 A12.5,12.5 0 0 1 19.5,7",
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "166.4883",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "90.9316",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "19",
+          "y": "45.4883"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "54.9316",
+          "x": "19",
+          "y": "110.4883"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M19.5,7 L85.4316,7 A12.5,12.5 0 0 1 97.9316,19.5 L97.9316,33.4883 L7,33.4883 L7,19.5 A12.5,12.5 0 0 1 19.5,7",
+          "fill": "#7a3c917f"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "166.4883",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "90.9316",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "19",
+          "y": "45.4883"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "54.9316",
+          "x": "19.0042",
+          "y": "110.4883"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M19.5,7 L85.4316,7 A12.5,12.5 0 0 1 97.9316,19.5 L97.9316,33.4883 L7,33.4883 L7,19.5 A12.5,12.5 0 0 1 19.5,7",
+          "fill": "#7a3c917f"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "166.4883",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "90.9316",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "19",
+          "y": "45.4883"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "54.9316",
+          "x": "19.0042",
+          "y": "110.4883"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/shape_history",
+    "java": [
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M19.5,7 L80.5,7 A12.5,12.5 0 0 1 93,19.5 L93,33.4883 L7,33.4883 L7,19.5 A12.5,12.5 0 0 1 19.5,7",
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "214.4883",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "86",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "19",
+          "y": "158.4883"
+        }
+      },
+      {
+        "tag": "ellipse",
+        "attributes": {
+          "cx": "44",
+          "cy": "54.4883",
+          "fill": "#222222",
+          "rx": "10",
+          "ry": "10",
+          "style": "stroke:#222222;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "ellipse",
+        "attributes": {
+          "cx": "44",
+          "cy": "111.4883",
+          "fill": "#F1F1F1",
+          "rx": "11",
+          "ry": "11",
+          "style": "stroke:#181818;stroke-width:0.5;"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M44,64.5683 C44,74.3383 44,83.8283 44,94.0783",
+          "fill": "none",
+          "id": "*start*Copse-to-*historical*Copse",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "44,100.0783,48,91.0783,44,95.0783,40,91.0783,44,100.0783",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M44,122.8183 C44,132.0983 44,140.0883 44,152.1883",
+          "fill": "none",
+          "id": "*historical*Copse-to-Fern",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "44,158.1883,48,149.1883,44,153.1883,40,149.1883,44,158.1883",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M19.5,7 L166.5,7 A12.5,12.5 0 0 1 179,19.5 L179,28.4883 L7,28.4883 L7,19.5 A12.5,12.5 0 0 1 19.5,7",
+          "fill": "#7a3c917f"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "117",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "172",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "31",
+          "y": "50"
+        }
+      },
+      {
+        "tag": "ellipse",
+        "attributes": {
+          "cx": "126",
+          "cy": "75",
+          "fill": "#222222",
+          "rx": "10",
+          "ry": "10",
+          "style": "stroke:#222222;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M123.14,84.84 C117.88,101.06 108.369,130.392 100.669,154.162",
+          "fill": "none",
+          "id": "*start*Copse-to-[H]Copse",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "98.82,159.87,105.3989,152.5407,100.3609,155.1133,97.7882,150.0753,98.82,159.87",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M83.17,159.84 C77.41,142.08 71.472,123.727 65.702,105.947",
+          "fill": "none",
+          "id": "[H]Copse-to-Fern",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "63.85,100.24,62.8234,110.0352,65.3934,104.9958,70.4327,107.5658,63.85,100.24",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M19.5,7 L166.5,7 A12.5,12.5 0 0 1 179,19.5 L179,28.4883 L7,28.4883 L7,19.5 A12.5,12.5 0 0 1 19.5,7",
+          "fill": "#7a3c917f"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "117",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "172",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "31",
+          "y": "50"
+        }
+      },
+      {
+        "tag": "ellipse",
+        "attributes": {
+          "cx": "126",
+          "cy": "75",
+          "fill": "#222222",
+          "rx": "10",
+          "ry": "10",
+          "style": "stroke:#222222;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M123.14,84.84 C117.88,101.06 108.369,130.392 100.669,154.162",
+          "fill": "none",
+          "id": "*start*Copse-to-[H]Copse",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "98.82,159.87,105.3989,152.5407,100.3609,155.1133,97.7882,150.0753,98.82,159.87",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M83.17,159.84 C77.41,142.08 71.472,123.727 65.702,105.947",
+          "fill": "none",
+          "id": "[H]Copse-to-Fern",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "63.85,100.24,62.8234,110.0352,65.3934,104.9958,70.4327,107.5658,63.85,100.24",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/shape_choice",
+    "java": [
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#F1F1F1",
+          "points": "32,6,44,18,32,30,20,18,32,6",
+          "style": "stroke:#181818;stroke-width:0.5;"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "7",
+          "y": "90"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M32,30.65 C32,45.31 32,64.88 32,83.84",
+          "fill": "none",
+          "id": "Branch-to-Fern",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "32,89.84,36,80.84,32,84.84,28,80.84,32,89.84",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "points": "32,6,44,18,32,30,20,18,32,6",
+          "style": "stroke:#181818;stroke-width:0.5;"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "7",
+          "y": "90"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M32,30.65 C32,45.31 32,64.88 32,83.84",
+          "fill": "none",
+          "id": "Branch-to-Fern",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "32,89.84,36,80.84,32,84.84,28,80.84,32,89.84",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "points": "32,6,44,18,32,30,20,18,32,6",
+          "style": "stroke:#181818;stroke-width:0.5;"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "7",
+          "y": "90"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M32,30.65 C32,45.31 32,64.88 32,83.84",
+          "fill": "none",
+          "id": "Branch-to-Fern",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "32,89.84,36,80.84,32,84.84,28,80.84,32,89.84",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/shape_fork",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#555555",
+          "height": "8",
+          "style": "stroke:none;stroke-width:1;",
+          "width": "80",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "22",
+          "y": "75"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M47,15.3 C47,24.93 47,47.58 47,68.69",
+          "fill": "none",
+          "id": "Split-to-Fern",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "47,74.69,51,65.69,47,69.69,43,65.69,47,74.69",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#555555",
+          "height": "8",
+          "style": "stroke:none;stroke-width:1;",
+          "width": "80",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "22",
+          "y": "75"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M47,15.3 C47,24.93 47,47.58 47,68.69",
+          "fill": "none",
+          "id": "Split-to-Fern",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "47,74.69,51,65.69,47,69.69,43,65.69,47,74.69",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#555555",
+          "height": "8",
+          "style": "stroke:none;stroke-width:1;",
+          "width": "80",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "22",
+          "y": "75"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M47,15.3 C47,24.93 47,47.58 47,68.69",
+          "fill": "none",
+          "id": "Split-to-Fern",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "47,74.69,51,65.69,47,69.69,43,65.69,47,74.69",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/shape_join",
+    "java": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#555555",
+          "height": "8",
+          "style": "stroke:none;stroke-width:1;",
+          "width": "80",
+          "x": "7",
+          "y": "117"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "22",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M47,57.23 C47,78.35 47,101.06 47,110.69",
+          "fill": "none",
+          "id": "Fern-to-Merge",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "47,116.69,51,107.69,47,111.69,43,107.69,47,116.69",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#555555",
+          "height": "8",
+          "style": "stroke:none;stroke-width:1;",
+          "width": "80",
+          "x": "7",
+          "y": "117"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "22",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M47,57.23 C47,78.35 47,101.06 47,110.69",
+          "fill": "none",
+          "id": "Fern-to-Merge",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "47,116.69,51,107.69,47,111.69,43,107.69,47,116.69",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#555555",
+          "height": "8",
+          "style": "stroke:none;stroke-width:1;",
+          "width": "80",
+          "x": "7",
+          "y": "117"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "22",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M47,57.23 C47,78.35 47,101.06 47,110.69",
+          "fill": "none",
+          "id": "Fern-to-Merge",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "47,116.69,51,107.69,47,111.69,43,107.69,47,116.69",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/shape_deep_history",
+    "java": [
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M19.5,7 L80.5,7 A12.5,12.5 0 0 1 93,19.5 L93,33.4883 L7,33.4883 L7,19.5 A12.5,12.5 0 0 1 19.5,7",
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "214.4883",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "86",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7A3C91",
+          "fill-opacity": "0.49804",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "19",
+          "y": "158.4883"
+        }
+      },
+      {
+        "tag": "ellipse",
+        "attributes": {
+          "cx": "44",
+          "cy": "54.4883",
+          "fill": "#222222",
+          "rx": "10",
+          "ry": "10",
+          "style": "stroke:#222222;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "ellipse",
+        "attributes": {
+          "cx": "44",
+          "cy": "111.4883",
+          "fill": "#F1F1F1",
+          "rx": "11",
+          "ry": "11",
+          "style": "stroke:#181818;stroke-width:0.5;"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M44,64.5683 C44,74.3383 44,83.8283 44,94.0783",
+          "fill": "none",
+          "id": "*start*Copse-to-*deephistory*Copse",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "44,100.0783,48,91.0783,44,95.0783,40,91.0783,44,100.0783",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M44,122.8183 C44,132.0983 44,140.0883 44,152.1883",
+          "fill": "none",
+          "id": "*deephistory*Copse-to-Fern",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "44,158.1883,48,149.1883,44,153.1883,40,149.1883,44,158.1883",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M19.5,7 L166.5,7 A12.5,12.5 0 0 1 179,19.5 L179,28.4883 L7,28.4883 L7,19.5 A12.5,12.5 0 0 1 19.5,7",
+          "fill": "#7a3c917f"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "117",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "172",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "31",
+          "y": "50"
+        }
+      },
+      {
+        "tag": "ellipse",
+        "attributes": {
+          "cx": "126",
+          "cy": "75",
+          "fill": "#222222",
+          "rx": "10",
+          "ry": "10",
+          "style": "stroke:#222222;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M123.14,84.84 C117.88,101.06 108.369,130.392 100.669,154.162",
+          "fill": "none",
+          "id": "*start*Copse-to-[H*]Copse",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "98.82,159.87,105.3989,152.5407,100.3609,155.1133,97.7882,150.0753,98.82,159.87",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M83.17,159.84 C77.41,142.08 71.472,123.727 65.702,105.947",
+          "fill": "none",
+          "id": "[H*]Copse-to-Fern",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "63.85,100.24,62.8234,110.0352,65.3934,104.9958,70.4327,107.5658,63.85,100.24",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M19.5,7 L166.5,7 A12.5,12.5 0 0 1 179,19.5 L179,28.4883 L7,28.4883 L7,19.5 A12.5,12.5 0 0 1 19.5,7",
+          "fill": "#7a3c917f"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "none",
+          "height": "117",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "172",
+          "x": "7",
+          "y": "7"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#7a3c917f",
+          "height": "50",
+          "rx": "12.5",
+          "ry": "12.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "50",
+          "x": "31",
+          "y": "50"
+        }
+      },
+      {
+        "tag": "ellipse",
+        "attributes": {
+          "cx": "126",
+          "cy": "75",
+          "fill": "#222222",
+          "rx": "10",
+          "ry": "10",
+          "style": "stroke:#222222;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M123.14,84.84 C117.88,101.06 108.369,130.392 100.669,154.162",
+          "fill": "none",
+          "id": "*start*Copse-to-[H*]Copse",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "98.82,159.87,105.3989,152.5407,100.3609,155.1133,97.7882,150.0753,98.82,159.87",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M83.17,159.84 C77.41,142.08 71.472,123.727 65.702,105.947",
+          "fill": "none",
+          "id": "[H*]Copse-to-Fern",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "63.85,100.24,62.8234,110.0352,65.3934,104.9958,70.4327,107.5658,63.85,100.24",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ]
+  },
+  {
+    "id": "fresh/shape_round",
+    "java": [
+      {
+        "tag": "ellipse",
+        "attributes": {
+          "cx": "20",
+          "cy": "97",
+          "fill": "none",
+          "rx": "11",
+          "ry": "11",
+          "style": "stroke:#222222;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "ellipse",
+        "attributes": {
+          "cx": "20",
+          "cy": "97",
+          "fill": "#222222",
+          "rx": "6",
+          "ry": "6",
+          "style": "stroke:#222222;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "ellipse",
+        "attributes": {
+          "cx": "20",
+          "cy": "16",
+          "fill": "#222222",
+          "rx": "10",
+          "ry": "10",
+          "style": "stroke:#222222;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "path",
+        "attributes": {
+          "d": "M20,26.37 C20,41.25 20,64.17 20,79.64",
+          "fill": "none",
+          "id": "Start-to-End",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "20,85.64,24,76.64,20,80.64,16,76.64,20,85.64",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ],
+    "before": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#000000",
+          "fill-opacity": "0.00000",
+          "height": "34",
+          "width": "8",
+          "x": "23.7363",
+          "y": "36.4883"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#000000",
+          "fill-opacity": "0.00000",
+          "height": "34",
+          "width": "8",
+          "x": "76.0166",
+          "y": "36.4883"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#E2E2F0",
+          "height": "30.4883",
+          "rx": "2.5",
+          "ry": "2.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "45.4727",
+          "x": "5",
+          "y": "5"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#E2E2F0",
+          "height": "30.4883",
+          "rx": "2.5",
+          "ry": "2.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "45.4727",
+          "x": "5",
+          "y": "69.4883"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#E2E2F0",
+          "height": "30.4883",
+          "rx": "2.5",
+          "ry": "2.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "39.0879",
+          "x": "60.4727",
+          "y": "5"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#E2E2F0",
+          "height": "30.4883",
+          "rx": "2.5",
+          "ry": "2.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "39.0879",
+          "x": "60.4727",
+          "y": "69.4883"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "68.0166,48.4883,78.0166,52.4883,68.0166,56.4883,72.0166,52.4883",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ],
+    "after": [
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#000000",
+          "fill-opacity": "0.00000",
+          "height": "34",
+          "width": "8",
+          "x": "23.7363",
+          "y": "36.4883"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#000000",
+          "fill-opacity": "0.00000",
+          "height": "34",
+          "width": "8",
+          "x": "76.0166",
+          "y": "36.4883"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#E2E2F0",
+          "height": "30.4883",
+          "rx": "2.5",
+          "ry": "2.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "45.4727",
+          "x": "5",
+          "y": "5"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#E2E2F0",
+          "height": "30.4883",
+          "rx": "2.5",
+          "ry": "2.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "45.4727",
+          "x": "5",
+          "y": "69.4883"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#E2E2F0",
+          "height": "30.4883",
+          "rx": "2.5",
+          "ry": "2.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "39.0879",
+          "x": "60.4727",
+          "y": "5"
+        }
+      },
+      {
+        "tag": "rect",
+        "attributes": {
+          "fill": "#E2E2F0",
+          "height": "30.4883",
+          "rx": "2.5",
+          "ry": "2.5",
+          "style": "stroke:#181818;stroke-width:0.5;",
+          "width": "39.0879",
+          "x": "60.4727",
+          "y": "69.4883"
+        }
+      },
+      {
+        "tag": "polygon",
+        "attributes": {
+          "fill": "#181818",
+          "points": "68.0166,48.4883,78.0166,52.4883,68.0166,56.4883,72.0166,52.4883",
+          "style": "stroke:#181818;stroke-width:1;"
+        }
+      }
+    ]
+  }
+]

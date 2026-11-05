@@ -1,0 +1,15 @@
+{
+  "version": "0.20.0",
+  "files": [
+    {
+      "path": "/Users/marcelo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/roxmltree-0.20.0/src/parse.rs",
+      "sha256": "83c0102685f26de8e31128f0c058901ab187f517242f7dd08644deba5cfdbcde"
+    },
+    {
+      "path": "/Users/marcelo/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/roxmltree-0.20.0/src/tokenizer.rs",
+      "sha256": "3ceb27053e862bf7b856ee85b5bed59774bc7519abd14c6e16f9c8f41d6aedc0"
+    }
+  ],
+  "source_boundary": "parse.rs315\u2013345 optional DTD policy; tokenizer.rs390\u2013430 consumes external identifiers,471\u2013504 external entity definitions yield None. No resolver/network/filesystem access.",
+  "no_external_dtd_or_entity_fetched_or_resolved": true
+}

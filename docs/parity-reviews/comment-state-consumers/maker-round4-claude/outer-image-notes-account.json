@@ -1,0 +1,33 @@
+{
+ "schema_version": 1,
+ "mechanism": "comment-state-consumers",
+ "sub_mechanism": "attached notes at the outer level of a diagram whose groups are GroupMakerState images, including a note linked only to an autarkic group (round-4 obligation 4, note_link_only_to_group)",
+ "status": "maker causal account before draft; independent review required",
+ "answers": "docs/parity-reviews/comment-state-consumers/review-4.json (bounded_next_obligations[2], held-out BB note_link_only_to_group)",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "java_locations": [
+  "abel/Entity.java#isAutarkic (686-705) with abel/EntityUtils.java#isPureInnerLink3 (76-88): every link counts, including the note link created by CommandFactoryNoteOnEntity (258-283). For 'note right of Silo' at root, both endpoints' parent containers (root) are outside Silo, so the link is pure and Silo stays autarkic.",
+  "dot/CucaDiagramSimplifierState.java#simplify (57-70): an autarkic group is replaced by its GroupMakerState image (Entity.overrideImage, LeafType.STATE), so at the root Silo is an ordinary leaf node, not a cluster. svek/ClusterDotString.isThereALinkFromOrToGroup is never consulted for it (it serves live clusters), so no special point is involved in this case.",
+  "svek/GraphvizImageBuilder.java#buildImage (226-262) for the root: printGroups then getUnpackagedEntities; the pass-THREE note quark GMN2 follows Silo among the root leaves; isOpalisable/onlyOneLink (313-325) make it an Opale note of the Silo-GMN2 link (setOpaleLine, line.setOpale).",
+  "svek/SvekResult.java#drawU (70-90): image Silo, then the note, then edges (the opale edge is not painted as a link)."
+ ],
+ "rust_locations": [
+  "crates/rustuml-render/src/state.rs#build_autonomous_composite: only notes laid out inside some image region are accepted (image_note_count == notes.len()); any other note makes the whole diagram fall through to the flat path, which draws Silo as a childless 50x50 state with its children outside.",
+  "crates/rustuml-render/src/state.rs#render_autonomous_composite: the outer scope is laid out with no notes (layout_autonomous_scope(.., &[])) and paints none."
+ ],
+ "invariant": "The outer GraphvizImageBuilder of an image-path diagram owns the attached notes declared at root (or in an outer live cluster) whose anchor is an outer node (a leaf or an image); they are SVEK nodes of the outer layout with the same opale line0/minlen-0 edge as region notes and are painted with the outer leaves by the printGroup bucket rule (note-paint-order-account.json).",
+ "planned_change": [
+  "build_autonomous_composite: collect outer attached-note specs (declaring group root or an outer live cluster, anchor in outer_ids; qualified name prefixed by a declaring cluster as for regions), pass them to layout_autonomous_scope for the outer scope, and accept the diagram when region notes plus outer notes account for every note.",
+  "render_autonomous_composite: paint outer notes after the leaves of their bucket, like emit_autonomous_composite."
+ ],
+ "declared_residue": [
+  "Notes whose anchor is inside an image but which are declared outside it (cross-boundary note links make the group non-autarkic in Java) keep the previous fall-through.",
+  "Floating notes and notes on links keep the previous paths."
+ ],
+ "perturbation_axes": ["note left/right of an autarkic group at root, renamed", "note on an outer leaf next to an image", "two notes on one image"],
+ "precommitted_measurement": {
+  "oracle": "strict compare and comment lists; whole sweep against 3992971a7 and 71d16da4a",
+  "expect_fixed": ["BB note_link_only_to_group"],
+  "expect": "outputs change only for state diagrams with root-level attached notes that previously fell through from the image path; zero lost strict matches, zero new errors"
+ }
+}

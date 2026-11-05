@@ -1,0 +1,3 @@
+@startyaml
+"Pass \U0010FFFD": "Gate \U0010F7FF"
+@endyaml

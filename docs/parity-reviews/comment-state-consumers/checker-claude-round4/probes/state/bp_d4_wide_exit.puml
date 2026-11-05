@@ -1,0 +1,15 @@
+@startuml
+state Site {
+  state Block {
+    state Floor {
+      state Room {
+        Desk --> leave
+        state "Leaving The Room Now" as leave <<exitPoint>>
+      }
+      leave --> Corridor
+    }
+    Corridor --> Lift
+  }
+  Lift --> Exit
+}
+@enduml

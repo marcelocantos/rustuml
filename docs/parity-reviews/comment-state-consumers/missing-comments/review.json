@@ -1,0 +1,341 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A76d88857-1ec0-408c-8c06-0b37eda8395a",
+    "model": "gpt-6-astra",
+    "tool": "Codex harness in T3 Code",
+    "reasoning_effort": "high",
+    "independent": true,
+    "prior_implementation_involvement": false,
+    "branch": "review/comment-state-independent-20261105",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-2f87fc19"
+  },
+  "account_commit": "42344228ed430c5678b46ec8f42f7f9018124247",
+  "implementation_commit": "523a2d89226d764b818b7af2472593d2690e9c4b",
+  "evidence_revision": "2a791353c998e4c34bbf0f16699c7ffd21d50cea",
+  "base_revision": "3875fee3b164d63d4b39df4bc6c13ca8ace89169",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/comment-state-independent-20261105 2a791353c998e4c34bbf0f16699c7ffd21d50cea",
+    "git archive 3875fee3b164d63d4b39df4bc6c13ca8ace89169 | tar -x -C /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/before-source",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/target-before cargo build --release -j 4 -p rustuml (cwd /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/before-source)",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/target-after cargo build --release -j 4 -p rustuml",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/replay_checker.py before",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/replay_checker.py after",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/validate_fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/supplement/validate_fresh.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/replay_fresh.py checker94",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/replay_fresh.py checker6",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-comment-state-checker-20261105/run_assisted.py",
+    "Parent existing Monkey Man runner only: reference --cwd <worker>/new --timezone GMT+11:00 -- -pipe -tsvg; exact per-case invocations and streams archived; Java argv derived, not process-traced."
+  ],
+  "verdict": "rejected",
+  "no_production_changes": true,
+  "no_shipping": true,
+  "mechanism": "comment-state-consumers/missing-comments",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/state_root_nested_identity.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/state_root_nested_identity.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "pass",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": true,
+      "comments_match": true,
+      "whole_output_pass": true,
+      "source_sha256": "a7569154e21342e43da92ef1cd029a88213721987797c1af98758d54121a39fe",
+      "java_svg_sha256": "5c81b057f4f773f5d2fff8c0e7d45a05a52bf9f196b82981162f2fb215638d72"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/state_history_nested_identity.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/state_history_nested_identity.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "850a0a50db81e4985ab5d97b166807d2debac50e906f13dc6159345a208ebe30",
+      "java_svg_sha256": "8878b11ce0474bfa6d6edb5695c0116a804f25cab4204f311afe89a08b973559"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_alias_linear.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_alias_linear.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "99c9f92292ce49acc40e5e098ecaca654ad5fd4c378ed6b0b2da716fc75b72ef",
+      "java_svg_sha256": "551d555463f5e78c6e2d7d4722298035f20fad19e0375963d26d79f1f7107b13"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_unicode_right.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_unicode_right.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "7306ac6dae33bcd001006d6a155099416f1fdec7e516d84b05449d8066a1cead",
+      "java_svg_sha256": "f1e105f037c03f37ba89feefcbf694800544cde04d9973ac01b5c2d30aeaaabf"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_unicode_left.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_unicode_left.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "271aa9ba4a78a31304c1e379eff4c075289854523c156bd7ed7b5eb3e223c848",
+      "java_svg_sha256": "27de6474096a49d2f9fdc8cb23b8e39e1307e56f8c054e7faf47abb222233603"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_unicode_up.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_unicode_up.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "6efbb355518f348856a4cb0f2b38604503bf4dda7b255bee819fb1f728e5ab8f",
+      "java_svg_sha256": "3851071f09b2b5f6db7022b761d772e64a3ca065af276f5fae38222b36b9158b"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_partition.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_partition.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "1bc17e6f1e20b239a8dfbf86fa1afe51d4e187e98382b598cd7b22e19c6406c9",
+      "java_svg_sha256": "67bd831a418a188f61d7af77e88d36b8e5b0f64089bdb7ca7060b55b83f55184"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_named_end.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_named_end.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "syntax_error_svg",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": true,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "e3a635f40edfd4196abd4c64eef6b498bfbe3daf470c6d2d1caaff69a99d865f",
+      "java_svg_sha256": "785a4d76604e782996b07a21bf506db9a4f24430565e0a0793aee2a7519ecbb9"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_groups.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_groups.svg",
+      "axes": [
+        "identifier provenance/alias collision/quoted local name",
+        "namespace depth/group endpoints/direction/producer document position"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "valid_diagram",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": false,
+      "cli_comparator_pass": false,
+      "comments_match": false,
+      "whole_output_pass": false,
+      "source_sha256": "db778e15be381d647b9e971da59496440cfb2f035ceef3eb6e4771954f7c2fd0",
+      "java_svg_sha256": "5ad97cceaac07f9f07f3bff71394ec20407f97a9cf2b7824476c63740f19143b"
+    },
+    {
+      "source": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_named_end_corrected.puml",
+      "golden": "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/activity_named_end_corrected.svg",
+      "axes": [
+        "line versus fill roles / explicit-alias collision",
+        "style inheritance / container topology / end identity"
+      ],
+      "result": "fail",
+      "mechanism": "missing-comments",
+      "reference_classification": "syntax_error_svg",
+      "intended_validity": "intended_valid",
+      "intended_observed_disagreement": true,
+      "cli_comparator_pass": false,
+      "comments_match": true,
+      "whole_output_pass": false,
+      "source_sha256": "ec6053f39211dd5460789e3fb73aa0c63b20131b451899c1893920bfa3957f98",
+      "java_svg_sha256": "f4a1651a1ff1067ebe88d950c4e1d9d4bb33d06cf8c714f49984f653406ee0ff"
+    }
+  ],
+  "findings": [
+    "REJECTED: two Java-valid retained inputs LOSE exact comment-list parity: collateral/1162-review_root_quark_no_reparent and collateral/1164-root_quark_nested_reuse_control. Before lists match Java; after lists prepend cluster R3/O3 and SharedGate593/OuterShell593. Both were whole-output failures before and after, so zero lost strict-comparator passes does not describe this comment regression. Exact source/reference hashes and lists are in comment-list-regressions.json.",
+    "Fresh state_history_nested_identity independently adds cluster Top/Lower although Java emits only link comments. Adding Cluster.drawU comments at a Rust wrapper is insufficient when the Rust wrapper does not correspond to a Java Cluster consumer. Fresh state_root_nested_identity is a bounded positive: comments and document positions match in both CLI and assisted paths.",
+    "Fresh activity aliases, directional Unicode labels, implicit continuation links, partitions, and partition-to-partition links remain whole failures and omit Java producer comments; activity_alias_linear even has steps=[]. These sources expose parser/layout admission limits, not evidence that all eleven added linear emitters were reached. Keep those failures executable and require admitted fresh controls for each linear direction in a later account. Both attempted named-end forms are Java syntax-error SVGs (exit 200), kept as intended-versus-observed disagreements and excluded from positive denominators.",
+    "Of the 194 changed goldens, 188 now match both Java comment lists AND the following sibling producer position (tag/class/qualified-name); the exact six recorded exceptions remain. All 194 decode to unchanged non-comment XML and all stripped byte streams are identical. The 456 existing element macros remain unchanged after isolating comment and fill arguments. This supports bounded placement, not global missing-producer completeness.",
+    "Assisted fresh rendering remains diagnostic only: 32/98 strict-comparator passes, not CLI truth. It retains cluster and missing-link differences; exact producer lists and positions are separately archived."
+  ],
+  "bounded_support_is_not_acceptance": true,
+  "measurements": {
+    "full_golden": {
+      "entries": 12550,
+      "valid": 11251,
+      "before_pass": 11179,
+      "after_pass": 11179,
+      "errors": 80,
+      "panics": 0,
+      "malformed": 0,
+      "new_errors": 0,
+      "new_panics": 0,
+      "lost_comparator_passes": 0
+    },
+    "cohorts": {
+      "entries": 2277,
+      "valid": 2119,
+      "before_pass": 1065,
+      "after_pass": 1072,
+      "errors": 131,
+      "panics": 36,
+      "malformed": 14,
+      "new_errors": 0,
+      "new_panics": 0,
+      "lost_comparator_passes": 0
+    },
+    "golden_bytes": {
+      "changed": 194,
+      "all_comment_only": true,
+      "decoded_equal": true,
+      "exact_java_comment_lists": 188,
+      "remaining_comment_differences": [
+        "full-golden/combo/combo_embedded_state_machine",
+        "full-golden/combo/combo_microservice_arch",
+        "full-golden/combo/combo_state_everything",
+        "full-golden/edge-cases/edge_misc_kitchen_sink_state",
+        "full-golden/state/state_composite_entry_exit_concurrent",
+        "full-golden/type-detection/ambiguous_allowmixing_sequence_component"
+      ],
+      "changed_passing": 184,
+      "changed_nonpassing": 10
+    },
+    "new_comment_list_regressions": 2,
+    "fresh": {
+      "checker94": {
+        "entries": 94,
+        "valid": 93,
+        "before_pass": 18,
+        "after_pass": 23,
+        "comment_and_comparator_pass": 20,
+        "losses": [],
+        "gains": [
+          "checker94/paint_simple_transparent",
+          "checker94/paint_composite_a01",
+          "checker94/paint_composite_a7f",
+          "checker94/paint_composite_afe",
+          "checker94/paint_composite_aff"
+        ],
+        "new_errors": [],
+        "new_panics": [],
+        "errors": 0,
+        "panics": 0,
+        "malformed": 0
+      },
+      "checker6": {
+        "entries": 6,
+        "valid": 5,
+        "before_pass": 2,
+        "after_pass": 2,
+        "comment_and_comparator_pass": 2,
+        "losses": [],
+        "gains": [],
+        "new_errors": [],
+        "new_panics": [],
+        "errors": 0,
+        "panics": 0,
+        "malformed": 0
+      }
+    },
+    "library_diagnostics": {
+      "product_pass": 11179,
+      "assisted_pass": 10497,
+      "eligible": 11251,
+      "failure_names_exact": [
+        72,
+        754
+      ],
+      "standing_pass": 930,
+      "standing_total": 2139,
+      "guards_pass": 4,
+      "guards_total": 6,
+      "parser_lib_pass": 624,
+      "renderer_lib_pass": 799,
+      "renderer_lib_total": 801,
+      "cli_gate_pass": 17,
+      "cli_gate_total": 17
+    },
+    "xml_registered": {
+      "entries": 2139,
+      "emitted": 2024,
+      "malformed": 14,
+      "errors": 115,
+      "panics": 36
+    },
+    "yaml": {
+      "memberships": 14827,
+      "byte_equal": 14818,
+      "order_only_changes": 9,
+      "semantic_differences": 0,
+      "owner": "T14.6.6",
+      "maker_order_only_changes": 8
+    }
+  },
+  "evidence_support": "../checker-support/README.md"
+}

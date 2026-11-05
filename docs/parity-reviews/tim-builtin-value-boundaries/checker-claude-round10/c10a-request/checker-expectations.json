@@ -1,0 +1,2665 @@
+{
+ "schema_version": 1,
+ "registered_before_java": true,
+ "tip": "e24240b3542aaabdaf6286b87c1cb23217898ddc",
+ "cases": [
+  {
+   "name": "c10a_st_comp_ar",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_comp_tn",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_comp_vd",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1: stereotype drawn Verdana Italic, measured with the Verdana Regular ASCII table (family_table_text_width has no italic table)"
+  },
+  {
+   "name": "c10a_st_comp_cn",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_comp_ss",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_comp_tn_i",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_nodc_ar",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_nodc_tn",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_nodc_vd",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1: stereotype drawn Verdana Italic, measured with the Verdana Regular ASCII table (family_table_text_width has no italic table)"
+  },
+  {
+   "name": "c10a_st_nodc_cn",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_nodc_ss",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_nodc_tn_i",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_dbsc_ar",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_dbsc_tn",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_dbsc_vd",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1: stereotype drawn Verdana Italic, measured with the Verdana Regular ASCII table (family_table_text_width has no italic table)"
+  },
+  {
+   "name": "c10a_st_dbsc_cn",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_dbsc_ss",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_dbsc_tn_i",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_cldc_ar",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_cldc_tn",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_cldc_vd",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1: stereotype drawn Verdana Italic, measured with the Verdana Regular ASCII table (family_table_text_width has no italic table)"
+  },
+  {
+   "name": "c10a_st_cldc_cn",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_cldc_ss",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_cldc_tn_i",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_quec_ar",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_quec_tn",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_quec_vd",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1: stereotype drawn Verdana Italic, measured with the Verdana Regular ASCII table (family_table_text_width has no italic table)"
+  },
+  {
+   "name": "c10a_st_quec_cn",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_quec_ss",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_quec_tn_i",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_usec_ar",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_usec_tn",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_usec_vd",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1: stereotype drawn Verdana Italic, measured with the Verdana Regular ASCII table (family_table_text_width has no italic table)"
+  },
+  {
+   "name": "c10a_st_usec_cn",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_usec_ss",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_usec_tn_i",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_actu_ar",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_actu_tn",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_actu_vd",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1: stereotype drawn Verdana Italic, measured with the Verdana Regular ASCII table (family_table_text_width has no italic table)"
+  },
+  {
+   "name": "c10a_st_actu_cn",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_actu_ss",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_actu_tn_i",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_part_ar",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_part_tn",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_part_vd",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1: stereotype drawn Verdana Italic, measured with the Verdana Regular ASCII table (family_table_text_width has no italic table)"
+  },
+  {
+   "name": "c10a_st_part_cn",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_part_ss",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H2/H3: Arial Italic, Courier New Italic and derived Lucida italic share their upright ASCII advances (unverified for Arial)"
+  },
+  {
+   "name": "c10a_st_part_tn_i",
+   "expect": "match",
+   "controls": [],
+   "hypothesis": "H4: Times stereotype now measured in Times Italic as drawn (EntityImageDescription fcStereo)"
+  },
+  {
+   "name": "c10a_st_clss_ar",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "class stereotype: outside the packet"
+  },
+  {
+   "name": "c10a_st_clss_tn",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "class stereotype: outside the packet"
+  },
+  {
+   "name": "c10a_st_clss_vd",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "class stereotype: outside the packet"
+  },
+  {
+   "name": "c10a_st_clss_cn",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "class stereotype: outside the packet"
+  },
+  {
+   "name": "c10a_st_clss_ss",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "class stereotype: outside the packet"
+  },
+  {
+   "name": "c10a_st_clss_tn_i",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "class stereotype: outside the packet"
+  },
+  {
+   "name": "c10a_cl_ss_d_n",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_ss_d_s",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_ss_20_n",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_ss_20_s",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_ss_i",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_tn_d_n",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_tn_d_s",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_tn_20_n",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_tn_20_s",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_tn_i",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_vd_d_n",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_vd_d_s",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_vd_20_n",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_vd_20_s",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_vd_i",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_cl_lone_tn",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "H7: cloud outline from the measured block (USymbolCloud.asSmall); no claim before Java"
+  },
+  {
+   "name": "c10a_ml_comp_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_comp_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_comp_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_comp_tn_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_comp_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_comp_vd_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_comp_vd_i",
+   "expect": "fail",
+   "controls": [
+    "c10a_ml_comp_vd_p"
+   ],
+   "hypothesis": "H1 Verdana italic table gap"
+  },
+  {
+   "name": "c10a_ml_comp_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_comp_vd_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_nodc_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_nodc_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_nodc_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_nodc_tn_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_nodc_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_nodc_vd_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_nodc_vd_i",
+   "expect": "fail",
+   "controls": [
+    "c10a_ml_nodc_vd_p"
+   ],
+   "hypothesis": "H1 Verdana italic table gap"
+  },
+  {
+   "name": "c10a_ml_nodc_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_nodc_vd_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_part_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_part_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_part_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_part_tn_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_part_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_part_vd_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_part_vd_i",
+   "expect": "fail",
+   "controls": [
+    "c10a_ml_part_vd_p"
+   ],
+   "hypothesis": "H1 Verdana italic table gap"
+  },
+  {
+   "name": "c10a_ml_part_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_part_vd_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_actv_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_actv_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_actv_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_actv_tn_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_actv_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_actv_vd_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_actv_vd_i",
+   "expect": "fail",
+   "controls": [
+    "c10a_ml_actv_vd_p"
+   ],
+   "hypothesis": "H1 Verdana italic table gap"
+  },
+  {
+   "name": "c10a_ml_actv_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_actv_vd_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_stat_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_stat_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_stat_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_stat_tn_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_stat_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_stat_vd_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_stat_vd_i",
+   "expect": "fail",
+   "controls": [
+    "c10a_ml_stat_vd_p"
+   ],
+   "hypothesis": "H1 Verdana italic table gap"
+  },
+  {
+   "name": "c10a_ml_stat_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_stat_vd_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_usec_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_usec_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_usec_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_usec_tn_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_usec_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_usec_vd_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_usec_vd_i",
+   "expect": "fail",
+   "controls": [
+    "c10a_ml_usec_vd_p"
+   ],
+   "hypothesis": "H1 Verdana italic table gap"
+  },
+  {
+   "name": "c10a_ml_usec_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_usec_vd_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_actu_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_actu_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_actu_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_actu_tn_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_actu_tn_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_ml_actu_vd_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ml_actu_vd_i",
+   "expect": "fail",
+   "controls": [
+    "c10a_ml_actu_vd_p"
+   ],
+   "hypothesis": "H1 Verdana italic table gap"
+  },
+  {
+   "name": "c10a_ml_actu_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ml_actu_vd_p"
+   ],
+   "hypothesis": "multi-line label measured per line in the drawn face"
+  },
+  {
+   "name": "c10a_cr_comp_bt_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_comp_bt_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_comp_bt_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_comp_sz_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_comp_sz_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_comp_sz_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_comp_fo_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_comp_fo_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_comp_fo_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_comp_st_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_comp_st_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_comp_st_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_part_bt_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_part_bt_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_part_bt_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_part_sz_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_part_sz_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_part_sz_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_part_fo_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_part_fo_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_part_fo_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_part_st_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_part_st_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_part_st_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_actv_bt_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_actv_bt_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_actv_bt_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_actv_sz_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_actv_sz_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_actv_sz_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_actv_fo_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_actv_fo_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_actv_fo_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_actv_st_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_actv_st_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_actv_st_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_usec_bt_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_usec_bt_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_usec_bt_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_usec_sz_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_usec_sz_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_usec_sz_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_usec_fo_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_usec_fo_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_usec_fo_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_usec_st_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_usec_st_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_usec_st_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_stat_bt_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_stat_bt_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_stat_bt_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_stat_sz_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_stat_sz_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_stat_sz_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_stat_fo_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_stat_fo_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_stat_fo_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_cr_stat_st_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_cr_stat_st_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_cr_stat_st_p"
+   ],
+   "hypothesis": "Creole runs add to the block FontConfiguration (FontConfiguration.add)"
+  },
+  {
+   "name": "c10a_pr_comp_sp_then_css",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_comp_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_comp_css_then_sp",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_comp_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_comp_nested_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_comp_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_comp_stereo_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_comp_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_comp_element_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_comp_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_comp_ctrl",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_pr_part_sp_then_css",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_part_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_part_css_then_sp",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_part_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_part_nested_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_part_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_part_stereo_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_part_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_part_element_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_part_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_part_ctrl",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_pr_actv_sp_then_css",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_actv_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_actv_css_then_sp",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_actv_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_actv_nested_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_actv_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_actv_element_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_actv_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_actv_ctrl",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_pr_stat_sp_then_css",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_stat_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_stat_css_then_sp",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_stat_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_stat_nested_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_stat_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_stat_stereo_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_stat_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_stat_element_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_stat_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_stat_ctrl",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_pr_usec_sp_then_css",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_usec_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_usec_css_then_sp",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_usec_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_usec_nested_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_usec_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_usec_stereo_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_usec_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_usec_element_sel",
+   "expect": "record",
+   "controls": [
+    "c10a_pr_usec_ctrl"
+   ],
+   "hypothesis": "precedence/selector forms: no claim before Java"
+  },
+  {
+   "name": "c10a_pr_usec_ctrl",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ns_pkg_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ns_pkg_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_pkg_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_pkg_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_pkg_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_innode_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ns_innode_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_innode_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_innode_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_innode_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_folder_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ns_folder_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_folder_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_folder_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_folder_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_nodenode_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ns_nodenode_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_nodenode_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_nodenode_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_nodenode_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_seqbox_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ns_seqbox_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_seqbox_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_seqbox_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_seqbox_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_compst_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ns_compst_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_compst_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_compst_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_compst_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_ucrect_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ns_ucrect_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_ucrect_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_ucrect_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_ucrect_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_partition_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ns_partition_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_partition_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_partition_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_partition_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_swim_tn_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ns_swim_tn_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_swim_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_ns_swim_vd_b",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ns_swim_tn_p"
+   ],
+   "hypothesis": "nested element measured in its drawn face"
+  },
+  {
+   "name": "c10a_fv_comp_BOLD",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_comp_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_comp_Italic",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_comp_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_comp_bolder",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_comp_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_comp_lighter",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_comp_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_comp_w600",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_comp_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_comp_w650",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_comp_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_comp_w900",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_comp_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_comp_normal",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_comp_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_comp_italicbold",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_comp_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_comp_oblique",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_comp_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_comp_css800",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_comp_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_comp_cssbi",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_comp_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_comp_ctrl",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_fv_part_BOLD",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_part_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_part_Italic",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_part_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_part_bolder",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_part_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_part_lighter",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_part_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_part_w600",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_part_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_part_w650",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_part_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_part_w900",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_part_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_part_normal",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_part_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_part_italicbold",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_part_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_part_oblique",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_part_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_part_css800",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_part_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_part_cssbi",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_part_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_part_ctrl",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_fv_actv_BOLD",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_actv_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_actv_Italic",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_actv_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_actv_bolder",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_actv_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_actv_lighter",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_actv_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_actv_w600",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_actv_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_actv_w650",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_actv_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_actv_w900",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_actv_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_actv_normal",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_actv_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_actv_italicbold",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_actv_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_actv_oblique",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_actv_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_actv_css800",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_actv_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_actv_cssbi",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_actv_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_actv_ctrl",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_fv_stat_BOLD",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_stat_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_stat_Italic",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_stat_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_stat_bolder",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_stat_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_stat_lighter",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_stat_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_stat_w600",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_stat_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_stat_w650",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_stat_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_stat_w900",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_stat_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_stat_normal",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_stat_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_stat_italicbold",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_stat_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_stat_oblique",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_stat_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_stat_css800",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_stat_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_stat_cssbi",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_stat_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_stat_ctrl",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_fv_usec_BOLD",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_usec_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_usec_Italic",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_usec_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_usec_bolder",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_usec_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_usec_lighter",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_usec_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_usec_w600",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_usec_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_usec_w650",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_usec_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_usec_w900",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_usec_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_usec_normal",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_usec_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_usec_italicbold",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_usec_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_usec_oblique",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_usec_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_usec_css800",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_usec_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_usec_cssbi",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_fv_usec_ctrl"
+   ],
+   "hypothesis": "ValueImpl.asFontFace value forms (Rust font_face) "
+  },
+  {
+   "name": "c10a_fv_usec_ctrl",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_classname_bi",
+   "expect": "fail",
+   "controls": [
+    "c10a_bi_classname_p"
+   ],
+   "hypothesis": "H5: 'bold italic' consumer outside the packet still reads contains('bold'/'italic') or ignores FontStyle; Java asFontFace gives plain"
+  },
+  {
+   "name": "c10a_bi_classname_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_classattr_bi",
+   "expect": "fail",
+   "controls": [
+    "c10a_bi_classattr_p"
+   ],
+   "hypothesis": "H5: 'bold italic' consumer outside the packet still reads contains('bold'/'italic') or ignores FontStyle; Java asFontFace gives plain"
+  },
+  {
+   "name": "c10a_bi_classattr_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_compnote_bi",
+   "expect": "fail",
+   "controls": [
+    "c10a_bi_compnote_p"
+   ],
+   "hypothesis": "H5: 'bold italic' consumer outside the packet still reads contains('bold'/'italic') or ignores FontStyle; Java asFontFace gives plain"
+  },
+  {
+   "name": "c10a_bi_compnote_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_seqnote_bi",
+   "expect": "fail",
+   "controls": [
+    "c10a_bi_seqnote_p"
+   ],
+   "hypothesis": "H5: 'bold italic' consumer outside the packet still reads contains('bold'/'italic') or ignores FontStyle; Java asFontFace gives plain"
+  },
+  {
+   "name": "c10a_bi_seqnote_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_seqarrow_bi",
+   "expect": "fail",
+   "controls": [
+    "c10a_bi_seqarrow_p"
+   ],
+   "hypothesis": "H5: 'bold italic' consumer outside the packet still reads contains('bold'/'italic') or ignores FontStyle; Java asFontFace gives plain"
+  },
+  {
+   "name": "c10a_bi_seqarrow_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_comparrow_bi",
+   "expect": "fail",
+   "controls": [
+    "c10a_bi_comparrow_p"
+   ],
+   "hypothesis": "H5: 'bold italic' consumer outside the packet still reads contains('bold'/'italic') or ignores FontStyle; Java asFontFace gives plain"
+  },
+  {
+   "name": "c10a_bi_comparrow_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_title_bi",
+   "expect": "fail",
+   "controls": [
+    "c10a_bi_title_p"
+   ],
+   "hypothesis": "H5: 'bold italic' consumer outside the packet still reads contains('bold'/'italic') or ignores FontStyle; Java asFontFace gives plain"
+  },
+  {
+   "name": "c10a_bi_title_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_legend_bi",
+   "expect": "fail",
+   "controls": [
+    "c10a_bi_legend_p"
+   ],
+   "hypothesis": "H5: 'bold italic' consumer outside the packet still reads contains('bold'/'italic') or ignores FontStyle; Java asFontFace gives plain"
+  },
+  {
+   "name": "c10a_bi_legend_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_pkg_bi",
+   "expect": "fail",
+   "controls": [
+    "c10a_bi_pkg_p"
+   ],
+   "hypothesis": "H5: 'bold italic' consumer outside the packet still reads contains('bold'/'italic') or ignores FontStyle; Java asFontFace gives plain"
+  },
+  {
+   "name": "c10a_bi_pkg_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_seqbox_bi",
+   "expect": "fail",
+   "controls": [
+    "c10a_bi_seqbox_p"
+   ],
+   "hypothesis": "H5: 'bold italic' consumer outside the packet still reads contains('bold'/'italic') or ignores FontStyle; Java asFontFace gives plain"
+  },
+  {
+   "name": "c10a_bi_seqbox_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_swim_bi",
+   "expect": "fail",
+   "controls": [
+    "c10a_bi_swim_p"
+   ],
+   "hypothesis": "H5: 'bold italic' consumer outside the packet still reads contains('bold'/'italic') or ignores FontStyle; Java asFontFace gives plain"
+  },
+  {
+   "name": "c10a_bi_swim_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_diamond_bi",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_bi_diamond_p"
+   ],
+   "hypothesis": "diamond: activityDiamondFontStyle now read by font_face"
+  },
+  {
+   "name": "c10a_bi_diamond_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_statattr_bi",
+   "expect": "fail",
+   "controls": [
+    "c10a_bi_statattr_p"
+   ],
+   "hypothesis": "H5: 'bold italic' consumer outside the packet still reads contains('bold'/'italic') or ignores FontStyle; Java asFontFace gives plain"
+  },
+  {
+   "name": "c10a_bi_statattr_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_bi_objname_bi",
+   "expect": "fail",
+   "controls": [
+    "c10a_bi_objname_p"
+   ],
+   "hypothesis": "H5: 'bold italic' consumer outside the packet still reads contains('bold'/'italic') or ignores FontStyle; Java asFontFace gives plain"
+  },
+  {
+   "name": "c10a_bi_objname_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ft_ar_plain",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "face table baseline"
+  },
+  {
+   "name": "c10a_ft_ar_italic",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ft_ar_plain"
+   ],
+   "hypothesis": "italic face advances"
+  },
+  {
+   "name": "c10a_ft_ar_bold",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "face table baseline"
+  },
+  {
+   "name": "c10a_ft_ar_bolditalic",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "FontWeight not modelled (T14.46): Rust draws italic only"
+  },
+  {
+   "name": "c10a_ft_vd_plain",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "face table baseline"
+  },
+  {
+   "name": "c10a_ft_vd_italic",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1: Verdana Italic/BoldItalic ASCII advances absent; Regular/Bold tables used"
+  },
+  {
+   "name": "c10a_ft_vd_bold",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "face table baseline"
+  },
+  {
+   "name": "c10a_ft_vd_bolditalic",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1: Verdana Italic/BoldItalic ASCII advances absent; Regular/Bold tables used"
+  },
+  {
+   "name": "c10a_ft_hv_plain",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "face table baseline"
+  },
+  {
+   "name": "c10a_ft_hv_italic",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ft_hv_plain"
+   ],
+   "hypothesis": "italic face advances"
+  },
+  {
+   "name": "c10a_ft_hv_bold",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "face table baseline"
+  },
+  {
+   "name": "c10a_ft_hv_bolditalic",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "FontWeight not modelled (T14.46): Rust draws italic only"
+  },
+  {
+   "name": "c10a_ft_tn_plain",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "face table baseline"
+  },
+  {
+   "name": "c10a_ft_tn_italic",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ft_tn_plain"
+   ],
+   "hypothesis": "italic face advances"
+  },
+  {
+   "name": "c10a_ft_tn_bold",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "face table baseline"
+  },
+  {
+   "name": "c10a_ft_tn_bolditalic",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "FontWeight not modelled (T14.46): Rust draws italic only"
+  },
+  {
+   "name": "c10a_ft_cn_plain",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "face table baseline"
+  },
+  {
+   "name": "c10a_ft_cn_italic",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ft_cn_plain"
+   ],
+   "hypothesis": "italic face advances"
+  },
+  {
+   "name": "c10a_ft_cn_bold",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "face table baseline"
+  },
+  {
+   "name": "c10a_ft_cn_bolditalic",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "FontWeight not modelled (T14.46): Rust draws italic only"
+  },
+  {
+   "name": "c10a_ft_ss_plain",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "face table baseline"
+  },
+  {
+   "name": "c10a_ft_ss_italic",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ft_ss_plain"
+   ],
+   "hypothesis": "italic face advances"
+  },
+  {
+   "name": "c10a_ft_ss_bold",
+   "expect": "record",
+   "controls": [],
+   "hypothesis": "face table baseline"
+  },
+  {
+   "name": "c10a_ft_ss_bolditalic",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "FontWeight not modelled (T14.46): Rust draws italic only"
+  },
+  {
+   "name": "c10a_ft_ar_creolebi",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ft_ar_creolebi_ctrl"
+   ],
+   "hypothesis": "italic face advances"
+  },
+  {
+   "name": "c10a_ft_ar_creolebi_ctrl",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ft_vd_creolebi",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1: Verdana Italic/BoldItalic ASCII advances absent; Regular/Bold tables used"
+  },
+  {
+   "name": "c10a_ft_vd_creolebi_ctrl",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ft_tn_creolebi",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ft_tn_creolebi_ctrl"
+   ],
+   "hypothesis": "italic face advances"
+  },
+  {
+   "name": "c10a_ft_tn_creolebi_ctrl",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_sz_comp_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_sz_comp_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sz_comp_p"
+   ],
+   "hypothesis": "size and italic in one FontConfiguration"
+  },
+  {
+   "name": "c10a_sz_part_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_sz_part_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sz_part_p"
+   ],
+   "hypothesis": "size and italic in one FontConfiguration"
+  },
+  {
+   "name": "c10a_sz_actv_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_sz_actv_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sz_actv_p"
+   ],
+   "hypothesis": "size and italic in one FontConfiguration"
+  },
+  {
+   "name": "c10a_sz_stat_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_sz_stat_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sz_stat_p"
+   ],
+   "hypothesis": "size and italic in one FontConfiguration"
+  },
+  {
+   "name": "c10a_sz_usec_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_sz_usec_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sz_usec_p"
+   ],
+   "hypothesis": "size and italic in one FontConfiguration"
+  },
+  {
+   "name": "c10a_sx_composite_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_sx_composite_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sx_composite_p"
+   ],
+   "hypothesis": "state title/fields measured in the drawn face"
+  },
+  {
+   "name": "c10a_sx_composite_nm_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sx_composite_p"
+   ],
+   "hypothesis": "state title/fields measured in the drawn face"
+  },
+  {
+   "name": "c10a_sx_composite_ar_i",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H8: state.rs arial_text_width measures Arial in SansSerif and drops italic (T14.47 path)"
+  },
+  {
+   "name": "c10a_sx_descs_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_sx_descs_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sx_descs_p"
+   ],
+   "hypothesis": "state title/fields measured in the drawn face"
+  },
+  {
+   "name": "c10a_sx_descs_nm_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sx_descs_p"
+   ],
+   "hypothesis": "state title/fields measured in the drawn face"
+  },
+  {
+   "name": "c10a_sx_descs_ar_i",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H8: state.rs arial_text_width measures Arial in SansSerif and drops italic (T14.47 path)"
+  },
+  {
+   "name": "c10a_sx_concurrent_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_sx_concurrent_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sx_concurrent_p"
+   ],
+   "hypothesis": "state title/fields measured in the drawn face"
+  },
+  {
+   "name": "c10a_sx_concurrent_nm_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sx_concurrent_p"
+   ],
+   "hypothesis": "state title/fields measured in the drawn face"
+  },
+  {
+   "name": "c10a_sx_concurrent_ar_i",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H8: state.rs arial_text_width measures Arial in SansSerif and drops italic (T14.47 path)"
+  },
+  {
+   "name": "c10a_sx_longname_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_sx_longname_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sx_longname_p"
+   ],
+   "hypothesis": "state title/fields measured in the drawn face"
+  },
+  {
+   "name": "c10a_sx_longname_nm_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sx_longname_p"
+   ],
+   "hypothesis": "state title/fields measured in the drawn face"
+  },
+  {
+   "name": "c10a_sx_longname_ar_i",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H8: state.rs arial_text_width measures Arial in SansSerif and drops italic (T14.47 path)"
+  },
+  {
+   "name": "c10a_sx_statename_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_sx_statename_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sx_statename_p"
+   ],
+   "hypothesis": "state title/fields measured in the drawn face"
+  },
+  {
+   "name": "c10a_sx_statename_nm_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_sx_statename_p"
+   ],
+   "hypothesis": "state title/fields measured in the drawn face"
+  },
+  {
+   "name": "c10a_sx_statename_ar_i",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H8: state.rs arial_text_width measures Arial in SansSerif and drops italic (T14.47 path)"
+  },
+  {
+   "name": "c10a_ax_table_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ax_table_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ax_table_p"
+   ],
+   "hypothesis": "action text measured in the drawn face"
+  },
+  {
+   "name": "c10a_ax_table_vd_i",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1 Verdana italic table gap"
+  },
+  {
+   "name": "c10a_ax_bullets_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ax_bullets_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ax_bullets_p"
+   ],
+   "hypothesis": "action text measured in the drawn face"
+  },
+  {
+   "name": "c10a_ax_bullets_vd_i",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1 Verdana italic table gap"
+  },
+  {
+   "name": "c10a_ax_numbered_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ax_numbered_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ax_numbered_p"
+   ],
+   "hypothesis": "action text measured in the drawn face"
+  },
+  {
+   "name": "c10a_ax_numbered_vd_i",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1 Verdana italic table gap"
+  },
+  {
+   "name": "c10a_ax_repeat_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ax_repeat_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ax_repeat_p"
+   ],
+   "hypothesis": "action text measured in the drawn face"
+  },
+  {
+   "name": "c10a_ax_repeat_vd_i",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1 Verdana italic table gap"
+  },
+  {
+   "name": "c10a_ax_deprecated_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ax_deprecated_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ax_deprecated_p"
+   ],
+   "hypothesis": "action text measured in the drawn face"
+  },
+  {
+   "name": "c10a_ax_deprecated_vd_i",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1 Verdana italic table gap"
+  },
+  {
+   "name": "c10a_ax_while_p",
+   "expect": "control",
+   "controls": [],
+   "hypothesis": "no FontStyle"
+  },
+  {
+   "name": "c10a_ax_while_i",
+   "expect": "match-iff-control",
+   "controls": [
+    "c10a_ax_while_p"
+   ],
+   "hypothesis": "action text measured in the drawn face"
+  },
+  {
+   "name": "c10a_ax_while_vd_i",
+   "expect": "fail",
+   "controls": [],
+   "hypothesis": "H1 Verdana italic table gap"
+  }
+ ]
+}

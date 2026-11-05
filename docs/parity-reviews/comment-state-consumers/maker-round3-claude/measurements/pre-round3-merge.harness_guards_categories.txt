@@ -1,0 +1,37 @@
+=== /Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-maker/merge-harness_guards.log 2414
+     1  FAILED. 4 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1
+    15  No such file or directory
+     9  account has no independent checker review
+    27  account_commit must be a 40-character Git commit
+     8  axes must contain at least 1 non-empty strings
+    98  checker source is outside the executable perturbation walk
+     1  commands must contain at least 2 non-empty strings
+     8  findings must contain at least 1 non-empty strings
+     5  golden must be a non-empty string
+    98  golden must be the source's same-stem .svg under test-diagrams/perturbations/seq
+    21  implementation_commit must be a 40-character Git commit
+     7  java_revision must be a 40-character Git commit
+  1222  latest accepted review cannot contain failing perturbations
+   197  latest checker review must be accepted
+     2  model must be a non-empty string
+   306  perturbation is not named in any checker review
+    24  perturbation result must be "pass" or "fail"
+    10  perturbations must contain at least two entries
+     9  planned_change must be a non-empty string
+    98  referenced golden escapes the mechanism directory: test-diagrams/perturbations/s
+    98  referenced source escapes the mechanism directory: test-diagrams/perturbations/s
+    11  result must be a non-empty string
+     1  review must exercise at least two distinct source files
+     7  reviewer must be an object
+    32  source must be a .puml under test-diagrams/perturbations/sequence-complete-parti
+    10  source must be a .puml under test-diagrams/perturbations/sequence-created-image-
+    12  source must be a .puml under test-diagrams/perturbations/sequence-dressing-owned
+     4  source must be a .puml under test-diagrams/perturbations/sequence-empty-rule-tit
+    12  source must be a .puml under test-diagrams/perturbations/sequence-englober-membe
+    12  source must be a .puml under test-diagrams/perturbations/sequence-head-englober-
+     4  source must be a .puml under test-diagrams/perturbations/sequence-participant-ki
+     4  source must be a .puml under test-diagrams/perturbations/sequence-self-part-cons
+     8  source must be a .puml under test-diagrams/perturbations/sequence-unclosed-note-
+     5  source must be a non-empty string
+    27  task_id must be a non-empty string
+     1  test failed, to rerun pass `-p rustuml-oracle --test harness_guards`

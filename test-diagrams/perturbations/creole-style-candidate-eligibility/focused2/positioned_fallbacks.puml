@@ -1,0 +1,3 @@
+@startuml
+Maple -> Alder : L **A<$twig>B\nL //A<$twig>B\nL __A<$twig>B\nL --A<$twig>B\nL ~~A<$twig>B\nL **Fir~**Elm** R\nL ~**Fir** R
+@enduml

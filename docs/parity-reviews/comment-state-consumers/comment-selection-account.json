@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "base_revision": "3875fee3b164d63d4b39df4bc6c13ca8ace89169",
+  "review_revision": "075f5095520bb1dc85a32c1f051a98421522419d",
+  "import_revision": "138ca3e5f",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "mechanism": "Consumer local identity selection for SVG comments",
+  "java_locations": [
+    "abel/Entity.java:682\u2013684 \u2192 plasma/Quark.java:58,84\u201385 local name distinct from qualifiedName",
+    "svek/image/EntityImageClass.java:141 and EntityImageDescription.java:289 write Entity.getName",
+    "svek/Cluster.java:309\u2013311 writes group.getName, suppresses ## synthetic names",
+    "abel/Link.java:116\u2013120 commentForSvg and svek/SvekEdge.java:837",
+    "classdiagram/command/CommandCreateClass.java:127\u2013144 CODE becomes Quark; DISPLAY solely paints label",
+    "statediagram/StateDiagram.java:125\u2013182 historical/deephistory synthetic local names"
+  ],
+  "rust_locations": [
+    "class.rs:5495 entity.label instead of existing relationship_endpoint_name;5849/5916/6486 and5956/6003/6028 private package emission structures",
+    "deployment.rs:778 existing label_to_id identity recovery;822/968 entity/cluster labels;3392/5736/5742 endpoint selection",
+    "state.rs:3735,4105,7983,8763 comment-only synthetic history selection"
+  ],
+  "invariant": "Each comment uses the local identity available in the model, prior to SVG metadata translation; paint labels, all IDs and qualified metadata remain unchanged.",
+  "causal_divergence": "Display labels are sent to class/deployment comments; raw endpoint IDs or SVG-sanitized names are sent to deployment/state comments; class root cluster raw names are replaced by metadata punctuation translation.",
+  "planned_change": "Reuse class relationship_endpoint_name for entity comment. Carry raw Package.name for root package comment in private renderer structures only; preserve nested unresolved identity under T14.23. Deployment comments select original label when existing parser label_to_id derived the identity, otherwise explicit id; resolve connection endpoints through model nodes without modifying path IDs. Add state comment-only history-name projection, retaining path/geometry identifiers. Do not reparse source or guess namespace separators.",
+  "production_files": [
+    "crates/rustuml-render/src/class.rs",
+    "crates/rustuml-render/src/deployment.rs",
+    "crates/rustuml-render/src/state.rs"
+  ],
+  "perturbation_axes": [
+    "alias differs from display, unaliased Unicode punctuation, root vs nested groups",
+    "class/description/deployment/history link consumers and forward/reverse endpoints"
+  ],
+  "residuals": [
+    "T14.23: nested/custom-separator local names and alias/derived-id ambiguity not present losslessly in current model",
+    "T14.17: quoted unaliased object source parsed with objects and links empty; no producer can be added without inventing model entities"
+  ]
+}

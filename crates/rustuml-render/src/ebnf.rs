@@ -322,7 +322,8 @@ impl Canvas {
             n(acy),
             n(r),
             n(r),
-            n(stroke_w)
+            n(stroke_w),
+            fill = crate::svg::escape_attribute(fill),
         );
     }
 

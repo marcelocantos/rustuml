@@ -1,0 +1,15 @@
+@startuml
+
+
+skinparam shadowing true
+start
+:Fresh intake;
+if (route?) then (north)
+  :North alpha;
+  :North beta;
+else (south)
+  :South gamma;
+endif
+:Fresh archive;
+stop
+@enduml

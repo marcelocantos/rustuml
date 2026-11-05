@@ -1,0 +1,475 @@
+[
+  {
+    "id": "typed_default_window",
+    "mechanism": "tim-builtin-typed-contracts",
+    "source": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_typed_default_window.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "default value kind",
+      "nested builtin conversion"
+    ],
+    "provenance": "TValue.toInt; Substr; Dec2hex",
+    "intended_negative": false,
+    "source_sha256": "8c44678d687275af9a2bbb60ee9682d3e3ce97e59752ed586d1086774ca99157"
+  },
+  {
+    "id": "surrogate_case_conversion",
+    "mechanism": "tim-builtin-typed-contracts",
+    "source": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "surrogate split position",
+      "case conversion path"
+    ],
+    "provenance": "Upper/Lower String case conversion; TValue.toString",
+    "intended_negative": false,
+    "source_sha256": "a70d22e75ef5017da8eb2703313aced6ea7b2e09f1245fffc4b4c104fd4557b5"
+  },
+  {
+    "id": "surrogate_projection",
+    "mechanism": "tim-builtin-typed-contracts",
+    "source": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_projection.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "isolated UTF16",
+      "final text projection"
+    ],
+    "provenance": "Substr; UTF-8 encoder/SVG escaping",
+    "intended_negative": false,
+    "source_sha256": "72cdaca4ceddd16d348c6c6796373d89e23f4c89f1fa02d69a3741b064b0252b"
+  },
+  {
+    "id": "chr_typed_numeric",
+    "mechanism": "tim-builtin-typed-contracts",
+    "source": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_chr_typed_numeric.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "string versus JSON",
+      "numeric builtin contract"
+    ],
+    "provenance": "Chr.executeReturnFunction TValue.toInt",
+    "intended_negative": false,
+    "source_sha256": "997b5eb9bcff4c030e15e58aab067dca2b03097c494fd4dedb42be3d1391ae8d"
+  },
+  {
+    "id": "strlen_arity_error",
+    "mechanism": "tim-builtin-typed-contracts",
+    "source": "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_strlen_arity_error.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "arity",
+      "first failure"
+    ],
+    "provenance": "Strlen.canCover; ReversePolishInterpretor.canCover",
+    "intended_negative": true,
+    "source_sha256": "984207386508308a7fb9079a0bb394bdeece5c6ea8ef550b955a302e01978da3"
+  },
+  {
+    "id": "snapshot_call_context",
+    "mechanism": "tim-expression-value-snapshot",
+    "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_call_context.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "expression versus plain call",
+      "argument mutation"
+    ],
+    "provenance": "ShuntingYard; EaterFunctionCall.analyze",
+    "intended_negative": false,
+    "source_sha256": "53318449889d42760f92ade3aca8b7615b662e10a9ffb86d5b12d79a4a3f85fa"
+  },
+  {
+    "id": "snapshot_index_effect",
+    "mechanism": "tim-expression-value-snapshot",
+    "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_index_effect.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "index preparation effects",
+      "left-to-right snapshot order"
+    ],
+    "provenance": "ShuntingYard.getVariable; TContext.fromJson; VariableManager.replaceJson",
+    "intended_negative": false,
+    "source_sha256": "c34ac3d69694cf7ca4b8be66a365ca4cbfc1d93976c251858db0df018c12a995"
+  },
+  {
+    "id": "snapshot_condition",
+    "mechanism": "tim-expression-value-snapshot",
+    "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_snapshot_condition.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "logical/comparison operators",
+      "conditional statement"
+    ],
+    "provenance": "TokenOperator; ShuntingYard; TValue.logicalAnd",
+    "intended_negative": false,
+    "source_sha256": "429b150e0190b192c68815e0bc091e74c6746a513d6fd5a84ef4d438c9972708"
+  },
+  {
+    "id": "json_missing_chain",
+    "mechanism": "tim-expression-value-snapshot",
+    "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_missing_chain.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "missing member",
+      "nested member access"
+    ],
+    "provenance": "VariableManager.replaceJson null traversal",
+    "intended_negative": true,
+    "source_sha256": "fd266cc042363f3232382fe666c69a8cef19cf2f4d7559484421bb1b14cde451"
+  },
+  {
+    "id": "json_scalar_types",
+    "mechanism": "tim-expression-value-snapshot",
+    "source": "test-diagrams/perturbations/tim-expression-value-snapshot/checker4_json_scalar_types.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "JSON numbers versus literals",
+      "boolean/null member projection"
+    ],
+    "provenance": "TContext.fromJson; TValue.add",
+    "intended_negative": false,
+    "source_sha256": "a3be86175a53ebc0b5e02854988405eeacefe04d8109d547deeba9183be66dde"
+  },
+  {
+    "id": "literal_definelong",
+    "mechanism": "tim-literal-substitution-boundary",
+    "source": "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_definelong.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "returned versus variable literal",
+      "legacy multiline-function registration"
+    ],
+    "provenance": "TContext.applyFunctionsAndVariables; TFunctionImpl.finalizeEnddefinelong",
+    "intended_negative": false,
+    "source_sha256": "051db29b72151f086a2acd01138ec230036bc18035e77b57eb0c39f767ff9f35"
+  },
+  {
+    "id": "literal_newline_boundary",
+    "mechanism": "tim-literal-substitution-boundary",
+    "source": "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_newline_boundary.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "backslash-n word boundary",
+      "direct versus substituted token"
+    ],
+    "provenance": "VariableManager.justAfterBackslashN/getVarnameAt",
+    "intended_negative": false,
+    "source_sha256": "5b9dcc95961e2460438a2fb480801afb70bbbc055597e7efec29f1407c0466ee"
+  },
+  {
+    "id": "literal_define_effects",
+    "mechanism": "tim-literal-substitution-boundary",
+    "source": "test-diagrams/perturbations/tim-literal-substitution-boundary/checker4_literal_define_effects.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "declaration-time effect",
+      "late definition and literal"
+    ],
+    "provenance": "EaterAffectationDefine.analyze; TContext.applyFunctionsAndVariables",
+    "intended_negative": false,
+    "source_sha256": "cabf7a797d07b06c448e3f77a155c60093fca9b9f2b52f61497897a2440498f8"
+  },
+  {
+    "id": "return_sibling_nested",
+    "mechanism": "tim-return-unwind",
+    "source": "test-diagrams/perturbations/tim-return-unwind/checker4_return_sibling_nested.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "nested foreach/while/conditional",
+      "sibling invocation state restore"
+    ],
+    "provenance": "TContext.executeLines; TFunctionImpl execution memory",
+    "intended_negative": false,
+    "source_sha256": "a178c168af0875c4d11ae700a6bfdcae90e93f944e69b5bdbc34b2c0102e2879"
+  },
+  {
+    "id": "return_condition_effect",
+    "mechanism": "tim-return-unwind",
+    "source": "test-diagrams/perturbations/tim-return-unwind/checker4_return_condition_effect.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "condition side effect",
+      "post-return cancellation"
+    ],
+    "provenance": "CodeIteratorWhile; TContext.executeLines",
+    "intended_negative": false,
+    "source_sha256": "c3717c1b6e912c5fd030e1d67b50185436117362d28d194104d760c95605ebec"
+  },
+  {
+    "id": "procedure_argument_error",
+    "mechanism": "tim-return-unwind",
+    "source": "test-diagrams/perturbations/tim-return-unwind/checker4_procedure_argument_error.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "argument failure versus procedure-kind failure",
+      "later statement cancellation"
+    ],
+    "provenance": "ReversePolishInterpretor; TFunctionImpl.executeReturnFunction",
+    "intended_negative": true,
+    "source_sha256": "ece1ac7093a8fa4dbc4ebeff60f9b2e8170b4424bf514060aefb44f1da9363a4"
+  },
+  {
+    "id": "foreach_shadow_sibling",
+    "mechanism": "tim-foreach-json-binding",
+    "source": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_shadow_sibling.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "parameter override versus global iteration",
+      "sibling visibility and element type"
+    ],
+    "provenance": "CodeIteratorForeach.setLoopVariable; TMemoryLocal",
+    "intended_negative": false,
+    "source_sha256": "37f64e5b5d31341f7ae88e6d1703de3cbc38a79d924f70e043fb947526664ad5"
+  },
+  {
+    "id": "foreach_object_rebind",
+    "mechanism": "tim-foreach-json-binding",
+    "source": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_object_rebind.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "insertion order",
+      "collection rebinding during iteration"
+    ],
+    "provenance": "ExecutionContextForeach; JsonObject.names",
+    "intended_negative": false,
+    "source_sha256": "4d0e9b1599e6f8f27a2ce24af98318b78675c3318e64ec623c7c62c933346200"
+  },
+  {
+    "id": "foreach_nested_same_name",
+    "mechanism": "tim-foreach-json-binding",
+    "source": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_nested_same_name.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "nested same binding",
+      "empty collection preservation"
+    ],
+    "provenance": "CodeIteratorForeach; ExecutionContextForeach",
+    "intended_negative": false,
+    "source_sha256": "ba1d4f3ebabbf7a0b516f86ea192c1529ea00873d9f70abdcd922efb8a818164"
+  },
+  {
+    "id": "foreach_scalar_error",
+    "mechanism": "tim-foreach-json-binding",
+    "source": "test-diagrams/perturbations/tim-foreach-json-binding/checker4_foreach_scalar_error.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "JSON scalar kind",
+      "error versus empty iteration"
+    ],
+    "provenance": "EaterForeach.size",
+    "intended_negative": true,
+    "source_sha256": "6f69c0ac531954ff21365f4b5ee236270c88b544c0879dbd4c9e6214f09f7fa0"
+  },
+  {
+    "id": "sub_function_selector",
+    "mechanism": "tim-sub-directive-selection",
+    "source": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_function_selector.puml",
+    "cwd": "test-diagrams/perturbations/tim-sub-directive-selection",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "function expansion and tabs",
+      "repeated blocks/nested relative include"
+    ],
+    "provenance": "EaterIncludesub; Sub.fromFile; TContext.executeIncludesub",
+    "intended_negative": false,
+    "source_sha256": "78d65fd85f2a8cf44b36a59cbeec54240aea324621e2c2680cbf4455a01e102e"
+  },
+  {
+    "id": "sub_local_end_marker",
+    "mechanism": "tim-sub-directive-selection",
+    "source": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_local_end_marker.puml",
+    "cwd": "test-diagrams/perturbations/tim-sub-directive-selection",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "local marker suffix",
+      "expanded local selector"
+    ],
+    "provenance": "TLineType.ENDSUB; CodeIteratorSub",
+    "intended_negative": false,
+    "source_sha256": "b2e25e983c288d46f62773d6f8c2e65636809fc940d6cb1930a782730da001e9"
+  },
+  {
+    "id": "sub_commented_invalid",
+    "mechanism": "tim-sub-directive-selection",
+    "source": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_commented_invalid.puml",
+    "cwd": "test-diagrams/perturbations/tim-sub-directive-selection",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "commented malformed marker",
+      "tab whitespace"
+    ],
+    "provenance": "UncommentReadLine; Sub.fromFile",
+    "intended_negative": false,
+    "source_sha256": "1ea36377dd3386183deec1785bdee574bf01f23779211db30252192a17f281a3"
+  },
+  {
+    "id": "sub_invalid_after_selected",
+    "mechanism": "tim-sub-directive-selection",
+    "source": "test-diagrams/perturbations/tim-sub-directive-selection/checker4_sub_invalid_after_selected.puml",
+    "cwd": "test-diagrams/perturbations/tim-sub-directive-selection",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "malformed marker after selected section",
+      "first-error priority"
+    ],
+    "provenance": "Sub.fromFile whole-file validation",
+    "intended_negative": true,
+    "source_sha256": "efdda720da7d10ef0b83272ab7b8821fcc5bc9ac97d77b71f0d60265264fdb0f"
+  },
+  {
+    "id": "registry_unknown_text",
+    "mechanism": "tim-builtin-registration",
+    "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_text.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "unknown plain calls",
+      "inner variable substitution"
+    ],
+    "provenance": "TContext.getFunctionNameAt/applyFunctionsAndVariables",
+    "intended_negative": false,
+    "source_sha256": "cfc220004445d3ed10e145c05f6c9db0c2fe156a8140061e77f90e01400da47f"
+  },
+  {
+    "id": "registry_unknown_expression",
+    "mechanism": "tim-builtin-registration",
+    "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unknown_expression.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "unknown expression calls",
+      "first failure priority"
+    ],
+    "provenance": "ReversePolishInterpretor.getFunction",
+    "intended_negative": true,
+    "source_sha256": "743baa5de3488a8a4321c7a7726be498cefd9cee33b83025e60da18e86396a19"
+  },
+  {
+    "id": "registry_filtered_environment",
+    "mechanism": "tim-builtin-registration",
+    "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_filtered_environment.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {
+      "PLANTUML_CHECKER4": "007,oak",
+      "CHECKER4_PRIVATE": "benign-control",
+      "plantuml.security.checker4": "benign-hidden",
+      "PLANTUML_SECURITY_PROFILE": "LEGACY"
+    },
+    "axes": [
+      "allowed versus denied names",
+      "preserve numeric-looking text"
+    ],
+    "provenance": "Getenv; SecurityProfile.canWeReadThisEnvironmentVariable",
+    "intended_negative": false,
+    "source_sha256": "08118d8d4a8b790739d200e620d7e0a2efb476f01b45bfdf9e40ddac091f7c29"
+  },
+  {
+    "id": "registry_unsecure_environment",
+    "mechanism": "tim-builtin-registration",
+    "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_unsecure_environment.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {
+      "CHECKER4_PRIVATE": "visible-control",
+      "plantuml.security.checker4": "benign-hidden",
+      "PLANTUML_SECURITY_PROFILE": "UNSECURE"
+    },
+    "axes": [
+      "UNSECURE profile",
+      "security prefix still denied"
+    ],
+    "provenance": "SecurityProfile.init/canWeReadThisEnvironmentVariable",
+    "intended_negative": false,
+    "source_sha256": "249dfab87624b289f5872f6e9f9591236c463be48cd206877dea38e2484c2066"
+  },
+  {
+    "id": "registry_registered_unimplemented",
+    "mechanism": "tim-builtin-registration",
+    "source": "test-diagrams/perturbations/tim-builtin-registration/checker4_registry_registered_unimplemented.puml",
+    "cwd": ".",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {},
+    "axes": [
+      "registered name",
+      "plain text dispatch implementation"
+    ],
+    "provenance": "TContext.addStandardFunctions; BoolVal.executeReturnFunction",
+    "intended_negative": false,
+    "source_sha256": "bb49c4a81797ba6e884d3be99f58ca242a0697de22da3be40d842538520da4ad"
+  }
+]

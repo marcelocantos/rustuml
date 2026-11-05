@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam usecaseFontStyle bold
+rectangle Yard {
+  usecase "Kiln wq vista" as E1
+}
+@enduml

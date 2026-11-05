@@ -1,0 +1,9 @@
+@startuml
+!$hi=%substr("🦉",0,1)
+!$lo=%substr("🦉",1,1)
+!$a=%strpos(%upper("oak"+$hi)+%lower($lo+"ASH"),"🦉")
+!$b=%strlen(%upper("straße"))
+!$c=%strpos(%chr("65"),"A")
+!$d=%strpos(%chr(65),"A")
+class "$a / $b / $c / $d" as Units
+@enduml

@@ -1,0 +1,29 @@
+{
+  "base_files": 10347,
+  "imports": [
+    {
+      "revision": "83469a4832cf20b8e2e57514841e5c46adf63a6e",
+      "files": 118,
+      "differences": []
+    },
+    {
+      "revision": "521fe226d428c01128f4379bb7342584772924d7",
+      "files": 96,
+      "differences": []
+    },
+    {
+      "revision": "5ec48be56c4bce12ec646c29ed8e6d4be5e8518b",
+      "files": 135,
+      "differences": []
+    }
+  ],
+  "maker_archive_sha256": "c8d78419a7f297765ae725f4be2825f66cda1330855f7205c80509a4360e972f",
+  "maker_archive_members": 35347,
+  "maker_archive_members_exact": true,
+  "older_inventory": {
+    "path": "docs/parity-reviews/creole-unresolved-sprite-command/maker-support/historical-files.json",
+    "files": 9731,
+    "sha256": "2c6cc381b7efd6e512b65b9efc14851ba527397f9d092e61d199e0f348da9c71",
+    "differences": []
+  }
+}

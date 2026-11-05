@@ -1,0 +1,5 @@
+@startuml
+class "**Juniper**" as J
+class "Birch--" as B
+J --> B
+@enduml

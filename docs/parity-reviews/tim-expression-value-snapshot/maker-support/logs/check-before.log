@@ -1,0 +1,35 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.45
+   Compiling unicode-ident v1.0.24
+    Checking memchr v2.8.0
+   Compiling serde_core v1.0.228
+   Compiling anyhow v1.0.102
+   Compiling zmij v1.0.21
+    Checking hashbrown v0.16.1
+    Checking equivalent v1.0.2
+   Compiling version_check v0.9.5
+   Compiling serde v1.0.228
+   Compiling serde_yml v0.0.12
+   Compiling syn v2.0.117
+    Checking indexmap v2.13.0
+    Checking aho-corasick v1.1.4
+    Checking regex-syntax v0.8.10
+   Compiling serde_json v1.0.149
+    Checking itoa v1.0.18
+   Compiling libc v0.2.183
+   Compiling serde_derive v1.0.228
+    Checking regex-automata v0.4.14
+    Checking libyml v0.0.5
+    Checking ryu v1.0.23
+    Checking regex v1.12.3
+    Checking rustuml-parser v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563/crates/rustuml-parser)
+warning: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:72:15
+   |
+72 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rustuml-parser` (lib) generated 1 warning
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 8.03s

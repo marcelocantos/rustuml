@@ -1,0 +1,4 @@
+@startyaml
+scale 2
+k: v
+@endyaml

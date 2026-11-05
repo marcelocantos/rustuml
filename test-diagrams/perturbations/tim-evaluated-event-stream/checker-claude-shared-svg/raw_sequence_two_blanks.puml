@@ -1,0 +1,9 @@
+@startuml
+
+
+skinparam shadowing true
+participant Wren
+participant Finch
+Wren -> Finch : call
+note over Wren : memo
+@enduml

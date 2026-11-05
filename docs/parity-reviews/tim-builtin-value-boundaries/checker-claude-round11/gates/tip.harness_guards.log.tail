@@ -1,0 +1,60 @@
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/test-diagrams/perturbations/creole-unresolved-sprite-command/maker/missing_note.puml: perturbation is not named in any checker review
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/test-diagrams/perturbations/creole-unresolved-sprite-command/maker/missing_runs.puml: perturbation is not named in any checker review
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/test-diagrams/perturbations/creole-unresolved-sprite-command/maker/missing_seq.puml: perturbation is not named in any checker review
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/test-diagrams/perturbations/creole-unresolved-sprite-command/maker/missing_size.puml: perturbation is not named in any checker review
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/test-diagrams/perturbations/creole-unresolved-sprite-command/maker/missing_styled.puml: perturbation is not named in any checker review
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/state-transition-label-family-baseline/review.json: findings must contain at least 1 non-empty strings
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/state-transition-label-family-baseline/review.json: latest checker review must be accepted
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/state-transition-label-family-baseline/review.json: reviewer must be an object
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/state-transition-label-family-baseline/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/state-transition-label-family-baseline/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/state-transition-label-family-baseline/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/state-transition-label-family-baseline/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/state-transition-label-family-baseline/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/state-transition-label-family-baseline/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-symbol-cluster-style-shadow/review.json: account_commit must be a 40-character Git commit
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-symbol-cluster-style-shadow/review.json: implementation_commit must be a 40-character Git commit
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-symbol-cluster-style-shadow/review.json: latest checker review must be accepted
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-symbol-cluster-style-shadow/review.json: task_id must be a non-empty string
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-symbol-cluster-style-shadow/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/state-recursive-group-simplification/review-3.json: latest checker review must be accepted
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/state-recursive-group-simplification/review-3.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/state-recursive-group-simplification/review-3.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-single-svek-envelope-origin/review.json: latest checker review must be accepted
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-single-svek-envelope-origin/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-single-svek-envelope-origin/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-single-svek-envelope-origin/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-single-svek-envelope-origin/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-single-svek-envelope-origin/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-single-svek-envelope-origin/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/creole-recursive-character-hiding/review.json: latest checker review must be accepted
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/creole-recursive-character-hiding/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/creole-recursive-character-hiding/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/creole-recursive-character-hiding/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/creole-recursive-character-hiding/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/creole-recursive-character-hiding/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/creole-recursive-character-hiding/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/creole-recursive-character-hiding/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-current-spot-cascade/review.json: latest checker review must be accepted
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-current-spot-cascade/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-current-spot-cascade/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-current-spot-cascade/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-current-spot-cascade/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-current-spot-cascade/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-current-spot-cascade/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-current-spot-cascade/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/class-current-spot-cascade/review.json: latest accepted review cannot contain failing perturbations
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/tim-literal-variable-lookup/review-3.json: latest checker review must be accepted
+  /Users/marcelo/Library/Caches/rustuml-shared-svg-round11-claude-checker/gsrc/ba15189b2/docs/parity-reviews/tim-literal-variable-lookup/review-3.json: latest accepted review cannot contain failing perturbations
+test parity_review_records_are_complete ... FAILED
+test error_golden_census_is_frozen ... ok
+
+failures:
+
+failures:
+    decimal_literal_ratchet
+    parity_review_records_are_complete
+
+test result: FAILED. 4 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.50s
+
+error: test failed, to rerun pass `-p rustuml-oracle --test harness_guards`

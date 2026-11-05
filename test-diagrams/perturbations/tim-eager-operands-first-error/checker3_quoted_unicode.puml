@@ -1,0 +1,10 @@
+@startuml
+!$calls=0
+!function $tick()
+!$calls=$calls+1
+!return 0
+!endfunction
+!$literal="é $tick()"
+!$result=(0 || $literal) && %not("")
+class "$result / $calls" as Result
+@enduml

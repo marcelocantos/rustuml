@@ -1,0 +1,10 @@
+@startuml
+!$bare=false
+!$integer=%false()
+!$json=%str2json("false")
+!$a=%not($bare)
+!$b=%not($integer)
+!$c=%not($json)
+!$d=%feature("dark-mode")
+class "$a / $b / $c / $d" as Boolean
+@enduml

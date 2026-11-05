@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Times New Roman
+node "Dock" {
+  node "Kiln wq vista" as E1
+}
+component "Ok" as E2
+E1 --> E2
+@enduml

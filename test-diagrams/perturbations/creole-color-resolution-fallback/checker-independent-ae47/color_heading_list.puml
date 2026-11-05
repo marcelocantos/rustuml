@@ -1,0 +1,7 @@
+@startuml
+participant Oriole
+note right of Oriole
+== <color:indigo>a<color:NoTint77>b</color>c
+* <color:teal>x<color:NoTint77>y</color>z
+end note
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+skinparam linetype polyline
+skinparam ArrowFontSize 16
+class A
+class B
+A --> B : Pier quay
+@enduml

@@ -1,0 +1,5 @@
+@startsalt
+{
+  "Name%substr("🦉",0,1)"
+}
+@endsalt

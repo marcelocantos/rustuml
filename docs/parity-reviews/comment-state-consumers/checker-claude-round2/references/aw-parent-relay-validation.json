@@ -1,0 +1,43 @@
+{
+  "validated": true,
+  "cases": 45,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.bl79Ktpg",
+  "hashes": {
+    "reference-results.json.gz": "1d983971016d2eb534b150289457c3fdbcb813becb764c2980188a40d77ca651",
+    "reference-transport.json": "ebf3524a273084211dd7ce48e0ac049a9de0d9fdaa1acdeaa3c2772ff157a90e"
+  },
+  "remote_names": {
+    "reference-results.json.gz": "reference-results.json.gz",
+    "reference-transport.json": "reference-transport.json"
+  },
+  "exit_statuses": {
+    "0": 41,
+    "200": 4
+  },
+  "intended_invalid": [
+    "intval_double_sign",
+    "intval_fullwidth_overflow",
+    "intval_superscript_digit",
+    "intval_supplementary_digit",
+    "surrogate_activity_label",
+    "surrogate_high_class",
+    "surrogate_upper_sequence"
+  ],
+  "intended_invalid_exit0": [
+    "surrogate_activity_label",
+    "surrogate_high_class",
+    "surrogate_upper_sequence"
+  ],
+  "intended_valid_nonzero": [],
+  "nonempty_stderr": [
+    "intval_double_sign",
+    "intval_fullwidth_overflow",
+    "intval_superscript_digit",
+    "intval_supplementary_digit",
+    "surrogate_activity_label",
+    "surrogate_upper_sequence"
+  ],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "classification": "Validity not inferred from exit status."
+}

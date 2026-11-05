@@ -1083,18 +1083,39 @@ pub fn parse_named(input: &str, name: &str) -> Result<Diagram, ParseError> {
 
 /// Parse YAML input into a diagram model.
 pub fn parse_yaml(input: &str) -> Result<Diagram, ParseError> {
-    serde_yml::from_str(input).map_err(|e| ParseError {
+    // Model text enters here without TIM: escape it for the unit carrier.
+    let direct = serde_yml::from_str(&crate::java_utf16::escape(input)).map_err(|e| ParseError {
         line: e.location().map_or(0, |l| l.line()),
         message: format!("YAML parse error: {e}"),
-    })
+    });
+    // A decoded escape (\U0010FFFD) is escaped where serde decodes it.
+    if direct.is_ok()
+        && let Ok(mut value) = serde_yml::from_str::<serde_yml::Value>(input)
+        && crate::java_utf16::escape_yaml(&mut value)
+        && let Ok(diagram) = serde_yml::from_value(value)
+    {
+        return Ok(diagram);
+    }
+    direct
 }
 
 /// Parse JSON input into a diagram model.
 pub fn parse_json(input: &str) -> Result<Diagram, ParseError> {
-    serde_json::from_str(input).map_err(|e| ParseError {
+    let direct = serde_json::from_str(&crate::java_utf16::escape(input)).map_err(|e| ParseError {
         line: e.line(),
         message: format!("JSON parse error: {e}"),
-    })
+    });
+    // A decoded escape (\uDBFF\uDFFD) is escaped where serde decodes it; the
+    // escaped value is re-read as JSON text, whose raw scalars serde keeps.
+    if direct.is_ok()
+        && let Ok(mut value) = serde_json::from_str::<serde_json::Value>(input)
+        && crate::java_utf16::escape_json(&mut value)
+        && let Ok(text) = serde_json::to_string(&value)
+        && let Ok(diagram) = serde_json::from_str(&text)
+    {
+        return Ok(diagram);
+    }
+    direct
 }
 
 /// Detect input format and parse accordingly.
@@ -1111,7 +1132,10 @@ pub fn parse_auto_with_base(
     if trimmed.starts_with('{') {
         // Try model JSON first; fall back to @startjson-style data visualization.
         parse_json(input).or_else(|_| {
-            let lines: Vec<String> = input.lines().map(|l| l.to_string()).collect();
+            let lines: Vec<String> = crate::java_utf16::escape(input)
+                .lines()
+                .map(|l| l.to_string())
+                .collect();
             let diagram = json_diagram::parse_json_diagram(&lines)?;
             Ok(Diagram::Json(diagram))
         })
@@ -1137,6 +1161,14 @@ pub fn parse_with_base(
         Some(dir) => preprocess::preprocess_full_for_parse(input, Some(dir.to_path_buf())),
         None => preprocess::preprocess_full_for_parse(input, None),
     };
+    // Java TContext.executeOneLineSafe propagates fatal TIM errors; its partial
+    // result list must not become a successful diagram (account 0530072a).
+    if let Some(error) = preprocess_out.error.take() {
+        return Err(ParseError {
+            line: error.line,
+            message: error.message,
+        });
+    }
     let mut style_program = style::extract_style_program(&mut preprocess_out.lines);
     if typ == "uml" {
         for (index, line) in preprocess_out.lines.iter().enumerate() {
@@ -1157,6 +1189,13 @@ pub fn parse_with_base(
             }
             None => preprocess::preprocess_full_for_sequence_parse(input, None),
         };
+        // The sequence projection has the same TContext error contract.
+        if let Some(error) = preprocess_out.error.take() {
+            return Err(ParseError {
+                line: error.line,
+                message: error.message,
+            });
+        }
         style_program = style::extract_style_program(&mut preprocess_out.lines);
     }
     let lines = preprocess_out.lines;
@@ -1306,6 +1345,25 @@ pub fn parse_with_base(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn fatal_preprocessing_errors_preserve_origin() {
+        for declaration in ["class Before", "Alice -> Bob: before"] {
+            for (expression, diagnostic) in [
+                ("%date(\"QQ\",0)", "Bad date pattern"),
+                (
+                    "%date(\"yyyy\",2147483648)",
+                    // Java TValue.fromNumber rejects the literal before DateFunction.
+                    "Integer literal outside signed 32-bit range",
+                ),
+            ] {
+                let input = format!("@startuml\n{declaration}\n!$bad = {expression}\n@enduml\n");
+                let error = parse(&input).expect_err("fatal TIM error accepted partial diagram");
+                assert_eq!(error.line, 2, "{input}");
+                assert!(error.message.starts_with(diagnostic), "{error:?}");
+            }
+        }
+    }
 
     #[test]
     fn detects_uml_type() {
@@ -2189,15 +2247,18 @@ Policy --> Retry
     }
 
     #[test]
-    fn leading_blank_lines_do_not_shift_locations_but_internal_blanks_do() {
+    fn raw_reader_preserves_leading_and_internal_blank_line_origins() {
         let input = "@startuml\n\n\n\n\nclass FreshAlpha881\n\n\nclass FreshBeta883\nFreshAlpha881 --> FreshBeta883\n@enduml";
         let Diagram::Class(diagram) = parse(input).expect("class input parses") else {
             panic!("expected class diagram");
         };
 
-        assert_eq!(diagram.entities[0].source_line, 1);
-        assert_eq!(diagram.entities[1].source_line, 4);
-        assert_eq!(diagram.relationships[0].source_line, 5);
+        // Owner-selected Java CLI/file contract (policy commit b62d8ce9).
+        // SourceStringReader preserves these blanks; picoweb GET's
+        // DiagramSourceCompressor.decompress instead produces origins 1/4/5.
+        assert_eq!(diagram.entities[0].source_line, 5);
+        assert_eq!(diagram.entities[1].source_line, 8);
+        assert_eq!(diagram.relationships[0].source_line, 9);
     }
 
     // ── multi-block splitting ─────────────────────────────────────────────────

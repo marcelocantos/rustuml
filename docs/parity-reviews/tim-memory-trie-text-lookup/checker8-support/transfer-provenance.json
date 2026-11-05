@@ -1,0 +1,11 @@
+{
+  "remote_path": "/Users/marcelo/rustuml-reference/scratch/transfer.40QNxqeJ/input.json.gz",
+  "gzip_sha256": "c080ebc3cb87aeab74a9029f00d6b38b01cca36f97ce1d017b5a81e3daceeea8",
+  "bytes": 14523,
+  "original_input_bundle_sha256": "a8b4040b4bedbdff85791315d5e92bcbb4eb6585a60c898060a3a8c55c214e4f",
+  "request_sha256": "77fbc289bc49685ab5aa853b62efad4ab5c0ae7d165cec01d4a558adadc3afb6",
+  "manifest_sha256": "f3f75e45190bf83f926811d00be35dad86a2cdf189bc37c63ea7dae784311fac",
+  "resources": 24,
+  "cases": 20,
+  "transport_adaptation": "Original immutable files[].base64 mapped losslessly to established resources[].data envelope. All original files untouched."
+}

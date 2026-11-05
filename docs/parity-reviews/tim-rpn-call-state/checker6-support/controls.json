@@ -1,0 +1,920 @@
+[
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml",
+    "phases": {
+      "before": {
+        "argv": [
+          "/tmp/rustuml-checker6/before-rustuml",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+        "env_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "RAYON_NUM_THREADS": "4",
+          "TZ": "GMT+11:00",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+        },
+        "exit": 0,
+        "stdout_sha256": "a2f7198e13fabf89029f192c8e43438dcf9975dc3ab760d1b43c6bac504c8b8a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.svg",
+          "/tmp/rustuml-checker6/controls/checker2_raw_tight/before/rust.svg"
+        ],
+        "comparison_exit": 0,
+        "svg_match": true
+      },
+      "after": {
+        "argv": [
+          "/tmp/rustuml-checker6/after-rustuml",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+        "env_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "RAYON_NUM_THREADS": "4",
+          "TZ": "GMT+11:00",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+        },
+        "exit": 0,
+        "stdout_sha256": "a2f7198e13fabf89029f192c8e43438dcf9975dc3ab760d1b43c6bac504c8b8a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.svg",
+          "/tmp/rustuml-checker6/controls/checker2_raw_tight/after/rust.svg"
+        ],
+        "comparison_exit": 0,
+        "svg_match": true
+      }
+    }
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml",
+    "phases": {
+      "before": {
+        "argv": [
+          "/tmp/rustuml-checker6/before-rustuml",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+        "env_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "RAYON_NUM_THREADS": "4",
+          "TZ": "GMT+11:00",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+        },
+        "exit": 0,
+        "stdout_sha256": "cf17bfea17dbf20fa788d5008ae4d26b1b037cce760247d323b6166c7042486a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.svg",
+          "/tmp/rustuml-checker6/controls/checker2_raw_blank_crlf/before/rust.svg"
+        ],
+        "comparison_exit": 0,
+        "svg_match": true
+      },
+      "after": {
+        "argv": [
+          "/tmp/rustuml-checker6/after-rustuml",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+        "env_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "RAYON_NUM_THREADS": "4",
+          "TZ": "GMT+11:00",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+        },
+        "exit": 0,
+        "stdout_sha256": "cf17bfea17dbf20fa788d5008ae4d26b1b037cce760247d323b6166c7042486a",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.svg",
+          "/tmp/rustuml-checker6/controls/checker2_raw_blank_crlf/after/rust.svg"
+        ],
+        "comparison_exit": 0,
+        "svg_match": true
+      }
+    }
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml",
+    "phases": {
+      "before": {
+        "argv": [
+          "/tmp/rustuml-checker6/before-rustuml",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+        "env_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "RAYON_NUM_THREADS": "4",
+          "TZ": "GMT+11:00",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+        },
+        "exit": 0,
+        "stdout_sha256": "481a57a4d153ddb42fa43028e61ebda1b783a8b9294c01dc59f97b60e1ed49d6",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.svg",
+          "/tmp/rustuml-checker6/controls/checker2_raw_named_trailing/before/rust.svg"
+        ],
+        "comparison_exit": 0,
+        "svg_match": true
+      },
+      "after": {
+        "argv": [
+          "/tmp/rustuml-checker6/after-rustuml",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+        "env_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "RAYON_NUM_THREADS": "4",
+          "TZ": "GMT+11:00",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+        },
+        "exit": 0,
+        "stdout_sha256": "481a57a4d153ddb42fa43028e61ebda1b783a8b9294c01dc59f97b60e1ed49d6",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.svg",
+          "/tmp/rustuml-checker6/controls/checker2_raw_named_trailing/after/rust.svg"
+        ],
+        "comparison_exit": 0,
+        "svg_match": true
+      }
+    }
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+    "phases": {
+      "before": {
+        "argv": [
+          "/tmp/rustuml-checker6/before-rustuml",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+        "env_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "RAYON_NUM_THREADS": "4",
+          "TZ": "GMT+11:00",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+        },
+        "exit": 0,
+        "stdout_sha256": "77bd7ef554056626c2862dbae57a3344463bf474e49ad341ca76e59fe8ee4869",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.svg",
+          "/tmp/rustuml-checker6/controls/checker2_raw_counterpart_act_skinparam2_shadowing_true/before/rust.svg"
+        ],
+        "comparison_exit": 0,
+        "svg_match": true
+      },
+      "after": {
+        "argv": [
+          "/tmp/rustuml-checker6/after-rustuml",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+        "env_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "RAYON_NUM_THREADS": "4",
+          "TZ": "GMT+11:00",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+        },
+        "exit": 0,
+        "stdout_sha256": "77bd7ef554056626c2862dbae57a3344463bf474e49ad341ca76e59fe8ee4869",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.svg",
+          "/tmp/rustuml-checker6/controls/checker2_raw_counterpart_act_skinparam2_shadowing_true/after/rust.svg"
+        ],
+        "comparison_exit": 0,
+        "svg_match": true
+      }
+    }
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+    "phases": {
+      "before": {
+        "argv": [
+          "/tmp/rustuml-checker6/before-rustuml",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+        "env_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "RAYON_NUM_THREADS": "4",
+          "TZ": "GMT+11:00",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+        },
+        "exit": 0,
+        "stdout_sha256": "5cc35796ef055b46d8306ddbd2baa38319b31b9b7e609301f5bba0b6585e545c",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.svg",
+          "/tmp/rustuml-checker6/controls/checker2_raw_counterpart_act_skinparam_shadowing/before/rust.svg"
+        ],
+        "comparison_exit": 0,
+        "svg_match": true
+      },
+      "after": {
+        "argv": [
+          "/tmp/rustuml-checker6/after-rustuml",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+        "env_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "RAYON_NUM_THREADS": "4",
+          "TZ": "GMT+11:00",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+        },
+        "exit": 0,
+        "stdout_sha256": "5cc35796ef055b46d8306ddbd2baa38319b31b9b7e609301f5bba0b6585e545c",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.svg",
+          "/tmp/rustuml-checker6/controls/checker2_raw_counterpart_act_skinparam_shadowing/after/rust.svg"
+        ],
+        "comparison_exit": 0,
+        "svg_match": true
+      }
+    }
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+    "phases": {
+      "before": {
+        "argv": [
+          "/tmp/rustuml-checker6/before-rustuml",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+        "env_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "RAYON_NUM_THREADS": "4",
+          "TZ": "GMT+11:00",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+        },
+        "exit": 0,
+        "stdout_sha256": "aff2bb42a26a9f94d3f979c2c89383243c2b0950495882d23d8baa8072a772eb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.svg",
+          "/tmp/rustuml-checker6/controls/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines/before/rust.svg"
+        ],
+        "comparison_exit": 0,
+        "svg_match": true
+      },
+      "after": {
+        "argv": [
+          "/tmp/rustuml-checker6/after-rustuml",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml"
+        ],
+        "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+        "env_overrides": {
+          "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+          "RAYON_NUM_THREADS": "4",
+          "TZ": "GMT+11:00",
+          "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+        },
+        "exit": 0,
+        "stdout_sha256": "aff2bb42a26a9f94d3f979c2c89383243c2b0950495882d23d8baa8072a772eb",
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.svg",
+          "/tmp/rustuml-checker6/controls/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines/after/rust.svg"
+        ],
+        "comparison_exit": 0,
+        "svg_match": true
+      }
+    }
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+    "phases": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "panic": false,
+        "calls": [
+          {
+            "mode": "svg",
+            "argv": [
+              "/tmp/rustuml-checker6/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "0743a8424116036e378fc5c9ff2a92ba2b66f9b46f52f6e3e5b65755918af971",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "mode": "yaml",
+            "argv": [
+              "/tmp/rustuml-checker6/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "5fa651c580a96991012754b7e9289521c8149be44200c7afdb2b883a917c3857",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.svg",
+          "/tmp/rustuml-checker6/replay/collateral/1309-checker_comments_and_origins/before/rust.svg"
+        ],
+        "first_diagnostic": [],
+        "model": {
+          "type": "Class",
+          "entities": 2,
+          "source": "@startuml\n\n\n\n\nskinparam backgroundColor transparent\nskinparam useBetaStyle false\n\n\n\n\n\n\n<style>\n  root {\n    BackgroundColor transparent\n    FontColor #FFF\n    HyperLinkColor #FD7E14\n    LineColor #2683B9\n    LineThickness 1\n    Margin 10\n    Padding 6\n    Shadowing 0.0\n  }\n  node {\n   Padding 15\n   roundcorner 20\n   BackgroundColor #2FA4E7-#2683B9\n  }\n  caption {\n    LineThickness 0\n  }\n  footer {\n    LineThickness 0\n  }\n  groupHeader {\n    BackgroundColor #E9ECEF\n    FontColor #033C73\n    FontStyle bold\n  }\n  header {\n    LineThickness 0\n  }\n  referenceHeader {\n    BackgroundColor transparent\n    FontColor #343A40\n    FontStyle bold\n  }\n  separator {\n    BackgroundColor #343A40\n    FontColor transparent\n    FontStyle bold\n  }\n  title {\n\tFontSize 20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor  #EDF0F2-#E9ECEF\n\tFontColor #2FA4E7\n\tBorderColor #E9ECEF\n  }\n  nwdiagDiagram {\n\tnetwork {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7    \n\t\tLineColor #2FA4E7\n\t\tLineThickness 1.0\n\t\tFontColor #2683B9\n\t}\n\tserver {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t}\n\tarrow {\n\t\tFontColor #2683B9\n\t\tLineColor #2683B9\n\t}\n\tgroup {\n\t\tBackGroundColor #F8F9FA\n\t\tLineColor $LIGHT_DARK\n\t\tLineThickness 2.0\n\t\tMargin 5\n\t\tPadding 5\n\t}\n  }\n  ganttDiagram {\n\ttask {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t\tLineColor #2FA4E7\n\t\tMargin 10 2 2 2\n\t\tPadding 6\n\t}\n\tnote {\n\t\tFontColor #FFF\n\t\tLineColor #02305C\n\t\tBackGroundColor #033C73\n\t}\n\tseparator {\n\t\tLineColor #E9ECEF\n\t\tBackGroundColor #E9ECEF-#BABDBF\n\t\tFontColor #343A40\n\t}\n\tmilestone {\n\t\tFontColor #033C73\n\t\tFontSize 16\n\t\tFontStyle italic\n\t\tBackGroundColor #E9ECEF\n\t\tLineColor #BABDBF\n\t}\n\ttimeline {\n\t\tBackgroundColor #E9ECEF\n\t\tFontColor #343A40\n\t}\n\tclosed {\n\t\tBackgroundColor #B14500\n\t\tFontColor #FFF\n\t}\n  }\n</style>\nskinparam defaultFontName        \"Verdana\"\nskinparam defaultFontSize        12\nskinparam dpi                    100\nskinparam shadowing              false\nskinparam roundcorner            8\nskinparam ParticipantPadding     40\nskinparam BoxPadding             40\nskinparam Padding                5\nskinparam ArrowColor             #868E96\nskinparam stereotype {\n    CBackgroundColor #EDF0F2\n    CBorderColor #BABDBF\n    ABackgroundColor #8FB961\n    ABorderColor #5C862E\n    IBackgroundColor #D2494E\n    IBorderColor #9F161B\n    EBackgroundColor #E47833\n    EBorderColor #B14500\n    NBackgroundColor #35638F\n    NBorderColor #02305C\n}\nskinparam title {\n\tFontColor\t                 #2FA4E7\n\tBorderColor\t                 #BABDBF\n\tFontSize\t    \t         20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor              #EDF0F2-#E9ECEF\n}\n\n\nskinparam legend {\n\tBackgroundColor #E9ECEF\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\nskinparam swimlane {\n\tBorderColor #033C73\n\tBorderThickness 2\n\tTitleBackgroundColor  #EDF0F2-#E9ECEF\n\tTitleFontColor #2FA4E7\n}\n\n\nskinparam activity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBarColor #73A839\n\tStartColor #033C73\n\tEndColor #033C73\n\tDiamondBackgroundColor #FFF-#EDF0F2\n  \tDiamondBorderColor #BABDBF\n\tDiamondFontColor #343A40\n}\n\n\nskinparam participant {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tParticipantBorderThickness 2\n}\n\n\nskinparam actor {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam arrow {\n\tThickness 3\n\tColor #2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam sequence {\n\tBorderColor #2FA4E7\n\tTitleFontColor #2FA4E7\n\tBackgroundColor transparent\n\tStartColor #2FA4E7\n\tEndColor #2FA4E7\n\tBoxBackgroundColor #F8F9FA\n\tBoxBorderColor #868E96\n\tBoxFontColor #343A40\n\tDelayFontColor #343A40\n\tLifeLineBorderColor #BABDBF\n\tLifeLineBorderThickness 2\n\tLifeLineBackgroundColor #EDF0F2\n\tGroupBorderColor #868E96\n\tGroupFontColor #343A40\n\tGroupHeaderFontColor #033C73\n\tDividerBackgroundColor #FFF-#F8F9FA\n    DividerBorderColor #868E96\n    DividerBorderThickness 2\n    DividerFontColor #343A40\n\tReferenceBackgroundColor transparent\n\tReferenceBorderColor #868E96\n\tReferenceFontColor #343A40\n\tReferenceHeaderFontColor #033C73\n\tStereotypeFontColor #FFF\n}\n\n\nskinparam partition {\n\tBorderColor #2FA4E7\n\tFontColor #2FA4E7\n\tBackgroundColor transparent\n}\n\n\nskinparam collections {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam control {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam entity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam boundary {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam agent {\n\tBackgroundColor #orange\n\tBorderColor #999999\n\tFontColor #333333\n}\n\n\nskinparam note {\n\tBorderThickness 1\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam artifact {\n\tBackgroundColor #FFF-#F8F9FA\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\n\nskinparam component {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam interface {\n\tBackgroundColor  #D2494E\n\tBorderColor  #C71C22\n\tFontColor #343A40\n}\n\n\nskinparam storage {\n\tBackgroundColor #E47833-#DD5600\n  \tBorderColor #DD5600\n\tFontColor #FFF\n}\n\n\nskinparam node {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #E9ECEF\n\tFontColor #343A40\n}\n\n\nskinparam cloud {\n\tBackgroundColor #F2FCFE-#eeeeee\n\tBorderColor #F2FCFE\n\tFontColor #2FA4E7\n}\n\n\nskinparam database {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam class {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tHeaderBackgroundColor #2FA4E7-#2683B9\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #F8F9FA\n\tAttributeFontSize 11\n}\n\n\nskinparam object {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam usecase {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam rectangle {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam package {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n}\n\n\nskinparam folder {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #DD5600\n\tFontColor #DD5600\n\tBorderThickness 2\n}\n\n\nskinparam frame {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #033C73\n\tFontColor #033C73\n\tBorderThickness 2\n}\n\n\nskinparam state {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderColor #2683B9\n\tStartColor #033C73\n\tEndColor #033C73\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam queue {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam card {\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam file {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #033C73\n\tFontColor #868E96\n\n}\n\n\nskinparam stack {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\nclass Larch \n\nclass Pine\nLarch --> Pine\n@enduml\n"
+        },
+        "source_equal": true,
+        "reference_source_sha256": "5d8926707d37cd86d349e043258cd1d138f86eeef3e06bdb32ced58426d71b7c"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "panic": false,
+        "calls": [
+          {
+            "mode": "svg",
+            "argv": [
+              "/tmp/rustuml-checker6/after-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "0743a8424116036e378fc5c9ff2a92ba2b66f9b46f52f6e3e5b65755918af971",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "mode": "yaml",
+            "argv": [
+              "/tmp/rustuml-checker6/after-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "5fa651c580a96991012754b7e9289521c8149be44200c7afdb2b883a917c3857",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.svg",
+          "/tmp/rustuml-checker6/replay/collateral/1309-checker_comments_and_origins/after/rust.svg"
+        ],
+        "first_diagnostic": [],
+        "model": {
+          "type": "Class",
+          "entities": 2,
+          "source": "@startuml\n\n\n\n\nskinparam backgroundColor transparent\nskinparam useBetaStyle false\n\n\n\n\n\n\n<style>\n  root {\n    BackgroundColor transparent\n    FontColor #FFF\n    HyperLinkColor #FD7E14\n    LineColor #2683B9\n    LineThickness 1\n    Margin 10\n    Padding 6\n    Shadowing 0.0\n  }\n  node {\n   Padding 15\n   roundcorner 20\n   BackgroundColor #2FA4E7-#2683B9\n  }\n  caption {\n    LineThickness 0\n  }\n  footer {\n    LineThickness 0\n  }\n  groupHeader {\n    BackgroundColor #E9ECEF\n    FontColor #033C73\n    FontStyle bold\n  }\n  header {\n    LineThickness 0\n  }\n  referenceHeader {\n    BackgroundColor transparent\n    FontColor #343A40\n    FontStyle bold\n  }\n  separator {\n    BackgroundColor #343A40\n    FontColor transparent\n    FontStyle bold\n  }\n  title {\n\tFontSize 20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor  #EDF0F2-#E9ECEF\n\tFontColor #2FA4E7\n\tBorderColor #E9ECEF\n  }\n  nwdiagDiagram {\n\tnetwork {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7    \n\t\tLineColor #2FA4E7\n\t\tLineThickness 1.0\n\t\tFontColor #2683B9\n\t}\n\tserver {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t}\n\tarrow {\n\t\tFontColor #2683B9\n\t\tLineColor #2683B9\n\t}\n\tgroup {\n\t\tBackGroundColor #F8F9FA\n\t\tLineColor $LIGHT_DARK\n\t\tLineThickness 2.0\n\t\tMargin 5\n\t\tPadding 5\n\t}\n  }\n  ganttDiagram {\n\ttask {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t\tLineColor #2FA4E7\n\t\tMargin 10 2 2 2\n\t\tPadding 6\n\t}\n\tnote {\n\t\tFontColor #FFF\n\t\tLineColor #02305C\n\t\tBackGroundColor #033C73\n\t}\n\tseparator {\n\t\tLineColor #E9ECEF\n\t\tBackGroundColor #E9ECEF-#BABDBF\n\t\tFontColor #343A40\n\t}\n\tmilestone {\n\t\tFontColor #033C73\n\t\tFontSize 16\n\t\tFontStyle italic\n\t\tBackGroundColor #E9ECEF\n\t\tLineColor #BABDBF\n\t}\n\ttimeline {\n\t\tBackgroundColor #E9ECEF\n\t\tFontColor #343A40\n\t}\n\tclosed {\n\t\tBackgroundColor #B14500\n\t\tFontColor #FFF\n\t}\n  }\n</style>\nskinparam defaultFontName        \"Verdana\"\nskinparam defaultFontSize        12\nskinparam dpi                    100\nskinparam shadowing              false\nskinparam roundcorner            8\nskinparam ParticipantPadding     40\nskinparam BoxPadding             40\nskinparam Padding                5\nskinparam ArrowColor             #868E96\nskinparam stereotype {\n    CBackgroundColor #EDF0F2\n    CBorderColor #BABDBF\n    ABackgroundColor #8FB961\n    ABorderColor #5C862E\n    IBackgroundColor #D2494E\n    IBorderColor #9F161B\n    EBackgroundColor #E47833\n    EBorderColor #B14500\n    NBackgroundColor #35638F\n    NBorderColor #02305C\n}\nskinparam title {\n\tFontColor\t                 #2FA4E7\n\tBorderColor\t                 #BABDBF\n\tFontSize\t    \t         20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor              #EDF0F2-#E9ECEF\n}\n\n\nskinparam legend {\n\tBackgroundColor #E9ECEF\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\nskinparam swimlane {\n\tBorderColor #033C73\n\tBorderThickness 2\n\tTitleBackgroundColor  #EDF0F2-#E9ECEF\n\tTitleFontColor #2FA4E7\n}\n\n\nskinparam activity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBarColor #73A839\n\tStartColor #033C73\n\tEndColor #033C73\n\tDiamondBackgroundColor #FFF-#EDF0F2\n  \tDiamondBorderColor #BABDBF\n\tDiamondFontColor #343A40\n}\n\n\nskinparam participant {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tParticipantBorderThickness 2\n}\n\n\nskinparam actor {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam arrow {\n\tThickness 3\n\tColor #2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam sequence {\n\tBorderColor #2FA4E7\n\tTitleFontColor #2FA4E7\n\tBackgroundColor transparent\n\tStartColor #2FA4E7\n\tEndColor #2FA4E7\n\tBoxBackgroundColor #F8F9FA\n\tBoxBorderColor #868E96\n\tBoxFontColor #343A40\n\tDelayFontColor #343A40\n\tLifeLineBorderColor #BABDBF\n\tLifeLineBorderThickness 2\n\tLifeLineBackgroundColor #EDF0F2\n\tGroupBorderColor #868E96\n\tGroupFontColor #343A40\n\tGroupHeaderFontColor #033C73\n\tDividerBackgroundColor #FFF-#F8F9FA\n    DividerBorderColor #868E96\n    DividerBorderThickness 2\n    DividerFontColor #343A40\n\tReferenceBackgroundColor transparent\n\tReferenceBorderColor #868E96\n\tReferenceFontColor #343A40\n\tReferenceHeaderFontColor #033C73\n\tStereotypeFontColor #FFF\n}\n\n\nskinparam partition {\n\tBorderColor #2FA4E7\n\tFontColor #2FA4E7\n\tBackgroundColor transparent\n}\n\n\nskinparam collections {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam control {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam entity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam boundary {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam agent {\n\tBackgroundColor #orange\n\tBorderColor #999999\n\tFontColor #333333\n}\n\n\nskinparam note {\n\tBorderThickness 1\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam artifact {\n\tBackgroundColor #FFF-#F8F9FA\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\n\nskinparam component {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam interface {\n\tBackgroundColor  #D2494E\n\tBorderColor  #C71C22\n\tFontColor #343A40\n}\n\n\nskinparam storage {\n\tBackgroundColor #E47833-#DD5600\n  \tBorderColor #DD5600\n\tFontColor #FFF\n}\n\n\nskinparam node {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #E9ECEF\n\tFontColor #343A40\n}\n\n\nskinparam cloud {\n\tBackgroundColor #F2FCFE-#eeeeee\n\tBorderColor #F2FCFE\n\tFontColor #2FA4E7\n}\n\n\nskinparam database {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam class {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tHeaderBackgroundColor #2FA4E7-#2683B9\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #F8F9FA\n\tAttributeFontSize 11\n}\n\n\nskinparam object {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam usecase {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam rectangle {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam package {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n}\n\n\nskinparam folder {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #DD5600\n\tFontColor #DD5600\n\tBorderThickness 2\n}\n\n\nskinparam frame {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #033C73\n\tFontColor #033C73\n\tBorderThickness 2\n}\n\n\nskinparam state {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderColor #2683B9\n\tStartColor #033C73\n\tEndColor #033C73\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam queue {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam card {\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam file {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #033C73\n\tFontColor #868E96\n\n}\n\n\nskinparam stack {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\nclass Larch \n\nclass Pine\nLarch --> Pine\n@enduml\n"
+        },
+        "source_equal": true,
+        "reference_source_sha256": "5d8926707d37cd86d349e043258cd1d138f86eeef3e06bdb32ced58426d71b7c"
+      }
+    },
+    "provenance": "independent collateral-results replay, not another invocation"
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+    "phases": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "panic": false,
+        "calls": [
+          {
+            "mode": "svg",
+            "argv": [
+              "/tmp/rustuml-checker6/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "770649e1a39b603adc084208672682d53b145167b896ecd6f569f6146f882ba4",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "mode": "yaml",
+            "argv": [
+              "/tmp/rustuml-checker6/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "df95b31113592511c996a917129d21ebb467c3dd74f990c454d38d583b28e1b1",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.svg",
+          "/tmp/rustuml-checker6/replay/collateral/1391-checker_explicit_override_survives_global/before/rust.svg"
+        ],
+        "first_diagnostic": [],
+        "model": {
+          "type": "Class",
+          "entities": 2,
+          "source": "@startuml\nclass \"argument kept\" as Local\nclass \"published $local\" as Global\n@enduml\n"
+        },
+        "source_equal": true,
+        "reference_source_sha256": "2a017ca00cec60a4c56e3d382f895e8649f6706266e2d738f23d73f938533af5"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "panic": false,
+        "calls": [
+          {
+            "mode": "svg",
+            "argv": [
+              "/tmp/rustuml-checker6/after-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "770649e1a39b603adc084208672682d53b145167b896ecd6f569f6146f882ba4",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "mode": "yaml",
+            "argv": [
+              "/tmp/rustuml-checker6/after-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "df95b31113592511c996a917129d21ebb467c3dd74f990c454d38d583b28e1b1",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.svg",
+          "/tmp/rustuml-checker6/replay/collateral/1391-checker_explicit_override_survives_global/after/rust.svg"
+        ],
+        "first_diagnostic": [],
+        "model": {
+          "type": "Class",
+          "entities": 2,
+          "source": "@startuml\nclass \"argument kept\" as Local\nclass \"published $local\" as Global\n@enduml\n"
+        },
+        "source_equal": true,
+        "reference_source_sha256": "2a017ca00cec60a4c56e3d382f895e8649f6706266e2d738f23d73f938533af5"
+      }
+    },
+    "provenance": "independent collateral-results replay, not another invocation"
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+    "phases": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "panic": false,
+        "calls": [
+          {
+            "mode": "svg",
+            "argv": [
+              "/tmp/rustuml-checker6/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "ed6328e1cf3c7287f81e73511f00cc86429e188667222ed81999c55532a50131",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "mode": "yaml",
+            "argv": [
+              "/tmp/rustuml-checker6/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "bc7e02f6ec0ed74fcb152673ae89b7ab2e39929e5634ea51e759df767c5d0529",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.svg",
+          "/tmp/rustuml-checker6/replay/collateral/1393-checker_global_overtakes_auto_local/before/rust.svg"
+        ],
+        "first_diagnostic": [],
+        "model": {
+          "type": "Class",
+          "entities": 2,
+          "source": "@startuml\nclass \"now global\" as Now\nclass \"again automatic\" as Again\n@enduml\n"
+        },
+        "source_equal": true,
+        "reference_source_sha256": "7180d11d0ecd30c2944e807a570cebe4e1af970d5948325965b66d0b2b287945"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "panic": false,
+        "calls": [
+          {
+            "mode": "svg",
+            "argv": [
+              "/tmp/rustuml-checker6/after-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "ed6328e1cf3c7287f81e73511f00cc86429e188667222ed81999c55532a50131",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "mode": "yaml",
+            "argv": [
+              "/tmp/rustuml-checker6/after-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "bc7e02f6ec0ed74fcb152673ae89b7ab2e39929e5634ea51e759df767c5d0529",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.svg",
+          "/tmp/rustuml-checker6/replay/collateral/1393-checker_global_overtakes_auto_local/after/rust.svg"
+        ],
+        "first_diagnostic": [],
+        "model": {
+          "type": "Class",
+          "entities": 2,
+          "source": "@startuml\nclass \"now global\" as Now\nclass \"again automatic\" as Again\n@enduml\n"
+        },
+        "source_equal": true,
+        "reference_source_sha256": "7180d11d0ecd30c2944e807a570cebe4e1af970d5948325965b66d0b2b287945"
+      }
+    },
+    "provenance": "independent collateral-results replay, not another invocation"
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+    "phases": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "panic": false,
+        "calls": [
+          {
+            "mode": "svg",
+            "argv": [
+              "/tmp/rustuml-checker6/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "0e9ebce513c177a5bbadac002cde3d55c619fc508ec5cbd5c0a62311f9f818b4",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "mode": "yaml",
+            "argv": [
+              "/tmp/rustuml-checker6/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "587eca40332e14a8da327b513e682ac904916d3b19b22f947a65a6575569ad39",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.svg",
+          "/tmp/rustuml-checker6/replay/collateral/1398-checker_dump_memory/before/rust.svg"
+        ],
+        "first_diagnostic": [],
+        "model": {
+          "type": "Class",
+          "entities": 1,
+          "source": "@startuml\n\n\n\nskinparam backgroundColor transparent\nskinparam useBetaStyle false\n\n\n\n\n\n\n<style>\n  root {\n    BackgroundColor transparent\n    FontColor #FFF\n    HyperLinkColor #FD7E14\n    LineColor #2683B9\n    LineThickness 1\n    Margin 10\n    Padding 6\n    Shadowing 0.0\n  }\n  node {\n   Padding 15\n   roundcorner 20\n   BackgroundColor #2FA4E7-#2683B9\n  }\n  caption {\n    LineThickness 0\n  }\n  footer {\n    LineThickness 0\n  }\n  groupHeader {\n    BackgroundColor #E9ECEF\n    FontColor #033C73\n    FontStyle bold\n  }\n  header {\n    LineThickness 0\n  }\n  referenceHeader {\n    BackgroundColor transparent\n    FontColor #343A40\n    FontStyle bold\n  }\n  separator {\n    BackgroundColor #343A40\n    FontColor transparent\n    FontStyle bold\n  }\n  title {\n\tFontSize 20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor  #EDF0F2-#E9ECEF\n\tFontColor #2FA4E7\n\tBorderColor #E9ECEF\n  }\n  nwdiagDiagram {\n\tnetwork {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7    \n\t\tLineColor #2FA4E7\n\t\tLineThickness 1.0\n\t\tFontColor #2683B9\n\t}\n\tserver {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t}\n\tarrow {\n\t\tFontColor #2683B9\n\t\tLineColor #2683B9\n\t}\n\tgroup {\n\t\tBackGroundColor #F8F9FA\n\t\tLineColor $LIGHT_DARK\n\t\tLineThickness 2.0\n\t\tMargin 5\n\t\tPadding 5\n\t}\n  }\n  ganttDiagram {\n\ttask {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t\tLineColor #2FA4E7\n\t\tMargin 10 2 2 2\n\t\tPadding 6\n\t}\n\tnote {\n\t\tFontColor #FFF\n\t\tLineColor #02305C\n\t\tBackGroundColor #033C73\n\t}\n\tseparator {\n\t\tLineColor #E9ECEF\n\t\tBackGroundColor #E9ECEF-#BABDBF\n\t\tFontColor #343A40\n\t}\n\tmilestone {\n\t\tFontColor #033C73\n\t\tFontSize 16\n\t\tFontStyle italic\n\t\tBackGroundColor #E9ECEF\n\t\tLineColor #BABDBF\n\t}\n\ttimeline {\n\t\tBackgroundColor #E9ECEF\n\t\tFontColor #343A40\n\t}\n\tclosed {\n\t\tBackgroundColor #B14500\n\t\tFontColor #FFF\n\t}\n  }\n</style>\nskinparam defaultFontName        \"Verdana\"\nskinparam defaultFontSize        12\nskinparam dpi                    100\nskinparam shadowing              false\nskinparam roundcorner            8\nskinparam ParticipantPadding     40\nskinparam BoxPadding             40\nskinparam Padding                5\nskinparam ArrowColor             #868E96\nskinparam stereotype {\n    CBackgroundColor #EDF0F2\n    CBorderColor #BABDBF\n    ABackgroundColor #8FB961\n    ABorderColor #5C862E\n    IBackgroundColor #D2494E\n    IBorderColor #9F161B\n    EBackgroundColor #E47833\n    EBorderColor #B14500\n    NBackgroundColor #35638F\n    NBorderColor #02305C\n}\nskinparam title {\n\tFontColor\t                 #2FA4E7\n\tBorderColor\t                 #BABDBF\n\tFontSize\t    \t         20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor              #EDF0F2-#E9ECEF\n}\n\n\nskinparam legend {\n\tBackgroundColor #E9ECEF\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\nskinparam swimlane {\n\tBorderColor #033C73\n\tBorderThickness 2\n\tTitleBackgroundColor  #EDF0F2-#E9ECEF\n\tTitleFontColor #2FA4E7\n}\n\n\nskinparam activity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBarColor #73A839\n\tStartColor #033C73\n\tEndColor #033C73\n\tDiamondBackgroundColor #FFF-#EDF0F2\n  \tDiamondBorderColor #BABDBF\n\tDiamondFontColor #343A40\n}\n\n\nskinparam participant {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tParticipantBorderThickness 2\n}\n\n\nskinparam actor {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam arrow {\n\tThickness 3\n\tColor #2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam sequence {\n\tBorderColor #2FA4E7\n\tTitleFontColor #2FA4E7\n\tBackgroundColor transparent\n\tStartColor #2FA4E7\n\tEndColor #2FA4E7\n\tBoxBackgroundColor #F8F9FA\n\tBoxBorderColor #868E96\n\tBoxFontColor #343A40\n\tDelayFontColor #343A40\n\tLifeLineBorderColor #BABDBF\n\tLifeLineBorderThickness 2\n\tLifeLineBackgroundColor #EDF0F2\n\tGroupBorderColor #868E96\n\tGroupFontColor #343A40\n\tGroupHeaderFontColor #033C73\n\tDividerBackgroundColor #FFF-#F8F9FA\n    DividerBorderColor #868E96\n    DividerBorderThickness 2\n    DividerFontColor #343A40\n\tReferenceBackgroundColor transparent\n\tReferenceBorderColor #868E96\n\tReferenceFontColor #343A40\n\tReferenceHeaderFontColor #033C73\n\tStereotypeFontColor #FFF\n}\n\n\nskinparam partition {\n\tBorderColor #2FA4E7\n\tFontColor #2FA4E7\n\tBackgroundColor transparent\n}\n\n\nskinparam collections {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam control {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam entity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam boundary {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam agent {\n\tBackgroundColor #orange\n\tBorderColor #999999\n\tFontColor #333333\n}\n\n\nskinparam note {\n\tBorderThickness 1\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam artifact {\n\tBackgroundColor #FFF-#F8F9FA\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\n\nskinparam component {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam interface {\n\tBackgroundColor  #D2494E\n\tBorderColor  #C71C22\n\tFontColor #343A40\n}\n\n\nskinparam storage {\n\tBackgroundColor #E47833-#DD5600\n  \tBorderColor #DD5600\n\tFontColor #FFF\n}\n\n\nskinparam node {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #E9ECEF\n\tFontColor #343A40\n}\n\n\nskinparam cloud {\n\tBackgroundColor #F2FCFE-#eeeeee\n\tBorderColor #F2FCFE\n\tFontColor #2FA4E7\n}\n\n\nskinparam database {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam class {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tHeaderBackgroundColor #2FA4E7-#2683B9\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #F8F9FA\n\tAttributeFontSize 11\n}\n\n\nskinparam object {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam usecase {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam rectangle {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam package {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n}\n\n\nskinparam folder {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #DD5600\n\tFontColor #DD5600\n\tBorderThickness 2\n}\n\n\nskinparam frame {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #033C73\n\tFontColor #033C73\n\tBorderThickness 2\n}\n\n\nskinparam state {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderColor #2683B9\n\tStartColor #033C73\n\tEndColor #033C73\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam queue {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam card {\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam file {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #033C73\n\tFontColor #868E96\n\n}\n\n\nskinparam stack {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\nclass AshLedger\n@enduml\n"
+        },
+        "source_equal": true,
+        "reference_source_sha256": "dad83b058e418f2e90f32ced8af24b0e15ff2f0bc62a13b2b0e42c85317032e6"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "panic": false,
+        "calls": [
+          {
+            "mode": "svg",
+            "argv": [
+              "/tmp/rustuml-checker6/after-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "0e9ebce513c177a5bbadac002cde3d55c619fc508ec5cbd5c0a62311f9f818b4",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "mode": "yaml",
+            "argv": [
+              "/tmp/rustuml-checker6/after-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "587eca40332e14a8da327b513e682ac904916d3b19b22f947a65a6575569ad39",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.svg",
+          "/tmp/rustuml-checker6/replay/collateral/1398-checker_dump_memory/after/rust.svg"
+        ],
+        "first_diagnostic": [],
+        "model": {
+          "type": "Class",
+          "entities": 1,
+          "source": "@startuml\n\n\n\nskinparam backgroundColor transparent\nskinparam useBetaStyle false\n\n\n\n\n\n\n<style>\n  root {\n    BackgroundColor transparent\n    FontColor #FFF\n    HyperLinkColor #FD7E14\n    LineColor #2683B9\n    LineThickness 1\n    Margin 10\n    Padding 6\n    Shadowing 0.0\n  }\n  node {\n   Padding 15\n   roundcorner 20\n   BackgroundColor #2FA4E7-#2683B9\n  }\n  caption {\n    LineThickness 0\n  }\n  footer {\n    LineThickness 0\n  }\n  groupHeader {\n    BackgroundColor #E9ECEF\n    FontColor #033C73\n    FontStyle bold\n  }\n  header {\n    LineThickness 0\n  }\n  referenceHeader {\n    BackgroundColor transparent\n    FontColor #343A40\n    FontStyle bold\n  }\n  separator {\n    BackgroundColor #343A40\n    FontColor transparent\n    FontStyle bold\n  }\n  title {\n\tFontSize 20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor  #EDF0F2-#E9ECEF\n\tFontColor #2FA4E7\n\tBorderColor #E9ECEF\n  }\n  nwdiagDiagram {\n\tnetwork {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7    \n\t\tLineColor #2FA4E7\n\t\tLineThickness 1.0\n\t\tFontColor #2683B9\n\t}\n\tserver {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t}\n\tarrow {\n\t\tFontColor #2683B9\n\t\tLineColor #2683B9\n\t}\n\tgroup {\n\t\tBackGroundColor #F8F9FA\n\t\tLineColor $LIGHT_DARK\n\t\tLineThickness 2.0\n\t\tMargin 5\n\t\tPadding 5\n\t}\n  }\n  ganttDiagram {\n\ttask {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t\tLineColor #2FA4E7\n\t\tMargin 10 2 2 2\n\t\tPadding 6\n\t}\n\tnote {\n\t\tFontColor #FFF\n\t\tLineColor #02305C\n\t\tBackGroundColor #033C73\n\t}\n\tseparator {\n\t\tLineColor #E9ECEF\n\t\tBackGroundColor #E9ECEF-#BABDBF\n\t\tFontColor #343A40\n\t}\n\tmilestone {\n\t\tFontColor #033C73\n\t\tFontSize 16\n\t\tFontStyle italic\n\t\tBackGroundColor #E9ECEF\n\t\tLineColor #BABDBF\n\t}\n\ttimeline {\n\t\tBackgroundColor #E9ECEF\n\t\tFontColor #343A40\n\t}\n\tclosed {\n\t\tBackgroundColor #B14500\n\t\tFontColor #FFF\n\t}\n  }\n</style>\nskinparam defaultFontName        \"Verdana\"\nskinparam defaultFontSize        12\nskinparam dpi                    100\nskinparam shadowing              false\nskinparam roundcorner            8\nskinparam ParticipantPadding     40\nskinparam BoxPadding             40\nskinparam Padding                5\nskinparam ArrowColor             #868E96\nskinparam stereotype {\n    CBackgroundColor #EDF0F2\n    CBorderColor #BABDBF\n    ABackgroundColor #8FB961\n    ABorderColor #5C862E\n    IBackgroundColor #D2494E\n    IBorderColor #9F161B\n    EBackgroundColor #E47833\n    EBorderColor #B14500\n    NBackgroundColor #35638F\n    NBorderColor #02305C\n}\nskinparam title {\n\tFontColor\t                 #2FA4E7\n\tBorderColor\t                 #BABDBF\n\tFontSize\t    \t         20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor              #EDF0F2-#E9ECEF\n}\n\n\nskinparam legend {\n\tBackgroundColor #E9ECEF\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\nskinparam swimlane {\n\tBorderColor #033C73\n\tBorderThickness 2\n\tTitleBackgroundColor  #EDF0F2-#E9ECEF\n\tTitleFontColor #2FA4E7\n}\n\n\nskinparam activity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBarColor #73A839\n\tStartColor #033C73\n\tEndColor #033C73\n\tDiamondBackgroundColor #FFF-#EDF0F2\n  \tDiamondBorderColor #BABDBF\n\tDiamondFontColor #343A40\n}\n\n\nskinparam participant {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tParticipantBorderThickness 2\n}\n\n\nskinparam actor {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam arrow {\n\tThickness 3\n\tColor #2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam sequence {\n\tBorderColor #2FA4E7\n\tTitleFontColor #2FA4E7\n\tBackgroundColor transparent\n\tStartColor #2FA4E7\n\tEndColor #2FA4E7\n\tBoxBackgroundColor #F8F9FA\n\tBoxBorderColor #868E96\n\tBoxFontColor #343A40\n\tDelayFontColor #343A40\n\tLifeLineBorderColor #BABDBF\n\tLifeLineBorderThickness 2\n\tLifeLineBackgroundColor #EDF0F2\n\tGroupBorderColor #868E96\n\tGroupFontColor #343A40\n\tGroupHeaderFontColor #033C73\n\tDividerBackgroundColor #FFF-#F8F9FA\n    DividerBorderColor #868E96\n    DividerBorderThickness 2\n    DividerFontColor #343A40\n\tReferenceBackgroundColor transparent\n\tReferenceBorderColor #868E96\n\tReferenceFontColor #343A40\n\tReferenceHeaderFontColor #033C73\n\tStereotypeFontColor #FFF\n}\n\n\nskinparam partition {\n\tBorderColor #2FA4E7\n\tFontColor #2FA4E7\n\tBackgroundColor transparent\n}\n\n\nskinparam collections {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam control {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam entity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam boundary {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam agent {\n\tBackgroundColor #orange\n\tBorderColor #999999\n\tFontColor #333333\n}\n\n\nskinparam note {\n\tBorderThickness 1\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam artifact {\n\tBackgroundColor #FFF-#F8F9FA\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\n\nskinparam component {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam interface {\n\tBackgroundColor  #D2494E\n\tBorderColor  #C71C22\n\tFontColor #343A40\n}\n\n\nskinparam storage {\n\tBackgroundColor #E47833-#DD5600\n  \tBorderColor #DD5600\n\tFontColor #FFF\n}\n\n\nskinparam node {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #E9ECEF\n\tFontColor #343A40\n}\n\n\nskinparam cloud {\n\tBackgroundColor #F2FCFE-#eeeeee\n\tBorderColor #F2FCFE\n\tFontColor #2FA4E7\n}\n\n\nskinparam database {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam class {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tHeaderBackgroundColor #2FA4E7-#2683B9\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #F8F9FA\n\tAttributeFontSize 11\n}\n\n\nskinparam object {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam usecase {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam rectangle {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam package {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n}\n\n\nskinparam folder {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #DD5600\n\tFontColor #DD5600\n\tBorderThickness 2\n}\n\n\nskinparam frame {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #033C73\n\tFontColor #033C73\n\tBorderThickness 2\n}\n\n\nskinparam state {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderColor #2683B9\n\tStartColor #033C73\n\tEndColor #033C73\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam queue {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam card {\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam file {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #033C73\n\tFontColor #868E96\n\n}\n\n\nskinparam stack {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\nclass AshLedger\n@enduml\n"
+        },
+        "source_equal": true,
+        "reference_source_sha256": "dad83b058e418f2e90f32ced8af24b0e15ff2f0bc62a13b2b0e42c85317032e6"
+      }
+    },
+    "provenance": "independent collateral-results replay, not another invocation"
+  },
+  {
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+    "phases": {
+      "before": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "panic": false,
+        "calls": [
+          {
+            "mode": "svg",
+            "argv": [
+              "/tmp/rustuml-checker6/before-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "0d9a562797a579d6dafbf49f1cc0e2906a5aeff3db62e905698486bb82d103ce",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "mode": "yaml",
+            "argv": [
+              "/tmp/rustuml-checker6/before-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "32acbafc7a812e9598ee3a12a2990310282d1a26a143a1bc0f20800a3882a311",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.svg",
+          "/tmp/rustuml-checker6/replay/collateral/1405-checker_inner_comment/before/rust.svg"
+        ],
+        "first_diagnostic": [],
+        "model": {
+          "type": "Class",
+          "entities": 1,
+          "source": "@startuml\n\n\n\nskinparam backgroundColor transparent\nskinparam useBetaStyle false\n\n\n\n\n\n\n<style>\n  root {\n    BackgroundColor transparent\n    FontColor #FFF\n    HyperLinkColor #FD7E14\n    LineColor #2683B9\n    LineThickness 1\n    Margin 10\n    Padding 6\n    Shadowing 0.0\n  }\n  node {\n   Padding 15\n   roundcorner 20\n   BackgroundColor #2FA4E7-#2683B9\n  }\n  caption {\n    LineThickness 0\n  }\n  footer {\n    LineThickness 0\n  }\n  groupHeader {\n    BackgroundColor #E9ECEF\n    FontColor #033C73\n    FontStyle bold\n  }\n  header {\n    LineThickness 0\n  }\n  referenceHeader {\n    BackgroundColor transparent\n    FontColor #343A40\n    FontStyle bold\n  }\n  separator {\n    BackgroundColor #343A40\n    FontColor transparent\n    FontStyle bold\n  }\n  title {\n\tFontSize 20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor  #EDF0F2-#E9ECEF\n\tFontColor #2FA4E7\n\tBorderColor #E9ECEF\n  }\n  nwdiagDiagram {\n\tnetwork {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7    \n\t\tLineColor #2FA4E7\n\t\tLineThickness 1.0\n\t\tFontColor #2683B9\n\t}\n\tserver {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t}\n\tarrow {\n\t\tFontColor #2683B9\n\t\tLineColor #2683B9\n\t}\n\tgroup {\n\t\tBackGroundColor #F8F9FA\n\t\tLineColor $LIGHT_DARK\n\t\tLineThickness 2.0\n\t\tMargin 5\n\t\tPadding 5\n\t}\n  }\n  ganttDiagram {\n\ttask {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t\tLineColor #2FA4E7\n\t\tMargin 10 2 2 2\n\t\tPadding 6\n\t}\n\tnote {\n\t\tFontColor #FFF\n\t\tLineColor #02305C\n\t\tBackGroundColor #033C73\n\t}\n\tseparator {\n\t\tLineColor #E9ECEF\n\t\tBackGroundColor #E9ECEF-#BABDBF\n\t\tFontColor #343A40\n\t}\n\tmilestone {\n\t\tFontColor #033C73\n\t\tFontSize 16\n\t\tFontStyle italic\n\t\tBackGroundColor #E9ECEF\n\t\tLineColor #BABDBF\n\t}\n\ttimeline {\n\t\tBackgroundColor #E9ECEF\n\t\tFontColor #343A40\n\t}\n\tclosed {\n\t\tBackgroundColor #B14500\n\t\tFontColor #FFF\n\t}\n  }\n</style>\nskinparam defaultFontName        \"Verdana\"\nskinparam defaultFontSize        12\nskinparam dpi                    100\nskinparam shadowing              false\nskinparam roundcorner            8\nskinparam ParticipantPadding     40\nskinparam BoxPadding             40\nskinparam Padding                5\nskinparam ArrowColor             #868E96\nskinparam stereotype {\n    CBackgroundColor #EDF0F2\n    CBorderColor #BABDBF\n    ABackgroundColor #8FB961\n    ABorderColor #5C862E\n    IBackgroundColor #D2494E\n    IBorderColor #9F161B\n    EBackgroundColor #E47833\n    EBorderColor #B14500\n    NBackgroundColor #35638F\n    NBorderColor #02305C\n}\nskinparam title {\n\tFontColor\t                 #2FA4E7\n\tBorderColor\t                 #BABDBF\n\tFontSize\t    \t         20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor              #EDF0F2-#E9ECEF\n}\n\n\nskinparam legend {\n\tBackgroundColor #E9ECEF\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\nskinparam swimlane {\n\tBorderColor #033C73\n\tBorderThickness 2\n\tTitleBackgroundColor  #EDF0F2-#E9ECEF\n\tTitleFontColor #2FA4E7\n}\n\n\nskinparam activity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBarColor #73A839\n\tStartColor #033C73\n\tEndColor #033C73\n\tDiamondBackgroundColor #FFF-#EDF0F2\n  \tDiamondBorderColor #BABDBF\n\tDiamondFontColor #343A40\n}\n\n\nskinparam participant {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tParticipantBorderThickness 2\n}\n\n\nskinparam actor {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam arrow {\n\tThickness 3\n\tColor #2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam sequence {\n\tBorderColor #2FA4E7\n\tTitleFontColor #2FA4E7\n\tBackgroundColor transparent\n\tStartColor #2FA4E7\n\tEndColor #2FA4E7\n\tBoxBackgroundColor #F8F9FA\n\tBoxBorderColor #868E96\n\tBoxFontColor #343A40\n\tDelayFontColor #343A40\n\tLifeLineBorderColor #BABDBF\n\tLifeLineBorderThickness 2\n\tLifeLineBackgroundColor #EDF0F2\n\tGroupBorderColor #868E96\n\tGroupFontColor #343A40\n\tGroupHeaderFontColor #033C73\n\tDividerBackgroundColor #FFF-#F8F9FA\n    DividerBorderColor #868E96\n    DividerBorderThickness 2\n    DividerFontColor #343A40\n\tReferenceBackgroundColor transparent\n\tReferenceBorderColor #868E96\n\tReferenceFontColor #343A40\n\tReferenceHeaderFontColor #033C73\n\tStereotypeFontColor #FFF\n}\n\n\nskinparam partition {\n\tBorderColor #2FA4E7\n\tFontColor #2FA4E7\n\tBackgroundColor transparent\n}\n\n\nskinparam collections {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam control {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam entity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam boundary {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam agent {\n\tBackgroundColor #orange\n\tBorderColor #999999\n\tFontColor #333333\n}\n\n\nskinparam note {\n\tBorderThickness 1\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam artifact {\n\tBackgroundColor #FFF-#F8F9FA\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\n\nskinparam component {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam interface {\n\tBackgroundColor  #D2494E\n\tBorderColor  #C71C22\n\tFontColor #343A40\n}\n\n\nskinparam storage {\n\tBackgroundColor #E47833-#DD5600\n  \tBorderColor #DD5600\n\tFontColor #FFF\n}\n\n\nskinparam node {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #E9ECEF\n\tFontColor #343A40\n}\n\n\nskinparam cloud {\n\tBackgroundColor #F2FCFE-#eeeeee\n\tBorderColor #F2FCFE\n\tFontColor #2FA4E7\n}\n\n\nskinparam database {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam class {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tHeaderBackgroundColor #2FA4E7-#2683B9\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #F8F9FA\n\tAttributeFontSize 11\n}\n\n\nskinparam object {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam usecase {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam rectangle {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam package {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n}\n\n\nskinparam folder {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #DD5600\n\tFontColor #DD5600\n\tBorderThickness 2\n}\n\n\nskinparam frame {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #033C73\n\tFontColor #033C73\n\tBorderThickness 2\n}\n\n\nskinparam state {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderColor #2683B9\n\tStartColor #033C73\n\tEndColor #033C73\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam queue {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam card {\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam file {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #033C73\n\tFontColor #868E96\n\n}\n\n\nskinparam stack {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\nclass BirchLedger \n@enduml\n"
+        },
+        "source_equal": true,
+        "reference_source_sha256": "1e7306513d9cfc74ea3e6eb3c2942d34fc87d4559788aa9324ea146b10445168"
+      },
+      "after": {
+        "cli_exit": 0,
+        "comparison_exit": 0,
+        "svg_match": true,
+        "panic": false,
+        "calls": [
+          {
+            "mode": "svg",
+            "argv": [
+              "/tmp/rustuml-checker6/after-rustuml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "0d9a562797a579d6dafbf49f1cc0e2906a5aeff3db62e905698486bb82d103ce",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          },
+          {
+            "mode": "yaml",
+            "argv": [
+              "/tmp/rustuml-checker6/after-rustuml",
+              "--yaml",
+              "-pipe"
+            ],
+            "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2",
+            "env_overrides": {
+              "TZ": "GMT+11:00",
+              "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+              "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+              "RAYON_NUM_THREADS": "4"
+            },
+            "exit": 0,
+            "stdout_sha256": "32acbafc7a812e9598ee3a12a2990310282d1a26a143a1bc0f20800a3882a311",
+            "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+          }
+        ],
+        "comparison_argv": [
+          "/tmp/rustuml-checker6/probe",
+          "compare",
+          "/Users/marcelo/.t3/worktrees/rustuml/t3-0d7aeef2/test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.svg",
+          "/tmp/rustuml-checker6/replay/collateral/1405-checker_inner_comment/after/rust.svg"
+        ],
+        "first_diagnostic": [],
+        "model": {
+          "type": "Class",
+          "entities": 1,
+          "source": "@startuml\n\n\n\nskinparam backgroundColor transparent\nskinparam useBetaStyle false\n\n\n\n\n\n\n<style>\n  root {\n    BackgroundColor transparent\n    FontColor #FFF\n    HyperLinkColor #FD7E14\n    LineColor #2683B9\n    LineThickness 1\n    Margin 10\n    Padding 6\n    Shadowing 0.0\n  }\n  node {\n   Padding 15\n   roundcorner 20\n   BackgroundColor #2FA4E7-#2683B9\n  }\n  caption {\n    LineThickness 0\n  }\n  footer {\n    LineThickness 0\n  }\n  groupHeader {\n    BackgroundColor #E9ECEF\n    FontColor #033C73\n    FontStyle bold\n  }\n  header {\n    LineThickness 0\n  }\n  referenceHeader {\n    BackgroundColor transparent\n    FontColor #343A40\n    FontStyle bold\n  }\n  separator {\n    BackgroundColor #343A40\n    FontColor transparent\n    FontStyle bold\n  }\n  title {\n\tFontSize 20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor  #EDF0F2-#E9ECEF\n\tFontColor #2FA4E7\n\tBorderColor #E9ECEF\n  }\n  nwdiagDiagram {\n\tnetwork {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7    \n\t\tLineColor #2FA4E7\n\t\tLineThickness 1.0\n\t\tFontColor #2683B9\n\t}\n\tserver {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t}\n\tarrow {\n\t\tFontColor #2683B9\n\t\tLineColor #2683B9\n\t}\n\tgroup {\n\t\tBackGroundColor #F8F9FA\n\t\tLineColor $LIGHT_DARK\n\t\tLineThickness 2.0\n\t\tMargin 5\n\t\tPadding 5\n\t}\n  }\n  ganttDiagram {\n\ttask {\n\t\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\t\tLineColor #2FA4E7\n\t\tMargin 10 2 2 2\n\t\tPadding 6\n\t}\n\tnote {\n\t\tFontColor #FFF\n\t\tLineColor #02305C\n\t\tBackGroundColor #033C73\n\t}\n\tseparator {\n\t\tLineColor #E9ECEF\n\t\tBackGroundColor #E9ECEF-#BABDBF\n\t\tFontColor #343A40\n\t}\n\tmilestone {\n\t\tFontColor #033C73\n\t\tFontSize 16\n\t\tFontStyle italic\n\t\tBackGroundColor #E9ECEF\n\t\tLineColor #BABDBF\n\t}\n\ttimeline {\n\t\tBackgroundColor #E9ECEF\n\t\tFontColor #343A40\n\t}\n\tclosed {\n\t\tBackgroundColor #B14500\n\t\tFontColor #FFF\n\t}\n  }\n</style>\nskinparam defaultFontName        \"Verdana\"\nskinparam defaultFontSize        12\nskinparam dpi                    100\nskinparam shadowing              false\nskinparam roundcorner            8\nskinparam ParticipantPadding     40\nskinparam BoxPadding             40\nskinparam Padding                5\nskinparam ArrowColor             #868E96\nskinparam stereotype {\n    CBackgroundColor #EDF0F2\n    CBorderColor #BABDBF\n    ABackgroundColor #8FB961\n    ABorderColor #5C862E\n    IBackgroundColor #D2494E\n    IBorderColor #9F161B\n    EBackgroundColor #E47833\n    EBorderColor #B14500\n    NBackgroundColor #35638F\n    NBorderColor #02305C\n}\nskinparam title {\n\tFontColor\t                 #2FA4E7\n\tBorderColor\t                 #BABDBF\n\tFontSize\t    \t         20\n\tBorderRoundCorner            8\n\tBorderThickness \t         1\n\tBackgroundColor              #EDF0F2-#E9ECEF\n}\n\n\nskinparam legend {\n\tBackgroundColor #E9ECEF\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\nskinparam swimlane {\n\tBorderColor #033C73\n\tBorderThickness 2\n\tTitleBackgroundColor  #EDF0F2-#E9ECEF\n\tTitleFontColor #2FA4E7\n}\n\n\nskinparam activity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBarColor #73A839\n\tStartColor #033C73\n\tEndColor #033C73\n\tDiamondBackgroundColor #FFF-#EDF0F2\n  \tDiamondBorderColor #BABDBF\n\tDiamondFontColor #343A40\n}\n\n\nskinparam participant {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tParticipantBorderThickness 2\n}\n\n\nskinparam actor {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam arrow {\n\tThickness 3\n\tColor #2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam sequence {\n\tBorderColor #2FA4E7\n\tTitleFontColor #2FA4E7\n\tBackgroundColor transparent\n\tStartColor #2FA4E7\n\tEndColor #2FA4E7\n\tBoxBackgroundColor #F8F9FA\n\tBoxBorderColor #868E96\n\tBoxFontColor #343A40\n\tDelayFontColor #343A40\n\tLifeLineBorderColor #BABDBF\n\tLifeLineBorderThickness 2\n\tLifeLineBackgroundColor #EDF0F2\n\tGroupBorderColor #868E96\n\tGroupFontColor #343A40\n\tGroupHeaderFontColor #033C73\n\tDividerBackgroundColor #FFF-#F8F9FA\n    DividerBorderColor #868E96\n    DividerBorderThickness 2\n    DividerFontColor #343A40\n\tReferenceBackgroundColor transparent\n\tReferenceBorderColor #868E96\n\tReferenceFontColor #343A40\n\tReferenceHeaderFontColor #033C73\n\tStereotypeFontColor #FFF\n}\n\n\nskinparam partition {\n\tBorderColor #2FA4E7\n\tFontColor #2FA4E7\n\tBackgroundColor transparent\n}\n\n\nskinparam collections {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam control {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam entity {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam boundary {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam agent {\n\tBackgroundColor #orange\n\tBorderColor #999999\n\tFontColor #333333\n}\n\n\nskinparam note {\n\tBorderThickness 1\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam artifact {\n\tBackgroundColor #FFF-#F8F9FA\n\tBorderColor #BABDBF\n\tFontColor #343A40\n}\n\n\nskinparam component {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam interface {\n\tBackgroundColor  #D2494E\n\tBorderColor  #C71C22\n\tFontColor #343A40\n}\n\n\nskinparam storage {\n\tBackgroundColor #E47833-#DD5600\n  \tBorderColor #DD5600\n\tFontColor #FFF\n}\n\n\nskinparam node {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #E9ECEF\n\tFontColor #343A40\n}\n\n\nskinparam cloud {\n\tBackgroundColor #F2FCFE-#eeeeee\n\tBorderColor #F2FCFE\n\tFontColor #2FA4E7\n}\n\n\nskinparam database {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tFontColor #343A40\n}\n\n\nskinparam class {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tHeaderBackgroundColor #2FA4E7-#2683B9\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #F8F9FA\n\tAttributeFontSize 11\n}\n\n\nskinparam object {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tStereotypeFontColor #343A40\n\tBorderThickness 1\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam usecase {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam rectangle {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n\tStereotypeFontColor #2FA4E7\n}\n\n\nskinparam package {\n\tFontColor #2FA4E7\n\tBorderColor #59B6EC\n\tBackgroundColor transparent\n\tBorderThickness 2\n}\n\n\nskinparam folder {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #DD5600\n\tFontColor #DD5600\n\tBorderThickness 2\n}\n\n\nskinparam frame {\n\tBackgroundColor #FFF-#EDF0F2\n  \tBorderColor #033C73\n\tFontColor #033C73\n\tBorderThickness 2\n}\n\n\nskinparam state {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n\tBorderColor #2683B9\n\tStartColor #033C73\n\tEndColor #033C73\n\tAttributeFontColor #343A40\n\tAttributeFontSize 11\n}\n\n\nskinparam queue {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\n\n\nskinparam card {\n\tBackgroundColor #35638F-#033C73\n\tBorderColor #033C73\n\tFontColor #FFF\n}\n\n\nskinparam file {\n\tBackgroundColor #EDF0F2-#E9ECEF\n\tBorderColor #033C73\n\tFontColor #868E96\n\n}\n\n\nskinparam stack {\n\t\tFontColor #FFF\n\tBorderColor #2FA4E7\n\tBackgroundColor #59B6EC-#2FA4E7\n}\nclass BirchLedger \n@enduml\n"
+        },
+        "source_equal": true,
+        "reference_source_sha256": "1e7306513d9cfc74ea3e6eb3c2942d34fc87d4559788aa9324ea146b10445168"
+      }
+    },
+    "provenance": "independent collateral-results replay, not another invocation"
+  }
+]

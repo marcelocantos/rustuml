@@ -1,0 +1,90 @@
+{
+  "cases": [
+    {
+      "id": "golden-regressions/activity/act_creole_monospace",
+      "source_present_in_1992": false,
+      "before": true,
+      "initial": false,
+      "after": true,
+      "models_byte_equal": true
+    },
+    {
+      "id": "golden-regressions/creole/creole_font_name_in_activity",
+      "source_present_in_1992": false,
+      "before": true,
+      "initial": false,
+      "after": true,
+      "models_byte_equal": true
+    },
+    {
+      "id": "golden-regressions/creole/creole_font_name_in_class",
+      "source_present_in_1992": false,
+      "before": true,
+      "initial": false,
+      "after": true,
+      "models_byte_equal": true
+    },
+    {
+      "id": "golden-regressions/creole/creole_font_name_in_note",
+      "source_present_in_1992": false,
+      "before": true,
+      "initial": false,
+      "after": true,
+      "models_byte_equal": true
+    },
+    {
+      "id": "golden-regressions/creole/creole_font_name_in_sequence",
+      "source_present_in_1992": false,
+      "before": true,
+      "initial": false,
+      "after": true,
+      "models_byte_equal": true
+    },
+    {
+      "id": "golden-regressions/creole/creole_font_name_in_title",
+      "source_present_in_1992": false,
+      "before": true,
+      "initial": false,
+      "after": true,
+      "models_byte_equal": true
+    }
+  ],
+  "failure_names": [
+    {
+      "file": "no_oracle_failure_names.txt",
+      "before_count": 72,
+      "initial_count": 78,
+      "after_count": 72,
+      "after_byte_equal_before": true,
+      "after_byte_equal_maker_baseline": true,
+      "initial_losses": [
+        "activity/act_creole_monospace",
+        "creole/creole_font_name_in_activity",
+        "creole/creole_font_name_in_class",
+        "creole/creole_font_name_in_note",
+        "creole/creole_font_name_in_sequence",
+        "creole/creole_font_name_in_title"
+      ],
+      "initial_gains": [],
+      "final_sha256": "7fe3bf366cbf6b4baa85b02e4a3bd7d42cfa0c514e0be05e619353930169710a"
+    },
+    {
+      "file": "golden_failure_names.txt",
+      "before_count": 754,
+      "initial_count": 759,
+      "after_count": 754,
+      "after_byte_equal_before": true,
+      "after_byte_equal_maker_baseline": true,
+      "initial_losses": [
+        "activity/act_creole_monospace",
+        "creole/creole_font_name_in_activity",
+        "creole/creole_font_name_in_class",
+        "creole/creole_font_name_in_sequence",
+        "creole/creole_font_name_in_title"
+      ],
+      "initial_gains": [],
+      "final_sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b"
+    }
+  ],
+  "coverage_finding": "All six golden source hashes absent from every replay membership (1992). Initial focused creole-only tests and replay did not catch them; maker initial broad library/unit gates did. New independent initial diagnostics reproduce six product and five assisted losses, final repair restores all."
+}

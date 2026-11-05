@@ -1,0 +1,9 @@
+@startuml
+sprite $s [4x4/16] {
+0000
+0F00
+0F00
+0000
+}
+class "<$s> 􏿽" as S
+@enduml

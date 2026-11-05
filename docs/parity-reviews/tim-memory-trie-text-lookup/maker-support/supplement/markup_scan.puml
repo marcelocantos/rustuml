@@ -1,0 +1,6 @@
+@startuml
+!$label="word"
+!$x=%set_variable_value("space key","value")
+!$text="<$label> / <space key> / <$missing>"
+class "$text" as Markup
+@enduml

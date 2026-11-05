@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Times New Roman
+skinparam swimlaneTitleFontStyle bold italic
+|Kiln wq vista|
+start
+:Ok;
+@enduml

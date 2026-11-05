@@ -1,0 +1,137 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/memory_dual.puml",
+    "mechanism": "tim-exact-memory-identities",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/memory_mutate.puml",
+    "mechanism": "tim-exact-memory-identities",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/memory_sibling.puml",
+    "mechanism": "tim-exact-memory-identities",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/memory_remove.puml",
+    "mechanism": "tim-exact-memory-identities",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/overload_order.puml",
+    "mechanism": "tim-function-signature-availability",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/overload_defaults.puml",
+    "mechanism": "tim-function-signature-availability",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/overload_replace.puml",
+    "mechanism": "tim-function-signature-availability",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/overload_pending.puml",
+    "mechanism": "tim-function-signature-availability",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/overload_overlap.puml",
+    "mechanism": "tim-function-signature-availability",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/overload_bare.puml",
+    "mechanism": "tim-function-signature-availability",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/sub_uncalled_return.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/sub_called_counts.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/sub_uncalled_nested.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": true,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/sub_comments_origin.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-tim7-maker/new/sub_defaults_effect.puml",
+    "mechanism": "tim-sub-before-function-buffering",
+    "negative": false,
+    "cwd": "new",
+    "zone": "GMT+11:00",
+    "debug": "date=1774210426000,tz=AEDT+1100",
+    "env": {}
+  }
+]

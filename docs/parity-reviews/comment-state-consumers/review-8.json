@@ -1,0 +1,545 @@
+{
+ "schema_version": 1,
+ "reviewer": {
+  "task_id": "t3-661d4578 independent shared-SVG round-6 checker (claude)",
+  "model": "claude-opus-5-5 / Claude Code in T3 Code; no children; did not implement the candidate; no Java run locally"
+ },
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "base_revision": "8317cf006a18ba626a75824b13456934dbe8ce6c",
+ "base_code_identical_to": "9834a719455308120c3289b59a260567f141b724",
+ "merge": "fc44ee58cb74817e37bc1af843f2ba549ab63610",
+ "merge_code_identical_to": "8dda18b1bf819f379c0c13d1cadd158400eed147",
+ "tested_revision": "7e9b16f52ab20a00eba367ce5d572025318325fd",
+ "answers_rejection": "50cacfe23402f66536753aec052b93df07fde4a1",
+ "no_production_changes": true,
+ "no_shipping": true,
+ "account_chronology": {
+  "accounts (docs only)": "56a67759b0904ba7bf56b521e1ace5ab5ba1a3bc",
+  "outer canvas draft": "0861a51af70aecad1661610043b5646820bd3a70",
+  "extraction tool": "9267aa10551028c6498578ac97c057886c0aac86",
+  "marks + interim table + drift gate": "5ceb530dbec1f45762390745954182cd44deec5b",
+  "YAML/JSON Display draft": "85968418f764e8962900ab3af79ccaea13aa1418",
+  "CR/LF addendum -> draft": [
+   "51687f9ad7dbd237a5e7efd07610516e60f59343",
+   "11a9b1d0a6bba0bccdb06e7983dc25342b1c4baf"
+  ],
+  "YAML | addendum -> draft": [
+   "bd0f31ce1360bbb1f551392480134c600ae885d5",
+   "9aead23f0b80af4f33e3d57bd600873597762926"
+  ],
+  "root canvas addendum -> draft": [
+   "c19eeac56f510b100e8d18f25691d1968f94beb6",
+   "ef2f8c39e729fedd582c795c9c76b91728a78413"
+  ],
+  "relay request r6a (predictions sha256 38bc8cc7..., before results)": "cbc69571567d06aede3bc920e9df5a20260feb56",
+  "post-result addenda (HarfBuzz 10.0.1, StyleExtractor)": "9bca8ab35d22727cd7dc3395bc630a69295fb638",
+  "final table + HarfBuzz 10.0.1 rules": "41bf6019690f1e88589a85c066b84186f915f62c",
+  "blank-line drop": "ad554600c035b23d33d337f26c9fc2a5f47b94ab",
+  "test only": "6838ac4ea5cdb432f60f927122ebfe34800c31b5",
+  "every account and addendum precedes its change in linear ancestry; account and addendum commits are docs-only": true,
+  "post-BI output changes disclosed (results.json final_tip_changed_from_prediction: yd7_block_mid_document, mk7_0897_u16, mk7_1e5ee_u16, mk7_after_hebrew, fe7_f8b7_simple, fe7_20b7_simple)": true
+ },
+ "frozen_items": "unchanged 8317cf006..7e9b16f52: crates/rustuml-oracle (comparator slack, syntax markers, park list, error census, guard allow-lists, 14-entry strict-XML list), test-diagrams/no_oracle_baseline.txt, decimal_literal_baseline.txt, docs/reference-bootstrap.md; round 6 adds no 3+-decimal literal (ratchet lines identical merge -> tip)",
+ "do_not_regress_check": "BH/BG/BF/BE/BC/BB/AW/AU/AR: 0 lost vs merge, 0 comments lost, 0 new errors, panics or stderr changes; sweep merge->tip 0 lost matches, 0 lost rejections, 0 new valid-input errors, 0 new panics or timeouts, 0 comments lost (4 stderr changes are thread ids of pre-existing panics dash_01/03/06/07). Outer image origin, root-path note names, pass-three anchors, routing guard, width-token decoding, decode-site escaping, '?' comment rule, .notdef constants, note paint order, border points, stderr discard, node order, leaf corners, nested x, surrogate serializer, %intval, bracket declaration, strokes, X[H], seed, __theme, %strlen/%substr/%upper: unchanged outcomes in their batches and perturbation directories (parity_perturbations: 0 new failures on files existing at base or at merge).",
+ "commands": [
+  "git switch -c review/shared-svg-round6-claude 7e9b16f52ab20a00eba367ce5d572025318325fd; git -c protocol.file.allow=always submodule update --init --reference /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden test-diagrams/golden  # 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "git archive 8317cf006 | fc44ee58c | 7e9b16f52 -> ~/Library/Caches/rustuml-shared-svg-round6-claude-checker/src/<rev>; CARGO_TARGET_DIR=~/Library/Caches/rustuml-shared-svg-round6-claude-checker/target/<rev> cargo build --release -j 6 -p rustuml  # binaries sha256 00094ef5.. (base) 15b48398.. (merge) 8cb25352.. (tip)",
+  "checker-cmp (tools/checker-cmp-main.rs) built against the base export's rustuml-oracle (unchanged base->tip): compare::compare_svg_strict",
+  "python3 -I tools/sweep.py <bin> <out> <repo> work/cwd_map.json test-diagrams/golden test-diagrams/perturbations  # 16,701 sources x 3, recorded cwd; tools/sweep3.sh; tools/cohorts.py",
+  "python3 -I tools/batch.py ~/Library/Caches/rustuml-shared-svg-round6-claude-checker/work <relay dir> <label> bin/rustuml-8317cf006=base bin/rustuml-fc44ee58c=merge bin/rustuml-7e9b16f52=tip  # BI BH BG BF BE BC BB AW AU AR; tools/batchsum.py",
+  "bash tools/gates_all.sh  # gates.sh per tree (lib, pipe_mode, golden_no_oracle, golden_pairs, parity_perturbations, harness_guards, doc_claims) for tip and base; merge: parity_perturbations, harness_guards; tools/gatelists.py",
+  "bash tools/clippy_json.sh; python3 -I tools/clippy_list.py  # cargo clippy -p <crate> --no-deps --message-format=json -- -D warnings, crate root touched first",
+  "harfbuzz: git clone --filter=blob:none https://github.com/harfbuzz/harfbuzz; git show <tag>:src/<file>; tools/hbdiff.sh",
+  "font table: tools/font_chain_coverage.py and tools/font_chain_unicode.py regenerated (+ rustfmt) from the stored extraction and official UCD files; tools/drift_drill.sh (7 mutations, restored)",
+  "held-out batch K6A: python3 -I tools/k6a_sources.py; tools/canvas_pool.py (integral-extent selection); tools/predict.py base/merge/tip; tools/stage.py; chmod a-w",
+  "python3 -I tools/register.py <repo> pairs-BI.json BI=...; python3 -I tools/write_reviews6.py <repo> evidence",
+  "python3 -I tools/batch.py work /Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round6-k6a BJ bin/rustuml-8317cf006=base bin/rustuml-fc44ee58c=merge bin/rustuml-7e9b16f52=tip; tools/batchsum.py; tools/bj_texts.py (text/viewBox decomposition); exact viewBox census",
+  "python3 -I tools/register.py <repo> pairs.json BI=...=432b4184... BJ=...=1ba3bf60...  # error-page markers now include YAML/JSON 'does not sound like'",
+  "HarfBuzz 15.0.0: git show 15.0.0:src/{hb-ot-shape.cc,hb-ot-shape-fallback.cc,hb-unicode.hh,hb-ot-shaper*.{hh,cc},hb-ot-shape-normalize.cc} vs 10.0.1; UnicodeData 16.0.0 vs 18.0.0; font tables of Lucida Grande, Helvetica, Menlo .ttc checked for trak/STAT/kern",
+  "python3 -I tools/write_reviews6b.py <repo> evidence"
+ ],
+ "supersedes_pending_records": {
+  "commit": "409c512ebac284703eed577196a235580b8bd2c3",
+  "records": [
+   "tim-builtin-value-boundaries/review-6.json",
+   "comment-state-consumers/review-7.json"
+  ]
+ },
+ "relays_answered": {
+  "BJ (K6A, held out from the maker)": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round6-k6a/",
+   "reference_manifest_sha256": "d8010b01957ffb7e2302fc111b4267f0ead659143be056cd86ece45ef32e59d6",
+   "reference_input_bundle_sha256": "a2170453d1b9239a15b7c67378d57104a0a9bfcabaa50844f1318585be62db95",
+   "reference_results_sha256": "1ba3bf60163841bd6a6e4540aa762e09e2587f4f8af431e9a1657afe8b9077cd",
+   "reference_transport_sha256": "e247d6886292a3bfc677b5ada8690e5c38f334902d64038b8bd83740546b4588",
+   "parent_relay_validation_sha256": "d76ee71b4d78ab2cdd7b27a0c78a8904da62211652a09ec967f29f5b34b6f4f3",
+   "rust_predictions_sha256_registered_before_results": "31b7fcf5693f788ebc2d56530979e8edfbd94a0bce3334a4328ce834a6122264"
+  },
+  "Monkey Man HarfBuzz diagnostic": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round6-monkeyman-hb/out/",
+   "SHA256SUMS_sha256": "c5d00e3cd71cd98cfb546c940ac747ef1a9281fc33cf0a10d1c010a63314adc8",
+   "run_sh_sha256": "f013f976055c62d938a26ca2cbf5b0503c7ead0297dcc889592016d0e52455da",
+   "loaded": "/opt/homebrew/Cellar/harfbuzz/15.0.0_1/lib/libharfbuzz.0.dylib (current_version 61500 = 15.0.0, sha256 b04ab259a343ba51a50db8d1df637160f31d342a66c4192e18dba63ea42ed04a), FreeType 2.15.0; DYLD_PRINT_LIBRARIES and lsof/vmmap of a live reference JVM agree; receipt stable 15.0.0 poured 2026-10-28 10:37 UTC (opt symlink Oct 28 21:37 local); kegs 10.1.0 and 13.2.1 also installed",
+   "methodA_output": "byte-identical to BJ mk8_lucida_arabic's Java output (textLength 53.8811): the BJ run used the same library",
+   "font_files": "Helvetica.ttc, LucidaGrande.ttc, Menlo.ttc, GeezaPro.ttc, Times New Roman.ttf, Verdana.ttf, Arial.ttf, Courier New.ttf: sha256 identical on Monkey Man and colossus"
+  }
+ },
+ "evidence": {
+  "dir": "checker-claude-round6 (byte-identical copy in docs/parity-reviews/comment-state-consumers/ and docs/parity-reviews/tim-builtin-value-boundaries/; SHA256SUMS.json)",
+  "measurements": "checker-claude-round6/measurements.json",
+  "batches": "checker-claude-round6/batches, checker-claude-round6/batch-summary.json",
+  "cohorts": "checker-claude-round6/cohorts.json",
+  "pairs": "checker-claude-round6/pairs.json (BI + BJ; pairs-BI.json kept)",
+  "gates": "checker-claude-round6/gates (guard categories, perturbation summary, decimal ratchet, no-oracle families, clippy-diags.json, clippy-introduced.json)",
+  "harfbuzz": "checker-claude-round6/harfbuzz (+ planner-15.0.0.txt, default-ignorable-and-mn-15.0.0.txt, diff-10.0.1-vs-15.0.0.txt)",
+  "font_table": "checker-claude-round6/font-table (regeneration, cmap, drift drill M0-M7)",
+  "held_out_request": "checker-claude-round6/k6a-request (sources, cases, manifest, bundle, Rust predictions, prediction-summary.json, generator)",
+  "monkeyman_request": "checker-claude-round6/monkeyman-hb-request",
+  "tools": "checker-claude-round6/tools",
+  "relay_results": "checker-claude-round6/relay-results (bj: batch-BJ.json, batch-summary-BJ.json, bj-viewbox.json, tip-failures-texts.txt, java-error-pages/; monkeyman-hb: static.txt, methodA.*, methodB.*, SHA256SUMS)"
+ },
+ "counts": {
+  "BI_r6a_given_to_maker": "48 cases, Java exit 0 x48; strict base/merge/tip 5/9/39, strict+comments 1/9/39; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "BH": "99 cases, Java exit 0 x96; strict base/merge/tip 12/67/78, strict+comments 3/67/78; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "BG": "53 cases, Java exit 0 x52; strict base/merge/tip 12/41/41, strict+comments 0/41/41; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "BF": "46 cases, Java exit 0 x45; strict base/merge/tip 6/32/32, strict+comments 1/32/32; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "BE": "34 cases, Java exit 0 x32; strict base/merge/tip 0/22/22, strict+comments 0/22/22; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "BC": "19 cases, Java exit 0 x19; strict base/merge/tip 0/18/18, strict+comments 0/18/18; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "BB": "36 cases, Java exit 0 x36; strict base/merge/tip 2/25/25, strict+comments 2/25/25; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "AW": "45 cases, Java exit 0 x41; strict base/merge/tip 6/30/30, strict+comments 6/30/30; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "AU": "32 cases, Java exit 0 x29; strict base/merge/tip 6/21/21, strict+comments 6/21/21; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "AR": "20 cases, Java exit 0 x20; strict base/merge/tip 6/17/17, strict+comments 6/17/17; lost vs merge 0, vs base 0; new valid-input errors 0; lost rejections 0; new panics 0; comments lost 0; stderr changed vs merge 0",
+  "goldens": "12550 sources, 11351 Java-valid: strict 11181/11181/11181; tip exits {'1': 76, '0': 12474}; 0 panics, 0 timeouts; merge->tip 91 outputs changed, 0 match changes",
+  "sweep_all": "16701 sources, 15189 Java-valid: strict 12941/13695/13706; merge->tip {'gained_match': 11, 'outputs_changed': 192, 'stderr_changed': 4}; base->tip {'comments_gained': 927, 'comments_lost': 2, 'error_now_renders_valid_ref': 7, 'gained_match': 768, 'lost_match_GET_provenance': 3, 'outputs_changed': 1856, 'panic_removed': 6, 'rejection_gained': 71, 'stderr_changed': 132}",
+  "GET_goldens": "act_skinparam2_shadowing_true, act_skinparam_shadowing, edge_whitespace_multiple_blank_lines: MATCH at base, DIFF at merge and tip (raw-reader contract, not round 6)",
+  "gates": "golden_no_oracle 11181/11251 at base and tip; per family base->tip activity 1299->1297, edge-cases 760->759 (the 3 GET goldens), preprocessing 285->286, state 895->897 (CLI sweep names: lost = the 3 GET goldens; gained preproc_complex_theme_override, state_history_shallow, state_note_composite); golden_pairs 12550 total, 10497 passed, 754 failed, 1299 skipped at base and tip; parity_perturbations failing base/merge/tip 1365/1667/1656, 0 new failures on files that exist at base, 0 vs merge, 11 fixed merge->tip; harness_guards categories identical merge->tip, T14.6.7 categories 98+98 escapes / 98 / 98 unchanged base->tip; decimal ratchet lines identical merge->tip; pipe_mode 17/17 (base 13/13); workspace lib 1591/1591 (base 1468/1468); doc_claims 2/2",
+  "clippy": "cargo clippy -p <crate> --no-deps -- -D warnings, distinct error diagnostics base/merge/tip: rustuml-render 19/32/32, rustuml-parser 1/1/1 (dead_code), rustuml-oracle 1/1/1 (useless_format), rustuml-layout 0/0/0, rustuml 0, rustuml-math 0. Introduced by the packet line: 13 in rustuml-render, all before round 6 (merge == tip). The maker's '2 layout errors' does not reproduce (layout re-linted from a touched crate root: 0 at all three trees); its 22/35 render counts include summary lines.",
+  "BJ_K6A_held_out": "120 cases; Java exit 0 x117, exit 200 x3 (s8_chr10_seq, s8_chr13_seq, s8_chr13_class: Java syntax error 'Assumed diagram type: sequence', line 1); 2 more are Java error pages with exit 0 (y8_folded: UnsupportedOperationException wip4, y8_list_key_block: wip3, 'Your data does not sound like YAML data'); 115 Java-valid registered. Strict base/merge/tip 25/42/80 of 120 (strict+comments 15/42/80); registered pass at tip 80/115. Lost vs merge: mk8_lucida_arabic, mk8_seq_arabic; lost vs base: none; 40 gained vs merge; 0 new valid-input errors, 0 lost rejections, 0 panics, 0 comments lost; stderr changed vs merge only y8_blank_lines_everywhere, y8_block_whitespace_lines (merge errored, tip renders). Exact viewBox over the 117 exit-0 cases 24/36/84; lost exact viewBox merge->tip: mk8_lucida_arabic, mk8_seq_arabic, mk8_menlo_hebrew; 51 gained.",
+  "intent_disagreements_classified": "y8_folded, y8_list_key_block: intended invalid, Java exit 0 but an error page (YamlParser wip4/wip3): invalid, as intended; Rust renders at base, merge and tip (pre-existing lost rejection). s8_chr10_seq, s8_chr13_seq, s8_chr13_class: intended valid, Java syntax error at line 1 (exit 200): invalid; Rust renders at all three (pre-existing lost rejection). All five are evidence only."
+ },
+ "mechanism": "comment-state-consumers",
+ "account_commit": "56a67759b0904ba7bf56b521e1ace5ab5ba1a3bc",
+ "implementation_commit": "ef2f8c39e729fedd582c795c9c76b91728a78413",
+ "other_commits_reviewed": {
+  "outer_canvas_draft": "0861a51af70aecad1661610043b5646820bd3a70",
+  "root_canvas_addendum": "c19eeac56f510b100e8d18f25691d1968f94beb6",
+  "root_canvas_draft": "ef2f8c39e729fedd582c795c9c76b91728a78413"
+ },
+ "scope": "round-6 state obligations: outer image canvas (int)(x + 1), root cluster path canvas (SvekResult dimension, Cuca margin, ensureVisible)",
+ "verdict": "rejected",
+ "packet_verdict": "Packet 7e9b16f52 rejected on fresh held-out Java evidence (BJ = K6A). (1) The YAML '|' rewrite (9aead23f0) draws 'example: |+' where Java draws 'example: |' (y8_block_inner_pipe, _end, _nested). (2) The mark rule (41bf60196) zeroes marks whose base is in another font slot: mk8_lucida_arabic and mk8_seq_arabic matched at merge and fail at the tip; mk8_helv_hebrew and mk8_menlo_hebrew gain the same error. (3) Its premise is wrong for the reference host: the JVM loads HarfBuzz 15.0.0 (Unicode 18), confirmed by the diagnostic and by mk8_u17_*/mk8_u18_* zero advances. Confirmed and accept-ready on their own: outer and root canvas (exact on 10 fresh cases), StyleExtractor blank lines, CR/LF advance, Display escapes and AtomText tabs (with two scoping obligations). Broad gates and the ten earlier batches show 0 losses vs merge.",
+ "per_mechanism_verdicts": {
+  "outer image canvas (56a67759b -> 0861a51af)": "confirmed exactly on fresh BJ cv8_outer_* (3 integral, 2 fractional)",
+  "root cluster path canvas (c19eeac56 -> ef2f8c39e)": "confirmed exactly on fresh BJ cv8_root_*, cv8_rootlate_* (5)"
+ },
+ "findings": [
+  "Outer image canvas (0861a51af): confirmed exactly on fresh held-out cases. BJ cv8_outer_pier_jetty_mm, cv8_outer_harbour_ko_pier, cv8_outer_mm_pier_il (integral width): Java and tip 108 x 482, merge 107 x 482; cv8_outer_dock_mm_harbour, cv8_outer_buoy_mm_lighthouse (fractional): Java = merge = tip. The comparator's frozen +-1 canvas slack lets merge pass strict, so the gain shows in the exact viewBox census only.",
+  "Root cluster path canvas (ef2f8c39e): confirmed exactly. BJ cv8_root_pier_jetty_mm 254, cv8_root_quay_dock_harbour 267, cv8_root_wharf_anchorage_pier 233, cv8_rootlate_quay_mooring_wharf 195, cv8_rootlate_mooring_pier_ko 172 wide: Java = tip, merge one wider each; heights equal.",
+  "Flat state path and other families (cv8_flat_*, cv8_class_note, cv8_usecase, cv8_component, cv8_activity): exact at base, merge and tip.",
+  "The state mechanisms cause no failure on any batch; this record is rejected only because the packet is (tim-builtin-value-boundaries review-7).",
+  "Clippy (bounded obligation, not a parity rejection): 13 rustuml-render diagnostics introduced by the packet line before round 6 (gates/clippy-introduced.json): clippy::useless_borrows_in_formatting activity.rs:27402 (x2), 28762, 28815, 28869, archimate.rs:629, class.rs:13916 (x2), object.rs:1102; clippy::too_many_arguments deployment.rs:3310; clippy::needless_borrow state.rs:7644, 7836, 7878. Round 6 adds none. Layout: 0 (the maker's 2 do not reproduce)."
+ ],
+ "attributed_regressions": [],
+ "held_out_failures": {},
+ "bounded_next_obligations": [
+  "None for the canvas mechanisms (accept-ready). Carry forward: second same-side note link, note on a link in an image diagram, above/below/floating outer notes.",
+  "Clippy -D warnings: state.rs:7644, 7836, 7878 (needless_borrow) among the 13 introduced rustuml-render diagnostics."
+ ],
+ "evidence_only_cases": [],
+ "perturbations": [
+  {
+   "name": "cv7_integer_outer",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "canvas",
+    "outer image path, renamed integral-extent variant"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv7_integer_outer.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv7_integer_outer.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "920267733bdd3e343ab605163e31439abf3dcb7eea5051bc3abaad7159562507",
+   "golden_sha256": "f96a4bd2a0b7c4477f104fc34bf17c362d6cd73f9eb237bb8cc3266971a33cc2",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv7_root_group_note",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "canvas",
+    "root cluster path, fractional width"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv7_root_group_note.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv7_root_group_note.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "a461f55c1ad01632c4ab2aeb6dbeef14a292255875d6bd8fec5ff408cf0343ff",
+   "golden_sha256": "39c740b3f7a088633bbe8504f62b5eb1e9942f5e392a4d41e88d66db9cd404ee",
+   "base_8317cf006": "0/DIFF/32/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv7_root_note_later_inner",
+   "batch": "BI",
+   "reference_batch": "BI (relay batch r6a, maker's own batch; seen by the maker, not held out)",
+   "axes": [
+    "canvas",
+    "root cluster path, outer note anchored to a later inner state"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv7_root_note_later_inner.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv7_root_note_later_inner.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "471aad3834da1924de4a52b4c5ad9d0bc2ddd0c64993d8b77d2f36da5890c3d7",
+   "golden_sha256": "40b4c1d1f45fd16d0a2e1256c83cb6fdc7d9e011f4ca18ad1cd306eb4940d911",
+   "base_8317cf006": "0/DIFF/21/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_activity",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "activity family"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_activity.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_activity.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "59355bb35d5bdc7c93049c5fc54a007f2a0877aca9b150969e5dbbfd0a7f2053",
+   "golden_sha256": "5e7245eb23f08e8023046a4085f75d89d1c99e6da4f2989c1117ae7df5c6e333",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_class_note",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "class family (svek)",
+    "short labels"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_class_note.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_class_note.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "64992d91ba7c432f534880ff3f69f3eba5ebc15b29a9967b49c2ed8fa550869b",
+   "golden_sha256": "6066d119cdf874db2b1a6ca8fa65b4b0379741cb46f9b71516e5beeab2403e84",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_component",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "component family"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_component.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_component.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "65b02f2a4459eae70dbcc74f1642b92d6bb96dc2248e25b9a5d7b65443099edb",
+   "golden_sha256": "817f0d7f2869fe25408880cd6d202abd08d29b4d4925fd7bd759a3b1a7a64926",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_flat_ko_jetty_mm",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "flat path",
+    "flat state path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_flat_ko_jetty_mm.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_flat_ko_jetty_mm.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "07845ab8a2631ea6d0aa066941e26fac451a7f19a27167d047078cf5f50b7f97",
+   "golden_sha256": "b8f665a5419a155dc2aded6a8f9a888e844bf109aa7a7096871428be3f548a6e",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_flat_mooring_harbour_slipway",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "flat path",
+    "flat state path"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_flat_mooring_harbour_slipway.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_flat_mooring_harbour_slipway.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "8bd2c9b03b27c8a8738bd21699740870884738819de05a263416feb9dbbd735b",
+   "golden_sha256": "a26450dd2608854e15e3f0d55d6495b0eb3c8bab8c004c33e384a622a9243242",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_outer_buoy_mm_lighthouse",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "outer path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_buoy_mm_lighthouse.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_buoy_mm_lighthouse.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "12716a0d994a7557d01fe72d0a3ddf1dfc4c8ef42f860246f650369b3e09db1d",
+   "golden_sha256": "3968f1e189ddfbb31ff142b63633cf405febaba77ae7cd90f1875259126b4ebd",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_outer_dock_mm_harbour",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "outer path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_dock_mm_harbour.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_dock_mm_harbour.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "a92aecc587b90472aff05cc73796957eb7a5d47d08c2f51ccc6429cae0de95ff",
+   "golden_sha256": "4f33acca053938380a12c4b97c2c35ed63b81e620782d1823eea12ed581f13e4",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_outer_harbour_ko_pier",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "outer path",
+    "integral width and height"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_harbour_ko_pier.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_harbour_ko_pier.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "2f7be434250b8f361cc1a2d937f288229f43a1e332f55cdad65cb57f8c9946b0",
+   "golden_sha256": "c448ba0167b8f66e4b066f6a7b3d4245af01d497dcf1691295d9d4c0795009ea",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_outer_mm_pier_il",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "outer path",
+    "integral width and height"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_mm_pier_il.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_mm_pier_il.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "ec634de46fe97a8fb93fb9d1d003b7f0d4cc54892d6613e363e21743c4f5df24",
+   "golden_sha256": "f903ea5f96309fb8cd4fb8bb5992b3f7f326aa3325eef81db249117363306532",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_outer_pier_jetty_mm",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "outer path",
+    "integral width and height"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_pier_jetty_mm.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_outer_pier_jetty_mm.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "e02965fbb562d61d3496c7917a63ec1316fb2dcf5e7068e49f0c06c1c9b9891d",
+   "golden_sha256": "a5b793bc9c412f8e49bf6e74410bbd525b88a1701ebe87ed3759301a33ad9e3b",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_root_pier_jetty_mm",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "root path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_root_pier_jetty_mm.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_root_pier_jetty_mm.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "ad92383289dfb557934114a978e4b5d56e26132fd0b5b89f538e9930225034b2",
+   "golden_sha256": "1342a51e4c99ef9e59ceef3676a281c99ab8f364bb00985a2bdd3dce4182bf6e",
+   "base_8317cf006": "0/DIFF/32/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_root_quay_dock_harbour",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "root path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_root_quay_dock_harbour.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_root_quay_dock_harbour.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "807cfdaa82c29606a99720d8a17ff2dce0f096bae7bdea1406e81089d8120be7",
+   "golden_sha256": "cc244dfde8075e428c9a89a80ed156e58ac4606cca35ae1ebc105e5a25682c55",
+   "base_8317cf006": "0/DIFF/32/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_root_wharf_anchorage_pier",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "root path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_root_wharf_anchorage_pier.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_root_wharf_anchorage_pier.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "939a6394241829c3b669cbad4543074fe1a6e29dde5a44947bf9bcb4711461eb",
+   "golden_sha256": "7b8e9521426ad90a9698fe3b4337e4400add9faf991c082af14d867451bc94d6",
+   "base_8317cf006": "0/DIFF/32/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_rootlate_mooring_pier_ko",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "rootlate path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_rootlate_mooring_pier_ko.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_rootlate_mooring_pier_ko.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "2e026f65608b0babc048a866f28529d07c441ae778352b9278780ba907f80506",
+   "golden_sha256": "245ff2f6048e3b7042f071160591401a65650e9a82a19f091b6db513ecf189cf",
+   "base_8317cf006": "0/DIFF/21/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_rootlate_quay_mooring_wharf",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "rootlate path",
+    "fractional width, integral height"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_rootlate_quay_mooring_wharf.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_rootlate_quay_mooring_wharf.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "322bbbdda0f29423ed330d8bb93b5c3166419c5bc34b7d8534a1d6e537fc5535",
+   "golden_sha256": "5c322d770fd615b1e9c6744497dcbd9985c3dc7efb0aab7b8f84cb52c1575e1a",
+   "base_8317cf006": "0/DIFF/21/comments=False",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  },
+  {
+   "name": "cv8_usecase",
+   "batch": "BJ",
+   "reference_batch": "BJ (checker relay K6A, held out from the maker; Rust predictions registered before results)",
+   "axes": [
+    "canvas",
+    "usecase family"
+   ],
+   "intended_valid": true,
+   "java_exit": 0,
+   "source": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_usecase.puml",
+   "golden": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6/cv8_usecase.svg",
+   "cwd": "test-diagrams/perturbations/comment-state-consumers/checker-claude-round6",
+   "source_sha256": "fe0f56ce9d826ed27119165f630a64d2f5e06dd3ed8f0063ad52c7a425e23ce0",
+   "golden_sha256": "f6f23c4514be86c58f779156a3ef5b8460b35954d26ecc3a0cd9218ee5f90263",
+   "base_8317cf006": "0/match/0/comments=True",
+   "merge_fc44ee58c": "0/match/0/comments=True",
+   "tip_7e9b16f52": "0/match/0/comments=True",
+   "result": "pass"
+  }
+ ]
+}

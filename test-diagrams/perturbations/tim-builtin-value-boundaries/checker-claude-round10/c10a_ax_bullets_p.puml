@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times New Roman
+start
+:* first item
+* second longer item;
+@enduml

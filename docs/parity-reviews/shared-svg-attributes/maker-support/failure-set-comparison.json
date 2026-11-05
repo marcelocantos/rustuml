@@ -1,0 +1,20 @@
+[
+  {
+    "file": "no_oracle_failure_names.txt",
+    "identical": true,
+    "count": 72,
+    "sha256": "7fe3bf366cbf6b4baa85b02e4a3bd7d42cfa0c514e0be05e619353930169710a",
+    "baseline": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/final-no_oracle_failure_names.txt",
+    "lost_passes": [],
+    "gained_passes": []
+  },
+  {
+    "file": "golden_failure_names.txt",
+    "identical": true,
+    "count": 754,
+    "sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+    "baseline": "/Users/marcelo/Library/Caches/rustuml-creole-fallback-maker/final-golden_failure_names.txt",
+    "lost_passes": [],
+    "gained_passes": []
+  }
+]

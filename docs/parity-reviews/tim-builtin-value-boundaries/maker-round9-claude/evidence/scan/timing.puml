@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Courier New
+robust "<i>Rob r𝅧</i>" as R
+@0
+R is <i>On o𝅧</i>
+@enduml

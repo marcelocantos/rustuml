@@ -1,0 +1,12 @@
+{
+  "before": {
+    "revision": "a33dccc8e94dc44b5bafdc756fc1b88c42823a7d",
+    "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/before-rustuml",
+    "sha256": "cb3defffa4bddc2441a68ce580f286c7df2ceeb7a6b809d44eea28d94e644525"
+  },
+  "after": {
+    "revision": "346f6b3f680895d3eb457041ed88ae224c583d95",
+    "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-corrective-checker/after-rustuml",
+    "sha256": "65410ef4746b2b140a64ac5940461a5e40dfa6de505998d8874958bd66a9237b"
+  }
+}

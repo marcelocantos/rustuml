@@ -1,0 +1,11 @@
+@startuml
+!b="global"
+!$b="dollar"
+!function $mix(b="local",$b="over")
+!b="changed"
+!local $b="leaf"
+!return b+"/"+$b+"/"+%variable_exists("b")
+!endfunction
+!$v=$mix()
+class "$v / b / $b" as Scope
+@enduml

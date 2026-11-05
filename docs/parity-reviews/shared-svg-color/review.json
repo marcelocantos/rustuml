@@ -1,0 +1,554 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A02b1a747-7512-424a-bf7a-dd53d71bb634",
+    "model": "gpt-6-astra",
+    "effort": "high",
+    "tool": "T3 Code / Codex harness",
+    "independence": "New checker with no implementation involvement. No child agents, worktrees or production edits. Native review branch prepared by T3."
+  },
+  "account_commit": "d48ed1e7033e5539568a59b63c3d3229d07972db",
+  "implementation_commit": "a33dccc8e94dc44b5bafdc756fc1b88c42823a7d",
+  "evidence_revision": "a2167f93695497e49b8ae71c4830bac96309023b",
+  "base_revision": "b8905e296b8865e53f3c573abaebf4adb632d751",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "jdk": "OpenJDK 21.0.5 Homebrew",
+  "commands": [
+    "CARGO_TARGET_DIR=<private>/target-before CARGO_BUILD_JOBS=4 cargo build --release --locked -p rustuml (base revision)",
+    "CARGO_TARGET_DIR=<private>/target-after CARGO_BUILD_JOBS=4 cargo build --release --locked -p rustuml -p rustuml-oracle (evidence tip, identical production sources)",
+    "uv run --no-project python replay.py (12550 goldens plus 2104 membership-preserved retained/maker observations; actual CLI SVG and YAML both phases)",
+    "uv run --no-project python fresh_measure.py (87 held-out actual CLI before/after; immutable Java relay)",
+    "uv run --no-project python gates.py (eight broad gates once, frozen candidate before registering checker cases)",
+    "reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.L9dFp3l5/new --timezone GMT+11:00 -- -pipe -tsvg (parent existing runner only; Java argv derived, not process-traced)"
+  ],
+  "support": "docs/parity-reviews/shared-svg-attributes/checker-support/",
+  "verdict": "rejected",
+  "policy": "Whole-output failures reject; bounded helper/attribute evidence is not acceptance. No combined correctness claim with concurrent sequence work.",
+  "mechanism": "shared-svg-color",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_activity.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_activity.svg",
+      "axes": [
+        "activity",
+        "transparent background with opaque foreground"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "0e037580eb668ea85905cdb5ee7958c137bc1a8ed1ef47590abf6dea7469facd",
+      "golden_sha256": "4798c658e85501be0e0378acdf822ef66639bda1669c714449cb0e399390b7ce",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_class.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_class.svg",
+      "axes": [
+        "class",
+        "transparent background with opaque foreground"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "c68a6cdb38d48a5065a4615a4d11c4f9afd842d0a9ee5825feb39273b56c7e0f",
+      "golden_sha256": "7c4f17392cffe2e133d6c47d4792776a7a434646079634eced26622b71c8c3e1",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_state.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_state.svg",
+      "axes": [
+        "state",
+        "transparent background with opaque foreground"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "fa3d9ee105b34afce56ce4a625cb47f69c913d862dd88dce8bdc61c2c1704bca",
+      "golden_sha256": "986ab4eef2560453e2b77b654968fc6b6adbaa93b72196939a929ae7b06a0574",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_deployment.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_deployment.svg",
+      "axes": [
+        "deployment",
+        "transparent background with opaque foreground"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "3c9ca2be4f3a52c73fcd580ace3cc348c0df973f7f40a43713c7c3003708c2a0",
+      "golden_sha256": "2b032711f721703a8c1a78585c135a0153804722504967fa6eb504007617cda3",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_component.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_component.svg",
+      "axes": [
+        "component",
+        "transparent background with opaque foreground"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "3c0fa6665addaabfc476665c4636238293701224f8599eaa364588b2f0a0d098",
+      "golden_sha256": "ba117640a059cacb6d2067572a1310a310a63e24d71be970de2941b7d20cbbef",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_usecase.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_usecase.svg",
+      "axes": [
+        "usecase",
+        "transparent background with opaque foreground"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "08ded610570e55c038673c553e9d0564dd94f2f677c6f204866e9899028850b5",
+      "golden_sha256": "ed4474571961187f11b9d581f5486def62af20c4296cd9f20499bdf47f6721ab",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_object.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_object.svg",
+      "axes": [
+        "object",
+        "transparent background with opaque foreground"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "53d9bfd299108f28ea2c7c36111eeaa7bbf0c26f997f52eb6ebbfe44d58ebba3",
+      "golden_sha256": "4dfb17dbf5a7bde721893b0aa8329491e769c38b39fb07cac3e80e696f37cdda",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_archimate.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_archimate.svg",
+      "axes": [
+        "archimate",
+        "transparent background with opaque foreground"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "a1e93e0934fb079d33c98d241ed8862a284e6cf5dbe74e5b358465505f20702e",
+      "golden_sha256": "91bb42d11d04879b673a6f19a3c2ffb55d0edcc65dd6de81d5a88cb15f5118f7",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_gantt.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_gantt.svg",
+      "axes": [
+        "gantt",
+        "transparent background with opaque foreground"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "9c55a0e4876b0776be395d659494b7a38091c94b04bb48804fa5da542ca67fe4",
+      "golden_sha256": "20b804d892bf315aa891e81793f16904fb14490e3c921e35e8203c8b7e3f11e8",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_timing.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_timing.svg",
+      "axes": [
+        "timing",
+        "transparent background with opaque foreground"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "1e2b9f3902651a0db9dd7e63bb765c28230217d36d6f9d07d1673297460b00e7",
+      "golden_sha256": "3c5909502b8877464599108be80bd089535a53c1c20b4727b3975def35de7a88",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_mindmap.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_mindmap.svg",
+      "axes": [
+        "mindmap",
+        "transparent background with opaque foreground"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "d1c13cc3551d25c651aefd7c965f9bda9f77a202f33f0751289738307a5f11b5",
+      "golden_sha256": "6fed5ae2c29ed57a89d6439a7a8df08703f33b79d0405f3ae922fe088825637a",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_wbs.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_wbs.svg",
+      "axes": [
+        "wbs",
+        "transparent background with opaque foreground"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "c9c8c5064bbdf8e334d4c0fd2be8c1a7655f5356c12e7bcebeef40689d7e3187",
+      "golden_sha256": "9926c5f52a7906fe876ac09d972fcb8b6a83c66b0a48be84ab7d424d8f445e70",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_salt.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_salt.svg",
+      "axes": [
+        "salt",
+        "transparent background with opaque foreground"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "41566e9e5b4737cd7749d4b9c92c6a321a0b2b22ce11375d3706c0c5c95c817f",
+      "golden_sha256": "2f7797875290aea0f2c43ab0bd3f418602a6235f09b394c532bad0259d500e45",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_json.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_json.svg",
+      "axes": [
+        "json",
+        "transparent background with opaque foreground"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "20c17de1fc05e8d306f2df48d80d25981683e64d09ed945713747eb48dd8e5ec",
+      "golden_sha256": "e860223617663ae25530d2791211b977ac1b5d0476a30f4dda8b96e0af178fbc",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_nwdiag.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_nwdiag.svg",
+      "axes": [
+        "nwdiag",
+        "transparent background with opaque foreground"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "a6e43f87f3f5ab645dabad58c3f4106567605b6fbd265837d3d09d448ed1ccd5",
+      "golden_sha256": "bf5706cf5854b9a7da64ecff4d7911f3c552de942027cc7042b20ff1a2e38bfa",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_regex.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/back_regex.svg",
+      "axes": [
+        "regex",
+        "transparent background with opaque foreground"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "ad69b4d082b9f90f17bb1df473b568f88f77c5d1dee09beb16dd492e19ef9ec9",
+      "golden_sha256": "ec210a7e2874508a49f8e1a277c79d995ab55c57035cb3554d2eb03b9febf1ae",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_nibble.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_nibble.svg",
+      "axes": [
+        "activity",
+        "foreground/background nibble"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "f9d6e32b542e783fc356a7818e48d8727507afc83aa8fca197d155d942db42c9",
+      "golden_sha256": "31d54c954cb3ce1f17af70e4acd295f84b915ff49381dbd25354c52c5f6af810",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_short.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_short.svg",
+      "axes": [
+        "activity",
+        "foreground/background short"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "304f32ddca37504925d04b3591ddc2a1ac4264c8dc726bf344316b4328619fb0",
+      "golden_sha256": "2c00aaf4cdef61b638d389f4a4052e5ffc6880bbba167046a9152ddd6ce61f79",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_full.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_full.svg",
+      "axes": [
+        "activity",
+        "foreground/background full"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "85b888554a1b00c09dee166b9128ab6a5a07c46481de8c9776fa579fe704543e",
+      "golden_sha256": "2cdcae4533e96f5ddb4ebcacbc7fcd8a928cafaf0aaa8457d5ddf3ca7a576816",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_named.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_named.svg",
+      "axes": [
+        "activity",
+        "foreground/background named"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "1636aca20879bcc47bd82841e18258343b6863ba4cf234d9f33ef5b15bdf0928",
+      "golden_sha256": "880b2c9e1e45e6b2dcfee0a81bf4d670175dbba4fde014a5427ee1d5ccefce73",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_hashnamed.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_hashnamed.svg",
+      "axes": [
+        "activity",
+        "foreground/background hashnamed"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "e971c4fee35db491931ac27ee575cd738821740537f0c8ba7d16a0a24ff64cc2",
+      "golden_sha256": "2b61b414f3e67e0874048995e9ac76895a9a9118beff22ca8a6262ce659fef59",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_alpha01.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_alpha01.svg",
+      "axes": [
+        "activity",
+        "foreground/background alpha01"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "e9844ec9512e48da49442bc5bba75547201f9b8fc90327a15623d62e545ec21e",
+      "golden_sha256": "14504742c7076f6ae6434a15d4ce0bebc15620eabda11bfbb7c4343dc8b81fd8",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_alpha80.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_alpha80.svg",
+      "axes": [
+        "activity",
+        "foreground/background alpha80"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "e3a2996621ff2755ae7c47885e3e691c842373b3bdf7c8125bba56dc902b773b",
+      "golden_sha256": "fa858f949721134e7ea9ef54e1e06d869209b8d420f5603c3c9ac194d427429d",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_alphaff.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_alphaff.svg",
+      "axes": [
+        "activity",
+        "foreground/background alphaff"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "331ed42fdcc47ba34b5a1eaf541c1987f700f65445411eb2e7f20579961f54b7",
+      "golden_sha256": "315fba4eda97674ab0c05cbb14269100f12c35f91e37c3ac8112fac4c2ed849e",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_background.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_background.svg",
+      "axes": [
+        "activity",
+        "foreground/background background"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "4c86c4f3310853acf2de7758a9ce58304e9f514daf97c1738ad41fe1225bbccd",
+      "golden_sha256": "8676c2298b91ad3c75d7bc4a971eed9099da1824583081b11af9acab173ed1e8",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_transparent.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_transparent.svg",
+      "axes": [
+        "activity",
+        "foreground/background transparent"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "3468eba21b25c11df0df5c99f70ce5b0b7862b9f1b599b8ddca9db0c02ce860b",
+      "golden_sha256": "b69946f0be60549c202ced5f10577e94b69768139dbdfb03b8c0cfcc4be04e4f",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_nested.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/paint_nested.svg",
+      "axes": [
+        "class member",
+        "nested alpha restoration and combined font"
+      ],
+      "result": "pass",
+      "java_classification": "valid diagram",
+      "source_sha256": "59f4bf44ddd73f9bde4fbb636d0b7dee4654bb180808891de448d830615ba7c9",
+      "golden_sha256": "3ac1ffe05f06951b8e792d9366967238e149ef48641d8ad89631003d90a12099",
+      "before_pass": false,
+      "after_pass": true,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/shape_alpha.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/shape_alpha.svg",
+      "axes": [
+        "state shape",
+        "alpha fill plus short stroke"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "08188e38fd854ccfc6e6818dc0305275db273311058cf6a61094f7d155a66867",
+      "golden_sha256": "07decd0bbfb43affad8386b62c388fe31aeeeddde3dd67706895eda68f84b074",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/automatic_000000.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/automatic_000000.svg",
+      "axes": [
+        "activity",
+        "automatic background inversion"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "e3b859487b1da0de5004b911af284bd745aef1bfaa99d026e9c5ef44ba1d610d",
+      "golden_sha256": "d7652b01e10435516d1fe0fb2803350af51dfa929db5c717dbd41dbd123242cb",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    },
+    {
+      "source": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/automatic_ffffff.puml",
+      "golden": "test-diagrams/perturbations/shared-svg-color/checker-independent-astra/automatic_ffffff.svg",
+      "axes": [
+        "activity",
+        "automatic background inversion"
+      ],
+      "result": "fail",
+      "java_classification": "valid diagram",
+      "source_sha256": "be86cb0e318ab4542c8dd13bf74d89cb9b4599d37c84a1bd05d3c3bbe7b820f8",
+      "golden_sha256": "9dd9af22239a948010383416a96781192a0e2e38035e5ca74ee40fdcfa9ce0e3",
+      "before_pass": false,
+      "after_pass": false,
+      "malformed": null,
+      "process_exit": 0,
+      "panic": false
+    }
+  ],
+  "findings": [
+    "HColorSet.parseColor/parseSimpleColor, ColorTrieNode, HColor.toRGB/toSvg, XColor.toSvg and SvgGraphics.fillMe independently confirm 1/3/6/8 hex, optional #, CSS and seven Archimate names, uppercase RGB, alpha/255 five decimals, transparent/background sentinel and role-dependent BACKCOLOR RGB. Current normal production dependency graph is byte-identical; Cargo.lock adds seven nodes and exactly two rustuml dev edges.",
+    "Fresh color cohort is 0\u219220/30 valid whole outputs. The ten scalar color controls plus nested restoration pass, including alpha01/80/ff and transparent/background behind text. Sixteen cross-family transparent-background cases show that not every consumer uses the shared model. No whole-output failure is waived.",
+    "shape_alpha is a concrete unclosed color path: Java state rect has fill=#3579BD and fill-opacity=0.50196; Rust emits fill=#3579bd80 without opacity. state.rs:7323/7403 routes through escape_attribute only, bypassing color_with_opacity/fillMe semantics. This is pre-existing and mechanically unchanged by the approved routing, but rejects a cross-family color completion claim.",
+    "automatic_000000 and automatic_ffffff remain failures. Source traces to AtomText.drawU \u2192 FontConfiguration.adjustColorForBackground \u2192 HColorAutomagic.getAppropriateColor; no fixed scalar alias can replace background context.",
+    "Logical-family/alias metrics, gradient painting T14.18, base-style OR T14.19, crash propagation T14.20, warnings T14.12, stripes T14.13, plain/code T14.14, unconsumed lines T14.17 and sequence escaping remain explicit failures/dependencies. No production fixes or target rewrites are included."
+  ],
+  "measurements": {
+    "inputs": 30,
+    "valid": 30,
+    "before_pass": 0,
+    "after_pass": 20
+  }
+}

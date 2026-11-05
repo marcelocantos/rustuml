@@ -1,0 +1,11 @@
+@startuml
+!procedure $unused()
+!startsub saved
+/' !startsub ignored '/
+class Elm
+!endsub
+!endprocedure
+!includesub saved
+class Ash
+Elm --> Ash
+@enduml

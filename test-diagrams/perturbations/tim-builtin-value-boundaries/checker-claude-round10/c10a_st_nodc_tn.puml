@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Times New Roman
+node "Kiln" as E1 <<Ferrous gauge vista>>
+component "Ok" as E2
+E1 --> E2
+@enduml
