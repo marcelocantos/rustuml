@@ -1,0 +1,7 @@
+@startuml
+queue Shelf as "Holding shelf" <<Queued>> #Azure {
+class Parcel
+class Manifest
+Parcel --> Manifest
+}
+@enduml

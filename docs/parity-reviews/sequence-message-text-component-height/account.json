@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-message-text-component-height",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "klimt.creole.legacy.AtomText#calculateDimensionSlow",
+    "klimt.creole.CreoleHorizontalLine#calculateDimensionSlow",
+    "klimt.creole.SheetBlock1#calculateDimensionSlow",
+    "skin.AbstractTextualComponent#getTextHeight",
+    "skin.rose.ComponentRoseArrow#getPreferredHeight/#getYPoint",
+    "sequencediagram.graphic.ArrowAndNoteBox#ArrowAndNoteBox/#getPreferredHeight"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::message_label_block_height_with_family",
+    "crates/rustuml-render/src/sequence.rs::msg_note_extra/msg_note_tail_extra"
+  ],
+  "invariant": "Message component preferred height uses measured AtomText height without a synthetic underline-only flow surcharge; an attached note contributes its complete preferred height exactly once through ArrowAndNoteBox.",
+  "causal_divergence": "The old ordinary-note branch used base3 and a separately scheduled labeled-rule tail quarter-line. The complete-child correction exposed a double reservation: message_label_block_height adds a quarter-line for all-underlined labels, first-message flow subtracts it, and labeled-rule attached notes separately add it after allocation. AtomText preferred dimensions have no underline-dependent extra; note horizontal rules own their own text block height. First broad run at350e776a loses creole_underline_in_sequence while sequence1411 remains green. That regression and outputs are retained.",
+  "planned_change": "Remove synthetic underline-message flow and first-row compensation; remove the duplicate folded-note rule tail reservation now represented by complete child allocation. Preserve unmodified shared text/creole modules and retain their independent metrics dependencies.",
+  "perturbation_axes": [
+    "inline underline versus note labeled rule and following plain message",
+    "legacy/Teoz and differing message/note font sizes"
+  ],
+  "parent_account_commit": "0b329582",
+  "regressed_implementation": "350e776a2cd376dd2171dc79b61010da8f01fc2e"
+}

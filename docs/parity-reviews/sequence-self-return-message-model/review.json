@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-self-return-message-model",
+  "reviewer": {
+    "task_id": "t3-b60455c3 independent sequence recovery checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "c865c5b3a35e5c5a1b965ab7f79e05775475ea9e",
+  "implementation_commit": "02abc3cd267a972efff07c805237f8af5cca3139",
+  "original_account_commit": "5adc80477ee0fac05ceb42ad0f032237425b97c9",
+  "original_implementation_commit": "bd8b0934d2630a730e077a320331a6e29f3b4a06",
+  "tested_parent_revision": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "tested_candidate_revision": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "original_candidate_revision": "1800ac48714743863307c82674490c697fcf5709",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "input_frontend": {
+    "owner_decision": "Raw Java CLI/file semantics approved during this review",
+    "policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "new_controls_frontend": "raw CLI -tsvg -pipe -charset UTF-8",
+    "historical_corpus": "GET preserved unchanged",
+    "TIM_code_imported": false,
+    "new_origin_assertion_imported": false,
+    "TIM_rawreader_reverification": "Not duplicated; assigned to independent TIM checker"
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/generated",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/focused-generated --focused",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe -charset UTF-8",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST /tmp/rustuml-seq-check-b60455c3/{before,after} SCRATCH_OUTPUT [CWD] (one invocation per cohort/revision; exact expansion in checker-support/README.md)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser -p rustuml-render --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo clippy --release -p rustuml-parser -p rustuml-render -- -D warnings",
+    "rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/diagram/sequence.rs",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "two owned self returns"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "243734b2cc37a6e23247861f82c2542bf1bb9721f9492ab71ad155e1c2652f71",
+      "golden_sha256": "0ff468071e89097951aca5ab743a16b952395a0ed9b5d42f3ebc6b26f5bac919",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "two owned self returns"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "2459020ba9aeb130be0dc78c5b158931ae2c51ae1b307736e43664dba4bd5771",
+      "golden_sha256": "c2e6b81089c150c04810a4eb2bd586f6a8c7f0465b79ddd63b9afa062aa7dcb6",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "two owned self returns"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "5c5ac59816397b4161d8cfa00370157fc6ec84f1fd14551a4395a43c5def20fa",
+      "golden_sha256": "f0a81d5f9a2885614e69585d31550e3c6e78baa617d7c91ea9aaaa102626794f",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_legacy_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "two owned self returns"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "d1cf0fdaf2d845018108e3d952b6a220c8218c22f6d67cecb941aba25dc173a8",
+      "golden_sha256": "43b5273d66a81f3bd74dfb8e7c83e2d2f4671e0943888645774bfab4fde75daf",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "two owned self returns"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "01c3469fd09e3f0a4cd7152c4f99088ba546488cf2fe772c58be20845c0eacc6",
+      "golden_sha256": "67de82551e224819bb9e2b22327b01a39bc98456875fd3f04b3c9df4e6cf88a9",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "two owned self returns"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "bd1af39791c09c2040d80dd39fcddc38d758443e66a90d0bcd66a4e30abb62df",
+      "golden_sha256": "1a48f620a7beaafe3d6dab27c6fe34d817f8a052ff57ce75de42cd7dc5096762",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "two owned self returns"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "0ffa0bd1e694705d9cf8e2b6bbbaa9487bdf012d56ea8a777851235f8a9050df",
+      "golden_sha256": "3d60cfca86390cbb3652798ddba6464bb180f39754e77222bf825c86bb827600",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_teoz_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "two owned self returns"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "8409f603f5fe1feed7daa36a3169731ff2cd7d5357fa6848afe9a6c164860d1d",
+      "golden_sha256": "e11690cd646250da56cfdf4ca7c4f152fb6881bed4ab5d9d2d752370b1a8e2d7",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz0.svg",
+      "axes": [
+        "explicit return color",
+        "self versus interparticipant ownership",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "ab2fd4a8aeec73db870a8ceb65e46b10a6d46ce433df19999245984da88252df",
+      "golden_sha256": "fcbdbb6a3a6e81b7454e757d430009b13ee453478b48a493b433dd0078b75c66",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz0.svg",
+      "axes": [
+        "no preceding activating message",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "intentional-invalid-Java-negative",
+      "java_exit": 200,
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "source_sha256": "912dc57c2bcc8b7758c1333a0aff748c367ff384d078763926c6d8f40bf1f92e",
+      "golden_sha256": "2b85f6343d1f3756f2a74ed5de20b024a2a1477748e15e8023d0cff79a53c035",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_colored_teoz1.svg",
+      "axes": [
+        "explicit return color",
+        "self versus interparticipant ownership",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "8fd879038ab2d977efafe4e763da7da62e6bcdfc056b25d5a1acde0e71691471",
+      "golden_sha256": "346edeae416538c4852489c1bc9f7058ab1e06054b19402a6a5134547059ce84",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-return-message-model/checker_recovery_negative_nowhere_teoz1.svg",
+      "axes": [
+        "no preceding activating message",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "intentional-invalid-Java-negative",
+      "java_exit": 200,
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "source_sha256": "82e0d1a8cba230ec2da2bf01d70aec66b148cfda3f0fe22a6b9c757d804ee7d3",
+      "golden_sha256": "de45b18e491222e9151f4748438f1bec1b5766d913094250b6cef73c6e6acfa8",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    }
+  ],
+  "findings": [
+    "CommandReturn#executeArg creates an ordinary Message using reversed participants, inherited dotted ArrowConfiguration, optional return COLOR override, and owned deactivation. Rust resolves contexts then replaces Return events in a cloned diagram and reruns render. Each restart removes Return events and preserves indices; no unbounded same-event recursion was found. The previously panicking valid self-return cases now render, and eight fresh ordinary recursion/order/label cases pass across both engines.",
+    "Fresh checker_recovery_colored_teoz0 and colored_teoz1 fail. The parser stores #purple as part of ReturnMessage.label; lowering at sequence.rs:7625 clones the original arrow and never consumes the return color. Java applies withColor and excludes the color token from label width. Example legacy self return canvas is321px in Java versus374px in Rust. This is a parser-to-lowering dependency, not a font or frontend discrepancy.",
+    "Two deliberate orphan-return controls are rejected by raw Java (exit200 with error SVG) while Rust returns exit0 with an SVG. They remain negative controls, never counted as positive parity. Lowered self arrows also inherit the reversed-direction and attached-note component failures recorded below.",
+    "All14 accounts were present byte-for-byte in earlier chronological commits before their corresponding code. See provenance.json and commit-mapping.json. Main release tiers remain11181/11251 product-library and10497/11251 assisted-library; source-only CLI cohort403/955 with10 invalid references; no regressions observed.",
+    "Verdict applies to whole source-to-SVG recovery with the dependencies described above. Positive component-local observations are explicitly bounded and are not acceptance. Every mismatch and negative remains in the standing suite."
+  ],
+  "verdict": "rejected",
+  "evidence_summary": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/summary.json",
+  "source_audit": "docs/parity-reviews/sequence-dependency-closure/checker-support/source-audit.json",
+  "scope_and_dependencies": [
+    "CommandReturn#executeArg creates an ordinary Message using reversed participants, inherited dotted ArrowConfiguration, optional return COLOR override, and owned deactivation. Rust resolves contexts then replaces Return events in a cloned diagram and reruns render. Each restart removes Return events and preserves indices; no unbounded same-event recursion was found. The previously panicking valid self-return cases now render, and eight fresh ordinary recursion/order/label cases pass across both engines.",
+    "Fresh checker_recovery_colored_teoz0 and colored_teoz1 fail. The parser stores #purple as part of ReturnMessage.label; lowering at sequence.rs:7625 clones the original arrow and never consumes the return color. Java applies withColor and excludes the color token from label width. Example legacy self return canvas is321px in Java versus374px in Rust. This is a parser-to-lowering dependency, not a font or frontend discrepancy.",
+    "Two deliberate orphan-return controls are rejected by raw Java (exit200 with error SVG) while Rust returns exit0 with an SVG. They remain negative controls, never counted as positive parity. Lowered self arrows also inherit the reversed-direction and attached-note component failures recorded below."
+  ]
+}

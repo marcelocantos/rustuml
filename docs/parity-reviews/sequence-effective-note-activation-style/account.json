@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "checker_evidence": "68c8b95ef1087b5daa83d16b7e8e83670d5ca10f",
+  "baseline": "5358314a0180cf760584c79bb5efd4ec1ae6320b",
+  "mechanism": "sequence-effective-note-activation-style",
+  "java_locations": [
+    "skin.rose.Rose#createComponentNote",
+    "skin.rose.ComponentRoseNote#ComponentRoseNote/#getPreferredWidth/#getPreferredHeight",
+    "sequencediagram.graphic.LifeLine#drawU",
+    "skin.rose.ComponentRoseActiveLine#drawInternalU",
+    "style.StyleSignatureBasic#getMergedStyle"
+  ],
+  "invariant": "Effective note alignment and numeric shadow feed the same preferred dimensions and paint, and activation borders use the merged component style.",
+  "causal_divergence": "Only default alignment and boolean shadow reach Rust note components; explicit noteTextAlignment/scoped shadow are lost. Activation bars hardcode their border instead of consuming the merged theme style.",
+  "planned_change": "Resolve existing sequence style declarations at the component signature, feed alignment and shadow consistently into geometry/paint, and materialize activation stroke. Reuse shared style/filter contracts; request ownership before any necessary shared-file edit.",
+  "perturbation_axes": [
+    "explicit CENTER/RIGHT versus inherited/default alignment",
+    "numeric scoped shadow and theme activation border across engines"
+  ]
+}

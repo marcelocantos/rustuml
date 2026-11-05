@@ -1,0 +1,11 @@
+@startuml
+participant Sedge as S
+participant Forge as F
+group package
+note left of S : Envelope abcdef
+loop cycle
+note left of S : WMW.ff
+S -> F : transfer
+end
+end
+@enduml

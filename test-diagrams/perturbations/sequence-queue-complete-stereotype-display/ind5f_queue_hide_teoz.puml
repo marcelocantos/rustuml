@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+hide stereotype
+participant Kite
+queue Q <<concealed>>
+Kite -> Q: deliver
+@enduml

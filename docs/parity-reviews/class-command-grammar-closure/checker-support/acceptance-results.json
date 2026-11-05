@@ -1,0 +1,168 @@
+{
+  "results": [
+    {
+      "cohort": "acceptance_probes",
+      "source": "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/dotted_alias.puml",
+      "relative": "class-symbol-container-alias-identity/dotted_alias.puml",
+      "source_sha256": "52426d709619cc305e3be59bf229dbd826e0f7fa08a6609dfb76d174c6c71206",
+      "java_sha256": "eeb1126c7ea9856eddab6e9e8f0beb2f261ad87a745378a1268669aab913e452",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/dotted_alias.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/dotted_alias.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/dotted_alias.svg",
+          "/tmp/rustuml-checker2740/outputs/acceptance_probes/class-symbol-container-alias-identity/dotted_alias/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "04dc96ce14cfe3bea04c2de2ae610bd7ccc35f8b1cc7fc98665165eeac14338a",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "3cc88da482edfe74263a6c3cc5189b7aa17a9cef5fa3a7b0a48d93c1de2d8983",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/acceptance_probes/class-symbol-container-alias-identity/dotted_alias"
+    },
+    {
+      "cohort": "acceptance_probes",
+      "source": "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/nested_opaque.puml",
+      "relative": "class-symbol-container-alias-identity/nested_opaque.puml",
+      "source_sha256": "998772b43acd12caaa827e75a6784616be2009ad5ba65db2f3320a3cce29d03a",
+      "java_sha256": "9e187e328539a775b75de7beee01ae501b8cc0f2c20567f747e12c01e11607cd",
+      "status": "pass",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/nested_opaque.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/nested_opaque.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/nested_opaque.svg",
+          "/tmp/rustuml-checker2740/outputs/acceptance_probes/class-symbol-container-alias-identity/nested_opaque/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "c95f4be4b219a02607d5d9e2dbfc656a519cd1456a6d3c13652b89f359b4870c",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "431db98f723581ec300f881842be5f5f9054455e53249ac400e067adb09cedd9",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 0,
+        "stdout_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/acceptance_probes/class-symbol-container-alias-identity/nested_opaque"
+    },
+    {
+      "cohort": "acceptance_probes",
+      "source": "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_dotted.puml",
+      "relative": "class-quoted-code-identity/quoted_dotted.puml",
+      "source_sha256": "f671e90fa42f1fb1d9455ac9be6f58611a18056ead877bcc4382ea50adc4bcbc",
+      "java_sha256": "ff2d4c7918bd195ffc515eb42a9ea5c2afefcecab2808d87d5df6b2cefdaccef",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_dotted.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_dotted.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_dotted.svg",
+          "/tmp/rustuml-checker2740/outputs/acceptance_probes/class-quoted-code-identity/quoted_dotted/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "19302a7415b8fe9962a219dd41890f0a901dc68194d65f992255a7e9245f957f",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "d94cb4c44642732032540ad8bf6b8d197506a70657e2d253965a5b7e5783722c",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "a16cfdd88c96401e619541480348e8450f52e716b75b7197e4ab25e2dbfb4208",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/acceptance_probes/class-quoted-code-identity/quoted_dotted"
+    },
+    {
+      "cohort": "acceptance_probes",
+      "source": "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_lr_order.puml",
+      "relative": "class-quoted-code-identity/quoted_lr_order.puml",
+      "source_sha256": "78d727526124e1f1c8145a09c36687bcdf3dba3efcc91a892910ce15790d22fe",
+      "java_sha256": "cdec272c6a723589582621894ae97206537b563e3674a61ac1b72aa447366332",
+      "status": "mismatch",
+      "commands": [
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "-tsvg",
+          "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_lr_order.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740-target/release/rustuml",
+          "--ast",
+          "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_lr_order.puml"
+        ],
+        [
+          "/tmp/rustuml-checker2740/check_svg",
+          "/tmp/rustuml-checker2740/new-sources/class-quoted-code-identity/quoted_lr_order.svg",
+          "/tmp/rustuml-checker2740/outputs/acceptance_probes/class-quoted-code-identity/quoted_lr_order/rust.svg"
+        ]
+      ],
+      "cli": {
+        "exit": 0,
+        "stdout_sha256": "794cc31b43731c1ed590f6a65011e13345da6179c1b0c05d302ba783e0b74a26",
+        "stderr": ""
+      },
+      "ast": {
+        "exit": 0,
+        "stdout_sha256": "e61e5a8bc304ab317fce842c501f98e30c037e0c09a9944036aa28ec5cdc0656",
+        "stderr": ""
+      },
+      "comparison": {
+        "exit": 1,
+        "stdout_sha256": "c96e5a6eca6f52d8eb95f7752b5fe02855acc132f063191c820e79520266fabb",
+        "stderr": ""
+      },
+      "output": "/tmp/rustuml-checker2740/outputs/acceptance_probes/class-quoted-code-identity/quoted_lr_order"
+    }
+  ]
+}

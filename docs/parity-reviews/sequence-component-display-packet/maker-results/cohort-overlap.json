@@ -1,0 +1,31 @@
+{
+  "entries": 2083,
+  "unique_paths": 2083,
+  "unique_source_bytes": 2035,
+  "duplicate_entries": 48,
+  "cohorts": {
+    "preserved2021": {
+      "entries": 2021,
+      "unique_sources": 1973,
+      "overlap_prior_bytes": 0
+    },
+    "checker42": {
+      "entries": 42,
+      "unique_sources": 42,
+      "overlap_prior_bytes": 0
+    },
+    "maker20": {
+      "entries": 20,
+      "unique_sources": 20,
+      "overlap_prior_bytes": 0
+    }
+  },
+  "parent1449": {
+    "overlap_paths": 1123,
+    "parent_only_paths_not_replayed": 326,
+    "overlap_unique_bytes": 1097,
+    "parent_only_unique_bytes": 278,
+    "provenance": "checker-672-astra denominator evidence; parent cohort overlaps and is not additive"
+  },
+  "note": "Every duplicate is measured. Invalid references remain separate; no positive parity credit. No unrelated parent growth imported."
+}

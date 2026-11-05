@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-teoz-callback-lifecycle/checker_d382_depth3_note.puml",
+  "source_sha256": "d445c8b3f004d4b953c657db797c3e949803d82e91db79658605d76605f835a8",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1553848329931498,
+  "stdout_sha256": "e0b32445feb6b338e25e787e3cb00def108b1c613f68299b329fdfeea5332bd4",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

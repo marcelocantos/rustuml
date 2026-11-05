@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e0_quoted1.puml",
+  "source_sha256": "4049aaa7ace3925e59ed70d3401f7b7f117e3dde502f8777670391b81ce60110",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1182086670014542,
+  "stdout_sha256": "2faf9b6e7aef54196f2f45adf48dcab777714d2f6a3cdf0a64f5778cd1871bab",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

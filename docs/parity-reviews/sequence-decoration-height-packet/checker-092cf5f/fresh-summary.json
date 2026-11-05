@@ -1,0 +1,142 @@
+{
+  "before": {
+    "entries": 31,
+    "mode_exits": {
+      "cli_comparison": {
+        "1": 27,
+        "0": 1,
+        "2": 3
+      },
+      "product_library": {
+        "1": 27,
+        "0": 1,
+        "2": 2,
+        "101": 1
+      },
+      "assisted_library": {
+        "1": 27,
+        "0": 1,
+        "2": 2,
+        "101": 1
+      }
+    },
+    "valid_cli_errors": [],
+    "negative_status": [
+      {
+        "name": "invalid_inner",
+        "java_exit": 200,
+        "cli_exit": 0,
+        "classification": "java_error"
+      },
+      {
+        "name": "invalid_exo",
+        "java_exit": 200,
+        "cli_exit": 0,
+        "classification": "java_error"
+      },
+      {
+        "name": "empty",
+        "java_exit": 50,
+        "cli_exit": 0,
+        "classification": "empty_output"
+      }
+    ]
+  },
+  "after": {
+    "entries": 31,
+    "mode_exits": {
+      "cli_comparison": {
+        "0": 18,
+        "1": 10,
+        "2": 3
+      },
+      "product_library": {
+        "0": 18,
+        "1": 10,
+        "2": 2,
+        "101": 1
+      },
+      "assisted_library": {
+        "0": 18,
+        "1": 10,
+        "2": 2,
+        "101": 1
+      }
+    },
+    "valid_cli_errors": [],
+    "negative_status": [
+      {
+        "name": "invalid_inner",
+        "java_exit": 200,
+        "cli_exit": 1,
+        "classification": "java_error"
+      },
+      {
+        "name": "invalid_exo",
+        "java_exit": 200,
+        "cli_exit": 1,
+        "classification": "java_error"
+      },
+      {
+        "name": "empty",
+        "java_exit": 50,
+        "cli_exit": 0,
+        "classification": "empty_output"
+      }
+    ]
+  },
+  "recoveries": [
+    "ordinary_live_legacy",
+    "exo_source_legacy",
+    "exo_target_legacy",
+    "child_small_legacy",
+    "child_multi_legacy",
+    "rule_alone_legacy",
+    "underline_legacy",
+    "style_lines_legacy",
+    "style_shadow_legacy",
+    "ordinary_live_teoz",
+    "exo_source_teoz",
+    "exo_target_teoz",
+    "child_multi_teoz",
+    "rule_alone_teoz",
+    "underline_teoz",
+    "style_lines_teoz",
+    "style_shadow_teoz"
+  ],
+  "losses": [],
+  "unique_source_strings": 31,
+  "overlap_with_frozen": 0,
+  "per_mechanism": {
+    "sequence-target-circle-decoration": {
+      "entries": 15,
+      "valid_matches": 6,
+      "valid_mismatches": 6,
+      "invalid_or_empty": 3
+    },
+    "sequence-ordinary-note-child-allocation": {
+      "entries": 4,
+      "valid_matches": 4,
+      "valid_mismatches": 0,
+      "invalid_or_empty": 0
+    },
+    "sequence-note-rule-title-height": {
+      "entries": 4,
+      "valid_matches": 2,
+      "valid_mismatches": 2,
+      "invalid_or_empty": 0
+    },
+    "sequence-message-text-component-height": {
+      "entries": 2,
+      "valid_matches": 2,
+      "valid_mismatches": 0,
+      "invalid_or_empty": 0
+    },
+    "sequence-component-style-consumption": {
+      "entries": 6,
+      "valid_matches": 4,
+      "valid_mismatches": 2,
+      "invalid_or_empty": 0
+    }
+  }
+}

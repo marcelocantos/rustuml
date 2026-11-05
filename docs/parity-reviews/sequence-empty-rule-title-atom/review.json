@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-empty-rule-title-atom",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7cbc0aef-f6c2-4036-bc37-086ae22f4e23%3Adelegate-task%3A3586e3c0-433f-4984-bdab-61d183d23ec6",
+    "model": "gpt-6-astra / Codex harness in T3 Code",
+    "role": "Independent checker; did not implement candidate; no children",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "branch": "review/sequence-711dbca7-5c023380"
+  },
+  "account_commit": "bf400d8455757a31123b51fd67b64e497514e223",
+  "implementation_commit": "b653a5f8adb43f4a6cb2f0ab3a4aad50c05a2bcf",
+  "tested_packet_commit": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "tested_production_commit": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+  "before_revision": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "intermediate_revision": "cf3eafb293de2f01699399321d2220c4de9eb28c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "Parent's existing Monkey Man relay: /Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg; exact per-input actual wrapper argv/cwd/status/streams in checker evidence; Java argv derived from pinned wrapper, not process-traced",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE_CACHE/target-after cargo build --release -p rustuml --bin rustuml -p rustuml-oracle --example diff_one",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/fresh52.json PRIVATE_CACHE/after-bin PRIVATE_CACHE/after-fresh; separately followup12.json -> after-followup (same checkout cwd); before binaries likewise",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE_CACHE/target-after cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_title_space_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_title_space_legacy.svg",
+      "axes": [
+        "whitespace title",
+        "right-note/multiline",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "a0859d3a6176af86de9afa0f4864d468130916bb40f96da39221b8b4a0c41150",
+      "reference_sha256": "cf21d8d3ddb7574b95ccf1d714901930fdef03886322feac82c49a535bf27165",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_title_space_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_title_space_teoz.svg",
+      "axes": [
+        "whitespace title",
+        "right-note/multiline",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "77eb41480ead5eb629d7445d3f8325aba4f1f299aacb8047562fe5562ebea1c0",
+      "reference_sha256": "a6bc33d0d4b0d6de1eef1e79260c47440b9d00f223bc408a3f62de6023c47dbd",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_title_space_styles_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_title_space_styles_legacy.svg",
+      "axes": [
+        "rule style/font size",
+        "over topology/whitespace",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "fc7a1ef8cbc8d005c2c3ff7ffd57f5ec3d2812791b85c567121eceb5eb08d8c3",
+      "reference_sha256": "5da19895b5c7f0a6c6bc8a331fb25b33f8285229bce2dc1b993afc678391f212",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_title_space_styles_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_title_space_styles_teoz.svg",
+      "axes": [
+        "rule style/font size",
+        "over topology/whitespace",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "abf0ac7b50e2863e03f2ae93dd59ed6ec1d69ea7a46e7b552a008e7ace272cac",
+      "reference_sha256": "41d7e047c1bf9c679ae94ad71733ee320700207e2e6535d909b23287c6103eda",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    }
+  ],
+  "findings": [
+    "BodyEnhancedAbstract.getTitle trims the interior of a titled separator; StripeSimple.getAtoms inserts one space when atoms are empty. Rust EnhancedNoteBody normalizes Some(empty) to the same space at construction. Four fresh whitespace/rule/font-size/topology cases match in both engines.",
+    "This is bounded positive support for the atom correction, not acceptance of the packet or all enhanced-note composition. The existing centered-note canvas and shared rich-text failures remain. Required standing perturbations and guards are red; acceptance is withheld, with no fabricated local counterexample."
+  ],
+  "verdict": "rejected",
+  "acceptance_policy": "Any failing whole case rejects. Mechanisms with green fresh cases only have bounded support, not acceptance: required standing perturbations and guards remain red. No prior acceptance transfers and no failure is waived.",
+  "evidence": "docs/parity-reviews/sequence-component-display-packet/checker-711-astra/README.md",
+  "fresh_outcomes": {
+    "entries": 4,
+    "outcomes": {
+      "0": 4
+    },
+    "cli_panics": []
+  }
+}

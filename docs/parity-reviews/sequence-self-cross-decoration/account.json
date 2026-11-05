@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "mechanism": "sequence-self-cross-decoration",
+  "java_locations": [
+    "sequencediagram.command.CommandArrow#executeArg",
+    "skin.rose.ComponentRoseSelfArrow#drawLeftSide/#drawRightSide",
+    "skin.rose.ComponentRoseArrow#spaceCrossX"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::parse_arrow",
+    "crates/rustuml-render/src/sequence.rs::render self-message painter"
+  ],
+  "invariant": "Cross dressing direction is determined before semantic endpoint swap; self-arrow cross decorations adjust stroke endpoints before painting their independent solid diagonal strokes. Reverse CROSSX adds spaceCrossX plus live indent (or another spaceCrossX at level zero).",
+  "causal_divergence": "The parser does not infer reverseDefine for x-- without <. The self painter does not draw starting crosses or apply their endpoint adjustments; final-cross placement uses only the forward formula.",
+  "planned_change": "Recognize reverse cross dressing per CommandArrow and port both self-arrow cross endpoint and painted diagonal equations, using named source constants and keeping ordinary/async/half controls unchanged.",
+  "perturbation_axes": [
+    "engine and activation depth",
+    "source/target cross direction and line style",
+    "self call versus lowered return"
+  ]
+}

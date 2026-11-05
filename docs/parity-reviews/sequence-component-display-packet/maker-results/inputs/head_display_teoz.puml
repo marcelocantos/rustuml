@@ -1,0 +1,16 @@
+@startuml
+!pragma teoz true
+<style>
+sequenceDiagram {
+ participant {
+ Shadowing 6
+ }
+ actor {
+ Shadowing 0
+ }
+}
+</style>
+actor Watcher
+participant "Long\nShort\nTail" as Desk
+Watcher -> Desk: check
+@enduml

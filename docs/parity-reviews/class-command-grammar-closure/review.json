@@ -1,0 +1,1474 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-command-grammar-closure",
+  "reviewer": {
+    "task_id": "t3-2740aefa-independent-class-container-checker",
+    "model": "gpt-6-astra (high), Codex harness; user explicitly selected inherited Codex; no children"
+  },
+  "account_commit": "fd4eb9f768768c006d814f389dbdad79605acc7f",
+  "implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 18916d312c32340b0a674e15259dc3031ea57acf -- crates/rustuml-parser crates/rustuml-render",
+    "git show bed3b50ca08e12d8ada612791cf07393617b2041 -- crates/rustuml-parser crates/rustuml-render",
+    "CARGO_TARGET_DIR=/tmp/rustuml-checker2740-target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "python3 /tmp/checker2740_generate.py",
+    "python3 /tmp/checker2740_followup.py",
+    "python3 /tmp/checker2740_run.py fresh",
+    "python3 /tmp/checker2740_run.py current",
+    "python3 /tmp/checker2740_run.py maker"
+  ],
+  "findings": [
+    "Both production implementations were reviewed. Complete-line command trials now cover many recovered cases: the original833 improve to549 passing and all36 earlier parse failures disappear. This does not close the grammar or authorize packet acceptance.",
+    "Fresh tests show lost native classes after group-note/braced-note rejection, root record/struct misdispatch, visibility-prefixed ordinary packages rejected, and qualified named-note codes rejected. Existing TIM/theme valid inputs acquire five new parse errors. Every failure and all62 maker cases are preserved below.",
+    "The parser has no new fixture-label dispatch or shipping golden lookup, but a successful subset and fallback score still do not implement PSystemBuilder factory order over the complete supported command grammar. Four mixed-description kinds parse yet paint as class boxes."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_actor.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_actor.svg",
+      "axes": [
+        "mixed leaf kind and keyword case",
+        "nested container and explicit alias"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-grammar-closure/mixed_actor.puml",
+      "source_sha256": "e7155aade39eb9638a63c26bb4c5bcf8a80238c00e348fddc967ab85f3a1a365",
+      "java_sha256": "5883a57d1b84ae83e6b62fc59f71592457fc938c40749d6e007813e9c6449b96",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-grammar-closure/mixed_actor"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_boundary.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_boundary.svg",
+      "axes": [
+        "mixed leaf kind and keyword case",
+        "nested container and explicit alias"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-grammar-closure/mixed_boundary.puml",
+      "source_sha256": "58c7b21f77ebf568c7dfaaa0a97c07d18ea401cdf820492372287a8ab49d67d3",
+      "java_sha256": "629d7485e3e99e5df1be373231a35878bf8370b0abce6ac8153e89badc7cb95e",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-grammar-closure/mixed_boundary"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_component.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_component.svg",
+      "axes": [
+        "mixed leaf kind and keyword case",
+        "nested container and explicit alias"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-grammar-closure/mixed_component.puml",
+      "source_sha256": "267f598993f16cae54d5cb5fd65a29c73bc66ec031ac4e3bea0a3d1cf019f7d3",
+      "java_sha256": "6506cef45621fa7612128177830cad2d92960b90723926077edc30a25eb2a192",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-grammar-closure/mixed_component"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_database.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_database.svg",
+      "axes": [
+        "mixed leaf kind and keyword case",
+        "nested container and explicit alias"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-grammar-closure/mixed_database.puml",
+      "source_sha256": "010c6079abca5156db4d16e7500c4838ae1d9bfdc73641718957755c5dff134a",
+      "java_sha256": "7b5d85d80b9b73796fef08a5ef30bb7721159783ad508eb943e9e46927276850",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-grammar-closure/mixed_database"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_queue.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_queue.svg",
+      "axes": [
+        "mixed leaf kind and keyword case",
+        "nested container and explicit alias"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-grammar-closure/mixed_queue.puml",
+      "source_sha256": "fcc5991755bb94bd5d24750a296e58475c9331ad00f9699bd5de51846668fc5b",
+      "java_sha256": "e53b2162b872be214daf320c2382aa59c63aa09be5d0ab98b6ead604d987ec18",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-grammar-closure/mixed_queue"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_rectangle.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/checker/mixed_rectangle.svg",
+      "axes": [
+        "mixed leaf kind and keyword case",
+        "nested container and explicit alias"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-grammar-closure/mixed_rectangle.puml",
+      "source_sha256": "820b756582a4bea219e4bb4ae3c7ef0e525ebdb7621b60a744b1e32762517d69",
+      "java_sha256": "3806f8426eeba86c51128ca29f1d841233e45c564bf0ae093ace445127613ebc",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-grammar-closure/mixed_rectangle"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/actor_generalization.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/actor_generalization.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/actor_generalization.puml",
+      "source_sha256": "0189f66dc0579599280e1b6f562e1e43395d5a3fbdbfaa81439657d049d75117",
+      "java_sha256": "08f05ed3fe33b948cf1182b4b5f366ba0d79169bbdc2d53826d07af2cc461fe6",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/actor_generalization"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/alias_reopen.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/alias_reopen.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/alias_reopen.puml",
+      "source_sha256": "bf3b7845bd3f0fe02f736dd7f8b2beffa126fdea7940ac3758e31c55f6a59f93",
+      "java_sha256": "48112e962adc3c9197c406450b5629d29a4377dc5edc4587eaaa66f1f388e6bc",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/alias_reopen"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/body_legend.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/body_legend.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_legend.puml",
+      "source_sha256": "61f1dcb652d7268898e7e92c85facb647b9d977c0e8233ab2543cf2c8a538791",
+      "java_sha256": "6857e4e2395600fd45c3c1e27a7adafeac354b99429733975b748bee152c9000",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/body_legend"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/body_ownership.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/body_ownership.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_ownership.puml",
+      "source_sha256": "5cfa42e57aeb98089167bacf3b62e13a33d0e17f9c117b77f769887a9744d37a",
+      "java_sha256": "50366b42f0082cb2ded62dd575bc54ca3ea8190e81c529b5d675f03e75c74064",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/body_ownership"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/body_title.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/body_title.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/body_title.puml",
+      "source_sha256": "7fb887567f92697a749c139635ad16df0db4208a6bff59196652bdcb7f9d91e0",
+      "java_sha256": "86c084cfbb3de0a3461ef4abb20f84349133138a5f39602582beb9824d7be9fe",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/body_title"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/generic_reverse.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/generic_reverse.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/generic_reverse.puml",
+      "source_sha256": "9b7ba1882fcbdf756c024e2b16a48faf9ef1fb402e42c92493beec5f29d5a73c",
+      "java_sha256": "8ddce745b3db0ecea22ed8ab53895e42015f9e050a1fd5c649bcf0203fbe778c",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/generic_reverse"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/header_center.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/header_center.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_center.puml",
+      "source_sha256": "496de8f8653cfe1c23312e5a71b15a036253cacd89b70e97ba110f1023e87216",
+      "java_sha256": "728f456cbb4df7b989ce1db408da994a109f9c006b81d564ca1a98348c9cc7d5",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/header_center"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/header_left.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/header_left.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_left.puml",
+      "source_sha256": "29611956bc8749ee1045636d8e281cfd1a2203083a71f2879dc4a28ba0daf31d",
+      "java_sha256": "a5a4a0ef7237516a1f72cac30c1873c47ef3738c2eeb80f9c3a072ffc4399338",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/header_left"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/header_right.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/header_right.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/header_right.puml",
+      "source_sha256": "d9441fc7d124a6d9a5d9919ea08f519f4b9c509743652acdad5f095615944849",
+      "java_sha256": "1e2bc38c7acb70442238fdef0f06f0e1192ac95a6b552ecbb8a278b142f43e5a",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/header_right"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/mixing_early.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/mixing_early.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/mixing_early.puml",
+      "source_sha256": "9f798db50b06577390dc19f0f779f58bbcc954ab47c16c2dc4c35ab82934caef",
+      "java_sha256": "8e4764e06931c65ee9a71f6f17bae2c155fa7c426a43c2f09eca08a30679590d",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/mixing_early"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/mixing_prefix.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/mixing_prefix.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/mixing_prefix.puml",
+      "source_sha256": "25b6fcb1408d0b5d48b8d47133293fcaf6b2ef4be430c8e73d8f0d54a9e604cd",
+      "java_sha256": "cbdd5c1cd591adb3379d6b09dac02f95ce2ae5abb6463dec01ccedfd50c96127",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/mixing_prefix"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_package.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_package.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_package.puml",
+      "source_sha256": "9f02fca5f86491836170088435ca33bd7005328c53bce753c628b31c6917c784",
+      "java_sha256": "5523b26534a6b096583acafc85dea73537014b29f35c73a5efa5f0f46f372b6c",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/modifier_package"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_private.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_private.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_private.puml",
+      "source_sha256": "381dabd9e582b7380fb7080e4caec957aa4b5c658dfa925f61c28fd7ed10b058",
+      "java_sha256": "021e4f66456e54955f3e78fd58370b83a605621631fbc96fbfc2dabf73c1c19b",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/modifier_private"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_protected.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_protected.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_protected.puml",
+      "source_sha256": "d54db01004ce4a4a79f3a8166b1611825a03c9093f1dbc22d421f1bdd30d9db2",
+      "java_sha256": "81cc042bd3a397a1c9cecee6aba8fa2944cd6678de22edda1ae0070dbcd3bbc8",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/modifier_protected"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_public.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_public.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_public.puml",
+      "source_sha256": "5c002e7f49b0b1fa0123655681e3647438f5cebfb1eba45d4272b75c833a134c",
+      "java_sha256": "5431efe6acd619e17cc8726a09bab19bbd78bc499e6d74037951ca4cf2908770",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/modifier_public"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_static.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/modifier_static.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/modifier_static.puml",
+      "source_sha256": "4ad6cc6016c1305b5224bc2d0d7c57b60be9b159948998d63defc5ca3815c82d",
+      "java_sha256": "5bfe9b166aaffe5e082e671b3a33c3d8f3f0cdf1f61e8c3386a4d3e40a6ca751",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/modifier_static"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_dataclass.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_dataclass.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_dataclass.puml",
+      "source_sha256": "847abff7e44351240486e9b32bca5d36513813455b1655d0af1fbe1cb6a2df80",
+      "java_sha256": "30179776d0b0921dac92b7ec3b314a9b19788a4377dc837528bcc9c0de627792",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/native_dataclass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_exception.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_exception.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_exception.puml",
+      "source_sha256": "8d24d2d6351d9508cf94540ccd47ba9042f077a31c389bf24d98070715aa1fc7",
+      "java_sha256": "dddea4a8dd2f1fe9fda774df79cc0c12706138cb8759d9be9c9de964f2c02441",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/native_exception"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_metaclass.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_metaclass.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_metaclass.puml",
+      "source_sha256": "903009d4c8776d5672ebea17eb8108ab19e2f032d108eae4fa695e04509c6f5a",
+      "java_sha256": "4ef9c93a197c5162d29e7548922c4f06ce27fcd359aad5985f941a46dd0daa4c",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/native_metaclass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_protocol.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_protocol.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_protocol.puml",
+      "source_sha256": "36fd5a8467b86d64de42323999b2cd97fdeb2be9132624aec46debe2b7c3c80c",
+      "java_sha256": "66e68052d37315b963f89667e4cf1bd2913ca4b9d08ed6b8652c17fecdf20f12",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/native_protocol"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_record.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_record.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_record.puml",
+      "source_sha256": "248fbaf111dc0c7618a50b197d854f6d28c5091b5193ff1ef022677be00eecfc",
+      "java_sha256": "7276aee1215ac4fb40ce4a9fced29ffc5c41608c6620f2ef59e6fc1444409568",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/native_record"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_stereotype.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_stereotype.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_stereotype.puml",
+      "source_sha256": "0bae5fddf0d1f7a5e6dc51686ee781dbb8b9ec62eeaa99334ddaa20b6a57689a",
+      "java_sha256": "8ab013c444c241d245729a4bc957f47e8da46db5ded42f33050feaeaff5cd368",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/native_stereotype"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_struct.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/native_struct.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/native_struct.puml",
+      "source_sha256": "0a1e8e38882fac3fb8a03a9d8905027a72160c86277f8a5df7fe925e776a6127",
+      "java_sha256": "00266385c08c974397eadc0b9f93ad314c661a95b23ab83a963f58979cc9d7f4",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/native_struct"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/nested_alias_note.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/nested_alias_note.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/nested_alias_note.puml",
+      "source_sha256": "a55cc58ec45f32f12ff721a75dcce49b74482c46553bd7c40e71357bf5f332b0",
+      "java_sha256": "53f42050b2fda1f2d66d76acc989468798d3e35113692947387d9f13bf02ce0c",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/nested_alias_note"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/note_quote.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/note_quote.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/note_quote.puml",
+      "source_sha256": "0e15da0a603c60b027c19242a21ef6380aab27415094be9fd2f2d4a7a88c5839",
+      "java_sha256": "32bcad6a44334ed5af6f2cd5dd87131f2c0a4fea3c2c158471177bcebf49502c",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/note_quote"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/quote_forward.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/quote_forward.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quote_forward.puml",
+      "source_sha256": "0675d30e61263b9f32979ac6ec8b830ccbcc4ed07561fcdb7ca43083bb2e9896",
+      "java_sha256": "1effedbc7ea17149aca419fcd991bb8aed93d67724457c4ba2d73e4fe976ea58",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/quote_forward"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/quote_reverse.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/quote_reverse.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quote_reverse.puml",
+      "source_sha256": "92d1ced6ec7dd3da406d572a08e5817c94c00c411e3365529e1750b48fd02a51",
+      "java_sha256": "fdcdddd78f1255f74a31872bf09d49a71583847eb2df472e072d9b175c205a54",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/quote_reverse"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/quoted_code_collision.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/quoted_code_collision.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quoted_code_collision.puml",
+      "source_sha256": "3502fec6f85d1a31e959a9ffc62ece81dfa2115de849a3c832d0a20f858a95ed",
+      "java_sha256": "8c92dd496306c99981dbec5294c8f3efbd7343b895a166c4121a3663d7d2aa0b",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/quoted_code_collision"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/quoted_decorations.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/quoted_decorations.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/quoted_decorations.puml",
+      "source_sha256": "675a0143a98c86c6a1acbcaa07a165d4ad028524684ec1c2e17538f41d213cda",
+      "java_sha256": "790b648eb6e4300d1d25920c37931d2eebb4ffea934586ece296e0145f1d154e",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/quoted_decorations"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/visibility_sizes.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/visibility_sizes.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/visibility_sizes.puml",
+      "source_sha256": "cc7cf61eb98e17c138509d48a2f622d205c8f2528e9a2ee1b8c869e083062d1c",
+      "java_sha256": "cc31c5c37e6194d4075b8d858f545941bef1a599063c8dfa7e04fb9829a222c9",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/visibility_sizes"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/visibility_stereotype.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/visibility_stereotype.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/prior31/visibility_stereotype.puml",
+      "source_sha256": "9cb34b77f1429c6dc16fa8b28092f1b3f15b9b2df8aa2f797792debe6a3dfe37",
+      "java_sha256": "dc3205e3b3207ffff8b3fdd21c11dbdf4e0e604199eb01055115a3d6a20e09e2",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/prior31/visibility_stereotype"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/action_process.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/action_process.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/action_process.puml",
+      "source_sha256": "6f923948738eb955fb3bf21f1c0f079f51d38fcf9e38ac7c81bae594651cb9c8",
+      "java_sha256": "0a0c3e9be6525f4691975eacaf5ff4ddc083d009073504d215be98703050a02d",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/action_process"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/boundary_renamed.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/boundary_renamed.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/boundary_renamed.puml",
+      "source_sha256": "a10c0c3e760549238acf4dcf917afe2d04c2462eb203bc9b2f4ac6c6116d7eca",
+      "java_sha256": "ef4bf1a573c17faca365b1861495df7ebe0720b8188fa41381328600b7c43230",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/boundary_renamed"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/chrome_center.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/chrome_center.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_center.puml",
+      "source_sha256": "b4c4d7b87cfd965eff9159bfeb13cab73c0f9f406b6415ce52af4442014a8d49",
+      "java_sha256": "5189eeb0f450c88a603dcb95d9c380763d7db9bb573239a775813f360d96d007",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/chrome_center"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/chrome_left.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/chrome_left.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_left.puml",
+      "source_sha256": "055af62ca60318bc3652827125482657cb7386754eef1c82cf5673bd496312ed",
+      "java_sha256": "e596e5922ed7b54f28b2007dd13aea6d989cb16a86bda9a17d2716596b5edfdf",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/chrome_left"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/chrome_right.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/chrome_right.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/chrome_right.puml",
+      "source_sha256": "178a5f16dc9072cae8de9805502a9d554f6c80bc5eaecb412c9ace7b37fc7591",
+      "java_sha256": "0662243a34cc26ac8913947ef287765f24b658ff989ce0f1677b5404cd09903d",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/chrome_right"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/cloud_long.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/cloud_long.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/cloud_long.puml",
+      "source_sha256": "73af931060c97b8c10e5c2584daf5d6ae050b8acfb595c3aa9cebc3b3d199bd7",
+      "java_sha256": "fb30582f6a98bceb6f643108d3307f3a2c2b7357177f446ca7776b65908b3ca4",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/cloud_long"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/cloud_nested.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/cloud_nested.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/cloud_nested.puml",
+      "source_sha256": "f520181beada36797e5f242ba03df5757e86c99584ff46b5a6fa1503bc891382",
+      "java_sha256": "e66f5f920433d34a547c8344e129594a824fde2182eb35a008eab54be6c19389",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/cloud_nested"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/component_reverse.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/component_reverse.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/component_reverse.puml",
+      "source_sha256": "2ce0bd6486704122bcf64bc67a1138fa2f6becd0af32194e14ba0a1e26ab41b2",
+      "java_sha256": "4d61ce753fba5cc646e3f14b6a27ba4fbe457753ddd435fd5363c77d300fb253",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/component_reverse"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/component_stereo.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/component_stereo.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/component_stereo.puml",
+      "source_sha256": "011fb429ff73ab4f4d06a562fbd4f5511c506fc2d30366fa75c18501bed7bcd1",
+      "java_sha256": "48c57d727fc6a8fc74df2173d614260b14440bb529e242477181dc0fd2c93a6a",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/component_stereo"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/description_route.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/description_route.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/description_route.puml",
+      "source_sha256": "e91096b45ebc09bc89303d9f8052fed685d36d5ead01ab0ce806c2669829ada0",
+      "java_sha256": "9fe4d749264d3bf422a5a40a5132bf817f888f16068403d364793d377945c82d",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/description_route"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/empty_link.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/empty_link.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/empty_link.puml",
+      "source_sha256": "77cb545287dd24dc4eff8d609761af4a2e973e7c8bc43ada2f766f9612d65c6e",
+      "java_sha256": "a0fcb2788ace6e727e0cc508b04f1302994325e6f743500a7bd8828a217854e8",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/empty_link"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/empty_nested.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/empty_nested.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/empty_nested.puml",
+      "source_sha256": "769cdb9b53b9933f16db4b525580199bca81b254d1aa616bca207bdbaad5dccb",
+      "java_sha256": "5d6daa61e3c1849fb271b5bbbcc7343616d82a03952c39888e6efdbe4f5bc6ce",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/empty_nested"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/endpoint_19.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/endpoint_19.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_19.puml",
+      "source_sha256": "1381105a7c2422ba6e23c61f73b4674b4ec86d4c0547192efc20190862e88b7c",
+      "java_sha256": "ea0d6ccf0df41b6ae4701ff68de8767622fe751b9c96cd783b6f7b9abe6d9ee4",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/endpoint_19"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/endpoint_20.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/endpoint_20.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_20.puml",
+      "source_sha256": "dc40808f54ee665b55ff0bb5937b8ed19b46eb196add457fba87f3ce713040a4",
+      "java_sha256": "41bb3bb3f682911ac191304f0ad7d0dc299d1ad1889a0099d4a0935f929915af",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/endpoint_20"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/endpoint_21.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/endpoint_21.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/endpoint_21.puml",
+      "source_sha256": "89bbecbf2162b6baaa4e751fc4ebd7d7dcd8aaf0e9dcac79a2a9c31f33b7e684",
+      "java_sha256": "515920e979c93d9f9a89fcc5f005d350ad6522f0cca390c65df396f89f40f3ba",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/endpoint_21"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/floating_note.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/floating_note.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/floating_note.puml",
+      "source_sha256": "c862cf4326443daba74e892a27292c180decf9367b9cefe8413fb7e68a249286",
+      "java_sha256": "01db05b1aa905366818980e956b2de49c5d7dae55eddb74196fe6dd549c769f1",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/floating_note"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/group_leaf.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/group_leaf.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_leaf.puml",
+      "source_sha256": "3f78e1d69ec9bb464172b94b6572cc953d15123df50e87c60dab7ee4af7ef7b9",
+      "java_sha256": "c733a137e0a7f84faf8a6ea5307f94c6ead49e360c69226177de4e047c0898b1",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/group_leaf"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/group_link.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/group_link.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_link.puml",
+      "source_sha256": "e5c0cd8d8641ada8c673f62c70cd5e53c5bfd84257ec1b05762f471ff80d0e84",
+      "java_sha256": "9ab2a2c94b477d6f57aa326819bcdc80ea7ebc0e6a03bdc172c76b7ee0dec34d",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/group_link"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/group_lr.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/group_lr.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_lr.puml",
+      "source_sha256": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+      "java_sha256": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/group_lr"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_alias_duplicates.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_alias_duplicates.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_alias_duplicates.puml",
+      "source_sha256": "3bc8adcb77f571240c223a207ffb19bec08bf338c04a1a0f5d76563113283c8c",
+      "java_sha256": "78e49221aaed0354784e3f5d0440e0799bb410fa892630632a974df5471dab95",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/note_alias_duplicates"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_namespace.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_namespace.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_namespace.puml",
+      "source_sha256": "0385a27050ac44f277fd7c02933438851ef44b02075b0ec56c85fe4cb95b6497",
+      "java_sha256": "d0dabe22f057a3ce8b6771e92ee0810d1cf0a39b36fd7314771719518cc12c4f",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/note_namespace"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_outside_right.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_outside_right.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_outside_right.puml",
+      "source_sha256": "969e620ab7e3813bdecfcebc30c007f81fcd89ddb064e3d988da4e5c05cb9455",
+      "java_sha256": "483b302934bc688f39aeaf964d76285c7606356b3cbc19469628d2150fcf85c8",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/note_outside_right"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_scope_lr.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_scope_lr.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_scope_lr.puml",
+      "source_sha256": "199470ac922428d8ea0b2f8bbeb378cf80962f968568c06f602530ed64e14a33",
+      "java_sha256": "f378671f39645a6b093e95054b08225f5f07ae16e84cf230cf00a8aeb45a48b2",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/note_scope_lr"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_top_scope.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_top_scope.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_top_scope.puml",
+      "source_sha256": "0dea9f7e83f59067c1370d482c5bc9ed58eb72f4e788e361aaf26eceef7c9e0e",
+      "java_sha256": "6f919aa0bc4faec2abaec4785a5fde4e44b250e641264a6c902e74348286081a",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/note_top_scope"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_two_links.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/note_two_links.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/note_two_links.puml",
+      "source_sha256": "a0989563e841fb051037197b95c9560a7dee41a22fd8fbb523aa62cae0a6d341",
+      "java_sha256": "3a18e49081bfaa99e3a5c735a21eb428919e240ff401943c09a1e9c99a0df1e0",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/note_two_links"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/notes_cross_scope.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/notes_cross_scope.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/notes_cross_scope.puml",
+      "source_sha256": "e56c082e4c44d749237c86e1b9111535e4c3259fcd4b5f0b69e3de41c4820e90",
+      "java_sha256": "aef2ea64db8e75ec385a778d00bfa3d01e4f8d33f79d951ff7bdd7e8665457b1",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/notes_cross_scope"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/notes_nested.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/notes_nested.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/notes_nested.puml",
+      "source_sha256": "46e2bda839c567f92bf92c303d163170d3bf6529ea6f6c88ddf92fe37b4cf157",
+      "java_sha256": "2c3c7c0747e58e86bbc3abbee24f3b4e151e7b5f4bc43985d8792f520f587a7b",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/notes_nested"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/package_link.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/package_link.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/package_link.puml",
+      "source_sha256": "5bc5a26e4e9f299b08dbf8c2f345f645f3de22499418979574e77a55ecdc6e66",
+      "java_sha256": "0d2b4583e580b882807379fc11541e075654c81bee575a35a16d0e029111c7e0",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/package_link"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/package_slots.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/package_slots.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/package_slots.puml",
+      "source_sha256": "9ad4e1ac09304d3dab9caf6c428d50010f45acde78b9e38fd27790d982710671",
+      "java_sha256": "c8403e2508df1d16dfb23fbbcc49376e32d85022a12f8d6c96068ef183edd257",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/package_slots"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/queue_alias.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/queue_alias.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/queue_alias.puml",
+      "source_sha256": "8b83e7919a85e6f8966b1ef9adce48d2d534dce8cb3702361623236969dc1ef4",
+      "java_sha256": "b39bfe55b6ba319f486d80d647e6da5f9691dda7c15a772f4edfa546a087307e",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/queue_alias"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/quote_modifiers.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/fresh/quote_modifiers.svg",
+      "axes": [
+        "retained maker declaration/command topology",
+        "retained maker alias/style/direction combination"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "byte-identical maker reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/quote_modifiers.puml",
+      "source_sha256": "fbba99d6e2295380d30666a4fe6e58dce4a0582cc35f0cf7891b2c389c91a8dc",
+      "java_sha256": "d1586161e82d89a6ff17f1e2d1418622a3781b40a8c450e098c91cab41ef84ad",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/fresh/quote_modifiers"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-evaluated-event-stream__checker_comments_and_origins.svg",
+      "axes": [
+        "retained current topology or preprocessing stream",
+        "retained current direction/alias/comment scope"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "byte-identical current955 source/reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+      "source_sha256": "f24e8da7277e5ddb223079152272860d20bb4c8b055466c1831f0c17c8e5d87d",
+      "java_sha256": "38a52ea1065dad2ef0b4c4da54df82e106e1c194a39ae3b397e17a2e7d56fc02",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/current955/tim-evaluated-event-stream/checker_comments_and_origins"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_explicit_override_survives_global.svg",
+      "axes": [
+        "retained current topology or preprocessing stream",
+        "retained current direction/alias/comment scope"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "byte-identical current955 source/reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+      "source_sha256": "8a4fe93537b541b001c2a7257ec05e1af333ef0b335985a11181e30022fd48ef",
+      "java_sha256": "7489a8771e2141e6ccbad9ef5a68df9efbbf94a052100f817dc29b5d9f9384e8",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/current955/tim-procedure-global-fork-memory/checker_explicit_override_survives_global"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-procedure-global-fork-memory__checker_global_overtakes_auto_local.svg",
+      "axes": [
+        "retained current topology or preprocessing stream",
+        "retained current direction/alias/comment scope"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "byte-identical current955 source/reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+      "source_sha256": "b48c5bf087b0d6124f4774ff63289e98b3eec5b1a32c0505ec642cf81592e258",
+      "java_sha256": "ff791dc1f6b2f1c8203203bf3dc0c20507e5409d4eec89c2d9e98fe78ff850c7",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/current955/tim-procedure-global-fork-memory/checker_global_overtakes_auto_local"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_dump_memory.svg",
+      "axes": [
+        "retained current topology or preprocessing stream",
+        "retained current direction/alias/comment scope"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "byte-identical current955 source/reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+      "source_sha256": "cfc154111736fe7a89d194c7c20b023d652c9d492b2df42fa73a17938671d836",
+      "java_sha256": "1b570bda06c6e8ea9348fdf063b7e95ae75d3d94008a17fcd8447952c0844c17",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/current955/tim-theme-post-expansion-source-identity/checker_dump_memory"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/retained-current/tim-theme-post-expansion-source-identity__checker_inner_comment.svg",
+      "axes": [
+        "retained current topology or preprocessing stream",
+        "retained current direction/alias/comment scope"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "byte-identical current955 source/reference, independent CLI replay",
+      "original_source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+      "source_sha256": "3a72b8b848f5a6c39bdab49660ceba08f85b69372269e9a4b5c4147d820287fb",
+      "java_sha256": "670329c1746ebc27517b84f7d32178e8ea6df48448cf11134207077a355dae12",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/current955/tim-theme-post-expansion-source-identity/checker_inner_comment"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/command-execution-ownership__bare_native_record.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/command-execution-ownership__bare_native_record.svg",
+      "axes": [
+        "new native kind",
+        "root aliased declaration plus relationship"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "independent cross-mechanism dependency counterexample; counted once in fresh135",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/bare_native_record.puml",
+      "source_sha256": "9be8040d89b00133743360b9c42931cda2780039dbade81f28d381fac4792aeb",
+      "java_sha256": "945318c15cbb5651d0386dddc4e8e180cca324d2f47e26247b499fbad355287f",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/bare_native_record"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/command-execution-ownership__braced_note_interface.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/command-execution-ownership__braced_note_interface.svg",
+      "axes": [
+        "brace-delimited multiline note ownership",
+        "native type and nested scope"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "independent cross-mechanism dependency counterexample; counted once in fresh135",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/braced_note_interface.puml",
+      "source_sha256": "c5593e935cf7dc0f4b9078acec4808a6578e1e9e015acbca4e15a11e4eb6b20a",
+      "java_sha256": "aec79c53fd55a780407f558dd852f3a53f5981829edb563b486423e76fc61363",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-command-execution-ownership/braced_note_interface"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/note-target-quark__group_target_left.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/note-target-quark__group_target_left.svg",
+      "axes": [
+        "group versus leaf quark target",
+        "attachment side"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "independent cross-mechanism dependency counterexample; counted once in fresh135",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-note-target-quark/group_target_left.puml",
+      "source_sha256": "9f5a7148f6f9b90bff9340af136955ebcca4ae40763d01bc71a5b5bf1f5d11b4",
+      "java_sha256": "84bc27be7d3b5673e57e9a521488aa4983a04fb34c6c77c8a5d6d63b126de3ce",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-note-target-quark/group_target_left"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/package-command-precedence-closure__visibility_public.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/package-command-precedence-closure__visibility_public.svg",
+      "axes": [
+        "ordinary package visibility",
+        "alias plus stereotype"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "independent cross-mechanism dependency counterexample; counted once in fresh135",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-package-command-precedence-closure/visibility_public.puml",
+      "source_sha256": "dea39482d5eb3039bd4d600216ab82453cad10853d84cbb767b8234c43e2fff7",
+      "java_sha256": "40b8e6e14a7638c89c1cfbdb05594067eca8e74ec891033ae7575442c16cdf5d",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-package-command-precedence-closure/visibility_public"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/named-note-scoped-identity-closure__qualified_0.puml",
+      "golden": "test-diagrams/perturbations/class-command-grammar-closure/dependencies/named-note-scoped-identity-closure__qualified_0.svg",
+      "axes": [
+        "qualified named-note identity",
+        "single/multiline declaration"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "independent cross-mechanism dependency counterexample; counted once in fresh135",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-named-note-scoped-identity-closure/qualified_0.puml",
+      "source_sha256": "2c9adbc3cc443ea82bab68e55e84636861d518742a66b381613961ac690e2d91",
+      "java_sha256": "fe337b30308f1daee732b1773901030dc7962cc49d537bed69d36cb7e55a0af1",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-named-note-scoped-identity-closure/qualified_0"
+    }
+  ],
+  "verdict": "rejected",
+  "tested_combined_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "parent_base": "ea136c78ff71d2be074b39d2ffe0484decba0aec",
+  "original_account_commit": "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+  "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+  "phase_mapping": {
+    "mechanism": "class-command-grammar-closure",
+    "account_path": "docs/parity-reviews/class-command-grammar-closure/account.json",
+    "original_account_commit": "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+    "picked_account_commit": "fd4eb9f768768c006d814f389dbdad79605acc7f",
+    "account_history_original": [
+      "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "fd4eb9f768768c006d814f389dbdad79605acc7f",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "05c955f9d1c09a159e49c4ac74430c9caab9f1b64f1872b46d2689a5470adaa7",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  "dependencies": [
+    "class-command-execution-ownership",
+    "class-package-command-precedence-closure",
+    "class-named-note-scoped-identity-closure",
+    "class-description-symbol-images"
+  ],
+  "scope": "Only the stated mechanism at the full combined tested revision; not packet acceptance and not certification of an extracted subset. Failed applicable held-outs are blocking. Invalid grammar references are negatives, never positive comparisons.",
+  "reference_profile": "Source-pinned Java 71806a2, raw CLI -tsvg -pipe for new inputs, consistent with owner-approved raw CLI/file policy b62d8ce967b6dda7d85bb6dc28ff92509f6066f9. All preexisting/maker reference bytes unchanged; historical GET corpus/counts reported separately. Historical binary/font/Graphviz equivalence unproven. TIM checker owns independent reader verification; no TIM production/assertion imported.",
+  "support": "docs/parity-reviews/class-command-grammar-closure/checker-support/REPORT.md",
+  "observed_counts": {
+    "mismatch": 8,
+    "pass": 63,
+    "process_error": 7
+  },
+  "reference_policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9"
+}

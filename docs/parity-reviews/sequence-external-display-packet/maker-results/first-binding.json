@@ -1,0 +1,12 @@
+{
+  "head": "6857e26f9b0e1fc4c96d34faca06f7fe3ce539f2",
+  "dirty": true,
+  "source_files": {
+    "crates/rustuml-render/src/sequence.rs": "73c2b668ffeac4427212789b28c01c34ce3fe15e7a58c9d9bc04ae525714b2fa"
+  },
+  "binaries": {
+    "compare_cli": "cb92187de32da6d8f659c8add252eb663b88934bffed28ce6e3e9fa0463b1425",
+    "diff_one": "bbeb78c58f6594c40c55bcd406b8c60c3e96422130c78706460ecdca1c5e8649",
+    "rustuml": "323efcaba39e2a146350cfd33f63635c0fd1cca0abeac1f06b3854536035d5cd"
+  }
+}

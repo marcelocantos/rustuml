@@ -1,0 +1,5 @@
+@startuml
+participant Vega
+participant Lyra
+Lyra <- Lyra: <size:8>low</size>\n<size:24>high</size>\n<size:10>ebb</size>\n<size:19>rise</size>
+@enduml

@@ -1,0 +1,196 @@
+{
+  "reference": {
+    "env_overrides": {},
+    "source_bytes": 91,
+    "name": "bidir_legacy",
+    "remote_name": "bidir_legacy.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/bidir_legacy.puml",
+    "source_sha256": "b7bb58b6f39da6c94c99e9eeaf6dc227047e72ffafbd3ba357808a9fa0d3e18f",
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 1.1540057500096736,
+    "stdout_sha256": "e0139ee7ec45ef85d81c7638195711dbc5e1686f1d8d872717ecf9494f99ea76",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+    "requested_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/bidir_legacy.puml",
+    "execution_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/bidir_legacy.puml",
+    "actual_wrapper_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "actual_java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "environment_overrides": {},
+    "mapping": {
+      "reason": "Existing wrapper requires an isolated cwd below scratch/; preserve unchanged wrapper and immutable manifest.",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/bidir_legacy.puml",
+      "requested_remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/bidir_legacy.puml",
+      "actual_remote_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/bidir_legacy.puml"
+    }
+  },
+  "request": {
+    "name": "bidir_legacy",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/bidir_legacy.puml",
+    "remote_name": "bidir_legacy.puml",
+    "remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/bidir_legacy.puml",
+    "source_sha256": "b7bb58b6f39da6c94c99e9eeaf6dc227047e72ffafbd3ba357808a9fa0d3e18f",
+    "bytes": 91,
+    "axes": [
+      "both endpoints",
+      "bidirectional/declaration order",
+      "legacy"
+    ],
+    "intended_reference": "valid sequence",
+    "source_validation": [
+      "sequencediagram.command.CommandArrow#getRegexConcat/#executeArg; Rose#createComponentArrow"
+    ],
+    "invocation": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "classification": {
+    "name": "bidir_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 91,
+    "stdout_bytes": 3641,
+    "stderr_bytes": 0
+  },
+  "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_legacy.svg",
+  "before": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/bidir_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/bidir_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "bidir_legacy",
+    "axes": [
+      "both endpoints",
+      "bidirectional/declaration order",
+      "legacy"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "b7bb58b6f39da6c94c99e9eeaf6dc227047e72ffafbd3ba357808a9fa0d3e18f",
+    "golden_sha256": "e0139ee7ec45ef85d81c7638195711dbc5e1686f1d8d872717ecf9494f99ea76",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "6112701edb81caac5818a9d8248a41fe345debec525430a0ada42d74411dc21c",
+      "svg": "fe3b9143afa875ee52d2.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 30, got 28\n  [23] <g> attr mismatch:\n    expected: [(\"class\", \"message\"), (\"data-entity-1\", \"part2\"), (\"data-entity-2\", \"part1\"), (\"data-source-line\", \"3\"), (\"id\", \"msg1\")]\n    actual:   [(\"class\", \"message\"), (\"data-entity-1\", \"part1\"), (\"data-entity-2\", \"part2\"), (\"data-source-line\", \"3\"), (\"id\", \"msg1\")]\n  [25] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"46.5503,63.7988,36.5503,67.7988,46.5503,71.7988,42.5503,67.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"142.5591,63.7988,152.5591,67.7988,142.5591,71.7988,146.5591,67.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [26] tag mismatch: expected <ellipse>, got <line>\n  [27] tag mismatch: expected <polygon>, got <text>\n\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 30, got 28\n  [23] <g> attr mismatch:\n    expected: [(\"class\", \"message\"), (\"data-entity-1\", \"part2\"), (\"data-entity-2\", \"part1\"), (\"data-source-line\", \"3\"), (\"id\", \"msg1\")]\n    actual:   [(\"class\", \"message\"), (\"data-entity-1\", \"part1\"), (\"data-entity-2\", \"part2\"), (\"data-source-line\", \"3\"), (\"id\", \"msg1\")]\n  [25] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"46.5503,63.7988,36.5503,67.7988,46.5503,71.7988,42.5503,67.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"142.5591,63.7988,152.5591,67.7988,142.5591,71.7988,146.5591,67.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [26] tag mismatch: expected <ellipse>, got <line>\n  [27] tag mismatch: expected <polygon>, got <text>\n\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 30, got 28\n  [23] <g> attr mismatch:\n    expected: [(\"class\", \"message\"), (\"data-entity-1\", \"part2\"), (\"data-entity-2\", \"part1\"), (\"data-source-line\", \"3\"), (\"id\", \"msg1\")]\n    actual:   [(\"class\", \"message\"), (\"data-entity-1\", \"part1\"), (\"data-entity-2\", \"part2\"), (\"data-source-line\", \"3\"), (\"id\", \"msg1\")]\n  [25] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"46.5503,63.7988,36.5503,67.7988,46.5503,71.7988,42.5503,67.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"142.5591,63.7988,152.5591,67.7988,142.5591,71.7988,146.5591,67.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [26] tag mismatch: expected <ellipse>, got <line>\n  [27] tag mismatch: expected <polygon>, got <text>\n\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  },
+  "after": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/bidir_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/bidir_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "bidir_legacy",
+    "axes": [
+      "both endpoints",
+      "bidirectional/declaration order",
+      "legacy"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "b7bb58b6f39da6c94c99e9eeaf6dc227047e72ffafbd3ba357808a9fa0d3e18f",
+    "golden_sha256": "e0139ee7ec45ef85d81c7638195711dbc5e1686f1d8d872717ecf9494f99ea76",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "33e957809f70c201dd071f5873b41a513d5abc536cb387b89b49feae41196c2d",
+      "svg": "fe3b9143afa875ee52d2.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [24] tag mismatch: expected <ellipse>, got <polygon>\n  [25] tag mismatch: expected <polygon>, got <ellipse>\n  [26] tag mismatch: expected <ellipse>, got <polygon>\n  [27] tag mismatch: expected <polygon>, got <ellipse>\n  [28] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"40.5503\"), (\"x2\", \"143.0591\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"40.5503\"), (\"x2\", \"148.5591\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [24] tag mismatch: expected <ellipse>, got <polygon>\n  [25] tag mismatch: expected <polygon>, got <ellipse>\n  [26] tag mismatch: expected <ellipse>, got <polygon>\n  [27] tag mismatch: expected <polygon>, got <ellipse>\n  [28] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"40.5503\"), (\"x2\", \"143.0591\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"40.5503\"), (\"x2\", \"148.5591\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [24] tag mismatch: expected <ellipse>, got <polygon>\n  [25] tag mismatch: expected <polygon>, got <ellipse>\n  [26] tag mismatch: expected <ellipse>, got <polygon>\n  [27] tag mismatch: expected <polygon>, got <ellipse>\n  [28] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"40.5503\"), (\"x2\", \"143.0591\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"40.5503\"), (\"x2\", \"148.5591\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  }
+}

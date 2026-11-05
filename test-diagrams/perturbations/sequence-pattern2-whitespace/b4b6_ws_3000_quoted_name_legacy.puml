@@ -1,0 +1,5 @@
+@startuml
+participant "Ju　niper" as J
+participant K
+J -> K: ping
+@enduml

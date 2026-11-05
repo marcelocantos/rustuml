@@ -1,0 +1,8 @@
+@startuml
+actor Lark
+participant Lyra
+create Lark
+Lark ->]: send
+Lyra -> Lark: close
+destroy Lark
+@enduml

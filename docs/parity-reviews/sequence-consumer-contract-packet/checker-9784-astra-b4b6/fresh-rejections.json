@@ -1,0 +1,1714 @@
+{
+  "entries": 60,
+  "before_rejections": 2,
+  "after_rejections": 36,
+  "introduced_losses": [],
+  "after_false_accepts": [
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_nbsp_color_boundary_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_nbsp_color_boundary_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_activation_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_activation_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_autonumber_resume_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_autonumber_resume_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_divider_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_divider_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_delay_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_delay_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_create_destroy_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_create_destroy_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_hide_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_hide_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_color_boundary_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_color_boundary_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_ff_divider_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_ff_divider_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_ff_delay_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_ff_delay_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_ff_color_boundary_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_ff_color_boundary_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_domain_accross_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_domain_accross_teoz.puml"
+  ],
+  "results": [
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2000_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2000_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2001_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2001_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2002_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2002_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2003_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2003_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2004_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2004_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2005_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2005_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2006_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2006_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2007_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2007_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2008_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2008_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2009_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_2009_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_200a_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_200a_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_3000_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_3000_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_1680_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_1680_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_205f_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "fd56a9a325162e6848fa034ce47d574fe5a5cdc745560fc5fb788e7572253526",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_205f_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "91847b976827541023cf632c1a74e244e8be123a5c87c260da948f5ba6dcfa2b",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_feff_terminator_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_feff_terminator_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_nbsp_color_boundary_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_nbsp_color_boundary_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_activation_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "65eb17b5adbf4719acd50518aec9da958d6eed85bc61115e7e71e4f2579a4d3c",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "65eb17b5adbf4719acd50518aec9da958d6eed85bc61115e7e71e4f2579a4d3c",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_activation_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "54c87554f4038998df35a3d1db0670a0fdc7f0c7fdb982c812a42c43555cb0ba",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "54c87554f4038998df35a3d1db0670a0fdc7f0c7fdb982c812a42c43555cb0ba",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_autonumber_resume_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "f5f8620907ce924eff8b85681683193dc93610db347bce489baa830aac6d8094",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "f5f8620907ce924eff8b85681683193dc93610db347bce489baa830aac6d8094",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_autonumber_resume_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "a14607042981a0d50f4a8621f7e67aaa2b85c447a146f42ca87befcb89c4c800",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "a14607042981a0d50f4a8621f7e67aaa2b85c447a146f42ca87befcb89c4c800",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_divider_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8f5bcf1ecaf1860a85a28c15decd3a322bb2d83bdb0142c7cc33053549912bd3",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8f5bcf1ecaf1860a85a28c15decd3a322bb2d83bdb0142c7cc33053549912bd3",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_divider_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c0c5dc74012abc9192659e6195f3af60728d632c67558b6f3ffaa15c2d378e77",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c0c5dc74012abc9192659e6195f3af60728d632c67558b6f3ffaa15c2d378e77",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_delay_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "2825bf17aad1787411432f159ad41ccfe027870a01d0a9a68dc6154dbcece83e",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "2825bf17aad1787411432f159ad41ccfe027870a01d0a9a68dc6154dbcece83e",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_delay_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4d5b9f0c7fcde9da5f2efc572a0cbfd140a48c655c7b586a3fe2b8e4f1386cbc",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4d5b9f0c7fcde9da5f2efc572a0cbfd140a48c655c7b586a3fe2b8e4f1386cbc",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_create_destroy_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "d06b3326d7f1477b747613482b56f1895d39024d7413135d062b225541ffaa6d",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "d06b3326d7f1477b747613482b56f1895d39024d7413135d062b225541ffaa6d",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_create_destroy_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "88e067dff9a16f2cb8315b5dd0094ccc269ff40fba5ea771c2d73f43140d9cb1",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "88e067dff9a16f2cb8315b5dd0094ccc269ff40fba5ea771c2d73f43140d9cb1",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_hide_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "6b00d37523df56c5a964731838d0ae97213b8e8d4cd96834e3526fca5d9f8870",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "6b00d37523df56c5a964731838d0ae97213b8e8d4cd96834e3526fca5d9f8870",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_hide_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "08d6f46faa0b7804474f0b54d15120b5130631588104c27b99a8118a0b5d6ff4",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "08d6f46faa0b7804474f0b54d15120b5130631588104c27b99a8118a0b5d6ff4",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_color_boundary_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_vt_color_boundary_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_ff_divider_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8f5bcf1ecaf1860a85a28c15decd3a322bb2d83bdb0142c7cc33053549912bd3",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "8f5bcf1ecaf1860a85a28c15decd3a322bb2d83bdb0142c7cc33053549912bd3",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_ff_divider_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c0c5dc74012abc9192659e6195f3af60728d632c67558b6f3ffaa15c2d378e77",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "c0c5dc74012abc9192659e6195f3af60728d632c67558b6f3ffaa15c2d378e77",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_ff_delay_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "2825bf17aad1787411432f159ad41ccfe027870a01d0a9a68dc6154dbcece83e",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "2825bf17aad1787411432f159ad41ccfe027870a01d0a9a68dc6154dbcece83e",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_ff_delay_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4d5b9f0c7fcde9da5f2efc572a0cbfd140a48c655c7b586a3fe2b8e4f1386cbc",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4d5b9f0c7fcde9da5f2efc572a0cbfd140a48c655c7b586a3fe2b8e4f1386cbc",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_ff_color_boundary_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "97dfa061f1623c986abc5e12be1682f9d80af9cdd7380ab8d52b3d4ef1e8b4eb",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_ws_ff_color_boundary_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "58350d3d2eca7acb7278d91ad4d486ef314bd8e7d552a4704bffbb4c396c0dbb",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_domain_accross_legacy.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "712e261878ddf0ab3372f087eb989c2606fbc29ec3afa5e57969bbb35dcaef22",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "712e261878ddf0ab3372f087eb989c2606fbc29ec3afa5e57969bbb35dcaef22",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_domain_accross_teoz.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "de82f29f0bf357c94eb773ed435d417315ae41afe492256e2fc9d0726a0f3763",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "de82f29f0bf357c94eb773ed435d417315ae41afe492256e2fc9d0726a0f3763",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_domain_bare_coloured_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "9e698c854ced9f11b4c33174a9dc766533abbdcded868a86e0d36d24b6daac0d",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: A note over command requires a participant\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_domain_bare_coloured_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "9c72ee4bd2ea283ae125d67520e7b6de46fe113740572429933ef89cf8349c83",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: A note over command requires a participant\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_domain_bare_rect_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "462c0ba1d0553f4f6494ecb3e50648c8ede270d52101c52084e47c9535f4c95c",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: A note over command requires a participant\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_domain_bare_rect_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "02e50fef3ce6dbc1b4c03424480e2349661420332a012ee48573ccb1de5bb32e",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: A note over command requires a participant\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_domain_bare_hex_multiline_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "f7894a27782f2bb2821bb327ec947b2e2c4ad4f8679aef354a24a6deb74a2eae",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: A note over command requires a participant\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/reference-inputs/b4b6_domain_bare_hex_multiline_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "7808deb4e32f88547b591be040cb6879ab6c2556bd40ddebf92656c9cd356311",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-consumer-checker-b4b6/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 5: A note over command requires a participant\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    }
+  ]
+}

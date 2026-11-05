@@ -1,0 +1,10 @@
+@startuml
+box "Wide participant container WWWWWWW"
+participant Sedge as S
+participant Forge as F
+end box
+group package
+note left of S : Outside gg.ll
+S -> F : transfer
+end
+@enduml

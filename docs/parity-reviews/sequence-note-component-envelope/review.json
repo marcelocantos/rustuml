@@ -1,0 +1,279 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-note-component-envelope",
+  "reviewer": {
+    "task_id": "t3-b60455c3 independent sequence recovery checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "c1ef52be1a1cb9614c3a06a7b524d650f32ecbb7",
+  "implementation_commit": "9c988764885240bd2615dca3f5f2af3f45d2eb69",
+  "original_account_commit": "6f36fedfba38ca19244a81454e3f7d9c900f2974",
+  "original_implementation_commit": "10b2906dad9cdfd94b1a036a0ce10c77a82edb40",
+  "tested_parent_revision": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "tested_candidate_revision": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "original_candidate_revision": "1800ac48714743863307c82674490c697fcf5709",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "input_frontend": {
+    "owner_decision": "Raw Java CLI/file semantics approved during this review",
+    "policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "new_controls_frontend": "raw CLI -tsvg -pipe -charset UTF-8",
+    "historical_corpus": "GET preserved unchanged",
+    "TIM_code_imported": false,
+    "new_origin_assertion_imported": false,
+    "TIM_rawreader_reverification": "Not duplicated; assigned to independent TIM checker"
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/generated",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/focused-generated --focused",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe -charset UTF-8",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST /tmp/rustuml-seq-check-b60455c3/{before,after} SCRATCH_OUTPUT [CWD] (one invocation per cohort/revision; exact expansion in checker-support/README.md)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser -p rustuml-render --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo clippy --release -p rustuml-parser -p rustuml-render -- -D warnings",
+    "rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/diagram/sequence.rs",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "shadow on/off",
+        "note across activation and delay"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "8a64e14ceab02a04d923dd4eb8775297dc4be76cbfe3e18f3686f59110584a34",
+      "golden_sha256": "3ab5998e100488f0b74404b87aaa1747582160462fe631d709f10fcf3c33ce5d",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "shadow on/off",
+        "note across activation and delay"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "0e7553fac10ca057a794140186be5506e22aae2f2529cdc800059abc55859249",
+      "golden_sha256": "94e0a66ee31280bb086902de02f91cac13f6cc085b7a722cbdf949611bd83a73",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "shadow on/off",
+        "note across activation and delay"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "52681d8c0ffc8f77219b8806e875eb76bf9ee123db42e9738bd86a3612f5a1b2",
+      "golden_sha256": "6eec811486f9c5bd98382144df35798bb151b00b5382c880c3a24c89c0f1ce61",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_legacy_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "shadow on/off",
+        "note across activation and delay"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "2207e0469f7996d71ee5f4f58846e6a0a47503bbb15927ea34bc931fa9c750f2",
+      "golden_sha256": "f10a03e0304787dd88d7278552ee60391bfaeecffa54ac38b6658da6d7e99983",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "shadow on/off",
+        "note across activation and delay"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "f5ee3e9f3f8d694f58f9b804df5ceb3f97ebb65d65d5b14a9b90b3ffed030eaf",
+      "golden_sha256": "602c8ff81f219c1b3f6b2a386a663628a95316b7f94b96c24c399c593d4fbfb2",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "shadow on/off",
+        "note across activation and delay"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "437e7854b8a5934a8553ca43962ae58d7f6ca36b09503d14f968dc6065fa3c21",
+      "golden_sha256": "d2f1fee199182bc369fa97d258138bd0f3567a67a2ec976f077ac4fb181af85a",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "shadow on/off",
+        "note across activation and delay"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "3e383e75fe109c0c48f4a595e0eea05f10e677ef064114362d9061b514579807",
+      "golden_sha256": "f31308586345d5db21f9fc88d929634af45e8962f646822f5c98c46328c71f69",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_recovery_teoz_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "shadow on/off",
+        "note across activation and delay"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "5134bc084aa7c9a68a0e4b2894b11b9afc43f4c937fac9d9e8d2d5fdfb55ef93",
+      "golden_sha256": "552c13a6602ad42dd755f508bb6fcd6f9cb1652f83dc4c9e0c88943f2b7af045",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e0.svg",
+      "axes": [
+        "attached note side",
+        "nonzero padding",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "561f35c24f4b4781fd05c76c7f804568fac7d119dd6a7c75d50cd9fc56ba6dc1",
+      "golden_sha256": "b8bc9640522e090eb556ae93370908aea2030186b6c308c7336456efb2ee6e4c",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e0.svg",
+      "axes": [
+        "attached note side",
+        "nonzero padding",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "cd2274ce0d6df174e66ffb39f9f407e44bdfa553437ee35495567ac205283aba",
+      "golden_sha256": "71230fe16b1dd09584c75fc1141593dba0b3b5bf0bf82be7b133d063c9b1a899",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e1.svg",
+      "axes": [
+        "attached note side",
+        "nonzero padding",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "156c630f7cda03adbd7fc449e65bddcfb2ff8a14e403d55ba5d0422876ff6449",
+      "golden_sha256": "319afffe433e5d54824cd3eb0f279c0f1e01faff661fab646a32462d2bd8cca8",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e1.svg",
+      "axes": [
+        "attached note side",
+        "nonzero padding",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "290500edf0035a197d4f934c18bc3c6c3ade90cc58121da7194b7c7bc1938102",
+      "golden_sha256": "fc03cfa3b26a39b3a58cbe5696b71d1e358382709f3853a09eefaba4ba32c424",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    }
+  ],
+  "findings": [
+    "NoteBox#getStartingX truncates the component origin and getSegment merges live thickness at both preferred-height endpoints; ComponentRoseNote adds deltaShadow to preferred width and height. Added shadow width and live-segment sampling follow this model. ArrowAndNoteBox combines arrow and note preferred dimensions, not their visible polygons.",
+    "All eight primary envelope cases fail. Legacy padding2 with a nested live segment and delay is435px tall in Java versus431px in Rust; shadowed counterparts also fail. Two focused legacy non-self attached-note controls pass, but both Teoz attached-note controls fail, including a10.6553px arrow ordinate displacement.",
+    "Self-note placement is separately synthesized from arrow_y-first_height+SELF_MSG_RIGHT_NOTE_Y_PAD at sequence.rs:7397, while other notes subtract padded component contributions. Multi-participant drawing at13218 still builds preferred width without note_shadow_delta and over_several_note_geometry uses painted participant widths. These duplicated component approximations are live dependencies of the claimed envelope and block acceptance.",
+    "All14 accounts were present byte-for-byte in earlier chronological commits before their corresponding code. See provenance.json and commit-mapping.json. Main release tiers remain11181/11251 product-library and10497/11251 assisted-library; source-only CLI cohort403/955 with10 invalid references; no regressions observed.",
+    "Verdict applies to whole source-to-SVG recovery with the dependencies described above. Positive component-local observations are explicitly bounded and are not acceptance. Every mismatch and negative remains in the standing suite."
+  ],
+  "verdict": "rejected",
+  "evidence_summary": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/summary.json",
+  "source_audit": "docs/parity-reviews/sequence-dependency-closure/checker-support/source-audit.json",
+  "scope_and_dependencies": [
+    "NoteBox#getStartingX truncates the component origin and getSegment merges live thickness at both preferred-height endpoints; ComponentRoseNote adds deltaShadow to preferred width and height. Added shadow width and live-segment sampling follow this model. ArrowAndNoteBox combines arrow and note preferred dimensions, not their visible polygons.",
+    "All eight primary envelope cases fail. Legacy padding2 with a nested live segment and delay is435px tall in Java versus431px in Rust; shadowed counterparts also fail. Two focused legacy non-self attached-note controls pass, but both Teoz attached-note controls fail, including a10.6553px arrow ordinate displacement.",
+    "Self-note placement is separately synthesized from arrow_y-first_height+SELF_MSG_RIGHT_NOTE_Y_PAD at sequence.rs:7397, while other notes subtract padded component contributions. Multi-participant drawing at13218 still builds preferred width without note_shadow_delta and over_several_note_geometry uses painted participant widths. These duplicated component approximations are live dependencies of the claimed envelope and block acceptance."
+  ]
+}

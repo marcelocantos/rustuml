@@ -1,0 +1,6 @@
+@startuml
+skinparam stereotypePosition bottom
+participant Hub
+create queue Mail <<role>>
+Hub -> Mail: open
+@enduml

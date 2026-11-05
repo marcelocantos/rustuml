@@ -1,0 +1,5 @@
+@startuml
+class "Azure Styled 3251" as AzureStyled
+class "Coral Styled 7649" as CoralStyled
+AzureStyled )-[dotted,#336699,thickness=3]-( CoralStyled
+@enduml

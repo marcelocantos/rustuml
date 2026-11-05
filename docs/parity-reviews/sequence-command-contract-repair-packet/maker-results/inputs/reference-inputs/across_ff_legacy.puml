@@ -1,0 +1,5 @@
+@startuml
+participant N
+N -> S: cross
+rnoteacross: field
+@enduml

@@ -1,0 +1,62 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_bare_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_bare_legacy.svg",
+    "cohort": "followup4",
+    "mechanism": "sequence-queue-complete-stereotype-display",
+    "axes": [
+      "hide stereotype",
+      "name wider than stereotype",
+      "bare",
+      "legacy"
+    ],
+    "name": "ind5f_hide_widename_bare_legacy",
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_bare_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_bare_teoz.svg",
+    "cohort": "followup4",
+    "mechanism": "sequence-queue-complete-stereotype-display",
+    "axes": [
+      "hide stereotype",
+      "name wider than stereotype",
+      "bare",
+      "teoz"
+    ],
+    "name": "ind5f_hide_widename_bare_teoz",
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_created_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_created_legacy.svg",
+    "cohort": "followup4",
+    "mechanism": "sequence-queue-complete-stereotype-display",
+    "axes": [
+      "hide stereotype",
+      "name wider than stereotype",
+      "created",
+      "legacy"
+    ],
+    "name": "ind5f_hide_widename_created_legacy",
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_created_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-external-display-checker-5fc3056e/followup-inputs/ind5f_hide_widename_created_teoz.svg",
+    "cohort": "followup4",
+    "mechanism": "sequence-queue-complete-stereotype-display",
+    "axes": [
+      "hide stereotype",
+      "name wider than stereotype",
+      "created",
+      "teoz"
+    ],
+    "name": "ind5f_hide_widename_created_teoz",
+    "intended_valid": true,
+    "observed_valid": true
+  }
+]

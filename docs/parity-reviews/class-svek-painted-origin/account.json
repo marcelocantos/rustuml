@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; no acceptance",
+  "rust_base": "0a04a06acb2a072946356a741a5850377dd5c039",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "svek/DotStringFactory#solve",
+    "svek/SvekResult#calculateDimension",
+    "decoration/symbol/USymbolCloud#asBig",
+    "svek/SvekNode#appendShape"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#normalize_svek_package_envelope,svek_layout_x_bias,svek_layout_y_bias,render_class"
+  ],
+  "invariant": "Node origins cross Graphviz SVG serialization before the complete painted frontier is normalized exactly once; cluster box and cloud painted frontier are not interchangeable.",
+  "causal_divergence": "After normalize_svek_package_envelope translates the cloud painted frontier to six, svek_layout_x_bias measures the cluster box, which may start before the painted frontier, and adds a second positive shift to leaves but not clusters. Nodes also retain raw C doubles instead of SVG two-decimal origins. Debug SVEK cloud example proves node x32.40 before translation; current Rust retains32.4033.",
+  "planned_model_change": "Use cloud painted min on both axes of the final envelope measurement, matching the first normalization. Serialize node origins at the layout/model boundary before normalization, with original rendered dimensions retained. Assess preserved passes to constrain other shape classes; do not round final SVG positions or change shared layout.",
+  "perturbation_axes": [
+    "cloud label/child width and nested versus top-level topology",
+    "component/boundary leaves and attached notes across fractional container frontier origins"
+  ],
+  "negative_evidence_contract": "Every relevant preserved/fresh valid failure remains blocking; no checker records authored.",
+  "planned_change": "Use cloud painted min on both axes of the final envelope measurement, matching the first normalization. Serialize node origins at the layout/model boundary before normalization, with original rendered dimensions retained. Assess preserved passes to constrain other shape classes; do not round final SVG positions or change shared layout.",
+  "mechanism": "class-svek-painted-origin"
+}

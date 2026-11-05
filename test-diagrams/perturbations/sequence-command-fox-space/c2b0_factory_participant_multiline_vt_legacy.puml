@@ -1,0 +1,9 @@
+@startuml
+participant Quartz
+participant Vale
+Quartz -> Vale: primer
+participantDepot[
+Cargo
+Bay]
+Depot -> Vale: manifest
+@enduml

@@ -1,0 +1,68 @@
+[
+  {
+    "name": "package_target",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_target_parenthesis_one_dash_lr.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-debugsvek",
+      "-tsvg",
+      "-pipe"
+    ],
+    "cwd": "/tmp/rustuml-checker2740/java-trace/package_target",
+    "exit": 0,
+    "files": [
+      "source.puml",
+      "stderr.txt",
+      "source.svg",
+      "svek.svg",
+      "svek.dot"
+    ]
+  },
+  {
+    "name": "shield",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/test-diagrams/perturbations/description-element-command-case/followup3/followup3_upper_interface_bare_lr.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-debugsvek",
+      "-tsvg",
+      "-pipe"
+    ],
+    "cwd": "/tmp/rustuml-checker2740/java-trace/shield",
+    "exit": 0,
+    "files": [
+      "source.puml",
+      "stderr.txt",
+      "source.svg",
+      "svek.svg",
+      "svek.dot"
+    ]
+  },
+  {
+    "name": "group_lr",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-cff2cd0e/docs/parity-reviews/class-command-grammar-closure/maker-evidence/inputs/fresh/group_lr.puml",
+    "command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-debugsvek",
+      "-tsvg",
+      "-pipe"
+    ],
+    "cwd": "/tmp/rustuml-checker2740/java-trace/group_lr",
+    "exit": 0,
+    "files": [
+      "source.puml",
+      "stderr.txt",
+      "source.svg",
+      "svek.svg",
+      "svek.dot"
+    ]
+  }
+]

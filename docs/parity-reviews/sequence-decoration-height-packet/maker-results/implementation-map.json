@@ -1,0 +1,42 @@
+{
+  "accounts": [
+    {
+      "mechanism": "sequence-target-circle-decoration",
+      "account_commit": "0b3295821b0aeef0d5fc8b190cd57aadba8ca0e0",
+      "implementation_commit": "350e776a2cd376dd2171dc79b61010da8f01fc2e"
+    },
+    {
+      "mechanism": "sequence-ordinary-note-child-allocation",
+      "account_commit": "0b3295821b0aeef0d5fc8b190cd57aadba8ca0e0",
+      "implementation_commit": "350e776a2cd376dd2171dc79b61010da8f01fc2e"
+    },
+    {
+      "mechanism": "sequence-component-style-consumption",
+      "account_commit": "0b3295821b0aeef0d5fc8b190cd57aadba8ca0e0",
+      "implementation_commit": "350e776a2cd376dd2171dc79b61010da8f01fc2e"
+    },
+    {
+      "mechanism": "sequence-message-text-component-height",
+      "account_commit": "54fb67fce0c99cab0152e748b033099feb8462ca",
+      "implementation_commit": "026e5eeb2f3521ec3a2f299b30d52a4cac51f05c"
+    },
+    {
+      "mechanism": "sequence-note-rule-title-height",
+      "account_commit": "6e9c711d5984185796e2f9c0ae0c8986d0668649",
+      "implementation_commit": "026e5eeb2f3521ec3a2f299b30d52a4cac51f05c"
+    },
+    {
+      "mechanism": "sequence-component-style-consumption creation consumer",
+      "account_commit": "0b3295821b0aeef0d5fc8b190cd57aadba8ca0e0",
+      "implementation_commit": "71b465a98aa5c511588d87ee080088e8614d975e"
+    }
+  ],
+  "files": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs",
+    "crates/rustuml-render/src/ascii.rs"
+  ],
+  "full_tested_production": "71b465a98aa5c511588d87ee080088e8614d975e",
+  "note": "All historical accepted/bounded observations stay tied to their exact tested revisions. This packet requires fresh independent review."
+}

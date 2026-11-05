@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-ordinary-note-child-allocation",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A3e06ca94-2269-474d-820c-d3eae66e6612",
+    "model": "gpt-6-astra/high",
+    "tool": "Codex harness in T3 Code",
+    "children": 0
+  },
+  "account_commit": "0b3295821b0aeef0d5fc8b190cd57aadba8ca0e0",
+  "implementation_commit": "350e776a2cd376dd2171dc79b61010da8f01fc2e",
+  "tested_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "before_revision": "efc2e922bbd093cf13d827501f5e53aa850a9e68",
+  "production_commits": [
+    "350e776a2cd376dd2171dc79b61010da8f01fc2e",
+    "026e5eeb2f3521ec3a2f299b30d52a4cac51f05c",
+    "71b465a98aa5c511588d87ee080088e8614d975e"
+  ],
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra --timezone GMT+11:00 -- -pipe -tsvg",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST BIN_DIR PRIVATE_OUTPUT REPO_CWD",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_legacy.svg",
+      "axes": [
+        "note below message font",
+        "activation/next row",
+        "legacy"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_legacy.svg",
+      "axes": [
+        "unequal child heights",
+        "reverse/multiple children/padding",
+        "legacy"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_small_teoz.svg",
+      "axes": [
+        "note below message font",
+        "activation/next row",
+        "teoz"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-ordinary-note-child-allocation/checker_092_child_multi_teoz.svg",
+      "axes": [
+        "unequal child heights",
+        "reverse/multiple children/padding",
+        "teoz"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    }
+  ],
+  "findings": [
+    "All4 fresh family controls match: small note font9 versus message23, and unequal multiple note children with font17/message11, reverse direction and padding3, in both engines. Java ArrowAndNoteBox max child height and per-child arrow push explain Rust max extra plus (count-1)*extra; no branch-count lookup ladder was introduced.",
+    "This is support for allocation of the measured child components, not proof that those child dimensions are complete. Fresh rule_body_legacy/teoz under sequence-note-rule-title-height fail the owned note text-block model; retained themed self-note, fonts, tab and URL text paths also fail. The composed ordinary message/note invariant cannot be accepted by excluding those failing dimensions.",
+    "The first implementation exposes the real main creole_underline_in_sequence regression. Exact baseline/intermediate/final real CLIs independently reproduce pass/fail/pass, with baseline and final SVG bytes identical. No failure was removed or reclassified.",
+    "Exact candidate is rejected as a combination. No old bounded acceptance transfers. Every source, including invalid and zero-byte sources, remains executable; no comparator, baseline, skip, target, policy or production edit.",
+    "Independent frozen CLI replay: 1350 matches, 569 valid mismatches, 47 invalid references among1966 entries/1918 unique byte strings;31 recoveries and0 losses. Every maker status and actual CLI SVG hash reproduces.",
+    "Exact candidate library tiers11181/11251 and10497/11251, sequence1411/1411; parser570, renderer790, CLI13 pass. Standing perturbations686/1279; guards4/6. Owned formatting passes; workspace formatting and Clippy remain red."
+  ],
+  "verdict": "rejected",
+  "assessment": "bounded support; acceptance withheld for combined complete-child invariant",
+  "causal_repair_guidance": "Preserve the complete-child max/centering change. Supply preferred dimensions from an actual BodyEnhanced block composition and then recheck the same allocation on all retained inputs; do not restore the fixed3 or add font offsets.",
+  "evidence": "docs/parity-reviews/sequence-decoration-height-packet/checker-092cf5f/README.md"
+}

@@ -1,0 +1,28 @@
+[
+  {
+    "action": "Initial required main/guard suite",
+    "exit": 101,
+    "reason": "Uninitialized exact golden submodule. Main tests failed before measurement; guards3/6. Raw log preserved."
+  },
+  {
+    "command": "git submodule update --init --reference /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden test-diagrams/golden",
+    "exit": 1,
+    "stderr": "fatal: transport 'file' not allowed; two built-in clone attempts failed"
+  },
+  {
+    "command": "git -c protocol.file.allow=always submodule update --init --reference /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden test-diagrams/golden",
+    "exit": 0,
+    "submodule_revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a"
+  },
+  {
+    "action": "Unresolved main tiers and guards rerun after submodule initialization",
+    "exit": 101,
+    "result": "11,181 product,10,497 assisted,sequence1411,guards4/6; known red gates"
+  },
+  {
+    "action": "First summarize.py metadata-only execution",
+    "exit": 1,
+    "stderr": "SyntaxError: '(' was never closed",
+    "resolution": "Failed original script retained as summarize-failed.py; summary code repaired, no product/reference rerun"
+  }
+]

@@ -1,0 +1,10 @@
+@startuml
+participant Vega
+actor Lyra
+queue Draco
+participant Corvus
+create Draco
+activate Lyra
+Vega -> Draco: hatch
+deactivate Lyra
+@enduml

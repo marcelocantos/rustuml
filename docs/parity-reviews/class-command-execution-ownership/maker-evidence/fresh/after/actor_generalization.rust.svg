@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="232px" preserveAspectRatio="none" style="width:147px;height:232px;background:#FFFFFF;" version="1.1" viewBox="0 0 147 232" width="147px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Parent-->
+<g class="entity" data-qualified-name="Parent" data-source-line="1" id="ent0002">
+<ellipse cx="69.4614" cy="14" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M69.4614,22 L69.4614,49 M56.4614,30 L82.4614,30 M69.4614,49 L56.4614,64 M69.4614,49 L82.4614,64" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="126.9229" x="6" y="79.0352">Harvest Supervisor</text>
+</g>
+<!--entity Child-->
+<g class="entity" data-qualified-name="Child" data-source-line="2" id="ent0003">
+<ellipse cx="69.4614" cy="150.4883" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+<path d="M69.4614,158.4883 L69.4614,185.4883 M56.4614,166.4883 L82.4614,166.4883 M69.4614,185.4883 L56.4614,200.4883 M69.4614,185.4883 L82.4614,200.4883" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="116.1084" x="11.4072" y="215.5234">Harvest Operator</text>
+</g>
+<!--link Parent to Child-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="extension" data-source-line="3" id="lnk4">
+<path d="M69.46,100.21 C69.46,118.7 69.46,122.97 69.46,141.5" fill="none" id="Parent-backto-Child" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="none" points="69.46,82.21,63.46,100.21,75.46,100.21,69.46,82.21" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

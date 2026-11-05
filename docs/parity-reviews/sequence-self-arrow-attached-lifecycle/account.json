@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-self-arrow-attached-lifecycle",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram/AbstractMessage.java#addLifeEvent,isActivate,isDeactivate",
+    "sequencediagram/graphic/Step1Message.java#createMessageSelfArrow",
+    "skin/rose/ComponentRoseSelfArrow.java#drawRightSide"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::MessageLifecycleState,SequenceLifecycleLayout,SequenceSelfArrow,self painter"
+  ],
+  "invariant": "Self-arrow deltaX is five when any accepted matching activation belongs to the message. DeltaY is halfLifeWidth times (hasDeactivate minus hasActivate); the two independent flags cancel when both occur. Component start stroke adds min(deltaY,0), and the return tip adds -deltaY if positive, otherwise one. Message life-event types include explicit directives attached across notes, not only inline shorthand.",
+  "causal_divergence": "The shared geometry constructor reads only Message.activation. It loses the attached activation on a self message with separate activate/deactivate directives, regressing the prior combined-row heldout by five pixels.",
+  "planned_change": "Retain aggregate matching lifecycle types in the existing attachment pass and feed them into shared self geometry and its component paint delta. Preserve distinct Teoz history and legacy variation ordinate behavior.",
+  "perturbation_axes": [
+    "inline versus explicit activation and matching versus unrelated participant lifecycle",
+    "open/closed heads, pre-existing recursion levels, declaration order and both lifecycle types on one message"
+  ],
+  "acceptance": "Candidate only; all regressions and fresh inputs remain executable for independent review."
+}

@@ -1,0 +1,23 @@
+{
+  "java_locations": [
+    "sequencediagram/graphic/MessageSelfArrow.java#getStartingX,getPreferredWidth,getMaxX",
+    "sequencediagram/graphic/Step1Message.java#prepareMessage",
+    "skin/rose/ComponentRoseSelfArrow.java#getPreferredWidth,drawRightSide",
+    "sequencediagram/graphic/DrawableSetInitializer.java#createDrawableSet"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::self-message spacing, group member bounds, right extent scan and self painter"
+  ],
+  "invariant": "A legacy MessageSelfArrow starts at the accepted start-level live segment right edge plus activation deltaX (or subtracts width when reversed), and has width max(padded text width,50)+segment length. ConstraintAfter reserves this arrow width plus segment length. All extent and attached-note consumers share these values.",
+  "causal_divergence": "Rust group bounds omit text padding and reconstruct start as the participant center, while the canvas extent uses activation boolean and created/destroyed pads instead of MessageSelfArrow. After newpage the extent scan samples page-one life history, losing later-page activations.",
+  "planned_change": "Introduce a single self-arrow geometry value based on accepted live history, component preferred width and activation change, consume it in constraints, envelopes and ordinary drawing/attached-note anchors. Keep Teoz tile geometry separate. Preserve all-page horizontal lifecycle when selecting first-page paint.",
+  "perturbation_axes": [
+    "self recursion depth and participant declaration position",
+    "padding, wide labels, creation/destruction and later-page lifecycle",
+    "open/closed arrow, lowered return and attached notes"
+  ],
+  "schema_version": 1,
+  "mechanism": "sequence-self-arrow-envelope",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "acceptance": "Candidate only; fresh independent checker required; no historical account or review edits."
+}

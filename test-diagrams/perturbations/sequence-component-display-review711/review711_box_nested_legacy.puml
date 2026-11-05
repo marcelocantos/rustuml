@@ -1,0 +1,11 @@
+@startuml
+box "Outer"
+participant P
+box "Inner"
+queue "Inbox\nHere" as Q
+end box
+end box
+actor A
+A -> Q: relay
+Q -> P: forward
+@enduml

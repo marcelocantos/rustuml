@@ -1,0 +1,552 @@
+{
+  "status": "NOT ACCEPTED: maker evidence only; independent checker required and unresolved dependencies retained",
+  "continuation_base": "b1bb1cfab38dc44c60950f56229f05b7604dcd93",
+  "production_head": "ff2c542b42b62e9c6334f6cad20dea616e6cb04b",
+  "commits": {
+    "sequence-external-arrow-grammar": {
+      "account": "cd2e96858835e29e0ca3cd0f30de2a65e6fe29f7",
+      "implementation": "caf642a96b667373cecf424646f5a22a1302528b"
+    },
+    "sequence-self-arrow-async-stroke": {
+      "account": "97820400929a1afcfaba701ca2f8b9efb6aadea1",
+      "implementation": "0821a330c726a351a162c5a2cdaf3f7425910bb2"
+    },
+    "sequence-component-padding-flow": {
+      "account": "b080d075ef80064e3af27bd692443a42e54bbd1d",
+      "implementation": "ef3b7a8691d5b1a06a579919b9724b118361b593"
+    },
+    "sequence-note-component-envelope": {
+      "account": "6f36fedfba38ca19244a81454e3f7d9c900f2974",
+      "implementation": "10b2906dad9cdfd94b1a036a0ce10c77a82edb40"
+    },
+    "sequence-self-arrow-envelope": {
+      "account": "2b7dbb908b3a5d129ff5897d8493366286018e25",
+      "implementation": "73c44e851ddb3d8fcfba4ca472dc8834d88a96d8"
+    },
+    "sequence-page-textblock-composition": {
+      "account": "ec228aba301359d217145d2bfc402390f5c3b27c",
+      "implementation": "23c872994861214207ef2a156f8cfe2088123340"
+    },
+    "sequence-teoz-note-tile-bounds": {
+      "account": "76ee592d31820903dcde86c437ccb6a3c0b63aca",
+      "implementation": "cb7e170cb561c5b8c0e4f95942d69cf6ac626bfc"
+    },
+    "sequence-teoz-self-tile-history": {
+      "account": "b1f50dd4cea86440543cda55aa8387f85de9da6b",
+      "implementation": "cb7e170cb561c5b8c0e4f95942d69cf6ac626bfc"
+    },
+    "sequence-teoz-life-event-bounds": {
+      "account": "8c6074666083f8db47872f81a1e79811331859b5",
+      "implementation": "cb7e170cb561c5b8c0e4f95942d69cf6ac626bfc"
+    },
+    "sequence-self-arrow-attached-lifecycle": {
+      "account": "f55d79708e03d18dafa3c6c2f0538840194c0f1a",
+      "implementation": "ff2c542b42b62e9c6334f6cad20dea616e6cb04b"
+    },
+    "sequence-participant-shadow-envelope": {
+      "account": "2b7dbb908b3a5d129ff5897d8493366286018e25",
+      "implementation": "10b2906dad9cdfd94b1a036a0ce10c77a82edb40"
+    }
+  },
+  "production_files": [
+    "crates/rustuml-render/src/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs"
+  ],
+  "main_tiers": {
+    "product": {
+      "before_pass": 11181,
+      "after_pass": 11181,
+      "eligible": 11251
+    },
+    "assisted": {
+      "before_pass": 10497,
+      "after_pass": 10497,
+      "eligible": 11251,
+      "failed": 754,
+      "skipped": 1299,
+      "total": 12550
+    },
+    "sequence_product_and_assisted": {
+      "before_pass": 1411,
+      "after_pass": 1411,
+      "eligible": 1411
+    },
+    "suite_exit": 101,
+    "note": "Frozen product ratchet has pre-existing class, preprocessing and rendering improvements; assisted retains pre-existing failures. Baselines unchanged."
+  },
+  "isolated_874": {
+    "product": {
+      "before": {
+        "0": 382,
+        "1": 485,
+        "2": 7
+      },
+      "after": {
+        "0": 390,
+        "1": 477,
+        "2": 7
+      },
+      "recoveries": [
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_reverse.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_3_left.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_3_right.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_7_left.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_7_right.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_shadow_active_0.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_shadow_active_1.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_teoz_control.puml"
+      ],
+      "regressions": [],
+      "new_errors": [],
+      "panics": []
+    },
+    "assisted": {
+      "before": {
+        "0": 342,
+        "1": 525,
+        "2": 7
+      },
+      "after": {
+        "0": 350,
+        "1": 517,
+        "2": 7
+      },
+      "recoveries": [
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_boundary_reverse.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_3_left.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_3_right.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_7_left.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_padding_7_right.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_shadow_active_0.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_shadow_active_1.puml",
+        "test-diagrams/perturbations/sequence-grouped-note-origin/checker_teoz_control.puml"
+      ],
+      "regressions": [],
+      "new_errors": [],
+      "panics": []
+    }
+  },
+  "corpus_scope": "874 prepared heldouts = 810 original + 23 class + 41 sequence. Does not include the parent 33 theme + 6 registry additions (913).",
+  "checker_41": {
+    "before_pass": 31,
+    "after_pass": 39,
+    "failures": [
+      "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_sansserif.puml",
+      "test-diagrams/perturbations/sequence-grouped-note-origin/checker_font_control_serif.puml"
+    ],
+    "cli_equivalence": 41
+  },
+  "fresh": {
+    "groups": {
+      "total": 31,
+      "product": {
+        "0": 31
+      },
+      "assisted": {
+        "0": 31
+      },
+      "cli_equal": 31,
+      "failures": [],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/groups",
+      "before": {
+        "product": {
+          "0": 28,
+          "1": 3
+        },
+        "assisted": {
+          "0": 28,
+          "1": 3
+        }
+      },
+      "before_basis": "b1bb1cf continuation start",
+      "regressions": []
+    },
+    "self": {
+      "total": 27,
+      "product": {
+        "0": 27
+      },
+      "assisted": {
+        "0": 27
+      },
+      "cli_equal": 27,
+      "failures": [],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/self",
+      "before": {
+        "product": {
+          "0": 24,
+          "1": 3
+        },
+        "assisted": {
+          "0": 24,
+          "1": 3
+        }
+      },
+      "before_basis": "b1bb1cf continuation start",
+      "regressions": []
+    },
+    "returns": {
+      "total": 20,
+      "product": {
+        "0": 20
+      },
+      "assisted": {
+        "0": 20
+      },
+      "cli_equal": 20,
+      "failures": [],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/returns",
+      "before": {
+        "product": {
+          "0": 14,
+          "1": 6
+        },
+        "assisted": {
+          "0": 14,
+          "1": 6
+        }
+      },
+      "before_basis": "b1bb1cf continuation start",
+      "regressions": []
+    },
+    "external": {
+      "total": 56,
+      "product": {
+        "0": 56
+      },
+      "assisted": {
+        "0": 56
+      },
+      "cli_equal": 56,
+      "failures": [],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/external",
+      "before": {
+        "product": {
+          "0": 16,
+          "1": 40
+        },
+        "assisted": {
+          "0": 16,
+          "1": 40
+        }
+      },
+      "before_basis": "staged mechanism baseline, as preserved in its account maker evidence",
+      "regressions": []
+    },
+    "async": {
+      "total": 18,
+      "product": {
+        "0": 18
+      },
+      "assisted": {
+        "0": 18
+      },
+      "cli_equal": 18,
+      "failures": [],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/async",
+      "before": {
+        "product": {
+          "0": 6,
+          "1": 12
+        },
+        "assisted": {
+          "0": 6,
+          "1": 12
+        }
+      },
+      "before_basis": "staged mechanism baseline, as preserved in its account maker evidence",
+      "regressions": []
+    },
+    "padding": {
+      "total": 48,
+      "product": {
+        "0": 48
+      },
+      "assisted": {
+        "0": 48
+      },
+      "cli_equal": 48,
+      "failures": [],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/padding",
+      "before": {
+        "product": {
+          "0": 3,
+          "1": 45
+        },
+        "assisted": {
+          "0": 3,
+          "1": 45
+        }
+      },
+      "before_basis": "staged mechanism baseline, as preserved in its account maker evidence",
+      "regressions": []
+    },
+    "shadow": {
+      "total": 60,
+      "product": {
+        "0": 60
+      },
+      "assisted": {
+        "0": 60
+      },
+      "cli_equal": 60,
+      "failures": [],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/shadow",
+      "before": {
+        "product": {
+          "0": 7,
+          "1": 53
+        },
+        "assisted": {
+          "0": 7,
+          "1": 53
+        }
+      },
+      "before_basis": "staged mechanism baseline, as preserved in its account maker evidence",
+      "regressions": []
+    },
+    "envelope": {
+      "total": 44,
+      "product": {
+        "0": 44
+      },
+      "assisted": {
+        "0": 44
+      },
+      "cli_equal": 44,
+      "failures": [],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/envelope",
+      "before": {
+        "product": {
+          "0": 22,
+          "1": 22
+        },
+        "assisted": {
+          "0": 22,
+          "1": 22
+        }
+      },
+      "before_basis": "staged mechanism baseline, as preserved in its account maker evidence",
+      "regressions": []
+    },
+    "root-envelope": {
+      "total": 48,
+      "product": {
+        "0": 48
+      },
+      "assisted": {
+        "0": 48
+      },
+      "cli_equal": 48,
+      "failures": [],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/root-envelope",
+      "before": {
+        "product": {
+          "0": 21,
+          "1": 27
+        },
+        "assisted": {
+          "0": 21,
+          "1": 27
+        }
+      },
+      "before_basis": "staged mechanism baseline, as preserved in its account maker evidence",
+      "regressions": []
+    },
+    "page": {
+      "total": 27,
+      "product": {
+        "0": 27
+      },
+      "assisted": {
+        "0": 27
+      },
+      "cli_equal": 27,
+      "failures": [],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/page",
+      "before": {
+        "product": {
+          "0": 13,
+          "1": 14
+        },
+        "assisted": {
+          "0": 13,
+          "1": 14
+        }
+      },
+      "before_basis": "staged mechanism baseline, as preserved in its account maker evidence",
+      "regressions": []
+    },
+    "teoz": {
+      "total": 36,
+      "product": {
+        "0": 36
+      },
+      "assisted": {
+        "0": 36
+      },
+      "cli_equal": 36,
+      "failures": [],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/teoz",
+      "before": {
+        "product": {
+          "1": 36
+        },
+        "assisted": {
+          "1": 36
+        }
+      },
+      "before_basis": "staged mechanism baseline, as preserved in its account maker evidence",
+      "regressions": []
+    },
+    "teoz-life": {
+      "total": 24,
+      "product": {
+        "0": 2,
+        "1": 22
+      },
+      "assisted": {
+        "0": 2,
+        "1": 22
+      },
+      "cli_equal": 24,
+      "failures": [
+        "life_0.puml",
+        "life_1.puml",
+        "life_10.puml",
+        "life_11.puml",
+        "life_12.puml",
+        "life_13.puml",
+        "life_14.puml",
+        "life_15.puml",
+        "life_16.puml",
+        "life_18.puml",
+        "life_19.puml",
+        "life_2.puml",
+        "life_20.puml",
+        "life_21.puml",
+        "life_22.puml",
+        "life_23.puml",
+        "life_3.puml",
+        "life_4.puml",
+        "life_6.puml",
+        "life_7.puml",
+        "life_8.puml",
+        "life_9.puml"
+      ],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/teoz-life",
+      "before": {
+        "product": {
+          "1": 24
+        },
+        "assisted": {
+          "1": 24
+        }
+      },
+      "before_basis": "staged mechanism baseline, as preserved in its account maker evidence",
+      "regressions": []
+    },
+    "attached": {
+      "total": 48,
+      "product": {
+        "0": 48
+      },
+      "assisted": {
+        "0": 48
+      },
+      "cli_equal": 48,
+      "failures": [],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/attached",
+      "before": {
+        "product": {
+          "0": 24,
+          "1": 24
+        },
+        "assisted": {
+          "0": 24,
+          "1": 24
+        }
+      },
+      "before_basis": "staged mechanism baseline, as preserved in its account maker evidence",
+      "regressions": []
+    },
+    "attached-half": {
+      "total": 48,
+      "product": {
+        "0": 48
+      },
+      "assisted": {
+        "0": 48
+      },
+      "cli_equal": 48,
+      "failures": [],
+      "evidence": "docs/parity-reviews/sequence-dependency-closure/maker-results/fresh/attached-half",
+      "before": {
+        "product": {
+          "0": 24,
+          "1": 24
+        },
+        "assisted": {
+          "0": 24,
+          "1": 24
+        }
+      },
+      "before_basis": "staged mechanism baseline, as preserved in its account maker evidence",
+      "regressions": []
+    }
+  },
+  "fresh_total": {
+    "total": 535,
+    "product": {
+      "0": 513,
+      "1": 22
+    },
+    "assisted": {
+      "0": 513,
+      "1": 22
+    },
+    "cli_equal": 535,
+    "parse_or_runtime_errors": []
+  },
+  "units": {
+    "parser": 562,
+    "render": 781,
+    "failed": 0,
+    "note": "Full library suites; return equivalence covers both engines, pages, recursion, declaration order and arrow styles. Added directive/shorthand lifecycle equivalence including half-heads."
+  },
+  "guards": {
+    "passed": 4,
+    "failed": 2,
+    "failures": [
+      "decimal_literal_ratchet",
+      "parity_review_records_are_complete"
+    ],
+    "review_diagnostic_count": 659,
+    "sequence_decimal_regressions": 0
+  },
+  "builtin_perturbations": {
+    "passed_tests": 1,
+    "failed_tests": 1,
+    "failing_inputs": 484,
+    "registry_cascade_errors": 0
+  },
+  "clippy": {
+    "exit": 101,
+    "blocker": "pre-existing unused looks_like_description_bracket_command in parser/parse/component.rs:72; outside ownership"
+  },
+  "reference": "reference.json",
+  "log_hashes": {
+    "teoz-main-3.log": "0e96d68e495bf60c61afaff890dd655987762711d232b1d37e45ada588dd4abc",
+    "final-isolated.log": "a53ef9b9cd97e03361fb64603c3bb51a87bca4ec728e37e7969ed796ef880b73",
+    "closure-units.log": "78b1349a2bd28a10221ac0c5f2229eb22f96b0b7e1c8ac68308d621cda2f14a6",
+    "final-suites.log": "6937ff1ebe3a4030efab9bb6da77dc86a9c0e99efd170c076a47ab0f6c17d6dd",
+    "closure-suites.log": "8647b6326ebf4cec8ab4478f704fb8030d77e0cbd3b8eddeb91d112b33c68a91",
+    "closure-isolated.log": "941c45392fda70c7ef8c77398149ccbef022c92f6fb5951689ba0b020ba903b5",
+    "teoz-main.log": "1e05a49440217d2a73ab1d49ed8a1b6b6ec9afc7a2097c087111268dfbe31e83",
+    "final-clippy.log": "0b9abcc93a30870213381562cf899c8a61b9419f66ec06e992884e55c47f407b",
+    "attached-build-2.log": "0a5bfb2a0dbc7ef20cdfc9d49ffd41531a1614ed376c311e89db366a3b09ceb3",
+    "attached-isolated.log": "941c45392fda70c7ef8c77398149ccbef022c92f6fb5951689ba0b020ba903b5",
+    "attached-suites.log": "c3a941b4c54c43ca381d2f058c189cbc498c8e3a94109b9e9907e5266a568e91",
+    "closure-clippy.log": "84e44b4401aa427580af2822d8472601413b2d4c10ca847a1bcc4082122f908b"
+  }
+}

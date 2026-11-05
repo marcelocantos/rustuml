@@ -1,0 +1,193 @@
+{
+  "reference": {
+    "env_overrides": {},
+    "source_bytes": 0,
+    "name": "empty",
+    "remote_name": "empty.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/empty.puml",
+    "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "exit_code": 50,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 0.9614185000100406,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+    "requested_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/empty.puml",
+    "execution_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/empty.puml",
+    "actual_wrapper_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "actual_java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "environment_overrides": {},
+    "mapping": {
+      "reason": "Existing wrapper requires an isolated cwd below scratch/; preserve unchanged wrapper and immutable manifest.",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/empty.puml",
+      "requested_remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/empty.puml",
+      "actual_remote_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/empty.puml"
+    }
+  },
+  "request": {
+    "name": "empty",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/empty.puml",
+    "remote_name": "empty.puml",
+    "remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/empty.puml",
+    "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0,
+    "axes": [
+      "zero bytes",
+      "pipe front end"
+    ],
+    "intended_reference": "empty/non-diagram",
+    "source_validation": [
+      "empty pipe input control, no intended factory"
+    ],
+    "invocation": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "classification": {
+    "name": "empty",
+    "exit": 50,
+    "xml": false,
+    "diagram_type": null,
+    "classification": "empty_output",
+    "source_bytes": 0,
+    "stdout_bytes": 0,
+    "stderr_bytes": 0
+  },
+  "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+  "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.svg",
+  "before": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/empty.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/empty.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "empty",
+    "axes": [
+      "zero bytes",
+      "pipe front end"
+    ],
+    "reference_classification": "empty_output",
+    "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "svg": "b31d1458f7774612ce88.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (16601948) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    "assisted_library": {
+      "exit": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (16601959) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  },
+  "after": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/empty.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/empty.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "empty",
+    "axes": [
+      "zero bytes",
+      "pipe front end"
+    ],
+    "reference_classification": "empty_output",
+    "source_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "golden_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+      "svg": "b31d1458f7774612ce88.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (16602325) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    "assisted_library": {
+      "exit": 101,
+      "stdout": "",
+      "stderr": "\nthread 'main' (16602333) panicked at crates/rustuml-oracle/examples/diff_one.rs:90:63:\ncalled `Result::unwrap()` on an `Err` value: \"failed to parse SVG: the document does not have a root node\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  }
+}

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="78px" preserveAspectRatio="none" style="width:267px;height:78px;background:#FFFFFF;" version="1.1" viewBox="0 0 267 78" width="267px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Measurement Bay-->
+<g class="cluster" data-qualified-name="Measurement Bay" data-source-line="5" id="ent0004">
+<polygon fill="none" points="16,63.4883,26,53.4883,16,53.4883,16,43.4883,6,53.4883,16,53.4883,16,63.4883" style="stroke:#181818;stroke-width:1;"/>
+<line style="stroke:#181818;stroke-width:1;" x1="6" x2="16" y1="63.4883" y2="53.4883"/>
+<line style="stroke:#181818;stroke-width:1;" x1="16" x2="6" y1="63.4883" y2="63.4883"/>
+<line style="stroke:#181818;stroke-width:1;" x1="6" x2="6" y1="63.4883" y2="53.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="127.292" x="-51.646" y="80.0235">Measurement Bay</text>
+</g>
+<!--entity textOnly-->
+<g class="entity" data-qualified-name="textOnly" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="97.7842" x="16" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="93.7842" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="91.7842" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="91.7842" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="57.7842" x="31" y="40.5352">textOnly</text>
+</g>
+<!--entity page_text-->
+<g class="entity" data-qualified-name="page_text" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="104.3604" x="148.7119" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="233.0723" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="231.0723" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="231.0723" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="64.3604" x="163.7119" y="40.5352">page text</text>
+</g>
+</g></svg>

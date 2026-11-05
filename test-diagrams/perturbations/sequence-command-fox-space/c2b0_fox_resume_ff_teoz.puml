@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+autonumber
+Quartz -> Vale: count
+autonumber stop
+autonumberresume
+Quartz -> Vale: next
+@enduml

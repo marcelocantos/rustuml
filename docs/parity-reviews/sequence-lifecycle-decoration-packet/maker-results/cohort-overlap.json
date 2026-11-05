@@ -1,0 +1,15 @@
+{
+  "previous_checker_provenance": "docs/parity-reviews/sequence-rejection-repair/checker-support/cohort-provenance.json",
+  "previous_checker_provenance_sha256": "c372e2da50e15d53f606eb07bcc54784eb4c27fe9cec38ba7bb9e9ecddb751b3",
+  "old_maker_entries": 1728,
+  "fresh_checker_entries": 68,
+  "new_maker_entries": 32,
+  "total": 1828,
+  "unique_source_paths": 1828,
+  "unique_source_bytes": 1780,
+  "duplicate_entries_by_source_bytes": 48,
+  "parent_entries": 1449,
+  "old_maker_parent_overlap": 1123,
+  "parent_only_not_replayed": 326,
+  "note": "Do not sum these overlapping cohorts. Parent owns combined integration; no unrelated growth replay or class/TIM production import."
+}

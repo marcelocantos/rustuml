@@ -1,0 +1,7 @@
+@startuml
+queue "<size:25>First</size>\nsecond" as Q
+actor "<size:21>First</size>\nsecond" as A
+participant "<size:18>First</size>\nsecond" as P
+Q -> A: relay
+A -> P: forward
+@enduml

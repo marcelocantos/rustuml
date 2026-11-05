@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "t3-d382aba6 independent sequence rejection-repair checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "implementation_commit": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "tested_candidate_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/sequence-repair-d382aba6 0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "Remote existing runner: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs --timezone GMT+11:00 -- -pipe -tsvg (one source on stdin per invocation; exact argv/status/streams in remote-captures.json.gz)",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/import_relay.py",
+    "python3 docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py docs/parity-reviews/sequence-rejection-repair/checker-support/fresh-manifest.json /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/final-bin /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/fresh",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py evidence",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/audit_evidence.py"
+  ],
+  "input_frontend": {
+    "fresh": "raw -pipe -tsvg on stdin through pinned remote wrapper, GMT+11:00",
+    "transport": "temporary T3 relay, exact input and result bundle hashes verified",
+    "preserved": "original reference bytes and per-reference provenance unchanged",
+    "local_java": false
+  },
+  "evidence": "docs/parity-reviews/sequence-rejection-repair/checker-support/README.md",
+  "mechanism": "sequence-reverse-self-component",
+  "account_commit": "a519af2de609190c9c124c5b5aa02a8dc06b9f97",
+  "account_normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e0_order0.puml",
+      "golden": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e0_order0.svg",
+      "source_sha256": "2bf9c54d90c8a89e8d48d5344bbba259da8dd5e1993ebd18c1fe8af78c222f72",
+      "golden_sha256": "94626e98a3183064b318eaa19f96e07893725460d7c06aaffab20c4ca5e4e878",
+      "axes": [
+        "engine",
+        "participant declaration order",
+        "reverse async head and attached note side"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e0_order1.puml",
+      "golden": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e0_order1.svg",
+      "source_sha256": "5e6e2dee2d9e93f9da1fb0fabf0dd022fca68834481948082ceca82509720498",
+      "golden_sha256": "5e036d5a746a02f6294537c3740f150a6ef880b26ef3d2ec1bbfc4b9ebacdc0b",
+      "axes": [
+        "engine",
+        "participant declaration order",
+        "reverse async head and attached note side"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e1_order0.puml",
+      "golden": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e1_order0.svg",
+      "source_sha256": "712ba9f75c8d20cb80890a7eb7ce31a737d156c312f212d2f99143c2f21c9004",
+      "golden_sha256": "48ff7b2c9cc6d4d69d66a93ead1a16b7f6d1304f48acc2ea9cc92c6486d6eaa4",
+      "axes": [
+        "engine",
+        "participant declaration order",
+        "reverse async head and attached note side"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e1_order1.puml",
+      "golden": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_e1_order1.svg",
+      "source_sha256": "250435109979eef8ddb35b8113a905134c074e939a9d88d7ec8a3d0ac4604200",
+      "golden_sha256": "54a47f815ffaa7fcd46cdba359931ce9661d32b9fe69fcd0e0f106c1a3a04ecc",
+      "axes": [
+        "engine",
+        "participant declaration order",
+        "reverse async head and attached note side"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_cross.puml",
+      "golden": "test-diagrams/perturbations/sequence-reverse-self-component/checker_d382_cross.svg",
+      "source_sha256": "b5d305889b0ef7c4e88e8f5786e208d2bf4451751332669154a5ec7e315127a7",
+      "golden_sha256": "c46eb88b3211eb5afb922e841b8e8b1d0e37d81783765a46ad10949d33b3ba27",
+      "axes": [
+        "reverse cross arrowhead",
+        "active depth and attached note"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ],
+  "source_audit": {
+    "mechanism": "sequence-reverse-self-component",
+    "java_files": [
+      "sequencediagram/graphic/MessageSelfArrow.java",
+      "sequencediagram/graphic/Step1Message.java",
+      "sequencediagram/graphic/ArrowAndNoteBox.java",
+      "sequencediagram/teoz/CommunicationTileSelf.java",
+      "skin/rose/ComponentRoseSelfArrow.java"
+    ],
+    "rust_locations": [
+      "sequence.rs:3109-3159",
+      "sequence.rs:8148-8224",
+      "sequence.rs:12392-12676"
+    ],
+    "source_supported": "Reverse origin pos2-preferredWidth, preceding constraint, current level, signed delta, and component direction are sourced. Teoz preceding constraint correctly uses previous participant max live depth. Standard normal/async reverse stroke arithmetic follows drawLeftSide, rather than label-specific offsets.",
+    "adversarial_boundary": "drawLeftSide independently handles source/target CROSSX and CIRCLE decorations before computing strokes. Rust reverse branch handles normal/async/half heads but does not port those decoration-specific x adjustments there. A fresh active reverse-cross input targets the omission."
+  },
+  "findings": [
+    "Reverse origin pos2-preferredWidth, preceding constraint, current level, signed delta, and component direction are sourced. Teoz preceding constraint correctly uses previous participant max live depth. Standard normal/async reverse stroke arithmetic follows drawLeftSide, rather than label-specific offsets.",
+    "Four engine/order/async/attached-note controls match. Active B x-- B with an attached left note fails: Java begins its upper stroke at136.5649, Rust124.5649; Java32 elements versus Rust30. This confirms the missing reverse CROSSX decoration branch, not a font discrepancy. Port decoration endpoint adjustments before stroke/head drawing and share them with constraints and note wrappers.",
+    "No new fixture label predicates, golden reads, branch-count constant ladders or coordinate string surgery found. See source-audit.json for Java provenance and semantic constant reuse concerns. Every valid failure is binding; no dependency waiver."
+  ],
+  "verdict": "rejected"
+}

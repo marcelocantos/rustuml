@@ -1,0 +1,1132 @@
+[
+  {
+    "path": "REPORT.md",
+    "sha256": "2620fc5b467f923890790d2eb483ec487250a11fb0f390d1239432c30bb7543f",
+    "bytes": 23674
+  },
+  {
+    "path": "acceptance-results.json",
+    "sha256": "9950d446ab76405a15c546a324c921ef7af8a2f332a1a599d67a8c53cc31e8db",
+    "bytes": 7023
+  },
+  {
+    "path": "account-map.json",
+    "sha256": "b6ec53e8b94506bc7aab72a7d5e5d67c3393d986d0c199f1bccc19d163047669",
+    "bytes": 29977
+  },
+  {
+    "path": "candidate-outputs.tar.gz",
+    "sha256": "5d834229647ab548b0b96d9085ded0da23154b858f0ea66c87bb9ceda6496a9c",
+    "bytes": 3015092
+  },
+  {
+    "path": "chronology.json",
+    "sha256": "ef46afb2968a758a95178d2b8c04e139f03bb83b2595c5b56779eb45d8d39d12",
+    "bytes": 221685
+  },
+  {
+    "path": "cohort-comparison.json",
+    "sha256": "6bad7a0b0a11c1920121203b84483ecfb3060efb705090cda6c083b0bb8f88b9",
+    "bytes": 1791
+  },
+  {
+    "path": "continuation-implementation.diff",
+    "sha256": "d357bdd3f8e819bd23963188458648adf59e92b9b67792078fe186a40038f06f",
+    "bytes": 117444
+  },
+  {
+    "path": "current-results.json",
+    "sha256": "864889d52fdb6cccc0cfef51ebf4f787b9eaf3a5a06ad09c3dcce9658daead8f",
+    "bytes": 1970193
+  },
+  {
+    "path": "decimal-census.json",
+    "sha256": "ada8ece9f3bfb3cedaf60a070183762434099e089e4a3a08b3eeae8276b791ff",
+    "bytes": 465
+  },
+  {
+    "path": "evidence-audit.json",
+    "sha256": "fea0c6888f75d9a3aac857b1aae68e3d2f327ce478079ad5b830a99afa98a1e5",
+    "bytes": 834
+  },
+  {
+    "path": "final-outputs.tar.gz",
+    "sha256": "ddbfa7cd5b341c6ff5e835827415944a652180b46d6ea40e931dc428a6add1b3",
+    "bytes": 3633109
+  },
+  {
+    "path": "final-results.json",
+    "sha256": "b778501ae1bb7e94cf229035a6994c66400c95ab51f3c1e803b44a2e3afd51ab",
+    "bytes": 2469660
+  },
+  {
+    "path": "fresh-results.json",
+    "sha256": "698279cc22b72bb18ab4b260801a6d2abbfa052c0b70408ce08f5071164c64f9",
+    "bytes": 236706
+  },
+  {
+    "path": "generation-acceptance.json",
+    "sha256": "6f778a321cf96b38c86fdd1cbf71006171667eb7c78780053025409cc05dcf5b",
+    "bytes": 3363
+  },
+  {
+    "path": "generation-followup.json",
+    "sha256": "69b159cab17438835bc4cdcb5eefc96976c69ad7fbb086d573097bdf9a26da57",
+    "bytes": 22320
+  },
+  {
+    "path": "generation.json",
+    "sha256": "ab5dd2d0afc2666afcee43b4c2b5f0ce9685083acd8ea911250770ebe0a7dadb",
+    "bytes": 88964
+  },
+  {
+    "path": "group-coordinate-evidence.json",
+    "sha256": "b7264d8dff66ca949b26c04ec49fcd8c3e0a41bdd0262373508861b4af599a70",
+    "bytes": 12887
+  },
+  {
+    "path": "inspection-sources.json",
+    "sha256": "66cf53f0988cc70082d9fcc8f7362b16377bd70d21e3854cc0dc5bff1d972264",
+    "bytes": 12005
+  },
+  {
+    "path": "java-generation-stderr/class-chrome-bordered-block-geometry/center_False.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-chrome-bordered-block-geometry/center_True.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-chrome-bordered-block-geometry/left_False.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-chrome-bordered-block-geometry/left_True.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-chrome-bordered-block-geometry/right_False.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-chrome-bordered-block-geometry/right_True.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-chrome-bordered-block-geometry/style_left.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-chrome-bordered-block-geometry/style_right.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-cloud-child-coordinate-dependency/dependency_origin_cloud.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-cloud-child-coordinate-dependency/dependency_origin_node.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-cluster-header-shape-extent/header_0.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-cluster-header-shape-extent/header_1.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-cluster-header-shape-extent/header_2.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-cluster-header-shape-extent/header_3.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-execution-ownership/bare_native_record.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-execution-ownership/bare_native_struct.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-execution-ownership/body_left.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-execution-ownership/body_right.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-execution-ownership/braced_note_class.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-execution-ownership/braced_note_interface.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-execution-ownership/mixed_order_0.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-execution-ownership/mixed_order_1.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-execution-ownership/negative_late_mixing.java.stderr",
+    "sha256": "982cdd4fafabee74b59e286dfb98aa296dbb4c92ce6e7f5c0bc65f3f234d91a7",
+    "bytes": 107
+  },
+  {
+    "path": "java-generation-stderr/class-command-execution-ownership/opaque_root_0.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-execution-ownership/opaque_root_1.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-execution-ownership/opaque_root_2.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-grammar-closure/mixed_actor.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-grammar-closure/mixed_boundary.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-grammar-closure/mixed_component.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-grammar-closure/mixed_database.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-grammar-closure/mixed_queue.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-command-grammar-closure/mixed_rectangle.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-container-only-factory-closure/empty_cloud.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-container-only-factory-closure/empty_node.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-container-only-factory-closure/empty_package.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-container-only-factory-closure/empty_queue.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-current-spot-cascade/custom_class.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-current-spot-cascade/custom_grouped_class.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-current-spot-cascade/custom_grouped_record.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-current-spot-cascade/custom_record.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-current-spot-cascade/grouped_record.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-current-spot-cascade/grouped_struct.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-current-spot-cascade/override_after.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-current-spot-cascade/override_before.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-current-spot-cascade/theme_class.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-current-spot-cascade/theme_interface.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-current-spot-cascade/theme_record.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-current-spot-cascade/theme_struct.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-description-leaf-image-dependency/dependency_component_uml1.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-description-leaf-image-dependency/dependency_component_uml2.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-description-symbol-images/action_group.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-description-symbol-images/boundary_uml1.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-description-symbol-images/boundary_uml2.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-description-symbol-images/component_uml1.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-description-symbol-images/component_uml2.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-description-symbol-images/plain_multiline_boundary.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-description-symbol-images/plain_multiline_component.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-description-symbol-images/process_group.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-description-symbol-images/queue_group.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-endpoint-routing/groups_0.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-endpoint-routing/groups_1.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-endpoint-routing/groups_2.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-endpoint-routing/groups_3.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-endpoint-routing/groups_4.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-endpoint-routing/groups_5.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-endpoint-routing/shield_LR.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-endpoint-routing/shield_TB.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-magnetic-extremities/magnetic_0.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-magnetic-extremities/magnetic_1.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-magnetic-extremities/magnetic_2.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-magnetic-extremities/magnetic_3.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-paint-ownership/url_action.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-paint-ownership/url_frame.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-paint-ownership/url_node.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-group-paint-ownership/url_queue.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-named-note-scoped-identity-closure/named_0.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-named-note-scoped-identity-closure/named_1.java.stderr",
+    "sha256": "b3b1bd2ef6cf26c38e33deb915fd66955c623f894b8061c4b0bb6d319c13a04c",
+    "bytes": 62
+  },
+  {
+    "path": "java-generation-stderr/class-named-note-scoped-identity-closure/named_2.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-named-note-scoped-identity-closure/named_3.java.stderr",
+    "sha256": "8db629e953dc8a1c7a3ad5ba2d112990790ee6da896bb73d8d3496f37cdfcf0b",
+    "bytes": 62
+  },
+  {
+    "path": "java-generation-stderr/class-named-note-scoped-identity-closure/qualified_0.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-named-note-scoped-identity-closure/qualified_1.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-native-leaf-presentation/bodyless_icon_0.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-native-leaf-presentation/bodyless_icon_14.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-native-leaf-presentation/bodyless_icon_9.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-native-leaf-presentation/native_dataclass.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-native-leaf-presentation/native_exception.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-native-leaf-presentation/native_metaclass.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-native-leaf-presentation/native_protocol.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-native-leaf-presentation/native_record.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-native-leaf-presentation/native_struct.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-native-leaf-presentation/negative_mandatory_modifier.java.stderr",
+    "sha256": "618da9e4ce41c14f8c91e4e7c88c90cb5bdaf1aabb798c53d07f12eff2c19654",
+    "bytes": 52
+  },
+  {
+    "path": "java-generation-stderr/class-note-cluster-ownership-dependency/dependency_scope_left.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-note-cluster-ownership-dependency/dependency_scope_right.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-note-declaration-scope/scope_bottom.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-note-declaration-scope/scope_left.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-note-declaration-scope/scope_right.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-note-declaration-scope/scope_top.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-note-target-quark/group_target_bottom.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-note-target-quark/group_target_left.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-note-target-quark/target_bottom.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-note-target-quark/target_left.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-note-target-quark/target_right.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-note-target-quark/target_top.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-package-command-precedence-closure/slots_0.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-package-command-precedence-closure/slots_1.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-package-command-precedence-closure/slots_2.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-package-command-precedence-closure/slots_3.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-package-command-precedence-closure/visibility_private.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-package-command-precedence-closure/visibility_public.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-page-chrome-composition-dependency/dependency_left_False.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-page-chrome-composition-dependency/dependency_left_True.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-parenthesis-link-identity/endpoint_0.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-parenthesis-link-identity/endpoint_1.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-parenthesis-link-identity/endpoint_2.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-parenthesis-link-identity/endpoint_3.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-quoted-code-identity/quoted_0.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-quoted-code-identity/quoted_1.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-quoted-code-identity/quoted_2.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-quoted-code-identity/quoted_3.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-quoted-code-identity/quoted_dotted.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-quoted-code-identity/quoted_lr_order.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-single-svek-envelope-origin/root_note_action.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-single-svek-envelope-origin/root_note_cloud.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-single-svek-envelope-origin/root_note_node.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-single-svek-envelope-origin/root_note_rectangle.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-single-svek-envelope-origin/single_root_note_left.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-single-svek-envelope-origin/single_root_note_top.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-svek-painted-origin/origin_cloud.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-svek-painted-origin/origin_node.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-svek-painted-origin/origin_process.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-svek-painted-origin/origin_rectangle.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-symbol-container-alias-identity/alias_cloud.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-symbol-container-alias-identity/alias_folder.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-symbol-container-alias-identity/alias_frame.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-symbol-container-alias-identity/alias_node.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-symbol-container-alias-identity/dotted_alias.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-symbol-container-alias-identity/nested_opaque.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-symbol-container-alias-identity/relabel_folder.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-generation-stderr/class-symbol-container-alias-identity/relabel_node.java.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-trace/commands.json",
+    "sha256": "93600dc146dfb173485917eabf470d0886462529bbd6f0d8a7f29e7a3dd7b6a2",
+    "bytes": 2087
+  },
+  {
+    "path": "java-trace/group_lr/external.stderr",
+    "sha256": "a7c4eb996b00525cd406bf7a94827b200b5e9aebbe8596a896dc8a985b49e3eb",
+    "bytes": 139
+  },
+  {
+    "path": "java-trace/group_lr/external.txt",
+    "sha256": "042ec26be1a5ef958c22e52b36bd43e72e1025711db12a19bfb9bed00ed5cc48",
+    "bytes": 2140
+  },
+  {
+    "path": "java-trace/group_lr/source.puml",
+    "sha256": "6fa45c7a03597e7bd3d385c3cf713efb27a67af03ff2ed4beb8561c1257bc48e",
+    "bytes": 140
+  },
+  {
+    "path": "java-trace/group_lr/source.svg",
+    "sha256": "674c065d29edc4cc8a25187c19f1304fceb1c3b1e5b8d5bd65c9c1d6a5a37454",
+    "bytes": 5115
+  },
+  {
+    "path": "java-trace/group_lr/stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-trace/group_lr/svek.dot",
+    "sha256": "f9182a2b30a66514910eeed44bbe0a48f45c914a9d0a7cf41c5fa811aa4675f7",
+    "bytes": 998
+  },
+  {
+    "path": "java-trace/group_lr/svek.svg",
+    "sha256": "85a38fd62f41b325d24d3c4cf965aef93890f1e490f8bb5a726262c39555dfc3",
+    "bytes": 3952
+  },
+  {
+    "path": "java-trace/group_lr/vendored.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-trace/group_lr/vendored.txt",
+    "sha256": "f6e85509381ff1c9cfbd5a6f0806bda781085182dbc67ffe27006951296f7c02",
+    "bytes": 1038
+  },
+  {
+    "path": "java-trace/package_target/external.stderr",
+    "sha256": "e074ffdd42ef609d4948a277b6d5f8dc95e3632e4bb64336ac536cb925849f7f",
+    "bytes": 69
+  },
+  {
+    "path": "java-trace/package_target/external.txt",
+    "sha256": "e994d7d590befe7cfd469b9b743a6ac1ed67596e8a863c7902e019d1af9dbbee",
+    "bytes": 1393
+  },
+  {
+    "path": "java-trace/package_target/source.puml",
+    "sha256": "542a538d01013f5d25478fab074f1727dd97286f19752678320b24e4099b2178",
+    "bytes": 201
+  },
+  {
+    "path": "java-trace/package_target/source.svg",
+    "sha256": "7992aad30b20b66a7984ac89683bd01131c881b083dd87495d11ca834ea6d7f6",
+    "bytes": 4496
+  },
+  {
+    "path": "java-trace/package_target/stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-trace/package_target/svek.dot",
+    "sha256": "0b39e457340b5034af135e139c65298fd7df735229de49abe6152979d6e208c1",
+    "bytes": 659
+  },
+  {
+    "path": "java-trace/package_target/svek.svg",
+    "sha256": "1c1d4997958ef57c8fda1e2afebb8c77ea17fb313166d6e75ce10dc25d9d14a5",
+    "bytes": 2586
+  },
+  {
+    "path": "java-trace/package_target/vendored.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-trace/package_target/vendored.txt",
+    "sha256": "8138df7408928b903074220039bacaace3b9de39b7191ccd59375ea56530f6ee",
+    "bytes": 719
+  },
+  {
+    "path": "java-trace/shield/external.stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-trace/shield/external.txt",
+    "sha256": "f3d24d268876f5f088790d2c2ea0cfcf467cfd518c61a26190e05a128c08832f",
+    "bytes": 944
+  },
+  {
+    "path": "java-trace/shield/source.puml",
+    "sha256": "035a2e0cc53b9053ac97157cf4de58fe46a613f3a4c988d9f63c4c96995921dd",
+    "bytes": 118
+  },
+  {
+    "path": "java-trace/shield/source.svg",
+    "sha256": "45789c12c51dadb82d802cfbd3f3116ee6f31fc321699c54ce0a8f8eb99107e3",
+    "bytes": 2020
+  },
+  {
+    "path": "java-trace/shield/stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "java-trace/shield/svek.dot",
+    "sha256": "d3e98894641c9009d74036db021e1d34ed3217c819c4593493e5279d4b406a0d",
+    "bytes": 737
+  },
+  {
+    "path": "java-trace/shield/svek.svg",
+    "sha256": "3d3e5f8af18c918cbdd2d95108df86dad54cc9faec66aa67baf9b37f2b082369",
+    "bytes": 1131
+  },
+  {
+    "path": "java-trace/shield/vendored.stderr",
+    "sha256": "9229803ce1ff37f452599e4e47f0d5e19ba97507c705f042729dfb918832f589",
+    "bytes": 135
+  },
+  {
+    "path": "java-trace/shield/vendored.txt",
+    "sha256": "29a1ca2d1a8879fa6f68f2d31962afd4aeeeac2c5b5f72b960fca4eae3c5d4b6",
+    "bytes": 212
+  },
+  {
+    "path": "java-trace/solver-commands.json",
+    "sha256": "b6903db7cdf5b4d845e758f99f04801c73c06aa3ea6bbbc451a5a56d7e053625",
+    "bytes": 929
+  },
+  {
+    "path": "logs/rustuml-checker2740-build.log",
+    "sha256": "6c5063a2d77aa8f5121bb668fd89c826532e40ef23e09b120c16cda2c873f87a",
+    "bytes": 5311
+  },
+  {
+    "path": "logs/rustuml-checker2740-check.log",
+    "sha256": "d14ea2f126d9cb2244848b2084dc95496b17804d861092c2f75f63714f0e7fb8",
+    "bytes": 5321
+  },
+  {
+    "path": "logs/rustuml-checker2740-clippy.log",
+    "sha256": "0fe4fdfc09a4d033e28bee068af501b92112a84eed2b4192d9c4a2cc3b2bcb14",
+    "bytes": 11337
+  },
+  {
+    "path": "logs/rustuml-checker2740-current.log",
+    "sha256": "80cae398bae626e3b5d89bb4d7e4c91c87a04636954ab42d6cbb096d92eb936e",
+    "bytes": 115
+  },
+  {
+    "path": "logs/rustuml-checker2740-final-gates.log",
+    "sha256": "52d14f410753d8f4ca25546da7df0543a2e0722ac9a13f8403ba364c124a9fe4",
+    "bytes": 2334400
+  },
+  {
+    "path": "logs/rustuml-checker2740-final-replay.log",
+    "sha256": "aa57d72989c236ce39ff353834dc38a656bb421254fb77a707fc59162c31c705",
+    "bytes": 379
+  },
+  {
+    "path": "logs/rustuml-checker2740-fmt.log",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  {
+    "path": "logs/rustuml-checker2740-followup.log",
+    "sha256": "424b995fcec57410cec031f0f4aaf52f60979cc0626a8294822c3d2fa2e03cae",
+    "bytes": 57
+  },
+  {
+    "path": "logs/rustuml-checker2740-fresh.log",
+    "sha256": "747847e65c3d86ac127af7ffdf82af3f4e17b109af7933d7aa66a351cd4375e3",
+    "bytes": 116
+  },
+  {
+    "path": "logs/rustuml-checker2740-generation.log",
+    "sha256": "d24becf7d9151a088563d7e0e189ba8857bc049634b4113badf1852d2696aee0",
+    "bytes": 66
+  },
+  {
+    "path": "logs/rustuml-checker2740-maker.log",
+    "sha256": "3281e9003c35a12368dddb0a77c3dc4b35b17a95d401c3eb3844ffc36366fe94",
+    "bytes": 90
+  },
+  {
+    "path": "logs/rustuml-checker2740-parent-build.log",
+    "sha256": "65ecd0d246bbfb8052ab196fc6e1da2d57adffd8436811eb4c52baa5fd2261ff",
+    "bytes": 781
+  },
+  {
+    "path": "logs/rustuml-checker2740-parent-checkout.log",
+    "sha256": "649c2ca729676a854fabbea872fbfdeaed5a1fb20c3173b1b6542934eb714b43",
+    "bytes": 89
+  },
+  {
+    "path": "logs/rustuml-checker2740-parent-current.log",
+    "sha256": "1cc57e92e6dc12352bb28be7be0e6807703fab705d0e74fab5f5f3f24b103759",
+    "bytes": 115
+  },
+  {
+    "path": "logs/rustuml-checker2740-parity.log",
+    "sha256": "5b8920876b58fed097ce635280ed3506d8d7362edac4f9a40511425ea43b307d",
+    "bytes": 2072111
+  },
+  {
+    "path": "logs/rustuml-checker2740-pipe.log",
+    "sha256": "8c7711e03bc58abd4e89a60ed5b2efe0bf40e341d942d641659e365e794e475b",
+    "bytes": 992
+  },
+  {
+    "path": "logs/rustuml-checker2740-rebuild.log",
+    "sha256": "1e471dd5c57477d1bf0525f39b4da511bed15cabd9fffbc24c11712222f9fab5",
+    "bytes": 481
+  },
+  {
+    "path": "logs/rustuml-checker2740-submodule.log",
+    "sha256": "bb540172420c85ea44d11ee0326d266a0c89d4127a019d19aff73848b8f4883f",
+    "bytes": 188
+  },
+  {
+    "path": "logs/rustuml-checker2740-units.log",
+    "sha256": "8e829703a8d762902006276e03da59027184cc267aee06e59b84ccc34aa67d84",
+    "bytes": 101239
+  },
+  {
+    "path": "logs/staged-whitespace.log",
+    "sha256": "cc4ff2161d33ccb1b200166ed7ed42980b65bb70de92c7946c9e14a020be90f9",
+    "bytes": 11545
+  },
+  {
+    "path": "maker-results.json",
+    "sha256": "3b1c96997bb3776e6d4286a9640d2e5ce50f8d0905b6377f70e33cec934a7077",
+    "bytes": 115789
+  },
+  {
+    "path": "original-implementation.diff",
+    "sha256": "4065836553cec564ac0b322c0f06d5299fb4386a23f23074464bd823804b9fe2",
+    "bytes": 71722
+  },
+  {
+    "path": "owner-reference-policy.json",
+    "sha256": "96c1d7aa0a1fc9fec32cbeafcd87693ff005d6d34477a2ecba9ac469b9e3da44",
+    "bytes": 380
+  },
+  {
+    "path": "owner-reference-policy.md",
+    "sha256": "77ed30e1c5ece8cc9368ef593a44f287b559c3cf91ccfe376499d88ae04b03b1",
+    "bytes": 9481
+  },
+  {
+    "path": "parent-current-results.json",
+    "sha256": "00ca1de0ab7b96f5cbdb640aa78e8012b2b77a62cf063023a718c687489624cf",
+    "bytes": 1981283
+  },
+  {
+    "path": "parent-fresh-results.json",
+    "sha256": "d75b27946250a7dc0ec0c664b08a563f33bccfe3716b9c1184fd8939799edd2d",
+    "bytes": 234782
+  },
+  {
+    "path": "parent-outputs.tar.gz",
+    "sha256": "10064c03abdc119ca7af7c7bd46f37e74154990d73cf13542f1e6edb968c7b21",
+    "bytes": 3123496
+  },
+  {
+    "path": "raw-dot-build-command.json",
+    "sha256": "78aea1afb16b0fdb214bc71a543fb650c5c3997b62759152be547c339ba0a046",
+    "bytes": 473
+  },
+  {
+    "path": "reference-bootstrap-observed.json",
+    "sha256": "d45ab8298b376cdf2ac1174efb2e05995e6578281d6dc95c6166e7e52514eca7",
+    "bytes": 3926
+  },
+  {
+    "path": "retained-manifest.json",
+    "sha256": "a0bfe0e380d66f2ccaf0294721cbc0fb93887cca0f805e120db7f3861c9e4f07",
+    "bytes": 228707
+  },
+  {
+    "path": "scripts/check_svg.rs",
+    "sha256": "523e1750b056f05293b101b59ae9bb4a2aac8ffbe670eabf7cc6a13bbfaba033",
+    "bytes": 817
+  },
+  {
+    "path": "scripts/checker2740_acceptance_probes.py",
+    "sha256": "e516c48dad5880f1721487c828630acc45562b9ed7dd9f12e82df4451188acf9",
+    "bytes": 1827
+  },
+  {
+    "path": "scripts/checker2740_append.py",
+    "sha256": "fa9b5692c0514507683590864fc7c5ec49ab48cd070df26bc4f087f38a35b514",
+    "bytes": 4022
+  },
+  {
+    "path": "scripts/checker2740_final_run.py",
+    "sha256": "431a72f5a17e82656ea16690a35a27b573f60e2570ee8abc5cfbddbf8da93b26",
+    "bytes": 1604
+  },
+  {
+    "path": "scripts/checker2740_finalize.py",
+    "sha256": "9e8d7129fbaed34686de8cc93743bdde7547f7746f3a6ea4b559cc9ea16cd3e4",
+    "bytes": 10264
+  },
+  {
+    "path": "scripts/checker2740_followup.py",
+    "sha256": "d33376b0a16d939b1a9d4e05f95714f22a10580dacdfda83f9d6478b2fa9ab15",
+    "bytes": 4226
+  },
+  {
+    "path": "scripts/checker2740_generate.py",
+    "sha256": "559a56e7a2ef2efab54e58d141cd375b0e584243264f67e52a76dceb2ddbc2c4",
+    "bytes": 12728
+  },
+  {
+    "path": "scripts/checker2740_raw_dot.rs",
+    "sha256": "78048553c6fb5ac4e15aa957f934dccf1408b534cad01fd8ab85f1ac5d374c50",
+    "bytes": 3251
+  },
+  {
+    "path": "scripts/checker2740_run.py",
+    "sha256": "f0dbc20d16fd1d55f986dbbb391b34c29a1a2c3b697d4042eca54e7cf779d732",
+    "bytes": 4047
+  },
+  {
+    "path": "verdicts.json",
+    "sha256": "1350db7ad960696c9dd342131b4ba0d99ce450babd2a4873a24527dd84e32ae1",
+    "bytes": 3662
+  }
+]

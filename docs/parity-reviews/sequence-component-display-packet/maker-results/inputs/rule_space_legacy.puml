@@ -1,0 +1,14 @@
+@startuml
+skinparam noteFontSize 16
+skinparam noteTextAlignment right
+participant Uno
+participant Dos
+Uno -> Dos: begin
+note right
+==   ==
+body
+..  ..
+next
+__ title __
+end note
+@enduml

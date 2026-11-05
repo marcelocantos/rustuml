@@ -1,0 +1,18 @@
+SVG structural differences:
+  element count: expected 17, got 7
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "120px"), ("preserveAspectRatio", "none"), ("style", "width:275px;height:120px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 275 120"), ("width", "275px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "66px"), ("preserveAspectRatio", "none"), ("style", "width:141px;height:66px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 141 66"), ("width", "141px"), ("zoomAndPan", "magnify")]
+  [3] <g> attr mismatch:
+    expected: [("class", "cluster"), ("data-qualified-name", "Decorations"), ("data-source-line", "1"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Decorations"), ("data-source-line", "1"), ("id", "ent0002")]
+  [4] <rect> attr mismatch:
+    expected: [("fill", "none"), ("height", "99"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:1;"), ("width", "254"), ("x", "7"), ("y", "7")]
+    actual:   [("fill", "#F1F1F1"), ("height", "46.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "121.2246"), ("x", "7"), ("y", "7")]
+  [5] <path> attr mismatch:
+    expected: [("d", "M103.5703,7 L103.5703,16.4883 L93.5703,26.4883 L7,26.4883"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M47.4082,7 L47.4082,12 L40.4082,19 L7,19"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "86.5703"), ("x", "10"), ("y", "21.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "81.2246"), ("x", "22"), ("y", "40.5352")]
+

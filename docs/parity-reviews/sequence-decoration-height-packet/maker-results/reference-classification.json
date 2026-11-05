@@ -1,0 +1,194 @@
+[
+  {
+    "name": "circle_internal_0",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "circle_self_0",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "circle_external_0",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "circle_both_0",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "child_fonts_0_11_13",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "child_fonts_0_18_10",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "child_fonts_0_10_20",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "child_two_notes_0",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "style_root_0",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "style_siblings_0",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "style_shadow_0",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "invalid_circle_order_0",
+    "intended_negative": true,
+    "exit": 200,
+    "xml": true,
+    "error": true,
+    "reference_valid": false
+  },
+  {
+    "name": "circle_internal_1",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "circle_self_1",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "circle_external_1",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "circle_both_1",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "child_fonts_1_11_13",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "child_fonts_1_18_10",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "child_fonts_1_10_20",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "child_two_notes_1",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "style_root_1",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "style_siblings_1",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "style_shadow_1",
+    "intended_negative": false,
+    "exit": 0,
+    "xml": true,
+    "error": false,
+    "reference_valid": true
+  },
+  {
+    "name": "invalid_circle_order_1",
+    "intended_negative": true,
+    "exit": 200,
+    "xml": true,
+    "error": true,
+    "reference_valid": false
+  }
+]

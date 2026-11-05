@@ -1,0 +1,102 @@
+[
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/self_e0.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/self_e0.svg",
+    "cohort": "return-configuration-fresh",
+    "java_exit": 0,
+    "axes": [
+      "self",
+      "legacy"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/internal_e0.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/internal_e0.svg",
+    "cohort": "return-configuration-fresh",
+    "java_exit": 0,
+    "axes": [
+      "internal",
+      "legacy"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/external_e0.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/external_e0.svg",
+    "cohort": "return-configuration-fresh",
+    "java_exit": 0,
+    "axes": [
+      "external",
+      "legacy"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e0.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e0.svg",
+    "cohort": "return-configuration-fresh",
+    "java_exit": 200,
+    "axes": [
+      "orphan",
+      "legacy"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e0.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e0.svg",
+    "cohort": "return-configuration-fresh",
+    "java_exit": 200,
+    "axes": [
+      "end_orphan",
+      "legacy"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/self_e1.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/self_e1.svg",
+    "cohort": "return-configuration-fresh",
+    "java_exit": 0,
+    "axes": [
+      "self",
+      "teoz"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/internal_e1.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/internal_e1.svg",
+    "cohort": "return-configuration-fresh",
+    "java_exit": 0,
+    "axes": [
+      "internal",
+      "teoz"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/external_e1.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/external_e1.svg",
+    "cohort": "return-configuration-fresh",
+    "java_exit": 0,
+    "axes": [
+      "external",
+      "teoz"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e1.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/orphan_e1.svg",
+    "cohort": "return-configuration-fresh",
+    "java_exit": 200,
+    "axes": [
+      "orphan",
+      "teoz"
+    ]
+  },
+  {
+    "source": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e1.puml",
+    "golden": "docs/parity-reviews/sequence-return-configuration/maker-results/end_orphan_e1.svg",
+    "cohort": "return-configuration-fresh",
+    "java_exit": 200,
+    "axes": [
+      "end_orphan",
+      "teoz"
+    ]
+  }
+]

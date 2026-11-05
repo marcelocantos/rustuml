@@ -1,0 +1,9 @@
+@startuml
+participant Willow as W
+participant Fir as F
+W -> F : open
+F -> F ++ : acquire
+return finish
+newpage next
+F -> W : continued WWWWWWWW
+@enduml

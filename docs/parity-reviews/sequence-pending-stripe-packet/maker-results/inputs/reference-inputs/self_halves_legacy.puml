@@ -1,0 +1,7 @@
+@startuml
+participant Cedar
+Cedar /- Cedar: reverse top
+Cedar -\ Cedar: forward top
+Cedar \- Cedar: reverse bottom
+Cedar -/ Cedar: forward bottom
+@enduml

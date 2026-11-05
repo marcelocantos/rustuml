@@ -1,0 +1,12 @@
+@startuml
+skinparam Padding 3
+participant L
+participant R
+participant S
+group scope
+L -> S : seed
+S -> S ++ : recursive
+S -> S : tiny
+return unwind
+end
+@enduml

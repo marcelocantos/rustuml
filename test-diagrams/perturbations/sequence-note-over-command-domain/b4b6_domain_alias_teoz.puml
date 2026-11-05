@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant "Juniper" as J
+participant Kestrel
+J -> Kestrel: arrive
+note over J: prose
+@enduml

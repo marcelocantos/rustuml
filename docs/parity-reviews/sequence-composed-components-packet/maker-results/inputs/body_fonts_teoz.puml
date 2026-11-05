@@ -1,0 +1,13 @@
+@startuml
+!pragma teoz true
+skinparam noteFontSize 18
+skinparam sequenceMessageFontSize 9
+participant Red
+participant Blue
+Red <- Blue: q
+note left
+__a much longer title__
+x
+end note
+Blue -> Red: r
+@enduml

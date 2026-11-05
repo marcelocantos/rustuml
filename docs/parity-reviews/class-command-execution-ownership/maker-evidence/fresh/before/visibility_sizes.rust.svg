@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="184px" preserveAspectRatio="none" style="width:252px;height:184px;background:#FFFFFF;" version="1.1" viewBox="0 0 252 184" width="252px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Access-->
+<g class="entity" data-qualified-name="Access" data-source-line="2" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="86.0742" x="6" y="7"/>
+<path d="M34.6914,7 L34.6914,12 L27.6914,19 L6,19" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="46.0742" x="21" y="40.5352">Access</text>
+</g>
+<!--entity Beacon-->
+<g class="entity" data-qualified-name="Beacon" data-source-line="5" id="ent0003">
+<polygon fill="#F1F1F1" points="127.02,17,137.02,7,215.063,7,215.063,43.4883,205.063,53.4883,127.02,53.4883,127.02,17" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="205.063" x2="215.063" y1="17" y2="7"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="127.02" x2="205.063" y1="17" y2="17"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="205.063" x2="205.063" y1="17" y2="53.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="48.043" x="142.02" y="40.5352">Beacon</text>
+</g>
+<!--entity BeaconLog-->
+<g class="entity" data-qualified-name="BeaconLog" data-source-line="5" id="ent0004">
+<polygon fill="#F1F1F1" points="114.62,123.49,124.62,113.49,227.4569,113.49,227.4569,149.9783,217.4569,159.9783,114.62,159.9783,114.62,123.49" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="217.4569" x2="227.4569" y1="123.49" y2="113.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="114.62" x2="217.4569" y1="123.49" y2="123.49"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="217.4569" x2="217.4569" y1="123.49" y2="159.9783"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="72.8369" x="129.62" y="147.0252">BeaconLog</text>
+</g>
+<!--link Beacon to BeaconLog-->
+<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="5" id="lnk5">
+<path d="M171.04,53.92 C171.04,71.44 171.04,89.59 171.04,107.1" fill="none" id="Beacon-to-BeaconLog" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="171.04,113.1,175.04,104.1,171.04,108.1,167.04,104.1,171.04,113.1" style="stroke:#181818;stroke-width:1;"/>
+</g>
+</g></svg>

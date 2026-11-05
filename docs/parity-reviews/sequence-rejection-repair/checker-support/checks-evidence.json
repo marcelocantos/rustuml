@@ -1,0 +1,23 @@
+[
+  {
+    "name": "evidence-gates",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--no-fail-fast",
+      "-p",
+      "rustuml-oracle",
+      "--test",
+      "harness_guards",
+      "--test",
+      "parity_perturbations",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-d382aba6",
+    "candidate": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "log": "/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/logs/evidence-gates.log"
+  }
+]

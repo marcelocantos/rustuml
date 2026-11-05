@@ -1,0 +1,5 @@
+{
+  "initial_log": "before2519.log",
+  "issue": "Checker fresh-pairs lacked cohort metadata; unchanged measure.py saved all2519 complete rows, then failed only while printing cohort summaries. No render rerun. Labeled private manifests add cohort checker148; immutable checker inputs are unchanged.",
+  "entries": 2519
+}

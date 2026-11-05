@@ -1,0 +1,30 @@
+{
+  "entries": 3111,
+  "unique_paths": 3111,
+  "unique_source_bytes": 3059,
+  "duplicate_entries": 52,
+  "cohorts": {
+    "frozen2549": {
+      "entries": 2549,
+      "unique_sources": 2501,
+      "overlap_prior_bytes": 0
+    },
+    "checker534": {
+      "entries": 534,
+      "unique_sources": 530,
+      "overlap_prior_bytes": 0
+    },
+    "maker24": {
+      "entries": 24,
+      "unique_sources": 24,
+      "overlap_prior_bytes": 0
+    },
+    "signature4": {
+      "entries": 4,
+      "unique_sources": 4,
+      "overlap_prior_bytes": 0
+    }
+  },
+  "parent1449": "Historical separate parent cohort, not additive to these retained cohorts; no new parent inventory or integration measurement claimed. See prior9784 overlap record.",
+  "note": "2549+534+24+4=3111. Duplicates, syntax-invalid and exporter-failure references retained."
+}

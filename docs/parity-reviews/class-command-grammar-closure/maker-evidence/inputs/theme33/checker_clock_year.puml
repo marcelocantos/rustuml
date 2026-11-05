@@ -1,0 +1,5 @@
+@startuml
+!theme cerulean
+!$stamp = %date("yyyy")
+class "Clock $stamp" as ClockLedger
+@enduml

@@ -1,0 +1,16 @@
+[
+  "docs/parity-reviews/sequence-component-padding-flow/review.json",
+  "docs/parity-reviews/sequence-external-arrow-grammar/review.json",
+  "docs/parity-reviews/sequence-note-component-envelope/review.json",
+  "docs/parity-reviews/sequence-page-textblock-composition/review.json",
+  "docs/parity-reviews/sequence-participant-shadow-envelope/review.json",
+  "docs/parity-reviews/sequence-recursive-group-constraints/review.json",
+  "docs/parity-reviews/sequence-return-live-message-model/review.json",
+  "docs/parity-reviews/sequence-self-arrow-async-stroke/review.json",
+  "docs/parity-reviews/sequence-self-arrow-attached-lifecycle/review.json",
+  "docs/parity-reviews/sequence-self-arrow-envelope/review.json",
+  "docs/parity-reviews/sequence-self-return-message-model/review.json",
+  "docs/parity-reviews/sequence-teoz-life-event-bounds/review.json",
+  "docs/parity-reviews/sequence-teoz-note-tile-bounds/review.json",
+  "docs/parity-reviews/sequence-teoz-self-tile-history/review.json"
+]

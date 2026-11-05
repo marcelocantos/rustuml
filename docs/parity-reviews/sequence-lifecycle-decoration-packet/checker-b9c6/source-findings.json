@@ -1,0 +1,82 @@
+[
+  {
+    "id": "B9-COLOR",
+    "mechanisms": ["sequence-command-event-identity"],
+    "cases": ["checker_b9c6_identity_exo_e0", "checker_b9c6_identity_exo_e1", "checker_b9c6_identity_symbolic_e0", "checker_b9c6_identity_symbolic_e1", "checker_b9c6_identity_gray_e0", "checker_b9c6_identity_gray_e1"],
+    "java": ["klimt/color/HColorSet.java:75 parseColor", "klimt/color/HColorSet.java:119 parseSimpleColor", "sequencediagram/command/CommandReturn.java:95 executeArg"],
+    "rust": ["crates/rustuml-parser/src/parse/sequence.rs:85 valid_return_color", "crates/rustuml-parser/src/diagram/sequence.rs:332 resolve_sequence_returns", "crates/rustuml-render/src/sequence.rs:28 resolve_color"],
+    "diagnosis": "The validator correctly admits the pinned 157 names/symbols and 1/3/6/8-digit hex grammar, but the resolved return carries an untyped color string into a renderer handling only 3/6-digit hex and a subset of named colors. Java returns HColorNone for transparent and an XColor with alpha for eight digits; Rust emits white for transparent, literal #a instead of #AAAAAA, and an unexpanded RGBA fill without Java's fill-opacity. External return destinations and geometry match in the isolated RGBA controls; these are shared color-model failures, not evidence that command ownership is wrong.",
+    "next_repair": "Preserve normalized color semantics through the sequence return arrow configuration and SVG color writer, including no-paint, single-nibble gray and alpha; do not weaken comparison or reject these valid Java colors. Keep the command validation improvement bounded and retain this downstream dependency.",
+    "regression": false
+  },
+  {
+    "id": "B9-LEGACY-LIFE",
+    "mechanisms": ["sequence-command-event-identity"],
+    "cases": ["checker_b9c6_identity_other_e0"],
+    "java": ["sequencediagram/AbstractMessage.java:147 addLifeEvent", "sequencediagram/SequenceDiagram.java:339 activate", "sequencediagram/graphic/LifeLine.java:121 finish", "sequencediagram/graphic/LifeLine.java:127 getMissingClose", "sequencediagram/graphic/LifeLine.java:181 getSegment"],
+    "rust": ["crates/rustuml-parser/src/diagram/sequence.rs:307 resolve_sequence_returns", "crates/rustuml-render/src/sequence.rs:11465 legacy activation bar materialization"],
+    "diagnosis": "A self message permits a different participant's deactivate/activate pair and still owns the command stack entry. The new resolver preserves that correctly. Java LifeLine.finish counts raw accepted LARGER minus SMALLER variations, so an unmatched earlier close cancels the later open in its missing-close count; getSegment then ends the final unclosed opening at the last variation itself, yielding a zero-height Cedar segment. Rust's open-stack painter discards the unmatched close and unconditionally closes the remaining open at the diagram tail, emitting an extra Cedar activation bar. The Teoz counterpart passes because it uses the separate stairs model.",
+    "next_repair": "Model legacy finish/getSegment from the accepted ordered variation stream, including unmatched-close history; keep that paint history separate from the now-correct return owner stack.",
+    "regression": false
+  },
+  {
+    "id": "B9-PARALLEL-CONTACT",
+    "mechanisms": ["sequence-command-event-identity", "sequence-teoz-life-event-scheduling"],
+    "cases": ["checker_b9c6_identity_chain_e1", "checker_b9c6_life_parallel_multiline"],
+    "java": ["sequencediagram/teoz/TileParallel.java:88 getContactPointRelative", "sequencediagram/teoz/CommunicationTileSelf.java:71 getContactPointRelative", "skin/rose/ComponentRoseSelfArrow.java:310 getYPoint", "skin/rose/ComponentRoseArrow.java:330 getYPoint"],
+    "rust": ["crates/rustuml-render/src/sequence.rs:7748 parallel scheduling", "crates/rustuml-render/src/sequence.rs:7832 joining branch"],
+    "diagnosis": "Rust uses event_y_positions (message stroke/callback ordinate) as the common parallel contact for all message kinds. Java aligns component getYPoint, which for a self component is text height plus half of the 13-unit loop plus paddingX, whereas ordinary arrows use text height plus paddingY. These are separate from the self callback's activation-dependent p1/p2. The fresh chain and multiline controls leave ordinary messages and their activation starts 2.5 units too high while the self component matches. This is not a label-metric discrepancy.",
+    "next_repair": "Represent tile contact, drawing origin, callback ordinates and extent below contact separately, and compose their maxima exactly as TileParallel; do not add a case-specific 2.5 offset.",
+    "regression": false
+  },
+  {
+    "id": "B9-PARALLEL-PREDECESSOR",
+    "mechanisms": ["sequence-teoz-life-event-scheduling"],
+    "cases": ["checker_b9c6_life_parallel_note"],
+    "java": ["sequencediagram/teoz/GroupingTile.java:353 mergeParallel", "sequencediagram/teoz/GroupingTile.java:378 moveRecentParallelTilesToPending", "sequencediagram/teoz/TileParallel.java:88 getContactPointRelative"],
+    "rust": ["crates/rustuml-render/src/sequence.rs:7765 joining", "crates/rustuml-render/src/sequence.rs:8203 parallel_members reset"],
+    "diagnosis": "Java's first parallel tile captures the preceding graphical tile plus trailing life tiles, even when that predecessor is a standalone note. Rust clears parallel_members on the note and therefore serializes the following & message. The fresh case is 225px high versus Java 199px, with deactivation delayed along with the message. Command parallel ancestry is retained but graphical parallel composition is not.",
+    "next_repair": "Compose the immediate prior tile (including NoteTile) and suffix LifeEventTiles, without treating a standalone note as a barrier to parallel layout. Preserve the distinct rule that notes can reset stairs paint state.",
+    "regression": false
+  },
+  {
+    "id": "B9-DESTROY-ORDER",
+    "mechanisms": ["sequence-teoz-life-event-scheduling"],
+    "cases": ["checker_b9c6_life_create_reverse"],
+    "java": ["sequencediagram/teoz/LiveBoxes.java:329 drawBoxes", "sequencediagram/teoz/LiveBoxes.java:349 drawOneLevel"],
+    "rust": ["crates/rustuml-render/src/sequence.rs:4113 TeozLifePainting assembly", "crates/rustuml-render/src/sequence.rs:12120 activation and destruction painter"],
+    "diagnosis": "The created participant's nested return/destroy case has matching coordinates and colors but wrong primitive order. Java draws a level's closing destroy immediately after that level's bar before traversing the next level. Rust stores segments and destroys in separate vectors and emits all bars before any cross. Expected outer bar, two destroy strokes, inner bar becomes outer bar, inner bar, two destroy strokes. The strict comparator correctly rejects order, which can affect overlap in other inputs.",
+    "next_repair": "Return an ordered draw stream or preserve per-level close-decoration attachment through materialization; do not post-sort the generated SVG.",
+    "regression": false
+  },
+  {
+    "id": "B9-NOTE-DISPLAY",
+    "mechanisms": ["sequence-legacy-message-note-envelope", "sequence-legacy-message-note-alignment"],
+    "cases": ["checker_b9c6_envelope_escaped", "checker_b9c6_alignment_k0", "checker_b9c6_alignment_k1", "checker_b9c6_alignment_k2", "checker_b9c6_alignment_k3", "checker_b9c6_alignment_k4", "checker_b9c6_alignment_k5"],
+    "java": ["command/note/sequence/FactorySequenceNoteOnArrowCommand.java:111 createSingleLine/executeArg", "sequencediagram/graphic/ArrowAndNoteBox.java:110 getPreferredWidth", "skin/rose/ComponentRoseNote.java:78 getPreferredWidth"],
+    "rust": ["crates/rustuml-parser/src/parse/sequence.rs:782 try_note inline text", "crates/rustuml-render/src/sequence.rs:831 note_visual_lines", "crates/rustuml-render/src/sequence.rs:1396 note_max_line_width_with_family", "crates/rustuml-render/src/sequence.rs:10805 ordinary note envelope measurement"],
+    "diagnosis": "Java builds note Display with escaped-newline expansion before measuring the component. Rust stores the inline text verbatim and note_visual_lines splits physical newlines only. The composite receives one long line instead of two, producing width368/height187 versus Java301/203 in the unstyled reverse control. Identical content in block-form multiline passes. This shared Display dependency is inside the claimed note preferred-dimension invariant and cannot disappear merely because the new envelope equation is otherwise correct.",
+    "next_repair": "Normalize note Display line semantics once before shared measurement and painting, with escaped and block forms as separate regression cases. Do not repair only canvas arithmetic or special-case these labels.",
+    "regression": false
+  },
+  {
+    "id": "B9-NOTE-ALIGNMENT",
+    "mechanisms": ["sequence-legacy-message-note-alignment"],
+    "cases": ["checker_b9c6_alignment_k0_single", "checker_b9c6_alignment_k1_single", "checker_b9c6_alignment_k4_single"],
+    "java": ["skin/rose/Rose.java:93 createComponentNote", "skin/rose/ComponentRoseNote.java:67 constructor", "skin/rose/ComponentRoseNote.java:78 preferred width"],
+    "rust": ["crates/rustuml-render/src/sequence.rs:6623 note_text_align initialization", "crates/rustuml-render/src/sequence.rs:6739 defaulttextalignment match arm", "crates/rustuml-render/src/sequence.rs:7054 note_shadow_delta", "crates/rustuml-render/src/sequence.rs:10856 alignment margin in composite"],
+    "diagnosis": "The new CENTER margin arithmetic is correct when its input is CENTER, but noteTextAlignment is not consumed: only defaulttextalignment assigns note_text_align. The fresh explicit CENTER single-line case is 9px too narrow with text9px too far left, exactly the lost constructor margin15 versus6; RIGHT preserves the shape but places text7px left. Scoped <style> note Shadowing7 also never reaches the component preferred dimension or filter: Rust has no filter and is7px short in both dimensions in its single-line control. Boolean global shadow's single-line LEFT control passes. Correct equations with missing style inputs do not satisfy the account's styled component claim.",
+    "next_repair": "Resolve the note's effective alignment and numeric shadow through the same style/skinparam inputs used for component paint, then feed those values into preferred dimensions and the complete event envelope. Preserve theme dominance and avoid adding shadow twice.",
+    "regression": false
+  },
+  {
+    "id": "B9-THEME-ACTIVATION",
+    "mechanisms": ["sequence-legacy-message-note-alignment"],
+    "cases": ["checker_b9c6_alignment_k3_single"],
+    "java": ["sequencediagram/graphic/LifeLine.java:232 drawU style merge", "skin/rose/ComponentRoseActiveLine.java drawInternalU"],
+    "rust": ["crates/rustuml-render/src/sequence.rs:5527 activation_bar_segment"],
+    "diagnosis": "After removing escaped multiline note text, the cerulean composite's geometry and theme bounds match. Its two activation rectangles still use Rust's hardcoded #181818 stroke rather than the Java merged activation style #2683B9. This was present before the packet and is a shared style dependency, not a newly introduced envelope regression.",
+    "next_repair": "Carry the effective activation line style into activation_bar_segment; retain the exact theme case and keep the bounded note-envelope evidence distinct from whole styled-sequence acceptance.",
+    "regression": false
+  }
+]

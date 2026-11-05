@@ -1,0 +1,6 @@
+@startuml
+participant Lead as L
+participant S
+S -> S : q
+note right : Held WWW
+@enduml

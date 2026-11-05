@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "0cde5d7e55139b63cb8e91f8e42acd473441f80a",
+  "evidence_import": "bd40c0f16838359779e406592edb51f32be2e9bd",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-note-aggregate-paint-height",
+  "java_locations": [
+    "skin.AbstractTextualComponent#getTextHeight",
+    "skin.rose.ComponentRoseNote#drawInternalU",
+    "skin.rose.ComponentRoseNoteBox#constructor/#drawInternalU",
+    "skin.rose.ComponentRoseNoteHexagonal#constructor/#drawInternalU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::note_rendered_height/note_base_height"
+  ],
+  "invariant": "Each note consumer casts total text-block height plus twice its component marginY once. Folded marginY5 and box/hex marginY4 come from their constructors; no stripe is individually truncated.",
+  "causal_divergence": "Folded notes already aggregate in this branch at8d668d3fb/account2dab3648; the shared checker handoff refers to an older tree. Rectangular/hexagonal still floor every later stripe separately, losing fractional accumulated height.",
+  "planned_change": "Retain folded behavior; replace rectangular/hexagonal per-line floors with aggregate total plus constructor margins, cast once. Reproduce exact flush_eol_nested and hide_closing_capture on this tree without shared imports or combined claim; preserve all outcomes.",
+  "perturbation_axes": [
+    "three note shapes and four/more fractional-height rows",
+    "mixed font heights, attached versus standalone and engines"
+  ]
+}

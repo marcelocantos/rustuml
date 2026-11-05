@@ -1,0 +1,6 @@
+@startuml
+box pending
+participant Cedar
+participant Maple
+Cedar o-->>o Maple: first
+@enduml

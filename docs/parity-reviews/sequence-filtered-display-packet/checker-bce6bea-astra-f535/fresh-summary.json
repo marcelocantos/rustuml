@@ -1,0 +1,130 @@
+{
+  "total": {
+    "entries": 148,
+    "positive_references": 136,
+    "nonpositive_references": 12,
+    "before": {
+      "1": 86,
+      "0": 34,
+      "2": 12,
+      "3": 16
+    },
+    "after": {
+      "0": 94,
+      "1": 42,
+      "2": 12
+    },
+    "positive_match_losses": [],
+    "introduced_rejection_losses": [
+      "indf535_terminator_em_space_legacy",
+      "indf535_terminator_em_space_teoz",
+      "indf535_terminator_narrow_nbsp_legacy",
+      "indf535_terminator_narrow_nbsp_teoz"
+    ],
+    "new_valid_errors": [],
+    "after_svg_panics": [],
+    "after_yaml_panics": [],
+    "positive_recoveries": 60
+  },
+  "mechanisms": {
+    "sequence-external-note-owner": {
+      "entries": 18,
+      "positive_references": 16,
+      "nonpositive_references": 2,
+      "before": {
+        "1": 14,
+        "0": 2,
+        "2": 2
+      },
+      "after": {
+        "0": 9,
+        "1": 7,
+        "2": 2
+      },
+      "positive_match_losses": [],
+      "introduced_rejection_losses": [],
+      "new_valid_errors": [],
+      "after_svg_panics": [],
+      "after_yaml_panics": [],
+      "positive_recoveries": 7
+    },
+    "sequence-filtered-ordered-participant-display": {
+      "entries": 42,
+      "positive_references": 42,
+      "nonpositive_references": 0,
+      "before": {
+        "1": 36,
+        "0": 6
+      },
+      "after": {
+        "0": 21,
+        "1": 21
+      },
+      "positive_match_losses": [],
+      "introduced_rejection_losses": [],
+      "new_valid_errors": [],
+      "after_svg_panics": [],
+      "after_yaml_panics": [],
+      "positive_recoveries": 15
+    },
+    "sequence-note-aggregate-paint-height": {
+      "entries": 60,
+      "positive_references": 60,
+      "nonpositive_references": 0,
+      "before": {
+        "0": 24,
+        "1": 36
+      },
+      "after": {
+        "0": 50,
+        "1": 10
+      },
+      "positive_match_losses": [],
+      "introduced_rejection_losses": [],
+      "new_valid_errors": [],
+      "after_svg_panics": [],
+      "after_yaml_panics": [],
+      "positive_recoveries": 26
+    },
+    "sequence-note-shape-terminator": {
+      "entries": 28,
+      "positive_references": 18,
+      "nonpositive_references": 10,
+      "before": {
+        "3": 16,
+        "0": 2,
+        "2": 10
+      },
+      "after": {
+        "0": 14,
+        "2": 10,
+        "1": 4
+      },
+      "positive_match_losses": [],
+      "introduced_rejection_losses": [
+        "indf535_terminator_em_space_legacy",
+        "indf535_terminator_em_space_teoz",
+        "indf535_terminator_narrow_nbsp_legacy",
+        "indf535_terminator_narrow_nbsp_teoz"
+      ],
+      "new_valid_errors": [],
+      "after_svg_panics": [],
+      "after_yaml_panics": [],
+      "positive_recoveries": 12
+    }
+  },
+  "freshness": {
+    "entries": 148,
+    "unique_sources": 148,
+    "overlap_with_packet2371": []
+  },
+  "note_heights": {
+    "entries": 60,
+    "after_height_equal": 58,
+    "height_failures": [
+      "indf535_rnote_self_attached_teoz",
+      "indf535_hnote_self_attached_teoz"
+    ]
+  },
+  "rejection_contract": "Four new false accepts are introduced lost passes, separate from zero positive-SVG pass losses. Invalid references never earn positive parity credit."
+}

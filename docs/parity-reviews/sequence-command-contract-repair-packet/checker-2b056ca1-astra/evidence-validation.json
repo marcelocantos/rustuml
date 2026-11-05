@@ -1,0 +1,45 @@
+{
+  "new_reviews": [
+    {
+      "path": "docs/parity-reviews/sequence-required-note-identity/review.json",
+      "shape_and_pair_hashes_valid": true,
+      "verdict": "rejected"
+    },
+    {
+      "path": "docs/parity-reviews/sequence-command-fox-space/review.json",
+      "shape_and_pair_hashes_valid": true,
+      "verdict": "rejected"
+    },
+    {
+      "path": "docs/parity-reviews/sequence-command-entry-grammar/review.json",
+      "shape_and_pair_hashes_valid": true,
+      "verdict": "rejected"
+    },
+    {
+      "path": "docs/parity-reviews/sequence-command-provenance-correction/review.json",
+      "shape_and_pair_hashes_valid": true,
+      "verdict": "rejected"
+    },
+    {
+      "path": "docs/parity-reviews/sequence-pattern2-class-composition/review.json",
+      "shape_and_pair_hashes_valid": true,
+      "verdict": "rejected"
+    },
+    {
+      "path": "docs/parity-reviews/sequence-create-command-signature-scope/review.json",
+      "shape_and_pair_hashes_valid": true,
+      "verdict": "rejected"
+    }
+  ],
+  "protected_paths_unchanged": 11800,
+  "production_unchanged": true,
+  "targets_and_baselines_unchanged": true,
+  "golden_revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "standing_pairs_before": 2258,
+  "registered_new_pair_paths": 424,
+  "registered_new_unique_source_bytes": 422,
+  "registration_duplicates": 2,
+  "standing_pairs_after": 2682,
+  "broad_rerun_after_registration": false,
+  "guard_claim": "Existing guards remain red; this is only shape/hash validation of new evidence."
+}

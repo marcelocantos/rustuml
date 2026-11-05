@@ -1,0 +1,944 @@
+{
+  "candidate": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "production": "b4f37ab5840b8d70bf1246e3659f1902c0952a51",
+  "before_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "preserved": {
+    "before": {
+      "entries": 2021,
+      "matches": 1371,
+      "valid_mismatches": 599,
+      "invalid_references": 51,
+      "cli_exits": {
+        "0": 1984,
+        "1": 37
+      },
+      "invalid_cli_exits": {
+        "0": 14,
+        "1": 37
+      },
+      "cli_panics": [],
+      "valid_cli_errors": [],
+      "library_render_panics": [],
+      "mode_exits": {
+        "cli_comparison": {
+          "1": 599,
+          "0": 1371,
+          "2": 51
+        },
+        "product_library": {
+          "1": 599,
+          "0": 1371,
+          "2": 49,
+          "101": 2
+        },
+        "assisted_library": {
+          "1": 642,
+          "0": 1328,
+          "2": 49,
+          "101": 2
+        }
+      },
+      "comparison_helper_panics": {
+        "product_library": [
+          "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/6d91548d31e343a3353c.puml",
+          "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/c07a0272252e819e9277.puml"
+        ],
+        "assisted_library": [
+          "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/6d91548d31e343a3353c.puml",
+          "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/c07a0272252e819e9277.puml"
+        ]
+      }
+    },
+    "after": {
+      "entries": 2021,
+      "matches": 1401,
+      "valid_mismatches": 569,
+      "invalid_references": 51,
+      "cli_exits": {
+        "0": 1984,
+        "1": 37
+      },
+      "invalid_cli_exits": {
+        "0": 14,
+        "1": 37
+      },
+      "cli_panics": [],
+      "valid_cli_errors": [],
+      "library_render_panics": [],
+      "mode_exits": {
+        "cli_comparison": {
+          "1": 569,
+          "0": 1401,
+          "2": 51
+        },
+        "product_library": {
+          "1": 569,
+          "0": 1401,
+          "2": 49,
+          "101": 2
+        },
+        "assisted_library": {
+          "1": 612,
+          "0": 1358,
+          "2": 49,
+          "101": 2
+        }
+      },
+      "comparison_helper_panics": {
+        "product_library": [
+          "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/6d91548d31e343a3353c.puml",
+          "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/c07a0272252e819e9277.puml"
+        ],
+        "assisted_library": [
+          "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/6d91548d31e343a3353c.puml",
+          "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/c07a0272252e819e9277.puml"
+        ]
+      }
+    },
+    "unique_source_bytes": 1973,
+    "duplicate_entries": 48,
+    "gains": [
+      "docs/parity-reviews/sequence-decoration-height-packet/maker-results/inputs/circle_both_0.puml",
+      "docs/parity-reviews/sequence-decoration-height-packet/maker-results/inputs/circle_both_1.puml",
+      "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_legacy.puml",
+      "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_legacy.puml",
+      "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_legacy.puml",
+      "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_legacy.puml",
+      "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_legacy.puml",
+      "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_bidir_teoz.puml",
+      "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_self_half_teoz.puml",
+      "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_teoz.puml",
+      "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_teoz.puml",
+      "test-diagrams/perturbations/sequence-component-style-consumption/checker_092_style_create_teoz.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/endpoints_mixed_legacy.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/endpoints_mixed_teoz.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/endpoints_half_legacy.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/endpoints_half_teoz.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/body_sections_legacy.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/body_sections_teoz.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/body_fonts_legacy.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/body_fonts_teoz.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/create_shadow_legacy.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/create_shadow_teoz.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/create_reverse_legacy.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/create_reverse_teoz.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/create_kind_legacy.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/create_kind_teoz.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/factory_sequence_legacy.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/factory_sequence_teoz.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/actor_scoped_forward.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/actor_scoped_reverse.puml"
+    ],
+    "losses_by_mode": {
+      "cli_comparison": [],
+      "product_library": [],
+      "assisted_library": []
+    },
+    "archived_after_status_or_svg_differences": [],
+    "archived_before_status_or_svg_differences": []
+  },
+  "fresh": {
+    "before": {
+      "entries": 42,
+      "matches": 8,
+      "valid_mismatches": 28,
+      "invalid_references": 6,
+      "cli_exits": {
+        "0": 40,
+        "1": 2
+      },
+      "invalid_cli_exits": {
+        "0": 4,
+        "1": 2
+      },
+      "cli_panics": [],
+      "valid_cli_errors": [],
+      "library_render_panics": [],
+      "mode_exits": {
+        "cli_comparison": {
+          "1": 28,
+          "2": 6,
+          "0": 8
+        },
+        "product_library": {
+          "1": 28,
+          "2": 6,
+          "0": 8
+        },
+        "assisted_library": {
+          "1": 27,
+          "2": 6,
+          "0": 9
+        }
+      },
+      "comparison_helper_panics": {
+        "product_library": [],
+        "assisted_library": []
+      }
+    },
+    "after": {
+      "entries": 42,
+      "matches": 17,
+      "valid_mismatches": 19,
+      "invalid_references": 6,
+      "cli_exits": {
+        "0": 40,
+        "1": 2
+      },
+      "invalid_cli_exits": {
+        "0": 4,
+        "1": 2
+      },
+      "cli_panics": [],
+      "valid_cli_errors": [],
+      "library_render_panics": [],
+      "mode_exits": {
+        "cli_comparison": {
+          "1": 19,
+          "2": 6,
+          "0": 17
+        },
+        "product_library": {
+          "1": 19,
+          "2": 6,
+          "0": 17
+        },
+        "assisted_library": {
+          "1": 18,
+          "2": 6,
+          "0": 18
+        }
+      },
+      "comparison_helper_panics": {
+        "product_library": [],
+        "assisted_library": []
+      }
+    },
+    "by_claim": {
+      "sequence-created-participant-component": {
+        "entries": 6,
+        "matches": 3,
+        "valid_mismatches": 3,
+        "invalid_references": 0,
+        "cli_exits": {
+          "0": 6
+        },
+        "invalid_cli_exits": {},
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "0": 3,
+            "1": 3
+          },
+          "product_library": {
+            "0": 3,
+            "1": 3
+          },
+          "assisted_library": {
+            "0": 3,
+            "1": 3
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [],
+          "assisted_library": []
+        }
+      },
+      "sequence-endpoint-dressing-composition": {
+        "entries": 8,
+        "matches": 4,
+        "valid_mismatches": 2,
+        "invalid_references": 2,
+        "cli_exits": {
+          "0": 6,
+          "1": 2
+        },
+        "invalid_cli_exits": {
+          "1": 2
+        },
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 2,
+            "0": 4,
+            "2": 2
+          },
+          "product_library": {
+            "1": 2,
+            "0": 4,
+            "2": 2
+          },
+          "assisted_library": {
+            "1": 2,
+            "0": 4,
+            "2": 2
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [],
+          "assisted_library": []
+        }
+      },
+      "sequence-factory-command-viability": {
+        "entries": 10,
+        "matches": 3,
+        "valid_mismatches": 5,
+        "invalid_references": 2,
+        "cli_exits": {
+          "0": 10
+        },
+        "invalid_cli_exits": {
+          "0": 2
+        },
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 5,
+            "2": 2,
+            "0": 3
+          },
+          "product_library": {
+            "1": 5,
+            "2": 2,
+            "0": 3
+          },
+          "assisted_library": {
+            "1": 4,
+            "2": 2,
+            "0": 4
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [],
+          "assisted_library": []
+        }
+      },
+      "sequence-note-body-composition": {
+        "entries": 8,
+        "matches": 3,
+        "valid_mismatches": 3,
+        "invalid_references": 2,
+        "cli_exits": {
+          "0": 8
+        },
+        "invalid_cli_exits": {
+          "0": 2
+        },
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 3,
+            "0": 3,
+            "2": 2
+          },
+          "product_library": {
+            "1": 3,
+            "0": 3,
+            "2": 2
+          },
+          "assisted_library": {
+            "1": 3,
+            "0": 3,
+            "2": 2
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [],
+          "assisted_library": []
+        }
+      },
+      "sequence-queue-preferred-component": {
+        "entries": 6,
+        "matches": 2,
+        "valid_mismatches": 4,
+        "invalid_references": 0,
+        "cli_exits": {
+          "0": 6
+        },
+        "invalid_cli_exits": {},
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 4,
+            "0": 2
+          },
+          "product_library": {
+            "1": 4,
+            "0": 2
+          },
+          "assisted_library": {
+            "1": 4,
+            "0": 2
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [],
+          "assisted_library": []
+        }
+      },
+      "sequence-resolved-head-alignment": {
+        "entries": 4,
+        "matches": 2,
+        "valid_mismatches": 2,
+        "invalid_references": 0,
+        "cli_exits": {
+          "0": 4
+        },
+        "invalid_cli_exits": {},
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "0": 2,
+            "1": 2
+          },
+          "product_library": {
+            "0": 2,
+            "1": 2
+          },
+          "assisted_library": {
+            "0": 2,
+            "1": 2
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [],
+          "assisted_library": []
+        }
+      }
+    }
+  },
+  "model_ascii": {
+    "entries": 97,
+    "changed_ascii": [
+      {
+        "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_legacy.puml",
+        "cohort": "prior55"
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_teoz.puml",
+        "cohort": "prior55"
+      },
+      {
+        "source": "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/factory_sequence_legacy.puml",
+        "cohort": "prior55"
+      },
+      {
+        "source": "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/factory_sequence_teoz.puml",
+        "cohort": "prior55"
+      },
+      {
+        "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/endpoint_half_legacy.puml",
+        "cohort": "fresh42"
+      },
+      {
+        "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/endpoint_half_teoz.puml",
+        "cohort": "fresh42"
+      }
+    ],
+    "model_statuses": {
+      "0": 93,
+      "1": 4
+    }
+  },
+  "parent_overlap": {
+    "parent_entries": 1449,
+    "parent_unique_sources": 1375,
+    "overlap": 1097,
+    "parent_only_not_measured": 278,
+    "path_overlap": 1123,
+    "parent_only_paths_not_replayed": 326,
+    "note": "1123/326 is source-PATH membership. By bytes1141 parent entries share inputs/references,18 additional copied paths; unique byte overlap1097,278 unique parent-only byte strings. No parent-only path is added to measured denominator."
+  },
+  "cohorts": {
+    "preserved1966": {
+      "before": {
+        "entries": 1966,
+        "matches": 1350,
+        "valid_mismatches": 569,
+        "invalid_references": 47,
+        "cli_exits": {
+          "0": 1931,
+          "1": 35
+        },
+        "invalid_cli_exits": {
+          "0": 12,
+          "1": 35
+        },
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 569,
+            "0": 1350,
+            "2": 47
+          },
+          "product_library": {
+            "1": 569,
+            "0": 1350,
+            "2": 46,
+            "101": 1
+          },
+          "assisted_library": {
+            "1": 612,
+            "0": 1307,
+            "2": 46,
+            "101": 1
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [
+            "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/6d91548d31e343a3353c.puml"
+          ],
+          "assisted_library": [
+            "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/6d91548d31e343a3353c.puml"
+          ]
+        }
+      },
+      "after": {
+        "entries": 1966,
+        "matches": 1352,
+        "valid_mismatches": 567,
+        "invalid_references": 47,
+        "cli_exits": {
+          "0": 1931,
+          "1": 35
+        },
+        "invalid_cli_exits": {
+          "0": 12,
+          "1": 35
+        },
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 567,
+            "0": 1352,
+            "2": 47
+          },
+          "product_library": {
+            "1": 567,
+            "0": 1352,
+            "2": 46,
+            "101": 1
+          },
+          "assisted_library": {
+            "1": 610,
+            "0": 1309,
+            "2": 46,
+            "101": 1
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [
+            "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/6d91548d31e343a3353c.puml"
+          ],
+          "assisted_library": [
+            "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/6d91548d31e343a3353c.puml"
+          ]
+        }
+      }
+    },
+    "latest_checker31": {
+      "before": {
+        "entries": 31,
+        "matches": 18,
+        "valid_mismatches": 10,
+        "invalid_references": 3,
+        "cli_exits": {
+          "0": 29,
+          "1": 2
+        },
+        "invalid_cli_exits": {
+          "1": 2,
+          "0": 1
+        },
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "0": 18,
+            "1": 10,
+            "2": 3
+          },
+          "product_library": {
+            "0": 18,
+            "1": 10,
+            "2": 2,
+            "101": 1
+          },
+          "assisted_library": {
+            "0": 18,
+            "1": 10,
+            "2": 2,
+            "101": 1
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [
+            "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/c07a0272252e819e9277.puml"
+          ],
+          "assisted_library": [
+            "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/c07a0272252e819e9277.puml"
+          ]
+        }
+      },
+      "after": {
+        "entries": 31,
+        "matches": 28,
+        "valid_mismatches": 0,
+        "invalid_references": 3,
+        "cli_exits": {
+          "0": 29,
+          "1": 2
+        },
+        "invalid_cli_exits": {
+          "1": 2,
+          "0": 1
+        },
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "0": 28,
+            "2": 3
+          },
+          "product_library": {
+            "0": 28,
+            "2": 2,
+            "101": 1
+          },
+          "assisted_library": {
+            "0": 28,
+            "2": 2,
+            "101": 1
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [
+            "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/c07a0272252e819e9277.puml"
+          ],
+          "assisted_library": [
+            "/Users/marcelo/Library/Caches/rustuml-review-672-astra/preserved/c07a0272252e819e9277.puml"
+          ]
+        }
+      }
+    },
+    "maker22": {
+      "before": {
+        "entries": 22,
+        "matches": 3,
+        "valid_mismatches": 18,
+        "invalid_references": 1,
+        "cli_exits": {
+          "0": 22
+        },
+        "invalid_cli_exits": {
+          "0": 1
+        },
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 18,
+            "0": 3,
+            "2": 1
+          },
+          "product_library": {
+            "1": 18,
+            "0": 3,
+            "2": 1
+          },
+          "assisted_library": {
+            "1": 18,
+            "0": 3,
+            "2": 1
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [],
+          "assisted_library": []
+        }
+      },
+      "after": {
+        "entries": 22,
+        "matches": 19,
+        "valid_mismatches": 2,
+        "invalid_references": 1,
+        "cli_exits": {
+          "0": 22
+        },
+        "invalid_cli_exits": {
+          "0": 1
+        },
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "0": 19,
+            "1": 2,
+            "2": 1
+          },
+          "product_library": {
+            "0": 19,
+            "1": 2,
+            "2": 1
+          },
+          "assisted_library": {
+            "0": 19,
+            "1": 2,
+            "2": 1
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [],
+          "assisted_library": []
+        }
+      }
+    },
+    "actor2": {
+      "before": {
+        "entries": 2,
+        "matches": 0,
+        "valid_mismatches": 2,
+        "invalid_references": 0,
+        "cli_exits": {
+          "0": 2
+        },
+        "invalid_cli_exits": {},
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 2
+          },
+          "product_library": {
+            "1": 2
+          },
+          "assisted_library": {
+            "1": 2
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [],
+          "assisted_library": []
+        }
+      },
+      "after": {
+        "entries": 2,
+        "matches": 2,
+        "valid_mismatches": 0,
+        "invalid_references": 0,
+        "cli_exits": {
+          "0": 2
+        },
+        "invalid_cli_exits": {},
+        "cli_panics": [],
+        "valid_cli_errors": [],
+        "library_render_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "0": 2
+          },
+          "product_library": {
+            "0": 2
+          },
+          "assisted_library": {
+            "0": 2
+          }
+        },
+        "comparison_helper_panics": {
+          "product_library": [],
+          "assisted_library": []
+        }
+      }
+    }
+  },
+  "main_library": {
+    "before": {
+      "revision": "092cf5f",
+      "product_pass": 11181,
+      "eligible": 11251,
+      "assisted_pass": 10497,
+      "assisted_fail": 754,
+      "skipped": 1299,
+      "sequence_pass": 1411,
+      "sequence_total": 1411,
+      "log": "before/main-tiers-and-guards.log",
+      "exit": 101,
+      "standing": {
+        "entries": 1279,
+        "failures": 593,
+        "matches": 686
+      },
+      "units": [
+        "570",
+        "790"
+      ],
+      "cli": [
+        "13"
+      ]
+    },
+    "candidate": {
+      "revision": "672cd8f",
+      "product_pass": 11181,
+      "eligible": 11251,
+      "assisted_pass": 10497,
+      "assisted_fail": 754,
+      "skipped": 1299,
+      "sequence_pass": 1411,
+      "sequence_total": 1411,
+      "log": "candidate/initialized-main-guards.log",
+      "exit": 101,
+      "standing": {
+        "entries": 1310,
+        "failures": 596,
+        "matches": 714
+      },
+      "units": [
+        "572",
+        "791"
+      ],
+      "cli": [
+        "13"
+      ]
+    },
+    "intermediate": {
+      "revision": "c921945a",
+      "product_pass": 11177,
+      "eligible": 11251,
+      "assisted_pass": 10493,
+      "assisted_fail": 758,
+      "skipped": 1299,
+      "sequence_pass": 1407,
+      "sequence_total": 1411,
+      "log": "intermediate/main-tiers.log",
+      "exit": 101
+    }
+  },
+  "main_failure_lists_equal": {
+    "no_oracle_failure_names.txt": true,
+    "golden_failure_names.txt": true
+  },
+  "fresh_intent_disagreements": [
+    {
+      "name": "factory_unclosed_group",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/factory_unclosed_group.puml",
+      "claim": "sequence-factory-command-viability",
+      "axes": [
+        "unfinished group",
+        "decorated trigger"
+      ],
+      "intended_valid": false,
+      "valid": true,
+      "disagreement": true,
+      "exit": 0,
+      "bytes": 3580,
+      "diagram_type": "SEQUENCE",
+      "error_markers": [],
+      "xml_error": null,
+      "source_sha256": "84c2976da5b97ffacb1d8413d8e582bcda923c3a53c042d2556ee77c999b74d2",
+      "stdout_sha256": "100f03123d65bf5810d5fbf663985fc39288d02557f09d811788110d3b08536b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "factory_unclosed_box",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/factory_unclosed_box.puml",
+      "claim": "sequence-factory-command-viability",
+      "axes": [
+        "unfinished box",
+        "decorated trigger"
+      ],
+      "intended_valid": false,
+      "valid": true,
+      "disagreement": true,
+      "exit": 0,
+      "bytes": 3850,
+      "diagram_type": "SEQUENCE",
+      "error_markers": [],
+      "xml_error": null,
+      "source_sha256": "4e1a3bf3ac95d2f3decbb58c7e28cdf24f5175c31b2ef709480960f5e768dd29",
+      "stdout_sha256": "f185ff653ce45297bbc29cf955707455ce178e28a3acf6bfcba0dc6e8ece94f0",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "factory_bare_circle",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/factory_bare_circle.puml",
+      "claim": "sequence-factory-command-viability",
+      "axes": [
+        "missing head",
+        "both circles"
+      ],
+      "intended_valid": false,
+      "valid": true,
+      "disagreement": true,
+      "exit": 0,
+      "bytes": 3424,
+      "diagram_type": "CLASS",
+      "error_markers": [],
+      "xml_error": null,
+      "source_sha256": "6bdedb9b3168db602f6ba0a0d5afd1e8b0f4e57cd2e64814109df554243a4e1b",
+      "stdout_sha256": "a411ae182d9eafb647fed0d1f3867a4acdccca208d8da4a3a6cb97252d20139f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "create_duplicate_legacy",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/create_duplicate_legacy.puml",
+      "claim": "sequence-created-participant-component",
+      "axes": [
+        "create_duplicate",
+        "legacy"
+      ],
+      "intended_valid": false,
+      "valid": true,
+      "disagreement": true,
+      "exit": 0,
+      "bytes": 3897,
+      "diagram_type": "SEQUENCE",
+      "error_markers": [],
+      "xml_error": null,
+      "source_sha256": "2be32158dd5af11e82a04f1fbd96e261dda04de68f02e1a16b4ea9eae58df8bf",
+      "stdout_sha256": "646aa1228f767162b44ad16104e02e89b8ddda481a3b584c72e0bd783d0d1e6d",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "create_duplicate_teoz",
+      "source": "/Users/marcelo/Library/Caches/rustuml-review-672-astra/fresh/create_duplicate_teoz.puml",
+      "claim": "sequence-created-participant-component",
+      "axes": [
+        "create_duplicate",
+        "teoz"
+      ],
+      "intended_valid": false,
+      "valid": true,
+      "disagreement": true,
+      "exit": 0,
+      "bytes": 3072,
+      "diagram_type": "SEQUENCE",
+      "error_markers": [],
+      "xml_error": null,
+      "source_sha256": "77eab9005525f91936c2e1445c6e6706d78c434314460859f8c534d2f157ddfe",
+      "stdout_sha256": "d859848668f9fe701cd6cb39a7f34d935073574cb7d15177636ac0b81251b41b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "residue": "No acceptance: 19 fresh valid failures,6 invalid references and all historical failures retained; main ratchets/assisted/standing/guards/fmt/Clippy red. Native review not retried. No production/accounts/baselines/comparator/skip/targets/reader/shared style/font edits."
+}

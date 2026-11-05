@@ -1,0 +1,4 @@
+@startuml
+!pragma teoz true
+Vega -> Lyra: <b><size:21>crest</size></b>\n<i><size:9>hollow</size></i>\n<u><size:18>rise</size></u>
+@enduml

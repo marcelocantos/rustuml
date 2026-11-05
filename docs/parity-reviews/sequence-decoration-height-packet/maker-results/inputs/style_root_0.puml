@@ -1,0 +1,10 @@
+@startuml
+<style>
+root {
+LineColor #7854ab
+}
+</style>
+Wren -> Lark ++ : enter
+note right : inherited
+return complete
+@enduml

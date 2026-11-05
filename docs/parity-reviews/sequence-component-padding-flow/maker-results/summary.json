@@ -1,0 +1,39 @@
+{
+  "account_commit": "b080d075ef80064e3af27bd692443a42e54bbd1d",
+  "status": "candidate; independent checker required",
+  "observations": {
+    "before": {
+      "product": {
+        "0": 3,
+        "1": 45
+      },
+      "assisted": {
+        "0": 3,
+        "1": 45
+      },
+      "cli_equivalence": 48
+    },
+    "current": {
+      "product": {
+        "0": 36,
+        "1": 12
+      },
+      "assisted": {
+        "0": 36,
+        "1": 12
+      },
+      "cli_equivalence": 48
+    }
+  },
+  "logs": {
+    "/tmp/rustuml-seq-recovery/padding-main-3.log": "43811cfd15fb45a21fa4d2b24a75c7eaf6a418f04255701aa689684a53b9ce9b",
+    "/tmp/rustuml-seq-recovery/padding-main-2.log": "9422141dd455a4fd0f4d4f42e96b61485f5ad46dd845bc29a46fd2a599f1fa2c",
+    "/tmp/rustuml-seq-recovery/padding-assisted-3.log": "56e72c09118addd0a2ac1cb4c7c714aa1e8c6ff41ba317b9d445b22d04e53852",
+    "/tmp/rustuml-seq-recovery/padding-main.log": "11fc6afc5f740a14c5be011ada1f7f2a88e0357fd6886034b92f701155736ec4",
+    "/tmp/rustuml-seq-recovery/padding-current.log": "82e70689c2bbff3fbcde9a96edd9d162ef4694632fa37e5f3feec3a36a8f18a5",
+    "/tmp/rustuml-seq-recovery/padding-build.log": "8903818ccd02c7ceb415b9797bf66fe9f6d8540aa870747257339e05f8fd6434",
+    "/tmp/rustuml-seq-recovery/padding-before.log": "01192468fbb1373bab043f4c7880b39fbbd87c63ee9cc1326a0aa1c6795df9b7",
+    "/tmp/rustuml-seq-recovery/padding-build-2.log": "d6172e0b90ff91538d0be0ae3250d3719b000d769e7a7fc5eca2b18bc3c42807",
+    "/tmp/rustuml-seq-recovery/padding-build-3.log": "4e103deaac99eaca68a5a1484fca5e10f9c2d9dccd70d08709147fffb2e30637"
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "total": 68,
+  "counts": {
+    "1": 22,
+    "0": 39,
+    "2": 7
+  },
+  "java_exit": {
+    "0": 61,
+    "200": 7
+  },
+  "mechanisms": {
+    "sequence-return-configuration": {
+      "verdict": "rejected",
+      "counts": {
+        "1": 3,
+        "0": 3,
+        "2": 3
+      }
+    },
+    "sequence-reverse-self-component": {
+      "verdict": "rejected",
+      "counts": {
+        "0": 4,
+        "1": 1
+      }
+    },
+    "sequence-preferred-component-flow": {
+      "verdict": "rejected",
+      "counts": {
+        "0": 4,
+        "1": 1
+      }
+    },
+    "sequence-page-wrapper-hierarchy": {
+      "verdict": "rejected",
+      "counts": {
+        "1": 6
+      }
+    },
+    "sequence-teoz-event-history": {
+      "verdict": "rejected",
+      "counts": {
+        "2": 4,
+        "1": 2,
+        "0": 4
+      }
+    },
+    "sequence-teoz-callback-lifecycle": {
+      "verdict": "rejected",
+      "counts": {
+        "0": 5,
+        "1": 1
+      }
+    },
+    "sequence-teoz-group-tile-composition": {
+      "verdict": "rejected",
+      "counts": {
+        "0": 4,
+        "1": 1
+      }
+    },
+    "sequence-teoz-note-component-flow": {
+      "verdict": "rejected",
+      "counts": {
+        "0": 2,
+        "1": 2
+      }
+    },
+    "sequence-teoz-real-bound-capture": {
+      "verdict": "rejected",
+      "counts": {
+        "0": 5
+      }
+    },
+    "sequence-delay-label-allocation": {
+      "verdict": "rejected",
+      "counts": {
+        "0": 4,
+        "1": 1
+      }
+    },
+    "sequence-box-title-grammar": {
+      "verdict": "accepted",
+      "counts": {
+        "0": 4
+      }
+    },
+    "sequence-teoz-englober-margins": {
+      "verdict": "rejected",
+      "counts": {
+        "1": 4
+      }
+    }
+  },
+  "negative_cases": [
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create0.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create0.svg",
+      "source_sha256": "10e52600f992c7da59f0f3cf23c718c67e299f6c75e87b4ba363e1380f449ae9",
+      "golden_sha256": "6fcccb56d151ae131d7dcdcbe319a28751bc618f4ffcdc5c23c413b6472858de",
+      "axes": [
+        "declaration order",
+        "creation/destruction and close/reopen ownership"
+      ],
+      "result": "fail",
+      "classification": "negative-reference",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 200,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json",
+      "negative_behavior": "Rust accepts Java-negative input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create1.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order0_create1.svg",
+      "source_sha256": "fb4e409a4db8d4e60070d5dea36b6d7b3a28ac6725b02232a1b6980273022cd7",
+      "golden_sha256": "c5107c4d3211cce7614fb153ffef856c067d7f30a355d3c3f0ea0ab50ebc282b",
+      "axes": [
+        "declaration order",
+        "creation/destruction and close/reopen ownership"
+      ],
+      "result": "fail",
+      "classification": "negative-reference",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 200,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json",
+      "negative_behavior": "Rust accepts Java-negative input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create0.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create0.svg",
+      "source_sha256": "c8ec460832419ea8b415599db7496137dae2ada8a71de9933d7e970001f4939a",
+      "golden_sha256": "ec01b8a402cd8da4ec6f62da7356cda153be93195fb666c6926426246986314b",
+      "axes": [
+        "declaration order",
+        "creation/destruction and close/reopen ownership"
+      ],
+      "result": "fail",
+      "classification": "negative-reference",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 200,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json",
+      "negative_behavior": "Rust accepts Java-negative input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create1.puml",
+      "golden": "test-diagrams/perturbations/sequence-teoz-event-history/checker_d382_order1_create1.svg",
+      "source_sha256": "6e9783bcf61eb0ad45168e947c73439129cba3f8f222e3ef74dd7ff1a59d21f5",
+      "golden_sha256": "6321988b085807e07bad3af3c4f366309772c192293cdf444824ada50b9cb4e8",
+      "axes": [
+        "declaration order",
+        "creation/destruction and close/reopen ownership"
+      ],
+      "result": "fail",
+      "classification": "negative-reference",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 200,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json",
+      "negative_behavior": "Rust accepts Java-negative input"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_orphan_note.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_orphan_note.svg",
+      "source_sha256": "95c83f3738bf68d24d6fb4da163a659ae017d86cced4483d33ef1a44059a77fd",
+      "golden_sha256": "e3f5f7eb110a3b91bf738a3944bf1094c66c20ed7d96fd6a68227cd2b4dc7fee",
+      "axes": [
+        "source-guided edge control",
+        "orphan_note"
+      ],
+      "result": "fail",
+      "classification": "negative-reference",
+      "cli_exit": 1,
+      "comparator_exit": 2,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 200,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json",
+      "negative_behavior": "correct CLI rejection; not a positive SVG pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_external_twice.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_external_twice.svg",
+      "source_sha256": "f1c3ce0bc9462c552c80887a65e0db794680b2677ed7ddf01ab7e210858c1fb8",
+      "golden_sha256": "99746e4d19cdb0b08d4928f5e7984069e5e8ea497c1d68147ba0f1e2e0176553",
+      "axes": [
+        "source-guided edge control",
+        "external_twice"
+      ],
+      "result": "fail",
+      "classification": "negative-reference",
+      "cli_exit": 1,
+      "comparator_exit": 2,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 200,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json",
+      "negative_behavior": "correct CLI rejection; not a positive SVG pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.puml",
+      "golden": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.svg",
+      "source_sha256": "4f9bec1386be0b78218fa56dbc63970e74a7bcc10ea91f4bc8ea715e01fbb180",
+      "golden_sha256": "b60e68e4d40886fc24e7324168b312ec680f9e01c1c2d3311f2faa836e34b295",
+      "axes": [
+        "source-guided edge control",
+        "unknown_color"
+      ],
+      "result": "fail",
+      "classification": "negative-reference",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 200,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json",
+      "negative_behavior": "Rust accepts Java-negative input"
+    }
+  ],
+  "fresh_before_claim": false
+}

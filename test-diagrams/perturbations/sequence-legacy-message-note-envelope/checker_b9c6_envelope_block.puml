@@ -1,0 +1,11 @@
+@startuml
+participant Cedar
+participant Birch
+Cedar -> Birch ++ : begin
+Birch -> Cedar : body
+note right
+first line
+a much longer second line
+end note
+return after
+@enduml

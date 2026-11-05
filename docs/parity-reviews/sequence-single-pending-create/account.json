@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "evidence_import": "96e2561122e70ffe53dfa3f102cf18d199cc464f",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-single-pending-create",
+  "java_locations": [
+    "sequencediagram.SequenceDiagram#activate/#addMessage",
+    "sequencediagram.Message#compatibleForCreate",
+    "sequencediagram.MessageExo#compatibleForCreate",
+    "sequencediagram.graphic.LifeLine#setCreate",
+    "sequencediagram.teoz.LivingSpace#goCreate"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/sequence.rs",
+    "crates/rustuml-parser/src/parse/sequence.rs::validate_return_destinations",
+    "crates/rustuml-render/src/sequence.rs::sequence_create_message_indices/TeozHistory/spacing_pending_create"
+  ],
+  "invariant": "One overwritten pendingCreate stores the raw event index. Only that event attaches to the next compatible message and clears pending. Already attached creations survive; participant life origin is overwritten separately.",
+  "causal_divergence": "The renderer queues IDs, then Teoz infers CREATE ownership from the participant next message, attaching obsolete events. The spacing pass has another queued reconstruction. An extra head is an introduced regression even inside a previously failing SVG.",
+  "planned_change": "Derive an event-index attachment map with single pending state and Java compatibility validation; use it for heads, spacing and Teoz history. Preserve raw Create events and all attached repeats. Report raw events, attached heads, label counts and output-element changes separately from whole-case results.",
+  "perturbation_axes": [
+    "same/different overwritten participants versus consumed repeats",
+    "message direction/self/external compatibility and engine"
+  ]
+}

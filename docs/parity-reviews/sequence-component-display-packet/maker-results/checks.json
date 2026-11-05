@@ -1,0 +1,133 @@
+[
+  {
+    "name": "build",
+    "command": [
+      "cargo",
+      "build",
+      "--release",
+      "-p",
+      "rustuml",
+      "--bin",
+      "rustuml",
+      "-p",
+      "rustuml-oracle",
+      "--example",
+      "diff_one"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af",
+    "exit": 0
+  },
+  {
+    "name": "units",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--lib",
+      "-p",
+      "rustuml-parser",
+      "-p",
+      "rustuml-render"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af",
+    "exit": 0
+  },
+  {
+    "name": "cli",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "-p",
+      "rustuml",
+      "--test",
+      "pipe_mode"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af",
+    "exit": 0
+  },
+  {
+    "name": "main-tiers-and-guards",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--no-fail-fast",
+      "-p",
+      "rustuml-oracle",
+      "--test",
+      "golden_no_oracle",
+      "--test",
+      "golden_pairs",
+      "--test",
+      "parity_perturbations",
+      "--test",
+      "harness_guards",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af",
+    "exit": 101
+  },
+  {
+    "name": "format-owned",
+    "command": [
+      "rustfmt",
+      "--check",
+      "--edition",
+      "2024",
+      "--config",
+      "skip_children=true",
+      "crates/rustuml-parser/src/parse/mod.rs",
+      "crates/rustuml-parser/src/diagram/sequence.rs",
+      "crates/rustuml-parser/src/parse/sequence.rs",
+      "crates/rustuml-render/src/sequence.rs",
+      "crates/rustuml-render/src/ascii.rs"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af",
+    "exit": 0
+  },
+  {
+    "name": "format-workspace",
+    "command": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--",
+      "--check"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af",
+    "exit": 1
+  },
+  {
+    "name": "clippy",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "rustuml-parser",
+      "-p",
+      "rustuml-render",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af",
+    "exit": 101
+  },
+  {
+    "name": "clippy-render",
+    "command": [
+      "cargo",
+      "clippy",
+      "-p",
+      "rustuml-render",
+      "--no-deps",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af",
+    "exit": 101
+  }
+]

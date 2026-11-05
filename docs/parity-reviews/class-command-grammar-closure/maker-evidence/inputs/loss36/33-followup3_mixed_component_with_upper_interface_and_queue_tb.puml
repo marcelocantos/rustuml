@@ -1,0 +1,9 @@
+@startuml
+PaCkAgE OuterF3F {
+  COMPONENT GatewayF3F
+  INTERFACE "Admin Port F3F" AS AdminPortF3F
+  QuEuE "Retry Work F3F" As RetryQueueF3F
+}
+GatewayF3F ..> AdminPortF3F
+GatewayF3F --> RetryQueueF3F
+@enduml

@@ -1,0 +1,86 @@
+Class(
+    ClassDiagram {
+        meta: DiagramMeta {
+            title: Some(
+                "class prose\n[page text]",
+            ),
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\ntitle\nclass prose\n[page text]\nend title\nnode \"Measurement Bay\" {\nclass Probe\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        uid_events: [
+            Package(
+                "Measurement Bay",
+            ),
+            Entity(
+                "Measurement Bay.Probe",
+            ),
+        ],
+        entities: [
+            ClassEntity {
+                id: "Measurement Bay.Probe",
+                label: "Probe",
+                explicit_alias: false,
+                kind: Class,
+                is_static: false,
+                visibility: Default,
+                members: [],
+                stereotypes: [],
+                generic: None,
+                url: None,
+                url_tooltip: None,
+                spot_color: None,
+                spot_character: None,
+                color: None,
+                text_color: None,
+                line_color: None,
+                line_style: None,
+                source_line: 6,
+            },
+        ],
+        relationships: [],
+        association_classes: [],
+        together: [],
+        packages: [
+            Package {
+                name: "Measurement Bay",
+                kind: Node,
+                color: None,
+                entities: [
+                    "Measurement Bay.Probe",
+                ],
+                parent: None,
+                source_line: 5,
+                stereotypes: [],
+                display_name: None,
+                phantom: false,
+            },
+        ],
+        notes: [],
+        hide_show: [],
+        header_line: None,
+        footer_line: None,
+        title_line: Some(
+            1,
+        ),
+        caption_line: None,
+        legend_line: None,
+    },
+)

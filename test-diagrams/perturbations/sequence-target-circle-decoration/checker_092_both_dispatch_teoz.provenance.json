@@ -1,0 +1,196 @@
+{
+  "reference": {
+    "env_overrides": {},
+    "source_bytes": 97,
+    "name": "both_dispatch_teoz",
+    "remote_name": "both_dispatch_teoz.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/both_dispatch_teoz.puml",
+    "source_sha256": "44629e6b7ac180b027ffd8837d37785a825b8980b4cc49f389b28efae627ea27",
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 1.126789165995433,
+    "stdout_sha256": "333c830f76484e5844d0bba7d40e7505d66c141c8e22d25d81febb005a89d1f6",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+    "requested_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/both_dispatch_teoz.puml",
+    "execution_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/both_dispatch_teoz.puml",
+    "actual_wrapper_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "actual_java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "environment_overrides": {},
+    "mapping": {
+      "reason": "Existing wrapper requires an isolated cwd below scratch/; preserve unchanged wrapper and immutable manifest.",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/both_dispatch_teoz.puml",
+      "requested_remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/both_dispatch_teoz.puml",
+      "actual_remote_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/both_dispatch_teoz.puml"
+    }
+  },
+  "request": {
+    "name": "both_dispatch_teoz",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/both_dispatch_teoz.puml",
+    "remote_name": "both_dispatch_teoz.puml",
+    "remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/both_dispatch_teoz.puml",
+    "source_sha256": "44629e6b7ac180b027ffd8837d37785a825b8980b4cc49f389b28efae627ea27",
+    "bytes": 97,
+    "axes": [
+      "both circle dispatch",
+      "open dotted head/labels",
+      "teoz"
+    ],
+    "intended_reference": "valid sequence",
+    "source_validation": [
+      "sequencediagram.command.CommandArrow#getRegexConcat/#executeArg; Rose#createComponentArrow"
+    ],
+    "invocation": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "classification": {
+    "name": "both_dispatch_teoz",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 97,
+    "stdout_bytes": 3116,
+    "stderr_bytes": 0
+  },
+  "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_teoz.puml",
+  "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_teoz.svg",
+  "before": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/both_dispatch_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/both_dispatch_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "both_dispatch_teoz",
+    "axes": [
+      "both circle dispatch",
+      "open dotted head/labels",
+      "teoz"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "44629e6b7ac180b027ffd8837d37785a825b8980b4cc49f389b28efae627ea27",
+    "golden_sha256": "333c830f76484e5844d0bba7d40e7505d66c141c8e22d25d81febb005a89d1f6",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "cc3626ee56270f491a8f3c9994e655383199470da4e47aa6e00713288e8dd7c6",
+      "svg": "8c7e3eea62bf666e5b07.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 26, got 21\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"160px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:162px;height:160px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 162 160\"), (\"width\", \"162px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"70px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:267px;height:70px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 267 70\"), (\"width\", \"267px\"), (\"zoomAndPan\", \"magnify\")]\n  [3] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"entity\"), (\"data-qualified-name\", \"Finch\"), (\"data-source-line\", \"3\"), (\"id\", \"ent0002\")]\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"76.6211\"), (\"width\", \"8\"), (\"x\", \"36.6431\"), (\"y\", \"41.4883\")]\n    actual:   [(\"fill\", \"#F1F1F1\"), (\"height\", \"48\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"68.1006\"), (\"x\", \"7\"), (\"y\", \"7\")]\n  [5] tag mismatch: expected <line>, got <ellipse>\n  [6] tag mismatch: expected <g>, got <path>\n  [7] tag mismatch: expected <rect>, got <text>\n  [8] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"126.2422\"), (\"x2\", \"126.2422\"), (\"y1\", \"41.4883\"), (\"y2\", \"118.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"x1\", \"8\"), (\"x2\", \"74.1006\"), (\"y1\", \"39\"), (\"y2\", \"39\")]\n  [9] tag mismatch: expected <rect>, got <line>\n  [10] tag mismatch: expected <text>, got <g>\n  [11] <rect> depth mismatch: expected 3, got 4\n  [11] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"101.1919\"), (\"y\", \"10\")]\n    actual:   [(\"fill\", \"#F1F1F1\"), (\"height\", \"48\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"78.2861\"), (\"x\", \"173.9072\"), (\"y\", \"7\")]\n  [12] tag mismatch: expected <text>, got <ellipse>\n  [13] tag mismatch: expected <rect>, got <path>\n  [14] <text> depth mismatch: expected 3, got 4\n  [14] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"17\"), (\"y\", \"138.6445\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"202.9072\"), (\"y\", \"28.291\")]\n  [15] tag mismatch: expected <rect>, got <line>\n  [16] tag mismatch: expected <text>, got <line>\n  [17] tag mismatch: expected <ellipse>, got <g>\n  [18] tag mismatch: expected <ellipse>, got <path>\n  [19] tag mismatch: expected <line>, got <polygon>\n  [20] tag mismatch: expected <line>, got <text>\n\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 26, got 21\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"160px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:162px;height:160px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 162 160\"), (\"width\", \"162px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"70px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:267px;height:70px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 267 70\"), (\"width\", \"267px\"), (\"zoomAndPan\", \"magnify\")]\n  [3] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"entity\"), (\"data-qualified-name\", \"Finch\"), (\"data-source-line\", \"3\"), (\"id\", \"ent0002\")]\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"76.6211\"), (\"width\", \"8\"), (\"x\", \"36.6431\"), (\"y\", \"41.4883\")]\n    actual:   [(\"fill\", \"#F1F1F1\"), (\"height\", \"48\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"68.1006\"), (\"x\", \"7\"), (\"y\", \"7\")]\n  [5] tag mismatch: expected <line>, got <ellipse>\n  [6] tag mismatch: expected <g>, got <path>\n  [7] tag mismatch: expected <rect>, got <text>\n  [8] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"126.2422\"), (\"x2\", \"126.2422\"), (\"y1\", \"41.4883\"), (\"y2\", \"118.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"x1\", \"8\"), (\"x2\", \"74.1006\"), (\"y1\", \"39\"), (\"y2\", \"39\")]\n  [9] tag mismatch: expected <rect>, got <line>\n  [10] tag mismatch: expected <text>, got <g>\n  [11] <rect> depth mismatch: expected 3, got 4\n  [11] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"101.1919\"), (\"y\", \"10\")]\n    actual:   [(\"fill\", \"#F1F1F1\"), (\"height\", \"48\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"78.2861\"), (\"x\", \"173.9072\"), (\"y\", \"7\")]\n  [12] tag mismatch: expected <text>, got <ellipse>\n  [13] tag mismatch: expected <rect>, got <path>\n  [14] <text> depth mismatch: expected 3, got 4\n  [14] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"17\"), (\"y\", \"138.6445\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"202.9072\"), (\"y\", \"28.291\")]\n  [15] tag mismatch: expected <rect>, got <line>\n  [16] tag mismatch: expected <text>, got <line>\n  [17] tag mismatch: expected <ellipse>, got <g>\n  [18] tag mismatch: expected <ellipse>, got <path>\n  [19] tag mismatch: expected <line>, got <polygon>\n  [20] tag mismatch: expected <line>, got <text>\n\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 26, got 17\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"160px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:162px;height:160px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 162 160\"), (\"width\", \"162px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"160px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:162px;height:160px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 162 160\"), (\"width\", \"162px\"), (\"zoomAndPan\", \"magnify\")]\n  [3] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"entity\"), (\"data-qualified-name\", \"Finch\"), (\"id\", \"ent0002\")]\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"76.6211\"), (\"width\", \"8\"), (\"x\", \"36.6431\"), (\"y\", \"41.4883\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"100.1919\"), (\"y\", \"7\")]\n  [5] tag mismatch: expected <line>, got <ellipse>\n  [6] tag mismatch: expected <g>, got <path>\n  [7] tag mismatch: expected <rect>, got <text>\n  [8] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"126.2422\"), (\"x2\", \"126.2422\"), (\"y1\", \"41.4883\"), (\"y2\", \"118.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"x1\", \"101.1919\"), (\"x2\", \"150.2925\"), (\"y1\", \"39\"), (\"y2\", \"39\")]\n  [9] tag mismatch: expected <rect>, got <line>\n  [10] tag mismatch: expected <text>, got <g>\n  [11] <rect> depth mismatch: expected 3, got 4\n  [11] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"101.1919\"), (\"y\", \"10\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"60.2861\"), (\"x\", \"9\"), (\"y\", \"7\")]\n  [12] tag mismatch: expected <text>, got <ellipse>\n  [13] tag mismatch: expected <rect>, got <path>\n  [14] <text> depth mismatch: expected 3, got 4\n  [14] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"17\"), (\"y\", \"138.6445\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"38\"), (\"y\", \"28.291\")]\n  [15] tag mismatch: expected <rect>, got <line>\n  [16] tag mismatch: expected <text>, got <line>\n\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  },
+  "after": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/both_dispatch_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/both_dispatch_teoz.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "both_dispatch_teoz",
+    "axes": [
+      "both circle dispatch",
+      "open dotted head/labels",
+      "teoz"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "44629e6b7ac180b027ffd8837d37785a825b8980b4cc49f389b28efae627ea27",
+    "golden_sha256": "333c830f76484e5844d0bba7d40e7505d66c141c8e22d25d81febb005a89d1f6",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "cc3626ee56270f491a8f3c9994e655383199470da4e47aa6e00713288e8dd7c6",
+      "svg": "8c7e3eea62bf666e5b07.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 26, got 21\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"160px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:162px;height:160px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 162 160\"), (\"width\", \"162px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"70px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:267px;height:70px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 267 70\"), (\"width\", \"267px\"), (\"zoomAndPan\", \"magnify\")]\n  [3] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"entity\"), (\"data-qualified-name\", \"Finch\"), (\"data-source-line\", \"3\"), (\"id\", \"ent0002\")]\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"76.6211\"), (\"width\", \"8\"), (\"x\", \"36.6431\"), (\"y\", \"41.4883\")]\n    actual:   [(\"fill\", \"#F1F1F1\"), (\"height\", \"48\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"68.1006\"), (\"x\", \"7\"), (\"y\", \"7\")]\n  [5] tag mismatch: expected <line>, got <ellipse>\n  [6] tag mismatch: expected <g>, got <path>\n  [7] tag mismatch: expected <rect>, got <text>\n  [8] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"126.2422\"), (\"x2\", \"126.2422\"), (\"y1\", \"41.4883\"), (\"y2\", \"118.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"x1\", \"8\"), (\"x2\", \"74.1006\"), (\"y1\", \"39\"), (\"y2\", \"39\")]\n  [9] tag mismatch: expected <rect>, got <line>\n  [10] tag mismatch: expected <text>, got <g>\n  [11] <rect> depth mismatch: expected 3, got 4\n  [11] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"101.1919\"), (\"y\", \"10\")]\n    actual:   [(\"fill\", \"#F1F1F1\"), (\"height\", \"48\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"78.2861\"), (\"x\", \"173.9072\"), (\"y\", \"7\")]\n  [12] tag mismatch: expected <text>, got <ellipse>\n  [13] tag mismatch: expected <rect>, got <path>\n  [14] <text> depth mismatch: expected 3, got 4\n  [14] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"17\"), (\"y\", \"138.6445\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"202.9072\"), (\"y\", \"28.291\")]\n  [15] tag mismatch: expected <rect>, got <line>\n  [16] tag mismatch: expected <text>, got <line>\n  [17] tag mismatch: expected <ellipse>, got <g>\n  [18] tag mismatch: expected <ellipse>, got <path>\n  [19] tag mismatch: expected <line>, got <polygon>\n  [20] tag mismatch: expected <line>, got <text>\n\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 26, got 21\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"160px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:162px;height:160px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 162 160\"), (\"width\", \"162px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"70px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:267px;height:70px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 267 70\"), (\"width\", \"267px\"), (\"zoomAndPan\", \"magnify\")]\n  [3] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"entity\"), (\"data-qualified-name\", \"Finch\"), (\"data-source-line\", \"3\"), (\"id\", \"ent0002\")]\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"76.6211\"), (\"width\", \"8\"), (\"x\", \"36.6431\"), (\"y\", \"41.4883\")]\n    actual:   [(\"fill\", \"#F1F1F1\"), (\"height\", \"48\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"68.1006\"), (\"x\", \"7\"), (\"y\", \"7\")]\n  [5] tag mismatch: expected <line>, got <ellipse>\n  [6] tag mismatch: expected <g>, got <path>\n  [7] tag mismatch: expected <rect>, got <text>\n  [8] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"126.2422\"), (\"x2\", \"126.2422\"), (\"y1\", \"41.4883\"), (\"y2\", \"118.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"x1\", \"8\"), (\"x2\", \"74.1006\"), (\"y1\", \"39\"), (\"y2\", \"39\")]\n  [9] tag mismatch: expected <rect>, got <line>\n  [10] tag mismatch: expected <text>, got <g>\n  [11] <rect> depth mismatch: expected 3, got 4\n  [11] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"101.1919\"), (\"y\", \"10\")]\n    actual:   [(\"fill\", \"#F1F1F1\"), (\"height\", \"48\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"78.2861\"), (\"x\", \"173.9072\"), (\"y\", \"7\")]\n  [12] tag mismatch: expected <text>, got <ellipse>\n  [13] tag mismatch: expected <rect>, got <path>\n  [14] <text> depth mismatch: expected 3, got 4\n  [14] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"17\"), (\"y\", \"138.6445\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"202.9072\"), (\"y\", \"28.291\")]\n  [15] tag mismatch: expected <rect>, got <line>\n  [16] tag mismatch: expected <text>, got <line>\n  [17] tag mismatch: expected <ellipse>, got <g>\n  [18] tag mismatch: expected <ellipse>, got <path>\n  [19] tag mismatch: expected <line>, got <polygon>\n  [20] tag mismatch: expected <line>, got <text>\n\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  element count: expected 26, got 17\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"160px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:162px;height:160px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 162 160\"), (\"width\", \"162px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"160px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:162px;height:160px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 162 160\"), (\"width\", \"162px\"), (\"zoomAndPan\", \"magnify\")]\n  [3] <g> attr mismatch:\n    expected: []\n    actual:   [(\"class\", \"entity\"), (\"data-qualified-name\", \"Finch\"), (\"id\", \"ent0002\")]\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"76.6211\"), (\"width\", \"8\"), (\"x\", \"36.6431\"), (\"y\", \"41.4883\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"100.1919\"), (\"y\", \"7\")]\n  [5] tag mismatch: expected <line>, got <ellipse>\n  [6] tag mismatch: expected <g>, got <path>\n  [7] tag mismatch: expected <rect>, got <text>\n  [8] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"126.2422\"), (\"x2\", \"126.2422\"), (\"y1\", \"41.4883\"), (\"y2\", \"118.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"x1\", \"101.1919\"), (\"x2\", \"150.2925\"), (\"y1\", \"39\"), (\"y2\", \"39\")]\n  [9] tag mismatch: expected <rect>, got <line>\n  [10] tag mismatch: expected <text>, got <g>\n  [11] <rect> depth mismatch: expected 3, got 4\n  [11] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"101.1919\"), (\"y\", \"10\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"60.2861\"), (\"x\", \"9\"), (\"y\", \"7\")]\n  [12] tag mismatch: expected <text>, got <ellipse>\n  [13] tag mismatch: expected <rect>, got <path>\n  [14] <text> depth mismatch: expected 3, got 4\n  [14] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"17\"), (\"y\", \"138.6445\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"46.2861\"), (\"x\", \"38\"), (\"y\", \"28.291\")]\n  [15] tag mismatch: expected <rect>, got <line>\n  [16] tag mismatch: expected <text>, got <line>\n\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  }
+}

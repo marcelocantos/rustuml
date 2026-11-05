@@ -1,0 +1,7 @@
+@startuml
+skinparam stereotypePosition bottom
+control "EnormouslyLongCedarName" as Cedar3 <<s>>
+skinparam stereotypePosition top
+participant Wren
+Cedar3 -> Wren: export
+@enduml

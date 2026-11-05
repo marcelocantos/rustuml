@@ -1,0 +1,8 @@
+@startuml
+header
+Elm o-->>o Ash
+endheader
+class Birch
+class Pine
+Birch o-- Pine
+@enduml

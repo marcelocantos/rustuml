@@ -1,0 +1,19 @@
+@startuml
+!pragma teoz true
+participant Juniper
+participant Kestrel
+participant Lark
+alt enabled
+loop again
+Juniper -> Juniper: recursive
+rnote left
+<b>amber</b>
+line two
+line three
+end note
+end
+else disabled
+Kestrel -> Lark: bypass
+end
+Juniper -> Kestrel: final
+@enduml

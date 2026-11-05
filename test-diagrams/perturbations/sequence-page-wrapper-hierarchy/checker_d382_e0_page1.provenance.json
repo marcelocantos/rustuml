@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-page-wrapper-hierarchy/checker_d382_e0_page1.puml",
+  "source_sha256": "241ee45621b41b5ec06357c29add2a1e963faeadefb4c0010d98e546006335de",
+  "exit_code": 0,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1262012500083074,
+  "stdout_sha256": "662f81d2706628d1d1fa4e237ae9e90fc8e54dda6cb1b2f8646bef22ecc10dab",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

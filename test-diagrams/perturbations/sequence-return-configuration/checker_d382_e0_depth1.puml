@@ -1,0 +1,9 @@
+@startuml
+participant "Outpost" as O
+participant "Worker station" as W
+O -> W ++ : first
+note right: return owner remains
+return #335577 response
+return #orange fallback
+return inherited
+@enduml

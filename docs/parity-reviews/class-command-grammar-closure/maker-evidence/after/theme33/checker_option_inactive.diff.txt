@@ -1,0 +1,20 @@
+SVG structural differences:
+  [2] <linearGradient> attr mismatch:
+    expected: [("id", "g1w0064mupcgxy0"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+    actual:   [("id", "grscg1bjfgi9d0"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+  [5] <linearGradient> attr mismatch:
+    expected: [("id", "g1w0064mupcgxy1"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+    actual:   [("id", "grscg1bjfgi9d1"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+  [9] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "HemlockLedger"), ("data-source-line", "5"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "HemlockLedger"), ("data-source-line", "4"), ("id", "ent0002")]
+  [10] <rect> attr mismatch:
+    expected: [("fill", "url(#g1w0064mupcgxy0)"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#2FA4E7;stroke-width:1.0417;"), ("width", "130.2953"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "url(#grscg1bjfgi9d0)"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#2FA4E7;stroke-width:1.0417;"), ("width", "130.2953"), ("x", "17.7083"), ("y", "17.7083")]
+  [11] <rect> attr mismatch:
+    expected: [("fill", "url(#g1w0064mupcgxy1)"), ("height", "34.759"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:url(#g1w0064mupcgxy1);stroke-width:1.0417;"), ("width", "130.2953"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "url(#grscg1bjfgi9d1)"), ("height", "34.759"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:url(#grscg1bjfgi9d1);stroke-width:1.0417;"), ("width", "130.2953"), ("x", "17.7083"), ("y", "17.7083")]
+  [12] <rect> attr mismatch:
+    expected: [("fill", "url(#g1w0064mupcgxy1)"), ("height", "4.1667"), ("style", "stroke:url(#g1w0064mupcgxy1);stroke-width:1.0417;"), ("width", "130.2953"), ("x", "17.7083"), ("y", "48.3007")]
+    actual:   [("fill", "url(#grscg1bjfgi9d1)"), ("height", "4.1667"), ("style", "stroke:url(#grscg1bjfgi9d1);stroke-width:1.0417;"), ("width", "130.2953"), ("x", "17.7083"), ("y", "48.3007")]
+

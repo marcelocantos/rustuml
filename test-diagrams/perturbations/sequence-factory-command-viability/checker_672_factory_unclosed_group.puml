@@ -1,0 +1,6 @@
+@startuml
+participant Cedar
+participant Maple
+loop pending
+Cedar o-->>o Maple: first
+@enduml

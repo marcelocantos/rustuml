@@ -1,0 +1,6 @@
+@startuml
+participant Juniper
+participant Kestrel
+Juniper -> Kestrel: seed
+note across [[https://example.test/n]]: prose
+@enduml

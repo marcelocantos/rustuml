@@ -1,0 +1,5 @@
+@startuml
+Node -> Node ++ : inspect
+return #purple complete
+return again
+@enduml

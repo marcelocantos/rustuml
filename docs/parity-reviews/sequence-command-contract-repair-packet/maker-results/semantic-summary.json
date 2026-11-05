@@ -1,0 +1,8 @@
+{
+  "entries": 3111,
+  "changed_geometry": 58,
+  "changed_counts": 56,
+  "new_or_larger_excess_counts": [],
+  "model_entries": 3111,
+  "note": "Counts are diagnostics, not semantic completeness or a substitute for whole comparison. Java creation heads are not consistently grouped; raw ellipse/shape and label counts are retained rather than inventing a universal head-group metric."
+}

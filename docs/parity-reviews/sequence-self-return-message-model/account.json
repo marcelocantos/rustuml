@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-self-return-message-model",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.sequencediagram.command.CommandReturn#executeArg (lines 83-131)",
+    "net.sourceforge.plantuml.sequencediagram.graphic.Step1Message#prepareMessage, createMessageSelfArrow",
+    "net.sourceforge.plantuml.sequencediagram.graphic.MessageSelfArrow#getPreferredWidth, getStartingX, drawInternalU",
+    "net.sourceforge.plantuml.sequencediagram.graphic.ConstraintSet#getConstraintAfter, getConstraintBefore, getConstraint",
+    "net.sourceforge.plantuml.sequencediagram.graphic.LivingParticipantBox#getLiveThicknessAt"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::sequence_lifelines",
+    "crates/rustuml-render/src/sequence.rs::SequenceReturnContext",
+    "crates/rustuml-render/src/sequence.rs::render Event::Return spacing and paint branches",
+    "crates/rustuml-parser/src/diagram/sequence.rs::SequenceDiagram and Event clone support"
+  ],
+  "invariant": "A return whose resolved sender and receiver are the same participant is a dotted self-message, inheriting the activating arrow configuration and deactivating only when it owns an activation stack entry. Its horizontal constraint is against the adjacent participant or border, never against the same participant. Its vertical loop, live-segment width, group extent and paint use the self-message model.",
+  "causal_divergence": "Java CommandReturn constructs an ordinary Message with reversed participants and a dotted inherited ArrowConfiguration, then attaches deactivation if there was an activating message. Step1Message selects its self path by participant identity and reserves getConstraintAfter/Before with the self arrow width plus live-segment thickness. Rust retains a Return event, resolves its owners, but routes equal indices through the nonadjacent multi-span branch. At participant zero, right-1 underflows; elsewhere the width is incorrectly assigned to a preceding pair. Even avoiding that index would leave Return's straight-arrow paint and no-loop vertical advance wrong.",
+  "planned_change": "Retain the complete owning arrow configuration and whether a return owns deactivation in the resolved lifecycle context. Lower resolved self-return events to ordinary dotted self-message events in a render-local cloned model, then recompute geometry/lifelines through the existing self-message path. Preserve input source identity and event indices, never modify caller data or clamp/skip constraints. The lowering strictly reduces unresolved Return events, so any layout restart terminates. Add semantic equivalence tests for explicit dotted self-deactivation versus return syntax and fresh Java cases varying order, recursion depth, long labels and return ownership.",
+  "perturbation_axes": [
+    "Self participant first, middle or last in declared order, including a single-participant diagram",
+    "Nested activation and unwind depth, intervening delegated calls and fallback return without activation",
+    "Self-return label width and inherited filled/open/colored arrow configuration"
+  ],
+  "verification_plan": [
+    "Replay checker_live_stack_2 and checker_live_stack_3 through the real CLI and unchanged comparator",
+    "Generate valid fresh inputs and pinned Java SVGs across participant order, depth and return ownership; preserve every mismatch",
+    "Run focused units, all parser/render sequence tests, both full main tiers, all 874 isolated perturbations, built-in perturbations and unchanged guards"
+  ],
+  "journey_exception": "Fresh rustuml -tsvg -pipe runs exercise the shipped deterministic product with pinned live Java as reference. There is no provider/backend wire. In-process model-equivalence tests complement, but do not replace, source-to-SVG parity.",
+  "acceptance": "Maker candidate only. Root schedules a fresh independent checker; any remaining geometry or style failures remain nonaccepted dependencies."
+}

@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-container-only-factory-closure",
+  "reviewer": {
+    "task_id": "t3-2740aefa-independent-class-container-checker",
+    "model": "gpt-6-astra (high), Codex harness; user explicitly selected inherited Codex; no children"
+  },
+  "account_commit": "77468aaed3478d586da411b2c98811dd52e31ea4",
+  "implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 18916d312c32340b0a674e15259dc3031ea57acf -- crates/rustuml-parser crates/rustuml-render",
+    "git show bed3b50ca08e12d8ada612791cf07393617b2041 -- crates/rustuml-parser crates/rustuml-render",
+    "CARGO_TARGET_DIR=/tmp/rustuml-checker2740-target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "python3 /tmp/checker2740_generate.py",
+    "python3 /tmp/checker2740_followup.py",
+    "python3 /tmp/checker2740_run.py fresh",
+    "python3 /tmp/checker2740_run.py current",
+    "python3 /tmp/checker2740_run.py maker"
+  ],
+  "findings": [
+    "The parser can now select a successful package-only class trial and retains empty group endpoints. Two fresh package/queue examples pass.",
+    "Empty linked node and cloud examples with URL and aliases are valid Java but fail strict output geometry. Their AST preservation is diagnostic only; image/routing dependencies block acceptance of the claimed factory path as an end-to-end feature."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-container-only-factory-closure/checker/empty_cloud.puml",
+      "golden": "test-diagrams/perturbations/class-container-only-factory-closure/checker/empty_cloud.svg",
+      "axes": [
+        "empty container kind and URL",
+        "two linked aliased containers"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-container-only-factory-closure/empty_cloud.puml",
+      "source_sha256": "272001eb1f51a61821a6b56585784904bdf6239e6081b14a7142475303de746b",
+      "java_sha256": "3493cdd92b8029ea6320867eb76d1a8afc198c8b1fec8d9afbafd8fb48321015",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-container-only-factory-closure/empty_cloud"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-container-only-factory-closure/checker/empty_node.puml",
+      "golden": "test-diagrams/perturbations/class-container-only-factory-closure/checker/empty_node.svg",
+      "axes": [
+        "empty container kind and URL",
+        "two linked aliased containers"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-container-only-factory-closure/empty_node.puml",
+      "source_sha256": "2abaf48bc7a39c558af14afdee989d38acf7b71516f55d614c3e47f525212f36",
+      "java_sha256": "e5c6583e990537887b7a795b6dc6cd4e0a710c997f608f88f0073e8d10869e3f",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-container-only-factory-closure/empty_node"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-container-only-factory-closure/checker/empty_package.puml",
+      "golden": "test-diagrams/perturbations/class-container-only-factory-closure/checker/empty_package.svg",
+      "axes": [
+        "empty container kind and URL",
+        "two linked aliased containers"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-container-only-factory-closure/empty_package.puml",
+      "source_sha256": "f2a498deddb1992b869097e47ec9fb21c553c2fca068a37f2c8eac8285b68cca",
+      "java_sha256": "15a906b9a51ae27925eb7c089b1b74aa41c63325ab1de9147265d5f661747a55",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-container-only-factory-closure/empty_package"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-container-only-factory-closure/checker/empty_queue.puml",
+      "golden": "test-diagrams/perturbations/class-container-only-factory-closure/checker/empty_queue.svg",
+      "axes": [
+        "empty container kind and URL",
+        "two linked aliased containers"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-container-only-factory-closure/empty_queue.puml",
+      "source_sha256": "c9cf229cb1a35757141cd58ac46a2c66e759e7a0194a5be5b7b13da9c045e399",
+      "java_sha256": "e9b3c63ef89b73bedebe95eb22113ae0d42e767add35abe06e81a56df047f61e",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-container-only-factory-closure/empty_queue"
+    }
+  ],
+  "verdict": "rejected",
+  "tested_combined_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "parent_base": "ea136c78ff71d2be074b39d2ffe0484decba0aec",
+  "original_account_commit": "42e8ff78466d3b6c6b7c3f2a1defdbf8d09c5ba0",
+  "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+  "phase_mapping": {
+    "mechanism": "class-container-only-factory-closure",
+    "account_path": "docs/parity-reviews/class-container-only-factory-closure/account.json",
+    "original_account_commit": "42e8ff78466d3b6c6b7c3f2a1defdbf8d09c5ba0",
+    "picked_account_commit": "77468aaed3478d586da411b2c98811dd52e31ea4",
+    "account_history_original": [
+      "42e8ff78466d3b6c6b7c3f2a1defdbf8d09c5ba0",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "77468aaed3478d586da411b2c98811dd52e31ea4",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "29832886cae3561ab36ce73ddf98fcd3d3cbc8a2b3b29a187284ca44e488cab5",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  "dependencies": [
+    "class-group-endpoint-routing",
+    "class-single-svek-envelope-origin"
+  ],
+  "scope": "Only the stated mechanism at the full combined tested revision; not packet acceptance and not certification of an extracted subset. Failed applicable held-outs are blocking. Invalid grammar references are negatives, never positive comparisons.",
+  "reference_profile": "Source-pinned Java 71806a2, raw CLI -tsvg -pipe for new inputs, consistent with owner-approved raw CLI/file policy b62d8ce967b6dda7d85bb6dc28ff92509f6066f9. All preexisting/maker reference bytes unchanged; historical GET corpus/counts reported separately. Historical binary/font/Graphviz equivalence unproven. TIM checker owns independent reader verification; no TIM production/assertion imported.",
+  "support": "docs/parity-reviews/class-command-grammar-closure/checker-support/REPORT.md",
+  "observed_counts": {
+    "mismatch": 2,
+    "pass": 2
+  },
+  "reference_policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9"
+}

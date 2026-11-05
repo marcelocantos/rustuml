@@ -156,6 +156,63 @@ machine-local scratch evidence, not a portable checkout or a checker verdict.
 
 ## Standing gates
 
+### Campaign reference execution on Monkey Man
+
+At the owner's request, new campaign Java invocations run on Monkey Man, not
+the origin Mac, where repeated JVM launches interrupted desktop focus. This
+includes source probes and helper programs. Rust builds and comparisons against
+existing references may continue locally.
+
+The operational runner is `/Users/marcelo/rustuml-reference/bin/reference` on
+`marcelo@192.168.1.112`, accessed through existing SSH trust and credentials.
+The exact campaign JAR was transferred and its SHA256 verified. The wrapper
+checks that hash on every launch, forces headless AWT, UTF-8 and `en_AU`, uses
+absolute Java/dot paths, and preserves raw stdin, stdout, stderr and exit status.
+It does not expose an HTTP service or apply GET source normalization.
+
+Allocate an isolated remote directory per worker/job:
+
+```sh
+ssh -T -o BatchMode=yes marcelo@192.168.1.112 \
+  /Users/marcelo/rustuml-reference/bin/new-worker
+```
+
+Use the returned path as `WORKER_PATH` below, replacing the placeholder before
+execution. Stage inputs and includes with SCP/SFTP while preserving their relative
+hierarchy. Never share a mutable directory between concurrent jobs.
+
+```sh
+ssh -T -o BatchMode=yes marcelo@192.168.1.112 \
+  '/Users/marcelo/rustuml-reference/bin/reference --cwd WORKER_PATH --timezone GMT+11:00 -- -pipe -tsvg' \
+  < input.puml > output.svg 2> output.stderr
+```
+
+Timezone is explicit when required by the reference; omit `--timezone` only when
+the declared experiment uses the host default (`Australia/Melbourne`). File mode
+uses `-- -tsvg input.puml` in the staged directory. External stdlib/include files
+must be staged from the pinned source, not silently replaced by another version.
+Collect outputs before deleting a job's directory. SSH failures are distinct
+from PlantUML's status.
+
+Java source probes are staged remotely and use `--probe REMOTE_SOURCE.java`.
+For probes importing PlantUML, add `--classpath REMOTE_HELPER_DIRECTORY`, which
+includes the pinned JAR. Probe arguments follow `--`. No origin-side JVM is
+needed to compile or run the probe. The complete invocation contract and live
+readiness record are in the remote operational directory's `README.md` and
+`readiness.json`.
+
+The existing remote runtime is Homebrew OpenJDK 21.0.5 and Graphviz 12.2.0 on
+macOS arm64, differing from the origin versions above. No installs or global
+changes were needed. Seven supplied source/reference pairs passed strict parsed
+XML equality, including both sequence font controls, a nested sequence group,
+class/container layout and the three raw-reader historical counterparts. This
+calibration retains geometry, metadata and IDs; it ignores only XML declarations,
+comments and processing instructions. It does not establish universal environment
+equivalence. Record these runtime versions with new references and investigate
+any new environment-dependent discrepancy without rewriting preserved evidence.
+
+### Local Rust verification
+
 From the RustUML checkout, after initializing its actual golden submodule:
 
 ```sh

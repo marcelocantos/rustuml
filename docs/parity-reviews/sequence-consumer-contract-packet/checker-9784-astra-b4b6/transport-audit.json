@@ -1,0 +1,16 @@
+[
+  {
+    "batch": "rustuml-sequence-consumer-checker-b4b6",
+    "transport_sha256": "97904c888cc415a7bd37b1c17287e29ac2791fb937b6d2b6aa7612c85f5a70fc",
+    "decoded_transport_equals_result": true,
+    "uploaded_original_bundle_fields_equal": true,
+    "uploaded_exact_manifest_bytes_equal": true
+  },
+  {
+    "batch": "followup",
+    "transport_sha256": "2ca0fa90a99d52f0f7c3ef2c7a26428155960795349144dfb9bf1c6d8d0080da",
+    "decoded_transport_equals_result": true,
+    "uploaded_original_bundle_fields_equal": true,
+    "uploaded_exact_manifest_bytes_equal": true
+  }
+]

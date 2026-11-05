@@ -1,0 +1,170 @@
+{
+  "before": {
+    "units": [
+      "579",
+      "798"
+    ],
+    "ascii": 12,
+    "cli": [
+      "13"
+    ],
+    "product": [
+      "11181",
+      "11251"
+    ],
+    "assisted": [
+      "12550",
+      "10497",
+      "754",
+      "1299"
+    ],
+    "sequence": [
+      "1411",
+      "1411"
+    ],
+    "guards": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ],
+      [
+        "4",
+        "2"
+      ],
+      [
+        "1",
+        "1"
+      ]
+    ],
+    "standing_failures": 660,
+    "renderer_clippy_errors": 19,
+    "no_oracle_failure_names.txt": {
+      "sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+      "entries": 70
+    },
+    "golden_failure_names.txt": {
+      "sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+      "entries": 754
+    },
+    "standing_entries": 1576,
+    "standing_matches": 916
+  },
+  "after": {
+    "units": [
+      "581",
+      "800"
+    ],
+    "ascii": 12,
+    "cli": [
+      "13"
+    ],
+    "product": [
+      "11181",
+      "11251"
+    ],
+    "assisted": [
+      "12550",
+      "10497",
+      "754",
+      "1299"
+    ],
+    "sequence": [
+      "1411",
+      "1411"
+    ],
+    "guards": [
+      [
+        "0",
+        "1"
+      ],
+      [
+        "0",
+        "1"
+      ],
+      [
+        "4",
+        "2"
+      ],
+      [
+        "1",
+        "1"
+      ]
+    ],
+    "standing_failures": 693,
+    "renderer_clippy_errors": 19,
+    "no_oracle_failure_names.txt": {
+      "sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+      "entries": 70
+    },
+    "golden_failure_names.txt": {
+      "sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+      "entries": 754
+    },
+    "standing_entries": 1724,
+    "standing_matches": 1031
+  },
+  "standing_denominator_note": "Before exact production has 1576 checked-in perturbations; evidence import adds 148 before after-production snapshot (1724). This is not a like-for-like standing comparison. The independent 2549 CLI replay freezes both sides to identical entries.",
+  "clippy_messages_equal": true,
+  "clippy_messages": {
+    "before": {
+      "clippy": [
+        "function `looks_like_description_bracket_command` is never used",
+        "could not compile `rustuml-parser` (lib) due to 1 previous error"
+      ],
+      "clippy-render": [
+        "usage of `bool::then` in `filter_map`",
+        "this `let...else` may be rewritten with the `?` operator",
+        "this method chain can be written more clearly with `if .. else ..`",
+        "using `chunks_exact` with a constant chunk size",
+        "using `chunks_exact` with a constant chunk size",
+        "using `chunks_exact` with a constant chunk size",
+        "using `chunks_exact` with a constant chunk size",
+        "this `if` has identical blocks",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "using `chunks_exact` with a constant chunk size",
+        "could not compile `rustuml-render` (lib) due to 19 previous errors"
+      ]
+    },
+    "after": {
+      "clippy": [
+        "function `looks_like_description_bracket_command` is never used",
+        "could not compile `rustuml-parser` (lib) due to 1 previous error"
+      ],
+      "clippy-render": [
+        "usage of `bool::then` in `filter_map`",
+        "this `let...else` may be rewritten with the `?` operator",
+        "this method chain can be written more clearly with `if .. else ..`",
+        "using `chunks_exact` with a constant chunk size",
+        "using `chunks_exact` with a constant chunk size",
+        "using `chunks_exact` with a constant chunk size",
+        "using `chunks_exact` with a constant chunk size",
+        "this `if` has identical blocks",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "redundant reference in `write!` argument",
+        "using `chunks_exact` with a constant chunk size",
+        "could not compile `rustuml-render` (lib) due to 19 previous errors"
+      ]
+    }
+  }
+}

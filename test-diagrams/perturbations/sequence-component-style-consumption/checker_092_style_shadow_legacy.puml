@@ -1,0 +1,21 @@
+@startuml
+<style>
+root {
+Shadowing 5
+}
+sequenceDiagram {
+participant {
+Shadowing 7
+}
+activationBox {
+Shadowing 0
+}
+note {
+Shadowing 0
+}
+}
+</style>
+Quartz -> Finch ++ : shadowed
+note right : unshadowed
+return release
+@enduml

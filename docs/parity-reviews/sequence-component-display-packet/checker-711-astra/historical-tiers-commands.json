@@ -1,0 +1,56 @@
+[
+  {
+    "name": "before",
+    "revision": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--no-fail-fast",
+      "-p",
+      "rustuml-oracle",
+      "--test",
+      "golden_no_oracle",
+      "--test",
+      "golden_pairs",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "exit": 101,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/.cache/rustuml-review-711-5c023380/target-before",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "reason": "One execution per distinct production revision, explicitly testing initial regression and final recovery."
+  },
+  {
+    "name": "intermediate",
+    "revision": "cf3eafb293de2f01699399321d2220c4de9eb28c",
+    "command": [
+      "cargo",
+      "test",
+      "--release",
+      "--no-fail-fast",
+      "-p",
+      "rustuml-oracle",
+      "--test",
+      "golden_no_oracle",
+      "--test",
+      "golden_pairs",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "exit": 101,
+    "environment": {
+      "CARGO_TARGET_DIR": "/Users/marcelo/.cache/rustuml-review-711-5c023380/target-intermediate",
+      "CARGO_BUILD_JOBS": "4",
+      "RAYON_NUM_THREADS": "4",
+      "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib"
+    },
+    "reason": "One execution per distinct production revision, explicitly testing initial regression and final recovery."
+  }
+]

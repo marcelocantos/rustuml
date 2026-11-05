@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Birch
+[-> Birch ++ : enter
+& return #123abc80 leave
+@enduml

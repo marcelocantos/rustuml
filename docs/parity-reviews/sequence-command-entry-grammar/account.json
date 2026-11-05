@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "9784e412146e3ece634d88ea0a1bddd6b42a82b6",
+  "evidence_import": "e654acb9ba31aec53329c739e8151d5bf46659f7",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-command-entry-grammar",
+  "java_locations": [
+    "sequencediagram.command.CommandBoxStart#getRegexConcat",
+    "sequencediagram.command.CommandAutonumberResume#getRegexConcat",
+    "command.note.sequence.FactorySequenceNoteAcrossCommand#getRegexConcatSingleLine/getRegexConcatMultiLine/executeInternal"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::SeqParser::try_box/try_autonumber/try_note"
+  ],
+  "invariant": "Command entry obeys Java regex composition rather than a stricter Rust literal-space prefix. Across has independent shape grammar and rejects the accross spelling at execution.",
+  "causal_divergence": "Rust box SPACE, note SPACE across and autonumber SPACE resume gates bypass Pattern2. The brief reversed ownership of those literal gates: Java uses %s in these positions, confirmed by the source and independent source-audit literal-prefixes finding.",
+  "planned_change": "Replace manual entry gates with source-derived regex captures: optional box title/color, resume whitespace and across shape/optional color/colon/body. Preserve existing supported title/color behavior; do not alter nested-box ownership/envelopes. Reject recognized accross command through the source execution rule.",
+  "perturbation_axes": [
+    "NBSP/FF/VT/tab/ASCII separators and title presence",
+    "inline/multiline across shapes, resume state and both engines"
+  ]
+}

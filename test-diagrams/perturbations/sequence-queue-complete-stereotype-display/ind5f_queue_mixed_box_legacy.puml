@@ -1,0 +1,11 @@
+@startuml
+box Habitat
+collections Pages <<batch>>
+queue Q <<dispatch>>
+actor Kite <<pilot>>
+database Store <<archive>>
+end box
+Kite -> Q: enqueue
+Q -> Store: persist
+Store -> Pages: publish
+@enduml

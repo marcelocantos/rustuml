@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Finch
+[->o Finch ++ : inner target
+Finch -->>o] : outer target
+[o<-- Finch : left target
+deactivate Finch
+@enduml

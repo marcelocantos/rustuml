@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "bce6bea405d8b5efd55136f4768117115e7f634f",
+  "evidence_import": "f3913f3cb7094d8aedd5618f1ba27830a2804713",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-note-over-command-domain",
+  "java_locations": [
+    "command.note.sequence.FactorySequenceNoteOnArrowCommand#getRegexConcatSingleLine/#getRegexConcatMultiLine",
+    "command.note.sequence.FactorySequenceNoteCommand#getRegexConcatSingleLine/#getRegexConcatMultiLine",
+    "command.note.sequence.FactorySequenceNoteOverSeveralCommand#getRegexConcatSingleLine"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::try_note"
+  ],
+  "invariant": "Bare arrow-attached note grammar accepts left/right only; over requires named participant(s). Across has its own command and remains allowed.",
+  "causal_divergence": "Combined Rust note regex makes the participant optional for over and accepts Java-invalid bare note over in both engines.",
+  "planned_change": "Reject the combined-regex over branch when no participant capture exists, letting command viability reject it. Preserve named over, across and attached left/right. No fallback participant or change to external owner.",
+  "perturbation_axes": [
+    "inline/multiline bare over negatives versus named over/across positives",
+    "before/after external and ordinary messages, both engines"
+  ]
+}

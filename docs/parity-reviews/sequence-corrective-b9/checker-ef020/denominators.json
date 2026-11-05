@@ -1,0 +1,13 @@
+{
+  "replayed_entries": 1901,
+  "replayed_unique_sources": 1853,
+  "replayed_duplicate_entries": 48,
+  "fresh_entries": 37,
+  "fresh_unique_sources": 37,
+  "fresh_overlap_with_replayed": 0,
+  "copied_retained_theme_pairs": 2,
+  "new_registered_pairs": 39,
+  "parent_entries": 1449,
+  "parent_overlap_old_entries": 1123,
+  "parent_only_unmeasured": 326
+}

@@ -1,0 +1,196 @@
+{
+  "reference": {
+    "env_overrides": {},
+    "source_bytes": 109,
+    "name": "exo_source_legacy",
+    "remote_name": "exo_source_legacy.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_source_legacy.puml",
+    "source_sha256": "b86c4e518fc16ad3cd6ea51998d6301b27f2756d120ed9c8337005f90e4e29b3",
+    "exit_code": 0,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 1.1003463340020971,
+    "stdout_sha256": "49167857c3aa5201fdcd3ea4eccfe36bbbfafbe17c695a94d200c39028e175d9",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+    "requested_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/exo_source_legacy.puml",
+    "execution_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/exo_source_legacy.puml",
+    "actual_wrapper_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "actual_java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "environment_overrides": {},
+    "mapping": {
+      "reason": "Existing wrapper requires an isolated cwd below scratch/; preserve unchanged wrapper and immutable manifest.",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_source_legacy.puml",
+      "requested_remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/exo_source_legacy.puml",
+      "actual_remote_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/exo_source_legacy.puml"
+    }
+  },
+  "request": {
+    "name": "exo_source_legacy",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_source_legacy.puml",
+    "remote_name": "exo_source_legacy.puml",
+    "remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/exo_source_legacy.puml",
+    "source_sha256": "b86c4e518fc16ad3cd6ea51998d6301b27f2756d120ed9c8337005f90e4e29b3",
+    "bytes": 109,
+    "axes": [
+      "external source decoration",
+      "border/direction/activation",
+      "legacy"
+    ],
+    "intended_reference": "valid sequence",
+    "source_validation": [
+      "sequencediagram.command.CommandExoArrowLeft/Right#getRegexConcat; CommandExoArrowAny#executeArg"
+    ],
+    "invocation": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "classification": {
+    "name": "exo_source_legacy",
+    "exit": 0,
+    "xml": true,
+    "diagram_type": "SEQUENCE",
+    "classification": "valid_sequence",
+    "source_bytes": 109,
+    "stdout_bytes": 3136,
+    "stderr_bytes": 0
+  },
+  "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_legacy.puml",
+  "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_exo_source_legacy.svg",
+  "before": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_source_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_source_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "exo_source_legacy",
+    "axes": [
+      "external source decoration",
+      "border/direction/activation",
+      "legacy"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "b86c4e518fc16ad3cd6ea51998d6301b27f2756d120ed9c8337005f90e4e29b3",
+    "golden_sha256": "49167857c3aa5201fdcd3ea4eccfe36bbbfafbe17c695a94d200c39028e175d9",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "69f1d911c61fb95349d30a805344bc264fa7a0fad65436284142bbe192224abe",
+      "svg": "8f65214da13640238d7e.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"152px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:225px;height:152px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 225 152\"), (\"width\", \"225px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"152px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:209px;height:152px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 209 152\"), (\"width\", \"209px\"), (\"zoomAndPan\", \"magnify\")]\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"106.4917\"), (\"y\", \"67.7988\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"98.4917\"), (\"y\", \"67.7988\")]\n  [7] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"78.6211\"), (\"width\", \"8\"), (\"x\", \"107.4917\"), (\"y\", \"36.4883\")]\n    actual:   [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"78.6211\"), (\"width\", \"8\"), (\"x\", \"99.4917\"), (\"y\", \"36.4883\")]\n  [8] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"111.4414\"), (\"x2\", \"111.4414\"), (\"y1\", \"36.4883\"), (\"y2\", \"115.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"103.4414\"), (\"x2\", \"103.4414\"), (\"y1\", \"36.4883\"), (\"y2\", \"115.1094\")]\n  [10] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"86.4414\"), (\"y\", \"5\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"78.4414\"), (\"y\", \"5\")]\n  [11] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"93.4414\"), (\"y\", \"25.5352\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"85.4414\"), (\"y\", \"25.5352\")]\n  [13] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"86.4414\"), (\"y\", \"114.1094\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"78.4414\"), (\"y\", \"114.1094\")]\n  [14] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"93.4414\"), (\"y\", \"134.6445\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"85.4414\"), (\"y\", \"134.6445\")]\n  [16] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"106.4917\"), (\"y\", \"67.7988\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"98.4917\"), (\"y\", \"67.7988\")]\n  [18] <ellipse> attr mismatch:\n    expected: [(\"cx\", \"7.5\"), (\"cy\", \"67.0488\"), (\"fill\", \"#000000\"), (\"rx\", \"4\"), (\"ry\", \"4\"), (\"style\", \"stroke:#181818;stroke-width:1.5;\")]\n    actual:   [(\"cx\", \"-0.5\"), (\"cy\", \"67.0488\"), (\"fill\", \"#000000\"), (\"rx\", \"4\"), (\"ry\", \"4\"), (\"style\", \"stroke:#181818;stroke-width:1.5;\")]\n  [19] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"94.4917,63.7988,104.4917,67.7988,94.4917,71.7988,98.4917,67.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"86.4917,63.7988,96.4917,67.7988,86.4917,71.7988,90.4917,67.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [20] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"12\"), (\"x2\", \"100.4917\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"4\"), (\"x2\", \"92.4917\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n  [21] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.4917\"), (\"x\", \"15\"), (\"y\", \"63.0566\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.4917\"), (\"x\", \"7\"), (\"y\", \"63.0566\")]\n  [23] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"122.4917,93.1094,112.4917,97.1094,122.4917,101.1094,118.4917,97.1094\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"114.4917,93.1094,104.4917,97.1094,114.4917,101.1094,110.4917,97.1094\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [24] <ellipse> attr mismatch:\n    expected: [(\"cx\", \"211.1191\"), (\"cy\", \"96.3594\"), (\"fill\", \"#000000\"), (\"rx\", \"4\"), (\"ry\", \"4\"), (\"style\", \"stroke:#181818;stroke-width:1.5;\")]\n    actual:   [(\"cx\", \"203.1191\"), (\"cy\", \"96.3594\"), (\"fill\", \"#000000\"), (\"rx\", \"4\"), (\"ry\", \"4\"), (\"style\", \"stroke:#181818;stroke-width:1.5;\")]\n  [25] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"116.4917\"), (\"x2\", \"206.6191\"), (\"y1\", \"97.1094\"), (\"y2\", \"97.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"108.4917\"), (\"x2\", \"198.6191\"), (\"y1\", \"97.1094\"), (\"y2\", \"97.1094\")]\n  [26] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"76.1274\"), (\"x\", \"128.4917\"), (\"y\", \"92.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"76.1274\"), (\"x\", \"120.4917\"), (\"y\", \"92.3672\")]\n\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"152px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:225px;height:152px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 225 152\"), (\"width\", \"225px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"152px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:209px;height:152px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 209 152\"), (\"width\", \"209px\"), (\"zoomAndPan\", \"magnify\")]\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"106.4917\"), (\"y\", \"67.7988\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"98.4917\"), (\"y\", \"67.7988\")]\n  [7] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"78.6211\"), (\"width\", \"8\"), (\"x\", \"107.4917\"), (\"y\", \"36.4883\")]\n    actual:   [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"78.6211\"), (\"width\", \"8\"), (\"x\", \"99.4917\"), (\"y\", \"36.4883\")]\n  [8] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"111.4414\"), (\"x2\", \"111.4414\"), (\"y1\", \"36.4883\"), (\"y2\", \"115.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"103.4414\"), (\"x2\", \"103.4414\"), (\"y1\", \"36.4883\"), (\"y2\", \"115.1094\")]\n  [10] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"86.4414\"), (\"y\", \"5\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"78.4414\"), (\"y\", \"5\")]\n  [11] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"93.4414\"), (\"y\", \"25.5352\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"85.4414\"), (\"y\", \"25.5352\")]\n  [13] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"86.4414\"), (\"y\", \"114.1094\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"78.4414\"), (\"y\", \"114.1094\")]\n  [14] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"93.4414\"), (\"y\", \"134.6445\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"85.4414\"), (\"y\", \"134.6445\")]\n  [16] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"106.4917\"), (\"y\", \"67.7988\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"98.4917\"), (\"y\", \"67.7988\")]\n  [18] <ellipse> attr mismatch:\n    expected: [(\"cx\", \"7.5\"), (\"cy\", \"67.0488\"), (\"fill\", \"#000000\"), (\"rx\", \"4\"), (\"ry\", \"4\"), (\"style\", \"stroke:#181818;stroke-width:1.5;\")]\n    actual:   [(\"cx\", \"-0.5\"), (\"cy\", \"67.0488\"), (\"fill\", \"#000000\"), (\"rx\", \"4\"), (\"ry\", \"4\"), (\"style\", \"stroke:#181818;stroke-width:1.5;\")]\n  [19] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"94.4917,63.7988,104.4917,67.7988,94.4917,71.7988,98.4917,67.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"86.4917,63.7988,96.4917,67.7988,86.4917,71.7988,90.4917,67.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [20] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"12\"), (\"x2\", \"100.4917\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"4\"), (\"x2\", \"92.4917\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n  [21] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.4917\"), (\"x\", \"15\"), (\"y\", \"63.0566\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.4917\"), (\"x\", \"7\"), (\"y\", \"63.0566\")]\n  [23] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"122.4917,93.1094,112.4917,97.1094,122.4917,101.1094,118.4917,97.1094\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"114.4917,93.1094,104.4917,97.1094,114.4917,101.1094,110.4917,97.1094\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [24] <ellipse> attr mismatch:\n    expected: [(\"cx\", \"211.1191\"), (\"cy\", \"96.3594\"), (\"fill\", \"#000000\"), (\"rx\", \"4\"), (\"ry\", \"4\"), (\"style\", \"stroke:#181818;stroke-width:1.5;\")]\n    actual:   [(\"cx\", \"203.1191\"), (\"cy\", \"96.3594\"), (\"fill\", \"#000000\"), (\"rx\", \"4\"), (\"ry\", \"4\"), (\"style\", \"stroke:#181818;stroke-width:1.5;\")]\n  [25] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"116.4917\"), (\"x2\", \"206.6191\"), (\"y1\", \"97.1094\"), (\"y2\", \"97.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"108.4917\"), (\"x2\", \"198.6191\"), (\"y1\", \"97.1094\"), (\"y2\", \"97.1094\")]\n  [26] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"76.1274\"), (\"x\", \"128.4917\"), (\"y\", \"92.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"76.1274\"), (\"x\", \"120.4917\"), (\"y\", \"92.3672\")]\n\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"152px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:225px;height:152px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 225 152\"), (\"width\", \"225px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"152px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:209px;height:152px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 209 152\"), (\"width\", \"209px\"), (\"zoomAndPan\", \"magnify\")]\n  [4] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"106.4917\"), (\"y\", \"67.7988\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"98.4917\"), (\"y\", \"67.7988\")]\n  [7] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"78.6211\"), (\"width\", \"8\"), (\"x\", \"107.4917\"), (\"y\", \"36.4883\")]\n    actual:   [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"78.6211\"), (\"width\", \"8\"), (\"x\", \"99.4917\"), (\"y\", \"36.4883\")]\n  [8] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"111.4414\"), (\"x2\", \"111.4414\"), (\"y1\", \"36.4883\"), (\"y2\", \"115.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"103.4414\"), (\"x2\", \"103.4414\"), (\"y1\", \"36.4883\"), (\"y2\", \"115.1094\")]\n  [10] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"86.4414\"), (\"y\", \"5\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"78.4414\"), (\"y\", \"5\")]\n  [11] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"93.4414\"), (\"y\", \"25.5352\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"85.4414\"), (\"y\", \"25.5352\")]\n  [13] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"86.4414\"), (\"y\", \"114.1094\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"50.1006\"), (\"x\", \"78.4414\"), (\"y\", \"114.1094\")]\n  [14] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"93.4414\"), (\"y\", \"134.6445\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"36.1006\"), (\"x\", \"85.4414\"), (\"y\", \"134.6445\")]\n  [16] <rect> attr mismatch:\n    expected: [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"106.4917\"), (\"y\", \"67.7988\")]\n    actual:   [(\"fill\", \"#FFFFFF\"), (\"height\", \"29.3105\"), (\"style\", \"stroke:#181818;stroke-width:1;\"), (\"width\", \"10\"), (\"x\", \"98.4917\"), (\"y\", \"67.7988\")]\n  [18] <ellipse> attr mismatch:\n    expected: [(\"cx\", \"7.5\"), (\"cy\", \"67.0488\"), (\"fill\", \"#000000\"), (\"rx\", \"4\"), (\"ry\", \"4\"), (\"style\", \"stroke:#181818;stroke-width:1.5;\")]\n    actual:   [(\"cx\", \"-0.5\"), (\"cy\", \"67.0488\"), (\"fill\", \"#000000\"), (\"rx\", \"4\"), (\"ry\", \"4\"), (\"style\", \"stroke:#181818;stroke-width:1.5;\")]\n  [19] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"94.4917,63.7988,104.4917,67.7988,94.4917,71.7988,98.4917,67.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"86.4917,63.7988,96.4917,67.7988,86.4917,71.7988,90.4917,67.7988\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [20] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"12\"), (\"x2\", \"100.4917\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;\"), (\"x1\", \"4\"), (\"x2\", \"92.4917\"), (\"y1\", \"67.7988\"), (\"y2\", \"67.7988\")]\n  [21] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.4917\"), (\"x\", \"15\"), (\"y\", \"63.0566\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"79.4917\"), (\"x\", \"7\"), (\"y\", \"63.0566\")]\n  [23] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"122.4917,93.1094,112.4917,97.1094,122.4917,101.1094,118.4917,97.1094\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"114.4917,93.1094,104.4917,97.1094,114.4917,101.1094,110.4917,97.1094\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [24] <ellipse> attr mismatch:\n    expected: [(\"cx\", \"211.1191\"), (\"cy\", \"96.3594\"), (\"fill\", \"#000000\"), (\"rx\", \"4\"), (\"ry\", \"4\"), (\"style\", \"stroke:#181818;stroke-width:1.5;\")]\n    actual:   [(\"cx\", \"203.1191\"), (\"cy\", \"96.3594\"), (\"fill\", \"#000000\"), (\"rx\", \"4\"), (\"ry\", \"4\"), (\"style\", \"stroke:#181818;stroke-width:1.5;\")]\n  [25] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"116.4917\"), (\"x2\", \"206.6191\"), (\"y1\", \"97.1094\"), (\"y2\", \"97.1094\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"108.4917\"), (\"x2\", \"198.6191\"), (\"y1\", \"97.1094\"), (\"y2\", \"97.1094\")]\n  [26] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"76.1274\"), (\"x\", \"128.4917\"), (\"y\", \"92.3672\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"76.1274\"), (\"x\", \"120.4917\"), (\"y\", \"92.3672\")]\n\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  },
+  "after": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_source_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/exo_source_legacy.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "exo_source_legacy",
+    "axes": [
+      "external source decoration",
+      "border/direction/activation",
+      "legacy"
+    ],
+    "reference_classification": "valid_sequence",
+    "source_sha256": "b86c4e518fc16ad3cd6ea51998d6301b27f2756d120ed9c8337005f90e4e29b3",
+    "golden_sha256": "49167857c3aa5201fdcd3ea4eccfe36bbbfafbe17c695a94d200c39028e175d9",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "88ac83e3f4d85d73a44ed2f4bbb37772037ec154eac39024b3bb8e235863f090",
+      "svg": "8f65214da13640238d7e.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "product_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted_library": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli_equals_library": true,
+    "library_render_exit": 0,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  }
+}

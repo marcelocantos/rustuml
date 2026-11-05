@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "before_revision": "0cde5d7e55139b63cb8e91f8e42acd473441f80a",
+  "evidence_import": "bd40c0f16838359779e406592edb51f32be2e9bd",
+  "account_date": "2026-11-05",
+  "mechanism": "sequence-external-note-owner",
+  "java_locations": [
+    "sequencediagram.SequenceDiagram#getLastEventWithNote/#addMessage",
+    "command.note.sequence.FactorySequenceNoteOnArrowCommand#executeInternal",
+    "sequencediagram.AbstractMessage#addNote",
+    "sequencediagram.graphic.Step1MessageExo#constructor/#createArrow"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs::try_external_message/try_note"
+  ],
+  "invariant": "Every parsed ordinary or external AbstractMessage is available as the previous arrow-note owner. Bare left/right notes retain endpoints and attach to that message, including reversed border directions.",
+  "causal_divergence": "try_external_message appends Message but does not update last_message; bare notes are discarded or attach to a stale ordinary message. Java scans the event stream for EventWithNote and external messages implement that contract.",
+  "planned_change": "Update the external parser owner from normalized actual source/target endpoints exactly as ordinary message parsing does; retain border identity and existing renderer attachment flow. Do not replace absent owner with invented participant or change note text.",
+  "perturbation_axes": [
+    "incoming/outgoing left/right and normalized reverse grammar",
+    "first external versus prior ordinary owner, inline/multiline notes and engines"
+  ]
+}

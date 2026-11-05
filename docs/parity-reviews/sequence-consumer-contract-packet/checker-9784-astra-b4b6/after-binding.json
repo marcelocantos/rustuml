@@ -1,0 +1,13 @@
+{
+  "revision": "d491d4bda47faf90d4751484d45aa1387fb1b290",
+  "binaries": {
+    "compare_cli": "801746deed357f4cbbab51f6266bc1a91cfd03fc1b29a0edd862ab4b2a9cedd8",
+    "diff_one": "70acc1974ad6ffb2dc8dc8f1ad3b80f0416de24e5ea3e8752ed11c40f524a903",
+    "rustuml": "fd51badd9ea3c1ab18beef236adfdfd3067ab02f505155a5b99b32e34e85901f"
+  },
+  "source_tree": "b528caafbc14c4d9395764fedd8ef4ed3c5f7b0e",
+  "golden_revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)",
+  "cargo": "cargo 1.99.1 (5f94df478 2026-08-27) (Homebrew)",
+  "helper_source_sha256": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701"
+}

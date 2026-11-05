@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-unclosed-note-command",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7cbc0aef-f6c2-4036-bc37-086ae22f4e23%3Adelegate-task%3A3586e3c0-433f-4984-bdab-61d183d23ec6",
+    "model": "gpt-6-astra / Codex harness in T3 Code",
+    "role": "Independent checker; did not implement candidate; no children",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-5c023380",
+    "branch": "review/sequence-711dbca7-5c023380"
+  },
+  "account_commit": "bf400d8455757a31123b51fd67b64e497514e223",
+  "implementation_commit": "71422f1b957c15ca5d45850c5f260db6b4b15862",
+  "tested_packet_commit": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "tested_production_commit": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+  "before_revision": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "intermediate_revision": "cf3eafb293de2f01699399321d2220c4de9eb28c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "Parent's existing Monkey Man relay: /Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg; exact per-input actual wrapper argv/cwd/status/streams in checker evidence; Java argv derived from pinned wrapper, not process-traced",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE_CACHE/target-after cargo build --release -p rustuml --bin rustuml -p rustuml-oracle --example diff_one",
+    "uv run --no-project python PRIVATE_CACHE/measure.py PRIVATE_CACHE/fresh52.json PRIVATE_CACHE/after-bin PRIVATE_CACHE/after-fresh; separately followup12.json -> after-followup (same checkout cwd); before binaries likewise",
+    "CARGO_BUILD_JOBS=4 CARGO_TARGET_DIR=PRIVATE_CACHE/target-after cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_unclosed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_unclosed_legacy.svg",
+      "axes": [
+        "unclosed note",
+        "right topology/multiline",
+        "engine=legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "bf960f38a67dd3eaccfb102c7439bcf2ce375ee32258d09e8f8e308abd8c3cc0",
+      "reference_sha256": "ce1a4e63177f178d0e01fbc81aa1df359d94c7ecace42587640a7fc14f182e65",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "comparison_exit": 2,
+      "intended_validity": "invalid",
+      "observed_validity": "invalid",
+      "negative_evidence": true
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_unclosed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_unclosed_teoz.svg",
+      "axes": [
+        "unclosed note",
+        "right topology/multiline",
+        "engine=teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "60ff627fed728d95732ef5882261675fccd408e367b28365b52c18b2d3f93881",
+      "reference_sha256": "997e5db7958991be1982b026c71d5860daad73b8f916beca6b59568aac09e545",
+      "java_exit": 200,
+      "rust_exit": 1,
+      "comparison_exit": 2,
+      "intended_validity": "invalid",
+      "observed_validity": "invalid",
+      "negative_evidence": true
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_closed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_closed_legacy.svg",
+      "axes": [
+        "closure positive",
+        "over topology/multiline",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "b9fd2b8aa5acdc325e4cbc0e908f59b9e59989b32d41c6d8a177e44c8d2d1e96",
+      "reference_sha256": "1007ad8efe65c56e2657aac82e0614c825a85820a532f914dcddc7de3ce1382e",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_closed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_note_closed_teoz.svg",
+      "axes": [
+        "closure positive",
+        "over topology/multiline",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "fe5552b4b0bec112a8c202c745fca10111183a57fbb7925c14d2a9fb9df85dce",
+      "reference_sha256": "cd5ece7dbf1b3e7c2858594f9c86ae0c8d5aa2be10e64e0c07d878c279ece550",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_group_unclosed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_group_unclosed_legacy.svg",
+      "axes": [
+        "group closure contrast",
+        "renamed labels",
+        "engine=legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "2f36c2979cdda57ef9979e798afe914230f65d7dcc9a7ed6d7d781af6e25a88c",
+      "reference_sha256": "f88035c74a614d8914804940323b3b8e2a98509df5fd6f44866a9c0e16a12233",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_group_unclosed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_group_unclosed_teoz.svg",
+      "axes": [
+        "group closure contrast",
+        "renamed labels",
+        "engine=teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "88b46d239957565413d8bcfe9f5047cbd2eb0027ed4496aacaf09acdbcbbb51c",
+      "reference_sha256": "8b2888bd66b6c3a3cf7514fa77d6a56cf9f9f08d317a0e9545f47cfc6013735d",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 1,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_unclosed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_unclosed_legacy.svg",
+      "axes": [
+        "box closure contrast",
+        "member composition",
+        "engine=legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "baf5ddb969aa203f3ce92aa7a6e6ac7662050cffc4ba0f8ecd8742e8a212c400",
+      "reference_sha256": "1193683af464a3a12a546da192d1665c942e437207432566589a4ea7e3742410",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_unclosed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-component-display-review711/review711_box_unclosed_teoz.svg",
+      "axes": [
+        "box closure contrast",
+        "member composition",
+        "engine=teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "a4b2f0562013a8ac0e7baa3a0c6d5e623e66535742ab1dfd6c05de009ad468c4",
+      "reference_sha256": "0aebb54ea63a819804cdd2bb69b238bee21c772fe77d8d4169cbd58aa7598f60",
+      "java_exit": 0,
+      "rust_exit": 0,
+      "comparison_exit": 0,
+      "intended_validity": "valid",
+      "observed_validity": "valid",
+      "negative_evidence": false
+    }
+  ],
+  "findings": [
+    "PSystemCommandFactory requires the multiline note command to finish. Rust now rejects a remaining note_buffer before finish. Two fresh unclosed-note Java exit200 controls are rejected by the actual CLI; positive closed notes and valid unclosed boxes still render.",
+    "Java-valid unclosed group controls remain whole-output failures in both engines. Legacy width158 versus173; Teoz148x162 versus167x176 and missing group elements. Grammar rejection is bounded support only; the requested closure contrast does not pass as a whole."
+  ],
+  "verdict": "rejected",
+  "acceptance_policy": "Any failing whole case rejects. Mechanisms with green fresh cases only have bounded support, not acceptance: required standing perturbations and guards remain red. No prior acceptance transfers and no failure is waived.",
+  "evidence": "docs/parity-reviews/sequence-component-display-packet/checker-711-astra/README.md",
+  "fresh_outcomes": {
+    "entries": 8,
+    "outcomes": {
+      "2": 2,
+      "0": 4,
+      "1": 2
+    },
+    "cli_panics": []
+  }
+}

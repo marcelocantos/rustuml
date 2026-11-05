@@ -1,0 +1,8 @@
+@startuml
+!theme cerulean
+sprite $mark [2x2/16] {
+F0
+0F
+}
+class BeechLedger
+@enduml

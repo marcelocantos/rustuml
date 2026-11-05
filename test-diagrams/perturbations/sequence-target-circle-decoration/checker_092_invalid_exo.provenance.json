@@ -1,0 +1,194 @@
+{
+  "reference": {
+    "env_overrides": {},
+    "source_bytes": 42,
+    "name": "invalid_exo",
+    "remote_name": "invalid_exo.puml",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/invalid_exo.puml",
+    "source_sha256": "ee37b1241132638c0c027650648667cd90c38b3bf8730aaf1bb1f931a6d016ba",
+    "exit_code": 200,
+    "argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "cwd": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+    "timezone": "GMT+11:00",
+    "timed_out": false,
+    "elapsed_seconds": 1.1962985829886748,
+    "stdout_sha256": "054ead29488b374b562514f7f76b5d4ca5db471f31e6034d63342fa28354fa2e",
+    "stderr_sha256": "6767bff5412f3420f4650d80c0bdc2318794f0bb81579b726dcef48f49bc8d24",
+    "java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "requested_cwd": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+    "requested_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/invalid_exo.puml",
+    "execution_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/invalid_exo.puml",
+    "actual_wrapper_argv": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ],
+    "actual_java_argv": [
+      "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-Dfile.encoding=UTF-8",
+      "-Duser.language=en",
+      "-Duser.country=AU",
+      "-Duser.timezone=GMT+11:00",
+      "-jar",
+      "/Users/marcelo/rustuml-reference/reference.jar",
+      "-pipe",
+      "-tsvg"
+    ],
+    "environment_overrides": {},
+    "mapping": {
+      "reason": "Existing wrapper requires an isolated cwd below scratch/; preserve unchanged wrapper and immutable manifest.",
+      "original_source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/invalid_exo.puml",
+      "requested_remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/invalid_exo.puml",
+      "actual_remote_source": "/Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra/invalid_exo.puml"
+    }
+  },
+  "request": {
+    "name": "invalid_exo",
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/invalid_exo.puml",
+    "remote_name": "invalid_exo.puml",
+    "remote_source": "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra/invalid_exo.puml",
+    "source_sha256": "ee37b1241132638c0c027650648667cd90c38b3bf8730aaf1bb1f931a6d016ba",
+    "bytes": 42,
+    "axes": [
+      "interior decoration",
+      "ordinary/external"
+    ],
+    "intended_reference": "invalid",
+    "source_validation": [
+      "sequencediagram.command.CommandArrow#getRegexConcat/#executeArg; Rose#createComponentArrow",
+      "sequencediagram.command.CommandExoArrowLeft/Right#getRegexConcat; CommandExoArrowAny#executeArg"
+    ],
+    "invocation": [
+      "/Users/marcelo/rustuml-reference/bin/reference",
+      "--cwd",
+      "/Users/marcelo/rustuml-reference/work/sequence-review-092cf5f-astra",
+      "--timezone",
+      "GMT+11:00",
+      "--",
+      "-pipe",
+      "-tsvg"
+    ]
+  },
+  "classification": {
+    "name": "invalid_exo",
+    "exit": 200,
+    "xml": true,
+    "diagram_type": null,
+    "classification": "java_error",
+    "source_bytes": 42,
+    "stdout_bytes": 7549,
+    "stderr_bytes": 55
+  },
+  "source": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_exo.puml",
+  "golden": "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_invalid_exo.svg",
+  "before": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/invalid_exo.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/invalid_exo.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "invalid_exo",
+    "axes": [
+      "interior decoration",
+      "ordinary/external"
+    ],
+    "reference_classification": "java_error",
+    "source_sha256": "ee37b1241132638c0c027650648667cd90c38b3bf8730aaf1bb1f931a6d016ba",
+    "golden_sha256": "054ead29488b374b562514f7f76b5d4ca5db471f31e6034d63342fa28354fa2e",
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "svg_sha256": "684d3bd92558580c7c912cf6718d76056b624314a094bd6e5f95ba34c9ae0794",
+      "svg": "cd2815c9e69a43230a02.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    },
+    "assisted_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    },
+    "cli_equals_library": false,
+    "library_render_exit": 2,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  },
+  "after": {
+    "source": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/invalid_exo.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/reference-inputs/invalid_exo.svg",
+    "cohort": "checker_092_fresh31",
+    "name": "invalid_exo",
+    "axes": [
+      "interior decoration",
+      "ordinary/external"
+    ],
+    "reference_classification": "java_error",
+    "source_sha256": "ee37b1241132638c0c027650648667cd90c38b3bf8730aaf1bb1f931a6d016ba",
+    "golden_sha256": "054ead29488b374b562514f7f76b5d4ca5db471f31e6034d63342fa28354fa2e",
+    "cli": {
+      "exit": 1,
+      "stderr": "parse error: line 1: Illegal sequence arrow decoration\n",
+      "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "svg": "cd2815c9e69a43230a02.rust.svg"
+    },
+    "cli_comparison": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "invalid reference (retained negative evidence)\n"
+    },
+    "product_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    },
+    "assisted_library": {
+      "exit": 2,
+      "stdout": "",
+      "stderr": "skipped: golden SVG contains a PlantUML error\n"
+    },
+    "cli_equals_library": false,
+    "library_render_exit": 2,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7"
+  }
+}

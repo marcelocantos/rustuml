@@ -1,0 +1,6 @@
+@startuml
+Wren -> Wren ++ : seed
+Wren ->o Wren : nested circle
+Wren o<-- Wren : reverse circle
+Wren -->>o Wren -- : open close
+@enduml

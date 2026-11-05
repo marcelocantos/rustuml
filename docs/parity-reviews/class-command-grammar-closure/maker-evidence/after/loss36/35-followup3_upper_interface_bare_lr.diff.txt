@@ -1,0 +1,14 @@
+SVG structural differences:
+  [10] <ellipse> attr mismatch:
+    expected: [("cx", "247.76"), ("cy", "30.24"), ("fill", "#F1F1F1"), ("rx", "8"), ("ry", "8"), ("style", "stroke:#181818;stroke-width:0.5;")]
+    actual:   [("cx", "248.26"), ("cy", "30.24"), ("fill", "#F1F1F1"), ("rx", "8"), ("ry", "8"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [11] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "100.6797"), ("x", "197.4202"), ("y", "60.7752")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "100.6797"), ("x", "197.9202"), ("y", "60.7752")]
+  [13] <path> attr mismatch:
+    expected: [("d", "M129.93,30.24 C170.48,30.24 213.78,30.24 232.77,30.24"), ("fill", "none"), ("id", "GatewayF3C-to-ServicePortF3C"), ("style", "stroke:#181818;stroke-width:1;stroke-dasharray:7,7;")]
+    actual:   [("d", "M130.1,30.2442 C170.96,30.2442 214.69,30.2442 233.53,30.2442"), ("fill", "none"), ("id", "GatewayF3C-to-ServicePortF3C"), ("style", "stroke:#181818;stroke-width:1;stroke-dasharray:7,7;")]
+  [14] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "238.77,30.24,229.77,26.24,233.77,30.24,229.77,34.24,238.77,30.24"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "239.53,30.2442,230.53,26.2442,234.53,30.2442,230.53,34.2442,239.53,30.2442"), ("style", "stroke:#181818;stroke-width:1;")]
+

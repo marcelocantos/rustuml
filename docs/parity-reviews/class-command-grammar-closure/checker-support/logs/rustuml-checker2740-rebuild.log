@@ -1,0 +1,5 @@
+   Compiling rustuml-parser v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/crates/rustuml-parser)
+   Compiling rustuml-render v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/crates/rustuml-render)
+   Compiling rustuml-oracle v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/crates/rustuml-oracle)
+   Compiling rustuml v0.7.0 (/Users/marcelo/.t3/worktrees/rustuml/t3-2740aefa/crates/rustuml)
+    Finished `release` profile [optimized] target(s) in 34.25s

@@ -1,0 +1,13 @@
+@startuml
+!function $tone()
+!return "#123456"
+!endfunction
+!theme cerulean
+!if 0
+!function $tone()
+!return "#654321"
+!endfunction
+!endif
+skinparam classBorderColor $tone()
+class AcaciaLedger
+@enduml

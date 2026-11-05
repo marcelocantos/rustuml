@@ -1,0 +1,8 @@
+@startuml
+!theme cerulean
+!startsub change
+!$tone = "#123456"
+skinparam classBorderColor $tone
+!endsub
+class AspenLedger
+@enduml

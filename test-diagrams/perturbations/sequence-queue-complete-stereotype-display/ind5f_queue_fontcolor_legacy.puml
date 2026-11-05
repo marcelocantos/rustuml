@@ -1,0 +1,7 @@
+@startuml
+skinparam sequenceStereotypeFontColor #BB2255
+skinparam sequenceStereotypeFontStyle italic
+participant Kite
+queue Q <<dispatch>>
+Kite -> Q: deliver
+@enduml

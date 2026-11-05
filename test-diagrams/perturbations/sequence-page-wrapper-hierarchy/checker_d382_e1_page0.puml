@@ -1,0 +1,15 @@
+@startuml
+!pragma teoz true
+title A title wider than the tiny participants
+header Header
+legend left
+legend body
+endlegend
+caption First line\nSecond long line
+footer Footer
+hide footbox
+participant I
+participant J
+I -> J ++ : enter
+return done
+@enduml

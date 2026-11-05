@@ -1,0 +1,15 @@
+@startuml
+participant Cedar
+participant Maple
+Cedar -> Maple: attached
+note right
+== Long section heading ==
+x
+second body
+.. ..
+__ narrow __
+a much longer body than its title
+-- empty --
+end note
+Maple -> Cedar: done
+@enduml

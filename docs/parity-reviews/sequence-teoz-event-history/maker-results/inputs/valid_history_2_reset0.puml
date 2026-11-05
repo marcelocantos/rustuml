@@ -1,0 +1,15 @@
+@startuml
+!pragma teoz true
+participant Lark as L
+participant Raven as R
+L ->] ++ : outlet
+L -> L : recurse
+activate L #LightBlue
+deactivate L
+L -> L : reopening
+activate L #Pink
+L <- L : reverse
+deactivate L
+] -> L -- : inlet
+L -> R : final
+@enduml

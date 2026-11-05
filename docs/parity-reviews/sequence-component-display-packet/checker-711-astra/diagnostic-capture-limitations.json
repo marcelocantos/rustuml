@@ -1,0 +1,9 @@
+{
+  "last_writer": "cf3eafb293de2f01699399321d2220c4de9eb28c",
+  "files": {
+    "test-diagrams/no_oracle_failure_names.txt": "intermediate-no_oracle_failure_names.txt.gz",
+    "test-diagrams/golden_failure_names.txt": "intermediate-golden_failure_names.txt.gz",
+    "test-diagrams/golden_ulp_candidates.txt": "intermediate-golden_ulp_candidates.txt.gz"
+  },
+  "limitation": "The standing tests overwrite these ignored filenames. Before/final raw console logs and counts were preserved, but their exact per-input failure-name files were not snapshotted before later distinct-revision runs. Current files belong only to intermediate. No independent before/final failure-name-set equality is claimed; no broad test is repeated to repair evidence registration."
+}

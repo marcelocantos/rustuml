@@ -1,0 +1,12 @@
+@startuml
+<style>
+sequenceDiagram {
+ note {
+ Shadowing -0px
+ }
+}
+</style>
+skinparam shadowing false
+Ibis -> Swift : call
+note right : test\nheight
+@enduml

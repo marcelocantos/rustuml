@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Quartz
+participant Vale
+Quartz -> Vale: seed
+Quartz -> Vale: enter
+returndone
+@enduml

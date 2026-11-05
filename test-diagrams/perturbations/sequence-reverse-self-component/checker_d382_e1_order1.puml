@@ -1,0 +1,16 @@
+@startuml
+!pragma teoz true
+skinparam padding 2
+participant Tail
+participant "Small" as S
+participant "Long preceding head" as Q
+Q -> S ++ : enter
+S <<-- S ++ : reverse
+note left
+left attached
+second line
+end note
+S <-- S -- : unwind
+note right: opposite side
+S -> Tail : finish
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+participant Cedar
+queue "First\nSecond" as Maple
+create Maple
+Cedar -> Maple: build
+Maple -> Cedar: deliver
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+participant Birch
+create actorWillow
+Birch -> Willow: born
+Willow -> Birch: ready
+@enduml

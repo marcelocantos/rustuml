@@ -1,0 +1,42 @@
+[
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_numeric_0.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_numeric_0.svg",
+    "cohort": "shadow-value4",
+    "axes": [
+      "engine",
+      "signed decimal/unit value versus numeric fallback"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_fallback_0.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_fallback_0.svg",
+    "cohort": "shadow-value4",
+    "axes": [
+      "engine",
+      "signed decimal/unit value versus numeric fallback"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_numeric_1.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_numeric_1.svg",
+    "cohort": "shadow-value4",
+    "axes": [
+      "engine",
+      "signed decimal/unit value versus numeric fallback"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_fallback_1.puml",
+    "golden": "docs/parity-reviews/sequence-corrective-b9/maker-results/inputs/shadow_value_fallback_1.svg",
+    "cohort": "shadow-value4",
+    "axes": [
+      "engine",
+      "signed decimal/unit value versus numeric fallback"
+    ],
+    "java_exit": 0
+  }
+]

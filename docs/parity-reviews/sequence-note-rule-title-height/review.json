@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-note-rule-title-height",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A7a6e5142-c330-4dbe-941b-87119bcc7cef%3Adelegate-task%3A3e06ca94-2269-474d-820c-d3eae66e6612",
+    "model": "gpt-6-astra/high",
+    "tool": "Codex harness in T3 Code",
+    "children": 0
+  },
+  "account_commit": "6e9c711d5984185796e2f9c0ae0c8986d0668649",
+  "implementation_commit": "026e5eeb2f3521ec3a2f299b30d52a4cac51f05c",
+  "tested_revision": "092cf5f68464625c8b3771e069b42f44f43fc0c9",
+  "before_revision": "efc2e922bbd093cf13d827501f5e53aa850a9e68",
+  "production_commits": [
+    "350e776a2cd376dd2171dc79b61010da8f01fc2e",
+    "026e5eeb2f3521ec3a2f299b30d52a4cac51f05c",
+    "71b465a98aa5c511588d87ee080088e8614d975e"
+  ],
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/sequence-review-092cf5f-astra --timezone GMT+11:00 -- -pipe -tsvg",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST BIN_DIR PRIVATE_OUTPUT REPO_CWD",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_alone_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_alone_legacy.svg",
+      "axes": [
+        "title wrapper",
+        "font relationship/underline",
+        "legacy"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_legacy.svg",
+      "axes": [
+        "nonempty title body",
+        "font relationship/underline",
+        "legacy"
+      ],
+      "result": "fail",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_alone_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_alone_teoz.svg",
+      "axes": [
+        "title wrapper",
+        "font relationship/underline",
+        "teoz"
+      ],
+      "result": "pass",
+      "reference_classification": "valid_sequence"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-note-rule-title-height/checker_092_rule_body_teoz.svg",
+      "axes": [
+        "nonempty title body",
+        "font relationship/underline",
+        "teoz"
+      ],
+      "result": "fail",
+      "reference_classification": "valid_sequence"
+    }
+  ],
+  "findings": [
+    "rule_alone matches in both engines at note font16/message11. Adding one ordinary body line after the exact same title makes both outputs fail. All4 source strings are fresh, immutable and Java-valid.",
+    "BodyEnhanced2.getArea groups the lines after a separator into one body before decorate. For title heightH and body heightB, BodyEnhancedAbstract.decorate and TextBlockLineBefore.calculateDimension yield max(B+H/2+4,H)+H/2. Rust note_line_metrics_with_family at1091 computes the B=0 case per separator line, then note_text_metrics adds the body independently. With B=H this overcounts byH/2-4 (5.4219 at this captured font), exactly the lifeline-height error. Formula provenance explains the divergence; it does not authorize subtracting the measured error.",
+    "Full output also exposes width, title alignment and paint order: Java applies the6-unit right body margin and max(titleWidth+8,bodyWidth+6), centers the title across the block and draws body before title. Rust emit_note_line keeps a fixed title origin and per-line order. The captured body baseline differs9.4219 and note width6; fixing only total height is insufficient.",
+    "Exact candidate is rejected as a combination. No old bounded acceptance transfers. Every source, including invalid and zero-byte sources, remains executable; no comparator, baseline, skip, target, policy or production edit.",
+    "Independent frozen CLI replay: 1350 matches, 569 valid mismatches, 47 invalid references among1966 entries/1918 unique byte strings;31 recoveries and0 losses. Every maker status and actual CLI SVG hash reproduces.",
+    "Exact candidate library tiers11181/11251 and10497/11251, sequence1411/1411; parser570, renderer790, CLI13 pass. Standing perturbations686/1279; guards4/6. Owned formatting passes; workspace formatting and Clippy remain red."
+  ],
+  "verdict": "rejected",
+  "assessment": "rejected by nonempty body block",
+  "causal_repair_guidance": "Port the BodyEnhanced2 segmentation and composed title/body TextBlock, including margins, width max, title centering and paint order. Derive preferred dimensions and painting from that same block tree; retain the empty-title controls and nonempty failures, with no coordinate patches.",
+  "evidence": "docs/parity-reviews/sequence-decoration-height-packet/checker-092cf5f/README.md"
+}

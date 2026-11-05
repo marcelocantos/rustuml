@@ -1,0 +1,7 @@
+@startuml
+box "First\nSecond\nThird"
+participant P
+end box
+actor A
+A -> P: relay
+@enduml

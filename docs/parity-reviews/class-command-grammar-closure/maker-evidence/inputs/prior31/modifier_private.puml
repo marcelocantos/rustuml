@@ -1,0 +1,5 @@
+@startuml
+frame "Observation Bay" {
+- class "Hydrology Meter" as Meter
+}
+@enduml

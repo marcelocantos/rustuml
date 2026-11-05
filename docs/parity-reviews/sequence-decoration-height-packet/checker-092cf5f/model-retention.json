@@ -1,0 +1,31 @@
+{
+  "build": {
+    "command": [
+      "rustc",
+      "--edition=2024",
+      "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/model_retention.rs",
+      "-L",
+      "dependency=/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/target-after/release/deps",
+      "-o",
+      "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/model-retention",
+      "--extern",
+      "rustuml_parser=/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/target-after/release/deps/librustuml_parser-69497e1bef91509b.rlib",
+      "--extern",
+      "serde_json=/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/target-after/release/deps/libserde_json-4a753cf8612a29da.rlib"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "run": {
+    "command": [
+      "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/model-retention"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+    "exit": 0,
+    "stdout": "->o\tQuartz\tFinch\t{\"line\":\"Solid\",\"head\":\"Filled\",\"direction\":\"LeftToRight\",\"target_circle\":true}\n-->>o\tQuartz\tFinch\t{\"line\":\"Dotted\",\"head\":\"Open\",\"direction\":\"LeftToRight\",\"target_circle\":true}\no<--\tFinch\tQuartz\t{\"line\":\"Dotted\",\"head\":\"Filled\",\"direction\":\"RightToLeft\",\"target_circle\":true}\no<->o\tQuartz\tFinch\t{\"line\":\"Solid\",\"head\":\"Filled\",\"direction\":\"Bidirectional\",\"source_circle\":true,\"target_circle\":true}\no-->>o\tQuartz\tFinch\t{\"line\":\"Dotted\",\"head\":\"Open\",\"direction\":\"LeftToRight\",\"source_circle\":true,\"target_circle\":true}\n-/o\tQuartz\tFinch\t{\"line\":\"Solid\",\"head\":\"Filled\",\"direction\":\"LeftToRight\",\"head_half\":\"Bottom\",\"target_circle\":true}\no\\--\tFinch\tQuartz\t{\"line\":\"Dotted\",\"head\":\"Filled\",\"direction\":\"RightToLeft\",\"head_half\":\"Top\",\"target_circle\":true}\n",
+    "stderr": ""
+  },
+  "source_sha256": "2c1b32be8b73925e048da0fac54a2c30429f720bb101a7b5ded2eb28f3225fc7"
+}

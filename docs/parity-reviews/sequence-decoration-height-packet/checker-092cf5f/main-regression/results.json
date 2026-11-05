@@ -1,0 +1,86 @@
+[
+  {
+    "revision": "before",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7/test-diagrams/golden/creole/creole_underline_in_sequence.puml",
+    "source_sha256": "913d21d0f1566776098e9950200edf822f5c82afa2a854c197fcef2c047cad44",
+    "golden_sha256": "2848391600a3bbb3ac023969c46cde53b10da979fedf1dc089d4f74980f5be5e",
+    "result": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-before/rustuml",
+        "-tsvg",
+        "-pipe"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+      "exit": 0,
+      "stderr": ""
+    },
+    "comparison": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/compare_cli",
+        "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7/test-diagrams/golden/creole/creole_underline_in_sequence.svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/main-regression/before.svg"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "output_sha256": "6f9b5446db16e65895435323e4db625828f7f29fa2f694276507e9caf64676db"
+  },
+  {
+    "revision": "intermediate",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7/test-diagrams/golden/creole/creole_underline_in_sequence.puml",
+    "source_sha256": "913d21d0f1566776098e9950200edf822f5c82afa2a854c197fcef2c047cad44",
+    "golden_sha256": "2848391600a3bbb3ac023969c46cde53b10da979fedf1dc089d4f74980f5be5e",
+    "result": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-intermediate/rustuml",
+        "-tsvg",
+        "-pipe"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+      "exit": 0,
+      "stderr": ""
+    },
+    "comparison": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/compare_cli",
+        "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7/test-diagrams/golden/creole/creole_underline_in_sequence.svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/main-regression/intermediate.svg"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+      "exit": 1,
+      "stdout": "SVG structural differences:\n  [0] <svg> attr mismatch:\n    expected: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"166px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:313px;height:166px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 313 166\"), (\"width\", \"313px\"), (\"zoomAndPan\", \"magnify\")]\n    actual:   [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"170px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:313px;height:170px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 313 170\"), (\"width\", \"313px\"), (\"zoomAndPan\", \"magnify\")]\n  [5] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"92.2764\"), (\"width\", \"8\"), (\"x\", \"24.3618\"), (\"y\", \"36.4883\")]\n    actual:   [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"96.104\"), (\"width\", \"8\"), (\"x\", \"24.3618\"), (\"y\", \"36.4883\")]\n  [6] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"28\"), (\"x2\", \"28\"), (\"y1\", \"36.4883\"), (\"y2\", \"128.7646\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"28\"), (\"x2\", \"28\"), (\"y1\", \"36.4883\"), (\"y2\", \"132.5923\")]\n  [9] <rect> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"92.2764\"), (\"width\", \"8\"), (\"x\", \"167.3423\"), (\"y\", \"36.4883\")]\n    actual:   [(\"fill\", \"#000000\"), (\"fill-opacity\", \"0.00000\"), (\"height\", \"96.104\"), (\"width\", \"8\"), (\"x\", \"167.3423\"), (\"y\", \"36.4883\")]\n  [10] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"170.6104\"), (\"x2\", \"170.6104\"), (\"y1\", \"36.4883\"), (\"y2\", \"128.7646\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;\"), (\"x1\", \"170.6104\"), (\"x2\", \"170.6104\"), (\"y1\", \"36.4883\"), (\"y2\", \"132.5923\")]\n  [15] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"46.7236\"), (\"x\", \"5\"), (\"y\", \"127.7646\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"46.7236\"), (\"x\", \"5\"), (\"y\", \"131.5923\")]\n  [16] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"32.7236\"), (\"x\", \"12\"), (\"y\", \"148.2998\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"32.7236\"), (\"x\", \"12\"), (\"y\", \"152.1275\")]\n  [21] <rect> attr mismatch:\n    expected: [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"39.4639\"), (\"x\", \"151.6104\"), (\"y\", \"127.7646\")]\n    actual:   [(\"fill\", \"#E2E2F0\"), (\"height\", \"30.4883\"), (\"rx\", \"2.5\"), (\"ry\", \"2.5\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\"), (\"width\", \"39.4639\"), (\"x\", \"151.6104\"), (\"y\", \"131.5923\")]\n  [22] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"25.4639\"), (\"x\", \"158.6104\"), (\"y\", \"148.2998\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"14\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"25.4639\"), (\"x\", \"158.6104\"), (\"y\", \"152.1275\")]\n  [28] <polygon> attr mismatch:\n    expected: [(\"fill\", \"#181818\"), (\"points\", \"39.3618,99.937,29.3618,103.937,39.3618,107.937,35.3618,103.937\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n    actual:   [(\"fill\", \"#181818\"), (\"points\", \"39.3618,101.8508,29.3618,105.8508,39.3618,109.8508,35.3618,105.8508\"), (\"style\", \"stroke:#181818;stroke-width:1;\")]\n  [29] <line> attr mismatch:\n    expected: [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"33.3618\"), (\"x2\", \"170.3423\"), (\"y1\", \"103.937\"), (\"y2\", \"103.937\")]\n    actual:   [(\"style\", \"stroke:#181818;stroke-width:1;stroke-dasharray:2,2;\"), (\"x1\", \"33.3618\"), (\"x2\", \"170.3423\"), (\"y1\", \"105.8508\"), (\"y2\", \"105.8508\")]\n  [30] <text> attr mismatch:\n    expected: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"text-decoration\", \"underline\"), (\"textLength\", \"95.1133\"), (\"x\", \"45.3618\"), (\"y\", \"99.1948\")]\n    actual:   [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"13\"), (\"lengthAdjust\", \"spacing\"), (\"text-decoration\", \"underline\"), (\"textLength\", \"95.1133\"), (\"x\", \"45.3618\"), (\"y\", \"101.1087\")]\n\n",
+      "stderr": ""
+    },
+    "output_sha256": "1d54de01031ce02a42e603274d1949ed19f59798bf5244e4e43198870b3abcae"
+  },
+  {
+    "revision": "after",
+    "source": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7/test-diagrams/golden/creole/creole_underline_in_sequence.puml",
+    "source_sha256": "913d21d0f1566776098e9950200edf822f5c82afa2a854c197fcef2c047cad44",
+    "golden_sha256": "2848391600a3bbb3ac023969c46cde53b10da979fedf1dc089d4f74980f5be5e",
+    "result": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/rustuml",
+        "-tsvg",
+        "-pipe"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+      "exit": 0,
+      "stderr": ""
+    },
+    "comparison": {
+      "command": [
+        "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/bin-after/compare_cli",
+        "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7/test-diagrams/golden/creole/creole_underline_in_sequence.svg",
+        "/Users/marcelo/Library/Caches/rustuml-review-092cf5f-astra/main-regression/after.svg"
+      ],
+      "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-607d50f7",
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "output_sha256": "6f9b5446db16e65895435323e4db625828f7f29fa2f694276507e9caf64676db"
+  }
+]

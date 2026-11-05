@@ -1,0 +1,19 @@
+{
+  "source": "test-diagrams/perturbations/sequence-return-configuration/checker_d382_unknown_color.puml",
+  "source_sha256": "4f9bec1386be0b78218fa56dbc63970e74a7bcc10ea91f4bc8ea715e01fbb180",
+  "exit_code": 200,
+  "argv": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "/Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+  ],
+  "timed_out": false,
+  "elapsed_seconds": 1.1695544579997659,
+  "stdout_sha256": "b60e68e4d40886fc24e7324168b312ec680f9e01c1c2d3311f2faa836e34b295",
+  "stderr_sha256": "8c5c6a6e2bbdd9bcf110faf6a8140e5a4ce1d101f9a209f85b95c8c3e7644fca"
+}

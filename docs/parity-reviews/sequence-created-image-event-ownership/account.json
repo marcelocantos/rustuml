@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-created-image-event-ownership",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram.SequenceDiagram#addMessage/#activate",
+    "sequencediagram.graphic.Step1Message#createArrowCreate",
+    "sequencediagram.teoz.CommunicationTile#drawU/#callbackY_internal",
+    "sequencediagram.teoz.LivingSpace#drawHead"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::sequence_create_message_indices",
+    "crates/rustuml-render/src/sequence.rs::draw_created_head"
+  ],
+  "invariant": "Each CREATE life event attaches to its next compatible message; every such message owns a created image, while participant lifeline/history has separate ownership. A created image translation moves all shape/text anchors and its bounds.",
+  "causal_divergence": "Participant-keyed first creation map loses repeated event images. Teoz changes box_x without center_x although actors draw from center_x.",
+  "planned_change": "Represent creation ownership per event, preserve separate first/last participant consumers according to Java lifecycle dataflow, and translate the complete participant layout used by the head. Do not add measured coordinate offsets.",
+  "perturbation_axes": [
+    "repeated creation with interleaved live history",
+    "actor versus rectangle/queue, direction and engine"
+  ],
+  "before_revision": "672cd8f26e1d7c6725d8971e01ad7575defd8567",
+  "evidence_import": "16b28fc6de23d3920150efe50cfad7d065985c1a",
+  "account_date": "2026-11-04"
+}

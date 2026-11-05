@@ -1,0 +1,15 @@
+{
+  "argv": [
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+    "-jar",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "-debugsvek",
+    "-tsvg",
+    "source.puml"
+  ],
+  "cwd": "/tmp/rustuml-cff2/java-diagnostics/notes_cross_scope",
+  "source": "/tmp/rustuml-cff2/fresh/notes_cross_scope.puml",
+  "exit": 0,
+  "stdout": "",
+  "stderr": ""
+}

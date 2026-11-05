@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant "South Pier"
+N -> "South Pier": seed
+activate"South Pier"
+deactivate"South Pier"
+@enduml

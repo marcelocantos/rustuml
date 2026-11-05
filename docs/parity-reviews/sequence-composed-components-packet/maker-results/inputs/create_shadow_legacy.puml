@@ -1,0 +1,14 @@
+@startuml
+<style>
+sequenceDiagram {
+ participant {
+ Shadowing 4
+ LineColor #234567
+ }
+}
+</style>
+participant Seed
+create participant Shoot
+Seed -> Shoot: create
+Shoot --> Seed: grown
+@enduml

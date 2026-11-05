@@ -1,0 +1,5 @@
+@startuml
+participant "\n\n" as P
+queue "" as Q
+P -> Q: empty labels
+@enduml

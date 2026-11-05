@@ -1,0 +1,59 @@
+{
+  "accounts": [
+    {
+      "mechanism": "sequence-command-event-identity",
+      "account_commit": "ea313c6203844a0087bc40261366f5bace617d43",
+      "implementation_commits": [
+        "e6a4d41b3a2210cc5c0a8f6047d25edd39bbb07d"
+      ]
+    },
+    {
+      "mechanism": "sequence-teoz-life-event-scheduling",
+      "account_commit": "ea313c6203844a0087bc40261366f5bace617d43",
+      "implementation_commits": [
+        "19074587f391b3b0bd5306cdce116fb564d06f97"
+      ]
+    },
+    {
+      "mechanism": "sequence-self-cross-decoration",
+      "account_commit": "ea313c6203844a0087bc40261366f5bace617d43",
+      "implementation_commits": [
+        "a8d717ca3bc8733c9b1deb2e14dbb569e6e547bc"
+      ]
+    },
+    {
+      "mechanism": "sequence-legacy-destroy-component",
+      "account_commit": "bc18300d13f13f31b50018abe57bfff4bec637db",
+      "implementation_commits": [
+        "19074587f391b3b0bd5306cdce116fb564d06f97"
+      ]
+    },
+    {
+      "mechanism": "sequence-legacy-message-note-envelope",
+      "account_commit": "bc18300d13f13f31b50018abe57bfff4bec637db",
+      "implementation_commits": [
+        "07aa161142fa8631629f6d94bfa776d11812820d",
+        "41e2ce88aec0c6856d57f0c2322ca097ecd55de4"
+      ]
+    },
+    {
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "account_commit": "76972e36bd9abbeb264934bc112dea72314a54c5",
+      "implementation_commits": [
+        "41e2ce88aec0c6856d57f0c2322ca097ecd55de4"
+      ]
+    }
+  ],
+  "source_refinements": [
+    "42ec7126f6559d832d7ba5bbb9c293d152ca8afa",
+    "09eec925d59a83a461606ca26b7138f903ee999e",
+    "14228d60539c365b92f96d3051c99cdf05f22e2c"
+  ],
+  "files": {
+    "crates/rustuml-parser/src/diagram/sequence.rs": "ff5cab9494c1c1bd2b2e9c5163eb634e4d6b99083d950ee97aa763a970ce0dd6",
+    "crates/rustuml-parser/src/parse/sequence.rs": "1661ec00047258984bf3201c9763f4ced33c56898d4b9ba7c9edc1f7a664778f",
+    "crates/rustuml-render/src/ascii.rs": "72d8cc0497f113f7b6b230897870c2d034d288726866aac3bcd0a1d2cd0009c2",
+    "crates/rustuml-render/src/sequence.rs": "8c203b0ed8bb5176f16d87df209b7ef30a754bc7015b93a4eec437a1deaa98a3"
+  },
+  "ascii_scope": "Exactly two test Message constructors gain parallel:false; no ASCII behavior change."
+}

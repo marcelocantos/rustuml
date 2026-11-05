@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+Cedar -> Birch ++ : first
+group scope
+Birch -> Birch ++ : inner
+end
+destroy Birch
+Cedar -> Birch : after
+@enduml

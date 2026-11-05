@@ -1,0 +1,13 @@
+@startuml
+participant Vega
+actor Lyra
+queue Draco
+participant Corvus
+create Lyra
+Vega -> Lyra: hatch
+create Draco
+create Lyra
+Vega -> Lyra: again
+create Draco
+Lyra -> Draco: mail
+@enduml

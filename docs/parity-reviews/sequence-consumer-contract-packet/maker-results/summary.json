@@ -1,0 +1,767 @@
+{
+  "kind": "Maker measurements only, no acceptance; NEW independent checker required",
+  "baseline": "bce6bea405d8b5efd55136f4768117115e7f634f",
+  "production": "d491d4bda47faf90d4751484d45aa1387fb1b290",
+  "account_commit": "0b512262aaf4bcf0c0ab144b9f28c0719f329e4c",
+  "before": {
+    "entries": 2549,
+    "match": 1772,
+    "svg_mismatch": 676,
+    "nonpositive_reference": 99,
+    "valid_non_svg_error": 2,
+    "nonpositive_cli_exits": {
+      "0": 34,
+      "1": 65
+    },
+    "valid_errors": [
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+    ],
+    "cli_panics": [],
+    "library_diagnostic_panics": [
+      {
+        "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+        "stderr": "\nthread 'main' (24451235) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 5, message: \"After create command, you have to send a message to \\\"Osprey\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml",
+        "stderr": "\nthread 'main' (24451243) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 6, message: \"After create command, you have to send a message to \\\"Osprey\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+      }
+    ],
+    "mode_exits": {
+      "cli_comparison": {
+        "1": 676,
+        "0": 1772,
+        "2": 99,
+        "3": 2
+      },
+      "product_library": {
+        "1": 676,
+        "0": 1772,
+        "2": 97,
+        "101": 4
+      },
+      "assisted_library": {
+        "1": 718,
+        "0": 1730,
+        "2": 97,
+        "101": 4
+      }
+    }
+  },
+  "after": {
+    "entries": 2549,
+    "match": 1809,
+    "svg_mismatch": 639,
+    "nonpositive_reference": 99,
+    "valid_non_svg_error": 2,
+    "nonpositive_cli_exits": {
+      "0": 22,
+      "1": 77
+    },
+    "valid_errors": [
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+      "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+    ],
+    "cli_panics": [],
+    "library_diagnostic_panics": [
+      {
+        "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+        "stderr": "\nthread 'main' (24612952) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 5, message: \"After create command, you have to send a message to \\\"Osprey\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+      },
+      {
+        "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml",
+        "stderr": "\nthread 'main' (24612960) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 6, message: \"After create command, you have to send a message to \\\"Osprey\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+      }
+    ],
+    "mode_exits": {
+      "cli_comparison": {
+        "1": 639,
+        "0": 1809,
+        "2": 99,
+        "3": 2
+      },
+      "product_library": {
+        "1": 639,
+        "0": 1809,
+        "2": 97,
+        "101": 4
+      },
+      "assisted_library": {
+        "1": 681,
+        "0": 1767,
+        "2": 97,
+        "101": 4
+      }
+    }
+  },
+  "cohorts": {
+    "frozen2371": {
+      "before": {
+        "entries": 2371,
+        "match": 1674,
+        "svg_mismatch": 616,
+        "nonpositive_reference": 79,
+        "valid_non_svg_error": 2,
+        "nonpositive_cli_exits": {
+          "0": 20,
+          "1": 59
+        },
+        "valid_errors": [
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+        ],
+        "cli_panics": [],
+        "library_diagnostic_panics": [
+          {
+            "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+            "stderr": "\nthread 'main' (24451235) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 5, message: \"After create command, you have to send a message to \\\"Osprey\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          },
+          {
+            "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml",
+            "stderr": "\nthread 'main' (24451243) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 6, message: \"After create command, you have to send a message to \\\"Osprey\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          }
+        ],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 616,
+            "0": 1674,
+            "2": 79,
+            "3": 2
+          },
+          "product_library": {
+            "1": 616,
+            "0": 1674,
+            "2": 77,
+            "101": 4
+          },
+          "assisted_library": {
+            "1": 658,
+            "0": 1632,
+            "2": 77,
+            "101": 4
+          }
+        }
+      },
+      "after": {
+        "entries": 2371,
+        "match": 1674,
+        "svg_mismatch": 616,
+        "nonpositive_reference": 79,
+        "valid_non_svg_error": 2,
+        "nonpositive_cli_exits": {
+          "0": 20,
+          "1": 59
+        },
+        "valid_errors": [
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+          "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml"
+        ],
+        "cli_panics": [],
+        "library_diagnostic_panics": [
+          {
+            "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_legacy.puml",
+            "stderr": "\nthread 'main' (24612952) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 5, message: \"After create command, you have to send a message to \\\"Osprey\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          },
+          {
+            "source": "test-diagrams/perturbations/sequence-external-create-consumer/ind5f_exo_short_in_teoz.puml",
+            "stderr": "\nthread 'main' (24612960) panicked at crates/rustuml-oracle/examples/diff_one.rs:73:75:\ncalled `Result::unwrap()` on an `Err` value: ParseError { line: 6, message: \"After create command, you have to send a message to \\\"Osprey\\\"\" }\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n"
+          }
+        ],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 616,
+            "0": 1674,
+            "2": 79,
+            "3": 2
+          },
+          "product_library": {
+            "1": 616,
+            "0": 1674,
+            "2": 77,
+            "101": 4
+          },
+          "assisted_library": {
+            "1": 658,
+            "0": 1632,
+            "2": 77,
+            "101": 4
+          }
+        }
+      }
+    },
+    "checker148": {
+      "before": {
+        "entries": 148,
+        "match": 94,
+        "svg_mismatch": 42,
+        "nonpositive_reference": 12,
+        "valid_non_svg_error": 0,
+        "nonpositive_cli_exits": {
+          "0": 6,
+          "1": 6
+        },
+        "valid_errors": [],
+        "cli_panics": [],
+        "library_diagnostic_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "0": 94,
+            "1": 42,
+            "2": 12
+          },
+          "product_library": {
+            "0": 94,
+            "1": 42,
+            "2": 12
+          },
+          "assisted_library": {
+            "0": 94,
+            "1": 42,
+            "2": 12
+          }
+        }
+      },
+      "after": {
+        "entries": 148,
+        "match": 115,
+        "svg_mismatch": 21,
+        "nonpositive_reference": 12,
+        "valid_non_svg_error": 0,
+        "nonpositive_cli_exits": {
+          "1": 12
+        },
+        "valid_errors": [],
+        "cli_panics": [],
+        "library_diagnostic_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "0": 115,
+            "1": 21,
+            "2": 12
+          },
+          "product_library": {
+            "0": 115,
+            "1": 21,
+            "2": 12
+          },
+          "assisted_library": {
+            "0": 115,
+            "1": 21,
+            "2": 12
+          }
+        }
+      }
+    },
+    "maker30": {
+      "before": {
+        "entries": 30,
+        "match": 4,
+        "svg_mismatch": 18,
+        "nonpositive_reference": 8,
+        "valid_non_svg_error": 0,
+        "nonpositive_cli_exits": {
+          "0": 8
+        },
+        "valid_errors": [],
+        "cli_panics": [],
+        "library_diagnostic_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "1": 18,
+            "0": 4,
+            "2": 8
+          },
+          "product_library": {
+            "1": 18,
+            "0": 4,
+            "2": 8
+          },
+          "assisted_library": {
+            "1": 18,
+            "0": 4,
+            "2": 8
+          }
+        }
+      },
+      "after": {
+        "entries": 30,
+        "match": 20,
+        "svg_mismatch": 2,
+        "nonpositive_reference": 8,
+        "valid_non_svg_error": 0,
+        "nonpositive_cli_exits": {
+          "0": 2,
+          "1": 6
+        },
+        "valid_errors": [],
+        "cli_panics": [],
+        "library_diagnostic_panics": [],
+        "mode_exits": {
+          "cli_comparison": {
+            "0": 20,
+            "2": 8,
+            "1": 2
+          },
+          "product_library": {
+            "0": 20,
+            "2": 8,
+            "1": 2
+          },
+          "assisted_library": {
+            "0": 20,
+            "2": 8,
+            "1": 2
+          }
+        }
+      }
+    }
+  },
+  "gains": [
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_participant_legacy.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "1c6e86094115563352ea48c01acb61de62c8a607a004ec4f8d43d758a465a085",
+      "after_svg_sha256": "710adc214ed6c3ec2958db9a9c196829e0223e8cbddc8413556e24e9a04e59a4"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_participant_teoz.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "8b0f6781b277ebb9fedaba4207810aef67a6ea6cbf790022cc2d243859b89d77",
+      "after_svg_sha256": "4ecd33f0a9d90eae327c6cb3d6b454459daaa93afe9619b6201968d729acdea0"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_actor_legacy.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "784fc8f9a85f691d4954edea1f85d62151244c9cb20146a5b1d6f339e5280e13",
+      "after_svg_sha256": "2431101354e5f01c5bdb24645429c4a1bee865e168a3f7fae2db6cfc046bf3f3"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_actor_teoz.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "eafdd21f29fc29ad4e8b80550df694c8ce301297ab5e29379743fe232fef41db",
+      "after_svg_sha256": "19a4fa0a752c659fae4a4db98d0db46ba2ec3f46802e906c78c456a4cbdec57e"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_boundary_legacy.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "7bdf6fdde073b52db6582ff5c48a4a5aff3d42a59121d26dd9de690333671dc6",
+      "after_svg_sha256": "0909f521864fdad8f3eb4f1f97f2fb6bbe2243e412fae2d8e7deb6aba8728e19"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_boundary_teoz.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "876f6226a491f76c166b892b2be898e1153f16888707017c653f8a7a1f951050",
+      "after_svg_sha256": "0594e0653fa87ffe53f96f1f3afd89394f5697535b502d9bfce9d3b38e362166"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_control_legacy.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "f84783fc2894f8a0e0ff9fe7c2d642a330f013fe7fa385ac41618a34b9cd394b",
+      "after_svg_sha256": "7c2f0a485f82d73dec1ab9934b56c71597cdd3c69729217eaf65f60e4db7c5e2"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_control_teoz.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "e8f811a3e75bcf8d0b56eb24d3efa115e3680fa9c36c45dab217fdea6c3e8574",
+      "after_svg_sha256": "81aa7b28efb4a46e2224bb5772a61e50eeb451b611492217a23a02d23e390fee"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_entity_legacy.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "227650b78e9a57c30b7bc9920187dbb39dc6bf252c85b20ddf07b01c480af48f",
+      "after_svg_sha256": "8599396f12480c79142c7cb776809f8f072b023918b05b6a7a669c4065cee124"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_entity_teoz.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "05a7c401d4879cd46b497db7b5039c88ab49067f0291c32bdeba45c450164678",
+      "after_svg_sha256": "db3cc7709422f85c0fe2e52b230ee58805e48e91d8337e61c72afdcfb713a537"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_database_legacy.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "ae51096f94579235172d5bc3484afa2ab735c79a917b1241edced0015363383c",
+      "after_svg_sha256": "d14a686e6a7a9c9298932fd6fb3556eb4cd7d6717ffc53097af3a4a80592c92c"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_database_teoz.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "5d3b67860b50d25eec3ee7f7c5e9cf059e153914fbaabe79b4f702655c7513c1",
+      "after_svg_sha256": "81298db82ea01565e207cd99965e02310793a7f174e77a7f25bdea4cb14bae29"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_collections_legacy.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "8566acdcea124d7c01f2ef6d10ae08bce5539fa43958291bb07a812ade07948c",
+      "after_svg_sha256": "30011d19517b06c31cfeab9a8b66c0d0f1431fc9a7a8be526a5f3bb44807d987"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_bottom_collections_teoz.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "a08ac4c4996b664241eef732274d9e1ecdaec11f55554ff32fc97dd843020b2e",
+      "after_svg_sha256": "2a3807680f9f20bbe4050d9e5607f4a6d6fecc69fde5caf33c03688d8861c135"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_mixed_order_restore_legacy.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "a03d23013227d6fd966b9b58960dd03467928f230969155490ed6797af225134",
+      "after_svg_sha256": "e616be09518f8d09fab4cb4b4f2b0a3fc6acf2aee7670d701adf7ac48b3fd102"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_mixed_order_restore_teoz.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "e2add67a7567a92f405256941d2e8745fc8f1432beaefef80d30c63d6cb00e44",
+      "after_svg_sha256": "6774269b00b009a57d6a3170efa704cfcd2bc4817a7d47df6f8aa3a96fa0a01f"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_created_actor_legacy.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "94e8ef114dff67ff24b59a02678eed7062da087ab6d3af41523f41ed6b9b16fe",
+      "after_svg_sha256": "c9c5c7d2a21f4d1c42564e7a6a26516a4691504ccf31b0ba2e50c70c9f36ee54"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-filtered-ordered-participant-display/indf535_created_actor_teoz.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "ce7ec484ee6bdd7ca2ae762ef963beb461f8f826784f17ce32ecb8a30009baa9",
+      "after_svg_sha256": "f6a9471cfdbbe0fb8e864278daf1359282b0eb06fa0d24cf1bc13952d6575891"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-aggregate-paint-height/indf535_rnote_self_attached_teoz.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "b6c650e227a2dc69adea9e7b86c242286b88a1e08c149d4aec9106a216f910f9",
+      "after_svg_sha256": "22aacb91d7c2966072c01d75c811170ba0570437634549797e3849a94e169893"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-aggregate-paint-height/indf535_hnote_self_attached_teoz.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "f2f106e9dd5152a0802928d5c37deeda0e6166ccaf7922cc833bf7f501dd06f9",
+      "after_svg_sha256": "22aacb91d7c2966072c01d75c811170ba0570437634549797e3849a94e169893"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_attached_upper_teoz.puml",
+      "cohort": "checker148",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "254559065212275d25f446d1ae630c6c1519875158666c14b2f31dd460c52d98",
+      "after_svg_sha256": "bf458d888cc07084434b85164448049b7b3cca23b69cbaef8085dbf139d22dad"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/participant_ordered_legacy.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "310ac65fee88f47615a01e17c84c7d25dd3acc8cbf1ba45a1751359e54fab9d1",
+      "after_svg_sha256": "46f5360eae33f2e0f7f5c73449593d9891ffa2fb4ad249460b02c2b32f4fd568"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/participant_ordered_teoz.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "8c0ebc66b4ddd425c7bef0d380be11d854dc45c92ab9312cd62ab420ac67f8df",
+      "after_svg_sha256": "811bf240b828d4d25dc215c49477119ab533a2d268b7db18548a51c2fe98f57d"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/actor_ordered_legacy.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "e907bdb50ed559757f990d643564d136cba0c9e8904336cbb01dcbd24d14a59c",
+      "after_svg_sha256": "1c6fecd357afb857b71c16b45dc19a2628d1c84b567da70317a411879d6053e3"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/actor_ordered_teoz.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "0a4c91ed5a856b7a2aa3f050255e3e570ac96b6b6f735d5389c50294334873ad",
+      "after_svg_sha256": "d0de766e7936a18200598d12b900b1536f9b7f3682b58b53f9050758cbfc72aa"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/boundary_ordered_legacy.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "f7c714b63db6e5107dd3a3a83368ae374506608b424e8ca32ada1ea3fbbdf0e8",
+      "after_svg_sha256": "e8fec6db9ea5cdbaa454b60b26ecc2d4985027e849abe5b090ec98af2b00076d"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/boundary_ordered_teoz.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "1ecaf5ffc8adc2f42ebf7dd374085f0698d057574f1c976717794e66e3892d56",
+      "after_svg_sha256": "daef11b0afef3f4cd5f87fda5dd3f01e416f4ecad426340723c1bf194207d5a9"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/control_ordered_legacy.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "80f69ac640ba2bed003fc4b7a484f4fdfeb33e95b7fbf6983a7e233d650ae719",
+      "after_svg_sha256": "b98d87e394492839785f63b91553e3ec5930c6a0d121e3f1c8b0caa5a3636391"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/control_ordered_teoz.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "8617b05f61fe3db895cf34e2521e5b807b847821968eceabc7c6852cdfe5a09d",
+      "after_svg_sha256": "a5eca23118f792c8d5e72fda8dd30a345942ca327a6a779a4e8ffd4c2648e571"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/entity_ordered_legacy.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "10dfba4235567f4dca33cffe1f33e4f0d98518b6cc03786238cf34c5b7c16436",
+      "after_svg_sha256": "d59db7f40b0523222c132d7d0a9361d8b951b0ef34c9ff53a56a2ff4c483cc36"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/entity_ordered_teoz.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "1bb718a9b4b9637b9e01a85dca15c619b5f7fef31efdd875f868efcc272af6c4",
+      "after_svg_sha256": "9e8403d6fa3dc21def82d4d73d91fca1c2a8c8e532500814692a66749f5f2195"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/database_ordered_legacy.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "270acae2943f1bf59574bae8c2565b0d8f070ac4ce737e891e9ac30d894d1b29",
+      "after_svg_sha256": "cfda00ba03efb67b513fd2aa511e14f7e1c87b3d87ee43b369b7e6c94055b339"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/database_ordered_teoz.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "20ba01c813f64019dcc17ab8b56f4122ecfb6ec3d32ab8d39434086121fb2361",
+      "after_svg_sha256": "60a9be7b024fb80ec8b4be7e85d2ddd796336984fb9ee160246d5250eef391cf"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/collections_ordered_legacy.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "0f67c07602a5f86e71b667afd1fe76b4b421d6c6d7185638edf5729a56e442a9",
+      "after_svg_sha256": "f5108dfc4ea2d701b76c81ce4515259cceba0cf10e9132d9bb5dcb24fa3f164a"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/collections_ordered_teoz.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "c9515aa77d74379b19cf8201249f804bf4d0922a9b0225f0e4c6439e008ea3bc",
+      "after_svg_sha256": "fa9b1442fdb88ecdb1a532cd7829a77e776bc68686f58d625b18c85cdb4ec333"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/self_left_rnote_teoz.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "5631de06a95eaebb5a72003ab88929594139c67b26d2ebe892960a7fcb7a9d07",
+      "after_svg_sha256": "cc0530fe7ec24c69774b811b1df6c18cf1cd49c300b01a3f2dca36ced44d8b73"
+    },
+    {
+      "source": "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/self_right_hnote_teoz.puml",
+      "cohort": "maker30",
+      "before_status": 1,
+      "after_status": 0,
+      "before_cli": 0,
+      "after_cli": 0,
+      "before_svg_sha256": "4c74893dc7ac7003bf7c5b15df8bf720cba417ff1924c7d43b3d25467d57afd6",
+      "after_svg_sha256": "53f620aa4f4ec31b3eb7d6b36bc24cf8ae7090c857f4c506a0107a2b859f3e49"
+    }
+  ],
+  "losses_by_mode": {
+    "cli_comparison": [],
+    "product_library": [],
+    "assisted_library": []
+  },
+  "new_valid_cli_errors": [],
+  "rejection_contract": {
+    "entries": 99,
+    "before_rejections": 65,
+    "after_rejections": 77,
+    "introduced_losses": [],
+    "after_false_accepts": [
+      "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+      "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+      "test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+      "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+      "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+      "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+      "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+      "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_bad_pattern.puml",
+      "test-diagrams/perturbations/tim-explicit-date-instant/checker_invalid_overflow_seconds.puml",
+      "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inline_comment.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset0.puml",
+      "docs/parity-reviews/sequence-teoz-event-history/maker-results/inputs/valid_history_2_reset1.puml",
+      "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_empty.puml",
+      "docs/parity-reviews/sequence-composed-components-packet/maker-results/inputs/factory_mixed.puml",
+      "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_mixed_after.puml",
+      "test-diagrams/perturbations/sequence-factory-command-viability/checker_672_factory_unknown.puml",
+      "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_legacy.puml",
+      "test-diagrams/perturbations/sequence-component-display-review711/review711_ordinary_parts_teoz.puml",
+      "test-diagrams/perturbations/sequence-component-display-review711/review711_blank_display_legacy.puml",
+      "test-diagrams/perturbations/sequence-component-display-review711/review711_blank_display_teoz.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/message_gap_em_legacy.puml",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-consumers-bce6/reference-inputs/message_gap_narrow_legacy.puml"
+    ]
+  },
+  "main_library_tiers": {
+    "product_pass": 11181,
+    "eligible": 11251,
+    "assisted_pass": 10497,
+    "assisted_failures": 754,
+    "skipped": 1299,
+    "sequence": "1411/1411",
+    "changes": {
+      "no_oracle_failure_names.txt": {
+        "recovered": [],
+        "newly_failing": [],
+        "sha256": "ac1baa35e7c14367112dda1ca6c7eb1d22664bd80deebe8ba7043b28e4740910",
+        "byte_equal": true,
+        "snapshot": "Copied immediately after stable main/guard/standing command; before is immutable bce6 maker snapshot."
+      },
+      "golden_failure_names.txt": {
+        "recovered": [],
+        "newly_failing": [],
+        "sha256": "b92f592c7910f5fa5aaed1d6ddc6df7b7e2e7d79d1404c7e242091b06659ae1b",
+        "byte_equal": true,
+        "snapshot": "Copied immediately after stable main/guard/standing command; before is immutable bce6 maker snapshot."
+      }
+    },
+    "label": "Library APIs, not11251 CLI subprocesses"
+  },
+  "units": {
+    "parser": 581,
+    "renderer": 800,
+    "cli_pipe": 13,
+    "ascii_included": 12
+  },
+  "guards": "4/6; decimal provenance and rejected/unreviewed review records remain red",
+  "standing_perturbations": {
+    "entries": 1724,
+    "failures": 693,
+    "matches": 1031,
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-8eddc9af/crates/rustuml-oracle"
+  },
+  "broad_runs": 1
+}

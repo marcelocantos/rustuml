@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant Vega
+queue Sol
+Vega -> Vega: before
+create Sol
+@enduml

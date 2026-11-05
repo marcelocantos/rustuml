@@ -1,0 +1,6 @@
+@startuml
+participant "Tiny\n<size:23>Large</size>\nEnd" as P <<type>>
+participant "Middle\n\nFinal" as R
+P -> R: relay
+R -> P: return
+@enduml

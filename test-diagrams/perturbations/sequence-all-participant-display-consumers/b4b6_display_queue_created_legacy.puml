@@ -1,0 +1,8 @@
+@startuml
+skinparam stereotypePosition bottom
+participant Sender
+create queue "<b>Silver Meadow</b>\nthird register" as M <<s>> #LightBlue
+queue "Q" as Q <<longer classification>> #pink
+Sender -> M: born
+M -> Q: register
+@enduml

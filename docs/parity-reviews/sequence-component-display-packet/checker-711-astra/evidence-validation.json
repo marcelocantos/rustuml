@@ -1,0 +1,10 @@
+{
+  "review_records": 9,
+  "unique_fresh_pairs": 64,
+  "protected_paths": 8324,
+  "protected_changes": [],
+  "binary_source_bindings": "all three exact independent builds verified; after source matches worktree",
+  "capture_integrity": "Every saved CLI SVG in every replay archive matches its measurement SHA256",
+  "production_diff": "none",
+  "verification": "Evidence metadata/hash/schema checks only; no broad suite rerun after registration"
+}

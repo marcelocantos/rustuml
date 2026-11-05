@@ -1,0 +1,394 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-message-stripe-baselines",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A432882cd-4556-4e95-862f-31b54103f709",
+    "model": "gpt-6-astra",
+    "tool": "T3 Code / Codex harness",
+    "independence": "New checker; no maker involvement; no children; production unchanged",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-78c595f4",
+    "branch": "review/sequence-pending-stripe-independent-20261105"
+  },
+  "account_commit": "4aaab169442b1e8a1d9e896d0cd3f019de6803d4",
+  "implementation_commit": "653b1ed7a49784e6e6205f3aebf69a16278f8d78",
+  "tested_production": "653b1ed7a49784e6e6205f3aebf69a16278f8d78",
+  "evidence_tip": "ae1e0de4d39840dd58074d89d40aa97304c6ca9f",
+  "before_revision": "711dbca7c5e29592395f0927881aabfc2517b217",
+  "before_production": "a4c3c35794ae1d7117d709134ed22c7191db9db8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/build_gates.py",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py docs/parity-reviews/sequence-pending-stripe-packet/maker-results/all-inputs.json replay2169",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/fresh86.json fresh86",
+    "uv run --no-project python /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/replay.py /Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/followup10.json followup10",
+    "/Users/marcelo/rustuml-reference/bin/reference --cwd PRIVATE_CWD --timezone GMT+11:00 -- -pipe -tsvg (parent existing relay; exact substituted argv retained per result)"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_forward_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_forward_legacy.svg",
+      "axes": [
+        "four alternating sizes",
+        "forward",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "27ef868d1732ee4656e1e9add20d2d7ff58efcf37fe7b672b9975d76f41483dd",
+      "reference_sha256": "cc1f88f861348582d14e2fa84654a6cef178e8e3c7e945cf9d544aec24823ac0",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 52
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_forward_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_forward_teoz.svg",
+      "axes": [
+        "four alternating sizes",
+        "forward",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "2ea55c5edfa6fa06391d5b0c5344c0d1fe0254226c1233c8f2f7c82f957ce2ac",
+      "reference_sha256": "51a411963a70c47fd72a598a024cdad82b993b8970795e68d88d13a403e11f19",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 53
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_reverse_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_reverse_legacy.svg",
+      "axes": [
+        "four alternating sizes",
+        "reverse",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "c1dc9a94782ee69182bf9af04f64b0a2ba7d064cf6abfe79401f6f860afa41cf",
+      "reference_sha256": "4f99b8bc18adbb6a7ccdac9cf4e7e0b19fc2763bf3c0f0ec93967da4ae8fc0c8",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 54
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_reverse_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_reverse_teoz.svg",
+      "axes": [
+        "four alternating sizes",
+        "reverse",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "cf53fdba701ce13c6e7f1038a9178fceb033100c379c86741901cc00f4472121",
+      "reference_sha256": "b9221ccfa699f7b9950395f686a4ea802bb5b579e4f04f9292c34d677aba9669",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 55
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_self_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_self_legacy.svg",
+      "axes": [
+        "four alternating sizes",
+        "self",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "9687a7563d41f6ac1304b1b9addf27d531e61dc769078119e538e94d48f0447f",
+      "reference_sha256": "fa96e74b1b584a8fe969f42d9c2684e7adcfcfd685330fa417cf08bf8a3ecc62",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 56
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_self_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_self_teoz.svg",
+      "axes": [
+        "four alternating sizes",
+        "self",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "9d522ec9fa72ac332d523c769daebd6c14ce544e1e416ce2fa07fe804b35f82c",
+      "reference_sha256": "f2bd96d7b8c4e0e22cfa3ba4f0c0a408b62df1687a1ecfff06a802963be5b551",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 57
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_reverse_self_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_reverse_self_legacy.svg",
+      "axes": [
+        "four alternating sizes",
+        "reverse_self",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "0e9ea1d25fa0e3b59e7c9f2227a1201d6c85d8a8c95a314096aca7037442f1bb",
+      "reference_sha256": "65739ab5eabbf0cf8c98351f39c36c8cfb100a1b86f8ef0465f6f30c34d97d3a",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 58
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_reverse_self_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_reverse_self_teoz.svg",
+      "axes": [
+        "four alternating sizes",
+        "reverse_self",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "980c742df63089549e1633ac3f71ecbb3e41caa576c02c230488dac88badc49e",
+      "reference_sha256": "bedf3dedcb2de8df21f3c82918f94c26bfa1d1d991ff0cd301b0bdb5a4674cae",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 59
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_external_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_external_legacy.svg",
+      "axes": [
+        "four alternating sizes",
+        "external",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "fa9a41e5c7173ad38eb1bb943115263fd2941ae3415efb6935fdc8bf136620ef",
+      "reference_sha256": "34515d0afa64f6ce0b1525dc33d2b06e32201852e2e6541e22632d741c3ab708",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 60
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_external_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_external_teoz.svg",
+      "axes": [
+        "four alternating sizes",
+        "external",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "84bed69fc39c38a6499629655624d5058895242f2f154f7d61b97417a6e14731",
+      "reference_sha256": "372d4d96134c54bb7c28b446d0d339a41d9c4ed21e3f5d855fb85c6576263996",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 61
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_heading_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_heading_legacy.svg",
+      "axes": [
+        "heading and size",
+        "four lines",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "319753ff191a32e272364e89756cb57edba0a38b64b2ab8bddb7e9c70de0f5b4",
+      "reference_sha256": "2b381f295c96e9ae4ecc99b86669c5fb8a7f619dce9f5383f9ff60169402b9a5",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 62
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_heading_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_heading_teoz.svg",
+      "axes": [
+        "heading and size",
+        "four lines",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "19dad72489888406846d95e1e7f0b9d305607056876b32c17b278186f624f134",
+      "reference_sha256": "a6758395e74084f069999a0f17d8d9163e4277b6909c2d8068881d99306ac5b6",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 63
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_styles_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_styles_legacy.svg",
+      "axes": [
+        "inline style",
+        "alternating size",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "71adb4d95e70869049ce10c9e5a46ca7fcf89e7453e5b632c4030c1ae47460b1",
+      "reference_sha256": "3db345beb0f0bd98149442546d8ebf6b47a1d3211debc4e5635045ce2de3b630",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 64
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_styles_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_styles_teoz.svg",
+      "axes": [
+        "inline style",
+        "alternating size",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "pass",
+      "source_sha256": "356aeb06653c3d61e70febbfc9ff5fdb435a463b8f669b646a96b486211d9dc4",
+      "reference_sha256": "7e1cc5583b9b3230f04ad552a3483131916238902b324e95d5c6afb871e48887",
+      "before_comparison_exit": 1,
+      "comparison_exit": 0,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 65
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_note_divider_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_note_divider_legacy.svg",
+      "axes": [
+        "separate consumer control",
+        "note and divider",
+        "legacy"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "365ea9b776596a111498e4a111792396341a2913b6fadc42dd0ed5ff275d1926",
+      "reference_sha256": "9a19fe0839ff80be63ef9cef4f67afc80aa22315d15ad1f547c6745bec3e0a72",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 66
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_note_divider_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-message-stripe-baselines/ind78_stripe_note_divider_teoz.svg",
+      "axes": [
+        "separate consumer control",
+        "note and divider",
+        "teoz"
+      ],
+      "intended_valid": true,
+      "observed_valid": true,
+      "result": "fail",
+      "source_sha256": "9bab4b72bea669a34625edbe7d57d468c3ff00f111c4951d7f1b7fbc34fd7c7b",
+      "reference_sha256": "fab96e147f929b4db4e8b26f3d4a581c3191d711cba52f9228b53f33eb0769fb",
+      "before_comparison_exit": 1,
+      "comparison_exit": 1,
+      "before_cli_exit": 0,
+      "cli_exit": 0,
+      "cli_stderr": "",
+      "capture_set": "fresh86",
+      "capture_index": 67
+    }
+  ],
+  "findings": [
+    "SheetBlock1.initMap aligns each Sea, translates minY to cumulative height, then advances by that Sea height. Sea.doAlign uses atom dimensions and starting altitude. emit_message_label's current-minus-previous ascent increment is algebraically consistent with this baseline transition, with no fitted constant.",
+    "Twelve fresh valid four-stripe alternating-size, forward/reverse/self/reverse-self/external and inline bold/italic/underline controls match after. Two heading-form controls remain whole failures: Java paints Crest/Ridge, while Rust paints literal '= Crest'/'== Ridge' and measures different text/canvas. This is present before and after and remains a consumer/creole limitation, not a new regression.",
+    "Rust notes and dividers do not call emit_message_label: Event::Note owns line_top plus line_metrics.ascent / EnhancedNoteBody; Event::Divider directly calls text_render::emit_text. Their two control sources remain whole failures in both revisions and are explicitly outside the changed message emitter. No transfer of the new baseline formula is claimed.",
+    "present_bold_empty and style_parameter_contrast are both whole failures in before and after exact CLI replay. This checkout has no concurrent shared style/creole/text_render/WBS production, and these findings certify no combined behavior."
+  ],
+  "verdict": "rejected",
+  "next_obligations": [
+    "Complete heading/Display stripe semantics and separately integrate shared text changes under a new exact-tree review.",
+    "Keep note/divider and both shared handoff whole failures active; do not count a localized baseline improvement as their repair."
+  ],
+  "evidence_directory": "docs/parity-reviews/sequence-pending-stripe-packet/checker-ae1e0de4-astra",
+  "counts": {
+    "entries": 16,
+    "valid": 16,
+    "before": {
+      "1": 16
+    },
+    "after": {
+      "0": 12,
+      "1": 4
+    },
+    "verdict": "rejected"
+  },
+  "limitations": [
+    "Whole failure rejects; bounded support never waives any failed counterexample or imports historical acceptance.",
+    "Stable broad gates ran once per exact revision before evidence registration; no repeated broad run for evidence-only files. Existing gates remain red.",
+    "Java argv derived from pinned wrapper, not process traced. Remote OpenJDK21.0.5/Graphviz12.2 historical font/Graphviz equivalence is unproved.",
+    "No combined correctness with concurrent creole/text_render/WBS packet."
+  ]
+}

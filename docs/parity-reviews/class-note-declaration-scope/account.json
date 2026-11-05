@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; no acceptance",
+  "rust_base": "0a04a06acb2a072946356a741a5850377dd5c039",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "negative_evidence_contract": "All relevant valid failures remain blocking. No checker record changes.",
+  "mechanism": "class-note-declaration-scope",
+  "java_locations": [
+    "command/note/CommandFactoryNoteOnEntity#executeInternal",
+    "svek/GraphvizImageBuilder#printGroup,printEntity",
+    "svek/SvekEdge#opale",
+    "svek/image/EntityImageNote#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/class.rs#Note",
+    "crates/rustuml-parser/src/parse/class.rs#try_note,push_note",
+    "crates/rustuml-render/src/class.rs#package_render_model,attached_layout_slots,add_cluster_node"
+  ],
+  "invariant": "A note is a leaf in its declaration quark scope, independent of attachment target scope. Cluster membership and the note edge must both enter the graph before layout.",
+  "causal_divergence": "Note retains target but no declaration owner; renderer creates attached notes at the root while only class entities become cluster members. Same-rank note attachment across a parent boundary then distorts group dimensions and note positions.",
+  "planned_model_change": "Persist declaration owner package, count note leaves for group nonemptiness, enroll note layout node in its exact declaration cluster and preserve target identity separately. Trace Opale and final painted origin before any further note geometry corrections.",
+  "perturbation_axes": [
+    "note inside/outside target group and sibling/nested aliases",
+    "left/right/top/bottom, multiline and named floating notes"
+  ],
+  "planned_change": "Persist declaration owner package, count note leaves for group nonemptiness, enroll note layout node in its exact declaration cluster and preserve target identity separately. Trace Opale and final painted origin before any further note geometry corrections."
+}

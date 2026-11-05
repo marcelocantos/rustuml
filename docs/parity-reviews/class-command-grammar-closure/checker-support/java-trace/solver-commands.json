@@ -1,0 +1,47 @@
+[
+  {
+    "command": [
+      "/tmp/rustuml-checker2740/raw_dot",
+      "/tmp/rustuml-checker2740/java-trace/group_lr/svek.dot"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "/opt/homebrew/bin/dot",
+      "-Tdot",
+      "/tmp/rustuml-checker2740/java-trace/group_lr/svek.dot"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "/tmp/rustuml-checker2740/raw_dot",
+      "/tmp/rustuml-checker2740/java-trace/package_target/svek.dot"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "/opt/homebrew/bin/dot",
+      "-Tdot",
+      "/tmp/rustuml-checker2740/java-trace/package_target/svek.dot"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "/tmp/rustuml-checker2740/raw_dot",
+      "/tmp/rustuml-checker2740/java-trace/shield/svek.dot"
+    ],
+    "exit": 0
+  },
+  {
+    "command": [
+      "/opt/homebrew/bin/dot",
+      "-Tdot",
+      "/tmp/rustuml-checker2740/java-trace/shield/svek.dot"
+    ],
+    "exit": 0
+  }
+]

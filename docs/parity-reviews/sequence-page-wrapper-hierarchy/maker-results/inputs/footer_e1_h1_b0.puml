@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+hide footbox
+footer bookkeeping
+participant Birch
+participant Robin
+Birch -> Robin : start
+Robin -> Birch : end
+@enduml

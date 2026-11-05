@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant "Reserved Alias" as of
+participant Kestrel
+of -> Kestrel: seed
+note over of : reserved identity
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+participant Vega
+queue Sol
+Vega -> Vega: before
+create Sol
+@enduml

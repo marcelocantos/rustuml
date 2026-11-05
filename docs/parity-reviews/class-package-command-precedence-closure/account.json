@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; no acceptance",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_base": "0a04a06acb2a072946356a741a5850377dd5c039",
+  "java_locations": [
+    "classdiagram/ClassDiagramFactory#initCommandsList",
+    "command/CommandPackage#getRegexConcat,executeArg",
+    "descdiagram/command/CommandPackageWithUSymbol#getRegexConcat,executeArg",
+    "stereo/StereotypeDecoration#cutLabels"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#try_package",
+    "crates/rustuml-render/src/class.rs#emit_layout_symbol_cluster_title"
+  ],
+  "invariant": "CommandPackage gets the first complete-line trial before CommandPackageWithUSymbol. Its single stereotype capture may encompass apparent alias syntax and several chevron labels, so actual identity comes from the chosen command. Symbol headers own all their selected stereotype lines.",
+  "causal_divergence": "The new structured symbol grammar repairs strict rejection but erased the earlier complete ordinary package grammar precedence, now visible in checker_three_fallback_split_nested_tb. Existing symbol title drawing ignores stereotype lines even though layout reserves them.",
+  "planned_model_change": "Run the precise ordinary package full-line grammar first, retain its NAME/AS and complete stereotype capture (extracting chevron labels) when successful; otherwise retain distinct symbol identity and trailing slots. Paint selected symbol stereotype lines in each USymbol asBig order. Preserve prior rejected records.",
+  "perturbation_axes": [
+    "ordinary versus explicit symbol keyword and pre/post-AS stereotype placements",
+    "multiple stereotype labels, aliases and nested groups"
+  ],
+  "negative_evidence_contract": "No failed valid inputs waived.",
+  "planned_change": "Run the precise ordinary package full-line grammar first, retain its NAME/AS and complete stereotype capture (extracting chevron labels) when successful; otherwise retain distinct symbol identity and trailing slots. Paint selected symbol stereotype lines in each USymbol asBig order. Preserve prior rejected records.",
+  "mechanism": "class-package-command-precedence-closure"
+}

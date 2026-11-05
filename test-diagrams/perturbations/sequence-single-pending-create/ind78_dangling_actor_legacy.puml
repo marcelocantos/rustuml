@@ -1,0 +1,6 @@
+@startuml
+participant Vega
+actor Sol
+Vega -> Vega: before
+create Sol
+@enduml

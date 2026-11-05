@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "baseline": "efc2e922bbd093cf13d827501f5e53aa850a9e68",
+  "checker_evidence": "fdf1154eb3a17ebb041fffb0c18710a38210f56b",
+  "mechanism": "sequence-component-style-consumption",
+  "java_locations": [
+    "skin.rose.Rose#createComponent/#createComponentNote",
+    "skin.ComponentType#getStyleSignature",
+    "skin.rose.ComponentRoseLine#drawInternalU",
+    "skin.rose.ComponentRoseParticipant#getPreferredWidth/#getPreferredHeight/#drawInternalU",
+    "skin.rose.AbstractComponentRoseArrow#getForegroundColor/#getBackgroundColor",
+    "skin.rose.ComponentRoseActiveLine#drawInternalU",
+    "style.StyleSignatureBasic#getMergedStyle",
+    "style.Style#getShadowing",
+    "src/main/resources/skin/plantuml.skin"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::render component style materialization",
+    "crates/rustuml-render/src/sequence.rs::ParticipantLayout and PlantUmlSvg"
+  ],
+  "invariant": "Each sequence component consumes its own resolved inherited style; sibling lifeLine does not supply activationBox fallback. A component shadow contributes only where its Java preferred dimensions and painter consume it.",
+  "causal_divergence": "Note and activation resolve sparse styles but lifeline/arrow/participant paint still takes legacy skinparam-only values. Global shadow is treated as a boolean3, losing root numeric participant preferred dimensions and filters.",
+  "planned_change": "Reuse read-only shared StyleCascade with appropriate sequence component signatures for colors and component shadow values. Carry supported participant preferred shadow dimensions and independent activation/group paint effects rather than copying lifeLine into activationBox. Trace remaining kind-specific/theme envelope dependencies without offsets or shared-file edits.",
+  "perturbation_axes": [
+    "inherited root versus scoped lifeLine/arrow/participant/activationBox",
+    "root numeric shadow with independent note/component overrides",
+    "legacy/Teoz and participant order/topology"
+  ],
+  "scope_limits": [
+    "No shared text_render/creole/font/style edits",
+    "Theme self-note padder/Real/envelope and per-kind unknown dimensions remain explicit dependencies unless completely source-derived within this packet"
+  ]
+}

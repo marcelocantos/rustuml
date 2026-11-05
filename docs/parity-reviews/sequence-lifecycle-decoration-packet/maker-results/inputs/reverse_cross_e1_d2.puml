@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Before
+participant Worker
+Before -> Worker ++ : enter
+Before -> Worker ++ : enter
+Worker <-x Worker : reverse source cross
+return #blue inherited dressing
+@enduml

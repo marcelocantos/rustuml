@@ -1,0 +1,8 @@
+@startuml
+participant of2
+participant of
+of2 -> of: inbound
+rnote over of, of2
+paired ledger
+end rnote
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+participant Quartz
+Quartz <-> Quartz: full
+Quartz <-/ Quartz: lower
+Quartz <-\\ Quartz: upper open
+Quartz o<-/o Quartz: rings
+Quartz <<-\\ Quartz: asymmetry
+@enduml

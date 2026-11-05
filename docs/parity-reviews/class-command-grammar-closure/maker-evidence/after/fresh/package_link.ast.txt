@@ -1,0 +1,98 @@
+Class(
+    ClassDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\npackage \"Link Yard\" as Yard $one <<Public>> $two [[https://example.org/yard{Yard manual}]] {\nclass Gate\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        uid_events: [
+            Package(
+                "Yard",
+            ),
+            Entity(
+                "Yard.Gate",
+            ),
+        ],
+        entities: [
+            ClassEntity {
+                id: "Yard.Gate",
+                label: "Gate",
+                explicit_alias: false,
+                kind: Class,
+                is_static: false,
+                visibility: Default,
+                members: [],
+                stereotypes: [],
+                generic: None,
+                url: None,
+                url_tooltip: None,
+                spot_color: None,
+                spot_character: None,
+                color: None,
+                text_color: None,
+                line_color: None,
+                line_style: None,
+                source_line: 2,
+            },
+        ],
+        relationships: [],
+        association_classes: [],
+        together: [],
+        packages: [
+            Package {
+                tags: [
+                    "one",
+                    "two",
+                ],
+                url: Some(
+                    "https://example.org/yard",
+                ),
+                url_tooltip: Some(
+                    "Yard manual",
+                ),
+                name: "Yard",
+                kind: Package,
+                color: None,
+                entities: [
+                    "Yard.Gate",
+                ],
+                parent: None,
+                source_line: 1,
+                stereotypes: [
+                    "Public",
+                ],
+                display_name: Some(
+                    "Link Yard",
+                ),
+                phantom: false,
+            },
+        ],
+        notes: [],
+        hide_show: [],
+        header_line: None,
+        header_alignment: None,
+        footer_alignment: None,
+        footer_line: None,
+        title_line: None,
+        caption_line: None,
+        legend_line: None,
+    },
+)

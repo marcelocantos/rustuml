@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+skinparam stereotypePosition top
+hide stereotype
+participant "<b>Silver Meadow</b>\nthird register" as M <<s>> #LightBlue
+participant "Q" as Q <<longer classification>> #pink
+M -> Q: register
+@enduml

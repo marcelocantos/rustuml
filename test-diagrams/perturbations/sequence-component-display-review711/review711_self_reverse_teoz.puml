@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+participant Larch
+Larch <- Larch: reverse
+Larch /- Larch: lower
+Larch \\- Larch: upper open
+Larch o<-o Larch: rings
+activate Larch
+Larch /- Larch: live
+ deactivate Larch
+@enduml

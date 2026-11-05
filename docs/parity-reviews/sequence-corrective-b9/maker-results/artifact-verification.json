@@ -1,0 +1,22 @@
+{
+  "kind": "Maker packaging integrity checks, not a checker verdict",
+  "json_parsed": true,
+  "archive_measurements_and_svg_hashes_verified": true,
+  "archived_batches": {
+    "before1897": 1897,
+    "focus-first": 69,
+    "focus-second": 69,
+    "after1897": 1897,
+    "final1897": 1897,
+    "validation-8d668d3f/final1897": 1897,
+    "main-regression-before": 3,
+    "main-regression-intermediate": 3,
+    "main-regression-fixed": 3,
+    "shadow4-before": 4,
+    "shadow4-intermediate": 4,
+    "shadow4-final": 4
+  },
+  "raw_references_preserved": 24,
+  "raw_reference_status": "All exit0, zero timeouts; semantic classification/CLI comparison recorded separately",
+  "source_and_reference_hashes_verified": true
+}

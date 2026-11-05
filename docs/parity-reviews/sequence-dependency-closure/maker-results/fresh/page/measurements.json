@@ -1,0 +1,488 @@
+[
+  {
+    "source": "page_0.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_1.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_10.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_11.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_12.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_13.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_14.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_15.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_16.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_17.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_18.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_19.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_2.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_20.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_21.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_22.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_23.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_24.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_25.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_26.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_3.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_4.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_5.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_6.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_7.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_8.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  },
+  {
+    "source": "page_9.puml",
+    "product": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "assisted": {
+      "exit": 0,
+      "stdout": "SVGs are structurally equivalent\n",
+      "stderr": ""
+    },
+    "cli": {
+      "exit": 0,
+      "stderr": "",
+      "same_compared_svg": true
+    }
+  }
+]

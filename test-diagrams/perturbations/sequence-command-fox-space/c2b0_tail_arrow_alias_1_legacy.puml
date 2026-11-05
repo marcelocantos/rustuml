@@ -1,0 +1,5 @@
+@startuml
+participant Vale
+"Depot label"asDock -> Vale: introduced
+Vale -> Dock: reply
+@enduml

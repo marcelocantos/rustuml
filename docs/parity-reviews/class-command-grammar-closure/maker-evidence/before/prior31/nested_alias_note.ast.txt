@@ -1,0 +1,123 @@
+Class(
+    ClassDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nframe \"Weather House\" as Outer {\nnode Inner as \"Signal Bay\" {\nclass Thermometer\nnote right of Thermometer\ncomponent textual\n[explanation]\nend note\n}\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        uid_events: [
+            Package(
+                "Outer",
+            ),
+            Package(
+                "Outer.Inner",
+            ),
+            Entity(
+                "Outer.Inner.Thermometer",
+            ),
+            Note(
+                0,
+            ),
+        ],
+        entities: [
+            ClassEntity {
+                id: "Outer.Inner.Thermometer",
+                label: "Thermometer",
+                explicit_alias: false,
+                kind: Class,
+                is_static: false,
+                visibility: Default,
+                members: [],
+                stereotypes: [],
+                generic: None,
+                url: None,
+                url_tooltip: None,
+                spot_color: None,
+                spot_character: None,
+                color: None,
+                text_color: None,
+                line_color: None,
+                line_style: None,
+                source_line: 3,
+            },
+        ],
+        relationships: [],
+        association_classes: [],
+        together: [],
+        packages: [
+            Package {
+                name: "Outer",
+                kind: Frame,
+                color: None,
+                entities: [
+                    "Outer.Inner.Thermometer",
+                ],
+                parent: None,
+                source_line: 1,
+                stereotypes: [],
+                display_name: Some(
+                    "Weather House",
+                ),
+                phantom: false,
+            },
+            Package {
+                name: "Outer.Inner",
+                kind: Node,
+                color: None,
+                entities: [
+                    "Outer.Inner.Thermometer",
+                ],
+                parent: Some(
+                    0,
+                ),
+                source_line: 2,
+                stereotypes: [],
+                display_name: Some(
+                    "Signal Bay",
+                ),
+                phantom: false,
+            },
+        ],
+        notes: [
+            Note {
+                lines: [
+                    "component textual",
+                    "[explanation]",
+                ],
+                target: Some(
+                    "Outer.Inner.Thermometer",
+                ),
+                position: Some(
+                    Right,
+                ),
+                alias: None,
+                color: None,
+                source_line: 5,
+            },
+        ],
+        hide_show: [],
+        header_line: None,
+        footer_line: None,
+        title_line: None,
+        caption_line: None,
+        legend_line: None,
+    },
+)

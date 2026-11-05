@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; not independently accepted",
+  "rust_revision": "0a04a06acb2a072946356a741a5850377dd5c039",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "negative_evidence_contract": "Previously passing comparisons AND valid-input parseability must be preserved. Every relevant valid failing input remains blocking. No checker attestation will be authored.",
+  "mechanism": "class-current-spot-cascade",
+  "java_locations": [
+    "svek/image/EntityImageClassHeader#getCircledCharacter,spotStyleSignature",
+    "style/StyleSignatureBasic#getMergedStyle",
+    "skin/rose/Rose"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#ClassFontOverrides::from_skinparams,from_diagram_entity,render_entity_content"
+  ],
+  "invariant": "A class header resolves its spot background, border and font through the current style builder for its native type, even when its entity body retains an earlier creation style.",
+  "causal_divergence": "Forward skinparam find retains the first theme segment stereotypeC colors and from_diagram_entity never overrides those fields with current spot style. The independent TIM checker confirms failures in both theme orders with exact identity.",
+  "planned_model_change": "Resolve the Java spot signature through the existing StyleCascade at render time in owned class code; apply selected current background/line/font color while preserving explicit custom spot override and body creation style. No preprocessing or shared-style changes. Preserve parent reference bytes and compare original CLI plus isolated post-TIM source diagnostics.",
+  "perturbation_axes": [
+    "cerulean/minty ordering and explicit override before/after themes",
+    "native class/interface/record types and custom spots"
+  ],
+  "independent_dependency": "git show b2c9143f95de43cde37cbcc055a56da40e56735e:docs/parity-reviews/tim-theme-post-expansion-source-identity/review.json",
+  "planned_change": "Resolve the Java spot signature through the existing StyleCascade at render time in owned class code; apply selected current background/line/font color while preserving explicit custom spot override and body creation style. No preprocessing or shared-style changes. Preserve parent reference bytes and compare original CLI plus isolated post-TIM source diagnostics."
+}

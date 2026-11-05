@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+box Workers
+participant Cedar
+queue "Long Maple" as Maple <<work>>
+end box
+create Maple
+Cedar -> Maple ++: create
+Maple -> Cedar --: reply
+destroy Maple
+@enduml

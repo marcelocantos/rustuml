@@ -1,0 +1,44 @@
+[
+  {
+    "mechanism": "sequence-required-note-identity",
+    "path": "docs/parity-reviews/sequence-required-note-identity/review.json",
+    "verdict": "rejected",
+    "fresh_pair_entries": 56,
+    "fresh_match": 46
+  },
+  {
+    "mechanism": "sequence-command-fox-space",
+    "path": "docs/parity-reviews/sequence-command-fox-space/review.json",
+    "verdict": "rejected",
+    "fresh_pair_entries": 224,
+    "fresh_match": 103
+  },
+  {
+    "mechanism": "sequence-command-entry-grammar",
+    "path": "docs/parity-reviews/sequence-command-entry-grammar/review.json",
+    "verdict": "rejected",
+    "fresh_pair_entries": 42,
+    "fresh_match": 21
+  },
+  {
+    "mechanism": "sequence-command-provenance-correction",
+    "path": "docs/parity-reviews/sequence-command-provenance-correction/review.json",
+    "verdict": "rejected",
+    "fresh_pair_entries": 2,
+    "fresh_match": 2
+  },
+  {
+    "mechanism": "sequence-pattern2-class-composition",
+    "path": "docs/parity-reviews/sequence-pattern2-class-composition/review.json",
+    "verdict": "rejected",
+    "fresh_pair_entries": 68,
+    "fresh_match": 30
+  },
+  {
+    "mechanism": "sequence-create-command-signature-scope",
+    "path": "docs/parity-reviews/sequence-create-command-signature-scope/review.json",
+    "verdict": "rejected",
+    "fresh_pair_entries": 32,
+    "fresh_match": 32
+  }
+]

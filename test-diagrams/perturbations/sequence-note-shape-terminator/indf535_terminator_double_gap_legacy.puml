@@ -1,0 +1,7 @@
+@startuml
+participant Willow
+rnote over Willow
+reed
+end  rnote
+Willow -> Willow: outside
+@enduml

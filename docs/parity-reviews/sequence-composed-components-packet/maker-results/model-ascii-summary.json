@@ -1,0 +1,10 @@
+{
+  "entries": 55,
+  "changed_ascii": [
+    "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_legacy.puml",
+    "test-diagrams/perturbations/sequence-target-circle-decoration/checker_092_both_dispatch_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-092/reference-inputs/factory_sequence_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-092/reference-inputs/factory_sequence_teoz.puml"
+  ],
+  "note": "Factory ownership changes four ASCII outputs; no claim of ASCII behavior invariance. All raw model and ASCII stdout/stderr/status retained."
+}

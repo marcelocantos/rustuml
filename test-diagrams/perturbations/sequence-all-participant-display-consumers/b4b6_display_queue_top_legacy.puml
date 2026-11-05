@@ -1,0 +1,6 @@
+@startuml
+skinparam stereotypePosition top
+queue "<b>Silver Meadow</b>\nthird register" as M <<s>> #LightBlue
+queue "Q" as Q <<longer classification>> #pink
+M -> Q: register
+@enduml

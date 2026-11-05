@@ -1,0 +1,10 @@
+@startuml
+
+
+!theme cerulean
+
+
+class HawthornLedger
+
+
+@enduml

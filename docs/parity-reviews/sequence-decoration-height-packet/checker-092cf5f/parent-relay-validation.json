@@ -1,0 +1,13 @@
+{
+  "validated": true,
+  "cases": 31,
+  "calls": 31,
+  "gzip_sha256": "a8e9b5cda3b6c1d6b5663f0551f10b0425a2d459d34c9738192862445a61dbce",
+  "checks": [
+    "immutable input membership, bytes and hashes",
+    "raw stream hashes and transport",
+    "exact wrapper and Java argv",
+    "cwd mapping, timezone, environment and pinned headless reference"
+  ],
+  "classification_performed": false
+}

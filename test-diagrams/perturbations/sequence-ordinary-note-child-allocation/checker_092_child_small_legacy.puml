@@ -1,0 +1,8 @@
+@startuml
+skinparam noteFontSize 9
+skinparam sequenceMessageFontSize 23
+Quartz -> Finch ++ : wide message
+note right : short
+Finch -> Quartz : next
+deactivate Finch
+@enduml

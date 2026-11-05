@@ -1,0 +1,13 @@
+{
+  "base": "37642c05b4cbd8cf84fca9f32091f3848676d58c",
+  "head": "1b29d8c78d671649b0db6efcdc09e01391f6ce98",
+  "modified_existing_paths": [
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "imported_review_paths_verified": 468,
+  "imported_evidence_preserved_byte_for_byte": true,
+  "comparator_source_sha256": "d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701",
+  "measure_source_sha256": "966d34c58c2025580eb887907cac11ef753a4b02920a0a5bc56d600f22f092c9",
+  "invariant": "All existing accounts/reviews/fixtures/harness/comparator/baselines/targets unchanged. Production changes restricted to sequence parser and renderer."
+}

@@ -1,0 +1,6 @@
+@startuml
+participant "South Pier"
+N -> "South Pier": seed
+activate"South Pier"
+deactivate"South Pier"
+@enduml

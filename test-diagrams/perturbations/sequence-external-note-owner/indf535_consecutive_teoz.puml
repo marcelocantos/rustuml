@@ -1,0 +1,11 @@
+@startuml
+!pragma teoz true
+participant Nettle
+participant Sorrel
+[-> Nettle: first
+Sorrel ->]: second
+[<- Nettle: third
+note right: latest three
+Nettle -> Sorrel: ordinary
+note left: ordinary four
+@enduml

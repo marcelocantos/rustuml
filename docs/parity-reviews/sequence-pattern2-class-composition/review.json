@@ -1,0 +1,1346 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-pattern2-class-composition",
+  "reviewer": {
+    "task_id": "thread:delegated-task:command%3Amcp%3A3e6fe12c-b445-432a-9536-14b1ab9096f8%3Adelegate-task%3A481a605b-38ce-49c2-a334-2037d4b478a3",
+    "model": "gpt-6-astra, high reasoning effort",
+    "tool": "Codex harness in T3 Code",
+    "checkout": "/Users/marcelo/.t3/worktrees/rustuml/t3-2b056ca1",
+    "branch": "review/sequence-command-contract-independent-20261105",
+    "independent": true,
+    "prior_involvement": false,
+    "children": 0
+  },
+  "account_commit": "2a0441642b1d84315cb6bfef1d21c9fb4e5d3e08",
+  "implementation_commit": "70bc20cf1efe456fa5dd83e3a726c2796717ce9b",
+  "tested_rust_revision": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "production_revision": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "baseline_revision": "9784e412146e3ece634d88ea0a1bddd6b42a82b6",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "cargo build --release --jobs 4 -p rustuml -p rustuml-oracle --bin rustuml --example diff_one (exact per-revision cwd/env/targets in before-build.json and after-build.json)",
+    "Parent existing Monkey Man relay only: [\"/Users/marcelo/rustuml-reference/bin/reference\",\"--cwd\",\"PRIVATE_CWD\",\"--timezone\",\"GMT+11:00\",\"--\",\"-pipe\",\"-tsvg\"]; every expanded argv and source byte hash retained in reference-results.json.gz and supplement/reference-results.json.gz",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST PRIVATE_BIN_DIR PRIVATE_OUTPUT_DIR (unchanged comparator, before/after3111 and fresh358/fresh64)",
+    "cargo test --release --lib -p rustuml-parser -p rustuml-render",
+    "cargo test --release -p rustuml --test pipe_mode",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support/rejection_contract.py REPO_ROOT NEGATIVE_MANIFEST BEFORE_RUSTUML AFTER_RUSTUML OUTPUT_JSON"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_tight_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_tight_legacy.svg",
+      "axes": [
+        "note",
+        "over Vale",
+        "tight color-colon separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "fec57e8243586c687ed52857b29650b1422ac912c2b650e2b406db5d77afea36",
+      "golden_sha256": "4caddd649583a75e41f439b9ebb620ea7ad17ede60c92add4de93f7f0d993692",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_tight_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_tight_teoz.svg",
+      "axes": [
+        "note",
+        "over Vale",
+        "tight color-colon separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "d7d9444b4102292f53b55dc9e03d156ba620e3e39dbe9246de8d815745d36d68",
+      "golden_sha256": "43601844c3d5bc63ccf483fb91d957c5622f2369806e21b4347925f7b09cabd8",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_mixed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_mixed_legacy.svg",
+      "axes": [
+        "note",
+        "over Vale",
+        "mixed color-colon separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "5ecc9f52123c9d1c81b63994bbe2b2049730e0b638e189fbc2774f831cd098ac",
+      "golden_sha256": "6d1723e694b806bedb601ebb3112def1d413c4c944dbc5160d8e8757959b37f2",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_mixed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_mixed_teoz.svg",
+      "axes": [
+        "note",
+        "over Vale",
+        "mixed color-colon separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "b903a86ee1b15b381f250647c6f6b002e6e1c88294c8ce0f4e1a95912fdcbc87",
+      "golden_sha256": "5ca0dd90113e90077186f9076ea42cb627141fee83f655ea3a153b5b4071fa09",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_pair_tight_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_pair_tight_legacy.svg",
+      "axes": [
+        "note",
+        "over Quartz, Vale",
+        "tight color-colon separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "05505afc2746823087766e4c4498f574824dcf80e7cbcfa66030ef6267e74c01",
+      "golden_sha256": "7a9afe82994d553d49d4ae2912c8f8e1ba297f8edef35ff0b279a16bca1db6f3",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_pair_tight_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_pair_tight_teoz.svg",
+      "axes": [
+        "note",
+        "over Quartz, Vale",
+        "tight color-colon separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "b02576e31c5dc4755be4771f948ad8571e4c1ddb2c89cace6c7b2d5db570bea8",
+      "golden_sha256": "3ddb7d6326088546e9cd10007e805fb88d1eb355db64fac87386753681a35720",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_pair_mixed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_pair_mixed_legacy.svg",
+      "axes": [
+        "note",
+        "over Quartz, Vale",
+        "mixed color-colon separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "2f274288a1906d74b2001d25c866b896ef4ed44e232ba11f86c9c2e261d756b8",
+      "golden_sha256": "b7fac362895328f798db89ebb421d33f458ca7a63dc110e4ba6e795ab9e846ce",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_pair_mixed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_over_pair_mixed_teoz.svg",
+      "axes": [
+        "note",
+        "over Quartz, Vale",
+        "mixed color-colon separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "bd7f122c4e50a8f20048e2180c7e783ae0618029af1f22d03bf49bc2f567ad49",
+      "golden_sha256": "fc9b59f01d5b0877561a80c83e87a86b4ed52c309f9076130fddada497431d07",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_left_tight_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_left_tight_legacy.svg",
+      "axes": [
+        "note",
+        "left",
+        "tight color-colon separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "50c1a87eaa73aba8a17a7cef9f8d5e3565ce837c92af14042362dcbd72c1ab0b",
+      "golden_sha256": "7481841c77293b0c8d0f844b639d637f139c0cd94190785a5451c63e3f48dc25",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_left_tight_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_left_tight_teoz.svg",
+      "axes": [
+        "note",
+        "left",
+        "tight color-colon separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "fe6940cda3ad1396516fd8c29fb5a840c388b1741f4cf660c88dac9368b723de",
+      "golden_sha256": "d86902bb303fa02926534631c1ff61e514608f6e0108d6276911a3ea5d1489e1",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_left_mixed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_left_mixed_legacy.svg",
+      "axes": [
+        "note",
+        "left",
+        "mixed color-colon separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "e984d2f693d7f7bd11fc036e05c5c04de688b79316fc9abdf18e08fd1ad2d275",
+      "golden_sha256": "1743500515e0466c3a770f1986fa02708541ffb7bdcb196888c541de86a07e27",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_left_mixed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_left_mixed_teoz.svg",
+      "axes": [
+        "note",
+        "left",
+        "mixed color-colon separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "1169448bffa66f238e21e789d125017eb94f66a595a3caec35fd0318c0aeca0a",
+      "golden_sha256": "f12df9bb2b1b9c2992c1dd19812566d587e1c2d87f530364a566f21a1e1b6df4",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_across_tight_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_across_tight_legacy.svg",
+      "axes": [
+        "note",
+        "across",
+        "tight color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "c762728965fdb2051b15a53a23861ba646887723e65f6a0a44d68eefdd60ed64",
+      "golden_sha256": "3aaf6cf0c20989bdbdaee7cb4fb7d6b2d9a95dd0f8b017de6cde2388b351aa19",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_across_tight_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_across_tight_teoz.svg",
+      "axes": [
+        "note",
+        "across",
+        "tight color-colon separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "d2886b5330546380b81c72bb7a7122331dd13037d70666534d1a86b56cbbde6f",
+      "golden_sha256": "34ba38cde433c0d0efc35083ec5944a701c4961c61000f697c8a52c5877e1624",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_across_mixed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_across_mixed_legacy.svg",
+      "axes": [
+        "note",
+        "across",
+        "mixed color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "62e7b17b801aa341778f140b8768261e1870893833cc4cdd7c7e8f9252e6830a",
+      "golden_sha256": "06c7d2cd0bba7fc4a25975ec3710026f2004ca5f575ef0ab0d288f285a79143f",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_across_mixed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_note_across_mixed_teoz.svg",
+      "axes": [
+        "note",
+        "across",
+        "mixed color-colon separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "5615953a9a5a827e0ad4adcfa060ef33db8d066529f8e2281a3cea89f7538f03",
+      "golden_sha256": "c59a41d6ce47fa79e803b856240cb3521801cf616d70aa43cc22004b8146aa25",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_tight_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_tight_legacy.svg",
+      "axes": [
+        "rnote",
+        "over Vale",
+        "tight color-colon separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "ebb1c389b80145c7fdc8d6c7df9d906b56f1fae2ba58e8e2f807a5068810ca2a",
+      "golden_sha256": "8ee8560dbbf2ae338b864220f8488bcd596fab0853d0e0fa0c54985643c04981",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_tight_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_tight_teoz.svg",
+      "axes": [
+        "rnote",
+        "over Vale",
+        "tight color-colon separator",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "4b75e4822d75c67eb7a07b9427b51788c4af9cf6f133ded6eef6ab22a43ff069",
+      "golden_sha256": "69edb31d999df273c1020f2e780244ae5094ee0f99aa514edc31cdc931fb6fa7",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_mixed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_mixed_legacy.svg",
+      "axes": [
+        "rnote",
+        "over Vale",
+        "mixed color-colon separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "e103beb25cf42a1c5d910c1c0964d4bdb55608b7c4b6f5044fe10d347603c68b",
+      "golden_sha256": "ae801c4908353a901606d6d3327959616db219eabcaaf86bbcdfe2572eab5bdc",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_mixed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_mixed_teoz.svg",
+      "axes": [
+        "rnote",
+        "over Vale",
+        "mixed color-colon separator",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "444b13c71d0028aa0b1e3a9b50919dbb4e2baaac0f83f8a65e04bcf2936144e5",
+      "golden_sha256": "242d108766a623fde5cd44a28a1c13dd45229a4ca5b90c860e28169da14f204e",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_pair_tight_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_pair_tight_legacy.svg",
+      "axes": [
+        "rnote",
+        "over Quartz, Vale",
+        "tight color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "7f8861a3203ffc253d5d4240a362461050277e489cfe34ae369b49126d0fa0c2",
+      "golden_sha256": "c3ecc2890404588dd5368ca6ca9840fe6f894487c734b72a2116c6e5c1c2f6f7",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_pair_tight_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_pair_tight_teoz.svg",
+      "axes": [
+        "rnote",
+        "over Quartz, Vale",
+        "tight color-colon separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "f2e021e81f92c94b18a619fc9c34a9a3fde7b3bf092226e1d532614ce0c4b405",
+      "golden_sha256": "bf6f540da6d557992ba83aeb9ed89b7b959d65d8401434b63023113a6c530a6f",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_pair_mixed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_pair_mixed_legacy.svg",
+      "axes": [
+        "rnote",
+        "over Quartz, Vale",
+        "mixed color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "0d879c5b7c09910bc74233196d0412b46994a9fe8ca404a922908f27ab45f43a",
+      "golden_sha256": "d435636976e6915f25e6663b609ad0e22703519db0ba8f5c7cc01865407008e4",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_pair_mixed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_over_pair_mixed_teoz.svg",
+      "axes": [
+        "rnote",
+        "over Quartz, Vale",
+        "mixed color-colon separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "993dcdf7022ff778c21674414420c9c26acd06baf4cdc378114ee752eba33c9d",
+      "golden_sha256": "3702fa8502a16a594faa62b3d32217e3985a950955aa88b4973fa9da31d91c0d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_left_tight_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_left_tight_legacy.svg",
+      "axes": [
+        "rnote",
+        "left",
+        "tight color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "ad1250cc0852e2d7ee59c9dc28db5b90bc3bed1c9faa6be8715c22a3ada24205",
+      "golden_sha256": "912f9544961468e16e40a914930b0577616662bf3a2223085ad39df4d1150cb9",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_left_tight_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_left_tight_teoz.svg",
+      "axes": [
+        "rnote",
+        "left",
+        "tight color-colon separator",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "c4059406cf9b218fe93d4baacfda9fcc59bf5248d7c9a467c04f366597fa997d",
+      "golden_sha256": "cabde94fce8599ffc4879e0779fd829ee8510e0a370b02467f6b2688411fd514",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_left_mixed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_left_mixed_legacy.svg",
+      "axes": [
+        "rnote",
+        "left",
+        "mixed color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "0ca83b6502e53320542e53eb2e0c1792ce7dc6b1a750ec1d22480415ce5774d5",
+      "golden_sha256": "158512714974beb860408b7914bfa33d1d8102d699d951714394392e9b476281",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_left_mixed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_left_mixed_teoz.svg",
+      "axes": [
+        "rnote",
+        "left",
+        "mixed color-colon separator",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "3a273d5661c26533e1a83e69fb7460754370075dd4d834757838f2e5d472659c",
+      "golden_sha256": "1c563a1bb01694840aa38eb1f5d109b514ce2487c4a5cf023ec2859579b81b34",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_across_tight_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_across_tight_legacy.svg",
+      "axes": [
+        "rnote",
+        "across",
+        "tight color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "fe02651741fc5dbfc2dff60e8b3e49fbe681c62eb8f2eda53c0a4ecba862fdfe",
+      "golden_sha256": "c6eaa00ec618a615c0a68636e1366a2ccb0a6e07aae55dd0caf47b4bbd4d1494",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_across_tight_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_across_tight_teoz.svg",
+      "axes": [
+        "rnote",
+        "across",
+        "tight color-colon separator",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "01f991f596772b07541807c2865109d9dfde49c0a3e6df95397497ff53b32d40",
+      "golden_sha256": "d10d8295b24496d081ee5365b624932681dcfd0b258c391f1b4b0e4dabdb54c3",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_across_mixed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_across_mixed_legacy.svg",
+      "axes": [
+        "rnote",
+        "across",
+        "mixed color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "9922d93a9477a9eda90a67edbee437885a6814b263e847259b892f665edb1cad",
+      "golden_sha256": "a817d28f3ccc019b2f13ed6b8e9cdc78cd92c7cf22e3334978f217a5db59dbe5",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_across_mixed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_rnote_across_mixed_teoz.svg",
+      "axes": [
+        "rnote",
+        "across",
+        "mixed color-colon separator",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "a118d2761e83d8f8c376a8a97d3e8bdce8a5f4f84e39c74926b7e54acf41c08b",
+      "golden_sha256": "6f8fce1e82d1284bf297a2c924d5607bd7efabf6316b59b0a2da8b6a143f506a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_tight_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_tight_legacy.svg",
+      "axes": [
+        "hnote",
+        "over Vale",
+        "tight color-colon separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "a839c26bc38ca49a08916b03909362e3bdf83870629573ff57d25b04f741c4ad",
+      "golden_sha256": "3a857a96caaaa2d160e1d668697bb81126784daefa2ebed5524a53addd58152c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_tight_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_tight_teoz.svg",
+      "axes": [
+        "hnote",
+        "over Vale",
+        "tight color-colon separator",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "ef7cd8b911c495885efb1e5a5361fc3f2d482c6f3647011e177268b494097654",
+      "golden_sha256": "f4bcac4623a9dce01bb6c3f29ff0204351e03c2dfdd09144801477c0d13b9f3f",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_mixed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_mixed_legacy.svg",
+      "axes": [
+        "hnote",
+        "over Vale",
+        "mixed color-colon separator",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "9006821224fe57c483ce592cf9bda43c0f582ec12e112732d302dc3a95aaa4de",
+      "golden_sha256": "28fc16d02bd76107fe928b7f419aab9e6135e5e7700a30bbb0d8a5e27848ce2b",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_mixed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_mixed_teoz.svg",
+      "axes": [
+        "hnote",
+        "over Vale",
+        "mixed color-colon separator",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "7c0c0e3a36d1e6c733017a9e9a8ecaa3cea71745f24c4db49f4b4dd163594cec",
+      "golden_sha256": "5228288fc986fad7a5a1f7e151545c5fd662785400250d9afd57478a1b89ad71",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_pair_tight_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_pair_tight_legacy.svg",
+      "axes": [
+        "hnote",
+        "over Quartz, Vale",
+        "tight color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "638fa3e350f8dab70ffafbfe5e08ce1c20d176e8dafd774facffeed66208c35b",
+      "golden_sha256": "8f874f9d910ad37619a5efbeb5ac35171fb84ae43f605a99b7854aaf070965fa",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_pair_tight_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_pair_tight_teoz.svg",
+      "axes": [
+        "hnote",
+        "over Quartz, Vale",
+        "tight color-colon separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "f795daa326019f598b727ccc0fbdfd05b770e39ea8d3fa531da28efde5c86f74",
+      "golden_sha256": "65da8d7396eb50c7e1f2e5c67b3ea93856be1f34340de2c25ad3feffba3dcb67",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_pair_mixed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_pair_mixed_legacy.svg",
+      "axes": [
+        "hnote",
+        "over Quartz, Vale",
+        "mixed color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "a7aa425f9d9d2ca79912b1ac2acd96572adec36b0a8469f736e3ba95bd2b83ca",
+      "golden_sha256": "e2e26d81574a9a1b963eb856723d5b6660c637ace6275f7a8f4e0a5372c11500",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_pair_mixed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_over_pair_mixed_teoz.svg",
+      "axes": [
+        "hnote",
+        "over Quartz, Vale",
+        "mixed color-colon separator",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "da56c89d58de1f7c578ed78ae457dafd065ce4b5965a8c60f0cd047046f57066",
+      "golden_sha256": "c9cf270ac5a71c1f1559ea8c996dad7bab13c3411431c3052f73fa4256c31340",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_left_tight_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_left_tight_legacy.svg",
+      "axes": [
+        "hnote",
+        "left",
+        "tight color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "eebbc351015e9b7d0f247a9375210aba376787d4ef2c2879659cd5775d44c1ae",
+      "golden_sha256": "4f417c0e8c6c2e62b4e4fc731382113ee802ad0d5e7fd7a9b93d77772ac2dbb6",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_left_tight_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_left_tight_teoz.svg",
+      "axes": [
+        "hnote",
+        "left",
+        "tight color-colon separator",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "93b3ce7f3660a55e254f74104d6dc6fd4e36f22d17106ddcf746e486b3285a98",
+      "golden_sha256": "df10a258b79c38249e582264ecc1a9e4e3168cdad959e027e53ceb24249309b4",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_left_mixed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_left_mixed_legacy.svg",
+      "axes": [
+        "hnote",
+        "left",
+        "mixed color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "aad9040ddd808aedf36804427f58926f15ae25f9b2bbd4817f99c7a42b5ab749",
+      "golden_sha256": "f0eb3b941b55150599d87dbc9fda578361cc8377e27a1774c6c8f2ce266c65a4",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_left_mixed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_left_mixed_teoz.svg",
+      "axes": [
+        "hnote",
+        "left",
+        "mixed color-colon separator",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "9b48c93a202588bf06074b820f1e4345508eea866c505d3382091bdcd3bfa3c3",
+      "golden_sha256": "0325acb9815e1117245799539341e322aaf601552d1b4833b7177edb608d761c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_across_tight_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_across_tight_legacy.svg",
+      "axes": [
+        "hnote",
+        "across",
+        "tight color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "eb11355227a3d2c2f304589fbb5261988544cbccdc37770312620d686dee3bc3",
+      "golden_sha256": "4de66047a53ad6cbb4e091805d7daeccc38dc630d0baa894220edce49c623e4f",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_across_tight_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_across_tight_teoz.svg",
+      "axes": [
+        "hnote",
+        "across",
+        "tight color-colon separator",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "b002b84e6fd4cc10fd93adaaffd075de138046463eed8ef05d0f1d45561aef5c",
+      "golden_sha256": "e2eaffd3bd84e0a27fb5e5259319dd8dcb7f2106d92875e1fa4494a1e05815f4",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_across_mixed_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_across_mixed_legacy.svg",
+      "axes": [
+        "hnote",
+        "across",
+        "mixed color-colon separator",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "f84cb00e571622bc593bf0816ff4993e456427907048ce54101a5654da71b1a2",
+      "golden_sha256": "2709d80e95daea3fbf3b2104fd582eceacfdad4cd8c73e850d94910537fee9c0",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_across_mixed_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_color_hnote_across_mixed_teoz.svg",
+      "axes": [
+        "hnote",
+        "across",
+        "mixed color-colon separator",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "a28334f9db1fa0e57f8034c80050d699993783f5f49430f166d8297b47033cca",
+      "golden_sha256": "81fbdff57c49c8187ecfd953cd4003232c422f11c8d55a022b824bcee28d404a",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_0_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_0_legacy.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3.7'",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "45be338410f2d48716bcebe097c391fb682ff1f7ff5f990125416d6b92d1f5fd",
+      "golden_sha256": "77e4e30b6f81a2ea8a474f1e285bd4b7b85beaf7e8e3356b4234a6b5e09a218c",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_0_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_0_teoz.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3.7'",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "d0e192c95dbb7af92e4927c55524107ec65e8b1e2a25b07c29dccbfc7e435a53",
+      "golden_sha256": "1999be4db54fc71cfcc18eab5c496daad8ef32e223ca5e6ba48cd1c1dc027806",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_1_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_1_legacy.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3:7'",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "7c5a7047f4224ad9c9cce7eadd4a47d82c124c0f1a83fe89cd17019baa86ceaf",
+      "golden_sha256": "77e73e25467744028b799e5f30edb02213acc3e5e8a911e5ca9558c4f4000864",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_1_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_1_teoz.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3:7'",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "7b399b12bc559ac2e2e30cd6876ec6c550a25680524cf377dddcc005db24eb2e",
+      "golden_sha256": "5004f9da34115c5d8ec1291df3cdc4f7dac238b426354acf43495abb7ad98769",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_2_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_2_legacy.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3-7'",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "56cd021cb303faeccbbbdfe3b09409d1507e50976586ca95cbd55bb733dc99a7",
+      "golden_sha256": "8222967001c3e51e68253ad7bfab1a5843bfb9ae316ff4237ea972103f5ab775",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_2_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_2_teoz.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3-7'",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "2bfadcd7561a32adcd6d8c7f702d3a61dd4275d39f7e189fb44c1789c3b026c0",
+      "golden_sha256": "a606a7baddecc54915dc6c4592609183d677e0ff516bb59a2921b7e2aad78456",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_3_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_3_legacy.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3\\t7'",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "6b98a3d965644233a36519959f15149585906c3d4069711ed31442b42a624ed1",
+      "golden_sha256": "026be199773395de249df504fd41bfc8aaaca251428d4b10bccb6d5e192599d7",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_3_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_3_teoz.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3\\t7'",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "d21f59a16b26fe2e79aefe396276a8f675b6df84bbbc179ad937e5fedbf649ab",
+      "golden_sha256": "73fb89d730e247b0ce474e65b60ffbaaa0ef29c3a2c787db0ef8e4f11e4e134d",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_4_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_4_legacy.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3\\xa07'",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "8f541f57466dc05904d33a825addefed6ac1db1818be94b72e5a5c0482c328f6",
+      "golden_sha256": "1703b1550e191a137392a5dd24188594783a277692c979c531b5134d09ede947",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_4_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_4_teoz.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3\\xa07'",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "c91c5662974e36bdf9f67191cd4f5225ad2f6d6cacc1a8eecb0a908c490127a6",
+      "golden_sha256": "4e4ddfa106526098b5579b7a2bc403c6d3d0d6374b87961cee0e4f2db6d1d36e",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_5_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_5_legacy.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3\\x0b7'",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "3b16e0a95c70d45352455e68c0fa433fc671f716488bc6950e3f71f49847cfab",
+      "golden_sha256": "4781b5dfc16a45bb9b6de3e2893f70701b3ba89d5f39f88a45f601556e0fde95",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_5_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_5_teoz.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3\\x0b7'",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "3f37a7e5ceae14353958e21a8d89502ebc005fc53cd71279f4fcecac519d193d",
+      "golden_sha256": "8cfb3f1454f4955d01ad5622eedee98112fb5beb648ba121cbec19ea0a9366e4",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_6_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_6_legacy.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3\\x0c7'",
+        "legacy"
+      ],
+      "result": "pass",
+      "source_sha256": "aa5ce6ed726d848ef9f2e8653c4ba3c77e74e91a44b19bcbb548e9e878a159a1",
+      "golden_sha256": "55e5fbf1e9fee86c833b6ecd1bd4186d44c56f3a7bdb7ab0a14d4ee78b89dd70",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_6_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_composite_autonumber_6_teoz.svg",
+      "axes": [
+        "autonumber START [^%pLN%s]",
+        "punctuation versus separator '3\\x0c7'",
+        "teoz"
+      ],
+      "result": "pass",
+      "source_sha256": "d30870c115dd601f1e806378f43d28893645525f030be6174936c190ed8a12bd",
+      "golden_sha256": "b8313630e78d458053613da9bc04b78426559bda76dfc6b5c9dbb08899748dec",
+      "intended_valid": true,
+      "observed_valid": true,
+      "reference_outcome": "valid_sequence",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_note_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_note_legacy.svg",
+      "axes": [
+        "note",
+        "ColorParser named channel",
+        "colon in color",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "f7380915ee9a95d7ca4482b41b8f6598e87c75e3d20023d13d5a3aeae1e583d7",
+      "golden_sha256": "99221a670263363c95680029227a1ec79e4de054f7ff3756cd8930a3f6beb58b",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_color_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_note_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_note_teoz.svg",
+      "axes": [
+        "note",
+        "ColorParser named channel",
+        "colon in color",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "2188db0a69ee8a10c65323812a05c3a51513dae15038afea9fc90c08927b1ef5",
+      "golden_sha256": "90001cab76620b243430203b7f3ddad0124b0e65e85ace4fc542b13e29ffcdc9",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_color_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_rnote_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_rnote_legacy.svg",
+      "axes": [
+        "rnote",
+        "ColorParser named channel",
+        "colon in color",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "9ac96a68e08d8f82f1a55080090a8122a4332f9c8cb2218bef8b58e0e9ee22f5",
+      "golden_sha256": "70cf606c35ed61c9e8cae10edecfbf66a96ddd0a55ae3c71371ca2bed6788b2f",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_color_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_rnote_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_rnote_teoz.svg",
+      "axes": [
+        "rnote",
+        "ColorParser named channel",
+        "colon in color",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "afa82571a85514727d6c28a63272f659eb9658937705ce61710f10e55dde8438",
+      "golden_sha256": "37b9320e431b0c97ffabf25b8c6e0d0083c387ffdf125366c0c3e34e131759c3",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_color_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_hnote_legacy.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_hnote_legacy.svg",
+      "axes": [
+        "hnote",
+        "ColorParser named channel",
+        "colon in color",
+        "legacy"
+      ],
+      "result": "fail",
+      "source_sha256": "bdb2e6ab48c6a63cbef37d0938260ca9be13f876f8fd6a554bbebb47c2fed972",
+      "golden_sha256": "f6d79ccc39c7d6bab1877e8e16b0ee4e8063f0dff67a4e7b73a3352c0e97f96e",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_color_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_hnote_teoz.puml",
+      "golden": "test-diagrams/perturbations/sequence-pattern2-class-composition/c2b0_rich_color_hnote_teoz.svg",
+      "axes": [
+        "hnote",
+        "ColorParser named channel",
+        "colon in color",
+        "teoz"
+      ],
+      "result": "fail",
+      "source_sha256": "e0f18384a4d034768907c1ff6173269a19f3b53fe7c9f78be9b2aeae204d4f7c",
+      "golden_sha256": "f20ca48e2461e911ded51100d65de6c5fa9cab8a4204d935d2b434026e792f45",
+      "intended_valid": true,
+      "observed_valid": false,
+      "reference_outcome": "java_color_error",
+      "cli_exit": 0,
+      "comparator_exit": 2,
+      "duplicate_of": null
+    }
+  ],
+  "findings": [
+    "Pattern2#transform substitutes the token before compiling; replacing %s contents rather than exact bracket expressions restores composite [^%s:] behavior. The first broad run29 colored-note losses are present in both raw failure-name snapshots; final independently built main tiers restore every match.",
+    "Source enumeration finds one other composite %s class in the Java sequence command directories: CommandAutonumber START [^%pLN%s]. The matrix probes dotted/colon/hyphen numbers and TAB/NBSP/VT/FF splits. The existing Rust number grammar remains narrower; no additional class-composition regressions were found.",
+    "Fresh result30/68:32 valid mismatches and6 color execution rejections remain. Every shape, named/pair/attached/across target and tight/mixed color-colon separator is represented. No lost matches.",
+    "The six intended-valid #back:LightBlue: cargo probes are Java color errors, not exporter errors or valid SVGs. ColorParser PART2 cannot end immediately before another colon, falls back to COLOR_REGEXP capturing #back; Colors strips #, HColorSet#getColor(back) throws NoSuchColorException, caught by SingleLineCommand2#execute as badColor. Raw stderr says No such color. Rust silently succeeds before and after; all six remain rejection-contract failures. Intent is unchanged."
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "Whole-output packet acceptance, not a claim that every locally supported mechanism is wrong.",
+  "fresh_counts": {
+    "before": {
+      "entries": 68,
+      "match": 30,
+      "mismatch": 32,
+      "nonpositive": 6,
+      "valid_cli_errors": 0,
+      "cli_panics": []
+    },
+    "after": {
+      "entries": 68,
+      "match": 30,
+      "mismatch": 32,
+      "nonpositive": 6,
+      "valid_cli_errors": 0,
+      "cli_panics": []
+    }
+  },
+  "evidence": "docs/parity-reviews/sequence-command-contract-repair-packet/checker-2b056ca1-astra",
+  "inherited_failed_dependencies": "docs/parity-reviews/sequence-command-contract-repair-packet/maker-results/remaining-dependencies.json",
+  "reference_limits": [
+    "Java argv is derived, not process-traced.",
+    "OpenJDK21.0.5/Graphviz12.2 historical equivalence remains unproved.",
+    "No correctness claim for concurrent shared SVG serialization work."
+  ],
+  "bounded_next_obligations": [
+    "The six intended-valid #back:LightBlue: cargo probes are Java color errors, not exporter errors or valid SVGs. ColorParser PART2 cannot end immediately before another colon, falls back to COLOR_REGEXP capturing #back; Colors strips #, HColorSet#getColor(back) throws NoSuchColorException, caught by SingleLineCommand2#execute as badColor. Raw stderr says No such color. Rust silently succeeds before and after; all six remain rejection-contract failures. Intent is unchanged."
+  ]
+}

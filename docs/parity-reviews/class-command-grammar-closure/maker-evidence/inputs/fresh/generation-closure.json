@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+    "-jar",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "-tsvg",
+    "/tmp/rustuml-cff2/fresh/note_scope_lr.puml",
+    "/tmp/rustuml-cff2/fresh/note_alias_duplicates.puml",
+    "/tmp/rustuml-cff2/fresh/note_namespace.puml",
+    "/tmp/rustuml-cff2/fresh/note_two_links.puml",
+    "/tmp/rustuml-cff2/fresh/empty_nested.puml",
+    "/tmp/rustuml-cff2/fresh/group_lr.puml",
+    "/tmp/rustuml-cff2/fresh/group_leaf.puml",
+    "/tmp/rustuml-cff2/fresh/note_top_scope.puml",
+    "/tmp/rustuml-cff2/fresh/note_outside_right.puml"
+  ],
+  "exit": 0,
+  "cases": {
+    "note_scope_lr": "left to right direction\nnode Bay {\nclass Register\nnote \"Read carefully\" as Memo\nRegister .. Memo\n}",
+    "note_alias_duplicates": "package East {\nclass Reading\nnote \"East instructions\" as N\nReading .. N\n}\npackage West {\nclass Sample\nnote \"West instructions\" as N\nSample .. N\n}",
+    "note_namespace": "set namespaceSeparator ::\npackage Station {\nclass Reading\nnote \"Calibration\" as Memo\n}\nStation::Reading .. Station::Memo",
+    "note_two_links": "node Room {\nclass Counter\nclass Total\nnote as Memo\nNumbers in scope\nend note\nCounter .. Memo\nMemo .. Total\n}",
+    "empty_nested": "package \"Outer docs\" as Outer {\npackage \"Index\" as Index [[https://example.org/index]] {\n}\n}",
+    "group_lr": "left to right direction\npackage \"Departure area\" as D {\nclass Dispatch\n}\npackage \"Arrival\" as A {\nclass Receipt\n}\nD )-( A",
+    "group_leaf": "package \"Store\" as S {\nclass Item\n}\nclass Consumer\nS --( Consumer",
+    "note_top_scope": "node Archive {\nclass Folder\nnote top of Folder : Instruction\n}",
+    "note_outside_right": "frame Rack {\nclass Server\n}\nnote right of Rack.Server : External note"
+  },
+  "stdout": "",
+  "stderr": ""
+}

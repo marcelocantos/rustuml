@@ -1,0 +1,50 @@
+{
+  "participant": {
+    "entries": 16,
+    "before_match": 8,
+    "after_match": 15,
+    "lost": []
+  },
+  "actor": {
+    "entries": 16,
+    "before_match": 4,
+    "after_match": 15,
+    "lost": []
+  },
+  "boundary": {
+    "entries": 16,
+    "before_match": 4,
+    "after_match": 15,
+    "lost": []
+  },
+  "control": {
+    "entries": 16,
+    "before_match": 4,
+    "after_match": 14,
+    "lost": []
+  },
+  "entity": {
+    "entries": 16,
+    "before_match": 4,
+    "after_match": 15,
+    "lost": []
+  },
+  "database": {
+    "entries": 16,
+    "before_match": 4,
+    "after_match": 15,
+    "lost": []
+  },
+  "collections": {
+    "entries": 16,
+    "before_match": 4,
+    "after_match": 15,
+    "lost": []
+  },
+  "queue": {
+    "entries": 16,
+    "before_match": 15,
+    "after_match": 15,
+    "lost": []
+  }
+}

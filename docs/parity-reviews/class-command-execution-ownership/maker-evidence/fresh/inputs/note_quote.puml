@@ -1,0 +1,6 @@
+@startuml
+node "Observation Zone" as Site {
+class "Air Probe"
+note right of "Air Probe" : Calibration
+}
+@enduml

@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; no acceptance",
+  "rust_base": "0a04a06acb2a072946356a741a5850377dd5c039",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "svek/Cluster#drawU",
+    "svek/image/EntityImageEmptyPackage#drawU",
+    "svek/image/EntityImageDescription#drawU",
+    "klimt/drawing/LimitFinder#draw",
+    "svek/SvekResult#calculateDimension",
+    "decoration/symbol/USymbolNode,USymbolFrame,USymbolAction,USymbolProcess"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs"
+  ],
+  "invariant": "Group URL and symbol paint state survive from command execution to output. All descendants share the normalized image origin, while symbol-specific outline extents contribute to the envelope.",
+  "causal_divergence_and_planned_model": "Rust omitted group URL output and new symbol style membership. Nested node/frame routines add their own assumed root offset rather than using the enclosing image origin; notes lack that same origin. Action/process polygons contribute the polygon LimitFinder overscan. Retain AST URL on group layout objects, paint anchor wrappers in Java order, resolve symbol stroke, and apply outermost group origin to all owned leaves and clusters. Preserve failures if more general frontier model is needed.",
+  "perturbation_axes": [
+    "endpoint or note side / alias / URL and stereotype modifiers",
+    "top-level and nested symbol ownership / sibling links"
+  ],
+  "negative_evidence_contract": "No waiver: preserved and fresh valid failures block acceptance.",
+  "mechanism": "class-group-paint-ownership",
+  "causal_divergence": "Rust omitted group URL output and new symbol style membership. Nested node/frame routines add their own assumed root offset rather than using the enclosing image origin; notes lack that same origin. Action/process polygons contribute the polygon LimitFinder overscan. Retain AST URL on group layout objects, paint anchor wrappers in Java order, resolve symbol stroke, and apply outermost group origin to all owned leaves and clusters. Preserve failures if more general frontier model is needed.",
+  "planned_change": "Rust omitted group URL output and new symbol style membership. Nested node/frame routines add their own assumed root offset rather than using the enclosing image origin; notes lack that same origin. Action/process polygons contribute the polygon LimitFinder overscan. Retain AST URL on group layout objects, paint anchor wrappers in Java order, resolve symbol stroke, and apply outermost group origin to all owned leaves and clusters. Preserve failures if more general frontier model is needed."
+}

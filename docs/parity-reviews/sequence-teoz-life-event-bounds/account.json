@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-teoz-life-event-bounds",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram/teoz/LifeEventTile.java#getMinX,getMaxX",
+    "sequencediagram/teoz/LiveBoxes.java#getLevelAtInternal",
+    "sequencediagram/teoz/GroupingTile.java#constructor"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::GroupAccum and group event scan"
+  ],
+  "invariant": "Each accepted life event contributes a tile bounded by posC minus LIVE_DELTA_SIZE when its resulting level is positive, and posC plus level times LIVE_DELTA_SIZE. GroupingTile encloses these bounds with MARGINX. A closing event uses its resulting level, not the preceding open level.",
+  "causal_divergence": "Rust records activation right bounds only for shorthand message activation and omits the left tile bound, so reversed declaration order with a right note leaves a group five units too far right in unshifted coordinates. Explicit activation events are also missing from tile bounds.",
+  "planned_change": "Fold accepted lifecycle variations in event order to produce each life event tile bounds, include them in group min/max, and preserve the one-time PlayingSpace normalization.",
+  "perturbation_axes": [
+    "explicit versus message-attached activation and closing nested levels",
+    "declaration order, right/left/over notes and group nesting"
+  ],
+  "acceptance": "Maker candidate only; requires independent checking."
+}

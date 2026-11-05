@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-teoz-note-tile-bounds",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "sequencediagram/teoz/NoteTile.java#getX,getMinX,getMaxX",
+    "sequencediagram/teoz/GroupingTile.java#constructor,getMinX,getMaxX",
+    "sequencediagram/teoz/PlayingSpace.java#constructor",
+    "sequencediagram/teoz/SequenceDiagramFileMakerTeoz.java#getTextBlock12026",
+    "sequencediagram/teoz/CommunicationTile.java#drawU",
+    "sequencediagram/teoz/LivingSpace.java#getLevelAt",
+    "sequencediagram/command/CommandReturn.java#executeArg"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::Teoz note and group bounds, origin translation, note painter",
+    "crates/rustuml-render/src/sequence.rs::return lowering and message endpoint selection"
+  ],
+  "invariant": "Teoz NoteTile LEFT uses posC minus full component width with no live-left shift or integer cast; RIGHT uses current level, OVER uses center. GroupingTile recursively wraps child tile extrema by its margins. PlayingSpace chooses the full tile minimum, then Teoz translates by its negative and adds body/export margins. CommunicationTile uses IGNORE_FUTURE_DEACTIVATE levels for both ordinary messages and lowered returns, separately from legacy live-segment unions.",
+  "causal_divergence": "Rust feeds snapped legacy note paint into Teoz bounds, applies a legacy left live shift to NoteTile, and reserves origin using depth heuristics before actual group members exist. The negative outer frame is left unnormalized. Non-self returns also use a separate painter missing CommunicationTile reverse sender level adjustment.",
+  "planned_change": "Use exact fractional NoteTile component bounds and paint origins. Resolve nested frame extrema before applying a single PlayingSpace origin translation; remove replaced depth-based reservation. Lower returns to messages and use a dedicated Teoz endpoint calculation with before-deactivation levels. Preserve the legacy model independently.",
+  "perturbation_axes": [
+    "left/right/over note placement and active/inactive anchors",
+    "nested group topology and participant declaration order",
+    "return direction and nested activation levels"
+  ],
+  "acceptance": "Candidate only; fresh independent review required. No baseline/comparator or shared layout changes."
+}

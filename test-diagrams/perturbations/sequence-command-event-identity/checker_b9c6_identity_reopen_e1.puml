@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+Cedar -> Birch ++ : enter
+Birch -> Cedar : reply
+destroy Birch
+note over Birch : intervening
+activate Birch
+@enduml

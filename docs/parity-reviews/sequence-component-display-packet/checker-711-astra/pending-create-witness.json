@@ -1,0 +1,18 @@
+[
+  {
+    "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_legacy.puml",
+    "label_occurrences": {
+      "before": 2,
+      "after": 3,
+      "java": 2
+    }
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-component-display-review711/review711_create_double_pending_teoz.puml",
+    "label_occurrences": {
+      "before": 2,
+      "after": 3,
+      "java": 2
+    }
+  }
+]

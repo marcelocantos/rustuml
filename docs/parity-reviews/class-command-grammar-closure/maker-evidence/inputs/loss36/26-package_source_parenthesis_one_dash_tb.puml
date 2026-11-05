@@ -1,0 +1,7 @@
+@startuml
+package "Copper Vault 7729" as CopperVault {
+  class "Inner Relay 1181" as InnerRelay
+}
+class "Outer Peer 6631" as OuterPeer
+CopperVault )- OuterPeer
+@enduml

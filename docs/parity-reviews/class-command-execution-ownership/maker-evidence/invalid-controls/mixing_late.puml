@@ -1,0 +1,7 @@
+@startuml
+node "Runtime Domain" {
+entity FreshLedger
+component Api
+allowmixing
+}
+@enduml

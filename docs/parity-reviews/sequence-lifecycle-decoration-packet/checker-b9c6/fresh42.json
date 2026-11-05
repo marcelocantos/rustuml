@@ -1,0 +1,464 @@
+[
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e0.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "parallel ancestry length three",
+      "destroy with nested return ownership",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e0.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "external return ownership",
+      "RGBA return color",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e0.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "activation close",
+      "symbolic valid return color",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e0.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "fallback repeated return",
+      "one and eight digit valid colors",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e0.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "self event ignores other participant prohibition",
+      "command stack owns unrelated activation",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e0.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "negative same-message reactivation",
+      "note preserves owner",
+      "engine=0"
+    ],
+    "java_exit": 200
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e0.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "negative unknown return color",
+      "internal fallback",
+      "engine=0"
+    ],
+    "java_exit": 200
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_chain_e1.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "parallel ancestry length three",
+      "destroy with nested return ownership",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_exo_e1.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "external return ownership",
+      "RGBA return color",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_symbolic_e1.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "activation close",
+      "symbolic valid return color",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_gray_e1.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "fallback repeated return",
+      "one and eight digit valid colors",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_other_e1.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "self event ignores other participant prohibition",
+      "command stack owns unrelated activation",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_reopen_e1.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "negative same-message reactivation",
+      "note preserves owner",
+      "engine=1"
+    ],
+    "java_exit": 200
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-command-event-identity/checker_b9c6_identity_badcolor_e1.svg",
+    "cohort": "sequence-command-event-identity",
+    "axes": [
+      "negative unknown return color",
+      "internal fallback",
+      "engine=1"
+    ],
+    "java_exit": 200
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_note.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_note.svg",
+    "cohort": "sequence-teoz-life-event-scheduling",
+    "axes": [
+      "parallel history crosses standalone note",
+      "deactivate callback",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_multiline.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_multiline.svg",
+    "cohort": "sequence-teoz-life-event-scheduling",
+    "axes": [
+      "parallel contact maximum",
+      "self multiline and nested close",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_forward.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_forward.svg",
+    "cohort": "sequence-teoz-life-event-scheduling",
+    "axes": [
+      "create arrow taller than head",
+      "destroy nested activation",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_reverse.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_create_reverse.svg",
+    "cohort": "sequence-teoz-life-event-scheduling",
+    "axes": [
+      "reverse creation direction",
+      "return before destroy",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_create.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_parallel_create.svg",
+    "cohort": "sequence-teoz-life-event-scheduling",
+    "axes": [
+      "CREATE in parallel suffix",
+      "creation and destruction attachment",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_standalone_destroy.puml",
+    "golden": "test-diagrams/perturbations/sequence-teoz-life-event-scheduling/checker_b9c6_life_standalone_destroy.svg",
+    "cohort": "sequence-teoz-life-event-scheduling",
+    "axes": [
+      "standalone destroy after group END",
+      "depth two",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k0.svg",
+    "cohort": "sequence-self-cross-decoration",
+    "axes": [
+      "cross dressing=x--x",
+      "depth two with lifecycle=''",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k1.svg",
+    "cohort": "sequence-self-cross-decoration",
+    "axes": [
+      "cross dressing=<--x",
+      "depth two with lifecycle=' ++'",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k2.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k2.svg",
+    "cohort": "sequence-self-cross-decoration",
+    "axes": [
+      "cross dressing=x-->",
+      "depth two with lifecycle=' --'",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k3.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e0_k3.svg",
+    "cohort": "sequence-self-cross-decoration",
+    "axes": [
+      "cross dressing=--x",
+      "depth two with lifecycle=' --'",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k0.svg",
+    "cohort": "sequence-self-cross-decoration",
+    "axes": [
+      "cross dressing=x--x",
+      "depth two with lifecycle=''",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k1.svg",
+    "cohort": "sequence-self-cross-decoration",
+    "axes": [
+      "cross dressing=<--x",
+      "depth two with lifecycle=' ++'",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k2.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k2.svg",
+    "cohort": "sequence-self-cross-decoration",
+    "axes": [
+      "cross dressing=x-->",
+      "depth two with lifecycle=' --'",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k3.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-cross-decoration/checker_b9c6_cross_e1_k3.svg",
+    "cohort": "sequence-self-cross-decoration",
+    "axes": [
+      "cross dressing=--x",
+      "depth two with lifecycle=' --'",
+      "engine=1"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k0.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k0.svg",
+    "cohort": "sequence-legacy-destroy-component",
+    "axes": [
+      "ownership self/note/group",
+      "activation depth or CREATE ordering",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k1.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k1.svg",
+    "cohort": "sequence-legacy-destroy-component",
+    "axes": [
+      "ownership self/note/group",
+      "activation depth or CREATE ordering",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k2.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k2.svg",
+    "cohort": "sequence-legacy-destroy-component",
+    "axes": [
+      "ownership self/note/group",
+      "activation depth or CREATE ordering",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k3.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-destroy-component/checker_b9c6_destroy_k3.svg",
+    "cohort": "sequence-legacy-destroy-component",
+    "axes": [
+      "ownership self/note/group",
+      "activation depth or CREATE ordering",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_k0.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_k0.svg",
+    "cohort": "sequence-legacy-message-note-envelope",
+    "axes": [
+      "direction and activation transition",
+      "preferred arrow versus actual width / note side",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_k1.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_k1.svg",
+    "cohort": "sequence-legacy-message-note-envelope",
+    "axes": [
+      "direction and activation transition",
+      "preferred arrow versus actual width / note side",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_k2.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_k2.svg",
+    "cohort": "sequence-legacy-message-note-envelope",
+    "axes": [
+      "direction and activation transition",
+      "preferred arrow versus actual width / note side",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_k3.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-envelope/checker_b9c6_envelope_k3.svg",
+    "cohort": "sequence-legacy-message-note-envelope",
+    "axes": [
+      "direction and activation transition",
+      "preferred arrow versus actual width / note side",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k0.svg",
+    "cohort": "sequence-legacy-message-note-alignment",
+    "axes": [
+      "alignment via style/theme/skinparam",
+      "shadow and activation/direction",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k1.svg",
+    "cohort": "sequence-legacy-message-note-alignment",
+    "axes": [
+      "alignment via style/theme/skinparam",
+      "shadow and activation/direction",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k2.svg",
+    "cohort": "sequence-legacy-message-note-alignment",
+    "axes": [
+      "alignment via style/theme/skinparam",
+      "shadow and activation/direction",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k3.svg",
+    "cohort": "sequence-legacy-message-note-alignment",
+    "axes": [
+      "alignment via style/theme/skinparam",
+      "shadow and activation/direction",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k4.svg",
+    "cohort": "sequence-legacy-message-note-alignment",
+    "axes": [
+      "alignment via style/theme/skinparam",
+      "shadow and activation/direction",
+      "engine=0"
+    ],
+    "java_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k5.puml",
+    "golden": "test-diagrams/perturbations/sequence-legacy-message-note-alignment/checker_b9c6_alignment_k5.svg",
+    "cohort": "sequence-legacy-message-note-alignment",
+    "axes": [
+      "alignment via style/theme/skinparam",
+      "shadow and activation/direction",
+      "engine=0"
+    ],
+    "java_exit": 0
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "entries": 148,
+  "changed_ascii": [
+    "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/pending_incompatible_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/pending_incompatible_teoz.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/pending_self_legacy.puml",
+    "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711/reference-inputs/pending_self_teoz.puml"
+  ],
+  "note": "Four intended-invalid pending CREATE inputs now reject in both SVG and ASCII paths. All144 other measured ASCII outputs unchanged; no ASCII parity or global invariance claim. Raw model/status/output retained."
+}

@@ -1,0 +1,180 @@
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:8: trailing whitespace.
++    
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:12: trailing whitespace.
++    
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:25: trailing whitespace.
++    
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:54: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:76: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:114: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:122: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:149: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:203: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:249: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:294: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:310: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:324: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:816: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1187: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1291: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1342: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1485: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1544: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1559: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1638: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1643: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1804: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1817: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1830: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1837: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1847: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1936: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1954: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:1982: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:2178: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:2207: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:2218: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:2251: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:2324: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:2340: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:2343: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:2368: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:2479: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:2561: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/continuation-implementation.diff:2686: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/logs/rustuml-checker2740-clippy.log:105: trailing whitespace.
++4382 ~         
+docs/parity-reviews/class-command-grammar-closure/checker-support/logs/rustuml-checker2740-clippy.log:106: trailing whitespace.
++4383 ~         
+docs/parity-reviews/class-command-grammar-closure/checker-support/logs/rustuml-checker2740-pipe.log:22: new blank line at EOF.
+docs/parity-reviews/class-command-grammar-closure/checker-support/logs/rustuml-checker2740-units.log:1501: new blank line at EOF.
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:8: trailing whitespace.
++    
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:14: trailing whitespace.
++    
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:21: trailing whitespace.
++    
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:24: trailing whitespace.
++    
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:69: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:98: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:157: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:191: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:248: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:261: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:300: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:310: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:439: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:466: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:475: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:478: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:513: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:536: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:548: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:587: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:646: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:686: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:712: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:738: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:753: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:768: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:777: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:786: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:804: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:810: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:824: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:828: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:920: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:939: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:984: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:1111: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:1141: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:1146: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:1157: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:1174: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:1217: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:1267: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:1347: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:1361: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:1521: trailing whitespace.
++ 
+docs/parity-reviews/class-command-grammar-closure/checker-support/original-implementation.diff:1526: trailing whitespace.
++ 

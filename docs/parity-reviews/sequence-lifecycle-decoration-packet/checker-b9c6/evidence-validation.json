@@ -1,0 +1,40 @@
+{
+  "checks": [
+    {
+      "mechanism": "sequence-command-event-identity",
+      "cases": 14,
+      "verdict": "rejected"
+    },
+    {
+      "mechanism": "sequence-legacy-destroy-component",
+      "cases": 4,
+      "verdict": "accepted"
+    },
+    {
+      "mechanism": "sequence-legacy-message-note-alignment",
+      "cases": 11,
+      "verdict": "rejected"
+    },
+    {
+      "mechanism": "sequence-legacy-message-note-envelope",
+      "cases": 6,
+      "verdict": "rejected"
+    },
+    {
+      "mechanism": "sequence-self-cross-decoration",
+      "cases": 8,
+      "verdict": "accepted"
+    },
+    {
+      "mechanism": "sequence-teoz-life-event-scheduling",
+      "cases": 6,
+      "verdict": "rejected"
+    }
+  ],
+  "pairs": 49,
+  "tracked_existing_file_changes": [],
+  "java_source_files_verified_against_pinned_git_blob": 27,
+  "raw_remote_gzip_hashes_verified": true,
+  "post_record_guard_exit": 101,
+  "own_guard_complaints_only_rejected_or_failing_verdicts": true
+}

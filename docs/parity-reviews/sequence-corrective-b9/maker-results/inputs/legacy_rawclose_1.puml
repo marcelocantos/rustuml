@@ -1,0 +1,10 @@
+@startuml
+participant Finch
+participant Wren
+Wren -> Wren : establish
+deactivate Finch
+activate Finch
+Wren -> Finch : middle
+activate Finch
+Wren -> Finch : finish
+@enduml

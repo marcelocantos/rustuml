@@ -1,0 +1,794 @@
+[
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_e0_r0_d0",
+    "axes": [
+      "self-loop direction",
+      "prior depth",
+      "both lifecycle flags",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d0.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "bb55d03dd7b0b8d1873f50d25364ae7a8e0c1164900edd17656c9b3fe42de0e7"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_e0_r0_d2",
+    "axes": [
+      "self-loop direction",
+      "prior depth",
+      "both lifecycle flags",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d2.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d2.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "77e9115540938ce81bee9537ca4f4a4a99686a44340776e13ae93e748be3c793"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_e0_r1_d0",
+    "axes": [
+      "self-loop direction",
+      "prior depth",
+      "both lifecycle flags",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d0.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "a3400bde55fa2f126dda9e3df26977448f38fcb8626bf05cdc23ccb6ed662728"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_e0_r1_d2",
+    "axes": [
+      "self-loop direction",
+      "prior depth",
+      "both lifecycle flags",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d2.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d2.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "76df00340eb548d6b69a83fa40abee380e73d2359f5907bcd2cb6b6df4ad5daf"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_half_top_n0_e0",
+    "axes": [
+      "async half-head direction",
+      "attached note",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e0.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "7135f21f3289eacf50c3639b65795607474f8119abac245d92e47af8fe8678e6"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_half_top_n1_e0",
+    "axes": [
+      "async half-head direction",
+      "attached note",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e0.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "ba95e4f26c9e3b00e22ffd291f7f07d680a14ee90e2c0e3941d3d43dda39ab24"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_half_bottom_n0_e0",
+    "axes": [
+      "async half-head direction",
+      "attached note",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e0.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "111d0ced290cadc3c5b2dfcc33986b5ca59dd73502714ed0d8b8e80662fd2ff7"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_half_bottom_n1_e0",
+    "axes": [
+      "async half-head direction",
+      "attached note",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e0.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "2943ee62fe77316e9e0b492f6f907e7c9d8ac9d4fb855555e0a66af9339c1751"
+  },
+  {
+    "mechanism": "sequence-note-component-envelope",
+    "name": "checker_focus_attached_padding_left_e0",
+    "axes": [
+      "attached note side",
+      "nonzero padding",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e0.svg",
+    "cohort": "checker-sequence-note-component-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "b8bc9640522e090eb556ae93370908aea2030186b6c308c7336456efb2ee6e4c"
+  },
+  {
+    "mechanism": "sequence-note-component-envelope",
+    "name": "checker_focus_attached_padding_right_e0",
+    "axes": [
+      "attached note side",
+      "nonzero padding",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e0.svg",
+    "cohort": "checker-sequence-note-component-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "71230fe16b1dd09584c75fc1141593dba0b3b5bf0bf82be7b133d063c9b1a899"
+  },
+  {
+    "mechanism": "sequence-participant-shadow-envelope",
+    "name": "checker_focus_shadow_span0_e0",
+    "axes": [
+      "spanning note presence",
+      "shadowed participant envelope",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e0.svg",
+    "cohort": "checker-sequence-participant-shadow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "20ebad148194f22a9d4d5e2c240fd1412c0189818ecad5bc0abede5b60261965"
+  },
+  {
+    "mechanism": "sequence-participant-shadow-envelope",
+    "name": "checker_focus_shadow_span1_e0",
+    "axes": [
+      "spanning note presence",
+      "shadowed participant envelope",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e0.svg",
+    "cohort": "checker-sequence-participant-shadow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "c5b00d0921e7aec897ac33afcb94c51225db523ff4d0f9aa605f1ffdfc1ee23e"
+  },
+  {
+    "mechanism": "sequence-page-textblock-composition",
+    "name": "checker_focus_caption_multi0_e0",
+    "axes": [
+      "multiline caption",
+      "legend and title wrapper composition",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e0.svg",
+    "cohort": "checker-sequence-page-textblock-composition",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "2a178ca00bd33dbbbfa61093a8454c5321e15a2ed828a657bc90f337a9d0f319"
+  },
+  {
+    "mechanism": "sequence-page-textblock-composition",
+    "name": "checker_focus_caption_multi1_e0",
+    "axes": [
+      "multiline caption",
+      "legend and title wrapper composition",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e0.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e0.svg",
+    "cohort": "checker-sequence-page-textblock-composition",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "321f9b44f2693b7833cc192f08ed6e94ba60bf6d9b0920dae24eee9105037bf9"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_e1_r0_d0",
+    "axes": [
+      "self-loop direction",
+      "prior depth",
+      "both lifecycle flags",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d0.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "7cffb8a5532188f70101a02200efc4a1e514703911e839e1ea1c7c01ff9f928d"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_e1_r0_d2",
+    "axes": [
+      "self-loop direction",
+      "prior depth",
+      "both lifecycle flags",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d2.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d2.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "214b2cf73c3fc8cd871e4e9206474da2ea278b1ca43e6c5f9a5d8773ae6ceceb"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_e1_r1_d0",
+    "axes": [
+      "self-loop direction",
+      "prior depth",
+      "both lifecycle flags",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d0.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d0.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "2c19d777b29483d45476ce844c7ddd453328584eef0c0b3b15ec5733642ebad9"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_e1_r1_d2",
+    "axes": [
+      "self-loop direction",
+      "prior depth",
+      "both lifecycle flags",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d2.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d2.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "1ee58f3271bb6763bb50a2da457832292f540bc8ee65355ddf9d10ba2d4201e6"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_half_top_n0_e1",
+    "axes": [
+      "async half-head direction",
+      "attached note",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e1.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "e31894e2b42d7461d03d1b4f304e6bff6c67bd847336628774d2c283440910b5"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_half_top_n1_e1",
+    "axes": [
+      "async half-head direction",
+      "attached note",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e1.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "4b87abb7597c967646cabbcfa04100a56e15cd1bcf92513e310818578bec9ff3"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_half_bottom_n0_e1",
+    "axes": [
+      "async half-head direction",
+      "attached note",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e1.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "816592bb4f18e859a71f4ae63fbf446e90336f7acedd560d654d75196f00d28b"
+  },
+  {
+    "mechanism": "sequence-self-arrow-async-stroke",
+    "name": "checker_focus_half_bottom_n1_e1",
+    "axes": [
+      "async half-head direction",
+      "attached note",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e1.svg",
+    "cohort": "checker-sequence-self-arrow-async-stroke",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "208f2c2f3db07ca3b00200ef117a75d39e3481ba619d50311ee1e30f99211f55"
+  },
+  {
+    "mechanism": "sequence-note-component-envelope",
+    "name": "checker_focus_attached_padding_left_e1",
+    "axes": [
+      "attached note side",
+      "nonzero padding",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_left_e1.svg",
+    "cohort": "checker-sequence-note-component-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "319afffe433e5d54824cd3eb0f279c0f1e01faff661fab646a32462d2bd8cca8"
+  },
+  {
+    "mechanism": "sequence-note-component-envelope",
+    "name": "checker_focus_attached_padding_right_e1",
+    "axes": [
+      "attached note side",
+      "nonzero padding",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-note-component-envelope/checker_focus_attached_padding_right_e1.svg",
+    "cohort": "checker-sequence-note-component-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "fc03cfa3b26a39b3a58cbe5696b71d1e358382709f3853a09eefaba4ba32c424"
+  },
+  {
+    "mechanism": "sequence-participant-shadow-envelope",
+    "name": "checker_focus_shadow_span0_e1",
+    "axes": [
+      "spanning note presence",
+      "shadowed participant envelope",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span0_e1.svg",
+    "cohort": "checker-sequence-participant-shadow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "a725555be7bf1017313d9c338e27d7943d637be7a3ca33f6c62b501e765b61fb"
+  },
+  {
+    "mechanism": "sequence-participant-shadow-envelope",
+    "name": "checker_focus_shadow_span1_e1",
+    "axes": [
+      "spanning note presence",
+      "shadowed participant envelope",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-shadow-envelope/checker_focus_shadow_span1_e1.svg",
+    "cohort": "checker-sequence-participant-shadow-envelope",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "9b0629b3acdeaedd39f68a3341c9fa5c273552d97b3ea0879441feb66344490b"
+  },
+  {
+    "mechanism": "sequence-page-textblock-composition",
+    "name": "checker_focus_caption_multi0_e1",
+    "axes": [
+      "multiline caption",
+      "legend and title wrapper composition",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi0_e1.svg",
+    "cohort": "checker-sequence-page-textblock-composition",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "5b90ad0ae07fd7a7a61bb5fa3a006ce30afb1ee527b7a4712ce3dc4fb8859227"
+  },
+  {
+    "mechanism": "sequence-page-textblock-composition",
+    "name": "checker_focus_caption_multi1_e1",
+    "axes": [
+      "multiline caption",
+      "legend and title wrapper composition",
+      "engine"
+    ],
+    "negative_control": false,
+    "frontend": "raw Java CLI -tsvg -pipe -charset UTF-8",
+    "source": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e1.puml",
+    "golden": "test-diagrams/perturbations/sequence-page-textblock-composition/checker_focus_caption_multi1_e1.svg",
+    "cohort": "checker-sequence-page-textblock-composition",
+    "java_exit": 0,
+    "java_stderr": "",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe",
+      "-charset",
+      "UTF-8"
+    ],
+    "xml_svg": true,
+    "java_sha256": "e62ae79efd837ab2e0ebd964882cc53f205ef37e19544d9e397f978b81d75c69"
+  }
+]

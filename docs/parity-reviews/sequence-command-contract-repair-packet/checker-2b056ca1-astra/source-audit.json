@@ -1,0 +1,637 @@
+{
+  "reviewer": "independent 2b056ca1 / gpt-6-astra high / Codex T3",
+  "baseline": "9784e412146e3ece634d88ea0a1bddd6b42a82b6",
+  "evidence_tip": "dc438fd0cd0f5edd44816db81f0d765bf48ce4e6",
+  "production": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "account_order": [
+    {
+      "mechanism": "sequence-required-note-identity",
+      "account_commit": "4d84995c7b52ad5e3a08835ef9e59a6c7480868e",
+      "implementation_commit": "8cb61e5dce9006a570549de0fd11f2bc9f1dfcc3",
+      "account_precedes_draft": true,
+      "account_unchanged": true,
+      "account_sha256": "e370a17a6d4a11475c6e160b660a9efab19de677808cb84e920f093d03452c75",
+      "implementation_message": "fix: require sequence note identities within their grammar\n\nCausal account 4d84995c7: sequence-required-note-identity. Separate named single/pair captures from attached notes so the optional prefix cannot consume a required identity. Preserve bare-over rejection.\n\n"
+    },
+    {
+      "mechanism": "sequence-command-fox-space",
+      "account_commit": "4d84995c7b52ad5e3a08835ef9e59a6c7480868e",
+      "implementation_commit": "fc3019e363c1e2b8b2f4822261255dc954037d7e",
+      "account_precedes_draft": true,
+      "account_unchanged": true,
+      "account_sha256": "ee78f225824dcef2e4da5feb8e7e29e07d09cd29c154e91434922cdfcd3719ea",
+      "implementation_message": "fix: apply sequence command whitespace signature preconditions\n\nCausal account 4d84995c7: sequence-command-fox-space. Require the full-line FoxSignature whitespace bit only for commands with direct mandatory leaves; keep Pattern2 terminators and multiline ref matching separate. Global unconsumed-line rejection remains T14.17.\n\n"
+    },
+    {
+      "mechanism": "sequence-command-entry-grammar",
+      "account_commit": "4d84995c7b52ad5e3a08835ef9e59a6c7480868e",
+      "implementation_commit": "f48bafbc94af6d0fd3adc777708666407952a585",
+      "account_precedes_draft": true,
+      "account_unchanged": true,
+      "account_sha256": "1e6acc4a3861123aa884fc576c6a3c037d27e84cf56a9bdd5ec33f3eefb44e0e",
+      "implementation_message": "fix: use sequence command grammar at whitespace entry points\n\nCausal account 4d84995c7: sequence-command-entry-grammar. Replace Rust literal-space gates for box, across and autonumber resume. Preserve shape and body selection for across notes and reject the recognized accross spelling through its execution contract.\n\n"
+    },
+    {
+      "mechanism": "sequence-command-provenance-correction",
+      "account_commit": "4d84995c7b52ad5e3a08835ef9e59a6c7480868e",
+      "implementation_commit": "5dccddca0c94fa2d436afd4a8c6ff0f09f028170",
+      "account_precedes_draft": true,
+      "account_unchanged": true,
+      "account_sha256": "abf1e7c636d9da173c44e800d4d0e31453cc793e3d79a9f3d900566c84416cc2",
+      "implementation_message": "docs: correct sequence participant initializer source citation\n\nCausal account 4d84995c7: sequence-command-provenance-correction. The pinned method is prepareParticipant; historical accounts remain unchanged.\n\n"
+    },
+    {
+      "mechanism": "sequence-pattern2-class-composition",
+      "account_commit": "2a0441642b1d84315cb6bfef1d21c9fb4e5d3e08",
+      "implementation_commit": "70bc20cf1efe456fa5dd83e3a726c2796717ce9b",
+      "account_precedes_draft": true,
+      "account_unchanged": true,
+      "account_sha256": "7ca821aa19ddbcdd7e5e823f288a5660c7842c707b83899428c559a149713e12",
+      "implementation_message": "fix: expand Pattern2 whitespace within composite character classes\n\nCausal account 2a0441642. Replace the %s token rather than complete bracket spellings, preserving negation and adjacent exclusions. This repairs 29 introduced colored-note losses from the first preserved broad run.\n\n"
+    },
+    {
+      "mechanism": "sequence-create-command-signature-scope",
+      "account_commit": "d4fc86b240d2ea0cde6780c0910de2fff01b3c23",
+      "implementation_commit": "b4849a5008ff28c360fefe0176ee6ad073c02fd7",
+      "account_precedes_draft": true,
+      "account_unchanged": true,
+      "account_sha256": "50ff4dc8dbefa7f1ad124ed7d73608712dbbf86ee88a0ceb1d3cf5827566d563",
+      "implementation_message": "fix: retain full sequence command signature through create parsing\n\nCausal account d4fc86b24. Reused participant declaration parsing receives both its slice and the original command, so FoxSignature evaluates the same input as Java CommandParticipantA.\n\n"
+    }
+  ],
+  "citations": [
+    {
+      "mechanism": "sequence-required-note-identity",
+      "citation": "command.note.sequence.FactorySequenceNoteCommand#getRegexConcatSingleLine",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+      "sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 92,
+          "text": "private IRegex getRegexConcatSingleLine() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-required-note-identity",
+      "citation": "command.note.sequence.FactorySequenceNoteCommand#getRegexConcatMultiLine",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+      "sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 75,
+          "text": "private IRegex getRegexConcatMultiLine() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-required-note-identity",
+      "citation": "command.note.sequence.FactorySequenceNoteCommand#executeInternal",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+      "sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 149,
+          "text": "private CommandExecutionResult executeInternal(LineLocation location, SequenceDiagram diagram, RegexResult arg, Display display)"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-required-note-identity",
+      "citation": "command.note.sequence.FactorySequenceNoteOverSeveralCommand#getRegexConcatSingleLine",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOverSeveralCommand.java",
+      "sha256": "19ca1eae68073d00acaf3341e7da70a9b48c2eb56476881f9aa6be7f76a93c17",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 95,
+          "text": "private IRegex getRegexConcatSingleLine() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-required-note-identity",
+      "citation": "command.note.sequence.FactorySequenceNoteOverSeveralCommand#getRegexConcatMultiLine",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOverSeveralCommand.java",
+      "sha256": "19ca1eae68073d00acaf3341e7da70a9b48c2eb56476881f9aa6be7f76a93c17",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 73,
+          "text": "private IRegex getRegexConcatMultiLine() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-required-note-identity",
+      "citation": "command.note.sequence.FactorySequenceNoteOnArrowCommand#getRegexConcatSingleLine",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOnArrowCommand.java",
+      "sha256": "a39ddd63e6e9e14803fe1b99f7ec66a5316d4b5208d8d026fbca141555f17f29",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 89,
+          "text": "private IRegex getRegexConcatSingleLine() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-fox-space",
+      "citation": "regex.RegexLeaf#getFoxSignature",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/regex/RegexLeaf.java",
+      "sha256": "a2f2b6362509bbb4275401e18ba8ca424c7d714163f615858a9a08c6d5c9474b",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 160,
+          "text": "public long getFoxSignature() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-fox-space",
+      "citation": "regex.RegexConcat#foxRegex",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/regex/RegexConcat.java",
+      "sha256": "8b8b9f89abb93776bc09b62360843e20e8522778ce47b96b4dbcd4bf1b2871cd",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 77,
+          "text": "private long foxRegex() {"
+        },
+        {
+          "line": 133,
+          "text": "final long foxRegex = foxRegex();"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-fox-space",
+      "citation": "regex.RegexConcat#match",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/regex/RegexConcat.java",
+      "sha256": "8b8b9f89abb93776bc09b62360843e20e8522778ce47b96b4dbcd4bf1b2871cd",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 127,
+          "text": "public boolean match(StringLocated s) {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-fox-space",
+      "citation": "text.FoxSignature#getMask",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/text/FoxSignature.java",
+      "sha256": "327ea8b237d3a2d65ebb0775087b5d9203a4bfd40b4cae27d3dcf3e120ad6985",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 86,
+          "text": "private static long getMask(char ch) {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-fox-space",
+      "citation": "text.FoxSignature#getFoxSignatureFromRealString",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/text/FoxSignature.java",
+      "sha256": "327ea8b237d3a2d65ebb0775087b5d9203a4bfd40b4cae27d3dcf3e120ad6985",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 95,
+          "text": "public static long getFoxSignatureFromRealString(String s) {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-entry-grammar",
+      "citation": "sequencediagram.command.CommandBoxStart#getRegexConcat",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandBoxStart.java",
+      "sha256": "67d06b20d6bae9f5a28275a9f82c1a4b4e8802b7b292cc86c6efcd457096f198",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 64,
+          "text": "static IRegex getRegexConcat() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-entry-grammar",
+      "citation": "sequencediagram.command.CommandAutonumberResume#getRegexConcat",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumberResume.java",
+      "sha256": "838c7dc7894fb7f0e314329fc6b6a064784609e8c09026dcc3d83c0921bc9321",
+      "pinned_byte_equal": true,
+      "exists": false,
+      "locations": [],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-entry-grammar",
+      "citation": "command.note.sequence.FactorySequenceNoteAcrossCommand#getRegexConcatSingleLine",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteAcrossCommand.java",
+      "sha256": "5f778dd48411620af48310a797f87f80046003daa7d5355d58edf13ddc762175",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 87,
+          "text": "private IRegex getRegexConcatSingleLine() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-entry-grammar",
+      "citation": "command.note.sequence.FactorySequenceNoteAcrossCommand#getRegexConcatMultiLine",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteAcrossCommand.java",
+      "sha256": "5f778dd48411620af48310a797f87f80046003daa7d5355d58edf13ddc762175",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 72,
+          "text": "private IRegex getRegexConcatMultiLine() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-entry-grammar",
+      "citation": "command.note.sequence.FactorySequenceNoteAcrossCommand#executeInternal",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteAcrossCommand.java",
+      "sha256": "5f778dd48411620af48310a797f87f80046003daa7d5355d58edf13ddc762175",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 141,
+          "text": "private CommandExecutionResult executeInternal(SequenceDiagram diagram, final RegexResult line0, Display display)"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-provenance-correction",
+      "citation": "sequencediagram.command.CommandParticipantA#getRegexConcat",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA.java",
+      "sha256": "61664e96e15f18e24a98352538b62ca9c09b7c3942670d969a6781693aa14597",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 52,
+          "text": "static IRegex getRegexConcat() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-provenance-correction",
+      "citation": "sequencediagram.command.CommandParticipant#getRegexType",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipant.java",
+      "sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 79,
+          "text": "static IRegex getRegexType() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-provenance-correction",
+      "citation": "sequencediagram.command.CommandParticipant#getOrderRegex",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipant.java",
+      "sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 70,
+          "text": "static IRegex getOrderRegex() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-provenance-correction",
+      "citation": "sequencediagram.command.CommandParticipant#executeArg",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipant.java",
+      "sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 88,
+          "text": "final protected CommandExecutionResult executeArg(SequenceDiagram diagram, LineLocation location, RegexResult arg,"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-command-provenance-correction",
+      "citation": "sequencediagram.graphic.DrawableSetInitializer#prepareParticipant",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/DrawableSetInitializer.java",
+      "sha256": "db8c1bd54e44ea2e86802952936032c9db59c00dcf858b0987314cfaa2d2c897",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 598,
+          "text": "private void prepareParticipant(StringBounder stringBounder, Participant p) {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-pattern2-class-composition",
+      "citation": "regex.Pattern2#QUOTED_REPLACEMENTS",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [],
+      "field": true
+    },
+    {
+      "mechanism": "sequence-pattern2-class-composition",
+      "citation": "regex.Pattern2#transform",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 109,
+          "text": "final String regex = transform(patternString);"
+        },
+        {
+          "line": 121,
+          "text": "public static String transform(String input) {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-pattern2-class-composition",
+      "citation": "klimt.color.ColorParser#simpleColor",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+      "sha256": "16809219620993a934cc8a319bd286e081d7b5191999bf20c263e81e2cbb6cdd",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 71,
+          "text": "public static ColorParser simpleColor(ColorType mainType) {"
+        },
+        {
+          "line": 75,
+          "text": "public static ColorParser simpleColor(ColorType mainType, String id) {"
+        },
+        {
+          "line": 83,
+          "text": "public static ColorParser simpleColor(String optPrefix, ColorType mainType) {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-pattern2-class-composition",
+      "citation": "klimt.color.ColorParser#getRegex",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/color/ColorParser.java",
+      "sha256": "16809219620993a934cc8a319bd286e081d7b5191999bf20c263e81e2cbb6cdd",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 114,
+          "text": "public RegexLeaf getRegex() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-create-command-signature-scope",
+      "citation": "sequencediagram.command.CommandParticipantA#getRegexConcat",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA.java",
+      "sha256": "61664e96e15f18e24a98352538b62ca9c09b7c3942670d969a6781693aa14597",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 52,
+          "text": "static IRegex getRegexConcat() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-create-command-signature-scope",
+      "citation": "sequencediagram.command.CommandParticipant#getRegexType",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipant.java",
+      "sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 79,
+          "text": "static IRegex getRegexType() {"
+        }
+      ],
+      "field": false
+    },
+    {
+      "mechanism": "sequence-create-command-signature-scope",
+      "citation": "regex.RegexConcat#match",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/regex/RegexConcat.java",
+      "sha256": "8b8b9f89abb93776bc09b62360843e20e8522778ce47b96b4dbcd4bf1b2871cd",
+      "pinned_byte_equal": true,
+      "exists": true,
+      "locations": [
+        {
+          "line": 127,
+          "text": "public boolean match(StringLocated s) {"
+        }
+      ],
+      "field": false
+    }
+  ],
+  "citation_failures": [
+    {
+      "mechanism": "sequence-command-entry-grammar",
+      "citation": "sequencediagram.command.CommandAutonumberResume#getRegexConcat",
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumberResume.java",
+      "sha256": "838c7dc7894fb7f0e314329fc6b6a064784609e8c09026dcc3d83c0921bc9321",
+      "pinned_byte_equal": true,
+      "exists": false,
+      "locations": [],
+      "field": false
+    }
+  ],
+  "production_changed": [
+    "crates/rustuml-parser/src/parse/sequence.rs",
+    "crates/rustuml-render/src/sequence.rs"
+  ],
+  "java_composite_classes": [
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumber.java",
+      "line": 61,
+      "expression": "[^%pLN%s]",
+      "source": "new RegexLeaf(1, \"START\", \"(\\\\d(?:(?:[^%pLN%s]+|\\\\d+)*\\\\d)?)?\"), //"
+    }
+  ],
+  "tail_parser_locations": [
+    {
+      "line": 1305,
+      "text": "if !self.try_participant_decl_in_command(rest, line) {"
+    }
+  ],
+  "maker_source_trace_verified": [
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/regex/Pattern2.java",
+      "sha256": "4c64a9a7f64f1b742093a5e0ab28b6c928d80f44da28ff38561b5d4b09ff9e52",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/regex/RegexLeaf.java",
+      "sha256": "a2f2b6362509bbb4275401e18ba8ca424c7d714163f615858a9a08c6d5c9474b",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/regex/RegexConcat.java",
+      "sha256": "8b8b9f89abb93776bc09b62360843e20e8522778ce47b96b4dbcd4bf1b2871cd",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/text/FoxSignature.java",
+      "sha256": "327ea8b237d3a2d65ebb0775087b5d9203a4bfd40b4cae27d3dcf3e120ad6985",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteCommand.java",
+      "sha256": "7859f40c67b6268b7bcafbe89c350e0e7312e5d79cfb396eeebae51f88682508",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOverSeveralCommand.java",
+      "sha256": "19ca1eae68073d00acaf3341e7da70a9b48c2eb56476881f9aa6be7f76a93c17",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteOnArrowCommand.java",
+      "sha256": "a39ddd63e6e9e14803fe1b99f7ec66a5316d4b5208d8d026fbca141555f17f29",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/sequence/FactorySequenceNoteAcrossCommand.java",
+      "sha256": "5f778dd48411620af48310a797f87f80046003daa7d5355d58edf13ddc762175",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipant.java",
+      "sha256": "cb05f0039a04be5b1d1dd69ef8668b4c4dd121ddaad8b4f54032ee8a5d118e5b",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA.java",
+      "sha256": "61664e96e15f18e24a98352538b62ca9c09b7c3942670d969a6781693aa14597",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA2.java",
+      "sha256": "04ef56cbcccf57d00ac734924789fd28035b30d6cea69cba566e0825e8bf06af",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA3.java",
+      "sha256": "ed1f123de770356792aee51faa0baf1ceb2217cc2dc0d9371b2b30daa9427fa0",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandParticipantA4.java",
+      "sha256": "65d1e19a67935a50316be252968046d8baf7677378a56612e2fe0f079ddcff29",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandActivate.java",
+      "sha256": "8d653402d29619ab112333ffb17e5e188ae84661fc1e1f75df676de54cf81299",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandBoxStart.java",
+      "sha256": "67d06b20d6bae9f5a28275a9f82c1a4b4e8802b7b292cc86c6efcd457096f198",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandAutonumberResume.java",
+      "sha256": "838c7dc7894fb7f0e314329fc6b6a064784609e8c09026dcc3d83c0921bc9321",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReferenceOverSeveral.java",
+      "sha256": "9948cf0d17ee31420cd89bb69a04b36ef4a9d96ed47ac937a8ae56021072dac7",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandReferenceMultilinesOverSeveral.java",
+      "sha256": "11e6d7dadc1d8d924bd3df29098bf01f54bf36b04caaee8ae0d67a013487adae",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandHideShowByGender.java",
+      "sha256": "4bf13806a5f95c692afcc3d1e8c0abb4cecf22d910b99b871fa7ee0107b55ce4",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/DrawableSetInitializer.java",
+      "sha256": "db8c1bd54e44ea2e86802952936032c9db59c00dcf858b0987314cfaa2d2c897",
+      "pinned_equal": true
+    },
+    {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/teoz/Dolls.java",
+      "sha256": "51cf5ce87ebcb0d81e0e836a5d77249da371959038dc950abebade524159fe04",
+      "pinned_equal": true
+    }
+  ],
+  "manual_findings": [
+    "No fixture text discrimination or golden imports in the production diff. Literal of is an optional grammar prefix; participant content is captured generally. The whitespace set derives from FoxSignature, not a VT-only branch.",
+    "CommandParticipantA/A2/A3/A4#getRegexConcat and DrawableSetInitializer#prepareParticipant exist. prepareParticipant lines630-634 supplies the same Display to both head and tail components. Old accounts are byte-exact.",
+    "New CommandAutonumberResume#getRegexConcat citation does not exist; actual declaration is private static RegexConcat getConcat at line55. The same incorrect method name appears in the new parser comment. This is an append-only provenance obligation, not authority to rewrite the account.",
+    "Pattern2#transform replaces tokens before compiling; the Rust expansion correctly leaves bracket negation and adjoining colon intact. The only additional composite class in the registered Java sequence command directories is CommandAutonumber START [^%pLN%s]. ColorParser has no %s composite class; new Rust [^%s:] is its delimiter approximation, not the complete Java color language.",
+    "Create is the sole call from a sequence command consumer back into try_participant_decl. Other tails: try_return strips &/return then a color fragment (Java required space is nested optional); try_autoactivate trims the tail; try_skinparam parses its tail; message parsing strips & and separately strips arrow-style annotations. None of these calls a guarded declaration parser. Inline arrow aliases are not a Rust tail parser: the new probes deliberately challenge their unsupported source grammar.",
+    "SequenceDiagramFactory registers short activation, participant multiline, hide-unlinked, URL, anchor, pagination, footbox commands beyond the repaired subset. Supplement probes these; their pre-existing omissions must not be attributed to this packet.",
+    "No combined correctness is claimed for concurrent SVG serialization changes; tested production tree is exactly b4849a500, with dc438fd0 evidence only."
+  ]
+}

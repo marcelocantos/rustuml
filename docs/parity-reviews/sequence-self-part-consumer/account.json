@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-self-part-consumer",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "skin.ArrowConfiguration#getPart/#withPart",
+    "skin.rose.ComponentRoseSelfArrow#drawRightSide/#drawLeftSide/#getPolygon"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::self-arrow source dressing paint"
+  ],
+  "invariant": "Ordinary arrows consume independent dressing parts; ComponentRoseSelfArrow instead explicitly consumes ArrowConfiguration.getPart (the selected non-FULL part) for both source and destination paint, while model dressing ownership remains independent.",
+  "causal_divergence": "The initial ordinary ownership correction was incorrectly also applied to the self paint consumer, adding source wings. New preserved mixed-half self controls expose this distinction.",
+  "planned_change": "Restore the source self paint consumer to the selected configuration part with an exact Java citation. Keep ordinary endpoint pairs independent. Preserve first62 failures and investigate remaining self orientation/decoration through ComponentRoseSelfArrow.",
+  "perturbation_axes": [
+    "self mixed async/normal and half parts",
+    "activation/deactivation, circles and engine"
+  ],
+  "before_revision": "71422f1b",
+  "account_date": "2026-11-04"
+}

@@ -1,0 +1,142 @@
+[
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_full_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_full_legacy.svg",
+    "cohort": "followup10",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "reverse reverse_full",
+      "reversed declaration order",
+      "first/last nested activation",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_full_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_full_teoz.svg",
+    "cohort": "followup10",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "reverse reverse_full",
+      "reversed declaration order",
+      "first/last nested activation",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_open_top_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_open_top_legacy.svg",
+    "cohort": "followup10",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "reverse reverse_open_top",
+      "reversed declaration order",
+      "first/last nested activation",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_open_top_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_open_top_teoz.svg",
+    "cohort": "followup10",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "reverse reverse_open_top",
+      "reversed declaration order",
+      "first/last nested activation",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_open_bottom_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_open_bottom_legacy.svg",
+    "cohort": "followup10",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "reverse reverse_open_bottom",
+      "reversed declaration order",
+      "first/last nested activation",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_open_bottom_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_open_bottom_teoz.svg",
+    "cohort": "followup10",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "reverse reverse_open_bottom",
+      "reversed declaration order",
+      "first/last nested activation",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_circle_top_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_circle_top_legacy.svg",
+    "cohort": "followup10",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "reverse reverse_circle_top",
+      "reversed declaration order",
+      "first/last nested activation",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_circle_top_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_circle_top_teoz.svg",
+    "cohort": "followup10",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "reverse reverse_circle_top",
+      "reversed declaration order",
+      "first/last nested activation",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_circle_bottom_legacy.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_circle_bottom_legacy.svg",
+    "cohort": "followup10",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "reverse reverse_circle_bottom",
+      "reversed declaration order",
+      "first/last nested activation",
+      "legacy"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  },
+  {
+    "source": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_circle_bottom_teoz.puml",
+    "golden": "/Users/marcelo/Library/Caches/rustuml-sequence-pending-checker-78c595f4/self-followup/ind78_self_extra_reverse_circle_bottom_teoz.svg",
+    "cohort": "followup10",
+    "mechanism": "sequence-self-half-polygon-order",
+    "axes": [
+      "reverse reverse_circle_bottom",
+      "reversed declaration order",
+      "first/last nested activation",
+      "teoz"
+    ],
+    "intended_valid": true,
+    "observed_valid": true
+  }
+]

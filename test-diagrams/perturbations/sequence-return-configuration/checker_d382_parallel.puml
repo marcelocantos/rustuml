@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+A -> B ++ : enter
+B -> C ++ : nested
+& return #blue together
+return outer
+@enduml

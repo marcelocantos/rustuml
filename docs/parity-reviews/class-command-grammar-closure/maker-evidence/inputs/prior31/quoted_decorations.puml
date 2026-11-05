@@ -1,0 +1,5 @@
+@startuml
+frame "Decorations" {
+class "X extends Ghost [[literal]] #red" as Literal
+}
+@enduml

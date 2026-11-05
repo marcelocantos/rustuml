@@ -1,0 +1,8 @@
+@startuml
+!theme cerulean
+!$record = "SaffronLedger"
+!$field = "invoice"
+class $record {
+  +$field: String
+}
+@enduml

@@ -1,0 +1,357 @@
+{
+  "entries": 12,
+  "before_rejections": 10,
+  "after_rejections": 6,
+  "introduced_losses": [
+    "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_legacy.puml",
+    "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_teoz.puml",
+    "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_legacy.puml",
+    "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_teoz.puml"
+  ],
+  "after_false_accepts": [
+    "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_legacy.puml",
+    "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_teoz.puml",
+    "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_legacy.puml",
+    "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_teoz.puml",
+    "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_legacy.puml",
+    "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_teoz.puml"
+  ],
+  "results": [
+    {
+      "source": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "75e0e048861e124ac7387b19774cd4a40a1ded89b9f4289ce3a87c747dd65652",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "75e0e048861e124ac7387b19774cd4a40a1ded89b9f4289ce3a87c747dd65652",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-external-note-owner/indf535_over_bare_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "f8cc8be03f8c94c46b96c7aca508c888ee3cbb132aa44ff098d82a5004642fba",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "f8cc8be03f8c94c46b96c7aca508c888ee3cbb132aa44ff098d82a5004642fba",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_double_gap_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_double_gap_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_suffix_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_suffix_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_attached_reject_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_attached_reject_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 4: Unclosed sequence note\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "17cc8dd139a89c9c58c2bee270760ec2092cb6b919b224230da70cda34755603",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": true
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_em_space_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4c049e61bda4c1bc8fce7fd26764d5898a316f38e9827cd9795a8bb917e9f46f",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": true
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_legacy.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 2: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "17cc8dd139a89c9c58c2bee270760ec2092cb6b919b224230da70cda34755603",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": true
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-note-shape-terminator/indf535_terminator_narrow_nbsp_teoz.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/before-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 3: Unclosed sequence note\n"
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-sequence-filtered-display-checker-f535/independent/after-bin/rustuml",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "4c049e61bda4c1bc8fce7fd26764d5898a316f38e9827cd9795a8bb917e9f46f",
+          "stderr": ""
+        }
+      },
+      "introduced_rejection_loss": true
+    }
+  ]
+}

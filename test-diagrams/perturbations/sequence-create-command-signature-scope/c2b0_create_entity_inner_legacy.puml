@@ -1,0 +1,10 @@
+@startuml
+participant Quartz
+group Batch
+loop retry
+create entityDepot
+Quartz -> Depot: receive
+end
+end
+Depot -> Quartz: confirm
+@enduml

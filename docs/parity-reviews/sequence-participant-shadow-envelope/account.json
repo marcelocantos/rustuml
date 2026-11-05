@@ -1,0 +1,22 @@
+{
+  "java_locations": [
+    "sequencediagram/graphic/ParticipantBox.java#getCenterX,getMaxX",
+    "sequencediagram/graphic/LivingParticipantBox.java#getMaxX",
+    "skin/rose/ComponentRoseParticipant.java#getPreferredWidth",
+    "style/FromSkinparamToStyle.java#getShadowingValue"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs::living_participant_group_member and folded over-several width"
+  ],
+  "invariant": "Participant center and maxX use the head component preferred width, including shadow, while the painted head rectangle excludes shadow. InGroupableList must receive this full maxX.",
+  "causal_divergence": "Rust spacing already retains shadow in center_x, but group membership reconstructs maxX from the painted box width and discards the shadow tail. This leaves group width three units short under boolean shadowing.",
+  "planned_change": "Use the existing resolved participant shadow extent consistently in member bounds and multi-participant note allocation. Retain visible rectangle dimensions.",
+  "perturbation_axes": [
+    "global versus note-only shadow",
+    "declaration order with grouped messages and left/right/over notes"
+  ],
+  "schema_version": 1,
+  "mechanism": "sequence-participant-shadow-envelope",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "acceptance": "Candidate only; fresh independent checker required; no historical account or review edits."
+}

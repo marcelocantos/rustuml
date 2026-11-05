@@ -1,0 +1,30 @@
+[
+  {
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "python",
+      "docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py",
+      "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/all-inputs.json",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/bin-before",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/replay-before"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b9c6cf04",
+    "exit": 0
+  },
+  {
+    "argv": [
+      "uv",
+      "run",
+      "--no-project",
+      "python",
+      "docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py",
+      "docs/parity-reviews/sequence-lifecycle-decoration-packet/maker-results/all-inputs.json",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/bin-after",
+      "/Users/marcelo/Library/Caches/rustuml-sequence-review-b9c6cf04/replay-after"
+    ],
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-b9c6cf04",
+    "exit": 0
+  }
+]

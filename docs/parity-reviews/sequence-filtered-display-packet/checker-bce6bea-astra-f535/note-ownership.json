@@ -1,0 +1,1271 @@
+[
+  {
+    "name": "indf535_left_in_legacy",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "[",
+          "Rowan"
+        ],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Rowan",
+        "Rowan",
+        "Linden",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "before": [
+        "Rowan",
+        "Rowan",
+        "Linden",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "after": [
+        "Rowan",
+        "Rowan",
+        "Linden",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ]
+    },
+    "note_label_counts": {
+      "annotation one": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      },
+      "annotation two": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 0
+  },
+  {
+    "name": "indf535_left_in_teoz",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "[",
+          "Rowan"
+        ],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Rowan",
+        "Linden",
+        "Rowan",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "before": [
+        "Rowan",
+        "Linden",
+        "Rowan",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "after": [
+        "Rowan",
+        "Linden",
+        "Rowan",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ]
+    },
+    "note_label_counts": {
+      "annotation one": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      },
+      "annotation two": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 0
+  },
+  {
+    "name": "indf535_left_out_legacy",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "Rowan",
+          "["
+        ],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Rowan",
+        "Rowan",
+        "Linden",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "before": [
+        "Rowan",
+        "Rowan",
+        "Linden",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "after": [
+        "Rowan",
+        "Rowan",
+        "Linden",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ]
+    },
+    "note_label_counts": {
+      "annotation one": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      },
+      "annotation two": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 1
+  },
+  {
+    "name": "indf535_left_out_teoz",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "Rowan",
+          "["
+        ],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Rowan",
+        "Linden",
+        "Rowan",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "before": [
+        "Rowan",
+        "Linden",
+        "Rowan",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "after": [
+        "Rowan",
+        "Linden",
+        "Rowan",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ]
+    },
+    "note_label_counts": {
+      "annotation one": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      },
+      "annotation two": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 1
+  },
+  {
+    "name": "indf535_right_out_legacy",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "Rowan",
+          "]"
+        ],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Rowan",
+        "Rowan",
+        "Linden",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "before": [
+        "Rowan",
+        "Rowan",
+        "Linden",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "after": [
+        "Rowan",
+        "Rowan",
+        "Linden",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ]
+    },
+    "note_label_counts": {
+      "annotation one": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      },
+      "annotation two": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 1
+  },
+  {
+    "name": "indf535_right_out_teoz",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "Rowan",
+          "]"
+        ],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Rowan",
+        "Linden",
+        "Rowan",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "before": [
+        "Rowan",
+        "Linden",
+        "Rowan",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "after": [
+        "Rowan",
+        "Linden",
+        "Rowan",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ]
+    },
+    "note_label_counts": {
+      "annotation one": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      },
+      "annotation two": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 1
+  },
+  {
+    "name": "indf535_right_in_legacy",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "]",
+          "Rowan"
+        ],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Rowan",
+        "Rowan",
+        "Linden",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "before": [
+        "Rowan",
+        "Rowan",
+        "Linden",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "after": [
+        "Rowan",
+        "Rowan",
+        "Linden",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ]
+    },
+    "note_label_counts": {
+      "annotation one": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      },
+      "annotation two": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 1
+  },
+  {
+    "name": "indf535_right_in_teoz",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "]",
+          "Rowan"
+        ],
+        "text": "annotation one\n<size:18>annotation two</size>",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Rowan",
+        "Linden",
+        "Rowan",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "before": [
+        "Rowan",
+        "Linden",
+        "Rowan",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ],
+      "after": [
+        "Rowan",
+        "Linden",
+        "Rowan",
+        "Linden",
+        "border",
+        "annotation one",
+        "annotation two"
+      ]
+    },
+    "note_label_counts": {
+      "annotation one": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      },
+      "annotation two": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 0
+  },
+  {
+    "name": "indf535_consecutive_legacy",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [
+          "Nettle",
+          "Sorrel"
+        ],
+        "text": "ordinary four",
+        "on_message": true
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "Nettle",
+          "["
+        ],
+        "text": "latest three",
+        "on_message": true
+      },
+      {
+        "participants": [
+          "Nettle",
+          "Sorrel"
+        ],
+        "text": "ordinary four",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 2
+    },
+    "all_text": {
+      "java": [
+        "Nettle",
+        "Nettle",
+        "Sorrel",
+        "Sorrel",
+        "first",
+        "second",
+        "third",
+        "latest three",
+        "ordinary",
+        "ordinary four"
+      ],
+      "before": [
+        "Nettle",
+        "Nettle",
+        "Sorrel",
+        "Sorrel",
+        "first",
+        "second",
+        "third",
+        "ordinary",
+        "ordinary four"
+      ],
+      "after": [
+        "Nettle",
+        "Nettle",
+        "Sorrel",
+        "Sorrel",
+        "first",
+        "second",
+        "third",
+        "latest three",
+        "ordinary",
+        "ordinary four"
+      ]
+    },
+    "note_label_counts": {
+      "latest three": {
+        "java": 1,
+        "before": 0,
+        "after": 1
+      },
+      "ordinary four": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 0
+  },
+  {
+    "name": "indf535_consecutive_teoz",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [
+          "Nettle",
+          "Sorrel"
+        ],
+        "text": "ordinary four",
+        "on_message": true
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "Nettle",
+          "["
+        ],
+        "text": "latest three",
+        "on_message": true
+      },
+      {
+        "participants": [
+          "Nettle",
+          "Sorrel"
+        ],
+        "text": "ordinary four",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 2
+    },
+    "all_text": {
+      "java": [
+        "Nettle",
+        "Sorrel",
+        "Nettle",
+        "Sorrel",
+        "first",
+        "second",
+        "third",
+        "latest three",
+        "ordinary",
+        "ordinary four"
+      ],
+      "before": [
+        "Nettle",
+        "Sorrel",
+        "Nettle",
+        "Sorrel",
+        "first",
+        "second",
+        "third",
+        "ordinary",
+        "ordinary four"
+      ],
+      "after": [
+        "Nettle",
+        "Sorrel",
+        "Nettle",
+        "Sorrel",
+        "first",
+        "second",
+        "third",
+        "latest three",
+        "ordinary",
+        "ordinary four"
+      ]
+    },
+    "note_label_counts": {
+      "latest three": {
+        "java": 1,
+        "before": 0,
+        "after": 1
+      },
+      "ordinary four": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 0
+  },
+  {
+    "name": "indf535_ordinary_before_legacy",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [
+          "Tansy",
+          "Yarrow"
+        ],
+        "text": "must belong current",
+        "on_message": true
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "]",
+          "Yarrow"
+        ],
+        "text": "must belong current",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Tansy",
+        "Tansy",
+        "Yarrow",
+        "Yarrow",
+        "prior",
+        "current",
+        "must belong current"
+      ],
+      "before": [
+        "Tansy",
+        "Tansy",
+        "Yarrow",
+        "Yarrow",
+        "prior",
+        "current",
+        "must belong current"
+      ],
+      "after": [
+        "Tansy",
+        "Tansy",
+        "Yarrow",
+        "Yarrow",
+        "prior",
+        "current",
+        "must belong current"
+      ]
+    },
+    "note_label_counts": {
+      "must belong current": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 1
+  },
+  {
+    "name": "indf535_ordinary_before_teoz",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [
+          "Tansy",
+          "Yarrow"
+        ],
+        "text": "must belong current",
+        "on_message": true
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "]",
+          "Yarrow"
+        ],
+        "text": "must belong current",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Tansy",
+        "Yarrow",
+        "Tansy",
+        "Yarrow",
+        "prior",
+        "current",
+        "must belong current"
+      ],
+      "before": [
+        "Tansy",
+        "Yarrow",
+        "Tansy",
+        "Yarrow",
+        "prior",
+        "current",
+        "must belong current"
+      ],
+      "after": [
+        "Tansy",
+        "Yarrow",
+        "Tansy",
+        "Yarrow",
+        "prior",
+        "current",
+        "must belong current"
+      ]
+    },
+    "note_label_counts": {
+      "must belong current": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 0
+  },
+  {
+    "name": "indf535_group_nested_legacy",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [],
+        "text": "mud\nroot",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "[",
+          "Clover"
+        ],
+        "text": "petal water",
+        "on_message": true
+      },
+      {
+        "participants": [
+          "Lotus",
+          "]"
+        ],
+        "text": "mud\nroot",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 2
+    },
+    "all_text": {
+      "java": [
+        "Clover",
+        "Clover",
+        "Lotus",
+        "Lotus",
+        "Bed",
+        "loop",
+        "[water]",
+        "enter",
+        "petal water",
+        "leave",
+        "mud",
+        "root"
+      ],
+      "before": [
+        "Clover",
+        "Clover",
+        "Lotus",
+        "Lotus",
+        "Bed",
+        "loop",
+        "[water]",
+        "enter",
+        "leave",
+        "mud",
+        "root"
+      ],
+      "after": [
+        "Clover",
+        "Clover",
+        "Lotus",
+        "Lotus",
+        "Bed",
+        "loop",
+        "[water]",
+        "enter",
+        "petal water",
+        "leave",
+        "mud",
+        "root"
+      ]
+    },
+    "note_label_counts": {
+      "petal water": {
+        "java": 1,
+        "before": 0,
+        "after": 1
+      },
+      "mud": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      },
+      "root": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 1
+  },
+  {
+    "name": "indf535_group_nested_teoz",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [],
+        "text": "mud\nroot",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "[",
+          "Clover"
+        ],
+        "text": "petal water",
+        "on_message": true
+      },
+      {
+        "participants": [
+          "Lotus",
+          "]"
+        ],
+        "text": "mud\nroot",
+        "on_message": true
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 2
+    },
+    "all_text": {
+      "java": [
+        "Clover",
+        "Lotus",
+        "Clover",
+        "Lotus",
+        "Bed",
+        "loop",
+        "[water]",
+        "enter",
+        "petal water",
+        "leave",
+        "mud",
+        "root"
+      ],
+      "before": [
+        "Clover",
+        "Lotus",
+        "Clover",
+        "Lotus",
+        "Bed",
+        "loop",
+        "[water]",
+        "enter",
+        "leave",
+        "mud",
+        "root"
+      ],
+      "after": [
+        "Clover",
+        "Lotus",
+        "Clover",
+        "Lotus",
+        "Bed",
+        "loop",
+        "[water]",
+        "enter",
+        "petal water",
+        "leave",
+        "mud",
+        "root"
+      ]
+    },
+    "note_label_counts": {
+      "petal water": {
+        "java": 1,
+        "before": 0,
+        "after": 1
+      },
+      "mud": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      },
+      "root": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 0
+  },
+  {
+    "name": "indf535_over_named_legacy",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [
+          "Heather"
+        ],
+        "text": "seed\nstem",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "Heather"
+        ],
+        "text": "seed\nstem",
+        "on_message": false
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Heather",
+        "Heather",
+        "pollen",
+        "seed",
+        "stem"
+      ],
+      "before": [
+        "Heather",
+        "Heather",
+        "pollen",
+        "seed",
+        "stem"
+      ],
+      "after": [
+        "Heather",
+        "Heather",
+        "pollen",
+        "seed",
+        "stem"
+      ]
+    },
+    "note_label_counts": {
+      "seed": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      },
+      "stem": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 0
+  },
+  {
+    "name": "indf535_over_named_teoz",
+    "observed_valid": true,
+    "notes_before": [
+      {
+        "participants": [
+          "Heather"
+        ],
+        "text": "seed\nstem",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [
+          "Heather"
+        ],
+        "text": "seed\nstem",
+        "on_message": false
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Heather",
+        "Heather",
+        "pollen",
+        "seed",
+        "stem"
+      ],
+      "before": [
+        "Heather",
+        "Heather",
+        "pollen",
+        "seed",
+        "stem"
+      ],
+      "after": [
+        "Heather",
+        "Heather",
+        "pollen",
+        "seed",
+        "stem"
+      ]
+    },
+    "note_label_counts": {
+      "seed": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      },
+      "stem": {
+        "java": 1,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 0
+  },
+  {
+    "name": "indf535_over_bare_legacy",
+    "observed_valid": false,
+    "notes_before": [
+      {
+        "participants": [],
+        "text": "ice",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [],
+        "text": "ice",
+        "on_message": false
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Add your own dedication into PlantUML",
+        "\u00a0",
+        "For just $5 per month!",
+        "Details on",
+        "https://plantuml.com/dedication",
+        "PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]",
+        "[From string (line 4) ]",
+        "\u00a0",
+        "@startuml",
+        "participant Thistle",
+        "[-> Thistle: frost",
+        "note over: ice",
+        "Syntax Error? (Assumed diagram type: sequence)"
+      ],
+      "before": [
+        "Thistle",
+        "Thistle",
+        "frost",
+        "ice"
+      ],
+      "after": [
+        "Thistle",
+        "Thistle",
+        "frost",
+        "ice"
+      ]
+    },
+    "note_label_counts": {
+      "ice": {
+        "java": 0,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 2
+  },
+  {
+    "name": "indf535_over_bare_teoz",
+    "observed_valid": false,
+    "notes_before": [
+      {
+        "participants": [],
+        "text": "ice",
+        "on_message": false
+      }
+    ],
+    "notes_after": [
+      {
+        "participants": [],
+        "text": "ice",
+        "on_message": false
+      }
+    ],
+    "event_counts": {
+      "before": 1,
+      "after": 1
+    },
+    "all_text": {
+      "java": [
+        "Add your own dedication into PlantUML",
+        "\u00a0",
+        "For just $5 per month!",
+        "Details on",
+        "https://plantuml.com/dedication",
+        "PlantUML version 1.2026.3beta6 / 71806a2 [2026-11-03 06:34:50 UTC]",
+        "[From string (line 5) ]",
+        "\u00a0",
+        "@startuml",
+        "!pragma teoz true",
+        "participant Thistle",
+        "[-> Thistle: frost",
+        "note over: ice",
+        "Syntax Error? (Assumed diagram type: sequence)"
+      ],
+      "before": [
+        "Thistle",
+        "Thistle",
+        "frost",
+        "ice"
+      ],
+      "after": [
+        "Thistle",
+        "Thistle",
+        "frost",
+        "ice"
+      ]
+    },
+    "note_label_counts": {
+      "ice": {
+        "java": 0,
+        "before": 1,
+        "after": 1
+      }
+    },
+    "whole_after": 2
+  }
+]

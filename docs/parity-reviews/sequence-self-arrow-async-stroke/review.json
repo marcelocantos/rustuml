@@ -1,0 +1,483 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-self-arrow-async-stroke",
+  "reviewer": {
+    "task_id": "t3-b60455c3 independent sequence recovery checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "account_commit": "de1678345e5c6f5154f9415d8113cc9e65aa592d",
+  "implementation_commit": "c15c6ecff53b7ec1e250e2744accd1852c7d1941",
+  "original_account_commit": "97820400929a1afcfaba701ca2f8b9efb6aadea1",
+  "original_implementation_commit": "0821a330c726a351a162c5a2cdaf3f7425910bb2",
+  "tested_parent_revision": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "tested_candidate_revision": "5d3eb9824df6084411c591f90d5b385aac32c1b7",
+  "original_candidate_revision": "1800ac48714743863307c82674490c697fcf5709",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "input_frontend": {
+    "owner_decision": "Raw Java CLI/file semantics approved during this review",
+    "policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "new_controls_frontend": "raw CLI -tsvg -pipe -charset UTF-8",
+    "historical_corpus": "GET preserved unchanged",
+    "TIM_code_imported": false,
+    "new_origin_assertion_imported": false,
+    "TIM_rawreader_reverification": "Not duplicated; assigned to independent TIM checker"
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/generated",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/generate.py /tmp/rustuml-seq-check-b60455c3/focused-generated --focused",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg -pipe -charset UTF-8",
+    "uv run --no-project python docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py MANIFEST /tmp/rustuml-seq-check-b60455c3/{before,after} SCRATCH_OUTPUT [CWD] (one invocation per cohort/revision; exact expansion in checker-support/README.md)",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser -p rustuml-render --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=/tmp/rustuml-seq-check-b60455c3/target CARGO_BUILD_JOBS=4 cargo clippy --release -p rustuml-parser -p rustuml-render -- -D warnings",
+    "rustfmt --edition 2024 --check crates/rustuml-render/src/sequence.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-parser/src/diagram/sequence.rs",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "open self arrow with activation and deactivation"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "d9d2e4a47095ee718a4f39da210ce8209e1c34ef8c0f44a56f722b166e83cd53",
+      "golden_sha256": "3ec1212fbeea6dc9e5bbecb13ca0d687435a020aa66f12d17d397dbd3986b7e1",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "open self arrow with activation and deactivation"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "5d97de4028d67c2d270cccdac8152bd7ba387784075e7cdeab58aeab55d8f8f3",
+      "golden_sha256": "05dcd284b112ef7a77c92aa79b4e36328c6e772b8670476666fb850fc44da593",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "open self arrow with activation and deactivation"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "e4c0a9e3515b411a519b41304b9303beb124d27e2f323f09cc053fbd21e7aa6f",
+      "golden_sha256": "d58c02856da2e3495b5e502f6e3d9fdda8f26c6b3d2b34bb737c23b584c5a8fb",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_legacy_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "open self arrow with activation and deactivation"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "cf133d11e15eb1fade14c4080bcd8b2ecbcb772cca78cc44e03bdd94448674d2",
+      "golden_sha256": "d178abc1d157045853d9b46009ca27593c057ed16bca51ff6132300bead07bd5",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "open self arrow with activation and deactivation"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "3f71bff57fe09e436d60492954dd5c11f54c02aae6aaa7b13b7caf151f9d74a0",
+      "golden_sha256": "a29f07589a012b1f4bd5823e7ed35f7ee1adcdb4bd2a67745cac63efbc6b09ab",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r0_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "open self arrow with activation and deactivation"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "177ebd7ad5c18e0ed674db93986a6ee3b14f73f5cd3afbdbf16477995d4e8831",
+      "golden_sha256": "085f452c38a89c6487570a7d858eb3cdf1c653bfd758a471168e8430d47a9b21",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w0.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "open self arrow with activation and deactivation"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "b127fc898189c346f19456e7e954b2da066f1a5958f8c303cf857518f94f8a5b",
+      "golden_sha256": "73f0d4a3bf0b36bb5eb3cc3481e4b57a5b4729ab5d63568df184df12da52b2a0",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_recovery_teoz_r1_w1.svg",
+      "axes": [
+        "legacy versus Teoz",
+        "participant declaration order",
+        "label width",
+        "open self arrow with activation and deactivation"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "6a6886ef88e0a42ed65f2ca491eed7e25797c7197dcb45ab8a14720df420e2fe",
+      "golden_sha256": "b23384ea87811b811bdf84eee2fdabef17823f2e56085118938956d3339829bf",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/fresh-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d0.svg",
+      "axes": [
+        "self-loop direction",
+        "prior depth",
+        "both lifecycle flags",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "9ee170cec51e9f9236152c2005660126e3be64b5edbae972e6eb0046df6996d9",
+      "golden_sha256": "bb55d03dd7b0b8d1873f50d25364ae7a8e0c1164900edd17656c9b3fe42de0e7",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d2.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r0_d2.svg",
+      "axes": [
+        "self-loop direction",
+        "prior depth",
+        "both lifecycle flags",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "196b0cace05d62ce04decf07f2ae44a02fa89979b25e5c5265a0e55462e66906",
+      "golden_sha256": "77e9115540938ce81bee9537ca4f4a4a99686a44340776e13ae93e748be3c793",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d0.svg",
+      "axes": [
+        "self-loop direction",
+        "prior depth",
+        "both lifecycle flags",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "55d9ea737f71d35e9ced14b7323af2ddeca28415aa3ea884d9d664feeacabbd7",
+      "golden_sha256": "a3400bde55fa2f126dda9e3df26977448f38fcb8626bf05cdc23ccb6ed662728",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d2.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e0_r1_d2.svg",
+      "axes": [
+        "self-loop direction",
+        "prior depth",
+        "both lifecycle flags",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "fb1c00977524da72c0b7f6cddaf15d2b94d1d7d44596e3f0516347502e904259",
+      "golden_sha256": "76df00340eb548d6b69a83fa40abee380e73d2359f5907bcd2cb6b6df4ad5daf",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e0.svg",
+      "axes": [
+        "async half-head direction",
+        "attached note",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "83a0b91b1828aeed4551185912c379db289e6b5461b844a2f0a9b6b2e94ad09b",
+      "golden_sha256": "7135f21f3289eacf50c3639b65795607474f8119abac245d92e47af8fe8678e6",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e0.svg",
+      "axes": [
+        "async half-head direction",
+        "attached note",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "f7709da36efbe5467a5cbcd286c62371c269cd92dcff23ee71f6a005be834145",
+      "golden_sha256": "ba95e4f26c9e3b00e22ffd291f7f07d680a14ee90e2c0e3941d3d43dda39ab24",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e0.svg",
+      "axes": [
+        "async half-head direction",
+        "attached note",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "820bad1a9ed44319cd7960acaba55464f39a1243bbf749e8753a2c20888c5507",
+      "golden_sha256": "111d0ced290cadc3c5b2dfcc33986b5ca59dd73502714ed0d8b8e80662fd2ff7",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e0.svg",
+      "axes": [
+        "async half-head direction",
+        "attached note",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "db837c7327419234c9332d0b6f385f7d32f6d741267e965602ff185a85cbf8c3",
+      "golden_sha256": "2943ee62fe77316e9e0b492f6f907e7c9d8ac9d4fb855555e0a66af9339c1751",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d0.svg",
+      "axes": [
+        "self-loop direction",
+        "prior depth",
+        "both lifecycle flags",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "591787e90d28224594607d03d26a2fc75148bbd496cebc1a66211c9dde3c0139",
+      "golden_sha256": "7cffb8a5532188f70101a02200efc4a1e514703911e839e1ea1c7c01ff9f928d",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d2.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r0_d2.svg",
+      "axes": [
+        "self-loop direction",
+        "prior depth",
+        "both lifecycle flags",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "09e87544dd902f3fc3c6f12bd17ba3cfdcd78ccb9478b7924959c5f54b709011",
+      "golden_sha256": "214b2cf73c3fc8cd871e4e9206474da2ea278b1ca43e6c5f9a5d8773ae6ceceb",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d0.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d0.svg",
+      "axes": [
+        "self-loop direction",
+        "prior depth",
+        "both lifecycle flags",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "c847d3c64bd42cbae083a21369d0b582516e2dbb2ba3cb4dd3e665d8b2fbbe76",
+      "golden_sha256": "2c19d777b29483d45476ce844c7ddd453328584eef0c0b3b15ec5733642ebad9",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d2.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_e1_r1_d2.svg",
+      "axes": [
+        "self-loop direction",
+        "prior depth",
+        "both lifecycle flags",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "d50148223502e32f05f59732276b73e1d2bfe8e496a8a8429f7591df726c9733",
+      "golden_sha256": "1ee58f3271bb6763bb50a2da457832292f540bc8ee65355ddf9d10ba2d4201e6",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n0_e1.svg",
+      "axes": [
+        "async half-head direction",
+        "attached note",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "75377a81d1138ad57a94ac2309eacee93c397b6385ece1cd4bfbab12610b5a54",
+      "golden_sha256": "e31894e2b42d7461d03d1b4f304e6bff6c67bd847336628774d2c283440910b5",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_top_n1_e1.svg",
+      "axes": [
+        "async half-head direction",
+        "attached note",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "985f03150eeb32dc650e3237171d685485607770fa726908fa87c40e95b8a419",
+      "golden_sha256": "4b87abb7597c967646cabbcfa04100a56e15cd1bcf92513e310818578bec9ff3",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n0_e1.svg",
+      "axes": [
+        "async half-head direction",
+        "attached note",
+        "engine"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "source_sha256": "ae7a930e7b2233a64f06255944584009ad7fec5da071dbf1760dbb6e61570f33",
+      "golden_sha256": "816592bb4f18e859a71f4ae63fbf446e90336f7acedd560d654d75196f00d28b",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e1.puml",
+      "golden": "test-diagrams/perturbations/sequence-self-arrow-async-stroke/checker_focus_half_bottom_n1_e1.svg",
+      "axes": [
+        "async half-head direction",
+        "attached note",
+        "engine"
+      ],
+      "result": "fail",
+      "classification": "valid-SVG-mismatch",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "comparator_exit": 1,
+      "source_sha256": "f6905da824601bdb68d812b0bbe4132b0ebb9fffeefac42322c9cb5ff851552f",
+      "golden_sha256": "208f2c2f3db07ca3b00200ef117a75d39e3481ba619d50311ee1e30f99211f55",
+      "diagnostics": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/focused-after.json.gz"
+    }
+  ],
+  "findings": [
+    "ComponentRoseSelfArrow#drawRightSide applies lifecycle Area.deltaX1, subtracts1 from x2 for ASYNC only when drawing the bottom stroke, then restores1 for the head. The new special-return-tip branch applies this in that order, including thin half-heads. The first eight full-CLI depth/label/order/engine controls and the legacy right-directed half-head controls pass.",
+    "Focused direction/depth/both-lifecycle controls disprove the shared model dependency: checker_focus_e0_r1_d0 is213px wide in Java versus170px in Rust. MessageSelfArrow#getStartingX has a reverse branch that subtracts preferred width and Step1Message reserves ConstraintBefore. SequenceSelfArrow::new has no direction argument and always returns right+activation_delta; the extent map and right-note shifts reuse it. The separate left painter cannot repair its missing left constraint.",
+    "Six focused Teoz controls also fail (both lifecycle flags or attached half-head notes). The exact right-side ASYNC subtraction is supported, but its required live-envelope/component dependencies are not independently accepted. This verdict does not claim the one-unit subtraction itself is wrong.",
+    "All14 accounts were present byte-for-byte in earlier chronological commits before their corresponding code. See provenance.json and commit-mapping.json. Main release tiers remain11181/11251 product-library and10497/11251 assisted-library; source-only CLI cohort403/955 with10 invalid references; no regressions observed.",
+    "Verdict applies to whole source-to-SVG recovery with the dependencies described above. Positive component-local observations are explicitly bounded and are not acceptance. Every mismatch and negative remains in the standing suite."
+  ],
+  "verdict": "rejected",
+  "evidence_summary": "docs/parity-reviews/sequence-dependency-closure/checker-support/evidence/summary.json",
+  "source_audit": "docs/parity-reviews/sequence-dependency-closure/checker-support/source-audit.json",
+  "scope_and_dependencies": [
+    "ComponentRoseSelfArrow#drawRightSide applies lifecycle Area.deltaX1, subtracts1 from x2 for ASYNC only when drawing the bottom stroke, then restores1 for the head. The new special-return-tip branch applies this in that order, including thin half-heads. The first eight full-CLI depth/label/order/engine controls and the legacy right-directed half-head controls pass.",
+    "Focused direction/depth/both-lifecycle controls disprove the shared model dependency: checker_focus_e0_r1_d0 is213px wide in Java versus170px in Rust. MessageSelfArrow#getStartingX has a reverse branch that subtracts preferred width and Step1Message reserves ConstraintBefore. SequenceSelfArrow::new has no direction argument and always returns right+activation_delta; the extent map and right-note shifts reuse it. The separate left painter cannot repair its missing left constraint.",
+    "Six focused Teoz controls also fail (both lifecycle flags or attached half-head notes). The exact right-side ASYNC subtraction is supported, but its required live-envelope/component dependencies are not independently accepted. This verdict does not claim the one-unit subtraction itself is wrong."
+  ]
+}

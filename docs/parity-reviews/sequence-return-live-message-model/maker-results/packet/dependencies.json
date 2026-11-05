@@ -1,0 +1,102 @@
+{
+  "status": "Unresolved dependencies; no waiver and no acceptance",
+  "items": [
+    {
+      "mechanism": "reversed external-arrow direction",
+      "sources": [
+        "checker_boundary_reverse"
+      ],
+      "evidence": "Only arrowhead, line endpoints and label origin differ; group frames/participants now agree. [<- I is painted as incoming [-> I.",
+      "rust": "crates/rustuml-parser/src/parse/sequence.rs::try_external_message unconditionally sets LeftToRight and keeps the boundary token as sender for the IN regex. Ordinary try_message swaps endpoints for RightToLeft.",
+      "disposition": "Unrepaired parser semantics dependency; requires a new account and directional boundary matrix. Incoming/outgoing requested cases pass."
+    },
+    {
+      "mechanism": "logical font family metrics and SVG family serialization",
+      "sources": [
+        "checker_font_control_serif",
+        "checker_font_control_sansserif"
+      ],
+      "evidence": "These controls contain no group or note. Serif text widths and ascents differ; SansSerif geometry agrees but font-family quotes differ.",
+      "rust": "Shared font/text measurement and family serialization; outside worker ownership.",
+      "disposition": "Unrepaired, not waived. Historical font equivalence is unproven as documented by reference bootstrap."
+    },
+    {
+      "mechanism": "global padding in vertical component scheduling",
+      "sources": [
+        "checker_padding_3_left",
+        "checker_padding_3_right",
+        "checker_padding_7_left",
+        "checker_padding_7_right"
+      ],
+      "evidence": "Zero-padding controls pass. At padding 3, actual canvas height 325 versus Java 353; at padding 7, 357 versus Java 425. Group horizontal bounds match, while message/activation/group vertical coordinates diverge.",
+      "rust": "sequence.rs phase-1 event y scheduling and later note/message component height paths apply global padding differently.",
+      "disposition": "Unrepaired vertical geometry dependency. Detailed component-height causal account still required; these remain failed relevant-axis cases."
+    },
+    {
+      "mechanism": "shadow component dimensions and painting",
+      "sources": [
+        "checker_shadow_active_0",
+        "checker_shadow_active_1"
+      ],
+      "evidence": "Group/canvas width is six pixels short; participant positions three pixels left; group and active bar shadow filters absent.",
+      "java": "ComponentRoseNote#getPreferredWidth explicitly adds symbolContext.getDeltaShadow; grouping and activation components also carry shadow paint.",
+      "rust": "folded_note_component_width omits shadow preferred width; group/activation SVG painters do not carry the component shadow filter.",
+      "disposition": "Unrepaired component-model dependency of the group envelope, not a waiver. Do not accept group model before repairing and checking this axis."
+    },
+    {
+      "mechanism": "Teoz tile constraints",
+      "sources": [
+        "checker_teoz_control"
+      ],
+      "evidence": "Pre-existing Teoz-only control has translated participants and frame width mismatch. The legacy InGroupableList change is not the Teoz Tile model.",
+      "rust": "diagram.teoz horizontal constraint and note tile paths.",
+      "disposition": "Unrepaired relevant control; independently account for Teoz behavior. No exclusion or acceptance claim."
+    },
+    {
+      "mechanism": "page decoration width/centering",
+      "sources": [
+        "sequence-recursive-group-constraints/maker-results/inputs/reservation_24",
+        "sequence-recursive-group-constraints/maker-results/inputs/reservation_25",
+        "sequence-recursive-group-constraints/maker-results/inputs/reservation_26"
+      ],
+      "evidence": "All three wide-title variants also fail the parent. Actual canvas 264 versus Java 336; title text width agrees but title x is negative and sequence placement is wrong. Group dimensions can agree while page placement fails.",
+      "rust": "sequence.rs meta_shift uses participant-box midpoint and later canvas arithmetic; page bands need the full sequence-area envelope.",
+      "disposition": "Unrepaired whole-page decoration dependency. Exact current Java outer TextBlock composition must be traced before repair; do not rely on possibly obsolete SequenceDiagramArea."
+    },
+    {
+      "mechanism": "self-arrow boundary extent",
+      "sources": [
+        "sequence-self-return-message-model/maker-results/inputs/delegated_25"
+      ],
+      "evidence": "After return lowering all SVG elements agree except root width: actual 247 versus Java 237. Parent also fails (and has additional loop geometry errors).",
+      "java": "MessageSelfArrow#getMaxX = getStartingX + getPreferredWidth; preferred width adds live segment length and starting x uses segment.pos2 plus deltaX.",
+      "rust": "sequence.rs self-message right-extent scan combines active boolean, created/destroyed pads and activation_stack_depth padding instead of the same MessageSelfArrow model used by constraints.",
+      "disposition": "Unrepaired boundary-envelope dependency, not a skipped width constraint. Requires coherent replacement across ordinary, created/destroyed, self activation/deactivation and border positions."
+    },
+    {
+      "mechanism": "later-page geometry and SVG composition",
+      "sources": [
+        "sequence-self-return-message-model/maker-results/inputs/later_page"
+      ],
+      "evidence": "Panic removed. Java first page has 30 elements and width371; actual 28 and width351. Parent panics before producing output.",
+      "rust": "sequence.rs phase-1 page truncation versus horizontal history and first-page SVG group/break structure.",
+      "disposition": "Unrepaired page-model dependency. The return lowering now scans every page to avoid the original equal-index crash, but cannot establish multipage parity."
+    },
+    {
+      "mechanism": "open self-arrow return-leg endpoint",
+      "sources": [
+        "sequence-self-return-message-model/maker-results/inputs/single_21",
+        "sequence-return-live-message-model/maker-results/inputs/return_1",
+        "sequence-return-live-message-model/maker-results/inputs/return_4",
+        "sequence-return-live-message-model/maker-results/inputs/return_7",
+        "sequence-return-live-message-model/maker-results/inputs/return_10",
+        "sequence-return-live-message-model/maker-results/inputs/return_13",
+        "sequence-return-live-message-model/maker-results/inputs/return_16"
+      ],
+      "evidence": "Only self-arrow return-leg line x1 differs by one pixel; the same discrepancy affects original self calls and lowered returns.",
+      "java": "ComponentRoseSelfArrow#drawRightSide subtracts one from x2 for ASYNC before drawing the return line and restores it before drawing the head.",
+      "rust": "sequence.rs special_return_tip overrides the open-line branch without the ASYNC stroke endpoint adjustment.",
+      "disposition": "Unrepaired shared self-arrow component dependency, retained as failures."
+    }
+  ]
+}

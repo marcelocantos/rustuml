@@ -1,0 +1,4 @@
+@startuml
+entity "class [Gate] as record" as E <<store>> #pink
+E -> E : pulse
+@enduml

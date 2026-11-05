@@ -1,0 +1,11 @@
+@startuml
+skinparam noteTextAlignment center
+skinparam padding 12
+skinparam shadowing true
+participant Cedar
+participant Birch
+Cedar -> Birch ++ : begin
+Birch -> Cedar : body
+note right : first line\na much longer second line
+return after
+@enduml

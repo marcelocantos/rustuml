@@ -1,0 +1,80 @@
+{
+  "cohorts": {
+    "original810": {
+      "parent": {
+        "mismatch": 454,
+        "pass": 349,
+        "invalid_reference": 7
+      },
+      "candidate": {
+        "mismatch": 277,
+        "pass": 526,
+        "invalid_reference": 7
+      }
+    },
+    "class23": {
+      "parent": {
+        "mismatch": 23
+      },
+      "candidate": {
+        "pass": 23
+      }
+    },
+    "registry6": {
+      "parent": {
+        "pass": 6
+      },
+      "candidate": {
+        "pass": 6
+      }
+    },
+    "sequence41": {
+      "parent": {
+        "pass": 17,
+        "mismatch": 22,
+        "process_error": 2
+      },
+      "candidate": {
+        "pass": 17,
+        "mismatch": 22,
+        "process_error": 2
+      }
+    },
+    "TIM42": {
+      "parent": {
+        "mismatch": 40,
+        "pass": 1,
+        "invalid_reference": 1
+      },
+      "candidate": {
+        "mismatch": 35,
+        "process_error": 3,
+        "pass": 3,
+        "invalid_reference": 1
+      }
+    },
+    "theme33": {
+      "parent": {
+        "mismatch": 26,
+        "pass": 6,
+        "invalid_reference": 1
+      },
+      "candidate": {
+        "mismatch": 22,
+        "process_error": 2,
+        "pass": 8,
+        "invalid_reference": 1
+      }
+    }
+  },
+  "parent": "ea136c78ff71d2be074b39d2ffe0484decba0aec",
+  "candidate": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "regressions": [],
+  "new_valid_process_errors": [
+    "tim-evaluated-event-stream/checker_comments_and_origins.puml",
+    "tim-procedure-global-fork-memory/checker_explicit_override_survives_global.puml",
+    "tim-procedure-global-fork-memory/checker_global_overtakes_auto_local.puml",
+    "tim-theme-post-expansion-source-identity/checker_dump_memory.puml",
+    "tim-theme-post-expansion-source-identity/checker_inner_comment.puml"
+  ]
+}

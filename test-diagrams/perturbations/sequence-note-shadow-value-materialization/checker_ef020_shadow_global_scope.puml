@@ -1,0 +1,14 @@
+@startuml
+<style>
+root {
+ Shadowing 4
+}
+sequenceDiagram {
+ note {
+ Shadowing nonnumeric
+ }
+}
+</style>
+Ibis -> Swift : call
+note right : inherited\nthen overridden
+@enduml

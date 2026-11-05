@@ -1,0 +1,13 @@
+@startuml
+participant Vega
+actor Lyra
+queue Draco
+participant Corvus
+group outer
+create Lyra
+alt branch
+create Draco
+end
+end
+Vega -> Draco: hatch
+@enduml

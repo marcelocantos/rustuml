@@ -1,0 +1,11 @@
+{
+  "kind": "Maker packaging integrity only; not independent acceptance",
+  "inputs_verified": 2169,
+  "final_svg_capture_hashes_verified": 2169,
+  "preimplementation_ancestry": true,
+  "git_production_revision": "653b1ed7a49784e6e6205f3aebf69a16278f8d78",
+  "compiler": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (Homebrew)",
+  "cargo_lock_sha256": "edb7c2e47915e0f9033f0832309095104634620785d37bf25244d675fb5d22fd",
+  "crate_tree": "ec4834ace35e026193c5b9af3fc737bd4e0fd79e",
+  "private_cache": "/Users/marcelo/Library/Caches/rustuml-sequence-corrective-711"
+}

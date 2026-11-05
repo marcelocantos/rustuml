@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "reviewer": {
+    "task_id": "t3-d382aba6 independent sequence rejection-repair checker",
+    "model": "gpt-6-astra",
+    "reasoning_effort": "high",
+    "tool": "Codex harness in T3 Code",
+    "independent_from_maker": true,
+    "children": 0
+  },
+  "implementation_commit": "8291416539aa9c61589e4dd586ad65d3a135966c",
+  "tested_candidate_revision": "0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "git switch -c review/sequence-repair-d382aba6 0fb4e14b7227eb768d268128d42fa5f6d5a5b1af",
+    "CARGO_TARGET_DIR=/Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/target CARGO_BUILD_JOBS=4 cargo build --release -p rustuml -p rustuml-oracle --bin rustuml --example diff_one",
+    "Remote existing runner: /Users/marcelo/rustuml-reference/bin/reference --cwd /Users/marcelo/rustuml-reference/scratch/worker.NzRxjEfs --timezone GMT+11:00 -- -pipe -tsvg (one source on stdin per invocation; exact argv/status/streams in remote-captures.json.gz)",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/import_relay.py",
+    "python3 docs/parity-reviews/sequence-dependency-closure/checker-support/measure.py docs/parity-reviews/sequence-rejection-repair/checker-support/fresh-manifest.json /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/final-bin /Users/marcelo/Library/Caches/rustuml-sequence-review-d382aba6/fresh",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/checks.py evidence",
+    "python3 docs/parity-reviews/sequence-rejection-repair/checker-support/audit_evidence.py"
+  ],
+  "input_frontend": {
+    "fresh": "raw -pipe -tsvg on stdin through pinned remote wrapper, GMT+11:00",
+    "transport": "temporary T3 relay, exact input and result bundle hashes verified",
+    "preserved": "original reference bytes and per-reference provenance unchanged",
+    "local_java": false
+  },
+  "evidence": "docs/parity-reviews/sequence-rejection-repair/checker-support/README.md",
+  "mechanism": "sequence-box-title-grammar",
+  "account_commit": "55e88b2add0a1356aeb1bc42284f1d5a0f06b974",
+  "account_normalization_commit": "89cac979e2053cc07fe791e28f9f31bfc125fdb5",
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e0_quoted0.puml",
+      "golden": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e0_quoted0.svg",
+      "source_sha256": "c913f864a875fa895478d25204884cdc9123c290a010ad212fa00ec3273a1dee",
+      "golden_sha256": "131cf3ceb6185a1d542a42f68e224ee2f13e56fc24fd8dbbbe610750b479899d",
+      "axes": [
+        "engine",
+        "quoted/unquoted trailing whitespace before color",
+        "multi-participant box"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e0_quoted1.puml",
+      "golden": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e0_quoted1.svg",
+      "source_sha256": "4049aaa7ace3925e59ed70d3401f7b7f117e3dde502f8777670391b81ce60110",
+      "golden_sha256": "2faf9b6e7aef54196f2f45adf48dcab777714d2f6a3cdf0a64f5778cd1871bab",
+      "axes": [
+        "engine",
+        "quoted/unquoted trailing whitespace before color",
+        "multi-participant box"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e1_quoted0.puml",
+      "golden": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e1_quoted0.svg",
+      "source_sha256": "a58c84cd58e4530d2cabb78e06c76e4f953fafaa8f5405873289668e2312d058",
+      "golden_sha256": "ff0cc4a7953d8f4a2de40c87b12e5f999a087c3f38c70acc40f4f6dfa96aa24c",
+      "axes": [
+        "engine",
+        "quoted/unquoted trailing whitespace before color",
+        "multi-participant box"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e1_quoted1.puml",
+      "golden": "test-diagrams/perturbations/sequence-box-title-grammar/checker_d382_e1_quoted1.svg",
+      "source_sha256": "33a6b5ecab333128f894afbea267daaa42573eb952d6f07b105ac3a25d4102d6",
+      "golden_sha256": "1149f9ede5e2ea522ce8347eeb19d6c686a04a3cfb0b2a86601ffbf05e746960",
+      "axes": [
+        "engine",
+        "quoted/unquoted trailing whitespace before color",
+        "multi-participant box"
+      ],
+      "result": "pass",
+      "classification": "valid-SVG-match",
+      "cli_exit": 0,
+      "comparator_exit": 0,
+      "diagnostics": "docs/parity-reviews/sequence-rejection-repair/checker-support/fresh.json.gz",
+      "java_exit": 0,
+      "reference_environment": "docs/parity-reviews/sequence-rejection-repair/checker-support/remote-environment.json"
+    }
+  ],
+  "source_audit": {
+    "mechanism": "sequence-box-title-grammar",
+    "java_files": [
+      "sequencediagram/command/CommandBoxStart.java"
+    ],
+    "rust_locations": [
+      "parse/sequence.rs:1004-1065"
+    ],
+    "source_supported": "NAME2 captures unquoted text up to color and preserves trailing spaces. New parser branch follows that information flow. Original bytes and chronology were independently verified; this is not a retrospective account.",
+    "adversarial_boundary": "Quoted/unquoted title, engine and trailing-space matrix tests grammar independently. Nested englober representation and component style are separate consumers; no full nested/style claim follows from parsing a title."
+  },
+  "findings": [
+    "NAME2 captures unquoted text up to color and preserves trailing spaces. New parser branch follows that information flow. Original bytes and chronology were independently verified; this is not a retrospective account.",
+    "All four quoted/unquoted, colored/trailing-space, legacy/Teoz inputs match. Source NAME2 capture and Rust unquoted-title storage agree, with original account chronology verified. Acceptance is restricted to title tokenization and retained title text before component measurement. Nested englober ownership, style and margins are separate downstream mechanisms and remain rejected; this is not acceptance of the sequence repair.",
+    "No new fixture label predicates, golden reads, branch-count constant ladders or coordinate string surgery found. See source-audit.json for Java provenance and semantic constant reuse concerns. Every valid failure is binding; no dependency waiver."
+  ],
+  "verdict": "accepted"
+}

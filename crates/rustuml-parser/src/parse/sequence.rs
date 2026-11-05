@@ -13,30 +13,50 @@ use super::ParseError;
 use crate::diagram::DiagramMeta;
 use crate::diagram::sequence::*;
 
+// Pattern2#QUOTED_REPLACEMENTS expands %s to Java \s plus NBSP;
+// compileInternal uses CASE_INSENSITIVE without UNICODE_CHARACTER_CLASS.
+// RegexLeaf.spaceOneOrMore/spaceZeroOrMore and sequence command factories all
+// use this class. Keep negation consistent for command token boundaries.
+fn sequence_regex(pattern: &str) -> Result<Regex, regex::Error> {
+    // Pattern2 transforms the token, not a complete bracket expression: this
+    // must also work in composite classes such as [^%s:] used for color tokens.
+    const JAVA_SPACE_CONTENTS: &str = r"\x09-\x0d \u{00a0}";
+    Regex::new(&pattern.replace("%s", JAVA_SPACE_CONTENTS))
+}
+
+// RegexConcat#foxRegex includes only direct RegexLeaf children. A mandatory
+// [%s]+ leaf contributes FoxSignature.MASK_SPACES; optional/nested leaves do not.
+// FoxSignature#getMask recognizes these characters anywhere in the FULL line,
+// deliberately excluding VT even though Pattern2's regex whitespace includes it.
+fn has_fox_space(line: &str) -> bool {
+    line.chars()
+        .any(|c| matches!(c, ' ' | '\t' | '\r' | '\n' | '\u{000c}' | '\u{00a0}'))
+}
+
 static INLINE_ARROW_STYLE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(
+    sequence_regex(
         r"\[((?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\]",
     )
     .unwrap()
 });
 
 static MESSAGE_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(
-        r#"^("(?:[^"]+)"|\w+)\s*([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)\s*("(?:[^"]+)"|\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$"#,
+    sequence_regex(
+        r#"^("(?:[^"]+)"|\w+)[%s]*([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)[%s]*("(?:[^"]+)"|\w+)[%s]*(?:((?:\+\+|--|!!))[%s]*(#[^%s]+)?[%s]*)?(?::[%s]*(.*))?$"#,
     )
     .unwrap()
 });
 
 static EXTERNAL_MESSAGE_IN_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(
-        r"^([\[\]])([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)\s*(\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$",
+    sequence_regex(
+        r"^([\[\]])([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)[%s]*(\w+)[%s]*(?:((?:\+\+|--|!!))[%s]*(#[^%s]+)?[%s]*)?(?::[%s]*(.*))?$",
     )
     .unwrap()
 });
 
 static EXTERNAL_MESSAGE_OUT_RE: LazyLock<Regex> = LazyLock::new(|| {
-    Regex::new(
-        r"^(\w+)\s*([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)([\[\]])\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$",
+    sequence_regex(
+        r"^(\w+)[%s]*([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)([\[\]])[%s]*(?:((?:\+\+|--|!!))[%s]*(#[^%s]+)?[%s]*)?(?::[%s]*(.*))?$",
     )
     .unwrap()
 });
@@ -59,7 +79,293 @@ pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
         parser.parse_line(source_line, text)?;
     }
 
+    // PSystemCommandFactory#getCandidate requires a completed multiline
+    // note command; an open buffer is not a successfully consumed command.
+    if let Some(note) = &parser.note_buffer {
+        return Err(ParseError {
+            line: note.source_line,
+            message: "Unclosed sequence note".to_string(),
+        });
+    }
+    validate_return_destinations(&parser.events)?;
     Ok(parser.finish())
+}
+
+/// Bounded factory viability for recognized decorated messages. Java's
+/// PSystemBuilder tries Sequence before Class; PSystemCommandFactory rejects a
+/// candidate on its first unconsumed command. Reuse the actual sequence parser
+/// and retain the existing fallback for unsupported commands (account 5b45a172).
+pub(super) fn consumes_decorated_sequence(lines: &[String]) -> bool {
+    let mut parser = SeqParser::new();
+    let mut decorated = false;
+    for (index, line) in lines.iter().enumerate() {
+        let (number, text) = super::source_line_and_trimmed(index + 1, line);
+        if text.is_empty()
+            || (text.starts_with("@startuml") || text == "@enduml")
+            || text.starts_with('\'')
+        {
+            continue;
+        }
+        let before = parser.events.len();
+        if parser.parse_line(number, text).is_err() || parser.unconsumed {
+            return false;
+        }
+        if let Some(Event::Message(message)) = parser.events.get(before) {
+            // CommandArrow requires a head/cross dressing; bare class/object
+            // aggregation has no viable sequence command, even though our
+            // historical permissive message regex recognizes its body.
+            let text = text.strip_prefix('&').unwrap_or(text).trim_start();
+            let Some(caps) = MESSAGE_RE
+                .captures(text)
+                .or_else(|| EXTERNAL_MESSAGE_IN_RE.captures(text))
+                .or_else(|| EXTERNAL_MESSAGE_OUT_RE.captures(text))
+            else {
+                return false;
+            };
+            let (_, arrow) = strip_arrow_style_annotation(&caps[2]);
+            if !arrow.contains(['<', '>', '/', '\\', 'x']) {
+                return false;
+            }
+            decorated |= message.arrow.source_circle || message.arrow.target_circle;
+        }
+    }
+    decorated
+        && parser.note_buffer.is_none()
+        && parser.ref_buffer.is_none()
+        && !parser.in_legend
+        && parser.skinparam_block_prefix.is_none()
+        && validate_return_destinations(&parser.events).is_ok()
+}
+
+// CommandReturn#executeArg calls HColorSet#getColor; an unknown name is a
+// command error, not label text or an SVG color. Account ea313c62.
+fn validate_return_destinations(events: &[Event]) -> Result<(), ParseError> {
+    for event in events {
+        if let Event::Return(ret) = event
+            && let Some(color) = &ret.color
+            && !valid_return_color(color)
+        {
+            return Err(ParseError {
+                line: ret.source_line,
+                message: "No such color".to_owned(),
+            });
+        }
+    }
+    let lowered =
+        resolve_sequence_returns(events).map_err(|(line, message)| ParseError { line, message })?;
+    sequence_create_attachments(&lowered)
+        .map(|_| ())
+        .map_err(|(line, message)| ParseError { line, message })
+}
+
+// Display#getWithNewlines expands inline note/participant escapes before the component
+// measures or draws them. Raw math/link bodies retain their backslashes.
+// Block commands use Display.create and do not run this inline conversion.
+fn inline_sequence_display(text: &str) -> String {
+    let mut result = String::with_capacity(text.len());
+    let mut chars = text.char_indices().peekable();
+    let mut raw = false;
+    while let Some((index, c)) = chars.next() {
+        let rest = &text[index..];
+        if rest.starts_with("<math>") || rest.starts_with("<latex>") || rest.starts_with("[[") {
+            raw = true;
+        } else if rest.starts_with("</math>")
+            || rest.starts_with("</latex>")
+            || rest.starts_with("]]")
+        {
+            raw = false;
+        }
+        if !raw && c == '\\' {
+            match chars.peek().map(|(_, c)| *c) {
+                Some('n') => {
+                    chars.next();
+                    result.push('\n');
+                }
+                Some('t') => {
+                    chars.next();
+                    result.push('\t');
+                }
+                Some('\\') => {
+                    chars.next();
+                    result.push('\\');
+                }
+                _ => result.push(c),
+            }
+        } else {
+            result.push(c);
+        }
+    }
+    result
+}
+
+fn valid_return_color(color: &str) -> bool {
+    let color = color.strip_prefix('#').unwrap_or(color);
+    // HColorSet#parseSimpleColor accepts 1/3/6/8 hexadecimal digits.
+    if matches!(color.len(), 1 | 3 | 6 | 8) && color.bytes().all(|b| b.is_ascii_hexdigit()) {
+        return true;
+    }
+    // ColorTrieNode's registered names, case-insensitive, plus HColorSet's
+    // transparent/background/automatic symbolic colors. Pinned Java 71806a23.
+    matches!(
+        color.to_ascii_lowercase().as_str(),
+        "aliceblue"
+            | "antiquewhite"
+            | "application"
+            | "aqua"
+            | "aquamarine"
+            | "automatic"
+            | "azure"
+            | "background"
+            | "beige"
+            | "bisque"
+            | "black"
+            | "blanchedalmond"
+            | "blue"
+            | "blueviolet"
+            | "brown"
+            | "burlywood"
+            | "business"
+            | "cadetblue"
+            | "chartreuse"
+            | "chocolate"
+            | "coral"
+            | "cornflowerblue"
+            | "cornsilk"
+            | "crimson"
+            | "cyan"
+            | "darkblue"
+            | "darkcyan"
+            | "darkgoldenrod"
+            | "darkgray"
+            | "darkgreen"
+            | "darkgrey"
+            | "darkkhaki"
+            | "darkmagenta"
+            | "darkolivegreen"
+            | "darkorange"
+            | "darkorchid"
+            | "darkred"
+            | "darksalmon"
+            | "darkseagreen"
+            | "darkslateblue"
+            | "darkslategray"
+            | "darkslategrey"
+            | "darkturquoise"
+            | "darkviolet"
+            | "deeppink"
+            | "deepskyblue"
+            | "dimgray"
+            | "dimgrey"
+            | "dodgerblue"
+            | "firebrick"
+            | "floralwhite"
+            | "forestgreen"
+            | "fuchsia"
+            | "gainsboro"
+            | "ghostwhite"
+            | "gold"
+            | "goldenrod"
+            | "gray"
+            | "green"
+            | "greenyellow"
+            | "grey"
+            | "honeydew"
+            | "hotpink"
+            | "implementation"
+            | "indianred"
+            | "indigo"
+            | "ivory"
+            | "khaki"
+            | "lavender"
+            | "lavenderblush"
+            | "lawngreen"
+            | "lemonchiffon"
+            | "lightblue"
+            | "lightcoral"
+            | "lightcyan"
+            | "lightgoldenrodyellow"
+            | "lightgray"
+            | "lightgreen"
+            | "lightgrey"
+            | "lightpink"
+            | "lightsalmon"
+            | "lightseagreen"
+            | "lightskyblue"
+            | "lightslategray"
+            | "lightslategrey"
+            | "lightsteelblue"
+            | "lightyellow"
+            | "lime"
+            | "limegreen"
+            | "linen"
+            | "magenta"
+            | "maroon"
+            | "mediumaquamarine"
+            | "mediumblue"
+            | "mediumorchid"
+            | "mediumpurple"
+            | "mediumseagreen"
+            | "mediumslateblue"
+            | "mediumspringgreen"
+            | "mediumturquoise"
+            | "mediumvioletred"
+            | "midnightblue"
+            | "mintcream"
+            | "mistyrose"
+            | "moccasin"
+            | "motivation"
+            | "navajowhite"
+            | "navy"
+            | "oldlace"
+            | "olive"
+            | "olivedrab"
+            | "orange"
+            | "orangered"
+            | "orchid"
+            | "palegoldenrod"
+            | "palegreen"
+            | "paleturquoise"
+            | "palevioletred"
+            | "papayawhip"
+            | "peachpuff"
+            | "peru"
+            | "physical"
+            | "pink"
+            | "plum"
+            | "powderblue"
+            | "purple"
+            | "red"
+            | "rosybrown"
+            | "royalblue"
+            | "saddlebrown"
+            | "salmon"
+            | "sandybrown"
+            | "seagreen"
+            | "seashell"
+            | "sienna"
+            | "silver"
+            | "skyblue"
+            | "slateblue"
+            | "slategray"
+            | "slategrey"
+            | "snow"
+            | "springgreen"
+            | "steelblue"
+            | "strategy"
+            | "tan"
+            | "teal"
+            | "technology"
+            | "thistle"
+            | "tomato"
+            | "transparent"
+            | "turquoise"
+            | "violet"
+            | "wheat"
+            | "white"
+            | "whitesmoke"
+            | "yellow"
+            | "yellowgreen"
+    )
 }
 
 struct SeqParser {
@@ -78,12 +384,15 @@ struct SeqParser {
     in_legend: bool,
     /// Whether `hide footbox` was specified.
     hide_footbox: bool,
+    hide_stereotypes: bool,
     /// Whether `!pragma teoz true` was specified.
     teoz: bool,
     /// Whether `autoactivate on` is active for subsequent messages.
     autoactivate: bool,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
+    /// PSystemCommandFactory viability: an unknown command rejects a candidate.
+    unconsumed: bool,
     /// Named participant boxes (`box ... end box`).
     boxes: Vec<ParticipantBox>,
     /// Index into `boxes` of the box currently being collected, if any.
@@ -121,9 +430,11 @@ impl SeqParser {
             last_message: None,
             in_legend: false,
             hide_footbox: false,
+            hide_stereotypes: false,
             teoz: false,
             autoactivate: false,
             current_line: 0,
+            unconsumed: false,
             boxes: Vec::new(),
             current_box: None,
             skinparam_block_prefix: None,
@@ -137,6 +448,7 @@ impl SeqParser {
             events: self.events,
             autonumber: self.autonumber,
             hide_footbox: self.hide_footbox,
+            hide_stereotypes: self.hide_stereotypes,
             teoz: self.teoz,
             boxes: self.boxes,
         }
@@ -152,10 +464,11 @@ impl SeqParser {
             self.participant_ids.push(id.clone());
             self.participants.push(Participant {
                 id: id.clone(),
-                label: id.clone(),
+                label: inline_sequence_display(&id),
                 kind: ParticipantKind::default(),
                 order: Some(self.participants.len()),
                 stereotype: None,
+                stereotype_position_bottom: false,
                 url: None,
                 color: None,
                 source_line,
@@ -200,9 +513,16 @@ impl SeqParser {
         }
 
         // Handle multiline note buffering.
-        if self.note_buffer.is_some() {
+        if let Some(note) = &self.note_buffer {
             let trimmed = line.trim();
-            if trimmed == "endnote" || trimmed == "end note" {
+            // FactorySequenceNote{,Across,OverSeveral}Command#END accepts all
+            // three shape names; FactorySequenceNoteOnArrowCommand#END only note.
+            static NOTE_END: LazyLock<Regex> =
+                LazyLock::new(|| sequence_regex(r"(?i)^end[%s]?(note|hnote|rnote)$").unwrap());
+            let closes = NOTE_END
+                .captures(trimmed)
+                .is_some_and(|caps| !note.on_message || caps[1].eq_ignore_ascii_case("note"));
+            if closes {
                 let buf = self.note_buffer.take().unwrap();
                 let text = note_text_from_lines(&buf.lines);
                 self.events.push(Event::Note(Note {
@@ -243,7 +563,7 @@ impl SeqParser {
         if self.try_group(line) {
             return Ok(());
         }
-        if self.try_note(line) {
+        if self.try_note(line)? {
             return Ok(());
         }
         if self.try_divider(line) {
@@ -272,6 +592,26 @@ impl SeqParser {
         if self.try_pragma(line) {
             return Ok(());
         }
+        let message_line = line.strip_prefix('&').unwrap_or(line).trim_start();
+        if let Some(caps) = MESSAGE_RE
+            .captures(message_line)
+            .or_else(|| EXTERNAL_MESSAGE_IN_RE.captures(message_line))
+            .or_else(|| EXTERNAL_MESSAGE_OUT_RE.captures(message_line))
+        {
+            let (_, arrow) = strip_arrow_style_annotation(&caps[2]);
+            // CommandArrow ARROW_DRESSING1/2 and CommandExoArrowLeft/Right:
+            // circles surround the head; `->o` is valid, `-o>` is not.
+            if let (Some(first), Some(last)) = (arrow.find('-'), arrow.rfind('-')) {
+                let left = arrow[..first].trim_start_matches(['o', 'x']);
+                let right = arrow[last + 1..].trim_end_matches(['o', 'x']);
+                if left.contains('o') || right.contains('o') {
+                    return Err(ParseError {
+                        line: line_num,
+                        message: "Illegal sequence arrow decoration".into(),
+                    });
+                }
+            }
+        }
         if self.try_message(line) {
             return Ok(());
         }
@@ -291,11 +631,23 @@ impl SeqParser {
             return Ok(());
         }
 
-        // Unknown lines are silently ignored (matches PlantUML behavior).
+        // Preserve permissive sequence parsing, but never count ignored text as
+        // successful command consumption in factory competition.
+        self.unconsumed = true;
         Ok(())
     }
 
     fn try_participant_decl(&mut self, line: &str) -> bool {
+        self.try_participant_decl_in_command(line, line)
+    }
+
+    fn try_participant_decl_in_command(&mut self, line: &str, full_command: &str) -> bool {
+        // CommandParticipantA/A2/A3/A4#getRegexConcat: direct spaceOneOrMore leaf.
+        // CommandParticipant#getRegexType includes `create` in the SAME command;
+        // keep its full-line signature when parsing only the declaration tail.
+        if !has_fox_space(full_command) {
+            return false;
+        }
         let (url, clean_line) = super::extract_link_url(line);
         let line = clean_line.as_str();
         // Matches these forms (label = display text, id = entity key):
@@ -305,8 +657,8 @@ impl SeqParser {
         //   4. keyword SimpleName             <<stereotype>>
         //   5. keyword "Long Label"           <<stereotype>>  (no alias; id = label)
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r#"^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+)\s+as\s+"([^"]+)"|(\w+)\s+as\s+(\w+)|"([^"]+)"|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+(#\S+))?(?:\s+order\s+(\d+))?"#,
+            sequence_regex(
+                r#"^(participant|actor|boundary|control|entity|database|collections|queue)[%s]+(?:"([^"]+)"[%s]+as[%s]+(\w+)|(\w+)[%s]+as[%s]+"([^"]+)"|(\w+)[%s]+as[%s]+(\w+)|"([^"]+)"|(\w+))(?:[%s]+<<([^>]+)>>)?(?:[%s]+(#[^%s]+))?(?:[%s]+order[%s]+(\d+))?"#,
             )
             .unwrap()
         });
@@ -346,10 +698,23 @@ impl SeqParser {
             } else {
                 extract_stereotype_from_label(&raw_label)
             };
+            // CommandParticipant passes its label through Display#getWithNewlines.
+            let label = inline_sequence_display(&label);
             let stereotype = caps
                 .get(10)
                 .map(|m| m.as_str().to_string())
                 .or(label_stereotype);
+
+            // CommandParticipant#executeArg calls setStereotype only when the
+            // declaration has one; SkinParam#stereotypePositionTop is captured.
+            let stereotype_position_bottom = stereotype.is_some()
+                && self
+                    .meta
+                    .skinparams
+                    .iter()
+                    .rev()
+                    .find(|param| param.key.eq_ignore_ascii_case("stereotypePosition"))
+                    .is_some_and(|param| param.value.eq_ignore_ascii_case("bottom"));
 
             let color = caps.get(11).map(|m| m.as_str().to_string());
 
@@ -369,6 +734,7 @@ impl SeqParser {
                     kind,
                     order: Some(explicit_order.unwrap_or(idx)),
                     stereotype,
+                    stereotype_position_bottom,
                     url,
                     color,
                     source_line: self.current_line,
@@ -384,6 +750,9 @@ impl SeqParser {
     }
 
     fn try_message(&mut self, line: &str) -> bool {
+        // CommandArrow#getRegexConcat PARALLEL precedes the first participant.
+        let parallel = line.starts_with('&');
+        let line = line.strip_prefix('&').unwrap_or(line).trim_start();
         if let Some(caps) = MESSAGE_RE.captures(line) {
             // Strip surrounding quotes from quoted participant names.
             let unquote = |s: &str| -> String {
@@ -421,6 +790,7 @@ impl SeqParser {
 
             self.last_message = Some((from_id.clone(), to_id.clone()));
             self.events.push(Event::Message(Message {
+                parallel,
                 from: from_id,
                 to: to_id,
                 label,
@@ -436,56 +806,50 @@ impl SeqParser {
     }
 
     fn try_external_message(&mut self, line: &str) -> bool {
-        if let Some(caps) = EXTERNAL_MESSAGE_IN_RE.captures(line) {
-            let (arrow_style, arrow_str) = strip_arrow_style_annotation(&caps[2]);
-            let mut arrow = parse_arrow(&arrow_str);
-            arrow.direction = ArrowDirection::LeftToRight;
-            apply_inline_arrow_style(&mut arrow, arrow_style);
-            let to = self.ensure_participant(&caps[3]);
-            let activation = caps
-                .get(4)
-                .map(|m| parse_activation(m.as_str()))
-                .or_else(|| self.autoactivation_for(&arrow));
-            let activation_color = caps.get(5).map(|m| m.as_str().to_string());
-            let label = message_label(line, caps.get(6));
-            self.events.push(Event::Message(Message {
-                from: caps[1].to_string(),
-                to,
-                label,
-                arrow,
-                activation,
-                activation_color,
-                source_line: self.current_line,
-            }));
-            true
+        let (caps, boundary_first) = if let Some(caps) = EXTERNAL_MESSAGE_IN_RE.captures(line) {
+            (caps, true)
         } else if let Some(caps) = EXTERNAL_MESSAGE_OUT_RE.captures(line) {
-            let from = self.ensure_participant(&caps[1]);
-            let (arrow_style, arrow_str) = strip_arrow_style_annotation(&caps[2]);
-            let mut arrow = parse_arrow(&arrow_str);
-            arrow.direction = ArrowDirection::LeftToRight;
-            apply_inline_arrow_style(&mut arrow, arrow_style);
-            let activation = caps
-                .get(4)
-                .map(|m| parse_activation(m.as_str()))
-                .or_else(|| self.autoactivation_for(&arrow));
-            let activation_color = caps.get(5).map(|m| m.as_str().to_string());
-            let label = message_label(line, caps.get(6));
-            self.events.push(Event::Message(Message {
-                from,
-                to: caps[3].to_string(),
-                label,
-                arrow,
-                activation,
-                activation_color,
-                source_line: self.current_line,
-            }));
-            true
+            (caps, false)
         } else {
-            false
-        }
+            return false;
+        };
+        let (arrow_style, arrow_str) = strip_arrow_style_annotation(&caps[2]);
+        let mut arrow = parse_arrow(&arrow_str);
+        apply_inline_arrow_style(&mut arrow, arrow_style);
+        let (left, right) = if boundary_first {
+            (caps[1].to_string(), self.ensure_participant(&caps[3]))
+        } else {
+            (self.ensure_participant(&caps[1]), caps[3].to_string())
+        };
+        // CommandExoArrowLeft/Right#getMessageExoType select FROM/TO from
+        // the dressing, independently of which side contains the border token.
+        let (from, to) = if arrow.direction == ArrowDirection::RightToLeft {
+            (right, left)
+        } else {
+            (left, right)
+        };
+        let activation = caps
+            .get(4)
+            .map(|m| parse_activation(m.as_str()))
+            .or_else(|| self.autoactivation_for(&arrow));
+        // SequenceDiagram#getLastEventWithNote sees AbstractMessage, including
+        // MessageExo. FactorySequenceNoteOnArrowCommand attaches a bare note to
+        // that event, using its normalized endpoints just like an ordinary arrow.
+        self.last_message = Some((from.clone(), to.clone()));
+        self.events.push(Event::Message(Message {
+            parallel: false,
+            from,
+            to,
+            label: message_label(line, caps.get(6)),
+            arrow,
+            activation,
+            activation_color: caps.get(5).map(|m| m.as_str().to_string()),
+            source_line: self.current_line,
+        }));
+        true
     }
 
-    fn try_note(&mut self, line: &str) -> bool {
+    fn try_note(&mut self, line: &str) -> Result<bool, ParseError> {
         // `note : text` — Java PlantUML creates a participant named "note" with
         // a note box above/beside it showing the text.  We declare the "note"
         // participant and emit a Note event.
@@ -495,90 +859,138 @@ impl SeqParser {
                 self.events.push(Event::Note(Note {
                     position: NotePosition::Over,
                     participants: vec![participant_id],
-                    text: text.to_string(),
+                    text: inline_sequence_display(text),
                     shape: NoteShape::Note,
                     color: None,
                     on_message: false,
                     source_line: self.current_line,
                 }));
             }
-            return true;
+            return Ok(true);
         }
 
         // Note on link (attaches to previous message).
         if let Some(rest) = line.strip_prefix("note on link") {
             let text = rest.trim().trim_start_matches(':').trim().to_string();
             self.events.push(Event::NoteOnLink(text));
-            return true;
+            return Ok(true);
         }
 
-        // Also handle "note across" (with optional color)
-        if let Some(rest) = line.strip_prefix("note across") {
-            // Parse optional color: "note across #color : text" or "note across #color"
-            let rest = rest.trim();
-            let (color, rest) = if rest.starts_with('#') {
-                let end = rest
-                    .find(|c: char| c.is_whitespace() || c == ':')
-                    .unwrap_or(rest.len());
-                (Some(rest[..end].to_string()), rest[end..].trim())
-            } else {
-                (None, rest)
-            };
-            let text = rest.trim_start_matches(':').trim().to_string();
-            if text.is_empty() {
-                self.note_buffer = Some(NoteBuffer {
-                    position: NotePosition::Over,
-                    participants: Vec::new(),
-                    lines: Vec::new(),
-                    shape: NoteShape::Note,
-                    color,
-                    on_message: false,
-                    source_line: self.current_line,
-                });
-            } else {
-                self.events.push(Event::Note(Note {
-                    position: NotePosition::Over,
-                    participants: Vec::new(),
-                    text,
-                    shape: NoteShape::Note,
-                    color,
-                    on_message: false,
-                    source_line: self.current_line,
-                }));
-            }
-            return true;
-        }
-
-        // Allow optional color (#xxx) after participant list.
-        // Capture shape prefix (h/r/note), position, participants, color, inline text.
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(h|r)?note\s+(left|right|over)\s*(?:of\s+)?(\w+(?:\s*,\s*\w+)*)?\s*(#\S+)?\s*(?::\s*(.*))?$").unwrap()
+        // FactorySequenceNoteAcrossCommand composes STYLE, optional whitespace,
+        // ACROSS and color, rather than a literal-space command prefix. Its
+        // nested optional stereotype whitespace contributes no required Fox bit.
+        static ACROSS: LazyLock<Regex> = LazyLock::new(|| {
+            sequence_regex(r"^(h|r)?note[%s]*(accross|across)[%s]*(#[^%s:]+)?[%s]*(?::[%s]*(.*))?$")
+                .unwrap()
         });
-
-        if let Some(caps) = RE.captures(line) {
+        if let Some(caps) = ACROSS.captures(line) {
+            // FactorySequenceNoteAcrossCommand#executeInternal rejects this
+            // recognized grammar alternative, rather than silently dropping it.
+            if &caps[2] == "accross" {
+                return Err(ParseError {
+                    line: self.current_line,
+                    message: "Use 'across' instead of 'accross'".into(),
+                });
+            }
             let shape = match caps.get(1).map(|m| m.as_str()) {
                 Some("h") => NoteShape::Hexagonal,
                 Some("r") => NoteShape::Rectangular,
                 _ => NoteShape::Note,
             };
-            let position = match &caps[2] {
+            let color = caps.get(3).map(|m| m.as_str().to_string());
+            if let Some(text) = caps.get(4) {
+                self.events.push(Event::Note(Note {
+                    position: NotePosition::Over,
+                    participants: Vec::new(),
+                    text: inline_sequence_display(text.as_str()),
+                    shape,
+                    color,
+                    on_message: false,
+                    source_line: self.current_line,
+                }));
+            } else {
+                self.note_buffer = Some(NoteBuffer {
+                    position: NotePosition::Over,
+                    participants: Vec::new(),
+                    lines: Vec::new(),
+                    shape,
+                    color,
+                    on_message: false,
+                    source_line: self.current_line,
+                });
+            }
+            return Ok(true);
+        }
+
+        // FactorySequenceNoteCommand requires its PARTICIPANT after the optional
+        // prefix. Keep it required, so `of` can itself be the identity. Single-line
+        // prefix uses [%s] once; multiline uses [%s]+. OverSeveral has exactly two
+        // required identities and no prefix. OnArrow is a separate, unnamed form.
+        static NAMED: LazyLock<Vec<Regex>> = LazyLock::new(|| {
+            let identity = r#"[\p{L}\p{N}_.@]+|"[^"]+""#;
+            let mut patterns = Vec::new();
+            for inline in [true, false] {
+                let suffix = if inline {
+                    r"[%s]*:[%s]*(?P<text>.*)$"
+                } else {
+                    "$"
+                };
+                let color = r"[%s]*(?P<color>#[^%s:]+)?[%s]*";
+                let prefix = if inline {
+                    r"(?:of[%s])?"
+                } else {
+                    r"(?:of[%s]+)?"
+                };
+                patterns.push(sequence_regex(&format!(
+                    r"^(?P<shape>h|r)?note[%s]+(?P<position>left|right|over)[%s]+{prefix}(?P<p1>{identity}){color}{suffix}"
+                )).unwrap());
+                patterns.push(sequence_regex(&format!(
+                    r"^(?P<shape>h|r)?note[%s]+(?P<position>over)[%s]+(?P<p1>{identity})[%s]*,[%s]*(?P<p2>{identity}){color}{suffix}"
+                )).unwrap());
+            }
+            patterns
+        });
+        static ATTACHED: LazyLock<Regex> = LazyLock::new(|| {
+            sequence_regex(r"^(?P<shape>h|r)?note[%s]+(?P<position>left|right)[%s]*(?P<color>#[^%s:]+)?[%s]*(?::[%s]*(?P<text>.*))?$").unwrap()
+        });
+        static BARE_OVER: LazyLock<Regex> = LazyLock::new(|| {
+            sequence_regex(r"^(?:h|r)?note[%s]+over[%s]*(?:#[^%s:]+)?[%s]*(?::.*)?$").unwrap()
+        });
+        // Both standalone note factories contain a direct required-space leaf;
+        // OnArrow has only optional whitespace and must bypass this prefilter.
+        let captures = NAMED
+            .iter()
+            .filter(|_| has_fox_space(line))
+            .find_map(|pattern| pattern.captures(line))
+            .or_else(|| ATTACHED.captures(line));
+        if let Some(caps) = captures {
+            let shape = match caps.name("shape").map(|m| m.as_str()) {
+                Some("h") => NoteShape::Hexagonal,
+                Some("r") => NoteShape::Rectangular,
+                _ => NoteShape::Note,
+            };
+            let position = match caps.name("position").unwrap().as_str() {
                 "left" => NotePosition::Left,
                 "right" => NotePosition::Right,
                 "over" => NotePosition::Over,
-                _ => NotePosition::Right,
+                _ => unreachable!(),
             };
-            let inline_text = caps.get(5);
+            let inline_text = caps.name("text");
             let participant_source_line = if inline_text.is_some() {
                 self.current_line
             } else {
                 self.current_line + 1
             };
-            let mut participants: Vec<String> = caps.get(3).map_or(Vec::new(), |m| {
-                m.as_str()
-                    .split(',')
-                    .map(|s| self.ensure_participant_at(s.trim(), participant_source_line))
-                    .collect()
-            });
+            let mut participants: Vec<String> = ["p1", "p2"]
+                .iter()
+                .filter_map(|name| caps.name(name))
+                .map(|m| {
+                    self.ensure_participant_at(
+                        m.as_str().trim_matches('"'),
+                        participant_source_line,
+                    )
+                })
+                .collect();
             // Bare "note left" / "note right" (no participant) attaches to the
             // last message and straddles its arrow band (on_message). PlantUML
             // anchors such notes to the message's leftmost/rightmost endpoint by
@@ -593,14 +1005,14 @@ impl SeqParser {
                 participants = vec![from.clone(), to.clone()];
                 on_message = true;
             }
-            let color = caps.get(4).map(|m| m.as_str().to_string());
+            let color = caps.name("color").map(|m| m.as_str().to_string());
 
             if let Some(text_match) = inline_text {
                 if participants.is_empty() && position != NotePosition::Over && !on_message {
-                    return true;
+                    return Ok(true);
                 }
                 // Inline note: note right : text
-                let text = text_match.as_str().trim().to_string();
+                let text = inline_sequence_display(text_match.as_str().trim());
                 self.events.push(Event::Note(Note {
                     position,
                     participants,
@@ -622,17 +1034,25 @@ impl SeqParser {
                     source_line: self.current_line,
                 });
             }
-            true
+            Ok(true)
+        } else if BARE_OVER.is_match(line) {
+            // Neither standalone factory accepts a missing participant; the
+            // OnArrow factory does not include `over` in POSITION.
+            Err(ParseError {
+                line: self.current_line,
+                message: "A note over command requires a participant".into(),
+            })
         } else {
-            false
+            Ok(false)
         }
     }
 
     fn try_group(&mut self, line: &str) -> bool {
         static RE_START: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(alt|opt|loop|par|break|critical|group)\s*(.*)$").unwrap()
+            sequence_regex(r"^(alt|opt|loop|par|break|critical|group)[%s]*(.*)$").unwrap()
         });
-        static RE_ELSE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^else\s*(.*)$").unwrap());
+        static RE_ELSE: LazyLock<Regex> =
+            LazyLock::new(|| sequence_regex(r"^else[%s]*(.*)$").unwrap());
 
         if line == "end" {
             self.events.push(Event::GroupEnd);
@@ -686,7 +1106,8 @@ impl SeqParser {
     }
 
     fn try_divider(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^==\s*(.*?)\s*==$").unwrap());
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| sequence_regex(r"^==[%s]*(.*?)[%s]*==$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             self.events.push(Event::Divider(caps[1].trim().to_string()));
@@ -697,19 +1118,18 @@ impl SeqParser {
     }
 
     fn try_delay(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\.\.\.(.*?)\.\.\.$").unwrap());
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| sequence_regex(r"^\.\.\.(.*?)\.\.\.$").unwrap());
 
         if line == "..." {
             self.events.push(Event::Delay(None));
             return true;
         }
         if let Some(caps) = RE.captures(line) {
-            let text = caps[1].trim();
-            self.events.push(Event::Delay(if text.is_empty() {
-                None
-            } else {
-                Some(text.to_string())
-            }));
+            // CommandDelay#executeArg passes LABEL verbatim to Display.
+            // Spacer atoms still contribute to the component preferred width
+            // (account a21a0275); only the undelimited `...` has no label.
+            self.events.push(Event::Delay(Some(caps[1].to_string())));
             true
         } else {
             false
@@ -717,7 +1137,7 @@ impl SeqParser {
     }
 
     fn try_space(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\|\|(\d+)\|\|$").unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| sequence_regex(r"^\|\|(\d+)\|\|$").unwrap());
 
         if line == "|||" {
             self.events.push(Event::Space(None));
@@ -734,17 +1154,20 @@ impl SeqParser {
 
     fn try_autonumber(&mut self, line: &str) -> bool {
         static RE_START: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^autonumber(?:\s+(\d+))?(?:\s+(\d+))?(?:\s+"([^"]*)")?$"#).unwrap()
+            sequence_regex(r#"^autonumber(?:[%s]+(\d+))?(?:[%s]+(\d+))?(?:[%s]+"([^"]*)")?$"#)
+                .unwrap()
         });
         static RE_RESUME: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^autonumber\s+resume(?:\s+(\d+))?(?:\s+"([^"]*)")?$"#).unwrap()
+            sequence_regex(r#"^autonumber[%s]+resume(?:[%s]+(\d+))?(?:[%s]+"([^"]*)")?$"#).unwrap()
         });
 
         if line == "autonumber stop" {
             self.push_autonumber(AutonumberCmd::Stop);
             return true;
         }
-        if line.starts_with("autonumber resume")
+        // CommandAutonumberResume#getRegexConcat has a direct required space;
+        // CommandAutonumber's optional argument groups do not contribute it.
+        if has_fox_space(line)
             && let Some(caps) = RE_RESUME.captures(line)
         {
             let step = caps.get(1).and_then(|m| m.as_str().parse().ok());
@@ -787,8 +1210,13 @@ impl SeqParser {
     }
 
     fn try_activate_deactivate(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^(activate|deactivate)\s+(\w+)(?:\s+(#\S+))?").unwrap());
+        // CommandActivate#getRegexConcat: direct spaceOneOrMore leaf.
+        if !has_fox_space(line) {
+            return false;
+        }
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            sequence_regex(r"^(activate|deactivate)[%s]+(\w+)(?:[%s]+(#[^%s]+))?").unwrap()
+        });
 
         if let Some(caps) = RE.captures(line) {
             let id = self.ensure_participant(&caps[2]);
@@ -837,14 +1265,18 @@ impl SeqParser {
     }
 
     fn try_create_destroy(&mut self, line: &str) -> bool {
+        // CommandActivate and CommandParticipantA#getRegexConcat: direct spaceOneOrMore leaf.
+        if !has_fox_space(line) {
+            return false;
+        }
         static KW: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^(create|destroy)\s+(.*)$").unwrap());
+            LazyLock::new(|| sequence_regex(r"^(create|destroy)[%s]+(.*)$").unwrap());
         // Identifier extraction from a participant declaration tail. Mirrors the
         // forms in `try_participant_decl`; the id is the alias when `as` is
         // present, otherwise the simple name (or quoted label).
         static REST: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r#"^(?:participant|actor|boundary|control|entity|database|collections|queue)?\s*(?:"[^"]+"\s+as\s+(\w+)|(\w+)\s+as\s+(?:"[^"]+"|\w+)|"([^"]+)"|(\w+))"#,
+            sequence_regex(
+                r#"^(?:participant|actor|boundary|control|entity|database|collections|queue)?[%s]*(?:"[^"]+"[%s]+as[%s]+(\w+)|(\w+)[%s]+as[%s]+(?:"[^"]+"|\w+)|"([^"]+)"|(\w+))"#,
             )
             .unwrap()
         });
@@ -870,7 +1302,7 @@ impl SeqParser {
             "create" => {
                 // Register with the declared kind/alias/label if a full declaration
                 // was given; otherwise ensure a plain participant exists.
-                if !self.try_participant_decl(rest) {
+                if !self.try_participant_decl_in_command(rest, line) {
                     self.ensure_participant(&id);
                 }
                 self.events.push(Event::Create(id));
@@ -882,10 +1314,23 @@ impl SeqParser {
     }
 
     fn try_return(&mut self, line: &str) -> bool {
+        let parallel = line.starts_with('&');
+        let line = line.strip_prefix('&').unwrap_or(line).trim_start();
         if let Some(rest) = line.strip_prefix("return") {
-            let label = rest.trim().to_string();
+            // CommandReturn#getRegexConcat captures COLOR only when #\w+
+            // is followed by whitespace; a terminal #word remains label text.
+            static COLOR: LazyLock<Regex> =
+                LazyLock::new(|| sequence_regex(r"^(#\w+)[%s]+(.*)$").unwrap());
+            let rest = rest.trim_start();
+            let (color, label) = if let Some(caps) = COLOR.captures(rest) {
+                (Some(caps[1].to_owned()), caps[2].to_owned())
+            } else {
+                (None, rest.to_owned())
+            };
             self.events.push(Event::Return(ReturnMessage {
+                parallel,
                 label,
+                color,
                 source_line: self.current_line,
             }));
             true
@@ -897,13 +1342,19 @@ impl SeqParser {
     fn try_ref(&mut self, line: &str) -> bool {
         // Inline: ref over A, B : text
         static RE_INLINE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^ref\s+over\s+(\w+(?:\s*,\s*\w+)*)\s*:\s*(.+)$").unwrap()
+            sequence_regex(r"^ref[%s]+over[%s]+(\w+(?:[%s]*,[%s]*\w+)*)[%s]*:[%s]*(.+)$").unwrap()
         });
         // Multiline start: ref over A, B  (no colon)
-        static RE_START: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^ref\s+over\s+(\w+(?:\s*,\s*\w+)*)\s*$").unwrap());
+        static RE_START: LazyLock<Regex> = LazyLock::new(|| {
+            sequence_regex(r"^ref[%s]+over[%s]+(\w+(?:[%s]*,[%s]*\w+)*)[%s]*$").unwrap()
+        });
 
-        if let Some(caps) = RE_INLINE.captures(line) {
+        // CommandReferenceOverSeveral uses RegexConcat#match. The multiline
+        // command instead passes REGEX_CONCAT.getPattern() to Pattern2 directly,
+        // so its first-line matcher must NOT run the FoxSignature prefilter.
+        if has_fox_space(line)
+            && let Some(caps) = RE_INLINE.captures(line)
+        {
             let participants: Vec<String> = caps[1]
                 .split(',')
                 .map(|s| self.ensure_participant(s.trim()))
@@ -980,21 +1431,18 @@ impl SeqParser {
             self.current_box = None;
             return true;
         }
-        if line == "box" || line.starts_with("box ") {
-            let rest = line[3..].trim();
-            // Title is an optional quoted string; colour is an optional #token.
-            let (title, after_title) = if let Some(stripped) = rest.strip_prefix('"') {
-                match stripped.find('"') {
-                    Some(end) => (stripped[..end].to_string(), stripped[end + 1..].trim()),
-                    None => (stripped.to_string(), ""),
-                }
-            } else {
-                (String::new(), rest)
-            };
-            let color = after_title
-                .split_whitespace()
-                .find(|tok| tok.starts_with('#'))
-                .map(|tok| tok.to_string());
+        // CommandBoxStart#getRegexConcat: title whitespace is inside an
+        // optional RegexOr, so it contributes no required FoxSignature bit.
+        // Preserve NAME1/NAME2 order and complete title capture before color.
+        static START: LazyLock<Regex> = LazyLock::new(|| {
+            sequence_regex(r#"^box(?:[%s]+(?:"(?P<quoted>[^"]+)"|(?P<unquoted>[^#]+)))?[%s]*(?P<color>#[^%s]+)?$"#).unwrap()
+        });
+        if let Some(caps) = START.captures(line) {
+            let title = caps
+                .name("quoted")
+                .or_else(|| caps.name("unquoted"))
+                .map_or_else(String::new, |m| m.as_str().to_string());
+            let color = caps.name("color").map(|m| m.as_str().to_string());
             self.boxes.push(ParticipantBox {
                 title,
                 color,
@@ -1059,6 +1507,22 @@ impl SeqParser {
             self.hide_footbox = true;
             return true;
         }
+        // CommandHideShowByGender#executeSequenceDiagram ignores the gender
+        // selector and updates SequenceDiagram#hiddenPortions, shared by every
+        // Participant#getDisplay. Its PORTION accepts singular and plural.
+        static STEREOTYPE_VISIBILITY: LazyLock<Regex> = LazyLock::new(|| {
+            sequence_regex(
+                r#"(?i)^(hide|show)[%s]+(?:(?:[\p{L}\p{N}_.]+|"[^"]+"|<<.*>>)[%s]+)*?stereotypes?$"#,
+            )
+            .unwrap()
+        });
+        // CommandHideShowByGender#getRegexConcat contributes spaceOneOrMore.
+        if has_fox_space(line)
+            && let Some(caps) = STEREOTYPE_VISIBILITY.captures(line)
+        {
+            self.hide_stereotypes = caps[1].eq_ignore_ascii_case("hide");
+            return true;
+        }
         line.starts_with("hide ")
     }
 }
@@ -1101,13 +1565,15 @@ fn parse_arrow(s: &str) -> Arrow {
         LineStyle::Solid
     };
 
-    let direction = if s.starts_with('<') && s.ends_with('>') {
+    // CommandArrow#executeArg separates dressings from the body before deciding
+    // reverseDefine. Decorations do not participate in that decision.
+    let left = s.split('-').next().unwrap_or("");
+    let right = s.rsplit('-').next().unwrap_or("");
+    let left_head = left.contains(['<', '/', '\\']);
+    let right_head = right.contains(['>', '/', '\\']);
+    let direction = if left_head && right_head {
         ArrowDirection::Bidirectional
-    } else if s.starts_with('/') || s.starts_with('\\') {
-        // Java `CommandArrow` treats a left half-head dressing as
-        // reverseDefine before it swaps the semantic participants.
-        ArrowDirection::RightToLeft
-    } else if s.contains("<-") || s.contains('<') && !s.contains("->") {
+    } else if left_head {
         ArrowDirection::RightToLeft
     } else {
         ArrowDirection::LeftToRight
@@ -1137,43 +1603,38 @@ fn parse_arrow(s: &str) -> Arrow {
     } else {
         s.ends_with('o')
     };
-    let target_open = match direction {
-        ArrowDirection::RightToLeft => s.contains("<<"),
-        ArrowDirection::LeftToRight => s.contains(">>"),
-        ArrowDirection::Bidirectional | ArrowDirection::Self_ => {
-            s.contains("<<") || s.contains(">>")
-        }
+    // CommandArrow computes sync1/sync2 independently. ArrowConfiguration
+    // #withPart modifies destination dressing2, which is initially present;
+    // source dressing1 stays FULL. Physical reversal swaps the whole dressing.
+    let (source, target) = if reverse {
+        (right, left)
+    } else {
+        (left, right)
     };
+    let is_async = |part: &str| {
+        part.contains("<<") || part.contains(">>") || part.contains("//") || part.contains("\\\\")
+    };
+    let source_dressing =
+        (direction == ArrowDirection::Bidirectional).then_some(if is_async(source) {
+            ArrowHead::Open
+        } else {
+            ArrowHead::Filled
+        });
     let head = if target_cross {
         ArrowHead::Cross
-    } else if target_circle {
-        ArrowHead::Circle
-    } else if target_open {
+    } else if is_async(target) && !target.contains(['/', '\\']) {
         ArrowHead::Open
     } else {
         ArrowHead::Filled
     };
-
-    // Half-arrowhead modifiers: `/` draws only the bottom wing, `\` only the
-    // top wing. Doubling the modifier (`//`, `\\`) renders a thin open stroke
-    // instead of a filled triangle.
-    let (mut head_half, thin_head) = if s.contains("//") {
-        (Some(ArrowHalf::Bottom), true)
-    } else if s.contains("\\\\") {
-        (Some(ArrowHalf::Top), true)
-    } else if s.contains('/') {
-        (Some(ArrowHalf::Bottom), false)
-    } else if s.contains('\\') {
-        (Some(ArrowHalf::Top), false)
+    let head_half = if right.contains('/') || left.contains('\\') {
+        Some(ArrowHalf::Bottom)
+    } else if right.contains('\\') || left.contains('/') {
+        Some(ArrowHalf::Top)
     } else {
-        (None, false)
+        None
     };
-    if direction == ArrowDirection::RightToLeft && (s.starts_with('/') || s.starts_with('\\')) {
-        head_half = head_half.map(|half| match half {
-            ArrowHalf::Top => ArrowHalf::Bottom,
-            ArrowHalf::Bottom => ArrowHalf::Top,
-        });
-    }
+    let thin_head = head_half.is_some() && is_async(target);
 
     Arrow {
         line,
@@ -1184,6 +1645,8 @@ fn parse_arrow(s: &str) -> Arrow {
         thin_head,
         source_cross,
         source_circle,
+        target_circle,
+        source_dressing,
     }
 }
 
@@ -1288,9 +1751,247 @@ fn note_text_from_lines(lines: &[String]) -> String {
 mod tests {
     use super::*;
 
+    #[test]
+    fn unfinished_note_is_not_a_consumed_command() {
+        for open in ["note right", "note over Birch, Elm"] {
+            let lines = ["Birch -> Elm: go", open, "body"].map(str::to_string);
+            let error = parse_sequence(&lines).unwrap_err();
+            assert_eq!(error.line, 2);
+            let mut closed = lines.to_vec();
+            closed.push("end note".to_string());
+            assert!(parse_sequence(&closed).is_ok());
+        }
+        // These have different Java grammar/finalization contracts.
+        assert!(parse_sequence(&["group open".to_string(), "Birch -> Elm".to_string()]).is_ok());
+    }
+
+    #[test]
+    fn endpoint_heads_are_independent_and_old_models_default() {
+        for (token, source, target) in [
+            ("o<<->o", ArrowHead::Open, ArrowHead::Filled),
+            ("o<-->>o", ArrowHead::Filled, ArrowHead::Open),
+        ] {
+            let arrow = parse_arrow(token);
+            assert_eq!(arrow.direction, ArrowDirection::Bidirectional);
+            assert_eq!(arrow.source_dressing, Some(source));
+            assert_eq!(arrow.head, target);
+            let mut value = serde_json::to_value(&arrow).unwrap();
+            let roundtrip: Arrow = serde_json::from_value(value.clone()).unwrap();
+            assert_eq!(roundtrip.source_dressing, Some(source));
+            value.as_object_mut().unwrap().remove("source_dressing");
+            let old: Arrow = serde_json::from_value(value).unwrap();
+            assert_eq!(old.source_dressing, None);
+            assert!(
+                serde_json::to_value(old)
+                    .unwrap()
+                    .get("source_dressing")
+                    .is_none()
+            );
+        }
+        for token in ["o\\--", "o\\\\--", "\\--"] {
+            assert_eq!(
+                parse_arrow(token).head_half,
+                Some(ArrowHalf::Bottom),
+                "{token}"
+            );
+        }
+    }
+
+    #[test]
+    fn circle_decoration_retains_head_direction_and_serialization_default() {
+        for (token, direction, head, source, target) in [
+            (
+                "->o",
+                ArrowDirection::LeftToRight,
+                ArrowHead::Filled,
+                false,
+                true,
+            ),
+            (
+                "o<--",
+                ArrowDirection::RightToLeft,
+                ArrowHead::Filled,
+                false,
+                true,
+            ),
+            (
+                "o-->>o",
+                ArrowDirection::LeftToRight,
+                ArrowHead::Open,
+                true,
+                true,
+            ),
+            (
+                "o<->o",
+                ArrowDirection::Bidirectional,
+                ArrowHead::Filled,
+                true,
+                true,
+            ),
+            (
+                "-/o",
+                ArrowDirection::LeftToRight,
+                ArrowHead::Filled,
+                false,
+                true,
+            ),
+        ] {
+            let arrow = parse_arrow(token);
+            assert_eq!(arrow.direction, direction, "{token}");
+            assert_eq!(arrow.head, head, "{token}");
+            assert_eq!((arrow.source_circle, arrow.target_circle), (source, target));
+            let mut value = serde_json::to_value(&arrow).unwrap();
+            value.as_object_mut().unwrap().remove("target_circle");
+            let legacy: Arrow = serde_json::from_value(value).unwrap();
+            assert!(!legacy.target_circle);
+        }
+    }
+
+    #[test]
+    fn circle_grammar_retains_valid_heads_and_rejects_interior_decoration() {
+        for source in ["A -[#a]>o B", "A o<-- B", "[->o A", "A ->o]", "A o-->>o A"] {
+            assert!(parse_sequence(&[source.into()]).is_ok(), "{source}");
+        }
+        for source in ["A -[#a]o> B", "[--o> A", "A --o>]", "A <o-- B"] {
+            assert!(parse_sequence(&[source.into()]).is_err(), "{source}");
+        }
+    }
+
+    #[test]
+    fn pending_create_overwrites_only_unattached_events() {
+        for earlier in ["Birch", "Willow"] {
+            let input = format!(
+                "participant Ash\nparticipant Birch\nparticipant Willow\ncreate {earlier}\ncreate Birch\nAsh -> Birch: one\nAsh -> {earlier}: ordinary\ncreate Birch\nAsh -> Birch: two"
+            );
+            let diagram = parse(&input);
+            let owners = sequence_create_attachments(&diagram.events).unwrap();
+            let creates: Vec<_> = diagram
+                .events
+                .iter()
+                .enumerate()
+                .filter_map(|(i, event)| matches!(event, Event::Create(_)).then_some(i))
+                .collect();
+            assert_eq!(creates.len(), 3);
+            assert_eq!(owners[creates[0]], None);
+            assert_eq!(owners[creates[1]], Some(creates[1] + 1));
+            assert_eq!(owners[creates[2]], Some(creates[2] + 1));
+        }
+        for message in ["Birch -> Ash", "Birch -> Birch"] {
+            let lines =
+                format!("participant Ash\nparticipant Birch\ncreate Birch\n{message}: invalid")
+                    .lines()
+                    .map(str::to_owned)
+                    .collect::<Vec<_>>();
+            assert!(parse_sequence(&lines).is_err(), "{message}");
+        }
+        for message in ["[-> Birch", "Birch ->]"] {
+            let diagram = parse(&format!(
+                "participant Birch\ncreate Birch\n{message}: external"
+            ));
+            assert_eq!(
+                sequence_create_attachments(&diagram.events)
+                    .unwrap()
+                    .iter()
+                    .filter(|x| x.is_some())
+                    .count(),
+                1
+            );
+        }
+    }
+
+    #[test]
+    fn participant_labels_keep_display_lines_separate_from_identity() {
+        for kind in ["participant", "actor", "queue"] {
+            let diagram = parse(&format!(
+                r#"{kind} "Long\nShort\nLast" as Mail
+Gate -> Mail: enqueue"#
+            ));
+            let participant = diagram
+                .participants
+                .iter()
+                .find(|p| p.id == "Mail")
+                .unwrap();
+            assert_eq!(participant.label, "Long\nShort\nLast");
+            assert!(matches!(&diagram.events[0], Event::Message(message) if message.to == "Mail"));
+        }
+    }
+
+    #[test]
+    fn inline_sequence_display_normalizes_before_model_storage() {
+        for command in ["note right", "note across", "note over Cedar"] {
+            let diagram = parse(&format!(
+                "Cedar -> Pine : enter\n{command} : first\\nsecond"
+            ));
+            let note = diagram
+                .events
+                .iter()
+                .find_map(|event| match event {
+                    Event::Note(note) => Some(note),
+                    _ => None,
+                })
+                .unwrap();
+            assert_eq!(note.text, "first\nsecond", "{command}");
+        }
+        // Display.create for a block retains literal escapes; getWithNewlines
+        // for an inline Display also leaves math and link bodies untouched.
+        assert_eq!(
+            inline_sequence_display(r"a\\n b\t c\nend"),
+            "a\\n b\t c\nend"
+        );
+        assert_eq!(
+            inline_sequence_display(r"<math>x\ny</math>\nz"),
+            "<math>x\\ny</math>\nz"
+        );
+        assert_eq!(
+            inline_sequence_display(r"[[https://example.test/x\ny link]]\nz"),
+            "[[https://example.test/x\\ny link]]\nz"
+        );
+        let block = parse("Cedar -> Pine : enter\nnote right\nfirst\\nsecond\nend note");
+        let Event::Note(note) = &block.events[1] else {
+            panic!("expected note")
+        };
+        assert_eq!(note.text, r"first\nsecond");
+    }
+
     fn parse(input: &str) -> SequenceDiagram {
         let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
         parse_sequence(&lines).unwrap()
+    }
+
+    #[test]
+    fn external_dressing_selects_direction_independently_of_border_syntax() {
+        for border in ["[", "]"] {
+            for (head, arrow_head) in [(">", ArrowHead::Filled), (">>", ArrowHead::Open)] {
+                let left_head = head.replace('>', "<");
+                for (source, incoming) in [
+                    (format!("{border}-{head} Iris ++ : enter"), true),
+                    (format!("Iris {left_head}-{border} ++ : enter"), true),
+                    (format!("{border}{left_head}- Iris ++ : enter"), false),
+                    (format!("Iris -{head}{border} ++ : enter"), false),
+                ] {
+                    let diagram = parse(&source);
+                    let Event::Message(message) = &diagram.events[0] else {
+                        panic!("expected message for {source}");
+                    };
+                    let expected = if incoming {
+                        (border, "Iris")
+                    } else {
+                        ("Iris", border)
+                    };
+                    assert_eq!(
+                        (message.from.as_str(), message.to.as_str()),
+                        expected,
+                        "{source}"
+                    );
+                    assert_eq!(message.arrow.head, arrow_head, "{source}");
+                    assert!(matches!(
+                        message.activation,
+                        Some(ActivationChange::Activate)
+                    ));
+                    assert_eq!(diagram.participants.len(), 1);
+                }
+            }
+        }
     }
 
     #[test]
@@ -1690,6 +2391,35 @@ mod tests {
     }
 
     #[test]
+    fn delay_preserves_component_label_whitespace() {
+        for label in ["  wait ", "wait   ", ""] {
+            let diagram = parse(&format!("A -> B : before\n...{label}...\nA -> B : after"));
+            assert!(matches!(&diagram.events[1], Event::Delay(Some(text)) if text == label));
+        }
+        assert!(matches!(parse("A -> B\n...").events[1], Event::Delay(None)));
+    }
+
+    #[test]
+    fn box_title_quote_forms_retain_label_color_and_membership() {
+        for title in ["Outer domain", "\"Outer domain\""] {
+            let diagram = parse(&format!(
+                "box {title} #lightblue\nparticipant Oak\nend box\nparticipant Elm\nOak -> Elm : request"
+            ));
+            assert_eq!(diagram.boxes.len(), 1);
+            assert_eq!(
+                diagram.boxes[0].title,
+                if title.starts_with('"') {
+                    "Outer domain"
+                } else {
+                    "Outer domain "
+                }
+            );
+            assert_eq!(diagram.boxes[0].color.as_deref(), Some("#lightblue"));
+            assert_eq!(diagram.boxes[0].members, vec![0]);
+        }
+    }
+
+    #[test]
     fn spacing() {
         let d = parse("A -> B : m1\n|||\nA -> B : m2\n||45||\nA -> B : m3");
         assert!(matches!(d.events[1], Event::Space(None)));
@@ -1789,6 +2519,107 @@ mod tests {
         assert!(matches!(d.events[1], Event::Return(_)));
         if let Event::Return(r) = &d.events[1] {
             assert_eq!(r.label, "response");
+        }
+    }
+
+    #[test]
+    fn command_history_preserves_parallel_return_and_destroy_stack() {
+        let d = parse(
+            "A -> B ++ : enter\nB -> C ++ : nested\ndestroy C\n& return #blue first\nreturn #red next",
+        );
+        let resolved = resolve_sequence_returns(&d.events).unwrap();
+        let Event::Message(first) = &resolved[3] else {
+            panic!("return lowered")
+        };
+        assert_eq!((&*first.from, &*first.to, first.parallel), ("C", "B", true));
+        let Event::Message(next) = &resolved[4] else {
+            panic!("return lowered")
+        };
+        assert_eq!((&*next.from, &*next.to, next.parallel), ("B", "A", false));
+        let d = parse("A -> B : enter\n& A -> C : sibling");
+        assert!(matches!(&d.events[1], Event::Message(m) if m.parallel));
+    }
+
+    #[test]
+    fn command_life_transitions_and_return_colors_are_validated() {
+        for call in ["A -> B", "B -> B"] {
+            for close in ["deactivate B", "destroy B"] {
+                let lines: Vec<String> =
+                    format!("A -> B ++ : begin\n{call} : row\n{close}\nactivate B")
+                        .lines()
+                        .map(str::to_owned)
+                        .collect();
+                assert!(
+                    parse_sequence(&lines)
+                        .unwrap_err()
+                        .message
+                        .contains("already done")
+                );
+            }
+        }
+        // A self message ignores another participant's flags, per addLifeEvent.
+        parse("A -> B : begin\nB -> B : row\ndeactivate A\nactivate A");
+        for color in [
+            "#f",
+            "#123",
+            "#123abc",
+            "#123abc80",
+            "#BlueViolet",
+            "#transparent",
+        ] {
+            assert!(valid_return_color(color));
+        }
+        for color in ["#12", "#12345", "#noSuchColor819", "#red_foo"] {
+            assert!(!valid_return_color(color));
+            let lines: Vec<String> = format!("A -> B : enter\nreturn {color} done")
+                .lines()
+                .map(str::to_owned)
+                .collect();
+            assert_eq!(parse_sequence(&lines).unwrap_err().message, "No such color");
+        }
+    }
+
+    #[test]
+    fn return_color_and_source_history() {
+        for prefix in ["", "!pragma teoz true\n"] {
+            for call in ["A -> A ++", "A -> B ++", "[-> B ++"] {
+                let d = parse(&format!("{prefix}{call} : enter\nreturn #purple settled"));
+                let ret = d
+                    .events
+                    .iter()
+                    .find_map(|event| match event {
+                        Event::Return(ret) => Some(ret),
+                        _ => None,
+                    })
+                    .unwrap();
+                assert_eq!(ret.color.as_deref(), Some("#purple"));
+                assert_eq!(ret.label, "settled");
+            }
+        }
+        let d = parse("A -> B : enter\nreturn #purple");
+        let Event::Return(ret) = &d.events[1] else {
+            panic!("return");
+        };
+        assert_eq!(ret.label, "#purple");
+        assert_eq!(ret.color, None);
+        // Initial life is not an activating message; END replaces fallback.
+        for body in [
+            "participant A\nreturn lost",
+            "activate A\nreturn lost",
+            "[-> A : incoming\nreturn lost",
+            "group G\nA -> B : enter\nend\nreturn lost",
+        ] {
+            let lines = body.lines().map(str::to_owned).collect::<Vec<_>>();
+            let error = parse_sequence(&lines).unwrap_err();
+            assert_eq!(error.message, "Nowhere to return to.");
+            assert_eq!(error.line, lines.len());
+        }
+        for body in [
+            "A -> B : enter\nnote over A : note\nreturn okay",
+            "group G\nA -> B ++ : enter\nend\nreturn okay",
+            "A -> B ++ : enter\nreturn one\nreturn two",
+        ] {
+            parse(body);
         }
     }
 
@@ -1909,5 +2740,262 @@ mod tests {
         let d = parse("participant Alice\nparticipant Bob\nAlice -> Bob : hi");
         assert_eq!(d.participants[0].url, None);
         assert_eq!(d.participants[1].url, None);
+    }
+    #[test]
+    fn participant_display_visibility_and_declaration_order() {
+        let d = parse(
+            "skinparam stereotypePosition bottom\nqueue Mail <<work>>\nskinparam stereotypePosition top\nqueue Other <<role>>\nMail -> Other\nhide stereotypes",
+        );
+        assert!(d.hide_stereotypes);
+        assert!(d.participants[0].stereotype_position_bottom);
+        assert!(!d.participants[1].stereotype_position_bottom);
+        assert_eq!(d.participants[0].stereotype.as_deref(), Some("work"));
+        let d = parse(
+            "hide stereotype\nactor Gate <<role>>\nparticipant Hub <<service>>\nHub -> Gate\nshow stereotypes",
+        );
+        assert!(!d.hide_stereotypes);
+    }
+
+    #[test]
+    fn participant_display_default_serialization_is_backward_compatible() {
+        let d = parse("queue Mail <<work>>\nHub -> Mail");
+        let yaml = serde_yml::to_string(&d).unwrap();
+        assert!(!yaml.contains("hide_stereotypes"));
+        assert!(!yaml.contains("stereotype_position_bottom"));
+        // An old model has neither key. Defaults must not change its full YAML.
+        let legacy: SequenceDiagram = serde_yml::from_str(&yaml).unwrap();
+        assert!(!legacy.hide_stereotypes);
+        assert!(
+            legacy
+                .participants
+                .iter()
+                .all(|p| !p.stereotype_position_bottom)
+        );
+        assert_eq!(serde_yml::to_string(&legacy).unwrap(), yaml);
+        let d = parse(
+            "skinparam stereotypePosition bottom\nqueue Mail <<work>>\nHub -> Mail\nhide stereotype",
+        );
+        let yaml = serde_yml::to_string(&d).unwrap();
+        let restored: SequenceDiagram = serde_yml::from_str(&yaml).unwrap();
+        assert!(restored.hide_stereotypes);
+        assert!(restored.participants[0].stereotype_position_bottom);
+        assert_eq!(serde_yml::to_string(&restored).unwrap(), yaml);
+    }
+    #[test]
+    fn external_message_owns_bare_note_after_direction_normalization() {
+        for (arrow, from, to) in [
+            ("[-> Hub", "[", "Hub"),
+            ("[<- Hub", "Hub", "["),
+            ("Hub ->]", "Hub", "]"),
+            ("Hub <-]", "]", "Hub"),
+        ] {
+            for body in ["note right: current", "note left\ncurrent\nend note"] {
+                let d = parse(&format!("Birch -> Hub: prior\n{arrow}: external\n{body}"));
+                let Some(Event::Note(note)) = d.events.last() else {
+                    panic!("missing note: {arrow}")
+                };
+                assert!(note.on_message);
+                assert_eq!(note.participants, [from, to]);
+                assert_eq!(note.text, "current");
+                assert_eq!(d.participants.len(), 2, "border is not a participant");
+            }
+        }
+    }
+    #[test]
+    fn standalone_note_terminators_consume_the_complete_command() {
+        for shape in ["note", "rnote", "hnote"] {
+            for ending in [
+                "endnote",
+                "end note",
+                "endrnote",
+                "end rnote",
+                "endhnote",
+                "end hnote",
+            ] {
+                let d = parse(&format!(
+                    "participant Hub\n{shape} over Hub\none\ntwo\n{ending}\nHub -> Hub: after"
+                ));
+                assert_eq!(d.events.len(), 2);
+                let Event::Note(note) = &d.events[0] else {
+                    panic!("missing note")
+                };
+                assert_eq!(note.text, "one\ntwo");
+                assert!(
+                    matches!(&d.events[1], Event::Message(message) if message.label == "after")
+                );
+            }
+        }
+    }
+    #[test]
+    fn java_pattern2_whitespace_is_shared_across_sequence_commands() {
+        for (space, valid) in [
+            (' ', true),
+            ('\t', true),
+            ('\u{00a0}', true),
+            ('\u{2003}', false),
+            ('\u{202f}', false),
+        ] {
+            let mut parser = SeqParser::new();
+            assert_eq!(
+                parser.try_participant_decl(&format!("participant{space}Birch")),
+                valid
+            );
+            assert_eq!(
+                parser.try_message(&format!("Birch{space}->{space}Elm")),
+                valid
+            );
+            let body = format!("participant Birch\nrnote over Birch\nbody\nend{space}rnote");
+            let lines = body.lines().map(str::to_owned).collect::<Vec<_>>();
+            assert_eq!(parse_sequence(&lines).is_ok(), valid, "{body:?}");
+        }
+        let whitespace = sequence_regex(r"^[%s]$").unwrap();
+        let non_whitespace = sequence_regex(r"^[^%s]$").unwrap();
+        for character in ['\t', '\n', '\u{000b}', '\u{000c}', '\r', ' ', '\u{00a0}'] {
+            assert!(whitespace.is_match(&character.to_string()));
+            assert!(!non_whitespace.is_match(&character.to_string()));
+        }
+    }
+    #[test]
+    fn pattern2_whitespace_composes_with_other_class_members() {
+        let positive = sequence_regex(r"^[%s:]$").unwrap();
+        let negative = sequence_regex(r"^[^%s:]$").unwrap();
+        for c in [' ', '\t', '\u{000b}', '\u{000c}', '\u{00a0}', ':'] {
+            assert!(positive.is_match(&c.to_string()));
+            assert!(!negative.is_match(&c.to_string()));
+        }
+        assert!(negative.is_match("x"));
+        for shape in ["note", "rnote", "hnote"] {
+            for target in ["over Birch", "right", "across"] {
+                for separator in ["", " ", "\t", "\u{00a0}"] {
+                    let diagram = parse(&format!(
+                        "Birch -> Elm: seed\n{shape} {target} #pink{separator}: body"
+                    ));
+                    let Some(Event::Note(note)) = diagram.events.last() else {
+                        panic!("missing note")
+                    };
+                    assert_eq!(note.color.as_deref(), Some("#pink"));
+                }
+            }
+        }
+    }
+
+    #[test]
+    fn command_entry_whitespace_follows_java_composition() {
+        for gap in [' ', '\t', '\u{000c}', '\u{00a0}', '\u{000b}'] {
+            let mut parser = SeqParser::new();
+            assert!(parser.try_box(&format!("box{gap}\"Northern Shore\" #pink")));
+            assert_eq!(parser.boxes[0].title, "Northern Shore");
+            assert_eq!(parser.boxes[0].color.as_deref(), Some("#pink"));
+            assert!(parser.try_note(&format!("rnote{gap}across: body")).unwrap());
+            assert!(
+                matches!(parser.events.last(), Some(Event::Note(note)) if note.shape == NoteShape::Rectangular)
+            );
+            assert_eq!(
+                parser.try_autonumber(&format!("autonumber{gap}resume")),
+                gap != '\u{000b}'
+            );
+            assert!(parser.try_autonumber(&format!("autonumber{gap}resume \"Item 00\"")));
+        }
+        for shape in ["note", "rnote", "hnote"] {
+            let mut parser = SeqParser::new();
+            assert!(parser.try_note(&format!("{shape} accross: body")).is_err());
+        }
+    }
+
+    #[test]
+    fn created_participant_signature_uses_the_complete_command() {
+        for declaration in ["create actor\u{000b}Willow", "create\u{000b}actor Willow"] {
+            let diagram = parse(&format!(
+                "participant Birch\n{declaration}\nBirch -> Willow: born"
+            ));
+            assert_eq!(diagram.participants[1].kind, ParticipantKind::Actor);
+            assert!(matches!(&diagram.events[0], Event::Create(id) if id == "Willow"));
+        }
+    }
+
+    #[test]
+    fn fox_space_prefilter_checks_the_complete_command() {
+        for gap in [' ', '\t', '\u{000c}', '\u{00a0}', '\u{000b}'] {
+            let required = gap != '\u{000b}';
+            let mut parser = SeqParser::new();
+            assert_eq!(
+                parser.try_participant_decl(&format!("participant{gap}Birch")),
+                required
+            );
+            assert!(parser.try_participant_decl(&format!("participant{gap}\"Birch Grove\"")));
+            assert_eq!(
+                parser.try_activate_deactivate(&format!("activate{gap}Birch")),
+                required
+            );
+            assert_eq!(
+                parser.try_create_destroy(&format!("destroy{gap}Birch")),
+                required
+            );
+            assert_eq!(parser.try_hide(&format!("hide{gap}stereotype")), required);
+            // CommandArrow and CommandGrouping have no direct mandatory space leaf.
+            assert!(parser.try_message(&format!("Birch{gap}->{gap}Elm")));
+            assert!(parser.try_group(&format!("group{gap}title")));
+        }
+        let mut parser = SeqParser::new();
+        parser.parse_line(1, "activate\u{000b}Birch").unwrap();
+        assert!(parser.unconsumed); // T14.17 owns the outer failure propagation.
+        assert!(parser.events.is_empty());
+    }
+
+    #[test]
+    fn named_note_identity_is_required_after_optional_prefix() {
+        for shape in ["note", "rnote", "hnote"] {
+            for (command, identities) in [
+                (format!("{shape} over of : body"), vec!["of"]),
+                (format!("{shape} over of #pink: body"), vec!["of"]),
+                (format!("{shape} over of of : body"), vec!["of"]),
+                (format!("{shape} over of, South: body"), vec!["of", "South"]),
+                (
+                    format!("{shape} left of \"North Pier\": body"),
+                    vec!["North Pier"],
+                ),
+                (format!("{shape} over of\nbody\nend note"), vec!["of"]),
+                (
+                    format!("{shape} over of  North\nbody\nend note"),
+                    vec!["North"],
+                ),
+            ] {
+                let diagram = parse(&command);
+                let Event::Note(note) = &diagram.events[0] else {
+                    panic!("missing note: {command}")
+                };
+                assert_eq!(note.participants, identities, "{command}");
+                assert!(!note.on_message);
+                assert_eq!(note.text, "body");
+            }
+        }
+    }
+
+    #[test]
+    fn note_over_requires_a_named_participant() {
+        for text in [
+            "note over: body",
+            "note over\nbody\nend note",
+            "rnote over: body",
+            "hnote over: body",
+        ] {
+            let lines = format!("[-> Birch: message\n{text}")
+                .lines()
+                .map(str::to_owned)
+                .collect::<Vec<_>>();
+            assert!(parse_sequence(&lines).is_err(), "{text}");
+        }
+        for text in [
+            "note over Birch: body",
+            "note over Birch,Elm: body",
+            "note across: body",
+            "note right: body",
+        ] {
+            let lines = format!("Birch -> Elm: message\n{text}")
+                .lines()
+                .map(str::to_owned)
+                .collect::<Vec<_>>();
+            assert!(parse_sequence(&lines).is_ok(), "{text}");
+        }
     }
 }

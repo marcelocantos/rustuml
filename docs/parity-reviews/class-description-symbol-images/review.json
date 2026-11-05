@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-description-symbol-images",
+  "reviewer": {
+    "task_id": "t3-2740aefa-independent-class-container-checker",
+    "model": "gpt-6-astra (high), Codex harness; user explicitly selected inherited Codex; no children"
+  },
+  "account_commit": "fd4eb9f768768c006d814f389dbdad79605acc7f",
+  "implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 18916d312c32340b0a674e15259dc3031ea57acf -- crates/rustuml-parser crates/rustuml-render",
+    "git show bed3b50ca08e12d8ada612791cf07393617b2041 -- crates/rustuml-parser crates/rustuml-render",
+    "CARGO_TARGET_DIR=/tmp/rustuml-checker2740-target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "python3 /tmp/checker2740_generate.py",
+    "python3 /tmp/checker2740_followup.py",
+    "python3 /tmp/checker2740_run.py fresh",
+    "python3 /tmp/checker2740_run.py current",
+    "python3 /tmp/checker2740_run.py maker"
+  ],
+  "findings": [
+    "USymbolComponent2 and USymbolBoundary numerical margins/glyph geometry have real source provenance. Parenthesis radius9, angle70, length10 and stroke1.5 agree with ExtremityParenthesis. Action/process/queue group image constants also match their named Java symbols.",
+    "The image dataflow is incomplete: componentStyle uml1 still paints Component2, multiline labels are centered line by line rather than using Java BodyFactory inner alignment, and boundary stereo/label emission order differs. Plain unequal-width component/boundary labels fail independently of stereotype style. Other accepted description leaf kinds still fall through to native boxes."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-description-symbol-images/checker/action_group.puml",
+      "golden": "test-diagrams/perturbations/class-description-symbol-images/checker/action_group.svg",
+      "axes": [
+        "container symbol and stereotype",
+        "wide alias and external link"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-description-symbol-images/action_group.puml",
+      "source_sha256": "faf254bc820188e2e968e458c9e861399f26bb807bff355699696b9dbe5513c4",
+      "java_sha256": "53f5fce6f3ef9be7329aeb752876a7c8073f949e3d56a23ea737f3854896b946",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-description-symbol-images/action_group"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-symbol-images/checker/boundary_uml1.puml",
+      "golden": "test-diagrams/perturbations/class-description-symbol-images/checker/boundary_uml1.svg",
+      "axes": [
+        "symbol image and UML style",
+        "multiline/stereotype/color and connected native peer"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-description-symbol-images/boundary_uml1.puml",
+      "source_sha256": "2cb1392d1dc6df4a7c0fd30bc6096eb97db8e8d3fc5a6d1d7731ecaaa344ceeb",
+      "java_sha256": "91355da1876b7d7fbcce8c403c262b52f8b72a7284361e379371dfabf5452060",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-description-symbol-images/boundary_uml1"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-symbol-images/checker/boundary_uml2.puml",
+      "golden": "test-diagrams/perturbations/class-description-symbol-images/checker/boundary_uml2.svg",
+      "axes": [
+        "symbol image and UML style",
+        "multiline/stereotype/color and connected native peer"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-description-symbol-images/boundary_uml2.puml",
+      "source_sha256": "c8c98e83fbf521e0612c8e002dec8e2559d6961e7ba97f03e0cf55c8b9bf01bd",
+      "java_sha256": "720d84cb3c81934abe38d48fb3a22b2781479c6983a4f57f24a7dbd45b3725d4",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-description-symbol-images/boundary_uml2"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-symbol-images/checker/component_uml1.puml",
+      "golden": "test-diagrams/perturbations/class-description-symbol-images/checker/component_uml1.svg",
+      "axes": [
+        "symbol image and UML style",
+        "multiline/stereotype/color and connected native peer"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-description-symbol-images/component_uml1.puml",
+      "source_sha256": "278630db916998ab8420afe441c453e71deecbbe12b5fb0878fa5c55d1a807fa",
+      "java_sha256": "180e1ede9b580b38af514d9b2de569c1af0d4bbe39299765dcd7cc9882ce5a3e",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-description-symbol-images/component_uml1"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-symbol-images/checker/component_uml2.puml",
+      "golden": "test-diagrams/perturbations/class-description-symbol-images/checker/component_uml2.svg",
+      "axes": [
+        "symbol image and UML style",
+        "multiline/stereotype/color and connected native peer"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-description-symbol-images/component_uml2.puml",
+      "source_sha256": "553a04198f607f2bc29d1bac2f10000d36ddca95bd8dd43972538846c899f428",
+      "java_sha256": "366fc8606758f3e1a11b5ef91102f55f820b4f840a6c15d5f5d24acb2ecc9fe8",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-description-symbol-images/component_uml2"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-symbol-images/checker/plain_multiline_boundary.puml",
+      "golden": "test-diagrams/perturbations/class-description-symbol-images/checker/plain_multiline_boundary.svg",
+      "axes": [
+        "unequal multiline label widths",
+        "mixed kind and declaration order"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-description-symbol-images/plain_multiline_boundary.puml",
+      "source_sha256": "5c1684ac136af943bfe2bb8ceebd80930522ca0d4b0c6662f146b138efaeca5c",
+      "java_sha256": "cabe0817824740839857249278d87196eaa9e18bd9d4c222a08ce73d8babc354",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-description-symbol-images/plain_multiline_boundary"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-symbol-images/checker/plain_multiline_component.puml",
+      "golden": "test-diagrams/perturbations/class-description-symbol-images/checker/plain_multiline_component.svg",
+      "axes": [
+        "unequal multiline label widths",
+        "mixed kind and declaration order"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-description-symbol-images/plain_multiline_component.puml",
+      "source_sha256": "816d1f36d87fa00dbad38e8ced0a655264c18e5a5d2ef72e62ba9fccbbe34ad7",
+      "java_sha256": "1d5150a118ba88a2a3c3e99e89db7894bd1d66e76e06dd27f02cfdec92041dc2",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-description-symbol-images/plain_multiline_component"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-symbol-images/checker/process_group.puml",
+      "golden": "test-diagrams/perturbations/class-description-symbol-images/checker/process_group.svg",
+      "axes": [
+        "container symbol and stereotype",
+        "wide alias and external link"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-description-symbol-images/process_group.puml",
+      "source_sha256": "9a4ca0b250d82452c6f1dffad4c347e9dd747050f1a58c68685bde8bec9074cd",
+      "java_sha256": "5d21439cf43de178576f61175422ab4a3c493e5d98da33766b4343b20f994658",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-description-symbol-images/process_group"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-description-symbol-images/checker/queue_group.puml",
+      "golden": "test-diagrams/perturbations/class-description-symbol-images/checker/queue_group.svg",
+      "axes": [
+        "container symbol and stereotype",
+        "wide alias and external link"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-description-symbol-images/queue_group.puml",
+      "source_sha256": "dc42b332bcb5333181971c72f6b8fcac0d07e39e693fce66fd8d79217a84be9e",
+      "java_sha256": "de13948af7f9e8ed6a7141631e223315004baeb0117987ea233fe5123fe53d1a",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-description-symbol-images/queue_group"
+    }
+  ],
+  "verdict": "rejected",
+  "tested_combined_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "parent_base": "ea136c78ff71d2be074b39d2ffe0484decba0aec",
+  "original_account_commit": "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+  "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+  "phase_mapping": {
+    "mechanism": "class-description-symbol-images",
+    "account_path": "docs/parity-reviews/class-description-symbol-images/account.json",
+    "original_account_commit": "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+    "picked_account_commit": "fd4eb9f768768c006d814f389dbdad79605acc7f",
+    "account_history_original": [
+      "7c784cd3ba7e530226fec5db8d09d0972813ebb9",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "fd4eb9f768768c006d814f389dbdad79605acc7f",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "5d579ab11c16dbd930309c0a0363bd17fe1a4edfb7eb47617fe7c291aab652af",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  "dependencies": [
+    "class-command-grammar-closure",
+    "class-single-svek-envelope-origin"
+  ],
+  "scope": "Only the stated mechanism at the full combined tested revision; not packet acceptance and not certification of an extracted subset. Failed applicable held-outs are blocking. Invalid grammar references are negatives, never positive comparisons.",
+  "reference_profile": "Source-pinned Java 71806a2, raw CLI -tsvg -pipe for new inputs, consistent with owner-approved raw CLI/file policy b62d8ce967b6dda7d85bb6dc28ff92509f6066f9. All preexisting/maker reference bytes unchanged; historical GET corpus/counts reported separately. Historical binary/font/Graphviz equivalence unproven. TIM checker owns independent reader verification; no TIM production/assertion imported.",
+  "support": "docs/parity-reviews/class-command-grammar-closure/checker-support/REPORT.md",
+  "observed_counts": {
+    "pass": 3,
+    "mismatch": 6
+  },
+  "reference_policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9"
+}
