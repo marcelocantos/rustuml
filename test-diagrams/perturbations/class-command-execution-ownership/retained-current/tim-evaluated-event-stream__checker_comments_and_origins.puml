@@ -1,0 +1,12 @@
+@startuml
+
+/' before '/ !theme cerulean
+!if 0
+!theme united
+!endif
+' consume this
+class Larch /' trailing '/
+
+class Pine
+Larch --> Pine
+@enduml

@@ -1,0 +1,134 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.puml",
+    "zone": "Australia/Melbourne",
+    "environment": {
+      "TZ": "Australia/Melbourne",
+      "RUSTUML_DEBUG": "date=1774210426000"
+    },
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.puml",
+    "zone": "Australia/Melbourne",
+    "environment": {
+      "TZ": "Australia/Melbourne",
+      "RUSTUML_DEBUG": "date=1774210426000"
+    },
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.puml",
+    "zone": "Australia/Melbourne",
+    "environment": {
+      "TZ": "Australia/Melbourne",
+      "RUSTUML_DEBUG": "date=1774210426000"
+    },
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.puml",
+    "zone": "Australia/Melbourne",
+    "environment": {
+      "TZ": "Australia/Melbourne",
+      "RUSTUML_DEBUG": "date=1774210426000"
+    },
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.puml",
+    "zone": "Asia/Kathmandu",
+    "environment": {
+      "TZ": "Asia/Kathmandu",
+      "RUSTUML_DEBUG": "date=1774210426000"
+    },
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.puml",
+    "zone": "Asia/Kathmandu",
+    "environment": {
+      "TZ": "Asia/Kathmandu",
+      "RUSTUML_DEBUG": "date=1774210426000"
+    },
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.puml",
+    "zone": "Asia/Kathmandu",
+    "environment": {
+      "TZ": "Asia/Kathmandu",
+      "RUSTUML_DEBUG": "date=1774210426000"
+    },
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.puml",
+    "zone": "Asia/Kathmandu",
+    "environment": {
+      "TZ": "Asia/Kathmandu",
+      "RUSTUML_DEBUG": "date=1774210426000"
+    },
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_after.puml",
+    "zone": "UTC",
+    "environment": {
+      "TZ": "UTC",
+      "RUSTUML_DEBUG": "date=1774210426000"
+    },
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_fall_before.puml",
+    "zone": "UTC",
+    "environment": {
+      "TZ": "UTC",
+      "RUSTUML_DEBUG": "date=1774210426000"
+    },
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_after.puml",
+    "zone": "UTC",
+    "environment": {
+      "TZ": "UTC",
+      "RUSTUML_DEBUG": "date=1774210426000"
+    },
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-explicit-date-instant/checker_dst_spring_before.puml",
+    "zone": "UTC",
+    "environment": {
+      "TZ": "UTC",
+      "RUSTUML_DEBUG": "date=1774210426000"
+    },
+    "java_exit": 0,
+    "rust_exit": 0,
+    "comparison_exit": 0
+  }
+]

@@ -1,0 +1,11 @@
+@startuml
+node Room {
+class Counter
+class Total
+note as Memo
+Numbers in scope
+end note
+Counter .. Memo
+Memo .. Total
+}
+@enduml

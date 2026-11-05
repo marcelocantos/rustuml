@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-expression-event-sink",
+  "rust_revision": "5f1035ace5c1fa38df91b2cf44c20e1e7edc79f0",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/TContext.java:executeLines/executeOneLineNotSafe/applyFunctionsAndVariables/executeLog",
+    "tim/EaterLog.java:analyze"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Every evaluated function emits ordered side effects into the active TIM stream, independent of whether its caller consumes a return value. Diagnostic arguments execute once without producing diagnostic source text.",
+  "causal_divergence": "call_function returns events that expression consumers discard; inline expansion filters event variants and reverses independent calls; !log skips evaluation.",
+  "planned_change": "Use a scoped event sink at statement execution, carry function effects through expression/text evaluation, retain every event variant and evaluate textual calls left-to-right. Diagnostics evaluate arguments through the same execution path.",
+  "perturbation_axes": [
+    "Nested return/selector/theme calls versus assignment/inline arguments",
+    "Diagnostic call count/order and inactive calls; sprite/option versus theme effects"
+  ],
+  "oracle_plan": [
+    "Exact raw Java Diagram.getSource() and shipped CLI SVG, preserved checker cases and >=2 fresh axes",
+    "Parser/CLI tests, main tiers, original907 and expanded949 isolated CLI; built-in with accepted registry cleanup"
+  ],
+  "scope": "preprocess modules and new maker evidence only; no checker attestation",
+  "pending": [
+    "T14.6.3 reader contract owner decision; current behavior unchanged",
+    "Independent checker required",
+    "Date error to ParseError handoff requires parse owner; CLI errors remain blocked until that interface is consumed"
+  ]
+}

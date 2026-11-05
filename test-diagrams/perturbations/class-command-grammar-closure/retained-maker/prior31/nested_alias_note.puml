@@ -1,0 +1,11 @@
+@startuml
+frame "Weather House" as Outer {
+node Inner as "Signal Bay" {
+class Thermometer
+note right of Thermometer
+component textual
+[explanation]
+end note
+}
+}
+@enduml

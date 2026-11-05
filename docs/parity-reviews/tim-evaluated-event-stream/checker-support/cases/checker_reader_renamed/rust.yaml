@@ -1,0 +1,50 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+
+
+
+
+      class ReaderCedar
+
+
+      class ReaderLarch
+      ReaderCedar --> ReaderLarch
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity ReaderCedar
+  - !Entity ReaderLarch
+  - !Relationship 0
+  entities:
+  - id: ReaderCedar
+    label: ReaderCedar
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 5
+  - id: ReaderLarch
+    label: ReaderLarch
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 8
+  relationships:
+  - from: ReaderCedar
+    to: ReaderLarch
+    kind: Dependency
+    label: null
+    label_arrow: None
+    from_multiplicity: null
+    to_multiplicity: null
+    decorated_end: To
+    dashed: false
+    length: 2
+    source_line: 9
+  packages: []
+  notes: []
+  hide_show: []

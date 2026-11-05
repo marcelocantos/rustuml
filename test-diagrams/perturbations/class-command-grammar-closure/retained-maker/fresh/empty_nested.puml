@@ -1,0 +1,6 @@
+@startuml
+package "Outer docs" as Outer {
+package "Index" as Index [[https://example.org/index]] {
+}
+}
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+package Dock {
+class Native
+component "Full widget" as Widget
+Native --> Widget
+}
+@enduml

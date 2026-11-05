@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; no acceptance",
+  "rust_base": "0a04a06acb2a072946356a741a5850377dd5c039",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "negative_evidence_contract": "All relevant valid failures remain blocking; no checker record changes.",
+  "mechanism": "class-cluster-header-shape-extent",
+  "java_locations": [
+    "svek/ClusterHeader#ClusterHeader",
+    "decoration/symbol/USymbolNode#suppWidthBecauseOfShape",
+    "svek/ClusterDotString#printInternal"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#render,ClusterTitleSize"
+  ],
+  "invariant": "Symbol width supplements apply to the merged title/stereotype block, after selecting its maximum width.",
+  "causal_divergence": "Rust adds Node width before max(title,stereotype), underallocating groups whose stereotype is wider than their title.",
+  "planned_model_change": "Move the existing source-derived symbol width supplement after the title/stereotype width maximum; preserve integer serialization and graph solve.",
+  "perturbation_axes": [
+    "short/long title relative to stereotype",
+    "node direct/nested package and aliases"
+  ],
+  "planned_change": "Move the existing source-derived symbol width supplement after the title/stereotype width maximum; preserve integer serialization and graph solve."
+}

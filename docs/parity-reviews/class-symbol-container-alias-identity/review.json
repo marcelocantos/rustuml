@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-symbol-container-alias-identity",
+  "reviewer": {
+    "task_id": "t3-2740aefa-independent-class-container-checker",
+    "model": "gpt-6-astra (high), Codex harness; user explicitly selected inherited Codex; no children"
+  },
+  "account_commit": "f3b2e9901928560ea5d811270b6398c938a14d3a",
+  "implementation_commit": "2a8852f3d7cc2b9103efc14e8fe2ddfdf30318c6",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 18916d312c32340b0a674e15259dc3031ea57acf -- crates/rustuml-parser crates/rustuml-render",
+    "git show bed3b50ca08e12d8ada612791cf07393617b2041 -- crates/rustuml-parser crates/rustuml-render",
+    "CARGO_TARGET_DIR=/tmp/rustuml-checker2740-target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "python3 /tmp/checker2740_generate.py",
+    "python3 /tmp/checker2740_followup.py",
+    "python3 /tmp/checker2740_run.py fresh",
+    "python3 /tmp/checker2740_run.py current",
+    "python3 /tmp/checker2740_run.py maker",
+    "python3 /tmp/checker2740_acceptance_probes.py"
+  ],
+  "findings": [
+    "Accepted only the new CODE/DISPLAY identity mechanism at the combined tested revision. Eight fresh exact CLI comparisons cover forward/reverse aliases, width changes, reopened groups, changed displays, and two child declarations with a link. Java CommandPackageWithUSymbol plus NameAndCodeParser retain code identity separately from display; Rust parse_name_and_code and package reopen resolve the same group. Final probes also cover dotted aliases, command-looking/bracketed displays and reopened nested LR clouds.",
+    "This is not acceptance of container factory selection, group notes, group routing or painted origins. Both implementation commits change shared parsing code; extracting this behavior or cherry-picking only its account is untested and requires a fresh build/review of that combination."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/alias_cloud.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/alias_cloud.svg",
+      "axes": [
+        "forward/reverse display and code",
+        "reopened container and kind"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/alias_cloud.puml",
+      "source_sha256": "66bce4164c9ef9a15f73ea761f7f7bf4c3efec3428202f519dc049443adb5a87",
+      "java_sha256": "ac5df3f83a0d1e3cb11b75d224c6ddbe8f4151b3a865a9a32c993b54a2ed807d",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-symbol-container-alias-identity/alias_cloud"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/alias_folder.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/alias_folder.svg",
+      "axes": [
+        "forward/reverse display and code",
+        "reopened container and kind"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/alias_folder.puml",
+      "source_sha256": "51e4f76e6c79b2c2bf6c3582a7557965608f66feb39b67f88d46d0f4272cd218",
+      "java_sha256": "114e9a54149cce7ee1cb02643342ff674b980b43d68ee46ccbc07ca3960fd2ee",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-symbol-container-alias-identity/alias_folder"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/alias_frame.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/alias_frame.svg",
+      "axes": [
+        "forward/reverse display and code",
+        "reopened container and kind"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/alias_frame.puml",
+      "source_sha256": "82275fcbcae34ddf16e7df8dec2adb356599042ad79824dd0307dc10d4eae0b0",
+      "java_sha256": "f13bff6b72e31886405300e19a2c3b9128ed07c92cfcdfcc0271363407116a93",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-symbol-container-alias-identity/alias_frame"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/alias_node.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/alias_node.svg",
+      "axes": [
+        "forward/reverse display and code",
+        "reopened container and kind"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/alias_node.puml",
+      "source_sha256": "e698c595e931f022f51ade7f2dea14d10f679a40d0044f8e1723568a5a2475eb",
+      "java_sha256": "46eab635d12f60533dd0b8e01310a0acc7c6934a7d030a9e7f4dce13dcd11df4",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-symbol-container-alias-identity/alias_node"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/relabel_folder.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/relabel_folder.svg",
+      "axes": [
+        "reopening same alias with new display",
+        "container kind and declaration order"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/relabel_folder.puml",
+      "source_sha256": "36b6656cd405f1fd31d1d9b133d1143877dc8d2bb889b78e6a7a8349bd636d76",
+      "java_sha256": "af6addc9da1151bf6765a55e0ee4cd281abc9215f8032436399996b48eea88e4",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-symbol-container-alias-identity/relabel_folder"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/relabel_node.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/relabel_node.svg",
+      "axes": [
+        "reopening same alias with new display",
+        "container kind and declaration order"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/relabel_node.puml",
+      "source_sha256": "78606da37bedd72720ebf05b8a9acee2643868ff6a245a025a4b8a319e2eaf2c",
+      "java_sha256": "4315f91380b75fa69abd45a4640d9b05e23f3f5cafbdcb53667d2aae88d48f73",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-symbol-container-alias-identity/relabel_node"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/dotted_alias.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/dotted_alias.svg",
+      "axes": [
+        "dotted alias and command-looking quoted display",
+        "reopened container with child relationship"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "final independent source-guided attempt to break a narrowly passing identity mechanism",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/dotted_alias.puml",
+      "source_sha256": "52426d709619cc305e3be59bf229dbd826e0f7fa08a6609dfb76d174c6c71206",
+      "java_sha256": "eeb1126c7ea9856eddab6e9e8f0beb2f261ad87a745378a1268669aab913e452",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/acceptance_probes/class-symbol-container-alias-identity/dotted_alias"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/nested_opaque.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-container-alias-identity/checker/nested_opaque.svg",
+      "axes": [
+        "nested opaque display and repeated alias",
+        "LR direction and reversed child declaration/link order"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "final independent source-guided attempt to break a narrowly passing identity mechanism",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/nested_opaque.puml",
+      "source_sha256": "998772b43acd12caaa827e75a6784616be2009ad5ba65db2f3320a3cce29d03a",
+      "java_sha256": "9e187e328539a775b75de7beee01ae501b8cc0f2c20567f747e12c01e11607cd",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/acceptance_probes/class-symbol-container-alias-identity/nested_opaque"
+    }
+  ],
+  "verdict": "accepted",
+  "tested_combined_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "parent_base": "ea136c78ff71d2be074b39d2ffe0484decba0aec",
+  "original_account_commit": "2a0981759c523c9da3d19ebc7f7919bb4cdd3fec",
+  "original_implementation_commit": "18916d312c32340b0a674e15259dc3031ea57acf",
+  "phase_mapping": {
+    "mechanism": "class-symbol-container-alias-identity",
+    "account_path": "docs/parity-reviews/class-symbol-container-alias-identity/account.json",
+    "original_account_commit": "2a0981759c523c9da3d19ebc7f7919bb4cdd3fec",
+    "picked_account_commit": "f3b2e9901928560ea5d811270b6398c938a14d3a",
+    "account_history_original": [
+      "2a0981759c523c9da3d19ebc7f7919bb4cdd3fec"
+    ],
+    "account_history_picked": [
+      "f3b2e9901928560ea5d811270b6398c938a14d3a"
+    ],
+    "original_implementation_commit": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "picked_implementation_commit": "2a8852f3d7cc2b9103efc14e8fe2ddfdf30318c6",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "82e548f826f9d98985b3e53f72caade745f0e4f78263d793725da764de24fbc1",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  "dependencies": [],
+  "scope": "Only the stated mechanism at the full combined tested revision; not packet acceptance and not certification of an extracted subset. Failed applicable held-outs are blocking. Invalid grammar references are negatives, never positive comparisons.",
+  "reference_profile": "Source-pinned Java 71806a2, raw CLI -tsvg -pipe for new inputs, consistent with owner-approved raw CLI/file policy b62d8ce967b6dda7d85bb6dc28ff92509f6066f9. All preexisting/maker reference bytes unchanged; historical GET corpus/counts reported separately. Historical binary/font/Graphviz equivalence unproven. TIM checker owns independent reader verification; no TIM production/assertion imported.",
+  "support": "docs/parity-reviews/class-command-grammar-closure/checker-support/REPORT.md",
+  "observed_counts": {
+    "pass": 8
+  },
+  "reference_policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9"
+}

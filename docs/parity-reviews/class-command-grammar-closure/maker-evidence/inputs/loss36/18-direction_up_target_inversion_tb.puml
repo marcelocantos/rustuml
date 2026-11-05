@@ -1,0 +1,5 @@
+@startuml
+class "Nimbus Upper 3209" as NimbusUpper
+class "Harbor Lower 7481" as HarborLower
+NimbusUpper -up-( HarborLower
+@enduml

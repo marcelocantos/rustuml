@@ -1,0 +1,37 @@
+SVG structural differences:
+  element count: expected 28, got 22
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "CLASS"), ("height", "228px"), ("preserveAspectRatio", "none"), ("style", "width:151px;height:228px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 151 228"), ("width", "151px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "DESCRIPTION"), ("height", "191px"), ("preserveAspectRatio", "none"), ("style", "width:254px;height:191px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 254 191"), ("width", "254px"), ("zoomAndPan", "magnify")]
+  [3] <g> attr mismatch:
+    expected: [("class", "cluster"), ("data-qualified-name", "Data Types"), ("data-source-line", "1"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Data Types"), ("data-source-line", "1"), ("id", "ent0002")]
+  [4] <path> attr mismatch:
+    expected: [("d", "M8.5,6 L90.5674,6 A3.75,3.75 0 0 1 93.0674,8.5 L100.0674,28.4883 L133.5,28.4883 A2.5,2.5 0 0 1 136,30.9883 L136,210.5 A2.5,2.5 0 0 1 133.5,213 L8.5,213 A2.5,2.5 0 0 1 6,210.5 L6,8.5 A2.5,2.5 0 0 1 8.5,6"), ("fill", "none"), ("style", "stroke:#000000;stroke-width:1.5;")]
+    actual:   [("d", "M8.5,6 L49.5,6 A3.75,3.75 0 0 1 52,8.5 L59,27 L109.0303,27 A2.5,2.5 0 0 1 111.5303,29.5 L111.5303,57.9883 A2.5,2.5 0 0 1 109.0303,60.4883 L8.5,60.4883 A2.5,2.5 0 0 1 6,57.9883 L6,8.5 A2.5,2.5 0 0 1 8.5,6"), ("fill", "#F1F1F1"), ("style", "stroke:#181818;stroke-width:0.5;")]
+  [5] <line> attr mismatch:
+    expected: [("style", "stroke:#000000;stroke-width:1.5;"), ("x1", "6"), ("x2", "100.0674"), ("y1", "28.4883"), ("y2", "28.4883")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "6"), ("x2", "59"), ("y1", "27"), ("y2", "27")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "81.0674"), ("x", "10"), ("y", "21.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "75.5303"), ("x", "16"), ("y", "47.5352")]
+  [7] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Data Types.Gauge"), ("data-source-line", "2"), ("id", "ent0003")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Gauge"), ("data-source-line", "4"), ("id", "ent0003")]
+  [8] tag mismatch: expected <rect>, got <polygon>
+  [9] tag mismatch: expected <ellipse>, got <line>
+  [10] tag mismatch: expected <path>, got <line>
+  [11] tag mismatch: expected <text>, got <line>
+  [12] tag mismatch: expected <rect>, got <text>
+  [13] tag mismatch: expected <text>, got <g>
+  [14] tag mismatch: expected <line>, got <polygon>
+  [15] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "28.67"), ("x2", "113.3243"), ("y1", "81"), ("y2", "81")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "218.6407"), ("x2", "228.6407"), ("y1", "130.49"), ("y2", "120.49")]
+  [16] tag mismatch: expected <g>, got <line>
+  [17] tag mismatch: expected <rect>, got <line>
+  [18] tag mismatch: expected <ellipse>, got <text>
+  [19] tag mismatch: expected <path>, got <g>
+  [20] tag mismatch: expected <text>, got <path>
+  [21] tag mismatch: expected <rect>, got <polygon>
+

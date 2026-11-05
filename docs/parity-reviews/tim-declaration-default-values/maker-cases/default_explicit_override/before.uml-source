@@ -1,0 +1,5 @@
+@startuml
+!function $label($prefix = "é,(x)", $suffix = early)
+!endfunction
+class "$label() / $label('other', 'tail')" as Copper
+@enduml

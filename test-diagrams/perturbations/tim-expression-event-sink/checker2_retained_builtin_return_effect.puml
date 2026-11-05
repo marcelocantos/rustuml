@@ -1,0 +1,10 @@
+@startuml
+!$n = 0
+!function $name()
+!$n = $n + 1
+!theme minty
+!return "$n"
+!endfunction
+!$exists = %variable_exists($name())
+class "$exists $n" as Copper
+@enduml

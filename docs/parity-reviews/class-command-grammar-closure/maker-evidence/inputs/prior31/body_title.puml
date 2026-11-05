@@ -1,0 +1,9 @@
+@startuml
+title
+class prose
+[page text]
+end title
+node "Measurement Bay" {
+class Probe
+}
+@enduml

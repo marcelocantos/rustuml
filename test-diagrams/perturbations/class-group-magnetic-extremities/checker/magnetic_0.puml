@@ -1,0 +1,7 @@
+@startuml
+folder "N" as F {
+class Inside
+}
+class Peer
+F )-- Peer
+@enduml

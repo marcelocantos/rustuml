@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+COMPONENT GatewayF3C
+INTERFACE ServicePortF3C
+GatewayF3C ..> ServicePortF3C
+@enduml

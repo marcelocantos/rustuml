@@ -1,0 +1,22 @@
+--- Java UmlSource
++++ before CLI metadata source
+@@ -1,4 +1,6 @@
+ @startuml
++!$enabled = 1
++!if $enabled
+ 
+ 
+ 
+@@ -432,7 +434,12 @@
+ 	BorderColor #78c2ad
+ 	BackgroundColor #86c8b5
+ }
++!endif
++!if $enabled
+ class QuartzArchive {
+   +capacity: int
+ }
++!else
++class UnusedArchive
++!endif
+ @enduml

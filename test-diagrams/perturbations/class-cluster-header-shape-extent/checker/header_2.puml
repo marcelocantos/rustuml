@@ -1,0 +1,5 @@
+@startuml
+node "N" as Host <<one>> <<another long label>> {
+class Leaf
+}
+@enduml

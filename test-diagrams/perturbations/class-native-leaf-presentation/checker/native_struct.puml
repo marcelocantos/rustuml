@@ -1,0 +1,8 @@
+@startuml
+skinparam classAttributeIconSize 14
+node "Native types" as N {
+#struct "Ledger\nEntry" as V {
++id: int
+}
+}
+@enduml

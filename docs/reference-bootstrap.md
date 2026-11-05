@@ -5,6 +5,40 @@ The recovery campaign uses Java PlantUML source revision
 submodule at `9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a`. Preserve existing
 references. Building a new JAR does not authorize regenerating any corpus.
 
+## Owner-selected input contract (3 November 2026)
+
+RustUML parity follows Java's raw CLI/file input behavior. The owner explicitly
+approved this choice after clarification that the observed blank-line differences
+affect internal SVG identifiers and source-line metadata, not diagram appearance.
+Preserve outer and internal body blank lines before preprocessing; do not apply
+picoweb GET's `DiagramSourceCompressor.decompress` normalization to raw input.
+
+The historical golden corpus was generated through picoweb GET. Keep those
+sources and references unchanged, and continue reporting their regression counts
+with that provenance. They are not authoritative raw-reader references where the
+front ends differ. New raw-reader evidence must identify the exact source bytes,
+Java revision/JAR, input front end and environment. Compare source origins and
+SVG identifier/reference consistency against that same raw front end, separately
+from the historical GET result. A visually unchanged diagram does not license
+broken SVG references or arbitrary source-location changes.
+
+The affected parser origin assertion now expects 5/8/9 under the approved raw
+contract, rather than GET's 1/4/5. That assertion update accompanies the TIM
+candidate, which remains subject to independent checking. The three documented
+historical mismatches are `activity/act_skinparam2_shadowing_true`,
+`activity/act_skinparam_shadowing`, and
+`edge-cases/edge_whitespace_multiple_blank_lines`; their raw counterparts must
+be preserved as additional evidence, never replacements for the historical files.
+The exact reader trace and reproduced outputs are in
+`docs/parity-reviews/tim-evaluated-event-stream/checker-support/README.md`.
+
+This decision does not widen SVG comparator tolerances, remove error markers,
+change eligibility, or turn historical mismatches into passes. XML formatting
+whitespace is not a visual parity requirement; meaningful text whitespace,
+geometry, styling and valid identifier references remain required. Until a
+separately reviewed raw-reference tier is established, publish both the unchanged
+historical counts and explicitly scoped raw-reader results without conflating them.
+
 ## Provenance observed on 3 November 2026
 
 - All 12,428 golden SVG files containing a PlantUML processing instruction name
@@ -121,6 +155,63 @@ hash, executable paths, environment, stdlib evidence and smoke result. This is
 machine-local scratch evidence, not a portable checkout or a checker verdict.
 
 ## Standing gates
+
+### Campaign reference execution on Monkey Man
+
+At the owner's request, new campaign Java invocations run on Monkey Man, not
+the origin Mac, where repeated JVM launches interrupted desktop focus. This
+includes source probes and helper programs. Rust builds and comparisons against
+existing references may continue locally.
+
+The operational runner is `/Users/marcelo/rustuml-reference/bin/reference` on
+`marcelo@192.168.1.112`, accessed through existing SSH trust and credentials.
+The exact campaign JAR was transferred and its SHA256 verified. The wrapper
+checks that hash on every launch, forces headless AWT, UTF-8 and `en_AU`, uses
+absolute Java/dot paths, and preserves raw stdin, stdout, stderr and exit status.
+It does not expose an HTTP service or apply GET source normalization.
+
+Allocate an isolated remote directory per worker/job:
+
+```sh
+ssh -T -o BatchMode=yes marcelo@192.168.1.112 \
+  /Users/marcelo/rustuml-reference/bin/new-worker
+```
+
+Use the returned path as `WORKER_PATH` below, replacing the placeholder before
+execution. Stage inputs and includes with SCP/SFTP while preserving their relative
+hierarchy. Never share a mutable directory between concurrent jobs.
+
+```sh
+ssh -T -o BatchMode=yes marcelo@192.168.1.112 \
+  '/Users/marcelo/rustuml-reference/bin/reference --cwd WORKER_PATH --timezone GMT+11:00 -- -pipe -tsvg' \
+  < input.puml > output.svg 2> output.stderr
+```
+
+Timezone is explicit when required by the reference; omit `--timezone` only when
+the declared experiment uses the host default (`Australia/Melbourne`). File mode
+uses `-- -tsvg input.puml` in the staged directory. External stdlib/include files
+must be staged from the pinned source, not silently replaced by another version.
+Collect outputs before deleting a job's directory. SSH failures are distinct
+from PlantUML's status.
+
+Java source probes are staged remotely and use `--probe REMOTE_SOURCE.java`.
+For probes importing PlantUML, add `--classpath REMOTE_HELPER_DIRECTORY`, which
+includes the pinned JAR. Probe arguments follow `--`. No origin-side JVM is
+needed to compile or run the probe. The complete invocation contract and live
+readiness record are in the remote operational directory's `README.md` and
+`readiness.json`.
+
+The existing remote runtime is Homebrew OpenJDK 21.0.5 and Graphviz 12.2.0 on
+macOS arm64, differing from the origin versions above. No installs or global
+changes were needed. Seven supplied source/reference pairs passed strict parsed
+XML equality, including both sequence font controls, a nested sequence group,
+class/container layout and the three raw-reader historical counterparts. This
+calibration retains geometry, metadata and IDs; it ignores only XML declarations,
+comments and processing instructions. It does not establish universal environment
+equivalence. Record these runtime versions with new references and investigate
+any new environment-dependent discrepancy without rewriting preserved evidence.
+
+### Local Rust verification
 
 From the RustUML checkout, after initializing its actual golden submodule:
 

@@ -1,0 +1,51 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nnode \"Observation Zone\" as Site {\nclass \"Air Probe\"\nnote right of \"Air Probe\" : Calibration\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "Site",
+                label: "Observation Zone",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: true,
+                children: [],
+                source_line: 1,
+            },
+        ],
+        connections: [],
+        notes: [
+            DeploymentNote {
+                id: None,
+                target: Some(
+                    "Air_Probe",
+                ),
+                text: "Calibration",
+                position: Right,
+                source_line: 3,
+            },
+        ],
+    },
+)

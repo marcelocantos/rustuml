@@ -1,0 +1,22 @@
+[
+  {
+    "command": [
+      "cargo",
+      "fmt",
+      "--all",
+      "--check"
+    ],
+    "exit": 1
+  },
+  {
+    "command": [
+      "rustfmt",
+      "--edition",
+      "2024",
+      "--check",
+      "crates/rustuml-parser/src/preprocess/mod.rs",
+      "crates/rustuml-parser/src/preprocess/debug.rs"
+    ],
+    "exit": 0
+  }
+]

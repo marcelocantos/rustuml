@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "2000-03-01 11:00:00" as Clockleapexpression
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Clockleapexpression
+  entities:
+  - id: Clockleapexpression
+    label: '2000-03-01 11:00:00'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

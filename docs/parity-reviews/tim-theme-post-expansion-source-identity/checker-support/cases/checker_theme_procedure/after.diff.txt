@@ -1,0 +1,25 @@
+SVG structural differences:
+  element count: expected 16, got 19
+  [2] <linearGradient> attr mismatch:
+    expected: [("id", "guqxaadycvw7b0"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+    actual:   [("id", "g1xslrb9flqoa50"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+  [3] <stop> attr mismatch:
+    expected: [("offset", "0%"), ("stop-color", "#2FA4E7")]
+    actual:   [("offset", "0%"), ("stop-color", "#59B6EC")]
+  [4] <stop> attr mismatch:
+    expected: [("offset", "100%"), ("stop-color", "#2683B9")]
+    actual:   [("offset", "100%"), ("stop-color", "#2FA4E7")]
+  [5] tag mismatch: expected <g>, got <linearGradient>
+  [6] tag mismatch: expected <g>, got <stop>
+  [7] tag mismatch: expected <rect>, got <stop>
+  [8] tag mismatch: expected <rect>, got <g>
+  [9] tag mismatch: expected <rect>, got <g>
+  [10] <rect> attr mismatch:
+    expected: [("fill", "none"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#FFFFFF;stroke-width:1.0417;"), ("width", "112.235"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "url(#g1xslrb9flqoa50)"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#2FA4E7;stroke-width:1.0417;"), ("width", "112.235"), ("x", "17.7083"), ("y", "17.7083")]
+  [11] tag mismatch: expected <ellipse>, got <rect>
+  [12] tag mismatch: expected <path>, got <rect>
+  [13] tag mismatch: expected <text>, got <rect>
+  [14] tag mismatch: expected <line>, got <ellipse>
+  [15] tag mismatch: expected <line>, got <path>
+

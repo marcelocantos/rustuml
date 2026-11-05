@@ -1,0 +1,9 @@
+@startuml
+!theme cerulean
+node Group {
+class Early <<(Z,#123456) marker>>
+!theme minty
+class Later
+Early --> Later
+}
+@enduml

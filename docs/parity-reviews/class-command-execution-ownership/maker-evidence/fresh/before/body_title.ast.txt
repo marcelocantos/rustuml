@@ -1,0 +1,51 @@
+Deployment(
+    DeploymentDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\ntitle\nclass prose\n[page text]\nend title\nnode \"Measurement Bay\" {\nclass Probe\n}\n@enduml\n",
+            ),
+        },
+        direction: TopToBottom,
+        nodes: [
+            DeploymentNode {
+                id: "page_text",
+                label: "page text",
+                kind: Component,
+                stereotype: None,
+                color: None,
+                declared_container: false,
+                children: [],
+                source_line: 3,
+            },
+            DeploymentNode {
+                id: "Measurement_Bay",
+                label: "Measurement Bay",
+                kind: Node,
+                stereotype: None,
+                color: None,
+                declared_container: true,
+                children: [],
+                source_line: 5,
+            },
+        ],
+        connections: [],
+        notes: [],
+    },
+)

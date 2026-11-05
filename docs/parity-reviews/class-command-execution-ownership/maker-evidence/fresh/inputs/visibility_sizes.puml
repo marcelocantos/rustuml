@@ -1,0 +1,8 @@
+@startuml
+skinparam classAttributeIconSize 18
+frame "Access" {
++class Beacon
+-class BeaconLog
+Beacon --> BeaconLog
+}
+@enduml

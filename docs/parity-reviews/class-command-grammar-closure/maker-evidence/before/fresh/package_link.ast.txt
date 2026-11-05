@@ -1,0 +1,1 @@
+parse error: line 1: unrecognized class command: package "Link Yard" as Yard $one <<Public>> $two [[https://example.org/yard{Yard manual}]] {

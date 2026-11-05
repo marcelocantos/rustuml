@@ -1,0 +1,3 @@
+@startuml
+class "2000-01-01 years day" as Clockformatliteral
+@enduml

@@ -1,0 +1,4 @@
+@startuml
+class "argument kept" as Local
+class "published $local" as Global
+@enduml

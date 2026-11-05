@@ -1,0 +1,9 @@
+@startuml
+cloud "Annex as [Input]" as Sector {
++static class "Ledger Unit" as Unit {
++value: int
+}
+record Snapshot
+Unit --> Snapshot
+}
+@enduml

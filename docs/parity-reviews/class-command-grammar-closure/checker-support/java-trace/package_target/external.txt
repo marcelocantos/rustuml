@@ -1,0 +1,64 @@
+digraph unix {
+	graph [bb="0,0,281.01,230",
+		nodesep=0.486111,
+		rankdir=LR,
+		ranksep=0.833333,
+		remincross=true,
+		searchsize=500
+	];
+	node [label="\N"];
+	subgraph cluster6a {
+		graph [bb="37.471,56,273.01,222",
+			label=""
+		];
+		subgraph cluster6p0 {
+			graph [bb="45.471,64,265.01,214",
+				label=""
+			];
+			subgraph cluster6 {
+				graph [bb="53.471,72,257.01,206",
+					color="#000006",
+					label=<<TABLE BGCOLOR="#000007" FIXEDSIZE="TRUE" WIDTH="148" HEIGHT="11"><TR><TD></TD></TR></TABLE>>,
+					labeljust=c,
+					lheight=0.15,
+					lp="155.24,196.5",
+					lwidth=2.06,
+					style=solid
+				];
+				subgraph cluster6i {
+					graph [bb="61.471,80,249.01,160",
+						label=""
+					];
+					subgraph cluster6p1 {
+						graph [bb="69.471,88,241.01,152",
+							label=""
+						];
+						sh0010	[color="#00000A",
+							height=0.66667,
+							label="",
+							pos="155.24,120",
+							shape=rect,
+							width=2.1603];
+					}
+				}
+				zaent0002	[height=0.01,
+					label="",
+					pos="155.24,179",
+					shape=point,
+					width=0.01];
+			}
+		}
+	}
+	sh0011	[color="#00000B",
+		height=0.66667,
+		label="",
+		pos="155.24,24",
+		shape=rect,
+		width=2.1763];
+	sh0011 -> zaent0002	[arrowhead=none,
+		arrowtail=none,
+		color="#00000C",
+		minlen=0,
+		pos="76.516,43.636 49.483,54.685 22.313,71.66 7.4709,97.5 -2.4903,114.84 -2.4903,125.16 7.4709,142.5 39.585,198.41 144.72,180.9 154.51,\
+179.14"];
+}

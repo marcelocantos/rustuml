@@ -1,0 +1,5 @@
+@startuml
+folder Observatory as "Rain [Station]" {
+class Instrument as "Meter as [Reading]"
+}
+@enduml

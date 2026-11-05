@@ -1,0 +1,5 @@
+
+
+
+skinparam __theme $palette()
+class HazelLedger

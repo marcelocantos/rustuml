@@ -1,0 +1,8 @@
+@startuml
+!$seed = "early"
+!function $label($prefix = "é,(x)", $suffix = $seed)
+!return $prefix + $suffix
+!endfunction
+!$seed = "late"
+class "$label() / $label('other', 'tail')" as Copper
+@enduml

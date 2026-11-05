@@ -1,0 +1,12 @@
+@startuml
+package East {
+class Reading
+note "East instructions" as N
+Reading .. N
+}
+package West {
+class Sample
+note "West instructions" as N
+Sample .. N
+}
+@enduml

@@ -1,0 +1,2760 @@
+[
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_assert_true.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_chr.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_darken_hex.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_darken_named.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_date.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_file_exists_exists.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_file_exists_missing.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_filename.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_function_exists_defined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_function_exists_undefined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_get_variable_value_defined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_get_variable_value_undefined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_hsl_color_basic.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_hsl_color_muted.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_intval.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_is_dark_false.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_is_dark_true.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_is_defined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_is_light_false.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_is_light_true.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_lighten_hex.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_lighten_named.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_not_false.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_not_true.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_set_variable_value_basic.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_set_variable_value_overwrite.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_size_array.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_size_string.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_string_funcs.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_strlen.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_substr.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_builtin_true_false.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_complex_conditional_diagram.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_complex_crud_generator.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_complex_loop_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_complex_mixed_defines_functions.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_conditional_skin_dev.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_conditional_skin_prod.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_conditional_skin_staging.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_class_shorthand.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_color.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_mode_compact.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_mode_detailed.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_mode_simple.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_nested_1.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_nested_2.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_nested_3.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_nested_4.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_nested_5.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_numeric.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_palette_blue.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_palette_gray.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_palette_green.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_palette_orange.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_palette_purple.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_palette_red.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_palette_teal.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_01.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_02.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_03.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_04.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_05.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_06.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_07.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_08.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_09.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_10.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_11.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_12.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_13.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_14.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_15.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_16.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_17.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_18.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_19.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_participant_20.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_redefine.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_seq_step_01.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_seq_step_02.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_seq_step_03.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_seq_step_04.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_seq_step_05.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_seq_step_06.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_seq_step_07.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_seq_step_08.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_seq_step_09.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_seq_step_10.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_simple.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_variant_01.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_variant_02.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_variant_03.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_variant_04.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_variant_05.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_variant_06.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_variant_07.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_variant_08.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_variant_09.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_variant_10.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_define_with_args.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_definelong_multiline.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_definelong_simple.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_and_while.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_basic_2items.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_basic_3items.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_basic_5items.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_class_hierarchy.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_classes.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_components.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_func_conditional.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_func_format_label.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_func_generate_note.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_func_msg_builder.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_func_proc_wrapping_foreach.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_label_substitution.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_messages.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_nested.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_nested_group.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_nested_note.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_numeric_strings.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_participants_seq.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_single_item.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_skinparam.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_states.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_with_define.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_foreach_with_if.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_func_accumulate.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_func_class_stub.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_func_conditional_return.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_func_seq_label.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_func_string_utils.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_func_type_check.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_function_default_arg.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_function_local_var.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_function_multiarg.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_function_nested_call.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_function_simple.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_function_with_string.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_if_and_or.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_if_comparison.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_if_elseif.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_if_not.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_if_string_eq.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_basic.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_chained.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_diagram_type.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_flag_debug_defined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_flag_debug_undefined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_flag_development_defined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_flag_development_undefined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_flag_production_defined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_flag_production_undefined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_flag_staging_defined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_flag_staging_undefined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_flag_testing_defined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_flag_testing_undefined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_guard_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_guard_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_guard_component.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_guard_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_guard_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_guard_usecase.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_multi_debug_verbose.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_multi_prod_secure.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_multi_test_mock.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_nested.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifdef_not_defined.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifndef_basic.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_ifndef_with_define.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_include_dark_theme.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_include_light_theme.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_include_main.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_include_startsub.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_local_var_nested.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_log_multiple.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_log_simple.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_pragma_charset.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_pragma_horizontal_line.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_pragma_nopo.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_pragma_revision.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_pragma_svgsize.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_pragma_teoz.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_pragma_useverticalif.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_proc_note_error.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_proc_note_info.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_proc_note_success.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_proc_note_warning.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_procedure_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_procedure_simple.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_procedure_with_relationship.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_aws_orange_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_aws_orange_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_aws_orange_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_aws_orange_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_black_knight_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_black_knight_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_black_knight_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_black_knight_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cerulean-outline_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cerulean-outline_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cerulean-outline_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cerulean_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cerulean_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cerulean_component.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cerulean_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cerulean_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cerulean_usecase.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cloudscape_design_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cloudscape_design_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cloudscape_design_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cloudscape_design_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cyborg_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cyborg_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_cyborg_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_darkly_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_darkly_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_darkly_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_flatly_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_flatly_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_flatly_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_hacker_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_hacker_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_hacker_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_hacker_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_journal_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_journal_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_journal_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_litera_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_litera_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_litera_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_lumen_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_lumen_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_lumen_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_lux_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_lux_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_lux_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_maia_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_maia_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_maia_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_mars_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_mars_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_mars_component.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_mars_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_mars_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_mars_usecase.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_materia_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_materia_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_materia_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_metal_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_metal_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_metal_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_metal_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_minty_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_minty_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_minty_component.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_minty_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_minty_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_minty_usecase.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_morph_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_morph_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_morph_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_pulse_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_pulse_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_pulse_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_quartz_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_quartz_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_quartz_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkblue_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkblue_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkblue_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkblue_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkgreen_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkgreen_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkgreen_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkgreen_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkorange_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkorange_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkorange_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkorange_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkred_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkred_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkred_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_darkred_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightblue_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightblue_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightblue_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightblue_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightgreen_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightgreen_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightgreen_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightgreen_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightorange_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightorange_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightorange_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightorange_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightred_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightred_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightred_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_reddress_lightred_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_sandstone_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_sandstone_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_sandstone_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_silver_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_silver_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_silver_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_silver_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_simplex_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_simplex_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_simplex_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_sketchy-outline_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_sketchy-outline_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_sketchy-outline_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_sketchy_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_sketchy_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_sketchy_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_slate_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_slate_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_slate_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_solar_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_solar_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_solar_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_spacelab_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_spacelab_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_spacelab_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_spacelab_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_superhero_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_superhero_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_superhero_component.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_superhero_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_superhero_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_superhero_usecase.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_toy_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_toy_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_toy_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_toy_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_united_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_united_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_united_component.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_united_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_united_state.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_united_usecase.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_vibrant_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_vibrant_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_vibrant_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_yeti_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_yeti_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_yeti_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_zephyr_activity.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_zephyr_class.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_theme_zephyr_sequence.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_undef.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_fibonacci.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_in_group_label.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_loop_2_entities.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_loop_3_entities.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_loop_5_entities.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_loop_8_entities.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_participants_client_server.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_participants_frontend.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_participants_producer_consumer.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_participants_pub_sub.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_participants_requester_responder.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_participants_sender_receiver.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_participants_source_sink.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_participants_writer_reader.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_reassign_3_times.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_reassign_4_times.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_reassign_5_times.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_reassign_6_times.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_reassign_7_times.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_reassign_8_times.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_skinparam_blue.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_skinparam_cyan.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_skinparam_gray.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_skinparam_green.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_skinparam_pink.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_skinparam_yellow.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_var_string_build.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_variable_arithmetic.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_variable_boolean.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_variable_in_skinparam.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_variable_interpolation_in_label.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_variable_reassign.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_variable_string.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_variable_string_concat.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_vartype_boolean_ops.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_vartype_integer_ops.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_vartype_string_ops.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_while_classes.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_while_counter.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_while_states.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  },
+  {
+    "source": "test-diagrams/golden/preprocessing/preproc_while_tree_build.puml",
+    "phase": "after",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass"
+  }
+]

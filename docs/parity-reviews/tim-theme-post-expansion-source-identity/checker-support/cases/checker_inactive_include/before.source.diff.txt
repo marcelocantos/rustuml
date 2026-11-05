@@ -1,0 +1,11 @@
+--- Java UmlSource
++++ before CLI metadata source
+@@ -436,5 +436,8 @@
+ 	BorderColor #2FA4E7
+ 	BackgroundColor #59B6EC-#2FA4E7
+ }
++!if 0
++!include docs/parity-reviews/tim-theme-post-expansion-source-identity/checker-support/include-theme.iuml
++!endif
+ class OliveLedger
+ @enduml

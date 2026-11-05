@@ -1,0 +1,4 @@
+@startuml
+!$stamp = %date("yyyy-MM-dd HH:mm:ss", 1791043199)
+class "$stamp" as Transition
+@enduml

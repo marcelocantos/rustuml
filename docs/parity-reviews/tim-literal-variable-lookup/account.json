@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "eebd74cebc3a3cf4b1dbc0d8b63bd06d163972cd",
+  "status": "pre-implementation causal account; maker only, independent checker pending",
+  "scope": [
+    "crates/rustuml-parser/src/preprocess/"
+  ],
+  "oracle_plan": {
+    "class": "2, reference-comparable; judgment cost converted to exact stream and strict SVG checks",
+    "checks": [
+      "Java SourceStringReader Diagram.getSource().getPlainString versus shipped CLI --yaml meta.source",
+      "Shipped CLI SVG versus pinned Java using unchanged compare_svg_strict",
+      "Parser units, pipe_mode, golden_no_oracle, golden_pairs, harness_guards, parity_perturbations and all 907 preserved inputs in isolated CLI processes"
+    ],
+    "residue": [
+      "Independent checker heldouts and verdict required",
+      "Historical font/Graphviz equivalence unproven; source-pinned JAR is not byte-identical",
+      "Repeated-theme class spot palette, handwritten shapes and sequence continuation geometry remain outside ownership"
+    ]
+  },
+  "mechanism": "tim-literal-variable-lookup",
+  "java_locations": [
+    "tim/builtin/VariableExists.java:executeReturnFunction",
+    "tim/expression/TokenStack.java",
+    "tim/TMemoryLocal.java:getVariable"
+  ],
+  "rust_locations": [
+    "preprocess/mod.rs:substitute_vars/eval_builtin_with_expr_args/eval_one_builtin_args/eval_bool"
+  ],
+  "claimed_invariant": "Quoted builtin lookup names are string values, not recursively expanded variable contents; dollar-prefixed names address TIM variables in the current Java-equivalent memory.",
+  "causal_divergence": "Rust substitutes $BGCOLOR inside the quoted lookup argument before the builtin sees it, and otherwise checks a dollar-prefixed name against a map of bare names. Guards incorrectly overwrite supplied theme variables.",
+  "planned_model_change": "Evaluate lookup builtin arguments before textual output substitution and preserve quoted names; distinguish dollar TIM names from legacy bare tokens and consult current scope.",
+  "perturbation_axes": [
+    "Present/absent names and bare versus dollar-prefixed strings",
+    "Computed lookup names and local/global shadowing",
+    "Guarded theme defaults with changed colors and theme families"
+  ],
+  "invariant": "Quoted builtin lookup names are string values, not recursively expanded variable contents; dollar-prefixed names address TIM variables in the current Java-equivalent memory.",
+  "planned_change": "Evaluate lookup builtin arguments before textual output substitution and preserve quoted names; distinguish dollar TIM names from legacy bare tokens and consult current scope."
+}

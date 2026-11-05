@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "eebd74cebc3a3cf4b1dbc0d8b63bd06d163972cd",
+  "status": "pre-implementation causal account; maker only, independent checker pending",
+  "scope": [
+    "crates/rustuml-parser/src/preprocess/"
+  ],
+  "oracle_plan": {
+    "class": "2, reference-comparable; judgment cost converted to exact stream and strict SVG checks",
+    "checks": [
+      "Java SourceStringReader Diagram.getSource().getPlainString versus shipped CLI --yaml meta.source",
+      "Shipped CLI SVG versus pinned Java using unchanged compare_svg_strict",
+      "Parser units, pipe_mode, golden_no_oracle, golden_pairs, harness_guards, parity_perturbations and all 907 preserved inputs in isolated CLI processes"
+    ],
+    "residue": [
+      "Independent checker heldouts and verdict required",
+      "Historical font/Graphviz equivalence unproven; source-pinned JAR is not byte-identical",
+      "Repeated-theme class spot palette, handwritten shapes and sequence continuation geometry remain outside ownership"
+    ]
+  },
+  "mechanism": "tim-procedure-global-fork-memory",
+  "java_locations": [
+    "tim/TFunctionImpl.java:getNewMemory/executeProcedureInternal",
+    "tim/TMemoryLocal.java:putVariable/getVariable/removeVariable/forkFromGlobal",
+    "tim/EaterAffectation.java:analyze"
+  ],
+  "rust_locations": [
+    "preprocess/mod.rs:get_var/set_var/set_local_var/call_function/try_local_var/try_undefine"
+  ],
+  "claimed_invariant": "Each function/procedure receives a sibling local frame rooted in global memory; parameters and explicit locals shadow globals, ordinary new names stay local, existing global names update globally, and a nested call cannot see caller locals.",
+  "causal_divergence": "Rust sets parameters in global memory before pushing an empty frame, searches all parent frames, and inserts fresh ordinary names globally. A procedure-loaded theme therefore leaks helper variables into nested helper calls where Java retains unresolved variables.",
+  "planned_model_change": "Represent parameter/explicit overrides separately from ordinary local names, read only the current frame plus globals with Java precedence, bind evaluated parameters without mutating globals, and implement scoped assignment/removal.",
+  "perturbation_axes": [
+    "Nested sibling calls with shadowed parameter/local names",
+    "Existing global mutations versus fresh locals and explicit global declarations",
+    "Theme loaded within a procedure versus theme in global scope"
+  ],
+  "invariant": "Each function/procedure receives a sibling local frame rooted in global memory; parameters and explicit locals shadow globals, ordinary new names stay local, existing global names update globally, and a nested call cannot see caller locals.",
+  "planned_change": "Represent parameter/explicit overrides separately from ordinary local names, read only the current frame plus globals with Java precedence, bind evaluated parameters without mutating globals, and implement scoped assignment/removal."
+}

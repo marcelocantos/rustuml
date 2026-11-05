@@ -1,0 +1,4 @@
+@startuml
+class "1 / bud" as Local
+class "0 / 0" as After
+@enduml

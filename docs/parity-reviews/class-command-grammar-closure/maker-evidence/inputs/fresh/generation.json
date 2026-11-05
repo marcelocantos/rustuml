@@ -1,0 +1,34 @@
+{
+  "argv": [
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+    "-jar",
+    "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "-tsvg",
+    "/tmp/rustuml-cff2/fresh"
+  ],
+  "exit": 0,
+  "sources": [
+    "action_process",
+    "boundary_renamed",
+    "chrome_center",
+    "chrome_left",
+    "chrome_right",
+    "cloud_long",
+    "cloud_nested",
+    "component_reverse",
+    "component_stereo",
+    "description_route",
+    "empty_link",
+    "endpoint_19",
+    "endpoint_20",
+    "endpoint_21",
+    "floating_note",
+    "group_link",
+    "notes_cross_scope",
+    "notes_nested",
+    "package_link",
+    "package_slots",
+    "queue_alias",
+    "quote_modifiers"
+  ]
+}

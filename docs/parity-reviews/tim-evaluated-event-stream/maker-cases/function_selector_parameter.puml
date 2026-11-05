@@ -1,0 +1,12 @@
+@startuml
+!function $palette($choice)
+!return $choice
+!endfunction
+!theme $palette("minty")
+sprite $rune [1x3/16] {
+A
+B
+C
+}
+class JasperIndex
+@enduml

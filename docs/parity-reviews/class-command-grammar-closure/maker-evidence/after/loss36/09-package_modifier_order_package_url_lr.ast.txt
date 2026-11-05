@@ -1,0 +1,98 @@
+Class(
+    ClassDiagram {
+        meta: DiagramMeta {
+            title: None,
+            title_line: None,
+            header: None,
+            header_line: None,
+            footer: None,
+            footer_line: None,
+            caption: None,
+            caption_line: None,
+            legend: None,
+            legend_line: None,
+            legend_horizontal_alignment: Center,
+            legend_vertical_alignment: Bottom,
+            skinparams: [],
+            style_program: StyleProgram {
+                declarations: [],
+            },
+            sprites: {},
+            source: Some(
+                "@startuml\nleft to right direction\npackage \"Operations\" as Ops $core <<Domain>> $v1 [[https://example.com/ops]] #Wheat {\n  class Service\n}\n@enduml\n",
+            ),
+        },
+        direction: LeftToRight,
+        uid_events: [
+            Package(
+                "Ops",
+            ),
+            Entity(
+                "Ops.Service",
+            ),
+        ],
+        entities: [
+            ClassEntity {
+                id: "Ops.Service",
+                label: "Service",
+                explicit_alias: false,
+                kind: Class,
+                is_static: false,
+                visibility: Default,
+                members: [],
+                stereotypes: [],
+                generic: None,
+                url: None,
+                url_tooltip: None,
+                spot_color: None,
+                spot_character: None,
+                color: None,
+                text_color: None,
+                line_color: None,
+                line_style: None,
+                source_line: 3,
+            },
+        ],
+        relationships: [],
+        association_classes: [],
+        together: [],
+        packages: [
+            Package {
+                tags: [
+                    "core",
+                    "v1",
+                ],
+                url: Some(
+                    "https://example.com/ops",
+                ),
+                url_tooltip: None,
+                name: "Ops",
+                kind: Package,
+                color: Some(
+                    "Wheat",
+                ),
+                entities: [
+                    "Ops.Service",
+                ],
+                parent: None,
+                source_line: 2,
+                stereotypes: [
+                    "Domain",
+                ],
+                display_name: Some(
+                    "Operations",
+                ),
+                phantom: false,
+            },
+        ],
+        notes: [],
+        hide_show: [],
+        header_line: None,
+        header_alignment: None,
+        footer_alignment: None,
+        footer_line: None,
+        title_line: None,
+        caption_line: None,
+        legend_line: None,
+    },
+)

@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "70-01-01 11:00:00" as Clockformatwidth
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Clockformatwidth
+  entities:
+  - id: Clockformatwidth
+    label: '70-01-01 11:00:00'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

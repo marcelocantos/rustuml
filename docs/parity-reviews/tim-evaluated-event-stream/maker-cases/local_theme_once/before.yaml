@@ -1,0 +1,26 @@
+type: Class
+diagram:
+  meta:
+    skinparams:
+    - key: __theme
+      value: $palette()
+    source: |
+      @startuml
+      skinparam __theme $palette()
+      class "Count 0" as SpinelRecord
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity SpinelRecord
+  entities:
+  - id: SpinelRecord
+    label: Count 0
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 7
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

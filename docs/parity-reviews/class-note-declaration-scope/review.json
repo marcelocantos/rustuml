@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-declaration-scope",
+  "reviewer": {
+    "task_id": "t3-2740aefa-independent-class-container-checker",
+    "model": "gpt-6-astra (high), Codex harness; user explicitly selected inherited Codex; no children"
+  },
+  "account_commit": "8402dc013e4116f661ccb1c253a40754ae615b9e",
+  "implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 18916d312c32340b0a674e15259dc3031ea57acf -- crates/rustuml-parser crates/rustuml-render",
+    "git show bed3b50ca08e12d8ada612791cf07393617b2041 -- crates/rustuml-parser crates/rustuml-render",
+    "CARGO_TARGET_DIR=/tmp/rustuml-checker2740-target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "python3 /tmp/checker2740_generate.py",
+    "python3 /tmp/checker2740_followup.py",
+    "python3 /tmp/checker2740_run.py fresh",
+    "python3 /tmp/checker2740_run.py current",
+    "python3 /tmp/checker2740_run.py maker"
+  ],
+  "findings": [
+    "owner_package now represents declaration context independently of target, matching GraphvizImageBuilder.printGroup. Three of four fresh side/scope cases pass.",
+    "External left notes fail; simple external top/left notes and nested cloud/root-note combinations also expose envelope/shape discrepancies. The later note_dx/note_dy branch compares raw node/cluster minima and applies -1 rather than measuring the full LimitFinder frontier. The existing constant is not new, but its changed branch is not a derivation of the claimed model."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_bottom.puml",
+      "golden": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_bottom.svg",
+      "axes": [
+        "root versus target declaration scope",
+        "attachment side and frame frontier"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-note-declaration-scope/scope_bottom.puml",
+      "source_sha256": "18eb890c42df8bd216c34eaeaa04d07ecfb4b0077cc0945c5962ee64429cf6c5",
+      "java_sha256": "fd3acfe0ad34041e46d952f4050edfb638060aaa11a3bbf301c4276ee7d52006",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-note-declaration-scope/scope_bottom"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_left.puml",
+      "golden": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_left.svg",
+      "axes": [
+        "root versus target declaration scope",
+        "attachment side and frame frontier"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-note-declaration-scope/scope_left.puml",
+      "source_sha256": "4e752ea7c755ca4e1b6f85ab500bc962f348717ad41ef599db6fd2f598236e66",
+      "java_sha256": "2496cf33ef2c309e7add1a65e4061cd9470423badccb7f190d9a9337e1ce0a5e",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-note-declaration-scope/scope_left"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_right.puml",
+      "golden": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_right.svg",
+      "axes": [
+        "root versus target declaration scope",
+        "attachment side and frame frontier"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-note-declaration-scope/scope_right.puml",
+      "source_sha256": "6e8d9111212b203bd3869d46ee8b8e85218067009407ec8948f9fb586e0979a6",
+      "java_sha256": "7e64fa7f3adf242ced4574fc706b4f558eeeb1920610fa14406a5fbfd8800197",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-note-declaration-scope/scope_right"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_top.puml",
+      "golden": "test-diagrams/perturbations/class-note-declaration-scope/checker/scope_top.svg",
+      "axes": [
+        "root versus target declaration scope",
+        "attachment side and frame frontier"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-note-declaration-scope/scope_top.puml",
+      "source_sha256": "715dffbcc96866723264cb693ae2585d92b630c3bf24ea58ff113e55f52e6aa0",
+      "java_sha256": "08537893552ce86ef7a7ca7b60e61cbb96cddb7163b33aa4c8800bbe800fe4bb",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-note-declaration-scope/scope_top"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-note-declaration-scope/dependencies/single-svek-envelope-origin__single_root_note_top.puml",
+      "golden": "test-diagrams/perturbations/class-note-declaration-scope/dependencies/single-svek-envelope-origin__single_root_note_top.svg",
+      "axes": [
+        "external note versus group frontier",
+        "horizontal/vertical image minimum"
+      ],
+      "result": "fail",
+      "observed_status": "mismatch",
+      "java_valid": true,
+      "origin": "independent cross-mechanism dependency counterexample; counted once in fresh135",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-single-svek-envelope-origin/single_root_note_top.puml",
+      "source_sha256": "0ceec73d1af41d25090cc7f683488bfc0dc1f8243643ad3acbdf42318ebb4978",
+      "java_sha256": "e741818b0f0319043784669bac887a654f3ba4d3b574768d4a0b4f0bc30fa027",
+      "cli_exit": 0,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-single-svek-envelope-origin/single_root_note_top"
+    }
+  ],
+  "verdict": "rejected",
+  "tested_combined_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "parent_base": "ea136c78ff71d2be074b39d2ffe0484decba0aec",
+  "original_account_commit": "4d13ee7b8b49fe28ff76178fc3780bc47b300632",
+  "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+  "phase_mapping": {
+    "mechanism": "class-note-declaration-scope",
+    "account_path": "docs/parity-reviews/class-note-declaration-scope/account.json",
+    "original_account_commit": "4d13ee7b8b49fe28ff76178fc3780bc47b300632",
+    "picked_account_commit": "8402dc013e4116f661ccb1c253a40754ae615b9e",
+    "account_history_original": [
+      "4d13ee7b8b49fe28ff76178fc3780bc47b300632",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "8402dc013e4116f661ccb1c253a40754ae615b9e",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "d576b58cefb6afdaa0ebb3ad243584c67feae94b22f866e8443534f83fe51b0b",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  "dependencies": [
+    "class-note-target-quark",
+    "class-single-svek-envelope-origin"
+  ],
+  "scope": "Only the stated mechanism at the full combined tested revision; not packet acceptance and not certification of an extracted subset. Failed applicable held-outs are blocking. Invalid grammar references are negatives, never positive comparisons.",
+  "reference_profile": "Source-pinned Java 71806a2, raw CLI -tsvg -pipe for new inputs, consistent with owner-approved raw CLI/file policy b62d8ce967b6dda7d85bb6dc28ff92509f6066f9. All preexisting/maker reference bytes unchanged; historical GET corpus/counts reported separately. Historical binary/font/Graphviz equivalence unproven. TIM checker owns independent reader verification; no TIM production/assertion imported.",
+  "support": "docs/parity-reviews/class-command-grammar-closure/checker-support/REPORT.md",
+  "observed_counts": {
+    "pass": 3,
+    "mismatch": 2
+  },
+  "reference_policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9"
+}

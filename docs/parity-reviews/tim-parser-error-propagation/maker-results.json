@@ -1,0 +1,87 @@
+{
+  "status": "maker evidence only; independent checking required",
+  "account_commit": "0530072a62919c4008278e84e5def3fbd11ec098",
+  "candidate_parent": "0fcc3cd9cc3920b5e9663d6465cfc99e4e3c355b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_frontend": "raw pipe; invalid controls are negative evidence, not valid SVG parity pairs",
+  "controls": [
+    {
+      "source": "@startuml\nclass Before\n!$bad = %date(\"QQ\",0)\n@enduml\n",
+      "exit": 0,
+      "svg": true,
+      "stderr": "",
+      "java_exit": 200,
+      "java_stderr": "ERROR\n2\nBad date pattern\n",
+      "java_output_bytes": 24413,
+      "after": {
+        "exit": 1,
+        "stdout_bytes": 0,
+        "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+      }
+    },
+    {
+      "source": "@startuml\nclass Before\n!$bad = %date(\"yyyy\",2147483648)\n@enduml\n",
+      "exit": 0,
+      "svg": true,
+      "stderr": "",
+      "java_exit": 1,
+      "java_stderr": "Exception in thread \"main\" java.lang.NumberFormatException: For input string: \"2147483648\"\n\tat java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)\n\tat java.base/java.lang.Integer.parseInt(Integer.java:666)\n\tat java.base/java.lang.Integer.parseInt(Integer.java:778)\n\tat net.sourceforge.plantuml.tim.expression.TValue.fromNumber(TValue.java:107)\n\tat net.sourceforge.plantuml.tim.expression.ReversePolishInterpretor.<init>(ReversePolishInterpretor.java:69)\n\tat net.sourceforge.plantuml.tim.expression.TokenStack.getResult(TokenStack.java:220)\n\tat net.sourceforge.plantuml.tim.Eater.eatExpression(Eater.java:91)\n\tat net.sourceforge.plantuml.tim.EaterAffectation.analyze(EaterAffectation.java:74)\n\tat net.sourceforge.plantuml.tim.iterator.CodeIteratorAffectation.executeAffectation(CodeIteratorAffectation.java:96)\n\tat net.sourceforge.plantuml.tim.iterator.CodeIteratorAffectation.doAffectation(CodeIteratorAffectation.java:81)\n\tat net.sourceforge.plantuml.tim.iterator.CodeIteratorAffectation.peek(CodeIteratorAffectation.java:69)\n\tat net.sourceforge.plantuml.tim.TContext.executeLines(TContext.java:350)\n\tat net.sourceforge.plantuml.tim.TimLoader.load(TimLoader.java:74)\n\tat net.sourceforge.plantuml.BlockUml.<init>(BlockUml.java:150)\n\tat net.sourceforge.plantuml.BlockUmlBuilder.<init>(BlockUmlBuilder.java:130)\n\tat net.sourceforge.plantuml.SourceStringReader.<init>(SourceStringReader.java:103)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:91)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n",
+      "java_output_bytes": 0,
+      "after": {
+        "exit": 1,
+        "stdout_bytes": 0,
+        "stderr": "parse error: line 2: Date seconds outside signed 32-bit range\n"
+      }
+    },
+    {
+      "source": "@startuml\nAlice -> Bob: before\n!$bad = %date(\"QQ\",0)\n@enduml\n",
+      "exit": 0,
+      "svg": true,
+      "stderr": "",
+      "java_exit": 200,
+      "java_stderr": "ERROR\n2\nBad date pattern\n",
+      "java_output_bytes": 24437,
+      "after": {
+        "exit": 1,
+        "stdout_bytes": 0,
+        "stderr": "parse error: line 2: Bad date pattern: unsupported letter Q\n"
+      }
+    },
+    {
+      "source": "@startuml\nAlice -> Bob: before\n!$bad = %date(\"yyyy\",2147483648)\n@enduml\n",
+      "exit": 0,
+      "svg": true,
+      "stderr": "",
+      "java_exit": 1,
+      "java_stderr": "Exception in thread \"main\" java.lang.NumberFormatException: For input string: \"2147483648\"\n\tat java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:67)\n\tat java.base/java.lang.Integer.parseInt(Integer.java:666)\n\tat java.base/java.lang.Integer.parseInt(Integer.java:778)\n\tat net.sourceforge.plantuml.tim.expression.TValue.fromNumber(TValue.java:107)\n\tat net.sourceforge.plantuml.tim.expression.ReversePolishInterpretor.<init>(ReversePolishInterpretor.java:69)\n\tat net.sourceforge.plantuml.tim.expression.TokenStack.getResult(TokenStack.java:220)\n\tat net.sourceforge.plantuml.tim.Eater.eatExpression(Eater.java:91)\n\tat net.sourceforge.plantuml.tim.EaterAffectation.analyze(EaterAffectation.java:74)\n\tat net.sourceforge.plantuml.tim.iterator.CodeIteratorAffectation.executeAffectation(CodeIteratorAffectation.java:96)\n\tat net.sourceforge.plantuml.tim.iterator.CodeIteratorAffectation.doAffectation(CodeIteratorAffectation.java:81)\n\tat net.sourceforge.plantuml.tim.iterator.CodeIteratorAffectation.peek(CodeIteratorAffectation.java:69)\n\tat net.sourceforge.plantuml.tim.TContext.executeLines(TContext.java:350)\n\tat net.sourceforge.plantuml.tim.TimLoader.load(TimLoader.java:74)\n\tat net.sourceforge.plantuml.BlockUml.<init>(BlockUml.java:150)\n\tat net.sourceforge.plantuml.BlockUmlBuilder.<init>(BlockUmlBuilder.java:130)\n\tat net.sourceforge.plantuml.SourceStringReader.<init>(SourceStringReader.java:103)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:91)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n",
+      "java_output_bytes": 0,
+      "after": {
+        "exit": 1,
+        "stdout_bytes": 0,
+        "stderr": "parse error: line 2: Date seconds outside signed 32-bit range\n"
+      }
+    }
+  ],
+  "tests": {
+    "parser_focused": "1 passed",
+    "parser_full": "576 passed; unchanged leading_blank_lines_do_not_shift_locations_but_internal_blanks_do failed",
+    "cli": "15 passed"
+  },
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-repair-target CARGO_BUILD_JOBS=4 cargo test -p rustuml-parser --lib --release fatal_preprocessing_errors_preserve_origin",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-repair-target CARGO_BUILD_JOBS=4 cargo test -p rustuml-parser --lib --release",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-repair-target CARGO_BUILD_JOBS=4 cargo test -p rustuml --test pipe_mode --release",
+    "rustfmt --edition 2024 --config skip_children=true --check crates/rustuml-parser/src/parse/mod.rs crates/rustuml/tests/pipe_mode.rs",
+    "git diff --check"
+  ],
+  "logs_sha256": {
+    "/tmp/rustuml-tim-error-parser.log": "e0cb1300ae4e3c6d3a29d3714138f82ff32cab7894a59e81eafd16e89f38b8be",
+    "/tmp/rustuml-tim-error-parser-full.log": "406b41c442307854bad8226fb8f0c79d85dc688b76d86cf61a22cb1ca2d5975e",
+    "/tmp/rustuml-tim-error-cli.log": "8eb6089a8617ec6d3f81f7cd9b5bcacb5959fe0213e75195498362a7147a2403"
+  },
+  "limits": [
+    "Both branches check errors; current deterministic invalid controls fail on the first pass, not exclusively the sequence retry.",
+    "Full corpus tiers were not rerun for this narrow follow-up; independent checker must measure exact combined tree.",
+    "No normalization, acceptance contract, baseline or review record changed."
+  ]
+}

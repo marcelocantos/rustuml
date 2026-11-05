@@ -1,0 +1,7 @@
+@startuml
+!procedure $emit($a = "007")
+!$sum = $a + 2
+class "$sum" as Typed
+!endprocedure
+$emit()
+@enduml

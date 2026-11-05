@@ -1,0 +1,4 @@
+@startuml
+skinparam classBorderColor #531247
+class "Count 2" as SpinelRecord
+@enduml

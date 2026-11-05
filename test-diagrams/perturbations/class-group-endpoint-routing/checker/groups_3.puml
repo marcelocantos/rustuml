@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+package "First shipping group" as G {
+class Item
+}
+package "Destination" as H {
+class Receiver
+}
+G )-( H
+@enduml

@@ -1,0 +1,3 @@
+@startuml
+Alice -> Bob : 'c:\temp / apostrophe's
+@enduml

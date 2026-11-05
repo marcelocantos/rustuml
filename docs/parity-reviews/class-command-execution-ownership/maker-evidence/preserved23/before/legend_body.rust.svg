@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="89px" preserveAspectRatio="none" style="width:171px;height:89px;background:#FFFFFF;" version="1.1" viewBox="0 0 171 89" width="171px" zoomAndPan="magnify"><?plantuml ?><defs/><g><rect fill="none" height="100.4883" style="stroke:#181818;stroke-width:1.5;" width="143.3896484375" x="7" y="7"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="91.3896" x="23" y="25">Polar Harbor</text>
+<rect x="7" y="44.5" width="119.1031494140625" height="56" fill="#FEFECE" stroke="#AAAAAA" stroke-width="1"/>
+<text x="15" y="68.5" text-anchor="start" font-family="sans-serif" font-size="14">[Harbor display]</text>
+<text x="15" y="92.5" text-anchor="start" font-family="sans-serif" font-size="14">component journal</text>
+</g></svg>

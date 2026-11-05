@@ -1,0 +1,384 @@
+--- Java UmlSource
++++ after CLI metadata source
+@@ -2,7 +2,7 @@
+ 
+ 
+ 
+-skinparam backgroundColor #123456
++skinparam backgroundColor transparent
+ skinparam useBetaStyle false
+ 
+ 
+@@ -12,7 +12,7 @@
+ 
+ <style>
+   root {
+-    BackgroundColor #123456
++    BackgroundColor transparent
+     FontColor #2FA4E7
+     HyperLinkColor #FD7E14
+     LineColor #2683B9
+@@ -24,7 +24,7 @@
+   node {
+    Padding 15
+    roundcorner 20
+-   BackgroundColor #123456
++   BackgroundColor transparent
+   }
+   caption {
+     LineThickness 0
+@@ -41,20 +41,20 @@
+     LineThickness 0
+   }
+   referenceHeader {
+-    BackgroundColor #123456
++    BackgroundColor transparent
+     FontColor #343A40
+     FontStyle bold
+   }
+   separator {
+     BackgroundColor #343A40
+-    FontColor #123456
++    FontColor transparent
+     FontStyle bold
+   }
+   title {
+ 	FontSize 20
+ 	BorderRoundCorner            8
+ 	BorderThickness 	         1
+-	BackgroundColor  #123456
++	BackgroundColor  transparent
+ 	FontColor #2FA4E7
+ 	BorderColor #E9ECEF
+   }
+@@ -62,7 +62,7 @@
+ 	network {
+ 			FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456    
++	BackgroundColor transparent    
+ 		LineColor #2FA4E7
+ 		LineThickness 1.0
+ 		FontColor #2683B9
+@@ -70,7 +70,7 @@
+ 	server {
+ 			FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	}
+ 	arrow {
+ 		FontColor #2683B9
+@@ -88,7 +88,7 @@
+ 	task {
+ 			FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 		LineColor #2FA4E7
+ 		Margin 10 2 2 2
+ 		Padding 6
+@@ -96,11 +96,11 @@
+ 	note {
+ 		FontColor #033C73
+ 		LineColor $INFO_DARK
+-		BackGroundColor #123456
++		BackGroundColor transparent
+ 	}
+ 	separator {
+ 		LineColor #BABDBF
+-		BackGroundColor #123456
++		BackGroundColor transparent
+ 		FontColor #BABDBF
+ 	}
+ 	milestone {
+@@ -147,11 +147,11 @@
+ 	FontSize	    	         20
+ 	BorderRoundCorner            8
+ 	BorderThickness 	         1
+-	BackgroundColor              #123456
++	BackgroundColor              transparent
+ }
+ 
+ skinparam legend {
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	BorderColor #BABDBF
+ 	FontColor #343A40
+ }
+@@ -167,11 +167,11 @@
+ skinparam activity {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	BarColor #73A839
+ 	StartColor #033C73
+ 	EndColor #033C73
+-	DiamondBackgroundColor #123456
++	DiamondBackgroundColor transparent
+   	DiamondBorderColor #BABDBF
+ 	DiamondFontColor #BABDBF
+ }
+@@ -180,7 +180,7 @@
+ skinparam participant {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	ParticipantBorderThickness 2
+ }
+ 
+@@ -188,7 +188,7 @@
+ skinparam actor {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ }
+ 
+ 
+@@ -202,16 +202,16 @@
+ skinparam sequence {
+ 	BorderColor #2FA4E7
+ 	TitleFontColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	StartColor #2FA4E7
+ 	EndColor #2FA4E7
+-	BoxBackgroundColor #123456
++	BoxBackgroundColor transparent
+ 	BoxBorderColor #868E96
+ 	BoxFontColor #343A40
+ 	DelayFontColor #343A40
+ 	LifeLineBorderColor #BABDBF
+ 	LifeLineBorderThickness 2
+-	LifeLineBackgroundColor #123456
++	LifeLineBackgroundColor transparent
+ 	GroupBorderColor #868E96
+ 	GroupFontColor #343A40
+ 	GroupHeaderFontColor #033C73
+@@ -219,7 +219,7 @@
+     DividerBorderColor #868E96
+     DividerBorderThickness 2
+     DividerFontColor #343A40
+-	ReferenceBackgroundColor #123456
++	ReferenceBackgroundColor transparent
+ 	ReferenceBorderColor #868E96
+ 	ReferenceFontColor #343A40
+ 	ReferenceHeaderFontColor #033C73
+@@ -230,40 +230,40 @@
+ skinparam partition {
+ 	BorderColor #2FA4E7
+ 	FontColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ }
+ 
+ 
+ skinparam collections {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ }
+ 
+ 
+ skinparam control {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ }
+ 
+ 
+ skinparam entity {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ }
+ 
+ 
+ skinparam boundary {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ }
+ 
+ 
+ skinparam agent {
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	BorderColor #999999
+ 	FontColor #333333
+ }
+@@ -271,14 +271,14 @@
+ 
+ skinparam note {
+ 	BorderThickness 1
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	BorderColor #033C73
+ 	FontColor #033C73
+ }
+ 
+ 
+ skinparam artifact {
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	BorderColor #868E96
+ 	FontColor #868E96
+ }
+@@ -287,26 +287,26 @@
+ skinparam component {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ }
+ 
+ 
+ skinparam interface {
+-	BackgroundColor  #123456
++	BackgroundColor  transparent
+ 	BorderColor  #C71C22
+ 	FontColor #343A40
+ }
+ 
+ 
+ skinparam storage {
+-	BackgroundColor #123456
++	BackgroundColor transparent
+   	BorderColor #DD5600
+ 	FontColor #DD5600
+ }
+ 
+ 
+ skinparam node {
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	BorderColor #343A40
+ 	FontColor #343A40
+ }
+@@ -322,14 +322,14 @@
+ skinparam database {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ }
+ 
+ 
+ skinparam class {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	FontColor #F8F9FA
+ 	HeaderBackgroundColor #2FA4E7-#2683B9
+ 	StereotypeFontColor #343A40
+@@ -342,7 +342,7 @@
+ skinparam object {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	StereotypeFontColor #343A40
+ 	BorderThickness 1
+ 	AttributeFontColor #BABDBF
+@@ -353,7 +353,7 @@
+ skinparam usecase {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	BorderThickness 2
+ 	StereotypeFontColor #2FA4E7
+ }
+@@ -362,14 +362,14 @@
+ skinparam rectangle {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	BorderThickness 2
+ 	StereotypeFontColor #2FA4E7
+ }
+ 
+ 
+ skinparam package {
+-	BackgroundColor #123456
++	BackgroundColor transparent
+   	BorderColor #2FA4E7
+ 	FontColor #2FA4E7
+ 	BorderThickness 2
+@@ -377,7 +377,7 @@
+ 
+ 
+ skinparam folder {
+-	BackgroundColor #123456
++	BackgroundColor transparent
+   	BorderColor #DD5600
+ 	FontColor #DD5600
+ 	BorderThickness 2
+@@ -385,7 +385,7 @@
+ 
+ 
+ skinparam frame {
+-	BackgroundColor #123456
++	BackgroundColor transparent
+   	BorderColor #033C73
+ 	FontColor #033C73
+ 	BorderThickness 2
+@@ -395,7 +395,7 @@
+ skinparam state {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	StartColor #033C73
+ 	EndColor #033C73
+ 	AttributeFontColor #BABDBF
+@@ -406,19 +406,19 @@
+ skinparam queue {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ }
+ 
+ 
+ skinparam card {
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	BorderColor #033C73
+ 	FontColor #033C73
+ }
+ 
+ 
+ skinparam file {
+-	BackgroundColor #123456
++	BackgroundColor transparent
+ 	BorderColor #868E96
+ 	FontColor #868E96
+ }
+@@ -427,11 +427,11 @@
+ skinparam stack {
+ 		FontColor #2FA4E7
+ 	BorderColor #2FA4E7
+-	BackgroundColor #123456
+-}
+-
+-
+-
+-skinparam classBackgroundColor #123456
++	BackgroundColor transparent
++}
++
++
++
++skinparam classBackgroundColor transparent
+ class AlderLedger
+ @enduml

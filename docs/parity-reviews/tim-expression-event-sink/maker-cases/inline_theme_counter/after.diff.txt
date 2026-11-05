@@ -1,0 +1,5 @@
+SVG structural differences:
+  [6] <g> attr mismatch:
+    expected: [("class", "entity"), ("data-qualified-name", "Copper"), ("data-source-line", "7"), ("id", "ent0002")]
+    actual:   [("class", "entity"), ("data-qualified-name", "Copper"), ("data-source-line", "8"), ("id", "ent0002")]
+

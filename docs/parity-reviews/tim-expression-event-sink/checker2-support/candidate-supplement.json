@@ -1,0 +1,272 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "leading/internal/trailing whitespace",
+      "CRLF or delimiter name"
+    ],
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "stdout_bytes": 3244,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "java_valid": true,
+    "negative_rejection": false,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "leading/internal/trailing whitespace",
+      "CRLF or delimiter name"
+    ],
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "stdout_bytes": 3244,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "java_valid": true,
+    "negative_rejection": false,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "leading/internal/trailing whitespace",
+      "CRLF or delimiter name"
+    ],
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "stdout_bytes": 3244,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "java_valid": true,
+    "negative_rejection": false,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "frozen historical GET input",
+      "additional raw-pipe reference"
+    ],
+    "original_source": "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "reference_contract": "additional raw-pipe counterpart; frozen GET pair unchanged",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "stdout_bytes": 6911,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "java_valid": true,
+    "negative_rejection": false,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "frozen historical GET input",
+      "additional raw-pipe reference"
+    ],
+    "original_source": "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "reference_contract": "additional raw-pipe counterpart; frozen GET pair unchanged",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "stdout_bytes": 5431,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "java_valid": true,
+    "negative_rejection": false,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+    "mechanism": "tim-evaluated-event-stream",
+    "kind": "fresh supplemental",
+    "axes": [
+      "frozen historical GET input",
+      "additional raw-pipe reference"
+    ],
+    "original_source": "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml",
+    "reference_contract": "additional raw-pipe counterpart; frozen GET pair unchanged",
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "stdout_bytes": 3244,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "java_valid": true,
+    "negative_rejection": false,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-declaration-default-values/checker2_literal_default_type.puml",
+    "mechanism": "tim-declaration-default-values",
+    "kind": "fresh supplemental",
+    "axes": [
+      "quoted literal default",
+      "numeric-looking string type"
+    ],
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "stdout_bytes": 1543,
+    "comparison_exit": 1,
+    "svg_match": false,
+    "reference_invalid": false,
+    "java_valid": true,
+    "negative_rejection": false,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "external subblock extraction",
+      "fatal unselected prelude"
+    ],
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "stdout_bytes": 1552,
+    "comparison_exit": 1,
+    "svg_match": false,
+    "reference_invalid": false,
+    "java_valid": true,
+    "negative_rejection": false,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "external selected subblock",
+      "fatal pattern"
+    ],
+    "negative": true,
+    "java_exit": 200,
+    "java_source_exit": 0,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 2,
+    "svg_match": false,
+    "reference_invalid": true,
+    "java_valid": false,
+    "negative_rejection": true,
+    "metadata_exit": 1,
+    "source_equal": false,
+    "metadata_error": "'NoneType' object has no attribute 'value'"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_plain_error.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "inactive branch",
+      "invalid assignment"
+    ],
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "stdout_bytes": 1545,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "java_valid": true,
+    "negative_rejection": false,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.puml",
+    "mechanism": "tim-parser-error-propagation",
+    "kind": "fresh supplemental",
+    "axes": [
+      "signed lower overflow",
+      "partial class output"
+    ],
+    "negative": true,
+    "java_exit": 1,
+    "java_source_exit": 1,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": true,
+    "java_valid": false,
+    "negative_rejection": true,
+    "metadata_exit": 1,
+    "source_equal": false,
+    "metadata_error": "'NoneType' object has no attribute 'value'"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "fresh supplemental",
+    "axes": [
+      "theme selector versus from evaluation",
+      "side effect ordering"
+    ],
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 0,
+    "stdout_bytes": 1637,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "java_valid": true,
+    "negative_rejection": false,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2-themes/puml-theme-custom.puml",
+    "mechanism": "tim-expression-event-sink",
+    "kind": "helper source",
+    "axes": [
+      "custom theme body",
+      "reference generation for preserved helper"
+    ],
+    "java_exit": 0,
+    "java_source_exit": 1,
+    "cli_exit": 0,
+    "stdout_bytes": 436,
+    "comparison_exit": 0,
+    "svg_match": true,
+    "reference_invalid": false,
+    "java_valid": true,
+    "negative_rejection": false,
+    "metadata_exit": 0,
+    "source_equal": false
+  }
+]

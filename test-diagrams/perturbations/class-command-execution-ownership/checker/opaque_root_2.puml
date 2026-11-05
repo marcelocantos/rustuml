@@ -1,0 +1,5 @@
+@startuml
+INTERFACE "component usecase queue" as Ledger
+class Peer
+Ledger --> Peer
+@enduml

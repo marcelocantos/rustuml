@@ -1,0 +1,998 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-evaluated-event-stream",
+  "reviewer": {
+    "task_id": "t3-2fa74908-independent-corrected-TIM-checker",
+    "model": "gpt-6-astra / high / inherited Codex intentional; fresh independent checker; no children"
+  },
+  "account_commit": "22c023397bc1422d21d24e37e800ed939be3d841",
+  "implementation_commit": "bdda6626040e9c2ecca77d7dc1fc089e9b8ef3d1",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo check --workspace",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 RAYON_NUM_THREADS=4 PLANTUML_STDLIB=/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100 cargo test --release --no-fail-fast --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards --test pipe_mode",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo test --release -p rustuml-parser --lib",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py parent isolated",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py candidate isolated",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/checker.py candidate fresh",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/diagnostics.py",
+    "uv run --with pyyaml python /tmp/rustuml-tim-check-2fa74908/final_controls.py",
+    "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java -Djava.awt.headless=true -Duser.timezone=GMT+11:00 -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -pipe -tsvg < SOURCE.puml",
+    "/tmp/rustuml-tim-check-2fa74908/candidate-rustuml -pipe < SOURCE.puml",
+    "/tmp/rustuml-tim-check-2fa74908/probe compare SOURCE.svg RUST.svg",
+    "CARGO_TARGET_DIR=/tmp/rustuml-tim-check-2fa74908/target CARGO_BUILD_JOBS=4 cargo clippy --workspace -- -D warnings",
+    "cargo fmt --all --check",
+    "rustfmt --edition 2024 --config skip_children=true --check crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/preprocess/mod.rs crates/rustuml-parser/src/preprocess/debug.rs crates/rustuml-parser/src/preprocess/date_format.rs crates/rustuml/tests/pipe_mode.rs"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_dynamic_sub_sprite.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_dynamic_sub_sprite.svg",
+      "axes": [
+        "subblock mutation plus sprite pixels",
+        "dynamic theme and inactive ordering"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.svg",
+      "axes": [
+        "leading/internal blank counts and comments",
+        "inactive/active themes and renamed topology"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comment_closure_tail.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comment_closure_tail.svg",
+      "axes": [
+        "long-comment closing line with content",
+        "theme plus two renamed classes"
+      ],
+      "result": "fail",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_spaces_identity.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_spaces_identity.svg",
+      "axes": [
+        "nonempty whitespace versus blank identity",
+        "theme and renamed entity"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_two_dynamic_themes.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_two_dynamic_themes.svg",
+      "axes": [
+        "theme ordering and inactive load",
+        "computed selector variables and renamed label"
+      ],
+      "result": "fail",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_loop_sprite_comment.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_loop_sprite_comment.svg",
+      "axes": [
+        "loop cardinality and renaming",
+        "sprite placement and apostrophe content"
+      ],
+      "result": "fail",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_aws_activity_seed.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_aws_activity_seed.svg",
+      "axes": [
+        "preserved maker failure replay",
+        "fresh pinned CLI reference"
+      ],
+      "result": "fail",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_repeated_reverse.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_repeated_reverse.svg",
+      "axes": [
+        "preserved maker failure replay",
+        "fresh pinned CLI reference"
+      ],
+      "result": "fail",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_maker_repeated_themes.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_maker_repeated_themes.svg",
+      "axes": [
+        "preserved maker failure replay",
+        "fresh pinned CLI reference"
+      ],
+      "result": "fail",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_option_true.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_option_true.svg",
+      "axes": [
+        "preserved maker failure replay",
+        "fresh pinned CLI reference"
+      ],
+      "result": "fail",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/retained_checker_line_continuation.svg",
+      "axes": [
+        "preserved maker failure replay",
+        "fresh pinned CLI reference"
+      ],
+      "result": "fail",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_renamed.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_renamed.svg",
+      "axes": [
+        "four leading and two internal blanks",
+        "renamed classes and relationship"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_return_function_theme_event.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_return_function_theme_event.svg",
+      "axes": [
+        "theme event in return-valued function",
+        "global mutation and renamed label"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_selector_nested_theme_event.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_selector_nested_theme_event.svg",
+      "axes": [
+        "nested theme event during selector evaluation",
+        "active theme ordering and renamed entity"
+      ],
+      "result": "fail",
+      "cli_exit": 0,
+      "comparison_exit": 1,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_diagnostic_side_effect.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_diagnostic_side_effect.svg",
+      "axes": [
+        "diagnostic function side effect",
+        "theme identity and renamed counter"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_assertion_verbatim.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_reader_assertion_verbatim.svg",
+      "axes": [
+        "exact frozen parser assertion bytes",
+        "leading versus internal source lines"
+      ],
+      "result": "pass",
+      "cli_exit": 0,
+      "comparison_exit": 0,
+      "kind": "retained previous review",
+      "source_equal": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_aws_activity_seed.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_aws_activity_seed.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "fail",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam2_shadowing_true.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam2_shadowing_true.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam_shadowing.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_act_skinparam_shadowing.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_edge_whitespace_multiple_blank_lines.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_diagnostic_edge_whitespace_multiple_blank_lines.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_function_selector_parameter.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_function_selector_parameter.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_inactive_and_comments.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_inactive_and_comments.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_local_theme_once.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_loop_side_effect.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_loop_side_effect.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_parser_blank_origin_control.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_parser_blank_origin_control.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_preamble_procedure_origin_control.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_preamble_procedure_origin_control.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "fail",
+      "kind": "retained maker",
+      "java_exit": 200,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sprite_before_dynamic_theme.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sprite_before_dynamic_theme.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sub_sprite_after_theme.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sub_sprite_after_theme.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sub_state_two_mutations.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_retained_sub_state_two_mutations.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_tight.svg",
+      "axes": [
+        "leading/internal/trailing whitespace",
+        "CRLF or delimiter name"
+      ],
+      "result": "pass",
+      "kind": "fresh supplemental",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_blank_crlf.svg",
+      "axes": [
+        "leading/internal/trailing whitespace",
+        "CRLF or delimiter name"
+      ],
+      "result": "pass",
+      "kind": "fresh supplemental",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_named_trailing.svg",
+      "axes": [
+        "leading/internal/trailing whitespace",
+        "CRLF or delimiter name"
+      ],
+      "result": "pass",
+      "kind": "fresh supplemental",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam2_shadowing_true.svg",
+      "axes": [
+        "frozen historical GET input",
+        "additional raw-pipe reference"
+      ],
+      "result": "pass",
+      "kind": "fresh supplemental",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_act_skinparam_shadowing.svg",
+      "axes": [
+        "frozen historical GET input",
+        "additional raw-pipe reference"
+      ],
+      "result": "pass",
+      "kind": "fresh supplemental",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.puml",
+      "golden": "test-diagrams/perturbations/tim-evaluated-event-stream/checker2_raw_counterpart_edge_whitespace_multiple_blank_lines.svg",
+      "axes": [
+        "frozen historical GET input",
+        "additional raw-pipe reference"
+      ],
+      "result": "pass",
+      "kind": "fresh supplemental",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    }
+  ],
+  "findings": [
+    "REJECTED. Raw-reader policy is now authorized and independently verified; the historical pending-owner statement remains intact in review.json as historical evidence, not a current blocker. Six new raw pipe/file/CLI comparisons and the exact assertion origins 5/8/9 pass. Frozen GET main corpus is unchanged.",
+    "checker2_return_plain_nested exposes an extra Phantom class: Java TContext.executeOneLineNotSafe calls simulatePlain for RETURN_FUNCTION, evaluating nested effects but discarding plain text. Rust FunctionDef loses procedure/return kind and call_function emits all plain body events. Source and shipped SVG fail.",
+    "checker2_sub_ignored_prelude is Java-valid: Sub.fromFile selects raw located lines without evaluating an unselected prelude. Rust try_includesub executes the whole file in a fresh temp_ctx; an invalid prelude stops before the selected sub is discovered and temp_ctx.error is discarded. Selected class vanishes without CLI failure.",
+    "All 40 valid previous TIM checker streams and all 33 original theme streams (one invalid reference) match Java. Previous valid repeated palettes, empty themed class, note, activity, handwritten and continued sequence failures remain failed, not waived by source equality. New return/boolean/type cases falsify generalization."
+  ],
+  "verdict": "rejected",
+  "combined_tested_commit": "53f2e605c222408ee81c23ff5ea81c8bf7449084",
+  "pre_policy_tested_commit": "86e0d0953acc1bbc660304265033c3314fa31150",
+  "parent_commit": "29642ec630e9902c892162a7081cd8a5e1113dac",
+  "original_candidate": "b384bc315f31b890abb3cbd91197b6f6666ca1ad",
+  "preparation_mappings": "docs/parity-reviews/tim-expression-event-sink/checker2-support/cherry-pick-mappings.json",
+  "followup_commits": [
+    "c1730d656949364dd12f0fa3bcc69b1dc04b1941",
+    "b384bc315f31b890abb3cbd91197b6f6666ca1ad",
+    "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+    "136ee057e0ffc3347ecdfafc9cf46e0bafa50197"
+  ],
+  "java_jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "reference_contract": "Owner-selected raw Java pipe/file. Frozen historical GET corpus retained and separately reported. Negative evidence unchanged.",
+  "evidence": "docs/parity-reviews/tim-expression-event-sink/checker2-support/README.md",
+  "independently_accepted_submechanisms": [],
+  "global_acceptance": "rejected; green bounded invariants do not certify the packet",
+  "dependency_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_return_plain_nested.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_return_plain_nested.svg",
+      "axes": [
+        "return function plain simulation",
+        "nested mutation and class count"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_inline_procedure_suffix.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_inline_procedure_suffix.svg",
+      "axes": [
+        "procedure prefix/suffix expansion",
+        "nested function side effects"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_log_theme_sprite.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_log_theme_sprite.svg",
+      "axes": [
+        "log order and duplicate execution",
+        "subblock sprite and theme identity"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_logical_effects.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_logical_effects.svg",
+      "axes": [
+        "logical operand evaluation",
+        "function side effect"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_literal_re_evaluation.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_literal_re_evaluation.svg",
+      "axes": [
+        "quoted boolean token",
+        "recursive textual evaluation"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_comment_origin.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_comment_origin.svg",
+      "axes": [
+        "nested theme order",
+        "Unicode declarations comments blanks origins"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_function_error.svg",
+      "axes": [
+        "error context function_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_default_error.svg",
+      "axes": [
+        "error context default_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 1,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_error.svg",
+      "axes": [
+        "error context inactive_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_unused_function.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_unused_function.svg",
+      "axes": [
+        "error context unused_function",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "pass",
+      "kind": "fresh",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sequence_error.svg",
+      "axes": [
+        "error context sequence_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_error_after_theme.svg",
+      "axes": [
+        "error context error_after_theme",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_two_errors.svg",
+      "axes": [
+        "error context two_errors",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_short_circuit_error.svg",
+      "axes": [
+        "error context short_circuit_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.svg",
+      "axes": [
+        "error context multi_block_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_include_error.svg",
+      "axes": [
+        "error context include_error",
+        "pattern versus overflow or inactive execution"
+      ],
+      "result": "fail",
+      "kind": "fresh",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_builtin_return_effect.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_builtin_return_effect.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_inline_theme_counter.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_inline_theme_counter.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_log_order_and_inactive.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_log_order_and_inactive.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_nested_argument_theme.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_retained_nested_argument_theme.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "pass",
+      "kind": "retained maker",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_0.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "fail",
+      "kind": "retained maker",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_1.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_1.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "fail",
+      "kind": "retained maker",
+      "java_exit": 1,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_2.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "fail",
+      "kind": "retained maker",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_3.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_retained_invalid_3.svg",
+      "axes": [
+        "retained maker input",
+        "fresh raw-pipe Java reference"
+      ],
+      "result": "fail",
+      "kind": "retained maker",
+      "java_exit": 1,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_ignored_prelude.svg",
+      "axes": [
+        "external subblock extraction",
+        "fatal unselected prelude"
+      ],
+      "result": "fail",
+      "kind": "fresh supplemental",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_sub_selected_error.svg",
+      "axes": [
+        "external selected subblock",
+        "fatal pattern"
+      ],
+      "result": "fail",
+      "kind": "fresh supplemental",
+      "java_exit": 200,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_plain_error.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_inactive_plain_error.svg",
+      "axes": [
+        "inactive branch",
+        "invalid assignment"
+      ],
+      "result": "pass",
+      "kind": "fresh supplemental",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.puml",
+      "golden": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_signed_underflow.svg",
+      "axes": [
+        "signed lower overflow",
+        "partial class output"
+      ],
+      "result": "fail",
+      "kind": "fresh supplemental",
+      "java_exit": 1,
+      "cli_exit": 1,
+      "source_equal": false,
+      "reference_classification": "negative Java output; never a positive SVG",
+      "negative_rejection": true
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2_theme_from_order.svg",
+      "axes": [
+        "theme selector versus from evaluation",
+        "side effect ordering"
+      ],
+      "result": "pass",
+      "kind": "fresh supplemental",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": true,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    },
+    {
+      "source": "test-diagrams/perturbations/tim-expression-event-sink/checker2-themes/puml-theme-custom.puml",
+      "golden": "test-diagrams/perturbations/tim-expression-event-sink/checker2-themes/puml-theme-custom.svg",
+      "axes": [
+        "custom theme body",
+        "reference generation for preserved helper"
+      ],
+      "result": "pass",
+      "kind": "helper source",
+      "java_exit": 0,
+      "cli_exit": 0,
+      "source_equal": false,
+      "reference_classification": "valid raw pipe",
+      "negative_rejection": false
+    }
+  ],
+  "dependency_evidence_note": "Cross-mechanism cases are linked here as dependencies, not misfiled under this mechanism. Each has its owning checker record and unchanged executable fixture. No duplication inflates the corpus."
+}

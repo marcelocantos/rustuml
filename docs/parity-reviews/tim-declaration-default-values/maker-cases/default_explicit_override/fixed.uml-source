@@ -1,0 +1,3 @@
+@startuml
+class "é,(x)early / othertail" as Copper
+@enduml

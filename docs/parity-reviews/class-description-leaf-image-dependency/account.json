@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-description-leaf-image-dependency",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "8a61fa097d278dad508da0659953a98765926774",
+  "status": "unimplemented blocking dependency; no acceptance requested",
+  "production_changes": "NONE for this dependency; account precedes any future implementation",
+  "evidence": "../class-command-execution-ownership/maker-results.json",
+  "negative_evidence_contract": "Every preserved relevant failing valid input remains blocking. No scope waiver or factory-label-only acceptance.",
+  "java_locations": [
+    "svek/GeneralImageBuilder.java#createEntityImageBlock",
+    "svek/image/EntityImageDescription.java",
+    "decoration/symbol/USymbolComponent2.java#asSmall,getMargin,drawComponent2"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#calc_entity_dims,render_entity_content",
+    "crates/rustuml-render/src/component.rs"
+  ],
+  "invariant": "A DESCRIPTION leaf keeps its USymbol image model when embedded in ClassDiagram; leaf measurement and drawing select the same image.",
+  "causal_divergence": "The repaired parser creates Component entities, but class calc_entity_dims/render_entity_content still use class compartments and circled C for description kinds. Java GeneralImageBuilder dispatches DESCRIPTION to EntityImageDescription, which delegates to USymbolComponent2.asSmall. This is not a command/factory failure.",
+  "planned_model_change": "In a separate renderer packet, share the symbol image measurement/paint model between class and component rendering, preserving class quark identities and SVEK layout. Derive styles and margins from USymbol implementations; do not insert posthoc SVG transformations.",
+  "perturbation_axes": [
+    "description type and UML1/UML2 style",
+    "labels, links, container nesting and declaration order"
+  ],
+  "blocking_inputs": [
+    "maker_mixing_first",
+    "mix_early_tabs",
+    "mix_prefix"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-parser-error-propagation",
+  "rust_revision": "0fcc3cd9cc3920b5e9663d6465cfc99e4e3c355b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/builtin/DateFunction.java:executeReturnFunction",
+    "tim/TContext.java:executeOneLineSafe"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs:parse_with_base",
+    "crates/rustuml-parser/src/preprocess/mod.rs:PreprocessOutput"
+  ],
+  "invariant": "A fatal evaluated preprocessing error prevents a successful diagram parse, retaining its source location and diagnostic through the shipped CLI.",
+  "causal_divergence": "Java propagates DateFunction exceptions through TContext.executeOneLineSafe. The candidate preprocessor now records a typed error and partial output, but parse_with_base ignores the error and parses the partial output successfully.",
+  "planned_change": "Consume the typed error immediately after both preprocessing entry points, before style extraction or diagram construction. Return the existing ParseError without interpreting diagnostic text or changing successful source projection.",
+  "perturbation_axes": [
+    "Invalid pattern versus signed-second overflow, with valid and inactive-error controls",
+    "Class versus sequence input, with errors after valid declarations"
+  ],
+  "oracle_plan": [
+    "Record current CLI success on invalid controls before implementation",
+    "Assert public parse errors retain line/message and real CLI rejects partial diagrams",
+    "Run parser and CLI tests; retain the known reader-contract assertion unchanged",
+    "Independent reviewer must check this mechanism with the full TIM candidate"
+  ],
+  "scope": "parse/mod.rs, CLI tests, and this new evidence directory only; no reader normalization, baseline, comparator or attestation changes"
+}

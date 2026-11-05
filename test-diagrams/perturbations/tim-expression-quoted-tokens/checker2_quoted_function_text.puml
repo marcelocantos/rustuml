@@ -1,0 +1,10 @@
+@startuml
+!$calls = 0
+!function $tick()
+!$calls = $calls + 1
+!return "changed"
+!endfunction
+!$raw = '$tick()'
+!$joined = $raw + ' / tail'
+class "$joined / $calls" as Raw
+@enduml

@@ -1,0 +1,433 @@
+@startuml
+
+skinparam BackgroundColor transparent
+skinparam useBetaStyle false
+    !assume transparent light
+skinparam defaultFontName       "Verdana"
+skinparam defaultFontSize       12
+skinparam dpi                   100
+skinparam shadowing             false
+skinparam roundcorner           8
+skinparam ParticipantPadding    40
+skinparam BoxPadding            40
+skinparam Padding               5
+skinparam ArrowColor            #4E5D6C
+skinparam stereotype {
+    CBackgroundColor ffffff
+    CBorderColor #BEBEBE
+    ABackgroundColor #239B02
+    ABorderColor #176702
+    IBackgroundColor #EC4624
+    IBorderColor #A7280E
+    EBackgroundColor #F18E3E
+    EBorderColor #BD5B0E
+    NBackgroundColor #008AE0
+    NBorderColor #005C96
+}
+skinparam title {
+	FontSize	    	         20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor  ffffff-#eeeeee
+	FontColor #EC7211
+	BorderColor #eeeeee
+}
+
+skinparam legend {
+    		FontColor #4E5D6C
+		BorderColor #BEBEBE
+		BackgroundColor ffffff-#eeeeee
+    BackgroundColor transparent
+}
+
+skinparam swimlane {
+	BorderColor #0073bb
+	BorderThickness 2
+	TitleBackgroundColor  ffffff-#eeeeee
+	TitleFontColor #EC7211
+}
+
+
+skinparam activity {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+	BarColor #1D8102
+	StartColor #0073bb
+	EndColor #0073bb
+	DiamondBackgroundColor #eeeeee
+  	DiamondBorderColor #BEBEBE
+  	DiamondFontColor #4E5D6C
+}
+
+skinparam participant {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+	ParticipantBorderThickness 2
+}
+
+skinparam actor {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+	FontColor #4E5D6C
+}
+
+skinparam arrow {
+	Thickness 3
+	Color #EC7211
+	FontColor #4E5D6C
+}
+
+skinparam sequence {
+	ArrowThickness 3
+	BorderColor #EC7211
+	TitleFontColor #EC7211
+	BackgroundColor transparent
+	StartColor #EC7211
+	EndColor #EC7211
+	BoxBackgroundColor transparent
+	BoxBorderColor #4E5D6C
+	BoxFontColor #4E5D6C
+	DelayFontColor #4E5D6C
+	LifeLineBorderColor #abb6c2
+	LifeLineBorderThickness 2
+	LifeLineBackgroundColor #8191A3
+	GroupBorderColor #4E5D6C
+	GroupFontColor #4E5D6C
+	GroupHeaderFontColor #0073bb
+	GroupBackgroundColor #eeeeee
+	GroupBodyBackgroundColor transparent
+	GroupHeaderBackgroundColor transparent
+	DividerBackgroundColor #4E5D6C
+    DividerBorderColor #4E5D6C
+    DividerBorderThickness 2
+    DividerFontColor #abb6c2
+	ReferenceBackgroundColor transparent
+	ReferenceBorderColor #4E5D6C
+	ReferenceFontColor #4E5D6C
+	ReferenceHeaderFontColor #0073bb
+	ReferenceHeaderBackgroundColor #eeeeee
+	StereotypeFontColor #FFF
+	StereotypeFontSize 12
+}
+
+skinparam partition {
+	BorderColor #EC7211
+	FontColor #EC7211
+	BackgroundColor transparent
+}
+
+skinparam collections {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+}
+
+skinparam control {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+	FontColor #4E5D6C
+}
+
+skinparam entity {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+	FontColor #4E5D6C
+}
+
+skinparam boundary {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+	FontColor #4E5D6C
+}
+
+skinparam agent {
+	BackgroundColor #EC7211
+	BorderColor #F18E3E
+	FontColor #4E5D6C
+}
+
+skinparam note {
+	BorderThickness 1
+	BackgroundColor #0073bb
+	BorderColor #005C96
+	FontColor #FFF
+}
+
+skinparam artifact {
+	BackgroundColor #4E5D6C
+	BorderColor #3E4A56
+	FontColor #abb6c2
+}
+
+skinparam component {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+}
+
+skinparam interface {
+	BackgroundColor  #A7280E
+	BorderColor  #d13212
+	FontColor #4E5D6C
+}
+
+skinparam storage {
+	BackgroundColor #EC7211
+  	BorderColor #BD5B0E
+	FontColor #FFF
+}
+
+skinparam node {
+	BackgroundColor  transparent
+	BorderColor #abb6c2
+	FontColor #abb6c2
+}
+
+skinparam cloud {
+	BackgroundColor transparent
+	BorderColor #4E5D6C
+	FontColor #4E5D6C
+}
+
+skinparam database {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+	FontColor #4E5D6C
+	StereotypeFontColor #4E5D6C
+}
+
+skinparam class {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+	FontColor #FFF
+	HeaderBackgroundColor #F18E3E-#EC7211
+	StereotypeFontColor #4E5D6C
+	BorderThickness 1
+	AttributeFontColor #FFF
+	AttributeFontSize 11
+}
+
+skinparam object {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+	StereotypeFontColor #4E5D6C
+	BorderThickness 1
+	AttributeFontColor #FFF
+	AttributeFontSize 11
+}
+
+skinparam usecase {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+	BorderThickness 2
+	StereotypeFontColor #EC7211
+}
+
+skinparam rectangle {
+	BackgroundColor transparent
+	FontColor #4E5D6C
+	BorderColor #4E5D6C
+	BorderThickness 2
+	StereotypeFontColor #EC7211
+}
+
+skinparam package {
+	BackgroundColor transparent
+  	BorderColor #4E5D6C
+	FontColor #4E5D6C
+	BorderThickness 2
+}
+
+skinparam folder {
+	BackgroundColor #eeeeee
+  	BorderColor #EC7211
+	FontColor #EC7211
+	BorderThickness 2
+}
+
+skinparam frame {
+	BackgroundColor #eeeeee
+  	BorderColor #0073bb
+	FontColor #0073bb
+	BorderThickness 2
+}
+
+skinparam state {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+	StartColor #0073bb
+	EndColor #0073bb
+	AttributeFontColor #4E5D6C
+	AttributeFontSize 11
+}
+
+skinparam queue {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+}
+
+skinparam card {
+	BackgroundColor #0073bb
+	BorderColor #005C96
+	FontColor #FFF
+}
+
+skinparam file {
+	BackgroundColor #eeeeee
+	BorderColor #abb6c2
+	FontColor #4E5D6C
+}
+
+skinparam stack {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+}
+
+
+skinparam map {
+			FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+}
+
+<style>
+wbsDiagram, mindmapDiagram {
+  root {
+    BackgroundColor transparent
+    FontColor #FFF
+    HyperLinkColor #0073bb
+    LineColor #BD5B0E
+    LineThickness 1
+    Margin 10
+    Padding 6
+    Shadowing 0.0
+  }
+  node {
+    		FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+    Padding 15
+    RoundCorner 20
+  }
+  caption {
+    LineThickness 0
+  }
+  footer {
+    LineThickness 0
+  }
+  groupHeader {
+    BackgroundColor #eeeeee
+    FontColor #0073bb
+    FontStyle bold
+  }
+  header {
+    LineThickness 0
+  }
+  referenceHeader {
+    BackgroundColor transparent
+    FontColor #4E5D6C
+    FontStyle bold
+  }
+  separator {
+    BackgroundColor #4E5D6C
+    FontColor transparent
+    FontStyle bold
+  }
+  title {
+	FontSize 20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor  ffffff-#eeeeee
+	FontColor #FFF
+	BorderColor #eeeeee
+  }
+}
+nwdiagDiagram {
+  network {
+    		FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211    
+    LineColor $PRIMARY_BG
+    LineThickness 1.0
+    FontColor #BD5B0E
+  }
+  server {
+    		FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+  }
+  arrow {
+    FontColor #BD5B0E
+    LineColor #BD5B0E
+  }
+  group {
+    BackGroundColor $LIGHT_BG
+    LineColor #8191A3
+    LineThickness 2.0
+    Margin 5
+    Padding 5
+  }
+}
+ganttDiagram {
+  task {
+    		FontColor #FFF
+		BorderColor #EC7211
+		BackgroundColor #F18E3E-#EC7211
+	LineColor $PRIMARY_BG
+    Margin 10 2 2 2
+    Padding 6
+  }
+  note {
+	FontColor #FFF
+	LineColor #005C96
+    BackGroundColor #0073bb
+  }
+  separator {
+	LineColor #eeeeee
+    BackGroundColor 		FontColor #4E5D6C
+		BorderColor #BEBEBE
+		BackgroundColor ffffff-#eeeeee
+    FontColor #4E5D6C
+  }
+  milestone {
+	FontColor #0073bb
+	FontSize 16
+	FontStyle italic
+	BackGroundColor $DIAMOND_BG
+	LineColor #BEBEBE
+  }
+  timeline {
+    BackgroundColor #eeeeee
+    FontColor #4E5D6C
+  }
+  closed {
+	BackgroundColor #BD5B0E
+	FontColor #FFF
+  }
+}
+</style>
+
+start
+:Receive renamed parcel;
+if (fresh route?) then (primary)
+  :Validate primary lane;
+elseif (secondary route?) then (secondary)
+  :Validate secondary lane;
+else (fallback)
+  :Record fallback lane;
+endif
+stop
+@enduml

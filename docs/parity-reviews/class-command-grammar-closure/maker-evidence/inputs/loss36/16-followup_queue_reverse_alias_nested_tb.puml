@@ -1,0 +1,10 @@
+@startuml
+top to bottom direction
+package Messaging {
+  queue QueueCode <<IdentityQueue>> as "Review Queue" $flow <<QueuePost>> #AliceBlue {
+    class PendingTicket
+    class ClaimedTicket
+    PendingTicket --> ClaimedTicket
+  }
+}
+@enduml

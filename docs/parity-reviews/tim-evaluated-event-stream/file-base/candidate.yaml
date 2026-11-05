@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class AlexandriteLedger
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity AlexandriteLedger
+  entities:
+  - id: AlexandriteLedger
+    label: AlexandriteLedger
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

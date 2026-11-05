@@ -1,0 +1,5 @@
+@startuml
+class "Cobalt Origin 4513" as CobaltOrigin
+class "Marigold Destination 8291" as MarigoldDestination
+CobaltOrigin )--( MarigoldDestination
+@enduml

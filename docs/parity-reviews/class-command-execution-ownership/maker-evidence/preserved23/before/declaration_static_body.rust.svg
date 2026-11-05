@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="118px" preserveAspectRatio="none" style="width:169px;height:118px;background:#FFFFFF;" version="1.1" viewBox="0 0 169 118" width="169px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Polar Harbor-->
+<g class="cluster" data-qualified-name="Polar Harbor" data-source-line="1" id="ent0002">
+<rect fill="none" height="97.49" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="148" x="7" y="7"/>
+<path d="M108.3896,7 L108.3896,16.4883 L98.3896,26.4883 L7,26.4883" fill="none" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="91.3896" x="10" y="21.5352">Polar Harbor</text>
+</g>
+<!--entity storedField-->
+<g class="entity" data-qualified-name="Polar Harbor.storedField" data-source-line="3" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="115.5234" x="23.24" y="42"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="118.7634" y="47"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="116.7634" y="49"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="116.7634" y="53"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="75.5234" x="38.24" y="75.5352">storedField</text>
+</g>
+</g></svg>

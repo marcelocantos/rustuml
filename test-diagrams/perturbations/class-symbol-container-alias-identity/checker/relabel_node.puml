@@ -1,0 +1,9 @@
+@startuml
+node "First display" as G {
+class Earlier
+}
+node "Second unrelated display" as G {
+class Later
+Earlier --> Later
+}
+@enduml

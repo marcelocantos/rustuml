@@ -1,0 +1,12 @@
+--- Java UmlSource
++++ before CLI metadata source
+@@ -432,5 +432,9 @@
+ 	BorderColor #78c2ad
+ 	BackgroundColor #86c8b5
+ }
++!if 0
++!theme cerulean
++!theme united
++!endif
+ class YewLedger
+ @enduml

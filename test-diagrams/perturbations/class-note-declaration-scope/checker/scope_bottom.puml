@@ -1,0 +1,6 @@
+@startuml
+frame Site {
+class Payload
+note bottom of Payload : in scope
+}
+@enduml

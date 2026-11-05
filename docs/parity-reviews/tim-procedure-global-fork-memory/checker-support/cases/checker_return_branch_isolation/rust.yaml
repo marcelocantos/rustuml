@@ -1,0 +1,40 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "tall" as Tree4
+      class "short" as Tree1
+      class Sentinel
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Tree4
+  - !Entity Tree1
+  - !Entity Sentinel
+  entities:
+  - id: Tree4
+    label: tall
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 11
+  - id: Tree1
+    label: short
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 11
+  - id: Sentinel
+    label: Sentinel
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 18
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

@@ -1,0 +1,180 @@
+{
+  "role": "maker report only; no acceptance claim",
+  "candidate_revision": "cefd22f9d047cf4ab1f2bb515aa869266b91aff6",
+  "baseline_revision": "eebd74cebc3a3cf4b1dbc0d8b63bd06d163972cd",
+  "account_commit": "22c023397bc1422d21d24e37e800ed939be3d841",
+  "implementation_commits": [
+    "bdda6626040e9c2ecca77d7dc1fc089e9b8ef3d1",
+    "aaf3dab7160605488bdeb0344fcf1d6c8d28ac1c",
+    "1ee250f0fafdc62fa9f348b64d12fe4363790d6c",
+    "e2503bd4c282841abee982fd6063658975f25f69",
+    "cefd22f9d047cf4ab1f2bb515aa869266b91aff6"
+  ],
+  "binary_sha256": {
+    "before": "dc40981c86f774dab87ad1d0c703469f3e1537bfbe4c0a4e123f0f763bbac8b1",
+    "stream": "24fdbd40116e6d1c39a07c8e916131af34685da2c4ba6e42e25d3bfaaa8fa4df",
+    "after": "c6feb28b64eb488fdc0b930653a3fe20b8080f930bfdbfc42b5603d511a7bd4c",
+    "final": "6fe7719e4f53a0a298092f606e9d28afc0cac47b86495982261ff4be79d86d5e",
+    "candidate": "cadaf758c694524466e555bcecf943b5ae974a7fbd7da5050a09af5903e2946f"
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/rustuml-tim-repair-target",
+    "CARGO_BUILD_JOBS": "4",
+    "RAYON_NUM_THREADS": "4",
+    "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+    "PLANTUML_STDLIB": "/Users/marcelo/work/github.com/plantuml/plantuml-stdlib/stdlib",
+    "cwd": "/Users/marcelo/.t3/worktrees/rustuml/t3-2c674563"
+  },
+  "reference_environment": "reference-environment.json",
+  "measurements": {
+    "new": {
+      "total": 22,
+      "svg_pass": 19,
+      "baseline_svg_pass": 0,
+      "invalid_reference": 2,
+      "cli_errors": 0,
+      "svg_mismatches": 1,
+      "exact_source_equal": 20,
+      "cases": "candidate-new.json",
+      "changes": "candidate-new-changes.json"
+    },
+    "preserved": {
+      "total": 33,
+      "svg_pass": 28,
+      "baseline_svg_pass": 6,
+      "invalid_reference": 1,
+      "cli_errors": 0,
+      "svg_mismatches": 4,
+      "exact_source_equal": 33,
+      "cases": "candidate-preserved.json",
+      "changes": "candidate-preserved-changes.json"
+    },
+    "isolated": {
+      "total": 907,
+      "svg_pass": 394,
+      "baseline_svg_pass": 372,
+      "invalid_reference": 8,
+      "cli_errors": 2,
+      "svg_mismatches": 503,
+      "exact_source_equal": null,
+      "cases": "candidate-isolated.json",
+      "changes": "candidate-isolated-changes.json"
+    },
+    "file_base": {
+      "java_svg_exit": 0,
+      "java_source_exit": 0,
+      "before_cli_exit": 0,
+      "before_comparison_exit": 1,
+      "before_source_equal": false,
+      "candidate_cli_exit": 0,
+      "candidate_comparison_exit": 1,
+      "candidate_source_equal": false,
+      "explicit_base_source_equal": true,
+      "explicit_base_exit": 0,
+      "before_cwd_cli_exit": 0,
+      "before_cwd_comparison_exit": 1,
+      "candidate_cwd_cli_exit": 0,
+      "candidate_cwd_comparison_exit": 0
+    }
+  },
+  "tests": {
+    "parser_units": {
+      "passed": 569,
+      "failed": 1,
+      "failure": "parse::tests::leading_blank_lines_do_not_shift_locations_but_internal_blanks_do; expected line 1, got 5. Fresh Java agrees with 5; unowned test unchanged."
+    },
+    "cli_pipe_mode": {
+      "passed": 13,
+      "failed": 0
+    },
+    "golden_no_oracle": {
+      "passed": 11179,
+      "eligible": 11251,
+      "baseline_passed": 11181,
+      "exit": 101,
+      "gain": "preprocessing +1",
+      "losses": [
+        "activity/act_skinparam2_shadowing_true (filter ID)",
+        "activity/act_skinparam_shadowing (filter ID)",
+        "edge-cases/edge_whitespace_multiple_blank_lines (source line attributes)"
+      ],
+      "note": "All three candidate losses against preserved references match fresh pinned Java SVGs. Baselines and references unchanged; still a red gate."
+    },
+    "golden_pairs": {
+      "passed": 10497,
+      "failed": 754,
+      "skipped": 1299,
+      "total": 12550,
+      "exit": 101
+    },
+    "harness_guards": {
+      "passed": 4,
+      "failed": 2,
+      "failures": [
+        "decimal_literal_ratchet",
+        "parity_review_records_are_complete"
+      ],
+      "exit": 101
+    },
+    "parity_perturbations_builtin": {
+      "test_passed": 1,
+      "test_failed": 1,
+      "exit": 101,
+      "panic_reports": 411,
+      "limitation": "Prepared checkout lacks independently accepted registry lifetime repair; same-thread registry cascade follows first real sequence panic. Do not equate panic reports with independent product errors."
+    },
+    "clippy": {
+      "exit": 101,
+      "failure": "Pre-existing dead_code parse/component.rs:72 looks_like_description_bracket_command, outside owned scope; new lint resolved."
+    },
+    "format": [
+      {
+        "command": [
+          "cargo",
+          "fmt",
+          "--all",
+          "--check"
+        ],
+        "exit": 1
+      },
+      {
+        "command": [
+          "rustfmt",
+          "--edition",
+          "2024",
+          "--check",
+          "crates/rustuml-parser/src/preprocess/mod.rs",
+          "crates/rustuml-parser/src/preprocess/debug.rs"
+        ],
+        "exit": 0
+      }
+    ],
+    "diff_whitespace": {
+      "production_diff_exit": 0,
+      "artifact_diff": "Raw oracle UmlSource whitespace and comparator trailing blank lines intentionally preserved byte-for-byte; git diff --cached --check reports those artifact bytes."
+    }
+  },
+  "pending_dependencies": [
+    "Independent adversarial checker and fresh heldouts for all four accounts; no maker acceptance.",
+    "Repeated-theme class stereotype spot palettes: checker_repeated_reverse and maker_repeated_themes; separate class worker owns this.",
+    "Handwritten shape rendering: checker_option_true.",
+    "Sequence continued-line geometry: checker_line_continuation.",
+    "Existing activity diamond text style/font and resulting geometry: aws_activity_seed; before and candidate SVG structurally equivalent, exact evaluated source now matches Java.",
+    "Two existing sequence panics: sequence-grouped-note-origin/checker_live_stack_2 and checker_live_stack_3.",
+    "Existing CLI file-base loss: main.rs default delimited-file branch calls parse_block without base; direct preprocessor explicit base matches Java and same-cwd shipped CLI matches. No unowned dispatch change.",
+    "Three main-tier preserved-reference conflicts and one parser origin expectation remain red. No reference/baseline/test edits or waivers.",
+    "Historical Java JAR bytes, fonts and Graphviz equivalence unproven."
+  ],
+  "parent_integration_update": {
+    "registry_integration": "22cd748c2ea2b5880c1dc5e4f7796c81a950d08b",
+    "accepted_review": "bc9e9463ef4e21aa238517d9c3726d39c859f8ae",
+    "applied_here": false,
+    "parent_sources": 913,
+    "prepared_sources": 907,
+    "cwd_dependency": "T14.6.2; existing checker_include_theme root cwd passes, crate cwd is a path-resolution difference, not geometry."
+  },
+  "archive": {
+    "path": "measurement-artifacts.tar.gz",
+    "sha256": "7bcae7cafda1ad78b11e7dd5e2391e8a189848127e3c655e9f519d1a8ab39826"
+  }
+}

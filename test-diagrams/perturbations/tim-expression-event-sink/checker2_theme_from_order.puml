@@ -1,0 +1,13 @@
+@startuml
+!$count = 0
+!function $name()
+!$count = $count + 1
+!return "custom"
+!endfunction
+!function $directory()
+!$count = $count * 10
+!return "test-diagrams/perturbations/tim-expression-event-sink/checker2-themes"
+!endfunction
+!theme $name() from $directory()
+class "$count" as Order
+@enduml

@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "2026-04-05 02:59:59" as Transition
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Transition
+  entities:
+  - id: Transition
+    label: '2026-04-05 02:59:59'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

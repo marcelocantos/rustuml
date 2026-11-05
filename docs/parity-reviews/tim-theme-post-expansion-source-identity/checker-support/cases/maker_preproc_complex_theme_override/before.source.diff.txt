@@ -1,0 +1,10 @@
+--- Java UmlSource
++++ before CLI metadata source
+@@ -437,6 +437,7 @@
+ 	BackgroundColor #59B6EC-#2FA4E7
+ }
+ 
++' Override specific theme settings
+ skinparam classBorderColor #FF0000
+ skinparam classArrowColor #FF0000
+ 

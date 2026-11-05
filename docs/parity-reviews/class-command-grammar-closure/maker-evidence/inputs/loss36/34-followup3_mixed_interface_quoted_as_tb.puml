@@ -1,0 +1,5 @@
+@startuml
+CoMpOnEnT GatewayF3B
+InTeRfAcE "Service Port F3B" AS ServicePortF3B
+GatewayF3B ..> ServicePortF3B
+@enduml

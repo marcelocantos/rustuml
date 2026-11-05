@@ -1,0 +1,569 @@
+[
+  {
+    "mechanism": "class-command-execution-ownership",
+    "name": "bare_native_record",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/bare_native_record.puml",
+    "axes": [
+      "new native kind",
+      "root aliased declaration plus relationship"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "9be8040d89b00133743360b9c42931cda2780039dbade81f28d381fac4792aeb",
+    "java_sha256": "945318c15cbb5651d0386dddc4e8e180cca324d2f47e26247b499fbad355287f"
+  },
+  {
+    "mechanism": "class-command-execution-ownership",
+    "name": "bare_native_struct",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/bare_native_struct.puml",
+    "axes": [
+      "new native kind",
+      "root aliased declaration plus relationship"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "04a58f849d5bf1302c4e100f4f3d4e1e6951c9905698c998bc7d8de3c3c435b0",
+    "java_sha256": "8cf2d3dfb3217c3059b5bb1032a0591152241206c369960b353bfca844cc27fe"
+  },
+  {
+    "mechanism": "class-command-execution-ownership",
+    "name": "braced_note_class",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/braced_note_class.puml",
+    "axes": [
+      "brace-delimited multiline note ownership",
+      "native type and nested scope"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "be122b28cbcda5ce53d15b5ff4adfc5805b8c2de8fa1614dd70c08744ccf202c",
+    "java_sha256": "ae7f18a11e25d7cdd191b7c2095b09398aedb10c558afbb06eac14728cbcc6af"
+  },
+  {
+    "mechanism": "class-command-execution-ownership",
+    "name": "braced_note_interface",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-command-execution-ownership/braced_note_interface.puml",
+    "axes": [
+      "brace-delimited multiline note ownership",
+      "native type and nested scope"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "c5593e935cf7dc0f4b9078acec4808a6578e1e9e015acbca4e15a11e4eb6b20a",
+    "java_sha256": "aec79c53fd55a780407f558dd852f3a53f5981829edb563b486423e76fc61363"
+  },
+  {
+    "mechanism": "class-package-command-precedence-closure",
+    "name": "visibility_public",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-package-command-precedence-closure/visibility_public.puml",
+    "axes": [
+      "ordinary package visibility",
+      "alias plus stereotype"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "dea39482d5eb3039bd4d600216ab82453cad10853d84cbb767b8234c43e2fff7",
+    "java_sha256": "40b8e6e14a7638c89c1cfbdb05594067eca8e74ec891033ae7575442c16cdf5d"
+  },
+  {
+    "mechanism": "class-package-command-precedence-closure",
+    "name": "visibility_private",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-package-command-precedence-closure/visibility_private.puml",
+    "axes": [
+      "ordinary package visibility",
+      "alias plus stereotype"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "6bb3ce215bdb23e392a5e16da605176ab1879188ca8c8b01c8949114ccee16f1",
+    "java_sha256": "5760aee156f2bdabc3178483f93c654dfa31d87bc2f124b217f4148fe845b367"
+  },
+  {
+    "mechanism": "class-note-target-quark",
+    "name": "group_target_left",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-note-target-quark/group_target_left.puml",
+    "axes": [
+      "group versus leaf quark target",
+      "attachment side"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "9f5a7148f6f9b90bff9340af136955ebcca4ae40763d01bc71a5b5bf1f5d11b4",
+    "java_sha256": "84bc27be7d3b5673e57e9a521488aa4983a04fb34c6c77c8a5d6d63b126de3ce"
+  },
+  {
+    "mechanism": "class-note-target-quark",
+    "name": "group_target_bottom",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-note-target-quark/group_target_bottom.puml",
+    "axes": [
+      "group versus leaf quark target",
+      "attachment side"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "d3455224d1b57b418e40829a87c615e5fe2c6810a00d79320855645ba2f80aef",
+    "java_sha256": "214df9f2b380c36f2321f5f58b50391b4e4f671eaceaf12c5ed16b2171d7c279"
+  },
+  {
+    "mechanism": "class-named-note-scoped-identity-closure",
+    "name": "qualified_0",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-named-note-scoped-identity-closure/qualified_0.puml",
+    "axes": [
+      "qualified named-note identity",
+      "single/multiline declaration"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "2c9adbc3cc443ea82bab68e55e84636861d518742a66b381613961ac690e2d91",
+    "java_sha256": "fe337b30308f1daee732b1773901030dc7962cc49d537bed69d36cb7e55a0af1"
+  },
+  {
+    "mechanism": "class-named-note-scoped-identity-closure",
+    "name": "qualified_1",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-named-note-scoped-identity-closure/qualified_1.puml",
+    "axes": [
+      "qualified named-note identity",
+      "single/multiline declaration"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "9a670655d320a2ee7d26e363eca99dd85866d5d0087ca680ca5df63d77cf9abb",
+    "java_sha256": "6c5149fc2552d3f3ffbdf3d3a3329c23a64a3f42351f1ce3fbaea2a002b9e0b1"
+  },
+  {
+    "mechanism": "class-native-leaf-presentation",
+    "name": "bodyless_icon_0",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-native-leaf-presentation/bodyless_icon_0.puml",
+    "axes": [
+      "visibility icon size including odd and zero",
+      "native kind and bodyless declaration"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "95e9aa67759a1947520117b072276830c0846ecff3e060aac7a638460faaf332",
+    "java_sha256": "5543a1e398b1290abfe804590928151403f5aa99831c9b849d4edc0e322c7565"
+  },
+  {
+    "mechanism": "class-native-leaf-presentation",
+    "name": "bodyless_icon_9",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-native-leaf-presentation/bodyless_icon_9.puml",
+    "axes": [
+      "visibility icon size including odd and zero",
+      "native kind and bodyless declaration"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "5d7c354cc6eac49461e0abb0a87469ed2f1de271412649c268162c80d43d112e",
+    "java_sha256": "83d83bf9745b4583f3977a6a555209fe71a904d38f9fa37c863a47a6e5c4d8f3"
+  },
+  {
+    "mechanism": "class-native-leaf-presentation",
+    "name": "bodyless_icon_14",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-native-leaf-presentation/bodyless_icon_14.puml",
+    "axes": [
+      "visibility icon size including odd and zero",
+      "native kind and bodyless declaration"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "4b98b00b9cdc18d0544dce0ab63420f0807793db04e2088e11284f217d3e7d51",
+    "java_sha256": "48970027965a209e7f497ecb42012359afde0a5ed3779fbdd03a44069f4985f0"
+  },
+  {
+    "mechanism": "class-current-spot-cascade",
+    "name": "grouped_record",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/grouped_record.puml",
+    "axes": [
+      "native spot type",
+      "theme change within container scope"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "7790b9944dea121fb8d4d2a55846216dab78d4466b50abed830cede63494a817",
+    "java_sha256": "bc03905cab65a8a6e7e6c2cee1af8b5279a81eeaa65cb9ad743a2f09b38ede51"
+  },
+  {
+    "mechanism": "class-current-spot-cascade",
+    "name": "grouped_struct",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/grouped_struct.puml",
+    "axes": [
+      "native spot type",
+      "theme change within container scope"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "dfba9980757edfd53a804e029e9f80c336a808bf739914a5d8586ba08df465af",
+    "java_sha256": "905ea48500af2f25e9ddb52fc64925793facc5ca301bd437729e5cd1d6e142c0"
+  },
+  {
+    "mechanism": "class-current-spot-cascade",
+    "name": "custom_grouped_class",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/custom_grouped_class.puml",
+    "axes": [
+      "custom spot and native type",
+      "container plus later theme"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "a55216becaf8664a7bb9c9e3f7270c3cc2983fc998db3ce4b538b9dbce2bd3c2",
+    "java_sha256": "c275c1adf7728eba32a4cd6482561de0702a5544494957688921b97bb48cf2b0"
+  },
+  {
+    "mechanism": "class-current-spot-cascade",
+    "name": "custom_grouped_record",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-current-spot-cascade/custom_grouped_record.puml",
+    "axes": [
+      "custom spot and native type",
+      "container plus later theme"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "5f3319c2cf09ebfb3eef34a40c211bd95386ac2b7cce0c8f927308a8413cfe9a",
+    "java_sha256": "34bd7be87cf60767070b060fa481a55818eb2fc64a94ba7b94da7754614d671d"
+  },
+  {
+    "mechanism": "class-chrome-bordered-block-geometry",
+    "name": "style_left",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-chrome-bordered-block-geometry/style_left.puml",
+    "axes": [
+      "current style alignment/font size",
+      "multiline unequal-width header"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "fd5d0c68b5034a0f5dac73c9033fc03d19e83072362097d446ad6b76deec5474",
+    "java_sha256": "3cc031dea4297d5322ad41a3fa0cf1855cf3cb1f4c21adb9d39e979b9694e58d"
+  },
+  {
+    "mechanism": "class-chrome-bordered-block-geometry",
+    "name": "style_right",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-chrome-bordered-block-geometry/style_right.puml",
+    "axes": [
+      "current style alignment/font size",
+      "multiline unequal-width header"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "19749ddf86b2a54545fa747be588f616bd58f629934dabe9d28e8a576fb2fb1d",
+    "java_sha256": "f68b4796e7049953ef89233b15fd35f3f82d81edde4a9c8ec3937c73daa5476e"
+  },
+  {
+    "mechanism": "class-symbol-container-alias-identity",
+    "name": "relabel_folder",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/relabel_folder.puml",
+    "axes": [
+      "reopening same alias with new display",
+      "container kind and declaration order"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "36b6656cd405f1fd31d1d9b133d1143877dc8d2bb889b78e6a7a8349bd636d76",
+    "java_sha256": "af6addc9da1151bf6765a55e0ee4cd281abc9215f8032436399996b48eea88e4"
+  },
+  {
+    "mechanism": "class-symbol-container-alias-identity",
+    "name": "relabel_node",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-symbol-container-alias-identity/relabel_node.puml",
+    "axes": [
+      "reopening same alias with new display",
+      "container kind and declaration order"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "78606da37bedd72720ebf05b8a9acee2643868ff6a245a025a4b8a319e2eaf2c",
+    "java_sha256": "4315f91380b75fa69abd45a4640d9b05e23f3f5cafbdcb53667d2aae88d48f73"
+  },
+  {
+    "mechanism": "class-description-symbol-images",
+    "name": "plain_multiline_component",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-description-symbol-images/plain_multiline_component.puml",
+    "axes": [
+      "unequal multiline label widths",
+      "mixed kind and declaration order"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "816d1f36d87fa00dbad38e8ced0a655264c18e5a5d2ef72e62ba9fccbbe34ad7",
+    "java_sha256": "1d5150a118ba88a2a3c3e99e89db7894bd1d66e76e06dd27f02cfdec92041dc2"
+  },
+  {
+    "mechanism": "class-description-symbol-images",
+    "name": "plain_multiline_boundary",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-description-symbol-images/plain_multiline_boundary.puml",
+    "axes": [
+      "unequal multiline label widths",
+      "mixed kind and declaration order"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "5c1684ac136af943bfe2bb8ceebd80930522ca0d4b0c6662f146b138efaeca5c",
+    "java_sha256": "cabe0817824740839857249278d87196eaa9e18bd9d4c222a08ce73d8babc354"
+  },
+  {
+    "mechanism": "class-group-endpoint-routing",
+    "name": "shield_TB",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-group-endpoint-routing/shield_TB.puml",
+    "axes": [
+      "interface shield label width",
+      "LR/TB direction and uppercase description fallback"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "0e4535ee1241eec435bdb1ae69af20f63d2ecb167dd57d54f94af596b7e37f5f",
+    "java_sha256": "f691ec1623e6c5e51fa450dfcc2041c85fa6d099b096ab663851a3d3efb2b264"
+  },
+  {
+    "mechanism": "class-group-endpoint-routing",
+    "name": "shield_LR",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-group-endpoint-routing/shield_LR.puml",
+    "axes": [
+      "interface shield label width",
+      "LR/TB direction and uppercase description fallback"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "9859748d4f79643cc12f9436fc7340b3e80908480944b42800408b7c4beeb6ab",
+    "java_sha256": "66f85cf9d4ec0522df6b9d6de6e9650f4d1be648435db809ebdec831ffbb41b8"
+  },
+  {
+    "mechanism": "class-single-svek-envelope-origin",
+    "name": "single_root_note_left",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-single-svek-envelope-origin/single_root_note_left.puml",
+    "axes": [
+      "external note versus group frontier",
+      "horizontal/vertical image minimum"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "0860a64b576aaf0177ca38cc1d37dd4eeba37a7ec2fde33fb088874ef4de610e",
+    "java_sha256": "0b6dbd90d5577b2f5345f070d9731c6fe1bae4d7766f2433b233c87950505509"
+  },
+  {
+    "mechanism": "class-single-svek-envelope-origin",
+    "name": "single_root_note_top",
+    "source": "/tmp/rustuml-checker2740/new-sources/class-single-svek-envelope-origin/single_root_note_top.puml",
+    "axes": [
+      "external note versus group frontier",
+      "horizontal/vertical image minimum"
+    ],
+    "origin": "fresh independent checker",
+    "java_command": [
+      "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home/bin/java",
+      "-Djava.awt.headless=true",
+      "-jar",
+      "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "-tsvg",
+      "-pipe"
+    ],
+    "java_exit": 0,
+    "source_sha256": "0ceec73d1af41d25090cc7f683488bfc0dc1f8243643ad3acbdf42318ebb4978",
+    "java_sha256": "e741818b0f0319043784669bac887a654f3ba4d3b574768d4a0b4f0bc30fa027"
+  }
+]

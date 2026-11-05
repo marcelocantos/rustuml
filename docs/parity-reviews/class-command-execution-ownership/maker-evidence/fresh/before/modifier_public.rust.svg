@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="66px" preserveAspectRatio="none" style="width:169px;height:66px;background:#FFFFFF;" version="1.1" viewBox="0 0 169 66" width="169px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Observation Bay-->
+<g class="entity" data-qualified-name="Observation Bay" data-source-line="1" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="149.4297" x="7" y="7"/>
+<path d="M56.8099,7 L56.8099,12 L49.8099,19 L7,19" fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="109.4297" x="22" y="40.5352">Observation Bay</text>
+</g>
+</g></svg>

@@ -1,0 +1,17 @@
+SVG structural differences:
+  [2] <linearGradient> attr mismatch:
+    expected: [("id", "gxodtwgpqwe1m0"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+    actual:   [("id", "g11q993tevjnoy0"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+  [5] <linearGradient> attr mismatch:
+    expected: [("id", "gxodtwgpqwe1m1"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+    actual:   [("id", "g11q993tevjnoy1"), ("x1", "50%"), ("x2", "50%"), ("y1", "0%"), ("y2", "100%")]
+  [10] <rect> attr mismatch:
+    expected: [("fill", "url(#gxodtwgpqwe1m0)"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#2FA4E7;stroke-width:1.0417;"), ("width", "115.5919"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "url(#g11q993tevjnoy0)"), ("height", "51.4257"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:#2FA4E7;stroke-width:1.0417;"), ("width", "115.5919"), ("x", "17.7083"), ("y", "17.7083")]
+  [11] <rect> attr mismatch:
+    expected: [("fill", "url(#gxodtwgpqwe1m1)"), ("height", "34.759"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:url(#gxodtwgpqwe1m1);stroke-width:1.0417;"), ("width", "115.5919"), ("x", "17.7083"), ("y", "17.7083")]
+    actual:   [("fill", "url(#g11q993tevjnoy1)"), ("height", "34.759"), ("rx", "4.1667"), ("ry", "4.1667"), ("style", "stroke:url(#g11q993tevjnoy1);stroke-width:1.0417;"), ("width", "115.5919"), ("x", "17.7083"), ("y", "17.7083")]
+  [12] <rect> attr mismatch:
+    expected: [("fill", "url(#gxodtwgpqwe1m1)"), ("height", "4.1667"), ("style", "stroke:url(#gxodtwgpqwe1m1);stroke-width:1.0417;"), ("width", "115.5919"), ("x", "17.7083"), ("y", "48.3007")]
+    actual:   [("fill", "url(#g11q993tevjnoy1)"), ("height", "4.1667"), ("style", "stroke:url(#g11q993tevjnoy1);stroke-width:1.0417;"), ("width", "115.5919"), ("x", "17.7083"), ("y", "48.3007")]
+

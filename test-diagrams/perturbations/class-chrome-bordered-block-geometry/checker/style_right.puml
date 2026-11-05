@@ -1,0 +1,13 @@
+@startuml
+<style>
+header {
+ HorizontalAlignment right
+ FontSize 18
+}
+</style>
+header
+Wide header line
+Short
+end header
+class Anchor
+@enduml

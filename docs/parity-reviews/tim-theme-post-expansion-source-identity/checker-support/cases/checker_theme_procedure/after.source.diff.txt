@@ -1,0 +1,223 @@
+--- Java UmlSource
++++ after CLI metadata source
+@@ -60,17 +60,17 @@
+   }
+   nwdiagDiagram {
+ 	network {
+-			FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY    
++			FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7    
+ 		LineColor #2FA4E7
+ 		LineThickness 1.0
+ 		FontColor #2683B9
+ 	}
+ 	server {
+-			FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++			FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ 	}
+ 	arrow {
+ 		FontColor #2683B9
+@@ -86,9 +86,9 @@
+   }
+   ganttDiagram {
+ 	task {
+-			FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++			FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ 		LineColor #2FA4E7
+ 		Margin 10 2 2 2
+ 		Padding 6
+@@ -166,9 +166,9 @@
+ 
+ 
+ skinparam activity {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ 	BarColor #73A839
+ 	StartColor #033C73
+ 	EndColor #033C73
+@@ -179,17 +179,17 @@
+ 
+ 
+ skinparam participant {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ 	ParticipantBorderThickness 2
+ }
+ 
+ 
+ skinparam actor {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ 	FontColor #343A40
+ }
+ 
+@@ -237,32 +237,32 @@
+ 
+ 
+ skinparam collections {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ }
+ 
+ 
+ skinparam control {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ 	FontColor #343A40
+ }
+ 
+ 
+ skinparam entity {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ 	FontColor #343A40
+ }
+ 
+ 
+ skinparam boundary {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ 	FontColor #343A40
+ }
+ 
+@@ -290,9 +290,9 @@
+ 
+ 
+ skinparam component {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ }
+ 
+ 
+@@ -325,17 +325,17 @@
+ 
+ 
+ skinparam database {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ 	FontColor #343A40
+ }
+ 
+ 
+ skinparam class {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ 	HeaderBackgroundColor #2FA4E7-#2683B9
+ 	StereotypeFontColor #343A40
+ 	BorderThickness 1
+@@ -345,9 +345,9 @@
+ 
+ 
+ skinparam object {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ 	StereotypeFontColor #343A40
+ 	BorderThickness 1
+ 	AttributeFontColor #343A40
+@@ -356,9 +356,9 @@
+ 
+ 
+ skinparam usecase {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ 	BorderThickness 2
+ 	StereotypeFontColor #2FA4E7
+ }
+@@ -398,9 +398,9 @@
+ 
+ 
+ skinparam state {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ 	BorderColor #2683B9
+ 	StartColor #033C73
+ 	EndColor #033C73
+@@ -410,9 +410,9 @@
+ 
+ 
+ skinparam queue {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ }
+ 
+ 
+@@ -432,9 +432,9 @@
+ 
+ 
+ skinparam stack {
+-		FontColor $PRIMARY_TEXT
+-	BorderColor $PRIMARY
+-	BackgroundColor $PRIMARY_LIGHT-$PRIMARY
++		FontColor #FFF
++	BorderColor #2FA4E7
++	BackgroundColor #59B6EC-#2FA4E7
+ }
+ class LarchLedger
+ @enduml

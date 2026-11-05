@@ -1,0 +1,7 @@
+{
+  "commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9",
+  "path": "docs/reference-bootstrap.md",
+  "sha256": "77ed30e1c5ece8cc9368ef593a44f287b559c3cf91ccfe376499d88ae04b03b1",
+  "contract": "raw Java CLI/file input; preserve historical GET references and counts separately",
+  "scope": "Policy read only. No TIM production/assertion import or duplicate reader verification."
+}

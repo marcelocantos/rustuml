@@ -1,0 +1,8 @@
+@startuml
+cloud "Weather Grid" as Outer {
+cloud "Sector C" as Inner {
+interface Hygrometer
+}
+class Observer
+}
+@enduml

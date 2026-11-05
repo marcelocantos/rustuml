@@ -1,0 +1,8 @@
+{
+  "argv": [
+    "/tmp/rustuml-cff-target/release/rustuml",
+    "--ast",
+    "/tmp/rustuml-cff2/negative-controls/unit_color_order_full.puml"
+  ],
+  "exit": 1
+}

@@ -1,0 +1,7 @@
+@startuml
+process "Delivery Pipeline" as Work <<engine>> {
+class Worker
+}
+class Client
+Client --> Work.Worker
+@enduml

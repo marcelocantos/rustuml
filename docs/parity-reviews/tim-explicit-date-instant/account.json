@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "eebd74cebc3a3cf4b1dbc0d8b63bd06d163972cd",
+  "status": "pre-implementation causal account; maker only, independent checker pending",
+  "scope": [
+    "crates/rustuml-parser/src/preprocess/"
+  ],
+  "oracle_plan": {
+    "class": "2, reference-comparable; judgment cost converted to exact stream and strict SVG checks",
+    "checks": [
+      "Java SourceStringReader Diagram.getSource().getPlainString versus shipped CLI --yaml meta.source",
+      "Shipped CLI SVG versus pinned Java using unchanged compare_svg_strict",
+      "Parser units, pipe_mode, golden_no_oracle, golden_pairs, harness_guards, parity_perturbations and all 907 preserved inputs in isolated CLI processes"
+    ],
+    "residue": [
+      "Independent checker heldouts and verdict required",
+      "Historical font/Graphviz equivalence unproven; source-pinned JAR is not byte-identical",
+      "Repeated-theme class spot palette, handwritten shapes and sequence continuation geometry remain outside ownership"
+    ]
+  },
+  "mechanism": "tim-explicit-date-instant",
+  "java_locations": [
+    "tim/builtin/DateFunction.java:executeReturnFunction"
+  ],
+  "rust_locations": [
+    "preprocess/mod.rs:eval_one_builtin_args date/format_java_date_pattern",
+    "preprocess/debug.rs:RenderClock"
+  ],
+  "claimed_invariant": "A two-argument date uses the supplied seconds-since-epoch instant; zero/one arguments use the render clock. Formatting uses the relevant timezone for that instant.",
+  "causal_divergence": "Rust ignores the second argument and always formats render_clock. The deterministic 946684800 case prints 2026 instead of Java 2000.",
+  "planned_model_change": "Honor the explicit signed seconds argument and format its instant, including dates before epoch; preserve deterministic timezone overrides and resolve host timezone at the explicit instant when no override exists.",
+  "perturbation_axes": [
+    "Positive versus negative/zero timestamps",
+    "Variable/arithmetic timestamp expressions and multiple date patterns",
+    "Explicit timestamp independence from pinned render date"
+  ],
+  "invariant": "A two-argument date uses the supplied seconds-since-epoch instant; zero/one arguments use the render clock. Formatting uses the relevant timezone for that instant.",
+  "planned_change": "Honor the explicit signed seconds argument and format its instant, including dates before epoch; preserve deterministic timezone overrides and resolve host timezone at the explicit instant when no override exists."
+}

@@ -1,0 +1,9 @@
+@startuml
+!$n = 0
+!function $paint()
+!$n = $n + 1
+!theme cerulean
+!return $n
+!endfunction
+class "Paint $paint()" as Copper
+@enduml

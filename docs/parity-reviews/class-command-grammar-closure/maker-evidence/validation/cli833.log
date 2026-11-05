@@ -1,0 +1,2 @@
+row keys dict_keys(['source', 'source_sha256', 'reference_sha256', 'cohort', 'before', 'before_detail', 'after', 'after_detail']) invalid frozen 7
+Counter({'pass': 549, 'mismatch': 277, 'invalid_reference': 7})

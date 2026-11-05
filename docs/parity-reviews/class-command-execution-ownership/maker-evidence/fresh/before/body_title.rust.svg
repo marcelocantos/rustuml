@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="78px" preserveAspectRatio="none" style="width:330px;height:78px;background:#FFFFFF;" version="1.1" viewBox="0 0 330 78" width="330px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--entity Measurement Bay-->
+<g class="entity" data-qualified-name="Measurement Bay" data-source-line="5" id="ent0003">
+<polygon fill="#F1F1F1" points="146.55,17,156.55,7,305.8166,7,305.8166,43.4883,295.8166,53.4883,146.55,53.4883,146.55,17" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="295.8166" x2="305.8166" y1="17" y2="7"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="146.55" x2="295.8166" y1="17" y2="17"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="295.8166" x2="295.8166" y1="17" y2="53.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="119.2666" x="161.55" y="40.5352">Measurement Bay</text>
+</g>
+<!--entity page text-->
+<g class="entity" data-qualified-name="page text" data-source-line="3" id="ent0002">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="104.3604" x="7" y="7"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="91.3604" y="12"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="89.3604" y="14"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="89.3604" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="64.3604" x="22" y="40.5352">page text</text>
+</g>
+</g></svg>

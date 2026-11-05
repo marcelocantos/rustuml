@@ -1,0 +1,12 @@
+{
+  "source": "test-diagrams/perturbations/tim-parser-error-propagation/checker2_multi_block_error.puml",
+  "command": [
+    "/tmp/rustuml-tim-check-2fa74908/candidate-rustuml",
+    "--block=1",
+    "-pipe"
+  ],
+  "exit": 1,
+  "stdout_bytes": 0,
+  "stderr": "parse error: line 5: Bad date pattern: unsupported letter Q\n",
+  "note": "Default Rust selects block 0; Java -pipe emits all blocks. This selected block experiment exercises the failing block explicitly, not a second preprocessing pass."
+}

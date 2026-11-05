@@ -1,0 +1,7 @@
+@startuml
+!theme cerulean
+!if 0
+!include docs/parity-reviews/tim-theme-post-expansion-source-identity/checker-support/include-theme.iuml
+!endif
+class OliveLedger
+@enduml

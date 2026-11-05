@@ -1,0 +1,20 @@
+{
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "PSystemBuilder.java#createPSystem",
+    "classdiagram/command/CommandCreateElementFull2.java#executeArg",
+    "descdiagram/DescriptionDiagramFactory.java#initCommandsList",
+    "descdiagram/command/CommandCreateElementFull.java#ALL_TYPES"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs#detect_uml_subtype",
+    "crates/rustuml-parser/src/parse/class.rs#parse_commands"
+  ],
+  "invariant": "A class execution failure must not turn a valid description-only actor generalization into an error solely because the old score dispatcher prefers class arrows. It must also not admit native class/actor mixtures without prior allowmixing.",
+  "evidence": "Workspace unit usecase::tests::reversed_renamed_generalization_keeps_its_hollow_start_triangle now exposes the old score routing to Class for two actor declarations and a generalization. Previously ClassParser silently accepted those actor commands without mixing.",
+  "planned_change": "Reuse the consuming command engine with description factory initial state (description leaves permitted) for a bounded actor/usecase-only candidate, requiring a complete successful stream, no native declarations, and ordinary actor/usecase entities only. When normal class execution fails and no allowmixing directive has chosen class, this complete description candidate overrides the erroneous class score. Do not add raw keyword exceptions or relax the class parser mixing check.",
+  "perturbation_axes": [
+    "actor labels and declaration order",
+    "generalization direction and presence of native class/late mixing controls"
+  ]
+}

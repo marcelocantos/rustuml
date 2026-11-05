@@ -1,0 +1,3 @@
+@startuml
+class "Sat Jan 01 years day  x" as Copper
+@enduml

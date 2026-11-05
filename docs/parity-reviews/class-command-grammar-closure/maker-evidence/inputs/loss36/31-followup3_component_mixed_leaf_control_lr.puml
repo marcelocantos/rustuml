@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+CoMpOnEnT "Telemetry Display F3H" AS TelemetryF3H
+COMPONENT ApiF3H
+TelemetryF3H --> ApiF3H
+@enduml

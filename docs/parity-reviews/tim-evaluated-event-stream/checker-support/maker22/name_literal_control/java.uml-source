@@ -1,0 +1,3 @@
+@startuml
+class "1|0|1" as LiteralLookup
+@enduml

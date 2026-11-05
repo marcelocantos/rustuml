@@ -1,0 +1,44 @@
+[
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_sum_wrap.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh arithmetic boundary",
+    "axes": [
+      "Java signed integer wrap",
+      "explicit date arithmetic expression"
+    ],
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": false,
+    "java_valid": true,
+    "negative_rejection": false,
+    "metadata_exit": 1,
+    "source_equal": false,
+    "metadata_error": "'NoneType' object has no attribute 'value'"
+  },
+  {
+    "source": "test-diagrams/perturbations/tim-date-pattern-tokens/checker2_difference_wrap.puml",
+    "mechanism": "tim-date-pattern-tokens",
+    "kind": "fresh arithmetic boundary",
+    "axes": [
+      "Java signed integer wrap",
+      "explicit date arithmetic expression"
+    ],
+    "java_exit": 0,
+    "java_source_exit": 0,
+    "cli_exit": 1,
+    "stdout_bytes": 0,
+    "comparison_exit": 3,
+    "svg_match": false,
+    "reference_invalid": false,
+    "java_valid": true,
+    "negative_rejection": false,
+    "metadata_exit": 1,
+    "source_equal": false,
+    "metadata_error": "'NoneType' object has no attribute 'value'"
+  }
+]

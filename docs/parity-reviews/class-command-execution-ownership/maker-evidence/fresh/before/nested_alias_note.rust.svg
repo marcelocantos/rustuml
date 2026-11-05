@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="118px" preserveAspectRatio="none" style="width:161px;height:118px;background:#FFFFFF;" version="1.1" viewBox="0 0 161 118" width="161px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Weather House-->
+<g class="cluster" data-qualified-name="Outer" data-source-line="1" id="ent0002">
+<rect fill="none" height="97.49" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="140" x="7" y="7"/>
+<path d="M125.3154,7 L125.3154,16.4883 L115.3154,26.4883 L7,26.4883" fill="none" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="108.3154" x="10" y="21.5352">Weather House</text>
+</g>
+<!--entity Signal Bay-->
+<g class="entity" data-qualified-name="Outer.Inner" data-source-line="2" id="ent0003">
+<polygon fill="#F1F1F1" points="22.84,52,32.84,42,131.1515,42,131.1515,78.4883,121.1515,88.4883,22.84,88.4883,22.84,52" style="stroke:#181818;stroke-width:0.5;"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="121.1515" x2="131.1515" y1="52" y2="42"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="22.84" x2="121.1515" y1="52" y2="52"/>
+<line style="stroke:#181818;stroke-width:0.5;" x1="121.1515" x2="121.1515" y1="52" y2="88.4883"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="68.3115" x="37.84" y="75.5352">Signal Bay</text>
+</g>
+</g></svg>

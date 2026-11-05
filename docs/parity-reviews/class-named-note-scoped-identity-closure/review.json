@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-named-note-scoped-identity-closure",
+  "reviewer": {
+    "task_id": "t3-2740aefa-independent-class-container-checker",
+    "model": "gpt-6-astra (high), Codex harness; user explicitly selected inherited Codex; no children"
+  },
+  "account_commit": "77468aaed3478d586da411b2c98811dd52e31ea4",
+  "implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 18916d312c32340b0a674e15259dc3031ea57acf -- crates/rustuml-parser crates/rustuml-render",
+    "git show bed3b50ca08e12d8ada612791cf07393617b2041 -- crates/rustuml-parser crates/rustuml-render",
+    "CARGO_TARGET_DIR=/tmp/rustuml-checker2740-target CARGO_BUILD_JOBS=4 cargo build --release --workspace",
+    "python3 /tmp/checker2740_generate.py",
+    "python3 /tmp/checker2740_followup.py",
+    "python3 /tmp/checker2740_run.py fresh",
+    "python3 /tmp/checker2740_run.py current",
+    "python3 /tmp/checker2740_run.py maker"
+  ],
+  "findings": [
+    "Named root/nested notes declared before links reuse their quark without fabricated classes, and those two fresh cases pass.",
+    "Java CODE permits qualified dots, while Rust FLOATING note grammar uses a word-only alias. H.N single-line and multiline declarations are both valid Java and both parse-error in Rust. Link-before-note probes unexpectedly prove Java-invalid (existing leaf cannot be rematerialized as a note); all original Java error bytes remain retained and are not counted as positive passes."
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_0.puml",
+      "golden": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_0.svg",
+      "axes": [
+        "link before/after named note",
+        "root/nested quark ownership"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-named-note-scoped-identity-closure/named_0.puml",
+      "source_sha256": "27ade472fef6b77f48c6056002b57ab982dcbb281fad211aa99177a0aac301a2",
+      "java_sha256": "92d1a4d749b05b56e3b9515aafb007d1455faec9a24a881a7be8a14ffeb5f8d5",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-named-note-scoped-identity-closure/named_0"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_1.puml",
+      "golden": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_1.svg",
+      "axes": [
+        "link before/after named note",
+        "root/nested quark ownership"
+      ],
+      "result": "fail",
+      "observed_status": "invalid_reference",
+      "java_valid": false,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-named-note-scoped-identity-closure/named_1.puml",
+      "source_sha256": "80ba01d1bb8dbb776d0712ef58807ca68846bca65fc539417db1fbe60643580f",
+      "java_sha256": "b990d5798ea89d70807ec3d0b219eacd2166d0af70ba99db411c907a129175d6",
+      "cli_exit": 0,
+      "strict_comparator_exit": 2,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-named-note-scoped-identity-closure/named_1"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_2.puml",
+      "golden": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_2.svg",
+      "axes": [
+        "link before/after named note",
+        "root/nested quark ownership"
+      ],
+      "result": "pass",
+      "observed_status": "pass",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-named-note-scoped-identity-closure/named_2.puml",
+      "source_sha256": "45a5c89c078f8428c1147cd82ec9d3339423d29926a5daf88769396c96b44705",
+      "java_sha256": "5eadc10d68317f0584b00afa512d7f51c7b0e76289e745aa29145c4932f30e6b",
+      "cli_exit": 0,
+      "strict_comparator_exit": 0,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-named-note-scoped-identity-closure/named_2"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_3.puml",
+      "golden": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/named_3.svg",
+      "axes": [
+        "link before/after named note",
+        "root/nested quark ownership"
+      ],
+      "result": "fail",
+      "observed_status": "invalid_reference",
+      "java_valid": false,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-named-note-scoped-identity-closure/named_3.puml",
+      "source_sha256": "da0c7a69cfdddd6a018aeb3768d6f716cfa59cf37033a0fac62ca755bfd56ec0",
+      "java_sha256": "67f82fe3330668113264e5f971f106c724b9a6b3bc3b31fc21f287c0b5d0ef39",
+      "cli_exit": 0,
+      "strict_comparator_exit": 2,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-named-note-scoped-identity-closure/named_3"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/qualified_0.puml",
+      "golden": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/qualified_0.svg",
+      "axes": [
+        "qualified named-note identity",
+        "single/multiline declaration"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-named-note-scoped-identity-closure/qualified_0.puml",
+      "source_sha256": "2c9adbc3cc443ea82bab68e55e84636861d518742a66b381613961ac690e2d91",
+      "java_sha256": "fe337b30308f1daee732b1773901030dc7962cc49d537bed69d36cb7e55a0af1",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-named-note-scoped-identity-closure/qualified_0"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/qualified_1.puml",
+      "golden": "test-diagrams/perturbations/class-named-note-scoped-identity-closure/checker/qualified_1.svg",
+      "axes": [
+        "qualified named-note identity",
+        "single/multiline declaration"
+      ],
+      "result": "fail",
+      "observed_status": "process_error",
+      "java_valid": true,
+      "origin": "fresh independent checker",
+      "original_source": "/tmp/rustuml-checker2740/new-sources/class-named-note-scoped-identity-closure/qualified_1.puml",
+      "source_sha256": "9a670655d320a2ee7d26e363eca99dd85866d5d0087ca680ca5df63d77cf9abb",
+      "java_sha256": "6c5149fc2552d3f3ffbdf3d3a3329c23a64a3f42351f1ce3fbaea2a002b9e0b1",
+      "cli_exit": 1,
+      "strict_comparator_exit": 1,
+      "evidence_output": "candidate-outputs.tar.gz::outputs/checker_fresh/class-named-note-scoped-identity-closure/qualified_1"
+    }
+  ],
+  "verdict": "rejected",
+  "tested_combined_revision": "fefca37686ff0c93b5b306831e4554a2d8f9efa6",
+  "parent_base": "ea136c78ff71d2be074b39d2ffe0484decba0aec",
+  "original_account_commit": "42e8ff78466d3b6c6b7c3f2a1defdbf8d09c5ba0",
+  "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+  "phase_mapping": {
+    "mechanism": "class-named-note-scoped-identity-closure",
+    "account_path": "docs/parity-reviews/class-named-note-scoped-identity-closure/account.json",
+    "original_account_commit": "42e8ff78466d3b6c6b7c3f2a1defdbf8d09c5ba0",
+    "picked_account_commit": "77468aaed3478d586da411b2c98811dd52e31ea4",
+    "account_history_original": [
+      "42e8ff78466d3b6c6b7c3f2a1defdbf8d09c5ba0",
+      "486c9fe9ecf4b85f4578a41a6e1ed018a03a1d4f"
+    ],
+    "account_history_picked": [
+      "77468aaed3478d586da411b2c98811dd52e31ea4",
+      "684bf7b0a7c1fc962928fa0a97ccdcddf11167b0"
+    ],
+    "original_implementation_commit": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "picked_implementation_commit": "58a89ed7f3fecece53659b097cd6a9af2952147e",
+    "phase_one_implementation": "18916d312c32340b0a674e15259dc3031ea57acf",
+    "phase_two_implementation": "bed3b50ca08e12d8ada612791cf07393617b2041",
+    "originally_deferred": false,
+    "final_account_sha256": "576fd057f63df13a48b653d9dd78e7337755b8a07f55f8e84c420a278f52f07f",
+    "account_precedes_first_actual_implementation": true,
+    "inspection": "Original causal text retained through schema projections; chronological ordering independently verified. Later refinements are listed as dependencies, not rewritten history."
+  },
+  "dependencies": [
+    "class-command-grammar-closure"
+  ],
+  "scope": "Only the stated mechanism at the full combined tested revision; not packet acceptance and not certification of an extracted subset. Failed applicable held-outs are blocking. Invalid grammar references are negatives, never positive comparisons.",
+  "reference_profile": "Source-pinned Java 71806a2, raw CLI -tsvg -pipe for new inputs, consistent with owner-approved raw CLI/file policy b62d8ce967b6dda7d85bb6dc28ff92509f6066f9. All preexisting/maker reference bytes unchanged; historical GET corpus/counts reported separately. Historical binary/font/Graphviz equivalence unproven. TIM checker owns independent reader verification; no TIM production/assertion imported.",
+  "support": "docs/parity-reviews/class-command-grammar-closure/checker-support/REPORT.md",
+  "observed_counts": {
+    "pass": 2,
+    "invalid_reference": 2,
+    "process_error": 2
+  },
+  "reference_policy_commit": "b62d8ce967b6dda7d85bb6dc28ff92509f6066f9"
+}

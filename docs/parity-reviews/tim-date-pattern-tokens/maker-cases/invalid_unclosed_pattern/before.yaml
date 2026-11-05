@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "1970 oops" as Copper
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Copper
+  entities:
+  - id: Copper
+    label: '1970 oops'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 2
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

@@ -1,0 +1,8 @@
+@startuml
+skinparam classAttributeIconSize 14
+node "Native types" as N {
++record "Long dossier" as V {
++id: int
+}
+}
+@enduml

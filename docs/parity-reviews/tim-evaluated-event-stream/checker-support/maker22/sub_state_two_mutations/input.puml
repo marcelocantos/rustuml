@@ -1,0 +1,12 @@
+@startuml
+!$counter = 0
+!startsub prime
+!$counter = $counter + 1
+!endsub
+!theme cerulean
+!startsub tint
+!$counter = $counter + 1
+skinparam classBorderColor #A41367
+!endsub
+class "Ordinal $counter" as CobaltArchive
+@enduml

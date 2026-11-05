@@ -1,0 +1,11 @@
+@startuml
+
+
+
+
+class ReaderCedar
+
+
+class ReaderLarch
+ReaderCedar --> ReaderLarch
+@enduml

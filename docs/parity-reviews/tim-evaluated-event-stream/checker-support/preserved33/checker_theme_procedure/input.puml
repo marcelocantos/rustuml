@@ -1,0 +1,7 @@
+@startuml
+!procedure $load()
+!theme cerulean
+!endprocedure
+$load()
+class LarchLedger
+@enduml

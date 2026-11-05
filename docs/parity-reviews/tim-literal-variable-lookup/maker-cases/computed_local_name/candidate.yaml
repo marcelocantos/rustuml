@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class PresentRecord
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity PresentRecord
+  entities:
+  - id: PresentRecord
+    label: PresentRecord
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 4
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

@@ -1,0 +1,440 @@
+@startuml
+!$n = 0
+!while $n < 2
+
+
+
+skinparam backgroundColor transparent
+skinparam useBetaStyle false
+
+
+
+
+
+
+<style>
+  root {
+    BackgroundColor transparent
+    FontColor #fff
+    HyperLinkColor #fd7e14
+    LineColor #6caf9c
+    LineThickness 1
+    Margin 10
+    Padding 6
+    Shadowing 0.0
+  }
+  node {
+   Padding 15
+   roundcorner 20
+   BackgroundColor #78c2ad-#6caf9c
+  }
+  caption {
+    LineThickness 0
+  }
+  footer {
+    LineThickness 0
+  }
+  groupHeader {
+    BackgroundColor #f3969a
+    FontColor #6cc3d5
+    FontStyle bold
+  }
+  header {
+    LineThickness 0
+  }
+  referenceHeader {
+    BackgroundColor transparent
+    FontColor #343a40
+    FontStyle bold
+  }
+  separator {
+    BackgroundColor #fff
+    FontColor transparent
+    FontStyle bold
+  }
+  title {
+	FontSize 20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor  #f4a1a4-#f3969a
+	FontColor #78c2ad
+	BorderColor #f3969a
+  }
+  nwdiagDiagram {
+	network {
+			FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5    
+		LineColor #78c2ad
+		LineThickness 1.0
+		FontColor #6caf9c
+	}
+	server {
+			FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	}
+	arrow {
+		FontColor #6caf9c
+		LineColor #6caf9c
+	}
+	group {
+		BackGroundColor #f8f9fa
+		LineColor #dfe0e1
+		LineThickness 2.0
+		Margin 5
+		Padding 5
+	}
+  }
+  ganttDiagram {
+	task {
+			FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+		LineColor #78c2ad
+		Margin 10 2 2 2
+		Padding 6
+	}
+	note {
+		FontColor #fff
+		LineColor #61b0c0
+		BackGroundColor #6cc3d5
+	}
+	separator {
+		LineColor #f3969a
+		BackGroundColor #f3969a-#db878b
+		FontColor #fff
+	}
+	milestone {
+		FontColor #6cc3d5
+		FontSize 16
+		FontStyle italic
+		BackGroundColor #f3969a
+		LineColor #db878b
+	}
+	timeline {
+		BackgroundColor #f3969a
+		FontColor #fff
+	}
+	closed {
+		BackgroundColor #e6b95d
+		FontColor #fff
+	}
+  }
+</style>
+skinparam defaultFontName       "Verdana"
+skinparam defaultFontSize       12
+skinparam dpi                   100
+skinparam shadowing             false
+skinparam roundcorner           8
+skinparam ParticipantPadding    40
+skinparam BoxPadding            40
+skinparam Padding               5
+skinparam ArrowColor            #343a40
+skinparam stereotype {
+    CBackgroundColor #f4a1a4
+    CBorderColor #db878b
+    ABackgroundColor #67d1a7
+    ABorderColor #4db88d
+    IBackgroundColor #ff8662
+    IBorderColor #e66c49
+    EBackgroundColor #ffd376
+    EBorderColor #e6b95d
+    NBackgroundColor #7bc9d9
+    NBorderColor #61b0c0
+}
+skinparam title {
+	FontColor	                 #6caf9c
+	BorderColor	                 #db878b
+	FontSize	    	         20
+	BorderRoundCorner            8
+	BorderThickness 	         1
+	BackgroundColor              #f4a1a4-#f3969a
+}
+
+skinparam legend {
+	BackgroundColor #f3969a
+	BorderColor #db878b
+	FontColor #f8f9fa
+}
+
+skinparam swimlane {
+	BorderColor #6cc3d5
+	BorderThickness 2
+	TitleBackgroundColor  #f4a1a4-#f3969a
+	TitleFontColor #78c2ad
+}
+
+
+skinparam activity {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	BarColor #56cc9d
+	StartColor #6cc3d5
+	EndColor #6cc3d5
+	DiamondBackgroundColor #f4a1a4
+  	DiamondBorderColor #db878b
+  	DiamondFontColor #fff
+}
+
+
+skinparam participant {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	ParticipantBorderThickness 2
+}
+
+
+skinparam actor {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam arrow {
+	Thickness 3
+	Color #78c2ad
+	FontColor #fff
+}
+
+
+skinparam sequence {
+	BorderColor #78c2ad
+	TitleFontColor #78c2ad
+	BackgroundColor transparent
+	StartColor #78c2ad
+	EndColor #78c2ad
+	BoxBackgroundColor transparent
+	BoxBorderColor #343a40
+	BoxFontColor #343a40
+	DelayFontColor #343a40
+	LifeLineBorderColor #f3969a
+	LifeLineBorderThickness 2
+	LifeLineBackgroundColor #db878b
+	GroupBorderColor #343a40
+	GroupFontColor #343a40
+	GroupHeaderFontColor #6cc3d5
+	GroupBackgroundColor #f3969a
+	GroupHeaderBackgroundColor transparent
+	DividerBackgroundColor #343a40
+    DividerBorderColor #343a40
+    DividerBorderThickness 2
+    DividerFontColor #f8f9fa
+	ReferenceBackgroundColor transparent
+	ReferenceBorderColor #343a40
+	ReferenceFontColor #343a40
+	ReferenceHeaderFontColor #6cc3d5
+	ReferenceHeaderBackgroundColor #f3969a
+	StereotypeFontColor #fff
+}
+
+
+skinparam partition {
+	BorderColor #78c2ad
+	FontColor #78c2ad
+	BackgroundColor transparent
+}
+
+
+skinparam collections {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam control {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam entity {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam boundary {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam agent {
+	BackgroundColor #ffce67
+	BorderColor #ffd376
+	FontColor #343a40
+}
+
+
+skinparam note {
+	BorderThickness 1
+	BackgroundColor #6cc3d5
+	BorderColor #61b0c0
+	FontColor #fff
+}
+
+
+skinparam artifact {
+	BackgroundColor #343a40
+	BorderColor #2f343a
+	FontColor #f8f9fa
+}
+
+
+skinparam component {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam interface {
+	BackgroundColor  #e66c49
+	BorderColor  #ff7851
+	FontColor #343a40
+}
+
+
+skinparam storage {
+	BackgroundColor #ffce67
+  	BorderColor #e6b95d
+	FontColor #fff
+}
+
+
+skinparam node {
+	BackgroundColor  #f3969a
+	BorderColor #f8f9fa
+	FontColor #f8f9fa
+}
+
+
+skinparam cloud {
+	BackgroundColor #F2FCFE-#eeeeee
+	BorderColor #F2FCFE
+	FontColor #343a40
+}
+
+
+skinparam database {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam class {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	HeaderBackgroundColor #86c8b5
+	StereotypeFontColor #343a40
+	BorderThickness 1
+	AttributeFontColor #343a40
+	AttributeFontSize 11
+}
+
+
+skinparam object {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	StereotypeFontColor #343a40
+	BorderThickness 1
+	AttributeFontColor #fff
+	AttributeFontSize 11
+}
+
+
+skinparam usecase {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	BorderThickness 2
+	StereotypeFontColor #78c2ad
+}
+
+
+skinparam rectangle {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	BackgroundColor #f4a1a4
+	BorderThickness 2
+	StereotypeFontColor #78c2ad
+}
+
+
+skinparam package {
+	BackgroundColor #f3969a
+  	BorderColor #78c2ad
+	FontColor #78c2ad
+	BorderThickness 2
+}
+
+
+skinparam folder {
+	BackgroundColor #f4a1a4
+  	BorderColor #ffce67
+	FontColor #ffce67
+	BorderThickness 2
+}
+
+
+skinparam frame {
+	BackgroundColor #f4a1a4
+  	BorderColor #6cc3d5
+	FontColor #6cc3d5
+	BorderThickness 2
+}
+
+
+skinparam state {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+	StartColor #6cc3d5
+	EndColor #6cc3d5
+	AttributeFontColor #fff
+	AttributeFontSize 11
+}
+
+
+skinparam queue {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+
+
+skinparam card {
+	BackgroundColor #6cc3d5
+	BorderColor #61b0c0
+	FontColor #fff
+}
+
+
+skinparam file {
+	BackgroundColor #db878b
+	BorderColor #f8f9fa
+	FontColor #f8f9fa
+}
+
+
+skinparam stack {
+		FontColor #fff
+	BorderColor #78c2ad
+	BackgroundColor #86c8b5
+}
+!$n = $n + 1
+!endwhile
+class SpruceLedger
+@enduml

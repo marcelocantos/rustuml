@@ -1,0 +1,222 @@
+[
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/aws_activity_seed.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 1,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam2_shadowing_true.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_act_skinparam_shadowing.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/diagnostic_edge_whitespace_multiple_blank_lines.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/function_selector_parameter.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/inactive_and_comments.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/local_theme_once.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/loop_side_effect.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/parser_blank_origin_control.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/preamble_procedure_origin_control.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sprite_before_dynamic_theme.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_sprite_after_theme.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-evaluated-event-stream/maker-cases/sub_state_two_mutations.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/expression_timestamp.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-explicit-date-instant/maker-cases/negative_and_zero.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/computed_local_name.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 2,
+    "result": "fail",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": false
+  },
+  {
+    "source": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/guard_changed_theme_valid.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-literal-variable-lookup/maker-cases/name_literal_control.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/explicit_global_shadow.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/nested_local_and_global.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  },
+  {
+    "source": "docs/parity-reviews/tim-procedure-global-fork-memory/maker-cases/theme_scope_helper.puml",
+    "phase": "fixed",
+    "cli_exit": 0,
+    "comparison_exit": 0,
+    "result": "pass",
+    "java_source_exit": 0,
+    "metadata_exit": 0,
+    "source_equal": true
+  }
+]

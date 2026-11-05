@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class WrongBareRecord
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity WrongBareRecord
+  entities:
+  - id: WrongBareRecord
+    label: WrongBareRecord
+    explicit_alias: false
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 7
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []

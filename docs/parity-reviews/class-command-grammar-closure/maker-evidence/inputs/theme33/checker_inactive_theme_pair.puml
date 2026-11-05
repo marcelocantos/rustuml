@@ -1,0 +1,8 @@
+@startuml
+!theme minty
+!if 0
+!theme cerulean
+!theme united
+!endif
+class YewLedger
+@enduml

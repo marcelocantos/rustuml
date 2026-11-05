@@ -1,0 +1,5 @@
+@startuml
+!$BGCOLOR = "#721345"
+!theme cyborg-outline
+class GarnetRegistry
+@enduml

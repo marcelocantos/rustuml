@@ -1,0 +1,10 @@
+--- Java UmlSource
++++ before CLI metadata source
+@@ -436,6 +436,7 @@
+ 	BorderColor #2FA4E7
+ 	BackgroundColor #59B6EC-#2FA4E7
+ }
++' switch palette
+ 
+ 
+ 

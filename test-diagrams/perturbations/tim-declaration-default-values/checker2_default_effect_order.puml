@@ -1,0 +1,12 @@
+@startuml
+!$calls = 0
+!function $next()
+!$calls = $calls + 1
+!return $calls
+!endfunction
+!procedure $emit($a = $next(), $b = $next())
+class "$a / $b / $calls" as Order
+!endprocedure
+!$calls = 8
+$emit()
+@enduml

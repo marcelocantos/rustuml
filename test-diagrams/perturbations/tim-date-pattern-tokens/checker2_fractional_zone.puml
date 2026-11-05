@@ -1,0 +1,4 @@
+@startuml
+!$stamp = %date("y-M-d H:m:s X XX XXX Z", -1)
+class "$stamp" as Offset
+@enduml

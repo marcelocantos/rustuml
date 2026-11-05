@@ -1,0 +1,6 @@
+@startuml
+!$BGCOLOR = "#123456"
+!theme cerulean-outline
+skinparam classBackgroundColor $BGCOLOR
+class AlderLedger
+@enduml

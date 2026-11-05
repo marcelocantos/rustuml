@@ -1,0 +1,22 @@
+{
+  "counts": {
+    "current955": {
+      "mismatch": 356,
+      "pass": 583,
+      "invalid_reference": 9,
+      "process_error": 7
+    },
+    "retained237": {
+      "pass": 143,
+      "mismatch": 73,
+      "process_error": 17,
+      "invalid_reference": 4
+    }
+  },
+  "total": {
+    "mismatch": 429,
+    "pass": 726,
+    "process_error": 24,
+    "invalid_reference": 13
+  }
+}

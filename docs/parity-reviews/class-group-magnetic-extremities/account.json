@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; no acceptance",
+  "rust_base": "0a04a06acb2a072946356a741a5850377dd5c039",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "negative_evidence_contract": "All relevant valid failures remain blocking; no checker record changes.",
+  "mechanism": "class-group-magnetic-extremities",
+  "java_locations": [
+    "klimt/shape/DotPath#moveStartPoint,moveEndPoint",
+    "klimt/geom/XCubicCurve2D#getLength",
+    "svek/SvekEdge#drawU",
+    "svek/Cluster#getMagneticBorder",
+    "decoration/symbol/USymbolFolder#asBig,getMagneticBorder,getWTitle,getHTitle"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs#shortened_endpoint_points,render_relationship_svg"
+  ],
+  "invariant": "Clipped routes retain subdivision precision; shortening can remove an exhausted first cubic. Folder endpoints and their decorations receive the same painted-border force after shortening.",
+  "causal_divergence": "Rust re-rounds compound-clipped controls, mutates an exhausted leading cubic without dropping it, and never moves contacts from the enclosing folder rectangle to the folder shoulder.",
+  "planned_model_change": "Implement DotPath start-removal semantics, retain already serialized compound precision, and derive folder magnetic displacement from cluster dimensions and measured title. Apply displacement to visible endpoint/control and the corresponding decoration only.",
+  "perturbation_axes": [
+    "source/target/both parenthesis on group endpoints",
+    "renamed short/wide folder titles, TB/LR and group-to-leaf links"
+  ],
+  "planned_change": "Implement DotPath start-removal semantics, retain already serialized compound precision, and derive folder magnetic displacement from cluster dimensions and measured title. Apply displacement to visible endpoint/control and the corresponding decoration only."
+}

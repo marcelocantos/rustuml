@@ -1,0 +1,6 @@
+@startuml
+!procedure $unused($v = %date("yyyy",2147483648))
+class Unused
+!endprocedure
+class Before
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+node "Transit" as Hub {
+class Ticket
+BOUNDARY "Ticket desk" as Desk
+Ticket -- Desk
+}
+@enduml

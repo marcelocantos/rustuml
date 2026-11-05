@@ -1,0 +1,6 @@
+@startuml
+!$value = "007"
+!$key = '$' + 'value'
+!$joined = %get_variable_value($key) + 2
+class "$joined" as Lookup
+@enduml

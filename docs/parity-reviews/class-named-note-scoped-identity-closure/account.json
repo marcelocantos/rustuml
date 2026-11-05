@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "status": "maker plan; no acceptance",
+  "rust_base": "0a04a06acb2a072946356a741a5850377dd5c039",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "negative_evidence_contract": "All relevant valid failures remain blocking; no checker record changes.",
+  "mechanism": "class-named-note-scoped-identity-closure",
+  "java_locations": [
+    "command/note/CommandFactoryNote#executeInternal",
+    "classdiagram/command/CommandLinkClass#executeArg",
+    "abel/CucaDiagram#quarkInContext"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs#push_note,resolve_relationship_endpoint"
+  ],
+  "invariant": "Named notes own a declaration quark and are reused as relationship endpoints in the same namespace as other leaves, without manufacturing a class.",
+  "causal_divergence": "Floating notes store raw aliases while class links resolve qualified quarks; the finish-time phantom filter cannot match Yard.N to N.",
+  "planned_model_change": "Resolve/register named note aliases in current scope when consumed and reuse them through canonical relationship identity. Preserve owner scope separately.",
+  "perturbation_axes": [
+    "root/nested declaration and qualified/unqualified reference",
+    "relationship before/after note and multiline note body"
+  ],
+  "planned_change": "Resolve/register named note aliases in current scope when consumed and reuse them through canonical relationship identity. Preserve owner scope separately."
+}

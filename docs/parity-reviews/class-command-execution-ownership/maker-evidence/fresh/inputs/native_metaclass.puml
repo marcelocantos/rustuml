@@ -1,0 +1,7 @@
+@startuml
+folder "Observation Types" {
+metaclass "Water Reading" as Water {
+value : Decimal
+}
+}
+@enduml

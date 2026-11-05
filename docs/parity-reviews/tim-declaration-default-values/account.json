@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-declaration-default-values",
+  "rust_revision": "5f1035ace5c1fa38df91b2cf44c20e1e7edc79f0",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "tim/Eater.java:eatDeclareFunction",
+    "tim/TFunctionImpl.java:getNewMemory"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs"
+  ],
+  "invariant": "Default arguments are evaluated once in declaration memory and stored as values, then bound unchanged when omitted by a caller.",
+  "causal_divergence": "Raw parameter strings and comma/parenthesis regexes neither evaluate nor capture declaration defaults.",
+  "planned_change": "Parse balanced declarations and arguments; evaluate defaults before storing the FunctionDef; preserve current sibling-frame precedence and explicit argument evaluation.",
+  "perturbation_axes": [
+    "Mutation after declaration and shadowing in sibling callers",
+    "Defaults with nested calls/comma-containing quoted strings and declaration-time side effects"
+  ],
+  "oracle_plan": [
+    "Exact raw Java Diagram.getSource() and shipped CLI SVG, preserved checker cases and >=2 fresh axes",
+    "Parser/CLI tests, main tiers, original907 and expanded949 isolated CLI; built-in with accepted registry cleanup"
+  ],
+  "scope": "preprocess modules and new maker evidence only; no checker attestation",
+  "pending": [
+    "T14.6.3 reader contract owner decision; current behavior unchanged",
+    "Independent checker required",
+    "Date error to ParseError handoff requires parse owner; CLI errors remain blocked until that interface is consumed"
+  ]
+}

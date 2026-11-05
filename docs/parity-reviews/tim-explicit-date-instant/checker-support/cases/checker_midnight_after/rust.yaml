@@ -1,0 +1,22 @@
+type: Class
+diagram:
+  meta:
+    source: |
+      @startuml
+      class "1970-01-01 00:00:00" as Clockmidnightafter
+      @enduml
+  direction: TopToBottom
+  uid_events:
+  - !Entity Clockmidnightafter
+  entities:
+  - id: Clockmidnightafter
+    label: '1970-01-01 00:00:00'
+    explicit_alias: true
+    kind: Class
+    members: []
+    stereotypes: []
+    source_line: 3
+  relationships: []
+  packages: []
+  notes: []
+  hide_show: []
