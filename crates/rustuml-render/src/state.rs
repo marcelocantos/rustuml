@@ -659,13 +659,17 @@ fn autonomous_layout_node_size(
     )
 }
 
+/// The state font of the oracle-assisted / no-style layout path
+/// (`state_node_size`). It has no italic: a `stateFontStyle` skinparam always
+/// adds a style declaration (`legacy_mappings` "state" x fontstyle), so
+/// without an oracle an italic state font always takes the autonomous path
+/// (`AutonomousTextStyle`, which carries its own italic).
 struct StateNodeFont<'a> {
     name_size: f64,
     desc_size: f64,
     name: Option<&'a str>,
     monospace: bool,
     bold: bool,
-    italic: bool,
 }
 
 fn layout_node_size_with_font(
@@ -694,7 +698,7 @@ fn layout_node_size_with_font(
         label,
         font.name_size,
         font.bold,
-        font.italic,
+        false,
         font.name,
         font.monospace,
     );
@@ -705,7 +709,7 @@ fn layout_node_size_with_font(
                 description,
                 font.desc_size,
                 font.bold,
-                font.italic,
+                false,
                 font.name,
                 font.monospace,
             )
@@ -6419,7 +6423,7 @@ pub fn render_with_oracle(
         .unwrap_or_default();
     // The face emission draws (`apply_resolved_state_text_style`):
     // `Style.getUFont` -> `ValueImpl.asFontFace`.
-    let (state_font_bold, state_font_italic) = crate::style_cascade::font_face(&state_font_style);
+    let (state_font_bold, _) = crate::style_cascade::font_face(&state_font_style);
 
     let (has_start, _has_end) = classify_star_nodes(&diagram.transitions);
 
@@ -6435,7 +6439,6 @@ pub fn render_with_oracle(
         name: state_font_name.as_deref(),
         monospace: state_name_is_mono,
         bold: state_font_bold,
-        italic: state_font_italic,
     };
 
     // Collect ordered unique entity IDs in PlantUML's render order.
