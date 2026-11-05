@@ -82,6 +82,19 @@ fn resolve_pseudo_state_color(value: &str) -> String {
     resolve_state_fill_color(value)
 }
 
+// ValueImpl.asColor resolves LINE exactly as it resolves BACK. The stroke is
+// then written by SvgGraphics.setStrokeColor/fixColor: HColor.toSvg, with a
+// transparent (#00000000) color written as none.
+fn resolve_state_line_color(value: &str) -> String {
+    let color = resolve_state_fill_color(value);
+    let (_, alpha) = text_render::color_with_opacity(&color);
+    if alpha == Some(0) {
+        "none".to_string()
+    } else {
+        color
+    }
+}
+
 fn state_gradients(diagram: &StateDiagram) -> Vec<StateGradient> {
     let source = diagram.meta.source.as_deref().unwrap_or("");
     let skin = StateSkin::from_diagram(diagram);
@@ -2044,8 +2057,10 @@ impl StateSkin {
         };
         let color =
             |k: &str| -> Option<String> { find(k).map(|v| crate::sequence::resolve_color(&v)) };
-        let root_line_color = color("__styleRootLineColor");
-        let stroke = color("stateBorderColor")
+        let line_color =
+            |k: &str| -> Option<String> { find(k).map(|v| resolve_state_line_color(&v)) };
+        let root_line_color = line_color("__styleRootLineColor");
+        let stroke = line_color("stateBorderColor")
             .or_else(|| root_line_color.clone())
             .unwrap_or_else(|| DEFAULT_STROKE_COLOR.to_string());
         let border_thickness = find("stateBorderThickness")
@@ -2078,7 +2093,7 @@ impl StateSkin {
                 skinparam.key.eq_ignore_ascii_case("stateArrowColor")
                     || skinparam.key.eq_ignore_ascii_case("ArrowColor")
             })
-            .map(|skinparam| crate::sequence::resolve_color(skinparam.value.trim()))
+            .map(|skinparam| resolve_state_line_color(skinparam.value.trim()))
             .or_else(|| root_line_color.clone())
             .unwrap_or_else(|| DEFAULT_STROKE_COLOR.to_string());
         // Java provenance: `FromSkinparamToStyle` maps `arrowThickness` to
@@ -2122,7 +2137,7 @@ impl StateSkin {
             skin.state_fill = resolve_state_paint(value);
         }
         if let Some(value) = state_style.property("lineColor") {
-            let color = crate::sequence::resolve_color(value);
+            let color = resolve_state_line_color(value);
             skin.stroke = color.clone();
             skin.root_line_color = Some(color);
         }
@@ -2135,7 +2150,7 @@ impl StateSkin {
             skin.text_color = crate::sequence::resolve_color(value);
         }
         if let Some(value) = arrow_style.property("lineColor") {
-            skin.arrow_color = crate::sequence::resolve_color(value);
+            skin.arrow_color = resolve_state_line_color(value);
         }
         if let Some(value) = arrow_style.property("lineThickness")
             && let Ok(value) = value.parse::<f64>()
@@ -2151,10 +2166,10 @@ impl StateSkin {
             skin.start_fill = resolve_pseudo_state_color(value);
         }
         if let Some(value) = start_style.property("lineColor") {
-            skin.start_stroke = resolve_pseudo_state_color(value);
+            skin.start_stroke = resolve_state_line_color(value);
         }
         if let Some(value) = end_style.property("lineColor") {
-            skin.end_stroke = resolve_pseudo_state_color(value);
+            skin.end_stroke = resolve_state_line_color(value);
         }
         if let Some(value) = end_style.property("backgroundColor") {
             skin.end_inner_fill = resolve_pseudo_state_color(value);
@@ -2413,7 +2428,7 @@ fn autonomous_state_style(
         style.fill = resolve_state_paint(value);
     }
     if let Some(value) = state_style.property("lineColor") {
-        style.stroke = crate::sequence::resolve_color(value);
+        style.stroke = resolve_state_line_color(value);
     }
     if let Some(value) = state_style.property("lineThickness")
         && let Ok(value) = value.parse::<f64>()
@@ -8427,11 +8442,7 @@ fn state_transition_paint(
         .color
         .as_deref()
         .map(crate::sequence::resolve_color)
-        .or_else(|| {
-            resolved
-                .property("lineColor")
-                .map(crate::sequence::resolve_color)
-        })
+        .or_else(|| resolved.property("lineColor").map(resolve_state_line_color))
         .unwrap_or_else(|| skin.arrow_color.clone());
     let thickness = transition_stroke_thickness(&inline, css_stroke.thickness);
     let dash = match inline.line_style {
