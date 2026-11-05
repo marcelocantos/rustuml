@@ -1,0 +1,277 @@
+{
+ "changes": [
+  {
+   "name": "mk4_svg_end_triple_word_seq",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 1: sprite $box <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "mk4_pixel_end_triple_word_deployment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_pixel_end_two_spans_class",
+   "cohort": "AY",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Cannot read: [2x2/16] {\n"
+  },
+  {
+   "name": "mk4_seq_message_trailing_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_seq_message_leading_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_seq_quoted_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_seq_participant_quote_then_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_seq_note_body_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_class_member_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_class_leading_comment_decl",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_object_triple_in_quotes",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_component_trailing_nospace",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_state_transition_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_usecase_leading_comment_usecase",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_activity3_action_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_mindmap_node_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_gantt_task_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_json_member_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_salt_widget_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_class_skinparam_leading_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_tim_define_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_tim_procedure_body_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_tim_if_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_tim_sprite_in_procedure",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "match",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_tim_startsub_comment",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk4_svg_text_fill_apostrophe_seq",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 1: sprite $txt <svg width=\"20\" height=\"10\"><text x=\"0\" y=\"8\" fill=\"black\">it ' s</text></svg>\n"
+  }
+ ],
+ "losses": [
+  {
+   "name": "mk4_tim_sprite_in_procedure",
+   "cohort": "AY",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "match",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  }
+ ],
+ "disagreements": []
+}

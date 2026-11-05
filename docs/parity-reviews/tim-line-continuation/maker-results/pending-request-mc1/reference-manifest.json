@@ -1,0 +1,814 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "cases": [
+  {
+   "name": "mc1_seq_procedure_body",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_procedure_body.puml",
+   "source_sha256": "4818002e3d2e2ed8cbb1c45e6ac6e7fbdfe585fa28dab2c61a5742f8cf34f208",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "!procedure body",
+    "pre-TIM join",
+    "following source line"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_define_macro",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_define_macro.puml",
+   "source_sha256": "436be701b38519a8727957d5c7f6048cde4dc507d00a244fce9f19a26053d5fd",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "!define macro body",
+    "leading whitespace kept"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_class_definelong",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_class_definelong.puml",
+   "source_sha256": "a3fafcd38f7692bca55f28d8a24050f77459a98db66a7334fba68ef56c629626",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "class",
+    "!definelong body",
+    "stereotype via continuation"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_theme_plain",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_theme_plain.puml",
+   "source_sha256": "e634c4f85693cc99e7cbad31a3831762b31a9cc126740e13d0595520d0b8ca39",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "!theme",
+    "three pieces"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_class_theme_sketchy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_class_theme_sketchy.puml",
+   "source_sha256": "30cb9fae15de25d0d3f00e2bb00bea5d91eeacfbcf2f3fb676103a4084b327e7",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "class",
+    "!theme",
+    "link label"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_state_theme_bluegray",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_state_theme_bluegray.puml",
+   "source_sha256": "890811fb51bc808c86d8c8c01c8396e1104a5f7867bc5fadebf0da141e0482ae",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "!theme",
+    "transition label"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_usecase_continued",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_usecase_continued.puml",
+   "source_sha256": "6891b3a97f18745b53ea85562caf33d9801204c873a07fc25a2767a14223349e",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "usecase",
+    "inside parentheses"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_include_postjoin",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_include_postjoin.puml",
+   "source_sha256": "7905ec7bbd1f681edc0607113c1b1f5c601f4ba20b6828770922241c495fbdc6",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "!include file",
+    "post-TIM UmlSource join"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_class_include_postjoin",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_class_include_postjoin.puml",
+   "source_sha256": "80ca27f0ba0e816cce650bd22a4c42a0f5ad4c4e19b0bf7271d0014488123459",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "class",
+    "!include file",
+    "post-TIM UmlSource join"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_include_procedure",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_include_procedure.puml",
+   "source_sha256": "d92085e982c3e0ee7041f1ca52fcfd16bcb4529d1beaa41df533735ce218f13b",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "procedure from !include",
+    "post-TIM join"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_class_three_pieces_lines",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_class_three_pieces_lines.puml",
+   "source_sha256": "faf635b2b8ea7611fe835ee7352b42770fdf2d4192f72a7f3a6a586c8550d6a3",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "class",
+    "three pieces",
+    "following data-source-line"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_component_comments_between",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_component_comments_between.puml",
+   "source_sha256": "5a147544a1a58a59b5b2b6905ec50ee102ddd56b85f3af99be473438f523bb11",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "component",
+    "ReadFilterQuoteComment skip",
+    "removeInnerComment on continuation"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_note_body",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_note_body.puml",
+   "source_sha256": "5971a6e8392d8d49c52131f1e8ad0ce0992c0ffdcb710fb3ebd1cfa02758ad16",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "multiline note body"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_activity_multiline_action",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_activity_multiline_action.puml",
+   "source_sha256": "a6cbd6b68f92b9576fdad3b26470b10933a1fa0269c5d7dfdee08ee057e80af9",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "activity3",
+    "multiline action body"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_state_description",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_state_description.puml",
+   "source_sha256": "cb4a8552b59a0e00371621aa53eaf0ec217ab07383705e01db668d49e35b835d",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "description"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_escaped_backslash",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_escaped_backslash.puml",
+   "source_sha256": "aabd984e7a1441f68c790e32ea4156199c6635af181356404088b87066fc1712",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "escaped double backslash not continued"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_backslash_space",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_backslash_space.puml",
+   "source_sha256": "92b1c615d9ded9eca52d7993e073d10f047bdcec8b2a9d930446b1dfe45cc92b",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "backslash then space not continued"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_crlf",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_crlf.puml",
+   "source_sha256": "5592e4ed98bf70133fdcc83166fbc45456c86c2660ce723850a998c204521089",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "CRLF",
+    "line-endings:CRLF"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_class_crlf_three",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_class_crlf_three.puml",
+   "source_sha256": "51a71c90e03a956eece1fba51d8b314995c1d68b74cb2ce99115fa41e72c3712",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "class",
+    "CRLF",
+    "three pieces",
+    "line-endings:CRLF"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_before_enduml",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_before_enduml.puml",
+   "source_sha256": "1d60c94c144c604db29bfb55955e2e93a43927b4ea8cd01fa920837ceaa8e6c0",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "sequence",
+    "backslash before @enduml (swallows the end)"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_at_eof",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_at_eof.puml",
+   "source_sha256": "6982be51f3fba656ce82d7a855f7ea80ac83139fdcb162e7b653d9106e719f43",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "sequence",
+    "backslash at EOF without @enduml"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_foreach_body",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_foreach_body.puml",
+   "source_sha256": "60c86dbb12986c22b7a451d59d230257ae5f4aca0fb4c4137b8128ed1150121f",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "!foreach body"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_tim_assignment",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_tim_assignment.puml",
+   "source_sha256": "fc3f130ff5db7d09c8567e813389d1f2bfa6a0833654079a70f3eb717b4e860f",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "TIM assignment continued"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_if_condition",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_if_condition.puml",
+   "source_sha256": "0bd9def77f38241c8d5fca1780d2073eeaf46893351a3ddcb251c57a96b953bc",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "!if condition continued"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_comment_only_continuation",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_comment_only_continuation.puml",
+   "source_sha256": "8edfbd337bb85aa3aecefaee6f188b1178b818ac82f71a7ba10fb1b31a2a2684",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "comment lines skipped before continuation"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_continued_comment_line",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_continued_comment_line.puml",
+   "source_sha256": "a793e5f4eb2b40a45d94af2346ed00943b6b89baaa0e310f7e07dca582aca76e",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "continued line is a comment: continuation joins the comment"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_mindmap",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_mindmap.puml",
+   "source_sha256": "587dbb6314a42cbf236aba46b8d6ad9b4249f7feba86c838b6b4401ae4b23050",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "mindmap",
+    "non-UML family pre-TIM join"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_json",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_json.puml",
+   "source_sha256": "9d0ab91f3299f28edfbe2d1635067cc097b729ad845809e5416992eaf442d82b",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "json",
+    "non-UML family pre-TIM join"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_skinparam_continued",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_skinparam_continued.puml",
+   "source_sha256": "b78c0d6792588c1e5ea5edd153d0b39434bcf3b11e7424a3087bc813d4285f80",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "class",
+    "skinparam line continued"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_style_block",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_style_block.puml",
+   "source_sha256": "005ca4154792dedf0c7490b5f1f0361c395ed89cef061d4876eec06b365c3dea",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "class",
+    "<style> body continued"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_leading_space_continuation",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_leading_space_continuation.puml",
+   "source_sha256": "207ae0d4d301e6f7d39ec27471a8440acb71880ebb64167cef62b947acda7766",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "continuation leading spaces kept"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_object_continued",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_object_continued.puml",
+   "source_sha256": "30ca1ac51cb1de9c26f7172ce3b0db81e91c2bf0b62f1e078f19cd734869b7bf",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "object",
+    "continued declaration"
+   ],
+   "mechanism": "tim-line-continuation"
+  },
+  {
+   "name": "mc1_seq_block_comment_continued",
+   "source": "/Users/marcelo/Library/Caches/rustuml-tim-continuation-claude-maker/mc1/inputs/mc1_seq_block_comment_continued.puml",
+   "source_sha256": "62585fad80617de967f6942e969f3b2c06eb734e30fc0790ed7f078892989f40",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "long comment skipped before continuation"
+   ],
+   "mechanism": "tim-line-continuation"
+  }
+ ]
+}
