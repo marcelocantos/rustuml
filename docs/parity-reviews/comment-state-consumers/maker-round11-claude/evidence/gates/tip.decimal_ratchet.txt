@@ -1,0 +1,15 @@
+
+thread 'decimal_literal_ratchet' (64302530) panicked at crates/rustuml-oracle/tests/harness_guards.rs:203:5:
+new high-precision decimal literals in rustuml-render — each needs a provenance comment (Java source or metrics-table derivation) and a reviewed baseline update (HARNESS_WRITE_BASELINES=1):
+  crates/rustuml-render/src/class.rs: 383 -> 578
+  crates/rustuml-render/src/deployment.rs: 43 -> 44
+  crates/rustuml-render/src/plantuml_metrics.rs: 1053 -> 1055
+  crates/rustuml-render/src/state.rs: 53 -> 62
+  crates/rustuml-render/src/svg.rs: 0 -> 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test decimal_literal_ratchet ... FAILED
+test no_golden_data_embedded_in_shipping_crates ... ok
+test error_golden_census_is_frozen ... ok
+
+thread 'parity_review_records_are_complete' (64302534) panicked at crates/rustuml-oracle/tests/harness_guards.rs:396:5:
+invalid T14 parity review evidence:

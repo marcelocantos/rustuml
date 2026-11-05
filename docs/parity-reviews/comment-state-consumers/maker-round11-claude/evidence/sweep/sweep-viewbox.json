@@ -1,0 +1,184 @@
+{
+ "viewbox_exact": {
+  "test-diagrams/golden/": {
+   "merge": 10403,
+   "tip": 10403
+  },
+  "test-diagrams/perturbations/": {
+   "merge": 3556,
+   "tip": 3556
+  }
+ },
+ "viewbox_lost": [],
+ "viewbox_gained": [],
+ "changed": {
+  "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_class.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_grouped_class.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_interface.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_bullets_vd_i.puml": {
+   "merge": "MATCH",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_deprecated_vd_i.puml": {
+   "merge": "MATCH",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_numbered_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_repeat_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_table_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_while_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_cl_vd_i.puml": {
+   "merge": "MATCH",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ft_vd_bolditalic.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ft_vd_creolebi.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ft_vd_italic.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_actu_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_actv_vd_i.puml": {
+   "merge": "MATCH",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_comp_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_nodc_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_part_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_usec_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_st_actu_vd.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_st_clss_vd.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_st_part_vd.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_st_usec_vd.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actd_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actu_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actv_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_artc_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_clss_vd_bi.puml": {
+   "merge": "DIFF",
+   "tip": "DIFF"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_clss_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_comp_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_dbsc_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_nodc_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_part_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_usec_vd_i.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_class.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_class_ctrl.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_uc.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_uc_ctrl.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_vd_interface.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  },
+  "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_vd_interface_ctrl.puml": {
+   "merge": "DIFF",
+   "tip": "MATCH"
+  }
+ }
+}

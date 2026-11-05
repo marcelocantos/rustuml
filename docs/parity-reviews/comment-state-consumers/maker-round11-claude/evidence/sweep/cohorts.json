@@ -1,0 +1,223 @@
+{
+ "goldens": {
+  "sources": 12550,
+  "java_valid": 11351,
+  "java_error": 1199,
+  "merge_valid_strict_match": 11181,
+  "merge_comments_exact": 11781,
+  "merge_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "merge_panics": 0,
+  "merge_timeouts": 0,
+  "merge_java_error_rejected": 76,
+  "merge_nonempty_stderr": 76,
+  "tip_valid_strict_match": 11181,
+  "tip_comments_exact": 11781,
+  "tip_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "tip_panics": 0,
+  "tip_timeouts": 0,
+  "tip_java_error_rejected": 76,
+  "tip_nonempty_stderr": 76,
+  "merge_to_tip": {},
+  "merge_to_tip_counts": {}
+ },
+ "perturbations": {
+  "sources": 5713,
+  "java_valid": 5400,
+  "java_error": 313,
+  "merge_valid_strict_match": 3297,
+  "merge_comments_exact": 5047,
+  "merge_exit": {
+   "0": 5542,
+   "1": 167,
+   "101": 4
+  },
+  "merge_panics": 4,
+  "merge_timeouts": 0,
+  "merge_java_error_rejected": 155,
+  "merge_nonempty_stderr": 171,
+  "tip_valid_strict_match": 3315,
+  "tip_comments_exact": 5047,
+  "tip_exit": {
+   "0": 5542,
+   "1": 167,
+   "101": 4
+  },
+  "tip_panics": 4,
+  "tip_timeouts": 0,
+  "tip_java_error_rejected": 155,
+  "tip_nonempty_stderr": 171,
+  "merge_to_tip": {
+   "gained_match": [
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ft_vd_creolebi.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_part_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actu_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actv_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_artc_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_clss_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_comp_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_dbsc_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_nodc_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_part_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_usec_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_class.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_class_ctrl.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_uc.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_uc_ctrl.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_vd_interface.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_vd_interface_ctrl.puml"
+   ],
+   "outputs_changed": 42,
+   "stderr_changed": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+   ]
+  },
+  "merge_to_tip_counts": {
+   "gained_match": 18,
+   "outputs_changed": 42,
+   "stderr_changed": 4
+  }
+ },
+ "all": {
+  "sources": 18263,
+  "java_valid": 16751,
+  "java_error": 1512,
+  "merge_valid_strict_match": 14478,
+  "merge_comments_exact": 16828,
+  "merge_exit": {
+   "1": 243,
+   "0": 18016,
+   "101": 4
+  },
+  "merge_panics": 4,
+  "merge_timeouts": 0,
+  "merge_java_error_rejected": 231,
+  "merge_nonempty_stderr": 247,
+  "tip_valid_strict_match": 14496,
+  "tip_comments_exact": 16828,
+  "tip_exit": {
+   "1": 243,
+   "0": 18016,
+   "101": 4
+  },
+  "tip_panics": 4,
+  "tip_timeouts": 0,
+  "tip_java_error_rejected": 231,
+  "tip_nonempty_stderr": 247,
+  "merge_to_tip": {
+   "gained_match": [
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ft_vd_creolebi.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_part_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actu_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actv_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_artc_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_clss_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_comp_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_dbsc_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_nodc_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_part_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_usec_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_class.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_class_ctrl.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_uc.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_uc_ctrl.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_vd_interface.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_vd_interface_ctrl.puml"
+   ],
+   "outputs_changed": 42,
+   "stderr_changed": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+   ]
+  },
+  "merge_to_tip_counts": {
+   "gained_match": 18,
+   "outputs_changed": 42,
+   "stderr_changed": 4
+  },
+  "merge_to_tip_stderr_lines_lost": {
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4
+  },
+  "merge_to_tip_stderr_lines_gained": {
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4
+  },
+  "merge_to_tip_stderr_per_source": {
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml": {
+    "lost": [
+     "thread 'main' (63625514) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (63994765) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml": {
+    "lost": [
+     "thread 'main' (63625519) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (63994769) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml": {
+    "lost": [
+     "thread 'main' (63625532) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (63994816) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml": {
+    "lost": [
+     "thread 'main' (63625527) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (63994804) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   }
+  }
+ },
+ "GET_goldens": {
+  "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+   "merge": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+   "merge": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+   "merge": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  }
+ }
+}

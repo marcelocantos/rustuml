@@ -1,0 +1,897 @@
+{
+ "schema_version": 1,
+ "status": "maker evidence (round 11); independent review required; held-out M11A and the Monkey Man re-extraction are pending relay",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "merge": "879d166f4 (parity-recovery-2026-11-03 4b431ab3e into a7bd62c86; code identical to e24240b35)",
+ "tip_code": "97830bd1e",
+ "commits": {
+  "879d166f4": "merge (bullseye.yaml union: T14.39 + T14.40..T14.51)",
+  "4f959e464": "account (docs + extraction data + extractor, no code)",
+  "f7c382ff4": "obligation 1 code + gates (text_render.rs)",
+  "cb3d36bb1": "obligation 2 C3: queue pill height without the dead face (sequence.rs)",
+  "0368eee79": "addendum: C5 measured unobservable (docs only)",
+  "97830bd1e": "obligation 2 C5: StateNodeFont italic removed (state.rs)",
+  "37381782a": "M11A + Monkey Man relay requests, pre-registered (docs only)"
+ },
+ "obligation_1": {
+  "provenance": "tools/font-chain-reference/ascii-advances-round11 (SHA256SUMS 1fa07b8c...; AsciiAdvanceExtract.swift c1db59ac...); font files hash as Monkey Man's round-9 record; Monkey Man re-run pending (evidence/mm-ascii-request)",
+  "audit": {
+   "Verdana-Italic": "9 of 95 differ from Verdana (A D V W g k m v y)",
+   "Verdana-BoldItalic": "2 of 95 differ from Verdana-Bold (o v)",
+   "Arial italic/bold-italic": "equal to upright on 95/95",
+   "Helvetica oblique faces": "equal to upright Helvetica faces; upright tables wrong = T14.49",
+   "Courier New, Menlo, Times New Roman, Lucida Grande (derived italics)": "Rust public path equals the extraction on all letters, digits and punctuation (a lone backtick is creole-parsed in every family; tables agree)",
+   "upright Verdana/Arial tables": "equal to the extraction exactly"
+  },
+  "required_probes": {
+   "BS": [
+    "m10a_comp_vd_i",
+    "m10a_nodc_vd_i",
+    "m10a_artc_vd_i",
+    "m10a_dbsc_vd_i",
+    "m10a_actu_vd_i",
+    "m10a_usec_vd_i",
+    "m10a_stat_vd_i",
+    "m10a_part_vd_i",
+    "m10a_clss_vd_i",
+    "m10a_actv_vd_i"
+   ],
+   "BT": [
+    "c10a_ml_part_vd_i",
+    "c10a_ft_vd_creolebi"
+   ],
+   "all_12_match_at_tip": true
+  },
+  "bt_verdana_face_tables": "c10a_ft_vd_italic: the four alphabet labels equal Java (119.4717/130.3477/98.3145/106.0869); case still DIFF on the E4 punctuation label ({|} parse, T14.51). c10a_ft_vd_bolditalic: Rust draws italic only (<style> FontWeight not modelled, T14.46); the bold-italic table is pinned by c10a_ft_vd_creolebi (MATCH) and the lib test with Java's four bold-italic widths. c10a_ft_vd_bold / plain unchanged.",
+  "held_out": "M11A (100 cases) pending relay; predictions and expectations committed in 37381782a",
+  "gate_drill": {
+   "D0_unmodified": {
+    "caught": null,
+    "failed": []
+   },
+   "D1_verdana_router_drops_italic": {
+    "caught": true,
+    "failed": [
+     "text_render::tests::every_italic_slot_measures_in_its_own_face",
+     "text_render::tests::verdana_faces_measure_java_widths"
+    ]
+   },
+   "D2_slot_italic_reads_plain": {
+    "caught": true,
+    "failed": [
+     "text_render::tests::ascii_tables_are_the_extracted_faces",
+     "text_render::tests::every_italic_slot_measures_in_its_own_face",
+     "text_render::tests::verdana_faces_measure_java_widths"
+    ]
+   },
+   "D3_slot_bold_italic_reads_bold": {
+    "caught": true,
+    "failed": [
+     "text_render::tests::ascii_tables_are_the_extracted_faces",
+     "text_render::tests::every_italic_slot_measures_in_its_own_face",
+     "text_render::tests::verdana_faces_measure_java_widths"
+    ]
+   },
+   "D4_verdana_italic_table_is_regular": {
+    "caught": true,
+    "failed": [
+     "text_render::tests::ascii_tables_are_the_extracted_faces",
+     "text_render::tests::every_italic_slot_measures_in_its_own_face",
+     "text_render::tests::verdana_faces_measure_java_widths"
+    ]
+   },
+   "D5_verdana_bold_italic_table_is_bold": {
+    "caught": true,
+    "failed": [
+     "text_render::tests::ascii_tables_are_the_extracted_faces",
+     "text_render::tests::every_italic_slot_measures_in_its_own_face",
+     "text_render::tests::verdana_faces_measure_java_widths"
+    ]
+   },
+   "D6_arial_router_drops_italic": {
+    "caught": true,
+    "failed": [
+     "text_render::tests::every_italic_slot_measures_in_its_own_face"
+    ]
+   },
+   "D7_one_verdana_italic_unit_off": {
+    "caught": true,
+    "failed": [
+     "text_render::tests::ascii_tables_are_the_extracted_faces"
+    ]
+   },
+   "D8_extraction_file_edited": {
+    "caught": true,
+    "failed": [
+     "text_render::tests::ascii_tables_are_the_extracted_faces"
+    ]
+   }
+  }
+ },
+ "obligation_2": {
+  "C3_queue_participant_block": "unobservable by construction (blocks fed only the pill height, which takes no face); face arguments removed; whole CLI output byte-identical on 18,263 sources (sweep-steps f7c382ff4->cb3d36bb1)",
+  "C5_StateNodeFont_italic": "mutant byte-identical on 18,263 sources (cb3d36bb1->C5mut); removed in 97830bd1e; golden_pairs failure names identical merge vs tip (oracle tier)"
+ },
+ "batches_merge_to_tip": {
+  "AR": {
+   "n": 20,
+   "merge": 17,
+   "tip": 17,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 18,
+    "tip": 18
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 19,
+    "tip": 19
+   },
+   "comments_lost": []
+  },
+  "AU": {
+   "n": 32,
+   "merge": 21,
+   "tip": 21,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 23,
+    "tip": 23
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 29,
+    "tip": 29
+   },
+   "comments_lost": []
+  },
+  "AW": {
+   "n": 45,
+   "merge": 30,
+   "tip": 30,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 30,
+    "tip": 30
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 43,
+    "tip": 43
+   },
+   "comments_lost": []
+  },
+  "BB": {
+   "n": 36,
+   "merge": 25,
+   "tip": 25,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 25,
+    "tip": 25
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 35,
+    "tip": 35
+   },
+   "comments_lost": []
+  },
+  "BC": {
+   "n": 19,
+   "merge": 18,
+   "tip": 18,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 18,
+    "tip": 18
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 18,
+    "tip": 18
+   },
+   "comments_lost": []
+  },
+  "BE": {
+   "n": 34,
+   "merge": 22,
+   "tip": 22,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 22,
+    "tip": 22
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 24,
+    "tip": 24
+   },
+   "comments_lost": []
+  },
+  "BF": {
+   "n": 46,
+   "merge": 32,
+   "tip": 32,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 34,
+    "tip": 34
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 42,
+    "tip": 42
+   },
+   "comments_lost": []
+  },
+  "BG": {
+   "n": 53,
+   "merge": 42,
+   "tip": 42,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 47,
+    "tip": 47
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 49,
+    "tip": 49
+   },
+   "comments_lost": []
+  },
+  "BH": {
+   "n": 99,
+   "merge": 78,
+   "tip": 78,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 82,
+    "tip": 82
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 93,
+    "tip": 93
+   },
+   "comments_lost": []
+  },
+  "BI": {
+   "n": 48,
+   "merge": 39,
+   "tip": 39,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 42,
+    "tip": 42
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 48,
+    "tip": 48
+   },
+   "comments_lost": []
+  },
+  "BJ": {
+   "n": 120,
+   "merge": 96,
+   "tip": 96,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 99,
+    "tip": 99
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 118,
+    "tip": 118
+   },
+   "comments_lost": []
+  },
+  "BK": {
+   "n": 49,
+   "merge": 32,
+   "tip": 32,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 36,
+    "tip": 36
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 49,
+    "tip": 49
+   },
+   "comments_lost": []
+  },
+  "BL": {
+   "n": 142,
+   "merge": 65,
+   "tip": 65,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 77,
+    "tip": 77
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 141,
+    "tip": 141
+   },
+   "comments_lost": []
+  },
+  "BM": {
+   "n": 26,
+   "merge": 8,
+   "tip": 8,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 12,
+    "tip": 12
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 26,
+    "tip": 26
+   },
+   "comments_lost": []
+  },
+  "BN": {
+   "n": 63,
+   "merge": 32,
+   "tip": 32,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 33,
+    "tip": 33
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 63,
+    "tip": 63
+   },
+   "comments_lost": []
+  },
+  "BO": {
+   "n": 81,
+   "merge": 36,
+   "tip": 36,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 39,
+    "tip": 39
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 81,
+    "tip": 81
+   },
+   "comments_lost": []
+  },
+  "BP": {
+   "n": 60,
+   "merge": 24,
+   "tip": 24,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 2,
+   "viewbox_exact": {
+    "merge": 36,
+    "tip": 36
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 50,
+    "tip": 50
+   },
+   "comments_lost": []
+  },
+  "BQ": {
+   "n": 8,
+   "merge": 0,
+   "tip": 0,
+   "lost": [],
+   "gained": 0,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 0,
+   "viewbox_exact": {
+    "merge": 1,
+    "tip": 1
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 8,
+    "tip": 8
+   },
+   "comments_lost": []
+  },
+  "BR": {
+   "n": 288,
+   "merge": 92,
+   "tip": 98,
+   "lost": [],
+   "gained": 6,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 6,
+   "viewbox_exact": {
+    "merge": 113,
+    "tip": 113
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 286,
+    "tip": 286
+   },
+   "comments_lost": []
+  },
+  "BS": {
+   "n": 374,
+   "merge": 211,
+   "tip": 221,
+   "lost": [],
+   "gained": 10,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 12,
+   "viewbox_exact": {
+    "merge": 208,
+    "tip": 208
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 374,
+    "tip": 374
+   },
+   "comments_lost": []
+  },
+  "BT": {
+   "n": 379,
+   "merge": 157,
+   "tip": 159,
+   "lost": [],
+   "gained": 2,
+   "lost_rejections": [],
+   "new_valid_input_errors": [],
+   "panics_tip": 0,
+   "new_panics": [],
+   "stderr_changed": [],
+   "outputs_changed": 21,
+   "viewbox_exact": {
+    "merge": 138,
+    "tip": 138
+   },
+   "viewbox_lost": [],
+   "comments_exact": {
+    "merge": 349,
+    "tip": 349
+   },
+   "comments_lost": []
+  }
+ },
+ "sweep": {
+  "goldens": {
+   "sources": 12550,
+   "java_valid": 11351,
+   "merge_valid_strict_match": 11181,
+   "tip_valid_strict_match": 11181,
+   "comments_exact": [
+    11781,
+    11781
+   ],
+   "java_error_rejected": [
+    76,
+    76
+   ],
+   "panics": [
+    0,
+    0
+   ]
+  },
+  "goldens_merge_to_tip": {},
+  "perturbations_merge_to_tip": {
+   "gained_match": 18,
+   "outputs_changed": 42,
+   "stderr_changed": 4
+  },
+  "perturbations_gained": [
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ft_vd_creolebi.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_part_vd_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actu_vd_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actv_vd_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_artc_vd_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_clss_vd_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_comp_vd_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_dbsc_vd_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_nodc_vd_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_part_vd_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_usec_vd_i.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_class.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_class_ctrl.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_uc.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_uc_ctrl.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_vd_interface.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_vd_interface_ctrl.puml"
+  ],
+  "GET_goldens": {
+   "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+    "merge": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "tip": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   },
+   "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+    "merge": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "tip": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   },
+   "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+    "merge": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "tip": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   }
+  },
+  "viewbox_exact": {
+   "test-diagrams/golden/": {
+    "merge": 10403,
+    "tip": 10403
+   },
+   "test-diagrams/perturbations/": {
+    "merge": 3556,
+    "tip": 3556
+   }
+  },
+  "viewbox_lost": [],
+  "outputs_changed": {
+   "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_class.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_grouped_class.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_interface.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_bullets_vd_i.puml": {
+    "merge": "MATCH",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_deprecated_vd_i.puml": {
+    "merge": "MATCH",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_numbered_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_repeat_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_table_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_while_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_cl_vd_i.puml": {
+    "merge": "MATCH",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ft_vd_bolditalic.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ft_vd_creolebi.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ft_vd_italic.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_actu_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_actv_vd_i.puml": {
+    "merge": "MATCH",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_comp_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_nodc_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_part_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_usec_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_st_actu_vd.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_st_clss_vd.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_st_part_vd.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_st_usec_vd.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actd_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actu_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actv_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_artc_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_clss_vd_bi.puml": {
+    "merge": "DIFF",
+    "tip": "DIFF"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_clss_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_comp_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_dbsc_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_nodc_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_part_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_usec_vd_i.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_class.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_class_ctrl.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_uc.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_uc_ctrl.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_vd_interface.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   },
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_vd_interface_ctrl.puml": {
+    "merge": "DIFF",
+    "tip": "MATCH"
+   }
+  },
+  "steps": {
+   "merge->f7c382ff4": {
+    "stdout_changed": 42,
+    "status_changed": 0,
+    "stderr_changed": 4
+   },
+   "f7c382ff4->cb3d36bb1": {
+    "stdout_changed": 0,
+    "status_changed": 0,
+    "stderr_changed": 4
+   },
+   "cb3d36bb1->C5mut": {
+    "stdout_changed": 0,
+    "status_changed": 0,
+    "stderr_changed": 4
+   },
+   "C5mut->tip": {
+    "stdout_changed": 0,
+    "status_changed": 0,
+    "stderr_changed": 4
+   }
+  },
+  "stderr": "4 stderr changes per step, all the thread id of the pre-existing class.rs:285 panic (shared-svg-corrective dash_01/03/06/07); no new stderr text"
+ },
+ "gates_tip": {
+  "workspace_lib": "1609 passed, 0 failed, 1 ignored (exit 0)",
+  "pipe_mode": "17/17 (exit 0)",
+  "doc_claims": "exit 0",
+  "golden_no_oracle": "11181/11251 at 9834a7194, merge and tip (exit 101 at all three on the pre-existing activity/edge-cases ratchet); failure names tip == merge; tip vs 9834a7194: gates/no_oracle_failure_names.9834a7194-vs-tip.diff (+3 GET goldens, -3 earlier gains), identical to the round-10 record",
+  "golden_pairs": "10497 passed / 754 failed / 1299 skipped at merge and tip; failure names identical",
+  "parity_perturbations": "failing 2446 (merge) -> 2428 (tip): 18 fewer, 0 new (gates/*.pert_fail.txt)",
+  "harness_guards": "same 2 failing tests at merge and tip (decimal_literal_ratchet, parity_review_records_are_complete); categories identical except the decimal ratchet's violating-file count 6 -> 5 (text_render.rs 419 -> below its baseline 409); baseline not edited",
+  "clippy_per_crate": "merge/tip: render 20/20, parser 1/1, layout 0/0, oracle 2/2, rustuml 1/1, math 0/0 (identical codes)"
+ },
+ "frozen": "crates/rustuml-oracle, test-diagrams/no_oracle_baseline.txt, ulp_parked.txt, decimal_literal_baseline.txt and every perturbation unchanged merge..tip",
+ "pending_relays": [
+  "M11A: evidence/m11a-request (manifest 45039703..., bundle 4c71dee8...)",
+  "Monkey Man ASCII extraction: evidence/mm-ascii-request (run.sh ca2f5a68...)"
+ ]
+}

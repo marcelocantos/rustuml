@@ -1,0 +1,109 @@
+{
+ "sources": 18263,
+ "steps": {
+  "merge->f7c382ff4": {
+   "stdout_changed": [
+    "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_class.puml",
+    "test-diagrams/perturbations/class-current-spot-cascade/checker/custom_grouped_class.puml",
+    "test-diagrams/perturbations/class-current-spot-cascade/checker/theme_interface.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_ml_stat_vd_i.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/m10a_stat_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_bullets_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_deprecated_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_numbered_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_repeat_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_table_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ax_while_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_cl_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ft_vd_bolditalic.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ft_vd_creolebi.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ft_vd_italic.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_actu_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_actv_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_comp_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_nodc_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_part_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_ml_usec_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_st_actu_vd.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_st_clss_vd.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_st_part_vd.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/c10a_st_usec_vd.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actd_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actu_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_actv_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_artc_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_clss_vd_bi.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_clss_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_comp_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_dbsc_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_nodc_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_part_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round10/m10a_usec_vd_i.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_class.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_class_ctrl.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_uc.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_vd_i_uc_ctrl.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_vd_interface.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_ns_vd_interface_ctrl.puml"
+   ],
+   "status_changed": [],
+   "stderr_changed": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+   ],
+   "counts": {
+    "stdout_changed": 42,
+    "status_changed": 0,
+    "stderr_changed": 4
+   }
+  },
+  "f7c382ff4->cb3d36bb1": {
+   "stdout_changed": [],
+   "status_changed": [],
+   "stderr_changed": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+   ],
+   "counts": {
+    "stdout_changed": 0,
+    "status_changed": 0,
+    "stderr_changed": 4
+   }
+  },
+  "cb3d36bb1->C5mut": {
+   "stdout_changed": [],
+   "status_changed": [],
+   "stderr_changed": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+   ],
+   "counts": {
+    "stdout_changed": 0,
+    "status_changed": 0,
+    "stderr_changed": 4
+   }
+  },
+  "C5mut->tip": {
+   "stdout_changed": [],
+   "status_changed": [],
+   "stderr_changed": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+   ],
+   "counts": {
+    "stdout_changed": 0,
+    "status_changed": 0,
+    "stderr_changed": 4
+   }
+  }
+ },
+ "note": "C5mut = cb3d36bb1 with StateNodeFont italic forced false; tip 97830bd1e removes the slot. stderr changes are the thread id of the pre-existing class.rs:285 panic (4 dash_* sources)."
+}
