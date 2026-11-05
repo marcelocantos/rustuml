@@ -1,0 +1,20 @@
+{
+ "schema_version": 1,
+ "status": "interim checker note (round 9, claude); no verdict",
+ "packet_tip": "2a4117b704d6eca30f21cc97967137edd8801fbc",
+ "measured_code_tip": "14dd5efaeb388dd557bd39f8b6ab40c4338ada6d",
+ "merge": "9d6af0a0e088546d470d0011e4af4c3049411c01",
+ "base": "dcf6d90766b04c13b2fcc961736f7d90880caf46",
+ "private_binaries_sha256": {
+  "dcf6d9076": "254fc2599471562f2fb83e99cd89f7d2e5bdf10bd3861a826e5f8423a27aedf0",
+  "9d6af0a0e": "5b3370aad125a532149c50ed8269b23ef3bb481b4c51e77d87bd5756094dbdfc",
+  "14dd5efae": "3514d83528639bc496902a6646732b71295af914eaceef7ed311f258d9b9302d"
+ },
+ "so_far": {
+  "regeneration": "tools/font_chain_coverage.py over tools/font-chain-reference/monkeyman-round9 (chain and own-cmap for all 22 faces) + rustfmt reproduces font_chain_coverage.rs byte-identically (eef8a552...); monkeyman-round9 equals the relay out/ byte for byte (plus the unlisted README); out/SHA256SUMS verifies (ad8e6566...)",
+  "bidi": "tip java_bidi over all 242,508 inputs of the checker's round-8 Java differential (e09425f4...): 0 differences in requiresBidi, isLeftToRight, base level, getLevelAt, and run levels for every direction; text_line_levels 0 differences on all 93,203 DEFAULT_LTR inputs TextLine uses",
+  "face_probe": "tip widths of 'Pier x'+U+1D167 and 'Pier x' equal the Java face probe (86795360...) for every family x style except SansSerif/Lucida Grande italic and bold italic (+2.70703125 mark advance, T14.41) and the family name 'Menlo' (Rust measures it as Lucida Grande at every tree: metric_family maps only Courier/Monospaced to Menlo)",
+  "BQ": "8 cases (M9B): 0 strict matches at base/merge/tip; every seqnote control fails at all trees; java rejects both activity cases (exit 200) which Rust accepts at every tree; tip mark deltas equal Java's on p2029_pdf and nel_pdf (4.5703), merge's do not (17.57)"
+ },
+ "held_out": "C9A staged and predictions registered (c9a-request/); relay pending"
+}
