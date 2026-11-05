@@ -3411,6 +3411,11 @@ fn layout_autonomous_scope(
         max_y = max_y.max(result.height);
     }
 
+    // A note image is a node of this SVEK layout like any leaf.
+    for (note, (x, y)) in notes.iter().zip(&note_corners) {
+        max_x = max_x.max(x + note.width);
+        max_y = max_y.max(y + note.height);
+    }
     let notes = notes
         .iter()
         .zip(note_corners)
@@ -3960,9 +3965,7 @@ fn build_autonomous_composite<'a>(
             .sum::<usize>()
             + image.children.iter().map(image_note_count).sum::<usize>()
     }
-    if composites.iter().map(image_note_count).sum::<usize>() != diagram.notes.len() {
-        return None;
-    }
+    let image_notes = composites.iter().map(image_note_count).sum::<usize>();
     let outer_transition_indices: Vec<usize> = if live_clusters.is_empty() {
         diagram
             .transitions
@@ -4027,6 +4030,36 @@ fn build_autonomous_composite<'a>(
             }
         })
         .collect();
+    // The outer GraphvizImageBuilder owns notes declared at root or in an
+    // outer live cluster whose anchor is an outer node: an autarkic group's
+    // image is an ordinary root leaf (CucaDiagramSimplifierState), and the
+    // note link is pure for isPureInnerLink3.
+    let note_ids = allocate_state_svg_ids(diagram, &[]);
+    let mut outer_notes = Vec::new();
+    for mut spec in attached_note_specs(diagram, &note_ids) {
+        let note = &diagram.notes[spec.note_index];
+        let outer_group = note.parent.as_deref().is_none_or(|parent| {
+            live_clusters.iter().any(|cluster| cluster.id == parent)
+                && !composites
+                    .iter()
+                    .any(|image| autonomous_scope_is_inside(diagram, parent, &image.state.id))
+        });
+        let Some(anchor) = note.anchor_id.clone() else {
+            continue;
+        };
+        if !outer_group || !outer_ids.contains(&anchor) {
+            continue;
+        }
+        spec.anchor = anchor;
+        if let Some(parent) = note.parent.as_deref() {
+            // The note quark lives in its declaring group.
+            spec.id = format!("{parent}.{}", spec.id);
+        }
+        outer_notes.push(spec);
+    }
+    if image_notes + outer_notes.len() != diagram.notes.len() {
+        return None;
+    }
     let outer = layout_autonomous_scope(
         diagram,
         outer_ids,
@@ -4034,7 +4067,7 @@ fn build_autonomous_composite<'a>(
         &outer_sizes,
         &live_clusters,
         Some(autonomous_outer_spacing(diagram)),
-        &[],
+        &outer_notes,
     )?;
     let outer = if live_clusters.is_empty() {
         outer
@@ -5084,14 +5117,39 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
             (outer.origin_x, outer.origin_y),
         );
     }
-    let mut paint_ids = outer.ids.clone();
-    paint_ids.sort_by_key(|id| {
-        let owner = autonomous_id_owner(diagram, id);
+    // printGroup buckets; state notes are the last leaves of their declaring
+    // group's bucket (ParserPass.THREE quarks).
+    let bucket_of = |owner: Option<&str>| {
         owner
             .and_then(|owner| live_clusters.iter().position(|cluster| cluster.id == owner))
             .unwrap_or(live_clusters.len())
-    });
-    for id in &paint_ids {
+    };
+    let mut paint: Vec<(usize, Result<&String, &AttachedNotePosition>)> = outer
+        .ids
+        .iter()
+        .map(|id| (bucket_of(autonomous_id_owner(diagram, id)), Ok(id)))
+        .chain(outer.notes.iter().map(|note| {
+            (
+                bucket_of(diagram.notes[note.note_index].parent.as_deref()),
+                Err(note),
+            )
+        }))
+        .collect();
+    paint.sort_by_key(|(bucket, item)| (*bucket, item.is_err()));
+    for (_, item) in paint {
+        let id = match item {
+            Ok(id) => id,
+            Err(note) => {
+                emit_attached_svek_note(
+                    &mut svg,
+                    &diagram.notes[note.note_index],
+                    note,
+                    &outer.edge_paths,
+                    (outer.origin_x, outer.origin_y),
+                );
+                continue;
+            }
+        };
         if let Some(composite) = composites
             .iter()
             .find(|composite| composite.state.id == *id)
