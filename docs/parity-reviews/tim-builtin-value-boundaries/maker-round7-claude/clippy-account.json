@@ -1,0 +1,20 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "sub_mechanism": "The 13 rustuml-render clippy diagnostics introduced by earlier rounds (round-7 obligation 6)",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-7.json (findings[11]; checker-claude-round6/gates/clippy-introduced.json)",
+ "planned_change": [
+  "useless_borrows_in_formatting (activity.rs x5, archimate.rs, class.rs x2, object.rs): drop the '&' in the format! arguments.",
+  "needless_borrow (state.rs x3): drop the borrow.",
+  "too_many_arguments (deployment.rs): an #[allow] would hide it; instead pass the related arguments in one struct only if that is local; otherwise allow with a reason. Decided at draft time by reading the function."
+ ],
+ "precommitted_measurement": {
+  "expect": [
+   "cargo clippy -p rustuml-render --no-deps -- -D warnings: no diagnostic at the tip that is absent at base 460570ba2 (same per-crate rule for every crate).",
+   "Sweep outputs byte-identical for these commits (checked with the tip build against a build without them)."
+  ]
+ }
+}
