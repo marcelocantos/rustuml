@@ -1,0 +1,7 @@
+[package]
+name = "checker-cmp"
+version = "0.1.0"
+edition = "2024"
+[dependencies]
+rustuml-oracle = { path = "/Users/marcelo/Library/Caches/rustuml-shared-svg-round4-claude-maker/src/3992971a7/crates/rustuml-oracle" }
+[workspace]

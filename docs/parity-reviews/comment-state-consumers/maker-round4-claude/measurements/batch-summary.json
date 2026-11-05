@@ -1,0 +1,211 @@
+{
+ "BC": {
+  "cases": 19,
+  "java_valid": 19,
+  "java_error_pages": 0,
+  "base_strict_matches_valid": 0,
+  "r3_strict_matches_valid": 3,
+  "tip_strict_matches_valid": 18,
+  "lost_match_vs_base": [],
+  "lost_match_vs_r3": [],
+  "new_valid_error_vs_base": [],
+  "new_valid_error_vs_r3": [],
+  "lost_rejection_vs_base": [],
+  "lost_rejection_vs_r3": [],
+  "new_panic_vs_base": [],
+  "new_panic_vs_r3": [],
+  "gained_vs_r3": [
+   "pua_b_class_last",
+   "pua_b_class_first_carrier",
+   "pua_b_pair_lookalike",
+   "pua_b_sequence",
+   "pua_b_state",
+   "pua_b_activity",
+   "pua_b_strlen",
+   "pua_b_title",
+   "pua_a_control",
+   "ex_wide_d1_image",
+   "en_wide_d2_image",
+   "ex_d2_widelabel",
+   "nc_note_in_cluster_renamed",
+   "nc_note_in_cluster_depth2",
+   "nc_two_clusters_notes"
+  ],
+  "java_crash_pages": [],
+  "comment_lists_exact": {
+   "base": 4,
+   "r3": 16,
+   "tip": 18
+  }
+ },
+ "BB": {
+  "cases": 36,
+  "java_valid": 26,
+  "java_error_pages": 10,
+  "base_strict_matches_valid": 2,
+  "r3_strict_matches_valid": 22,
+  "tip_strict_matches_valid": 25,
+  "lost_match_vs_base": [],
+  "lost_match_vs_r3": [],
+  "new_valid_error_vs_base": [],
+  "new_valid_error_vs_r3": [],
+  "lost_rejection_vs_base": [],
+  "lost_rejection_vs_r3": [],
+  "new_panic_vs_base": [],
+  "new_panic_vs_r3": [],
+  "gained_vs_r3": [
+   "img_cluster_exit_wide",
+   "img_note_in_cluster",
+   "note_link_only_to_group"
+  ],
+  "java_crash_pages": [
+   {
+    "name": "sur_activity_low_end",
+    "tip_exit": 1,
+    "tip_stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "java_message_exact": true
+   },
+   {
+    "name": "sur_class_high_mid_valid",
+    "tip_exit": 1,
+    "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e 77 ?",
+    "java_message_exact": true
+   },
+   {
+    "name": "sur_class_high_then_nonascii",
+    "tip_exit": 1,
+    "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e e9 ?",
+    "java_message_exact": true
+   },
+   {
+    "name": "sur_class_low_end",
+    "tip_exit": 1,
+    "tip_stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "java_message_exact": true
+   },
+   {
+    "name": "sur_class_low_mid",
+    "tip_exit": 1,
+    "tip_stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "java_message_exact": true
+   },
+   {
+    "name": "sur_link_title_escape",
+    "tip_exit": 0,
+    "tip_stderr": "",
+    "java_message_exact": false
+   },
+   {
+    "name": "sur_sequence_high_space",
+    "tip_exit": 1,
+    "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e 20 ?",
+    "java_message_exact": true
+   },
+   {
+    "name": "sur_sequence_participant_high",
+    "tip_exit": 1,
+    "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "java_message_exact": true
+   },
+   {
+    "name": "sur_state_link_title_escape",
+    "tip_exit": 1,
+    "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "java_message_exact": true
+   },
+   {
+    "name": "sur_tooltip_high_end",
+    "tip_exit": 1,
+    "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "java_message_exact": true
+   }
+  ],
+  "comment_lists_exact": {
+   "base": 11,
+   "r3": 35,
+   "tip": 35
+  }
+ },
+ "AW": {
+  "cases": 45,
+  "java_valid": 39,
+  "java_error_pages": 6,
+  "base_strict_matches_valid": 6,
+  "r3_strict_matches_valid": 30,
+  "tip_strict_matches_valid": 30,
+  "lost_match_vs_base": [],
+  "lost_match_vs_r3": [],
+  "new_valid_error_vs_base": [],
+  "new_valid_error_vs_r3": [],
+  "lost_rejection_vs_base": [],
+  "lost_rejection_vs_r3": [],
+  "new_panic_vs_base": [],
+  "new_panic_vs_r3": [],
+  "gained_vs_r3": [],
+  "java_crash_pages": [
+   {
+    "name": "surrogate_upper_sequence",
+    "tip_exit": 1,
+    "tip_stderr": "export error: An invalid XML character (Unicode: 0xdc9c) was found in the node's character data content.",
+    "java_message_exact": true
+   },
+   {
+    "name": "surrogate_activity_label",
+    "tip_exit": 1,
+    "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83d 74 ?",
+    "java_message_exact": true
+   }
+  ],
+  "comment_lists_exact": {
+   "base": 22,
+   "r3": 43,
+   "tip": 43
+  }
+ },
+ "AU": {
+  "cases": 32,
+  "java_valid": 29,
+  "java_error_pages": 3,
+  "base_strict_matches_valid": 6,
+  "r3_strict_matches_valid": 21,
+  "tip_strict_matches_valid": 21,
+  "lost_match_vs_base": [],
+  "lost_match_vs_r3": [],
+  "new_valid_error_vs_base": [],
+  "new_valid_error_vs_r3": [],
+  "lost_rejection_vs_base": [],
+  "lost_rejection_vs_r3": [],
+  "new_panic_vs_base": [],
+  "new_panic_vs_r3": [],
+  "gained_vs_r3": [],
+  "java_crash_pages": [],
+  "comment_lists_exact": {
+   "base": 22,
+   "r3": 29,
+   "tip": 29
+  }
+ },
+ "AR": {
+  "cases": 20,
+  "java_valid": 20,
+  "java_error_pages": 0,
+  "base_strict_matches_valid": 6,
+  "r3_strict_matches_valid": 17,
+  "tip_strict_matches_valid": 17,
+  "lost_match_vs_base": [],
+  "lost_match_vs_r3": [],
+  "new_valid_error_vs_base": [],
+  "new_valid_error_vs_r3": [],
+  "lost_rejection_vs_base": [],
+  "lost_rejection_vs_r3": [],
+  "new_panic_vs_base": [],
+  "new_panic_vs_r3": [],
+  "gained_vs_r3": [],
+  "java_crash_pages": [],
+  "comment_lists_exact": {
+   "base": 13,
+   "r3": 19,
+   "tip": 19
+  }
+ }
+}

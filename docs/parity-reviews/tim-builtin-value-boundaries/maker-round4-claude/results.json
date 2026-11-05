@@ -1,0 +1,1423 @@
+{
+ "schema_version": 1,
+ "status": "maker results; independent review required; Rust-only predictions for r4a pending Java",
+ "identities": {
+  "branch": "maker/shared-svg-round4-claude",
+  "started_from": "758a508730f228dbd6e8f78c7ccfc7e037165675 (round-3 review on maker tip e6f629944)",
+  "merged_base": "3992971a7517c3a6a1009f1d4b7554de7c928942 (parity-recovery-2026-11-03; code = 9834a7194)",
+  "merge_commit": "71d16da4a4885f02497e71ae7c0695f153bbfa59 (round-3 tip as merged = 'round3' column)",
+  "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "binaries": "git archive <rev> | tar -x into ~/Library/Caches/rustuml-shared-svg-round4-claude-maker/src/<rev>; CARGO_TARGET_DIR=<private>/target/<rev> cargo build --release -j 6 -p rustuml; tip built from the worktree into <private>/target/work",
+  "binary_sha256": {
+   "base": "1bd32667f8b96074c6bf5e9dbd2b078d7339c418ca2a17a0afe852b2bbabb9bd",
+   "r3": "242cdb356923ec18f2b07dd0a4206e90fbcc08dce85fe00397a2d9d4d814e78b",
+   "tip": "d3fac6d28a1d19a089d57985f6d8ab8b6bb57e9b15a967d3c97f9197d3c25c89"
+  },
+  "comparator": "rustuml_oracle::compare::compare_svg_strict from the 3992971a7 export via tools/checker-cmp-main.rs (crates/rustuml-oracle byte-identical 71d16da4a..tip; GEOM_EPS 0.02)",
+  "env": "RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100, PLANTUML_STDLIB=<pinned stdlib>, -pipe -tsvg, each source from its recorded cwd (tools/cwd_map.py: 918 repo sources mapped, 0 disagreements with the round-3 checker map, 26 new BB entries)"
+ },
+ "batch_BC_references": {
+  "dir": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round3-c3a",
+  "reference_results_sha256": "ea80774390cf6b2e87f573929478a5c924eb81881ac81b5b255d029eee1baa03",
+  "copies": {
+   "references/bc-reference-manifest.json": "06da22a973562260c8358898a9054e8739163fda55ecb5d0732dc419b62e6e62",
+   "references/bc-reference-input-bundle.json.gz": "2e1e29f2f8322d4c3f1dd8da45cde0b1160ec4c246bd59a267466608eeda6497",
+   "references/bc-reference-results.json.gz": "45e60fd462931bc5966fe3e91336e66ecf0b020600fc00c6cb3d87475f91dab6",
+   "references/bc-parent-relay-validation.json": "6fef5fe38ce984ceca0189ab334545136d2f79f62d1b73a16a2f61bca1e28350",
+   "references/bc-parent-upload-validation.json": "afdbe549b4be0c9998035f4835e4c186c209a6a8cc8545185b47069d5d29fb1a"
+  },
+  "visibility": "BC Java results were given to the maker before drafting (parent-validated inputs); they are not held out for this round. The held-out batch is the pending r4a request."
+ },
+ "measurements": {
+  "goldens_12550": {
+   "java_valid": 11351,
+   "strict_valid_matches": {
+    "base": 11181,
+    "round3": 11180,
+    "tip": 11181
+   },
+   "comment_lists_exact": {
+    "base": 11563,
+    "round3": 11781,
+    "tip": 11781
+   },
+   "exit_counts_all_trees": {
+    "0": 12474,
+    "1": 76
+   },
+   "panics": 0,
+   "timeouts": 0,
+   "gained_vs_base": [
+    "preprocessing/preproc_complex_theme_override",
+    "state/state_history_shallow",
+    "state/state_note_composite"
+   ],
+   "gained_vs_round3": [
+    "state/state_note_composite"
+   ],
+   "lost_vs_base": [
+    "GET provenance only: activity/act_skinparam2_shadowing_true, activity/act_skinparam_shadowing, edge-cases/edge_whitespace_multiple_blank_lines (MATCH in base, DIFF in round 3 and tip, exit 0; T14.24 raw-reader contract)"
+   ],
+   "lost_vs_round3": []
+  },
+  "sweep_16467": {
+   "sources": "16,441 round-3 sweep sources plus the 26 BB pairs registered by review-4",
+   "java_valid": 14955,
+   "java_error": 1512,
+   "strict_valid_matches": {
+    "base": 12911,
+    "round3": 13508,
+    "tip": 13512
+   },
+   "comment_lists_exact": {
+    "base": 14336,
+    "round3": 15077,
+    "tip": 15077
+   },
+   "base_to_tip": {
+    "lost_matches": "0 apart from the 3 GET goldens",
+    "new_valid_input_errors": 0,
+    "lost_rejections": 0,
+    "new_panics": 0,
+    "panics_removed": 4,
+    "rejections_gained": 71,
+    "error_now_renders_valid_reference": 3,
+    "gained_matches": 604,
+    "outputs_changed": 1531,
+    "comments_lost": [
+     "perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity (inherited from round 3)",
+     "perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation (inherited from round 3)"
+    ],
+    "comments_gained": 743
+   },
+   "round3_to_tip": {
+    "lost_matches": 0,
+    "new_valid_input_errors": 0,
+    "lost_rejections": 0,
+    "new_panics": 0,
+    "comments_lost": 0,
+    "comments_gained": 0,
+    "gained_matches": [
+     "golden/state/state_note_composite",
+     "perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide",
+     "perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster",
+     "perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group"
+    ],
+    "outputs_changed": 11,
+    "other_changed_outputs": "7 perturbations/shared-svg-corrective/checker-independent-astra/unicode_* (Java references are crash pages that fail XML parsing, ERR in every tree; the U+F0000 advance changed to 0.75 em)",
+    "stderr": "50 sources lose Graphviz 'Warning:' lines (port P unrecognized, etc.); no Graphviz diagnostic remains in any tip stderr (base had 42 such sources)"
+   }
+  },
+  "batches": {
+   "BC": {
+    "cases": 19,
+    "java_valid": 19,
+    "java_error_pages": 0,
+    "base_strict_matches_valid": 0,
+    "r3_strict_matches_valid": 3,
+    "tip_strict_matches_valid": 18,
+    "lost_match_vs_base": 0,
+    "lost_match_vs_r3": 0,
+    "new_valid_error_vs_base": 0,
+    "new_valid_error_vs_r3": 0,
+    "lost_rejection_vs_base": 0,
+    "lost_rejection_vs_r3": 0,
+    "new_panic_vs_base": 0,
+    "new_panic_vs_r3": 0,
+    "gained_vs_r3": 15,
+    "java_crash_pages": [],
+    "comment_lists_exact": {
+     "base": 4,
+     "r3": 16,
+     "tip": 18
+    }
+   },
+   "BB": {
+    "cases": 36,
+    "java_valid": 26,
+    "java_error_pages": 10,
+    "base_strict_matches_valid": 2,
+    "r3_strict_matches_valid": 22,
+    "tip_strict_matches_valid": 25,
+    "lost_match_vs_base": 0,
+    "lost_match_vs_r3": 0,
+    "new_valid_error_vs_base": 0,
+    "new_valid_error_vs_r3": 0,
+    "lost_rejection_vs_base": 0,
+    "lost_rejection_vs_r3": 0,
+    "new_panic_vs_base": 0,
+    "new_panic_vs_r3": 0,
+    "gained_vs_r3": 3,
+    "java_crash_pages": [
+     {
+      "name": "sur_activity_low_end",
+      "tip_exit": 1,
+      "tip_stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+      "java_message_exact": true
+     },
+     {
+      "name": "sur_class_high_mid_valid",
+      "tip_exit": 1,
+      "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e 77 ?",
+      "java_message_exact": true
+     },
+     {
+      "name": "sur_class_high_then_nonascii",
+      "tip_exit": 1,
+      "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e e9 ?",
+      "java_message_exact": true
+     },
+     {
+      "name": "sur_class_low_end",
+      "tip_exit": 1,
+      "tip_stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+      "java_message_exact": true
+     },
+     {
+      "name": "sur_class_low_mid",
+      "tip_exit": 1,
+      "tip_stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+      "java_message_exact": true
+     },
+     {
+      "name": "sur_link_title_escape",
+      "tip_exit": 0,
+      "tip_stderr": "",
+      "java_message_exact": false
+     },
+     {
+      "name": "sur_sequence_high_space",
+      "tip_exit": 1,
+      "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e 20 ?",
+      "java_message_exact": true
+     },
+     {
+      "name": "sur_sequence_participant_high",
+      "tip_exit": 1,
+      "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+      "java_message_exact": true
+     },
+     {
+      "name": "sur_state_link_title_escape",
+      "tip_exit": 1,
+      "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+      "java_message_exact": true
+     },
+     {
+      "name": "sur_tooltip_high_end",
+      "tip_exit": 1,
+      "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+      "java_message_exact": true
+     }
+    ],
+    "comment_lists_exact": {
+     "base": 11,
+     "r3": 35,
+     "tip": 35
+    }
+   },
+   "AW": {
+    "cases": 45,
+    "java_valid": 39,
+    "java_error_pages": 6,
+    "base_strict_matches_valid": 6,
+    "r3_strict_matches_valid": 30,
+    "tip_strict_matches_valid": 30,
+    "lost_match_vs_base": 0,
+    "lost_match_vs_r3": 0,
+    "new_valid_error_vs_base": 0,
+    "new_valid_error_vs_r3": 0,
+    "lost_rejection_vs_base": 0,
+    "lost_rejection_vs_r3": 0,
+    "new_panic_vs_base": 0,
+    "new_panic_vs_r3": 0,
+    "gained_vs_r3": 0,
+    "java_crash_pages": [
+     {
+      "name": "surrogate_upper_sequence",
+      "tip_exit": 1,
+      "tip_stderr": "export error: An invalid XML character (Unicode: 0xdc9c) was found in the node's character data content.",
+      "java_message_exact": true
+     },
+     {
+      "name": "surrogate_activity_label",
+      "tip_exit": 1,
+      "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83d 74 ?",
+      "java_message_exact": true
+     }
+    ],
+    "comment_lists_exact": {
+     "base": 22,
+     "r3": 43,
+     "tip": 43
+    }
+   },
+   "AU": {
+    "cases": 32,
+    "java_valid": 29,
+    "java_error_pages": 3,
+    "base_strict_matches_valid": 6,
+    "r3_strict_matches_valid": 21,
+    "tip_strict_matches_valid": 21,
+    "lost_match_vs_base": 0,
+    "lost_match_vs_r3": 0,
+    "new_valid_error_vs_base": 0,
+    "new_valid_error_vs_r3": 0,
+    "lost_rejection_vs_base": 0,
+    "lost_rejection_vs_r3": 0,
+    "new_panic_vs_base": 0,
+    "new_panic_vs_r3": 0,
+    "gained_vs_r3": 0,
+    "java_crash_pages": [],
+    "comment_lists_exact": {
+     "base": 22,
+     "r3": 29,
+     "tip": 29
+    }
+   },
+   "AR": {
+    "cases": 20,
+    "java_valid": 20,
+    "java_error_pages": 0,
+    "base_strict_matches_valid": 6,
+    "r3_strict_matches_valid": 17,
+    "tip_strict_matches_valid": 17,
+    "lost_match_vs_base": 0,
+    "lost_match_vs_r3": 0,
+    "new_valid_error_vs_base": 0,
+    "new_valid_error_vs_r3": 0,
+    "lost_rejection_vs_base": 0,
+    "lost_rejection_vs_r3": 0,
+    "new_panic_vs_base": 0,
+    "new_panic_vs_r3": 0,
+    "gained_vs_r3": 0,
+    "java_crash_pages": [],
+    "comment_lists_exact": {
+     "base": 13,
+     "r3": 19,
+     "tip": 19
+    }
+   }
+  },
+  "batch_failures_tip_java_valid": {
+   "BC": [
+    "pua_b_usecase"
+   ],
+   "BB": [
+    "sur_removed_entity"
+   ],
+   "AW": [
+    "theme_plain_activity",
+    "theme_mono_sequence",
+    "theme_amiga_class",
+    "theme_plain_state",
+    "theme_mono_usecase",
+    "theme_amiga_component",
+    "theme_plain_variable",
+    "theme_plain_then_cerulean",
+    "rh_suffix_undeclared"
+   ],
+   "AU": [
+    "delay_legacy_lead2_creole",
+    "delay_legacy_multiline",
+    "delay_teoz_lead3_multiline",
+    "raw_blank_before_start",
+    "raw_sequence_two_blanks",
+    "theme_mono_class",
+    "theme_plain_class_note",
+    "theme_plain_sequence"
+   ],
+   "AR": [
+    "delay_legacy_short",
+    "delay_legacy_wide",
+    "deploy_alias_reverse_up"
+   ]
+  },
+  "gates_tip": {
+   "workspace_lib": "ok (41 + 10 + 31 + 657 + 835 passed)",
+   "pipe_mode": "ok (17 passed)",
+   "golden_no_oracle": "11181/11251; exit 101 on the family ratchet activity 1299->1297 and edge-cases 760->759 (the 3 GET goldens, as in round 3; baseline unchanged). Failure names vs 9834a7194: +act_skinparam2_shadowing_true, +act_skinparam_shadowing, +edge_whitespace_multiple_blank_lines, -preproc_complex_theme_override, -state_history_shallow, -state_note_composite; vs the round-3 tip list: -state_note_composite",
+   "golden_pairs": "10497 passed, 754 failed, 1299 skipped; failure names identical to base (754)",
+   "parity_perturbations": "1616 failing sources at tip vs 1619 on the merged round-3 tree 71d16da4a (same perturbation set): 0 new failures in any directory, 3 fixed (img_cluster_exit_wide, img_note_in_cluster, note_link_only_to_group)",
+   "harness_guards": "decimal_literal_ratchet and parity_review_records_are_complete fail exactly as on 71d16da4a: per-file decimal counts identical (plantuml_metrics.rs 1055, state.rs 62, svg.rs 1, ...), record-violation categories identical (1221 accepted-with-failing, 306 not named, 197 latest not accepted, 98 x4 T14.6.7 categories, ...). error_golden_census_is_frozen passes at tip (it fails in the 71d16da4a archive only because that tree has no golden submodule).",
+   "files": "measurements/gates/"
+  },
+  "frozen_items": "crates/rustuml-oracle (comparator, GEOM_EPS, syntax markers, park list, error census, guard allow-lists, the 14-entry EXPECTED_MALFORMED list) and every baseline under test-diagrams are byte-identical to 71d16da4a",
+  "no_fixture_logic": "added shipping code names no fixture labels; label strings occur only in unit tests and provenance comments; high-precision decimal-literal counts per file are identical to 71d16da4a",
+  "registration": "No pairs registered: an executable perturbation must be named in a checker review (harness_guards), so the BC pairs stay evidence copies (references/) for the checker to register."
+ },
+ "relay_request": "relay-request-r4a.json",
+ "tools": "tools/ (batch.py, sweep.py, mkcmp.py, classify.py, cohorts.py, batch_summary.py, borderinv.py, formats.py, gates.sh, gates2.sh, gatelists.py, cwd_map.py, checker-cmp)",
+ "mechanism": "tim-builtin-value-boundaries",
+ "commits": {
+  "0b0283a9acc31107f72b700cc7406acf10f613ae": "account: note paint order (docs-only)",
+  "8cd8ba229d45fb24d8eae3a314481cd814618326": "draft: note paint order (state.rs)",
+  "7373e6d7b0e221cb02056359d6a34da087610af7": "account: image border points and port P diagnostics (docs-only)",
+  "ca57cc97974cecf0571d6b912f6598104b9b8acc": "draft: image border points (state.rs) and Graphviz diagnostics (rustuml-layout)",
+  "ee63e5dac4e7b9a94d025cc4c28fea19284cb2a3": "account: escaped carrier (docs-only)",
+  "f793a5e766c334c8540103ddcfed63755b4c3ea2": "draft: escaped carrier, consumers, per-format outcomes, PUA width",
+  "fc1bb8027324427170510f15a5eded9ce30deff0": "account: outer-level notes (docs-only)",
+  "5c64219739fbda93c3ba667f42afbf1fffc21fd7": "draft: outer-level notes",
+  "f6b7f66f006108c8041bb5923d70a7d327f28053": "follow-up: route image-free diagrams with outer notes back to the root cluster path",
+  "418aa5a4670f4b4d67ce5fdccde6b751b1d843ff": "test-only: width test stated relative to the ASCII advance (no new decimal literals)"
+ },
+ "obligations": {
+  "3_surrogate_carrier": {
+   "status": "implemented; BC 9 of 10 PUA probes match (the tenth is T14.21 dispatch), round-3 surrogate outcomes kept",
+   "account": "escaped-carrier-account.json (ee63e5dac)",
+   "implementation": "f793a5e76 (+418aa5a46 test-only)",
+   "representation": "Unpaired unit u = the single scalar U+10F800 + (u - 0xD800), as in round 3; every legitimate scalar of U+10F7FF..U+10FFFF is escaped as U+10F7FF + itself where text enters (PreprocessContext::process for source/include/stdlib/theme, !includesub text, %getenv, %dirpath, parse_yaml/parse_json/JSON-data input) and wherever units decode to text (java_utf16::text: Value::from_utf16, to_display, normalize). A carrier therefore always means an unpaired unit; text without reserved scalars is unchanged.",
+   "java_trace": "Java String keeps units; ToStream writes a legitimate pair as &#N; (accumDefaultEscape/writeCharRef) and fails only on unpaired units (round-3 rule, unchanged). PNG text goes through DriverTextG2d (Graphics2D.drawString) and EPS through DriverTextEps (TextLayout.getOutline), never ToStream, so neither fails; -ttxt prints UGraphicTxt's char area (one unit per cell) through a UTF-8 PrintStream, which writes '?' for an unpaired unit. PDF needs Batik through PdfConverter; the pinned outcome is requested (r4a), not assumed.",
+   "outcomes": {
+    "svg": "ToStream rule (round 3); escapes removed; legitimate text written as itself",
+    "comments": "'?' per code point or unpaired unit; escapes not written",
+    "ast_yaml": "decoded model copy: escapes removed, unpaired units as U+FFFD",
+    "ttxt": "decoded model copy, unpaired unit '?' (one cell)",
+    "png_pdf_eps": "document without escapes, unpaired units U+FFFD, never the export failure; exit 0 (no more resvg 'document does not have a root node')"
+   },
+   "width": "planes-15/16 private-use scalars advance 0.75 em, extracted from BC Java references at size 14 plain (5 code points, two planes: textLength minus the CHAR_WIDTHS_14 ASCII advance is 10.5 each); sizes 12 and 18 bold are requested in r4a",
+   "results": [
+    {
+     "batch": "BC",
+     "name": "pua_a_control",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 5,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 5,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BC",
+     "name": "pua_b_activity",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 10,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: An invalid XML character (Unicode: 0xdc10) was found in the node's character data content."
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BC",
+     "name": "pua_b_class_first_carrier",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 5,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": false,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d800 20 ?"
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BC",
+     "name": "pua_b_class_last",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 5,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": false,
+      "stderr": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content."
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BC",
+     "name": "pua_b_pair_lookalike",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 5,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 6,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BC",
+     "name": "pua_b_sequence",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 10,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: An invalid XML character (Unicode: 0xdff0) was found in the node's character data content."
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BC",
+     "name": "pua_b_state",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 7,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 8,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BC",
+     "name": "pua_b_strlen",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 101,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": false,
+      "stderr": "thread 'main' (47930955) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 20 is not a char boundary; it is inside '\\u{10fffd}' (bytes 19..23 of string)\nnote: run with `R"
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 1,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BC",
+     "name": "pua_b_title",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 8,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 9,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BC",
+     "name": "pua_b_usecase",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 12,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": false,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: db00 db00 ?"
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 12,
+      "comments_exact": false,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_activity_high_end",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 11,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_activity_low_end",
+     "java_exit": 0,
+     "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plant",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 12,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content."
+     },
+     "tip": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content."
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_class_high_bold18",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 6,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_class_high_end",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 6,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_class_high_mid_valid",
+     "java_exit": 0,
+     "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 77 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e 77 ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraph",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 11,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83e 77 ?"
+     },
+     "tip": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83e 77 ?"
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_class_high_then_ascii_only",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 22,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_class_high_then_low_node",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 13,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_class_high_then_nonascii",
+     "java_exit": 0,
+     "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e e9 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e e9 ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraph",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 23,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83e e9 ?"
+     },
+     "tip": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83e e9 ?"
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_class_low_end",
+     "java_exit": 0,
+     "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plant",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 11,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content."
+     },
+     "tip": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content."
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_class_low_mid",
+     "java_exit": 0,
+     "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plant",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 11,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content."
+     },
+     "tip": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content."
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_hidden_member",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_link_title_escape",
+     "java_exit": 0,
+     "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UG",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 12,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 12,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 12,
+      "comments_exact": false,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_removed_entity",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 1,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 1,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 1,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_sequence_high_end",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 11,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_sequence_high_space",
+     "java_exit": 0,
+     "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraph",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 36,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83e 20 ?"
+     },
+     "tip": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83e 20 ?"
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_sequence_participant_high",
+     "java_exit": 0,
+     "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UG",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 24,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?"
+     },
+     "tip": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?"
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_state_high_end",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 8,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_state_link_title_escape",
+     "java_exit": 0,
+     "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UG",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 21,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?"
+     },
+     "tip": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?"
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_title_high_end",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 9,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_tooltip_high_end",
+     "java_exit": 0,
+     "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UG",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 12,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?"
+     },
+     "tip": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?"
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_unused_skinparam",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "BB",
+     "name": "sur_usecase_high_end",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 9,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "AW",
+     "name": "surrogate_activity_label",
+     "java_exit": 0,
+     "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83d 74 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83d 74 ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraph",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 12,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83d 74 ?"
+     },
+     "tip": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: Invalid UTF-16 surrogate detected: d83d 74 ?"
+     }
+    },
+    {
+     "batch": "AW",
+     "name": "surrogate_high_class",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 6,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "AW",
+     "name": "surrogate_in_comment_line",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "AW",
+     "name": "surrogate_rejoined_pair",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "DIFF",
+      "ndiff": 6,
+      "comments_exact": false,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "AW",
+     "name": "surrogate_unused_variable",
+     "java_exit": 0,
+     "java_stderr": "",
+     "base": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "r3": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "MATCH",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": ""
+     }
+    },
+    {
+     "batch": "AW",
+     "name": "surrogate_upper_sequence",
+     "java_exit": 0,
+     "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdc9c) was found in the node's character data content.\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plant",
+     "base": {
+      "exit": 101,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "thread 'main' (47931902) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 25 is not a char boundary; it is inside '𝒜' (bytes 22..26 of string)\nnote: run with `RUST_BACKT"
+     },
+     "r3": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: An invalid XML character (Unicode: 0xdc9c) was found in the node's character data content."
+     },
+     "tip": {
+      "exit": 1,
+      "strict": "ERR",
+      "ndiff": 0,
+      "comments_exact": true,
+      "stderr": "export error: An invalid XML character (Unicode: 0xdc9c) was found in the node's character data content."
+     }
+    }
+   ],
+   "bb_crash_pages": "9 of 10 Java crash pages exit 1 with Java's exact message; sur_link_title_escape renders normally (class link titles do not decode <U+XXXX>; pre-existing, unchanged)",
+   "representation_probes": "measurements/representation-probes.json (round-3 checker probe sources, every output mode, base/round3/tip): at tip no output carries U+10F7FF; U+10F800..U+10FFFF appears only as the source's legitimate literals; lone units show as U+FFFD in --ast/--yaml and '?' in -ttxt; -tpng/-tpdf/-teps exit 0 for lone low and high units. salt.puml panics in every tree (pre-existing char-boundary slice)."
+  }
+ },
+ "disclosures": [
+  "BC Java results were inputs to this round, and the 0.75 em advance is extracted from them; it is not a held-out result. r4a carries held-out legitimate PUA-B/PUA-A probes (%strlen/%substr/%upper, a legitimate scalar next to a real unit in both orders, sizes 12 and 18 bold, sequence message, state note) and per-format probes.",
+  "svg_export also strips escapes and writes '?' for a raw carrier inside comments (ToStream.comment); this was not in the account's consumer list and changes the round-3 unit test comments_are_not_character_data (now expects '?')."
+ ],
+ "residue": [
+  "JSON \\u escapes that decode to a scalar in U+10F7FF..U+10FFFF are not escaped (serde_json produces them unescaped).",
+  "A renderer that splits text between the escape and its scalar (character wrapping) would separate them.",
+  "-ttxt keeps one cell per scalar for legitimate astral text.",
+  "PNG/PDF/EPS glyph appearance for an unpaired unit is not compared."
+ ]
+}

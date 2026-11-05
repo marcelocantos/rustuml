@@ -1,0 +1,5484 @@
+{
+ "BC": {
+  "pua_b_class_last": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "6e4e631aeef7f400085708582d2b07d3cd9f4933b217e2db061ded52241ba986",
+   "java_stdout_sha256": "f194f5117f2c54d17eee92f5e221eb0241e5e0c4ee04917fee6eb4bcaeefd39e",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 5,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "325f4ff19d16ee5421d9e1a6eae12192405c9982d6b1ad7072bf8b2baf9126dd"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": false,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "04f7404c40ae9ce7437a65ad3aff12e95106ef42e9d4af0b28c76b88dd568b11"
+   }
+  },
+  "pua_b_class_first_carrier": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "386f3e565dea90feabe126e361ebc756128af9a0d86c9a1df67bdae168ab6476",
+   "java_stdout_sha256": "139fccaaf75e45d3ce632bfe98966a41aae8695d9f13bd6a0e9465dcae09b7a1",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 5,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "77dd711d25c99d00b31d13c30eef4953c921c05d08e4eaff78b7d483dc72cfec"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d800 20 ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "610f0e9027bd0873f9efc1a323fb86f385cf8965d55d6cef9ed1038f4f0cd13e"
+   }
+  },
+  "pua_b_pair_lookalike": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "02840169a5cc56de601dffec8e9ee9b1d9fae77dbd788514a0f1cc26dc33c931",
+   "java_stdout_sha256": "1e4ae10905d61fef340a676a26517f74d9a2ca2ae8c8c80078aae00c67b3864e",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 5,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "93c0d371a92900bb79a727655bd668945f076d69ffbcb55eb0483d108f755a0f"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 6,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "22468cd36a987d650beb32e647a9dfa3e7140970cc2ced7cc19255ea006cfe4b"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "cbb49ec8ceab490839ccd46dcffc3c9ee721357e0abe002b554cd96fb1ddbda3"
+   }
+  },
+  "pua_b_sequence": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "4a742f17fadf45bdd24155e9d697cbf4c6688f02401da59671f5b4795bafb5f9",
+   "java_stdout_sha256": "d1a39d1cd88a7fb09c3e4241ae546c7b0589c7438d454c45e160d029360bb291",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 10,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "fb5709446b98ac519b4ed0ce758886565d4b89b895006ac0eb3a8a9fe8abf381"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdff0) was found in the node's character data content.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6cceac6a55466ad288179f4e0f390a6f71a22413264f535d06a8a78f6603e001"
+   }
+  },
+  "pua_b_state": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "22efadcfacb44d4dbb761e5aff9b342203d10b5b70a31439fcb25c3e0045b2db",
+   "java_stdout_sha256": "fa98439a7d54fb6512b0b973f0ad95c4b9d73bc88313150d7a7bd00cd32e46e2",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 7,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "04f06f390387aa5aae6f30737b2a2928590e84a887fe90698b3b6f98fef267d5"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 8,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5c687b39ff36a179d48abc6c375c0f1999ad20c74f245175c7b9403f605e9de6"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b68e6330f57b0ce0b26a0a896b2be8ac35087ffd192ee39d157cb85e03f25856"
+   }
+  },
+  "pua_b_activity": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "11f41fa692f414765222efa6a878b8d64b8a3e60a09e8cc186d8c0de40df9764",
+   "java_stdout_sha256": "26c89071ef82bf32371f1b4fbdee73d18fb2f289a182c4dcbcd2df5e2ca16038",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 10,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "32420e4566d9f0f2ef3767068aaa2e7d95241debf16b5e216ca597f13e183b68"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdc10) was found in the node's character data content.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b9780affbe212d330066981490f480e3d013e86e9336e44be3822ce0a5c97770"
+   }
+  },
+  "pua_b_strlen": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "e2ec20f2b64ca166d284cf0da9ad4f9d997ed028c2d77110f4996982817e5155",
+   "java_stdout_sha256": "f2991afb7c1b238c109a6f7df29a002737b77a9920aabf9d2fabb9c20c7cb5bc",
+   "base": {
+    "exit": 101,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": false,
+    "stderr": "thread 'main' (47930955) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 20 is not a char boundary; it is inside '\\u{10fffd}' (bytes 19..23 of string)\nnote: run with `R",
+    "panic": true,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 1,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9a2137be63e463f67cf94428ca34c7837aa433e700f2566500b4dacc4defddc4"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "94ba8549c9dd7c37aca8acb744f1240981719b1d34516b89f5ca3f20ac7f01c6"
+   }
+  },
+  "pua_b_title": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "1d17135c89b1ac49455e1a983de63654dcae2a58d0568f802a8ba82942f98c1a",
+   "java_stdout_sha256": "ff144e4dff383dc2c536383d2c7ed812b2e67abb12b3b5dfa7d9a82d30a556cc",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 8,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6f028e611bb114a00cf43664112f1de0272b730ed2af031fb481280e0d19386a"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 9,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "df55897fecde4cdb3d8eda469ad0cd5c682dd6276f3bfc70279bb64c6d548e1f"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "bf85327d3c14afafc3ecebcb60bbd1c975196ce8d4ef03298d1bd84fb4b72730"
+   }
+  },
+  "pua_b_usecase": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "2180806ddfeddd0b6f6c2d71d3f5f676ca1de4228d794fc93b9e1f2b86ce751c",
+   "java_stdout_sha256": "1b7a1bf487b7e8b343898778aa138d5015126637a9269f6c28fdb2d70dc42e3e",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ab64433e199b4c28024b15e554495e8dfbc4cfdd2dbe8805c549c7e1ec39ebc4"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": false,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: db00 db00 ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "890bcf96fecfa13314e3f647bc11d977b4afbce7de949bcd4b5f7bfb3e3b2554"
+   }
+  },
+  "pua_a_control": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "a8c949515c9e5e1e932372cd2166b890c8a7a88c47a633629789cbc52854f92f",
+   "java_stdout_sha256": "35b69ef7d5319d37cbea8316552b0468a0a88bf5847a7fd7fd4facb865f63072",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 5,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "0a5a22b7b19de9e9d69bbf08128b5269a1b5739cbda6ca8d4e608c3e772ffd6c"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 5,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "a560d235937ac19e021f02563b4a974fc9f4b721ba8d1c93f078c0881afe2a4c"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "1f3a4e30e115936a187a15c4c534f321747c139679a5dd71ad946f1fe7057214"
+   }
+  },
+  "ex_wide_d1_image": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "89f8e68546db89dcfdd4a10affaf171b380222cfade47067e0ff4ba24eea24ed",
+   "java_stdout_sha256": "1ecb5bacfbb098f06d984b6b772ebd88e9112a8f1646563217b20aa89e13b761",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 32,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "7dad203b248c8cd77eb12b3c81ec85f7e00f748edae66f49dc45736e77e23e10"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 23,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "3741119f6e5461d3d8774993427bf395dd69112dee4611e623185095c3f37a57"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "0373cc2aaa28b6f3b17f5831aec4c9b224d3b26bcffec9a8c14858503744e657"
+   }
+  },
+  "en_wide_d2_image": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "8740bcb6f29a305d1eb377624ec727a80804275a1395720a4ae2184fa7ad657b",
+   "java_stdout_sha256": "5de58bf700087d0a9e4d3895bdf52a09ae9f0da65ce3a509c2b057e6a5d63c28",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 39,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "879786b81ce41b2bbd8cda48d32f930b1eed3504485b0db9a9edd69989f53cbf"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 25,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "bbaecbd0c4fdcb0907e94337df891b519a4874e1c5f902a29bf52be764678b3e"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2fe252710f5ec2dc566eac0997c8502c4481e53335590aa08e98ca6d8bcbbf50"
+   }
+  },
+  "ex_d2_widelabel": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "cdf7fe28977bccf8e2ac187cae75b246f8d88156f6418e0ffad8ca89b7c0ed47",
+   "java_stdout_sha256": "42e8528dd980df18dd0689cdbe71eadbbc156f86647c05db445503aad4ce0ace",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 43,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "3bd5073ebd1e36eefcb2bc5d621c21c5b87fec2d8eb4c16445ca730060a8e3a0"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 32,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "019706a4ef95dada1be14bbe7d09a4a1b372476a86beceb192a2c306fc5be1bd"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2badc06e374b9cdf38260be2e8bafe912ebef41cd73a2d041a1be9d3a3fdb3c6"
+   }
+  },
+  "ex_d2_renamed": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "7685394bbd9ace0a0d55bedecf47f2276819d68770ab797dfaead5ccbdda7cd2",
+   "java_stdout_sha256": "6fd1deff0a83b0917afb92576c48815045802127f565ad1dff735650454c46b5",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 43,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "c63c570332f0ba1b8aa53d80281b3935e950680917004a5655aafbdcf3a95b53"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "Warning: node Plant.Line.Cell.done, port P unrecognized\nWarning: node Plant.Line.Cell.done, port P unrecognized",
+    "panic": false,
+    "stdout_sha256": "4e2cfe84851d7c1a8619974763a0a0ac4e220c96367417b3ab33aee469f31cad"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4e2cfe84851d7c1a8619974763a0a0ac4e220c96367417b3ab33aee469f31cad"
+   }
+  },
+  "ex_wide_noimage": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "cc9137909ac08282609c7667714d70c057bc807a7023aa532a062c35f7ae2c64",
+   "java_stdout_sha256": "fa1bb76f093e287b51afd97c8807db94a6dfd142dda8aa8a9d1401d4b024b839",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 35,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "51508646ab53c342abde1434cfb752494ac1a2925737b3acce0d1fe0cdc2d5ab"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "7c731917793bdcb037516e5027e84a24fd72d0b83d270a04911f50dd84f7412c"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "7c731917793bdcb037516e5027e84a24fd72d0b83d270a04911f50dd84f7412c"
+   }
+  },
+  "ex_d3": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "9088aec1f69547edea2ec502f8dd0634ce07d3a2558ffe27f7c3fec242df0f37",
+   "java_stdout_sha256": "d771bcbc17de16083e259bd03eaa7f1425ea4c50b1bba35dea10c91f0634a2e5",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 51,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "341c97bcca18ffcbbb605498abc4519e55f2c9c6f066b9bb940a99c2a97449e6"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "Warning: node Site.Hall.Bay.Rig.stop1, port P unrecognized\nWarning: node Site.Hall.Bay.Rig.stop1, port P unrecognized",
+    "panic": false,
+    "stdout_sha256": "390da115b1ee8d74c2b8c317ac9bfc2b6a4e07bd2eb6a5808f83fe46efe90d2b"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "390da115b1ee8d74c2b8c317ac9bfc2b6a4e07bd2eb6a5808f83fe46efe90d2b"
+   }
+  },
+  "nc_note_in_cluster_renamed": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "d5abc6437887c6203a70068f48c221d0d1648853a3127f1bc5c2f592bbf49a0c",
+   "java_stdout_sha256": "9441b60b9f388bd8a6cb723b28d636248d9e6df247d1ca4b5edcc226f11e8fad",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 34,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "566ad5cb4712f5c19e690cc6e1f1b2b2fa4dd35834a711624c9e9ffa73d12eef"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 10,
+    "comments_exact": true,
+    "stderr": "Warning: node Depot.Bay.dock, port P unrecognized",
+    "panic": false,
+    "stdout_sha256": "654504262358739a264d266f9adaf46fb1847ffb8b54439e085446a0c62b2ba9"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "50eabf2a1268272bfdf712319327079fcae401ba6874fcee72aeb714cbdab4d1"
+   }
+  },
+  "nc_note_in_cluster_depth2": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "a44192c6a34759b990a60067666bf8e25341fa26eea607a4462871515467a9bf",
+   "java_stdout_sha256": "6ae0bab964bc3ffa1827b922a1e44b967d181a42556fe8c4be5cc3d399ac5318",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 45,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "90384dd89137ee8e05603fbf3ac7f8d89e9e5ca7872832243489398227c5a4a5"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 10,
+    "comments_exact": true,
+    "stderr": "Warning: node Depot.Wing.Bay.dock, port P unrecognized",
+    "panic": false,
+    "stdout_sha256": "b979fcfd05a33d052339d634954dddbc15ba9b035c0951f7a23422c3ea255786"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "928ad2864d8124440ab67266377573b66757a3a8993b30e8685a0baab9fb4cd0"
+   }
+  },
+  "nc_two_clusters_notes": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "94d730c4132c164f11cef18630b6df8165fbe8fba4344901227f35b4ca722f1a",
+   "java_stdout_sha256": "04b4ec4403f97e40b1e06d4f7992ea40893d0960152144ada902b0906e4a83ab",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 57,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6552e77a8d3449b0b3aa1112a475557f5ce8426d55c6e77dfce57217fbbbb581"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 21,
+    "comments_exact": true,
+    "stderr": "Warning: node Depot.Bay.dock, port P unrecognized\nWarning: node Depot.Yard.gate, port P unrecognized",
+    "panic": false,
+    "stdout_sha256": "22eea8036a0c373e6ba458eaf628b864bc5e20c76b4c049523275f741c7d4a2d"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4912d1f08bd35c241e8d54a5e4826b6a74222274516e863eef8cb52e60e8f46e"
+   }
+  }
+ },
+ "BB": {
+  "dot_root_before_groups": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "8bb284b56d3e06f2ecfb639feb85f90fd4d990f9d3bee223606be73c1f415926",
+   "java_stdout_sha256": "2140763c4d17f5ead005e4aa466a73259d02f0b22cab700edac81d1ce9c7640e",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 28,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "36530956871174bdc2b55b1264fbc6c4c8ded5dadd660db5c9ffd7cedd7c9843"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6d1c937345733c6910fa2ad05ce6a8f66e6754322a0357d312f969c808be29c8"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6d1c937345733c6910fa2ad05ce6a8f66e6754322a0357d312f969c808be29c8"
+   }
+  },
+  "dot_root_both_sides": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "49ca9725392228c8011a64b1b5a2d2fb0854ecb769e762ae5b6585bcbf4a5c0e",
+   "java_stdout_sha256": "49aaf21efdafb25c0705402c05f2265d20355ac9648e98676688f7a636ddfcff",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 25,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9764875b27151796db4a270d3250fd10943e193a609eaecb1b62100b73247aae"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5ca378f9d01b0404431a6c3ec2cc16ea8504caba322a2ef51c0ea1950d683f51"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5ca378f9d01b0404431a6c3ec2cc16ea8504caba322a2ef51c0ea1950d683f51"
+   }
+  },
+  "dot_root_depth4": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "b37c376b465581c7f9494fcddd5cf22259c9078f1ae8858bf58335487403f71b",
+   "java_stdout_sha256": "f83c5773425b2f3e607d35298a619ffcb39bc2d48700c0083d7af0ab659d8cc7",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 28,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "363a569910527fede902535a32735473823eb28a441e94173a679b75e14d908e"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "bf9c63a803894d46c543ebea69ea9e4ef18009e94adff49e82034b2bf341db84"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "bf9c63a803894d46c543ebea69ea9e4ef18009e94adff49e82034b2bf341db84"
+   }
+  },
+  "img_cluster_depth2": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "69ee4c59f8b225ecf956a148bd9fb0127abe5a0a81efe83df0e531b5bc9dcecf",
+   "java_stdout_sha256": "d28dd906ff57bc62c2c331aa3479fe4b09521bbb269e68f11cf6b6854166cb11",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 30,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "c5fb4bf2d4ffe91b0ed35849d6e75500ddc5427b8db33762be213227bf662263"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "Warning: node Mine.Shaft.cage, port P unrecognized",
+    "panic": false,
+    "stdout_sha256": "1b7bbb57fa0e32cd253a653c5deeb7367b33d9bbaf0c049f3d355d0b647520a1"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "1b7bbb57fa0e32cd253a653c5deeb7367b33d9bbaf0c049f3d355d0b647520a1"
+   }
+  },
+  "img_cluster_depth3": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "d97e25df08efe20d106a9d03b7556235b2cdaed62508ed87a344b0507df248fd",
+   "java_stdout_sha256": "9b1c9086c997ffa74843cb7d066dd79be12b8b09142cb4b518700a9c025f58fa",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 38,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "e6ce92dbd0c810f876b122c8ccec526026b81c2f818960848faf8068590ce917"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "Warning: node Mine.Shaft.Level.cage, port P unrecognized",
+    "panic": false,
+    "stdout_sha256": "67ef7ed6bc7950829934b0bcef39648dcb7f80be90d4059831b3466ede64ac34"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "67ef7ed6bc7950829934b0bcef39648dcb7f80be90d4059831b3466ede64ac34"
+   }
+  },
+  "img_cluster_depth4": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "1783bfec6aa58290d0409b57e6405a6919162702a73575d34c7266800433bac0",
+   "java_stdout_sha256": "b221475bbbe08ea1b330cae87d284963b891939bcdc1dd34d548c31e7870c971",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 55,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "dbb03bed7158552d301b4623c8e41d41dcc2658d9e65e1a0c03934d3b3d078bb"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "Warning: node Tower.Floor.Room.Desk.slot, port P unrecognized",
+    "panic": false,
+    "stdout_sha256": "bc92d271c9a01ef5d0b7f5fcacd5e8ca92a62a0d39ad5239c8153f11e08d9460"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "bc92d271c9a01ef5d0b7f5fcacd5e8ca92a62a0d39ad5239c8153f11e08d9460"
+   }
+  },
+  "img_cluster_exit_wide": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "e2819339b4cf873d204cebeeafc54a26da4870a9d98bc3400886c2832dcc6916",
+   "java_stdout_sha256": "c7e760bb11bc4dd3de3580cb17a54a163f4e84ec40b69dd03f27782192d2b092",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 43,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "dcb1c4937381e16194bc293075db9705b5679b90cd28aa967f74f605bee8ed2d"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 4,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "1c15ea5e04bacfdb4227816e0d72cd8262cdc90ae2a7706c8d9dd3f3d53f8096"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "34f2eb95c67ce6ba81005cd528b74a129c29c20bda39a0c1585e1c8bb204bdf2"
+   }
+  },
+  "img_note_before_later_state": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "1c1436ba4a32418dccdec5cbec6df0a2b708060ff9a5eb6d1eb8bb3b14281c82",
+   "java_stdout_sha256": "ac9edcd5a0198a94bfe1f50ada14c5b9445e12411560cb705dacc8c41e259516",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 34,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "819449957de439c18f2109d8f9fb2220abf7c98517d46296820c3444d22d9a10"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2e89775951f2fd6ee5ba75fa2aece288ee824f99821b3e1ad69366626d7441ef"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2e89775951f2fd6ee5ba75fa2aece288ee824f99821b3e1ad69366626d7441ef"
+   }
+  },
+  "img_note_depth2": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "5360dd603efe72eb8faeef79b70f03b227570576ff159103e2778bb141653eff",
+   "java_stdout_sha256": "3d97a5e08dbaf609c5266a0a7c5006e31a7a75bb3f8e8688cc534bfef0bb9590",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 42,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b3eee21e3291cfbde39dcb2a7a204ac33489ee70f731d6ab98ab6f399f124465"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ea64a4f3310f952ad7ca725163c2b16e1720156520a07b46a32bd2367c579c3b"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ea64a4f3310f952ad7ca725163c2b16e1720156520a07b46a32bd2367c579c3b"
+   }
+  },
+  "img_note_depth3": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "45fad100ee584bf15f9e398952440485d6b105d23ee49b928f817f85e01f4f0d",
+   "java_stdout_sha256": "25cd0388a80ccb8be61568a162b2e124a705e4d50108d9445e9f217ebcd4f1c0",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 56,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "dd0e7cbe5b9343bae197fe6009cad65d6a4225e77971835924a432cb0d568871"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "59e77d1a84c04c1c522dcdf0aca8cbe5c2415c8a352116a17a74065b151d9db1"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "59e77d1a84c04c1c522dcdf0aca8cbe5c2415c8a352116a17a74065b151d9db1"
+   }
+  },
+  "img_note_first_left": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "322a46a8b8d68e2516739f530cb2db9464731fa741383aa084534fa2c2453de4",
+   "java_stdout_sha256": "22284dafe1d58bdf3113c018d6a8ea125937b999b1c2e16e2ebc6193d968b041",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 28,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "18513b58c34aedac2df89a961877153d191e59ded3a16a8b5878d07a505df7d6"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "eee48e78d04da157e7264b41516da2f89b2cd790540aba957149e1e0f7caca0c"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "eee48e78d04da157e7264b41516da2f89b2cd790540aba957149e1e0f7caca0c"
+   }
+  },
+  "img_note_in_cluster": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "e5cc2dcfc36c14996c291b4241549bbe2d6874005be7e4fe8245774a277183e8",
+   "java_stdout_sha256": "87e88fc4ef029f72fe17fa5502bfa1a630843699879613c7367f5d1793c78448",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 34,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "86694be38cf393c9f66f46fa6fecf7d3b61c984cdba3253e8587a76da3e63f20"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 10,
+    "comments_exact": true,
+    "stderr": "Warning: node Works.Shed.gate, port P unrecognized",
+    "panic": false,
+    "stdout_sha256": "cfb79e58e0b347663942f669c4c687dfd892379117f4e619449d8b3f59bf7399"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "78007da997473c26090fd44133d13132f5a20ea09dad7ed3409c87cdb90fb3be"
+   }
+  },
+  "img_two_notes": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "f3a10e14a8a8fc015bc65639ca6f977f4b89ef0a8c8a2985faa474f89b0592a1",
+   "java_stdout_sha256": "272185d55d6333893a190b56eafe8ed62ffab6c1d223b920f8dec51b8d03322d",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 33,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "495069fdacf2c9e756c64ea417831d68f84a3de0a2ce1f2c31a5e12302edceaa"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "a4fbf0fa42907c741d614f88e62e7c28da93a5bc2b6414dc1d40cfa092f0f2ec"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "a4fbf0fa42907c741d614f88e62e7c28da93a5bc2b6414dc1d40cfa092f0f2ec"
+   }
+  },
+  "note_link_only_to_group": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "7b151bc5a139eb85056ef9299ec5ec6ed4f529bb834433d77fd434659161e08c",
+   "java_stdout_sha256": "99070069ea299a2cdf0764088b2c3dd67d78ab98ca87a022626d6ce817d6b383",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 21,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b45b628fc66d6dbb82887f0155ad64d3308f5d9ecd468d67fe3c4ac06dd3c478"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 21,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9ef9cac49d8c9ea438b42577a208d59d9e3cd15fd49deede30c8208af8f85f0a"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "87e6b2771bf2006c3e3b9abe1010fc1b92649a140e4565a150260da765d1aa36"
+   }
+  },
+  "sur_activity_high_end": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "cb9a9d9b867326335c698eca8f9c34e08fd97b31440580f952849556b1a5dcd7",
+   "java_stdout_sha256": "146d4150b74a2ae836ddbdffc9f2f33a10a99ccb8d351bb136c2335f04bcd978",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 11,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f1e1043ec1bb5ebb19c954874dd466c523c93c1a889e4c7f88486e4486b90ada"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "10bcf0b422014f8d1fe0e2a20dfe477bf3e776d38c2a05a5eb86d3522add66ba"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "10bcf0b422014f8d1fe0e2a20dfe477bf3e776d38c2a05a5eb86d3522add66ba"
+   }
+  },
+  "sur_activity_low_end": {
+   "java_exit": 0,
+   "java_crash_page": true,
+   "java_error_marker": true,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plant",
+   "intended_valid": false,
+   "source_sha256": "43e1790e8ee48598c7e15cbcb72e1bf2117a42abf700252cae0dc791b2b348ab",
+   "java_stdout_sha256": "2f9109f353df6de05bc5805104660de6567ae2cdc418bce3eb7875f38fb7cdcc",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f1e1043ec1bb5ebb19c954874dd466c523c93c1a889e4c7f88486e4486b90ada"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_class_high_bold18": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "a91f339dcaf2c3501c37495e0f4603fd062ab9b6184d5dd232d44ee029b44370",
+   "java_stdout_sha256": "00736c04e03149e7c080c8ceb1845d215ef8e146e42993d963f1c56446a1e161",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 6,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "95f5bc3c7f3d41730639d235463c3f4e3f48316fba1eb00a4095bfbc4ae87d68"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "0e311f9cae7ab9015ef0bcfa5e940c416e0d35698b1497a1c03d4132b20f5fa9"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "0e311f9cae7ab9015ef0bcfa5e940c416e0d35698b1497a1c03d4132b20f5fa9"
+   }
+  },
+  "sur_class_high_end": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "f58ca6015980f82f3c75cd827a68677003927a015ca5c7f411b53488065f1b85",
+   "java_stdout_sha256": "973ce00a393f1af2fbfff634b647bfb073c79c63dc18567dee5faecadc6ad3a4",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 6,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "388ff2abdf72364f02c08bc24d33d00b5cb1367a8f06ec040e380f0c351595c6"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "69f50d6b777adebbbe73db6edef666c480d3a2debc23bb2a4f664118518bec37"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "69f50d6b777adebbbe73db6edef666c480d3a2debc23bb2a4f664118518bec37"
+   }
+  },
+  "sur_class_high_mid_valid": {
+   "java_exit": 0,
+   "java_crash_page": true,
+   "java_error_marker": true,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 77 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e 77 ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraph",
+   "intended_valid": false,
+   "source_sha256": "b1f7f5fca780a92d060dc4be63bd0cf6e7ea3bae4d9c43042df4873b56f160ae",
+   "java_stdout_sha256": "d8877abfe5cd3d4eafd703f97690b563c305293b2751a41f3cd383621cef3651",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 11,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2ccc2f0770b99f74686f93bf36fd22958bc9bd17449a95e90e503f34f738f8d3"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e 77 ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e 77 ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_class_high_then_ascii_only": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "8cda64c061834a997ef34cfec3382f9a85fa5c366e77c6cdf605aa0040e44b05",
+   "java_stdout_sha256": "b711fcc05eb79159ee44e616d52b541e4a210d507223aa0b88c013c90bb83c2b",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 22,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "686c3d5e1cbc4c2ebbbbfb73c641ff0ec077d000a79397d8639ebfcfd6980982"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f6b41776f37cb7e86b5cf431f144abc8d78cce5389af5875bc3196e3ca75daa5"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f6b41776f37cb7e86b5cf431f144abc8d78cce5389af5875bc3196e3ca75daa5"
+   }
+  },
+  "sur_class_high_then_low_node": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "08daf10168ed85a327860c3c468fdb8fac43d3efa13b5173b4e1598837185431",
+   "java_stdout_sha256": "8770e3b12c9e374afb505334522ae498ccfe37709f29c008de76e99bd09ec662",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 13,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ca1eedaf833b24167f2ab939810034bc183f5f965f9ff3c348cb4934ce8db2ca"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "fb0affdc8c27e333048b993f2f864d9783bd62abdc24afe1483da5526b4a6570"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "fb0affdc8c27e333048b993f2f864d9783bd62abdc24afe1483da5526b4a6570"
+   }
+  },
+  "sur_class_high_then_nonascii": {
+   "java_exit": 0,
+   "java_crash_page": true,
+   "java_error_marker": true,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e e9 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e e9 ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraph",
+   "intended_valid": false,
+   "source_sha256": "77682ab2f61fe55cac8ed028aefe6e09f55f1adaea6498c8da2eb9948d11917c",
+   "java_stdout_sha256": "89ef83827852293f6c06195e621c0f0adcb2435c8d90658fb03d580f52d4c6f7",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 23,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "02c8355f3fe0ca4ce3e16d2c9917f76e545dfe67e69c19c13cf135987c4536c1"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e e9 ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e e9 ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_class_low_end": {
+   "java_exit": 0,
+   "java_crash_page": true,
+   "java_error_marker": true,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plant",
+   "intended_valid": false,
+   "source_sha256": "38de46af67fe931a100b9e45a516087a08fbb060122ef82744b65b03c33f5b12",
+   "java_stdout_sha256": "f9a63e2375b7b874164769250e2ba2cbf824e175cd4963268b0ee72393f9bf3a",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 11,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "d10bccd99f71928759c1e68c1803fedfe863a41eb14f5de16dbf8a87c5d7b382"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_class_low_mid": {
+   "java_exit": 0,
+   "java_crash_page": true,
+   "java_error_marker": true,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plant",
+   "intended_valid": false,
+   "source_sha256": "0a2ba7842bee354efca5af734f7fa6740f62520ab6f985c5a7b3c0a477d1ef64",
+   "java_stdout_sha256": "52e96d2879b52c35e3db59eef68a881483bc84a4eff116d43c7213c4bc786181",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 11,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "aa11932240655489715bbed4dd6d53afd477479940beb1812247dc6f63321fb9"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_hidden_member": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "25774ccf0a3926d9e9cb90c3806f4453682c900fe389f6fa7041430b0393a182",
+   "java_stdout_sha256": "0f91ff56af4aab05a84094132e548307a05d323f3a0de9291d48a53a62c6cfd8",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f6414f6b2613658c61bc076d093bb4d57700078870f54ca257ccae6ec98c3d02"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f6414f6b2613658c61bc076d093bb4d57700078870f54ca257ccae6ec98c3d02"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f6414f6b2613658c61bc076d093bb4d57700078870f54ca257ccae6ec98c3d02"
+   }
+  },
+  "sur_link_title_escape": {
+   "java_exit": 0,
+   "java_crash_page": true,
+   "java_error_marker": true,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UG",
+   "intended_valid": false,
+   "source_sha256": "d29ba38f3895f7a7703d4ca96551efd1c82c819acaeb48bc315f9bd5be6db675",
+   "java_stdout_sha256": "e88dae0f7cfe0ba3d16d3e26bdb6048b9ccf4fad063a61547b893ed04662c81a",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9be5cd1b4b519ce23cf2c5e0ebabc20db9e133d98ea90796ab2f9b7044f9daff"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9be5cd1b4b519ce23cf2c5e0ebabc20db9e133d98ea90796ab2f9b7044f9daff"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9be5cd1b4b519ce23cf2c5e0ebabc20db9e133d98ea90796ab2f9b7044f9daff"
+   }
+  },
+  "sur_removed_entity": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "556f496c9f64d62167732946c9ce8e1016f916913a5a49610ecfd16d195d75fe",
+   "java_stdout_sha256": "608b8193a07aeac3a93145b7c7233b697561314f6dd01458b3fe9d42df202725",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 1,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "36c3883ee39adb672e3d9f76891b0db893771f9da7a7849fefa2b85c3d0c83de"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 1,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "36c3883ee39adb672e3d9f76891b0db893771f9da7a7849fefa2b85c3d0c83de"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 1,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "36c3883ee39adb672e3d9f76891b0db893771f9da7a7849fefa2b85c3d0c83de"
+   }
+  },
+  "sur_sequence_high_end": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "380fe87704d305a2356783d49005f3d7cd448a70455cd84f73e916fb32a9433f",
+   "java_stdout_sha256": "bd2861bc73b6f297f0fe802e7ab77a5df226f4a685fa92b67fad1c4b3eb3ec34",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 11,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "cb6ad3058cb47a8125df4e2ec1d52b127943deb8a72db03a7c36ac87a7527f21"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6c49ee69d5fbf5b5c00b00dbc7b0c0dcf8758401d70305e2c37d264f3b7c100f"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6c49ee69d5fbf5b5c00b00dbc7b0c0dcf8758401d70305e2c37d264f3b7c100f"
+   }
+  },
+  "sur_sequence_high_space": {
+   "java_exit": 0,
+   "java_crash_page": true,
+   "java_error_marker": true,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraph",
+   "intended_valid": false,
+   "source_sha256": "bef40bf894bb451ee059b3dd2a5f37f7a98c4d341cc457dd3e2173eef8f81f90",
+   "java_stdout_sha256": "53b3c1b37fdd8bc669ae5964b1bd817b55e952a507fb900d3d72dd7b9441f8a4",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 36,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9e56af5ef915a036ec7aba60b068895ae751d2160dc6c4fad0b7a2a7f90faf6d"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e 20 ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e 20 ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_sequence_participant_high": {
+   "java_exit": 0,
+   "java_crash_page": true,
+   "java_error_marker": true,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UG",
+   "intended_valid": false,
+   "source_sha256": "262105653ea2423c733f646a4ac9f360912ceffca99d9e28732846fba2dea879",
+   "java_stdout_sha256": "4c934d1f6d65fab333304d39de5bcb325d2c48260cdd518ccf9eb29ac1da3bb2",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 24,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "eca630a8b47cc7ac43e5727a9bfefe7ca8ebf9f88a130ae48f719a4833d294a4"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_state_high_end": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "8326251f8d4e606f8931e7b4c9c832a25b30536d4c43273c797f176f458d7f46",
+   "java_stdout_sha256": "c59674c59f589eaff9595c15eba000e4f4812ef83628e34d19ff2b1b5e2973a8",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 8,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "1f6eb17280f68bdd6ed51a497c149acc41a37666b39042875308cb97cb029fdc"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "096754aaa94eae507a971fb09c10628ecd8df7257be8a14829ad5a446e705b9a"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "096754aaa94eae507a971fb09c10628ecd8df7257be8a14829ad5a446e705b9a"
+   }
+  },
+  "sur_state_link_title_escape": {
+   "java_exit": 0,
+   "java_crash_page": true,
+   "java_error_marker": true,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UG",
+   "intended_valid": false,
+   "source_sha256": "947d7d125cdcad36602571616844b0a90d6314ecfcb97cd1954b01be25554d45",
+   "java_stdout_sha256": "f79e6301fae2c3de55c871fbbd6ed3bd184782d9f9d6ff3a9416eb71e102af10",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 21,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ac97f7c2d80d9fce18a5459a65f0772a546c6d340365c3ff87630e47703246c9"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_title_high_end": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "7a7dfb7de1296354fff0457772e7d40a93d42c452fe8b445bde1c9261fc169ba",
+   "java_stdout_sha256": "b037636eb5a55a32efa57f703771c38bb69f8356216b6cc49c167845bedb0454",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 9,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "7dbf2a9ad53b0323ebc8e1db99b2dab43d9aaa4800f5103c4ba08f9f5965f133"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "35335d8e6b850b8491dd80d13d4c66dae5bc12f95f0573482f0d8c5e09af44b5"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "35335d8e6b850b8491dd80d13d4c66dae5bc12f95f0573482f0d8c5e09af44b5"
+   }
+  },
+  "sur_tooltip_high_end": {
+   "java_exit": 0,
+   "java_crash_page": true,
+   "java_error_marker": true,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UG",
+   "intended_valid": false,
+   "source_sha256": "0dff26472bd86860c49ac57ea89ad9856e1c92e77c3b27943b3c8b07fa1ebd0f",
+   "java_stdout_sha256": "35791e1167879357c3d04de5b98c00c917445e0fb424739cb161cffc46a76300",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "da179b57d6bc3ff90a119c68b8789423a90a828ca5a436da0be04483a623b55e"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "sur_unused_skinparam": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "b8ff29318815050807c5a0f3c7663c58063b7d13c7b6518729d6817fa7fcada3",
+   "java_stdout_sha256": "b8aed56474fc3d89ff5086e9800a5b77bed5a8b01a00f1a73c4d3a85160d2cde",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "fd98ad5f28f56675dd7db230e89787964de44855817cdfb1fd1af8051283ae5a"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "fd98ad5f28f56675dd7db230e89787964de44855817cdfb1fd1af8051283ae5a"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "fd98ad5f28f56675dd7db230e89787964de44855817cdfb1fd1af8051283ae5a"
+   }
+  },
+  "sur_usecase_high_end": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "cc3e2ffb4f23a4ab358b2c625a6dbc4767795156f60a70c847999a475c7d64d9",
+   "java_stdout_sha256": "9a8b0f23117e2566c409786e62a75263e00f08222bb674398b7a42ffdaca394a",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 9,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "cf6989136af02ef80e1bc448c1fa29096f4e862083b7fdee451bde6cb9df84ed"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "8c1a988e23d601343f8c04a486e2983969e0fb9a127a3a2181674456c9c227d2"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "8c1a988e23d601343f8c04a486e2983969e0fb9a127a3a2181674456c9c227d2"
+   }
+  }
+ },
+ "AW": {
+  "theme_plain_activity": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "9ebb03f786309a542818c4e6f397337435c3c0b8bf031ed1a0ccf8cbda8f29f4",
+   "java_stdout_sha256": "7018cb745e5f9aeacb9b41add339f883c8b0c335d3ff58390e863b059a1e03f9",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 27,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "52c9c1ddc504c63a2b6f13861f0c7dea28f54114916e0a8b0f3a1a4e0672e90d"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 27,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "52c9c1ddc504c63a2b6f13861f0c7dea28f54114916e0a8b0f3a1a4e0672e90d"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 27,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "52c9c1ddc504c63a2b6f13861f0c7dea28f54114916e0a8b0f3a1a4e0672e90d"
+   }
+  },
+  "theme_mono_sequence": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "4cf6515bf7e3351ab2245e8bc3ab9a1dee24160d9170a0d6edc8b50136deed21",
+   "java_stdout_sha256": "77b10dd30390d7a7cf679c233757e15d70ccc771a22b7ae3c646215d92a874d9",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 19,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "01d12e677aa7a33672bb027c8d38e1561bcbd9a2ef4191cfbf697ff07fd09181"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 19,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "01d12e677aa7a33672bb027c8d38e1561bcbd9a2ef4191cfbf697ff07fd09181"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 19,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "01d12e677aa7a33672bb027c8d38e1561bcbd9a2ef4191cfbf697ff07fd09181"
+   }
+  },
+  "theme_amiga_class": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "a5148dd868b1c00f48be5400b9464db1ccbeaf55115e82c8a163e17d119305f6",
+   "java_stdout_sha256": "9c2b16a6205d30381f855a2b466cacd62b6694c104201f0f99dbb148da9beb89",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 19,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "d31ae4733e466cc7cbb3c783ded69bb35f5ebb0c2c33d1686ea588c6bc4c81ec"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 19,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "d31ae4733e466cc7cbb3c783ded69bb35f5ebb0c2c33d1686ea588c6bc4c81ec"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 19,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "d31ae4733e466cc7cbb3c783ded69bb35f5ebb0c2c33d1686ea588c6bc4c81ec"
+   }
+  },
+  "theme_plain_state": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "4971f56ac2f0be6c26934dc2ad3ca9ccdb71dd29cda292a2fc9b651c9e677c82",
+   "java_stdout_sha256": "e54c45a45722217551607a64cb1b099034ece0ff8cda8bf044287fac3644f027",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 16,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4d96b6d18ae7e4f012f5db407606a777f047651d8bc4f4aadea40ac17893aeb4"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 16,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4d96b6d18ae7e4f012f5db407606a777f047651d8bc4f4aadea40ac17893aeb4"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 16,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4d96b6d18ae7e4f012f5db407606a777f047651d8bc4f4aadea40ac17893aeb4"
+   }
+  },
+  "theme_mono_usecase": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "11bb8d1edfa7fe5091ad7de3a94899f5440f17fdff664c41f969df7005ecc1fa",
+   "java_stdout_sha256": "58075ee8926d69c7e9de2ad08c47e9389fc217f92718b8b2948ad86b43a97580",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6d1b8a40c05b0c4a54d89129676e918e6cf044fa839a534dd14151ce79d5e8e2"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6d1b8a40c05b0c4a54d89129676e918e6cf044fa839a534dd14151ce79d5e8e2"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6d1b8a40c05b0c4a54d89129676e918e6cf044fa839a534dd14151ce79d5e8e2"
+   }
+  },
+  "theme_amiga_component": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "1e55fa54f6a6abffe9d784d0fcd736ce51ccf5ac4face03bd58b3ab77ccd44cd",
+   "java_stdout_sha256": "83691ce66491161681ef8f09ea4475a5ecefaf3cb78eba7af74a764a7e9526e1",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 17,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "cb68f38dfe3a1104378f186538469ec52d113891837269759a6c336148d5c93e"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 17,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "cb68f38dfe3a1104378f186538469ec52d113891837269759a6c336148d5c93e"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 17,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "cb68f38dfe3a1104378f186538469ec52d113891837269759a6c336148d5c93e"
+   }
+  },
+  "theme_plain_variable": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "e87130e79892871f6420a0ee6783746495180cc6e8e3f8ad5c34fa2ba064d460",
+   "java_stdout_sha256": "5305fbefecb4cd9e451db3fe399e509fc50d8b8e0825cc59b1dd37d41558a6dc",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 15,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "c8ee7fb8c5822a097a2f35f0b534501bcb84797fee0a352ad3e2b376cd18870d"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 15,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "724dd12a28addce6d470f8e88718c5d1daf57eb5d2ccb0d46bb17d35637c95d7"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 15,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "724dd12a28addce6d470f8e88718c5d1daf57eb5d2ccb0d46bb17d35637c95d7"
+   }
+  },
+  "theme_mono_inactive": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "1760fc0be1ea779baa13fbede99bd30dfec414f8c74c3bf7d4be12336d1b436f",
+   "java_stdout_sha256": "52f42165d30c5a08021ffca7ab2be70547923c9101dbb691ce18981bd3bed213",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 1,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5907296da57af8fd30221a5917acd9554c02c316697781bc3cd10065e0b875b9"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "defd36f23f6c583fcb221819d031a8b71bc3a9c9e93ab95f08f03f8f53421407"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "defd36f23f6c583fcb221819d031a8b71bc3a9c9e93ab95f08f03f8f53421407"
+   }
+  },
+  "theme_plain_then_cerulean": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "8568368d6c04d46fc338fd226e9090f6c74187f27f07ef6b5e3ef3aa49a85ea6",
+   "java_stdout_sha256": "34828a29ae89b31fa6f2a86f9198b2b5ac23fffc6f82a9c315b00b66ce2f0aba",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 9,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "604d23fe881a5ee27c2e0e2dad3b98157b0c42e1a9c4f47ce73a8f97a38259f8"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 9,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "3825e1fa6aac3e37de1d374d1738d901935d336a529455528ea9cb15ac97346a"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 9,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "3825e1fa6aac3e37de1d374d1738d901935d336a529455528ea9cb15ac97346a"
+   }
+  },
+  "intval_arabic_indic_signed": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "87bc61a143364537f60fb7bf6694559b1b213aed95f5e8e1d36caa8e36b75679",
+   "java_stdout_sha256": "3657007cbabccfc663a424cb0cbb840a90a295f6d3a10602caa6c4a2c497a4c5",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 6,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "1273a28a9f7b81d6d28cc8cf50b252c034a1550156702ef513055ded587b7e42"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "e9ec061c049982d7a8df0b5688c1792fd1ed6e8bc08bd9f6f48b6846c0dcc17b"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "e9ec061c049982d7a8df0b5688c1792fd1ed6e8bc08bd9f6f48b6846c0dcc17b"
+   }
+  },
+  "intval_extended_arabic_bengali": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "9d15000c29ac6d6d396ca5184f7774c1954bbb9f41531e2236df7960b3695db8",
+   "java_stdout_sha256": "d3e2275d8cf7550c67cb18366b7062e58cf6386549aab6eb9bcaf55f3d9e31f4",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 6,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "dd7b698094a995124b3f96f4b72a75f228d9f6e23d825cb38ba443ed1a2823f1"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "46f1689dacacefcd64f295cd617c2be0d64c1f2423873dd70e1cfab3da69ac4b"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "46f1689dacacefcd64f295cd617c2be0d64c1f2423873dd70e1cfab3da69ac4b"
+   }
+  },
+  "intval_fullwidth_bounds": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "8b55ef2c7a39ca512d365ad5f9d00d042e22094b7418394e2eb5597d9569c7b1",
+   "java_stdout_sha256": "39015df6a18ca1e620d139301a706bd909fb055730787873beb05655b7c46b95",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 6,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "42f0b73beac69b3bbf898d819076104f1e0c487f3ecf362486861fa85d2457d2"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "61c66d45b3269eb68311876551608c2489562470ff0eca4123afd893c7b6ca9b"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "61c66d45b3269eb68311876551608c2489562470ff0eca4123afd893c7b6ca9b"
+   }
+  },
+  "intval_myanmar_tai_laing": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "0c1f8ae9f12bc522b6e0b008afd97f796b72d1900994652da4b88dc16a5ee5c6",
+   "java_stdout_sha256": "bf679c638258372b57933aef6c5378e0b1a2b97ace96795f0b3155ebfad76748",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 6,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "085f3d7d27ffa3f3f18129b6c7d6ad7c80404610f9149f09f737582e6caf4356"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "cfc254262a71d3e5708f6b2ebb4c6268f15ac809d53a0b5146efde0cfe57c027"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "cfc254262a71d3e5708f6b2ebb4c6268f15ac809d53a0b5146efde0cfe57c027"
+   }
+  },
+  "intval_fullwidth_overflow": {
+   "java_exit": 200,
+   "java_crash_page": false,
+   "java_error_marker": true,
+   "java_stderr": "ERROR\n1\nCannot convert ２１４７４８３６４８ to integer.",
+   "intended_valid": false,
+   "source_sha256": "abe0ddc9c8e72c99cea04f84862b293988f41918ea69069bad67a7da359d8ad7",
+   "java_stdout_sha256": "43a32e85541090e5332661441b5d465541c07f1fbf388781cf5a21b2c4c90d1e",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 11,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b4e80b556f15d484f0411c5f05ab9662b5d7354be573bd72076ad6dd8797d4e5"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "parse error: line 1: Cannot convert ２１４７４８３６４８ to integer.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "parse error: line 1: Cannot convert ２１４７４８３６４８ to integer.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "intval_supplementary_digit": {
+   "java_exit": 200,
+   "java_crash_page": false,
+   "java_error_marker": true,
+   "java_stderr": "ERROR\n1\nCannot convert 𝟏 to integer.",
+   "intended_valid": false,
+   "source_sha256": "b928e9018c31653dbfdc750131992889d39f9e83837eb0759725143e8f9724bd",
+   "java_stdout_sha256": "744472d1e4613fe8100430bf117209a415a97fcda2c86cac8b312445a8176d7b",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 11,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "bb0dbac11d87a5b2af9604df9a92102a8aaa8eaf6cb392e1871e1af01379b372"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "parse error: line 1: Cannot convert 𝟏 to integer.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "parse error: line 1: Cannot convert 𝟏 to integer.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "intval_superscript_digit": {
+   "java_exit": 200,
+   "java_crash_page": false,
+   "java_error_marker": true,
+   "java_stderr": "ERROR\n1\nCannot convert ² to integer.",
+   "intended_valid": false,
+   "source_sha256": "39f0e9004a3978b74b89bbb666a9d65d1c3fc76d74c775a06d0716e0a1072680",
+   "java_stdout_sha256": "93dafd4039f5a6b8769fca2e92a360aa874c3242e5675426a41055ea58039d51",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 11,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "21237b04724793b659a84451c6993ee5f08b683900bb5fae3acd29de1a8f73d0"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "parse error: line 1: Cannot convert ² to integer.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "parse error: line 1: Cannot convert ² to integer.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "intval_double_sign": {
+   "java_exit": 200,
+   "java_crash_page": false,
+   "java_error_marker": true,
+   "java_stderr": "ERROR\n1\nCannot convert +-٥ to integer.",
+   "intended_valid": false,
+   "source_sha256": "6522de33214849dad446fad1e1898ef31501a85620e3ba9766e0cb76b361de83",
+   "java_stdout_sha256": "957750b17e3180411f87ef7acd1fdd7ae76878d274200ae9e210c3f2d5ecf9d3",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 11,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "583d3dc86fd3ff119c5e090639bd450fa3592798112b22f36874866f3556484b"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "parse error: line 1: Cannot convert +-٥ to integer.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "parse error: line 1: Cannot convert +-٥ to integer.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "surrogate_high_class": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": false,
+   "source_sha256": "bf35fe33809f8dfa65af2c2560333fd05210095b34190a777126941649e09190",
+   "java_stdout_sha256": "1fc23e23ee197f61db6259791a898c9a1346ad3a96159844f76f6bf6669bbdb0",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 6,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "000c2d30645a4a8a5f66492e91ec6d351dfc14e75833039c69f2b53cbddd66fa"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b7e77658b20e4def93409217df0d17806064d9edd97e99ab6cff854883d7a7d9"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b7e77658b20e4def93409217df0d17806064d9edd97e99ab6cff854883d7a7d9"
+   }
+  },
+  "surrogate_upper_sequence": {
+   "java_exit": 0,
+   "java_crash_page": true,
+   "java_error_marker": true,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdc9c) was found in the node's character data content.\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraphicSvg.java:138)\n\tat net.sourceforge.plant",
+   "intended_valid": false,
+   "source_sha256": "dd8c632d6835256eaf79a5481f9330b652c6df6052628a4e57b5b16ce0f78c23",
+   "java_stdout_sha256": "d4e6aec451807560918541d78ec7398ff035e3ea6279ea5a00feedfa1aa135eb",
+   "base": {
+    "exit": 101,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "thread 'main' (47931902) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 25 is not a char boundary; it is inside '𝒜' (bytes 22..26 of string)\nnote: run with `RUST_BACKT",
+    "panic": true,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdc9c) was found in the node's character data content.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: An invalid XML character (Unicode: 0xdc9c) was found in the node's character data content.",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "surrogate_activity_label": {
+   "java_exit": 0,
+   "java_crash_page": true,
+   "java_error_marker": true,
+   "java_stderr": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83d 74 ?\njava.io.IOException: Invalid UTF-16 surrogate detected: d83d 74 ?\n\tat net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg.writeToStream(UGraph",
+   "intended_valid": false,
+   "source_sha256": "f37855baeb42528662295171de70acd3607c08f6957da3c21022fcfb01df0b97",
+   "java_stdout_sha256": "4a09e61d479e6dbcec963858048695a3a83705c4738df9d9fbd5fc9332e72e82",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "244c5e20957d332019a154f8cb6ede58cce9a2bb7f55ce59502998bb5d598315"
+   },
+   "r3": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83d 74 ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   },
+   "tip": {
+    "exit": 1,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "export error: Invalid UTF-16 surrogate detected: d83d 74 ?",
+    "panic": false,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+   }
+  },
+  "surrogate_unused_variable": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "d759d369313d436813cffe93edda765d5f43c3c97ae90c1651923a385e0d5ef6",
+   "java_stdout_sha256": "fe5a0944753079508e610b40eca1ebe7aa6cc865d79e203c0b2bdf1c234143b0",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f19e1bcef2cb4eb682e20d5a569043c563d4aef45b217b1d12bca871eb399645"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f19e1bcef2cb4eb682e20d5a569043c563d4aef45b217b1d12bca871eb399645"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f19e1bcef2cb4eb682e20d5a569043c563d4aef45b217b1d12bca871eb399645"
+   }
+  },
+  "surrogate_rejoined_pair": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "6aad11917b913388960d2544b1c1c8e75ce92b28b1292f9f73602e2ffc9cc90f",
+   "java_stdout_sha256": "2e753d5032a4a0e77a5a561f25d250dc7ef0936e366b4ad8af9e92da7234c198",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 6,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "53d7173b8a9dc928156db0916ae6dae65629156fe455fdd0d41dd0229ba54c4a"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6f8cafe28967bd4b7777997b6b9e5f6c3aa54f0fb361fd69108ff9e9461ab072"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6f8cafe28967bd4b7777997b6b9e5f6c3aa54f0fb361fd69108ff9e9461ab072"
+   }
+  },
+  "surrogate_in_comment_line": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "7ae5a9aae17ee7e6340310efa4b09a2462e6497da9b0071d432e07f273da8a2c",
+   "java_stdout_sha256": "c2d766d3cbca41206c42593edf93814c730040750d7a10fb461f3cebe27e17c4",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ee9af4d5b80e11ee4a5c0713e34adda2cccd42e3df4fbb229b62b2d623407bce"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ee9af4d5b80e11ee4a5c0713e34adda2cccd42e3df4fbb229b62b2d623407bce"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ee9af4d5b80e11ee4a5c0713e34adda2cccd42e3df4fbb229b62b2d623407bce"
+   }
+  },
+  "rc_exitpoint_depth1": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "8ab84c41fedf405de14a1ae9b5e5f0b0cae6ba8db2549d88588d1dcbceeb83c7",
+   "java_stdout_sha256": "5e8a7c7a238534839e379a340d8435263e7f9c423a8c982557e7cc8d86e20737",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 29,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "e9986831f86e33ff41209aea0eb66a4af9a9ab17fec7537dcf69b215fa882203"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "Warning: node Forge.vent, port P unrecognized\nWarning: node Forge.vent, port P unrecognized",
+    "panic": false,
+    "stdout_sha256": "c8df0a354233f6a43f1acdd505723eefaa4dfdb35615a1296169e0cd2e7ea480"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "c8df0a354233f6a43f1acdd505723eefaa4dfdb35615a1296169e0cd2e7ea480"
+   }
+  },
+  "rc_outputpin_lowercase": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "f1a8fa8d4a571ee754490030139e7c36423acf7d2bf0f7623d2fc07c14c71374",
+   "java_stdout_sha256": "6e7108f1c50194e5416baf4941460420656c9894eeb40b9e92a32faf87f6754a",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 16,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "89afb7b6549636237b5f3005f19b7212f6c1689832dbf7d26a84cce55593d972"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "49017f252a3833dc4cfca0f3e26ce0f70adfd58972df885e749277d6a2b33860"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "49017f252a3833dc4cfca0f3e26ce0f70adfd58972df885e749277d6a2b33860"
+   }
+  },
+  "rc_root_note_depth2": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "14796769ea43f0fa10e4bb9f2adc3639dbd344baa87233e429e828d9dc0a8ff4",
+   "java_stdout_sha256": "6b630c63742935fb15ccff6aee220a0be795590300ce4c2a8fbad8f89b403fe3",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 25,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2c986d0146443189083b988fb0b0df08e4cf9d077d639ab02dfb1893aa21802a"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f03bf0a834a5b4ec71e1556e413845c9f017ea9972b46e9d52d55875a2471431"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f03bf0a834a5b4ec71e1556e413845c9f017ea9972b46e9d52d55875a2471431"
+   }
+  },
+  "rc_inner_note_autarkic": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "7c4f84b293a77346a1486d67e8978e95e840ab2df2bceb638168061667be4e4b",
+   "java_stdout_sha256": "14bf9ad3e83bf73b80332a95c04f1a5bc6b3be5be89532335807d703d05f94dd",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 28,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "79f615ab0f5a9b40b3911c245220cb4ff3c0645bca6022811d13f2c2cf4a0dca"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "314072a9eb3be854ba864eb81fe515e6a99f638096fa02c3258e726883fe5b24"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "314072a9eb3be854ba864eb81fe515e6a99f638096fa02c3258e726883fe5b24"
+   }
+  },
+  "rc_entry_inside_autarkic_depth3": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "95cf5bfe3490fcbce28aa0a6c62b1e58c35e3524c926b99d937a412faeccf118",
+   "java_stdout_sha256": "742aac92907d300122f77325a0a9e6437061180cfcecf8b306ea684ca9ac6724",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 38,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "658b4ce5c9e313e2a3844672ca02c8354cb070a379b00f11eb25ca2df2644f21"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "Warning: node Plant.Hall.Bay.door, port P unrecognized",
+    "panic": false,
+    "stdout_sha256": "72d7eebd480a8bf9c72ae7af67252daf95192f4974b3789a0b14482a6ba5f387"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "72d7eebd480a8bf9c72ae7af67252daf95192f4974b3789a0b14482a6ba5f387"
+   }
+  },
+  "rc_quark_reuse_renamed": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "0f5224ab95436fa6f8e6807d9cb4bf93b900ff804e7b9898d0e89000927426a3",
+   "java_stdout_sha256": "e009b6ecc327462651e1add4b54c61351b53d02ade64369af4b48b38e6f97b5f",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 34,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5f1ac94587a306126b3c31a3542c17bfe49a26536e99919680cdf3814344e96d"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "48d7588c22dbc3730adff395222f3d92654739803a775c3de7ba34551266d7c3"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "48d7588c22dbc3730adff395222f3d92654739803a775c3de7ba34551266d7c3"
+   }
+  },
+  "rc_two_entry_points": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "dbcf02392bb16036f2f8e2c9b70869843e1e28d8d2c4709de282cdf3b4be8dc1",
+   "java_stdout_sha256": "c4bc41201ac329a9d66304be6ed78864a4e37b5a750c96d755c8968e1fcdd260",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 31,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "45d7d3183d210cdafc4377cb5f5f3672e839e3bafeb6f4ee2043d58df0fb74e9"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "Warning: node Gatehouse.north, port P unrecognized\nWarning: node Gatehouse.south, port P unrecognized\nWarning: node Gatehouse.north, port P unrecognized\nWarning: node Gatehouse.south, port P unrecogni",
+    "panic": false,
+    "stdout_sha256": "d0537037bffb7c190f7b9552a5303495ca22d46d802f0b1e76f41eaa15fdaf35"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "d0537037bffb7c190f7b9552a5303495ca22d46d802f0b1e76f41eaa15fdaf35"
+   }
+  },
+  "rh_suffix_nested": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "e54b30e571a5f3e64e702f82ae03bfda02a462e4bd4479c53fa818d1c1e28a0b",
+   "java_stdout_sha256": "d29a5444b8e669be668bbc3b8a3af29f270ca96eafd8a97290bc3224331ffb5e",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 19,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "364daed9accd875e568fd00548fae27b7f44509791eba922141cb7715cefe379"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b40025ac7c75692a6dc44a5adbe5bb2976bb86b2ee419d7303258b62db49e8e3"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b40025ac7c75692a6dc44a5adbe5bb2976bb86b2ee419d7303258b62db49e8e3"
+   }
+  },
+  "rh_suffix_undeclared": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "b7aa0736e15e886644bc6bb7bf10e264cb8e2c69fc45dbdc6e2117e5cba41df9",
+   "java_stdout_sha256": "b4377a1787b79180a26867e4dcd3da83f67d4a04c6a0d02bf291b7b51726795c",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 2,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 2,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 2,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d"
+   }
+  },
+  "rh_deep_depth3": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "a95650ad2cd65c3a6360c0d957fcba63bfebf519bfd2f1b7fee96b740b6e3589",
+   "java_stdout_sha256": "6f8eca9be4b1e378d5f57f310e42d1ba3cc975732257b4527139c92368ed490a",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 31,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "a03b5ec37787dc899938b4d7b9f3c3924f607175760160b121d741bcd0b11190"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "0a260956a73d55031b923e63c08a243c135d0fba00f7f70981db90a07adf18c5"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "0a260956a73d55031b923e63c08a243c135d0fba00f7f70981db90a07adf18c5"
+   }
+  },
+  "dep_bracket_spaces_links": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "62027d54a8654c90e9b9313fc07dc01fdb7358f8a0007f370ee22c21266e0479",
+   "java_stdout_sha256": "4a45900f637992fc4ce83051b3b2ee246922df20a27774aa5ea21f94847b00a6",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 21,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5fe7708daf07d4b63786879fced088d653d319d84d32e15aef0c81622d6c8123"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9c0f7c4a8d76934b91e2f2038925c2ea814d05c64dde99c945c171b932aa574b"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9c0f7c4a8d76934b91e2f2038925c2ea814d05c64dde99c945c171b932aa574b"
+   }
+  },
+  "dep_bracket_in_node": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "0767c98a153a017e3f3141d1d8f3b3f7501b0d8e0b03169c4b7018b0155ec6b2",
+   "java_stdout_sha256": "0d68c1b2f6632ba2bf807d43a7b1b9a673d3d3bd2d86623c00e2e367c1f73da3",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 23,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "049d9d02df3a68296cc022be4936bb538f235e6cbea81ce54c460489eb8f2bf8"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "cae9af2910cb69a3abc08d85e1c6f94399ac4493192a435523c28f62c3059c7e"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "cae9af2910cb69a3abc08d85e1c6f94399ac4493192a435523c28f62c3059c7e"
+   }
+  },
+  "dep_bracket_alias": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "feb65fc612f3428e424c1e8ffb91cd32517b150a5bd9096bd3ffc53c1536d358",
+   "java_stdout_sha256": "fc1f6012fb8dcbbfa20681a05b7d74dc410977910f8b494c21919317e5e01adc",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "80355728c5748c34436baf2c163536d9d398fb237628eefcd8a224a798414576"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "80355728c5748c34436baf2c163536d9d398fb237628eefcd8a224a798414576"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "80355728c5748c34436baf2c163536d9d398fb237628eefcd8a224a798414576"
+   }
+  },
+  "dep_bracket_nospace": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "49f21f47fe887582dea6314936a550f43312478a55a87eb3bd25e987441bfa0c",
+   "java_stdout_sha256": "bc956084f44ceac5763b5d96823861dbaa10c83bdedd66cbe56af2b9578db05a",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b46b5880052eb18ad91dcae516f934a146058a2288e234142c3bcbc5f4b1fe8f"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b46b5880052eb18ad91dcae516f934a146058a2288e234142c3bcbc5f4b1fe8f"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b46b5880052eb18ad91dcae516f934a146058a2288e234142c3bcbc5f4b1fe8f"
+   }
+  },
+  "stroke_arrow_palette": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "95451e012e67eb9095dba68a4b348828f8e8888e7b56f0bf150140626fbfea19",
+   "java_stdout_sha256": "77566fb29e48d2ac0f6784cc561f2fd0379665076801cdfe0e81b34324a0dec0",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5824286dad55dd435179e15d24572fca97ef12a7fc68c4ff8c6b44253d37fc67"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5824286dad55dd435179e15d24572fca97ef12a7fc68c4ff8c6b44253d37fc67"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5824286dad55dd435179e15d24572fca97ef12a7fc68c4ff8c6b44253d37fc67"
+   }
+  },
+  "stroke_arrow_alpha": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "182eae6d0b30b2479b2ef81cb9c7f3408f167ee3c1dbb5087db3e70e1a28db07",
+   "java_stdout_sha256": "8856236935879d7d6455ae3385ada40f8140ee5ec969a5fd779362c4d7d64c80",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 2,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "06bded97d0e231e095928a225a8e731ff9cdb731f783a43d87f2eb89b94d8c16"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ec6b2170c20ca8d37487d33373a813f67572684f05b8c61a53894dfd9fadb856"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ec6b2170c20ca8d37487d33373a813f67572684f05b8c61a53894dfd9fadb856"
+   }
+  },
+  "stroke_arrow_transparent_label": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "93171f4e568269ff9df9db5184dda811c32c457b1c5fbcf1f3bf89db76d47d01",
+   "java_stdout_sha256": "9d6d6b0e528663307af96a57ca29031f7e0b69080fb133027b80d846722d965e",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 3,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "a53c8351df28328b28346e9ead00fd05f769ae4c688f3dfeba8f26453385eb85"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6fd2a70ea350e395903972a42274874b5b29484101f3465590486501f2bc9dd1"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6fd2a70ea350e395903972a42274874b5b29484101f3465590486501f2bc9dd1"
+   }
+  },
+  "stroke_arrow_css4_dashed": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "49ccaa9d19a177e35190efef743530dc04fac3cb88b951dba62b8777e2a192a8",
+   "java_stdout_sha256": "5b51be79a983d43873ec873439488a481aadc984d2c990d675db92b14de0cbde",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 2,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "c9d2d6474fe1abbfb113740b4901b91c592427e82c113e26a6a671f2beb9249f"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5adf01edb84c2339a54a256c068dda0abb42c640ad209c64cb29f83db563336f"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5adf01edb84c2339a54a256c068dda0abb42c640ad209c64cb29f83db563336f"
+   }
+  },
+  "stroke_style_arrow_transparent": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "1af23acbb138ff4a6e3bfb2d6ef5b9fb90d2f81a82934c4bd5ea9fd800562e49",
+   "java_stdout_sha256": "c98b2c849b7c9bd5f24f347b67c6fe0ef387005cd880bdef8d11a60d7a33691b",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 2,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "a88735877505e709811c741ba0e5ed97c885207e576c504778b48c7e4c2f2ade"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "3d716163848f7683811a9648cb1c44784a9570eaaa129074fa51f678bb10352a"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "3d716163848f7683811a9648cb1c44784a9570eaaa129074fa51f678bb10352a"
+   }
+  },
+  "stroke_skinparam_zero_alpha_bold": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "0af9fe5674fd432630621a467224146cae653a8a260822e90cb2f1681513e224",
+   "java_stdout_sha256": "d6672aa69a69f6a43a57cffe8579475beffcb6852de24442fb54bf4070cee3cb",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 2,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "64d073154988fedce03845acedcc797a43ce31e2ec5ef846b1f2ff8662ec7cf1"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4c9a19c15d12530f108c86b93db3532f1e096968ff28ac4f2bcf9cf5f4b866ac"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4c9a19c15d12530f108c86b93db3532f1e096968ff28ac4f2bcf9cf5f4b866ac"
+   }
+  },
+  "stroke_stereo_style_renamed": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "4b31e63d01869552e693d57bf64f3a254bd0a5b3e05a2030c40831ad071aa629",
+   "java_stdout_sha256": "c50c189b1b7cacd639d42fc525c1378384d440239d12af20ea017c869353b0b6",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 2,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "26f584d9d2be9ff561dfd4b38a3d8948adbc1a691d6aa5f614b61b2c2d67f1c2"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "e5e626235eb9aee874a59168c4384c95628de74fc6e5878b1dfb32e49545d98f"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "e5e626235eb9aee874a59168c4384c95628de74fc6e5878b1dfb32e49545d98f"
+   }
+  },
+  "stroke_stereo_skinparam_renamed": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "8498d92430299340d297e9ffc6da110a81266481dd8a6492affac29b113268b6",
+   "java_stdout_sha256": "e33cf3675584cbdeaaaf704967942dd85d5ce47ecf6c575592dbe9554c8a9cd3",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5ba91fdfad8ad9285032c673ca560eec46503c89b6751985809be78f7d98f403"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5ba91fdfad8ad9285032c673ca560eec46503c89b6751985809be78f7d98f403"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "5ba91fdfad8ad9285032c673ca560eec46503c89b6751985809be78f7d98f403"
+   }
+  }
+ },
+ "AU": {
+  "cluster_concurrent_crossing": {
+   "java_exit": 200,
+   "java_crash_page": false,
+   "java_error_marker": true,
+   "java_stderr": "ERROR\n6\nThe state Blow cannot be used here. (Assumed diagram type: state)",
+   "intended_valid": true,
+   "source_sha256": "7afced43c5ab1e2eba0c72ced824bc32fd1e0156a9ae9b11c81e5428b8587164",
+   "java_stdout_sha256": "056824e963c7cfdc5f36e0e5293d1b37e4a09919775a838186be456f00f89754",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 19,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "83cd26eae652e5102fba1d36bb3633226e7d99fad44029f069afc0f624bf1e2a"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 19,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "49576c1ba099fca21686a1141d87cdb1b769635ab7a8339b12445f13a43ccb18"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 19,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "49576c1ba099fca21686a1141d87cdb1b769635ab7a8339b12445f13a43ccb18"
+   }
+  },
+  "cluster_entry_inside_autarkic": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "99928f591b9f28d8b5278cb99619112e6c8065e605e98ae3dc496ff7852096d1",
+   "java_stdout_sha256": "8df5f32c3bba7f77e4996d7e08cf938a9bc96a00d6192369bf2514fbd3cfd232",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 30,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "11c2efcb94f5ab2eea4e33b0936da03db0dbe4f27d67c15bb6b777ed5da7d34f"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "Warning: node Works.Shed.gate, port P unrecognized",
+    "panic": false,
+    "stdout_sha256": "4d5bfae8e894f505d95df2ab464ad24311ba7d171faea21c78bd63ce9f767501"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4d5bfae8e894f505d95df2ab464ad24311ba7d171faea21c78bd63ce9f767501"
+   }
+  },
+  "cluster_inputpin_mixed_case": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "5db07a2f01d43e5de0f9ea19fe973d8c6ed796768596443adb3765e2eb83a12f",
+   "java_stdout_sha256": "844b19e3d0be33d09a74de3f9c52db3591c3bce9a5c507506d2c2810402158a6",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 13,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2c8548594c0a47cf4919fe8cae39209fa9cb7b64868047e5c00ef5ece06d43d5"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9bc853a1589e999d9209340074eccd3065aef4b1656fee44bb29e88a95130632"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9bc853a1589e999d9209340074eccd3065aef4b1656fee44bb29e88a95130632"
+   }
+  },
+  "cluster_root_note_on_inner": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "0d0050450fc4b6b5726bf64a47754f077fa9073135bea13ff9f5f38cd31461dc",
+   "java_stdout_sha256": "5bfc42bee9689156f1fb0b857dcab5c60a508f71262e736bb2c5e2f1b3997e0f",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 21,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "afbfff18efc2cb0f017caa22eebc33394e2f9586c633338df3a51a3303dd8a1a"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4efc66608b7821dbdeb41a66de4b309121739e0cbd22112ac5f560842bef6164"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4efc66608b7821dbdeb41a66de4b309121739e0cbd22112ac5f560842bef6164"
+   }
+  },
+  "delay_legacy_empty": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "bba5fd07a46064198a25bf90a2842ed97ca5f9fa780c41ce7bf97b6ad0f9e8b0",
+   "java_stdout_sha256": "9587f30e8c72c1463128e5269cad072fd05ab9dc837217dc9089c4d4c231d7da",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2dba2a9bd110b41506a2e42e8d34e8f67ba7b461832a6d6a039a7cf353bfdb04"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2dba2a9bd110b41506a2e42e8d34e8f67ba7b461832a6d6a039a7cf353bfdb04"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2dba2a9bd110b41506a2e42e8d34e8f67ba7b461832a6d6a039a7cf353bfdb04"
+   }
+  },
+  "delay_legacy_lead1": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "45c32ad70bdfb6154805d59bc06af09d05cd4cc3ea319449b4aefde4a8779ef6",
+   "java_stdout_sha256": "ea09ddc8137540f4cb3250f31437b3e2cac74fdf442aa2446fa7b3182861b4ed",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "96b7b416eb9ee2f007735c05f4b56674ab4e0a0d8d542f0dd5ee68db43a973d9"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "96b7b416eb9ee2f007735c05f4b56674ab4e0a0d8d542f0dd5ee68db43a973d9"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "96b7b416eb9ee2f007735c05f4b56674ab4e0a0d8d542f0dd5ee68db43a973d9"
+   }
+  },
+  "delay_legacy_lead2_creole": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "c3cc9dbc03e07b83624744ef51052975deb059b886e8a500ee8cd23be492d148",
+   "java_stdout_sha256": "7c6223f242c265749a755de7f94848768a297e7e41aac6b3272604e6b5403e5f",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 9,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ff55d831700e19ac3d266cc06463be20bbc4f95035708328e473cd6a51ef6ca3"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 9,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ff55d831700e19ac3d266cc06463be20bbc4f95035708328e473cd6a51ef6ca3"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 9,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ff55d831700e19ac3d266cc06463be20bbc4f95035708328e473cd6a51ef6ca3"
+   }
+  },
+  "delay_legacy_multiline": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "8f07db75966ea0588fae4d7c8b87a120bcd355fa15cc6088be450f36c9b29ba7",
+   "java_stdout_sha256": "a8cdfda8ec826e507193a17e1da16404e61360b6c6ff5380581aee767da935b5",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 18,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6f58abc03a719b53745b60d6e3a4b0b114bb3365c2ad678a1aaa8d4dd3d4b6c0"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 18,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6f58abc03a719b53745b60d6e3a4b0b114bb3365c2ad678a1aaa8d4dd3d4b6c0"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 18,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "6f58abc03a719b53745b60d6e3a4b0b114bb3365c2ad678a1aaa8d4dd3d4b6c0"
+   }
+  },
+  "delay_legacy_plain0": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "da3f8a0e38486ed0d12e1aaba93230dac9e82eadc315104967cc6bb7dbd4f58c",
+   "java_stdout_sha256": "648a6bafebed9a03714796dd55063f963a176a62aa2e6321be37cdbf5e8101d4",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "de69db6c909844b717a0d862ca9b33a5072432bd27e12b9897228f866152b9e9"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "de69db6c909844b717a0d862ca9b33a5072432bd27e12b9897228f866152b9e9"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "de69db6c909844b717a0d862ca9b33a5072432bd27e12b9897228f866152b9e9"
+   }
+  },
+  "delay_teoz_empty": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "36f34e176e34f27d4ce650d2e8689684a8ba6126ed6fb91bd21258843ebe5f9d",
+   "java_stdout_sha256": "c9adf19ca6ce77fcc83ee2e77d29f88fed432cd89515fbdf526dd270931f407a",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "db7b7aa8b66562110438af0c29c2c9e5bcb3d9ade3f19eca31e56c8dc677924f"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "db7b7aa8b66562110438af0c29c2c9e5bcb3d9ade3f19eca31e56c8dc677924f"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "db7b7aa8b66562110438af0c29c2c9e5bcb3d9ade3f19eca31e56c8dc677924f"
+   }
+  },
+  "delay_teoz_lead3": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "df29d27a9f1c34400c5e93d6ee241512c6d3d9521fb7e45130626f21fce983e8",
+   "java_stdout_sha256": "73edb0c9eba336e072fed3c8ae2881853ee9559d3da31d45f1127eed6f4828d6",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "57b99444cdccc31889b6609bbafd80e71eb7b197adac9b523df06b45decad6a7"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "57b99444cdccc31889b6609bbafd80e71eb7b197adac9b523df06b45decad6a7"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "57b99444cdccc31889b6609bbafd80e71eb7b197adac9b523df06b45decad6a7"
+   }
+  },
+  "delay_teoz_lead3_multiline": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "01d9a40293b790f287e221ec3fab23034abe6552b185a0b8daba6c6b52fbd1e3",
+   "java_stdout_sha256": "6bda7a0a80719fd9d1931bc4c6f4aa60bcd12e54d1ca411ed144b4bd50fb6eca",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 17,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "024337769cc269382277d2de113241d1d876c40e96f25a02815a9f6159c75fd9"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 17,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "024337769cc269382277d2de113241d1d876c40e96f25a02815a9f6159c75fd9"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 17,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "024337769cc269382277d2de113241d1d876c40e96f25a02815a9f6159c75fd9"
+   }
+  },
+  "deploy_alias_direction_matrix": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "60d87f52024ea9bc0f4d9225bbfe7567e39198ef7a82d8242b30d104e5d50749",
+   "java_stdout_sha256": "2a4bec0de17bd1881640e124e21a794de9d71fe220f392ed1b28f44f81c58475",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 6,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2f9eafc813250d7df99c0cffa31e04e1a37cc7b6784b69ad4f92d73885f52d30"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "396a7e1ba7bddad100edc3865f46480a2362d2100581967e86162777a3de47a7"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "396a7e1ba7bddad100edc3865f46480a2362d2100581967e86162777a3de47a7"
+   }
+  },
+  "deploy_nested_alias_reverse": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "bdc0380c9b32dcbea3b24026d9ef7f26d562c50875a14a6af1a41c094dbaa3d9",
+   "java_stdout_sha256": "3fa460cf0a943eaeaadf628bc743b5a3489de8c7c63ac5d8a9c1047f080d31ab",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 2,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "d90e3f4927128e39ed00a353a39da204776ab748f881641cb4286728df418ec5"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "fb7475b229284e6078d5d99b79c6c396a2877cef8d4d42131bd6ce9218f12112"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "fb7475b229284e6078d5d99b79c6c396a2877cef8d4d42131bd6ce9218f12112"
+   }
+  },
+  "history_external_suffix_form": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "61e08f0356599f41588d4b2a665d8fdedb468d033fa7eaf4e92c30e07087c9da",
+   "java_stdout_sha256": "1f5bb0bc3b13bb81465b5eac20576514938f39c568c3b218b0900b04b1b49795",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 22,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "84690694122bb437f9c0a3441b54b840d3605bd23d33d16c1d7c90fdc4909f24"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "bd045f67fca471d420cc145f5076286b661eb8ccfc6b97b74082c02a77afc20d"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "bd045f67fca471d420cc145f5076286b661eb8ccfc6b97b74082c02a77afc20d"
+   }
+  },
+  "raw_blank_before_start": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "dee5d644fe13991af54aa4c1b5fb9356f2c9a5ad5a3c6cb016fbc74559546bb1",
+   "java_stdout_sha256": "dc91dc795f5389cf998ef834dad95b4818ec1b9ce956b91804343816b8ebbb69",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 7,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "63b84e825a7ac06f9dd2db715acf3b48083ba068b43f6486783bd8778fc64199"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 7,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "63b84e825a7ac06f9dd2db715acf3b48083ba068b43f6486783bd8778fc64199"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 7,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "63b84e825a7ac06f9dd2db715acf3b48083ba068b43f6486783bd8778fc64199"
+   }
+  },
+  "raw_crlf_one_blank": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "8cf2372102e6b2b8bdb1bc3c46d2ddbaab77f357028587a0b4e60c9e3c8d517f",
+   "java_stdout_sha256": "16365a86db85a40990099f5f4783fdb1e1875365a375e6b481156e39ef52c49e",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 7,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "41fe30d920c9558eeca0f1bd42f05976ae5579e1ee492ea8a00a67e52e1558f8"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "bc5c25e9fa9d9b85c99ba732d652cee68fefa267c3267bd0d08b85f8275aa3ae"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "bc5c25e9fa9d9b85c99ba732d652cee68fefa267c3267bd0d08b85f8275aa3ae"
+   }
+  },
+  "raw_include_leading_blanks": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "3f590c3ef36c80c8456d4b051de00018b79a6ba21fc85bb776baf37d9d5db9d6",
+   "java_stdout_sha256": "364dacc7b0a0fe8d834050c3a2d75199047c7ae9e9aa14a141528d75fdbee253",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 24,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9c930bc2107dd99a0a39e296f233e33a33dcdc5e533c6ae325938bad4a3e96d2"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "1fd1373558a4bcebb8ba644c8b9846e2e5ce5f924cb510e7bd8325965f8c2d12"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "1fd1373558a4bcebb8ba644c8b9846e2e5ce5f924cb510e7bd8325965f8c2d12"
+   }
+  },
+  "raw_multi_blank_first_block": {
+   "java_exit": 200,
+   "java_crash_page": false,
+   "java_error_marker": true,
+   "java_stderr": "ERROR\n1\nEmpty description (Assumed diagram type: sequence)",
+   "intended_valid": true,
+   "source_sha256": "3ee90343ca49794a07d6bf011acbc4aff60ec2dce8334242dabc17d8fe9b6d1a",
+   "java_stdout_sha256": "de67b0ad7b1c8ce6ad76bfe82f0ab4158588e85abea1d40dd655a96f241765bb",
+   "base": {
+    "exit": 0,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "ERR",
+    "ndiff": 0,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed"
+   }
+  },
+  "raw_sequence_two_blanks": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "7609c6091cd07e85bbddf35159e990adbe97b460aa830f66691798ed00910fa4",
+   "java_stdout_sha256": "c3f7c17a22c12b90fcc470f12d267e824b49fe0dacc657863779068e2ee73d18",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 25,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "1aa51d89b0f0d83ef155fff2df9052d49f16bee85808c77a18e452e5241d96b7"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 16,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "621e292ef43128719f5970652388a9c0fb9331deab5adfe749d2eabffac99b54"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 16,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "621e292ef43128719f5970652388a9c0fb9331deab5adfe749d2eabffac99b54"
+   }
+  },
+  "raw_trailing_blanks": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "e3cbfb68cd2c808c5892d123b8940cea127a1223426d14778e23bf55468ee3bb",
+   "java_stdout_sha256": "3a9f88a345e7b3b1c552015a03de3a86b38356bb2c11937f46a3e1060de80f14",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "c8f8bab7920b1920d66fff24db2ba4c0c78ad7e1a4cc4404f7cad5c2364a1c57"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "c8f8bab7920b1920d66fff24db2ba4c0c78ad7e1a4cc4404f7cad5c2364a1c57"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "c8f8bab7920b1920d66fff24db2ba4c0c78ad7e1a4cc4404f7cad5c2364a1c57"
+   }
+  },
+  "raw_unit_test_input": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "1999a3efa55a37dfe2bbe3b44f2a56d49f1893cb5a800afd56dee3fc7462b8a5",
+   "java_stdout_sha256": "52e8aa5ecb9088905411f33b9aff6fec7d455455f9f3505aab3c52995d9aada5",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 10,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "3b5460006dbc4210391349ffd071de880111327ad6ac562b1b799e6f10c303e3"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "af1e019ace73845fe0a779417f1a8bb1de3368dc48a9e0184cb250c4d0bf53eb"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "af1e019ace73845fe0a779417f1a8bb1de3368dc48a9e0184cb250c4d0bf53eb"
+   }
+  },
+  "raw_whitespace_only_lines": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "a4c8ebcdb29b0211bb41eebcb6ce035f8db185696126466ddf474297431fb6c5",
+   "java_stdout_sha256": "e9d02da00f71176ff996e8cf7556827f6006e7582da42f6d0d9d4984e3cd73dc",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 7,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "889109ef69563b0c06bc885c593bc52eac3d90e87e2e3c0d8905644f05b8c336"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f36ad75d1acb43cc058e428c2662a954a0c3766a714c4089f83ce048ef595b9f"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f36ad75d1acb43cc058e428c2662a954a0c3766a714c4089f83ce048ef595b9f"
+   }
+  },
+  "stroke_arrow_skinparam_transparent": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "313778ba1cedb1d5e5c2313e523151749567dba464ddba94e1bf16af98839c0c",
+   "java_stdout_sha256": "4be66409861573cf0d97ec04a2cf31495a218fbd7c76fd8d79ef46bc59fef12f",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 2,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "c5096f2dfc4ac47bf89ad7a190200b3ff898b9301cc3325191dd5f5d69b72108"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b0c628f70f93cf43873d9fbedcdad22b5c2fc880c3ac6aec7cb120e97a7375a7"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "b0c628f70f93cf43873d9fbedcdad22b5c2fc880c3ac6aec7cb120e97a7375a7"
+   }
+  },
+  "stroke_per_arrow_css4": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "dca0ff1b2ee8d9cb076e63b60e968f71b347f530d73eb2694bc7447051b80fdc",
+   "java_stdout_sha256": "44cee2fb8a8f237a25f0bf0df85baad3e668bedeb1ce1bbb0eb75a245d7f54a3",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 2,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "716997f7c0bcb0bb1631d592dd2e0e5b791cc9b90627517ae99845216350964c"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4c69cf6d7806cd560e6937cb52583073481cde55f8cf658b5296284e6df767da"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4c69cf6d7806cd560e6937cb52583073481cde55f8cf658b5296284e6df767da"
+   }
+  },
+  "stroke_per_state_css4": {
+   "java_exit": 200,
+   "java_crash_page": false,
+   "java_error_marker": true,
+   "java_stderr": "ERROR\n1\nNo such color (Assumed diagram type: state)",
+   "intended_valid": true,
+   "source_sha256": "c12b27845f21f353c78e8ecd91f6b01d4680f1370eb64a7cc3c2e8709cb700d2",
+   "java_stdout_sha256": "5d4bd16f52b931b406f0995795c5b3b8fb1460d7c94b36d20f0774a87c62c014",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "0779f3f0f897fab4f49c9a4d370e5f3e21eb204bd8d2e977fc3ee9493fe359ec"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "0779f3f0f897fab4f49c9a4d370e5f3e21eb204bd8d2e977fc3ee9493fe359ec"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 12,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "0779f3f0f897fab4f49c9a4d370e5f3e21eb204bd8d2e977fc3ee9493fe359ec"
+   }
+  },
+  "stroke_stereo_skinparam_css4": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "505708d285558528153fa3cd726d5d6938aee09af5c604f5a49e6d3a6f2cd828",
+   "java_stdout_sha256": "8e7ca14f7a38c754decffa18be95331741801527ae8e147075e5e3cce0dc4257",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 2,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9ea0745d567a4f050674df9a3004d7c5ee8b687c03bb4fc0780b39f21e7b0d18"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "af0c183622d5eefb3d731ce43426360295e54c4b120936e02ff88bb61b188392"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "af0c183622d5eefb3d731ce43426360295e54c4b120936e02ff88bb61b188392"
+   }
+  },
+  "stroke_stereo_style_css4": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "5d7e936bb386cfd70c56f3bb25d876da3586286f0f26f15803593458d7388dd1",
+   "java_stdout_sha256": "7d0adfd8079552f07c99053ec3e8fd2ce547fb33e10a93cf0c6f5ac5c44eaa77",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 2,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "a722b1cc528ce0327ec5a2385a0b982f18549e611583ac90826108d13e1085f1"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "d3612013aabd7d442c3a7ac0a90e5b0a7da4214caee1998b6a5709fe76b4ad5d"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "d3612013aabd7d442c3a7ac0a90e5b0a7da4214caee1998b6a5709fe76b4ad5d"
+   }
+  },
+  "stroke_zero_alpha_nonblack": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "410e9bdf632be6c1eb4c902a1fcac05f8ccf04324b35a607a28ec8b2c79d4736",
+   "java_stdout_sha256": "c2c2b9cf325d1beaab553b43dca1b48e139d572080a00ea4b18f04f7075758fa",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 4,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "03e3f89f65c4826a4922409888909d85066a1562e854f171b5815bad8b199d6f"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "30a019fa78e9e85db52ee3cb1fb3ce2c972eb178832f4aad6185009c86c0d8b2"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "30a019fa78e9e85db52ee3cb1fb3ce2c972eb178832f4aad6185009c86c0d8b2"
+   }
+  },
+  "theme_mono_class": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "908a38eeb2bb885b193f62733839a19743ed1245a675e13e2c63ee105ac4151b",
+   "java_stdout_sha256": "e5bc890717ebaa245be9ec529fd40e9ef721a8f21919fec798bd364dc1ffd9a7",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 15,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2d0e75bae14fa96ba10bb171e28ebbf6000481844a631a175421c346da70cd04"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 15,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2d0e75bae14fa96ba10bb171e28ebbf6000481844a631a175421c346da70cd04"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 15,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2d0e75bae14fa96ba10bb171e28ebbf6000481844a631a175421c346da70cd04"
+   }
+  },
+  "theme_plain_class_note": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "1469cd79983134f8c981bd41c76080aba3498981ab4b752c79eceb5381c2eb1c",
+   "java_stdout_sha256": "81ae90a6663e47b73e46055ee97644b1a243f82e5d8fd67f537bce3b27ca32e9",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 18,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "a0916c66e6c5ddded4b42ec2084605e77185f26a3b73b46c53a5326a74b4a9f1"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 18,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "a0916c66e6c5ddded4b42ec2084605e77185f26a3b73b46c53a5326a74b4a9f1"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 18,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "a0916c66e6c5ddded4b42ec2084605e77185f26a3b73b46c53a5326a74b4a9f1"
+   }
+  },
+  "theme_plain_sequence": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "71e42eca685267f72c5604a4509a3dbc1c2ef72d3f3e93f2cc5f5f4aa7cb232a",
+   "java_stdout_sha256": "443a5ec31c900d33ddc80f813c022101eb9c7edd559401fe85c1e8c78c9a61b7",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 16,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9b1b4ed9d22a15f10e3503a70cd7608fdb213059b841065463ed23d13a11f8e5"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 16,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9b1b4ed9d22a15f10e3503a70cd7608fdb213059b841065463ed23d13a11f8e5"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 16,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9b1b4ed9d22a15f10e3503a70cd7608fdb213059b841065463ed23d13a11f8e5"
+   }
+  }
+ },
+ "AR": {
+  "blank0_activity_shadow": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "60b7870a8037c3e94c6c3603ebcc30533b8dee2330ecab96552a55ceac6abe6f",
+   "java_stdout_sha256": "3e181f1f701fefea311950073fd72d7307a42e5b3ba1d36c46502ccdfffa21ad",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "87ba7ef8efe8641defca6c11212e044092fb6ae56f78740d56130a326067fae9"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "87ba7ef8efe8641defca6c11212e044092fb6ae56f78740d56130a326067fae9"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "87ba7ef8efe8641defca6c11212e044092fb6ae56f78740d56130a326067fae9"
+   }
+  },
+  "blank0_class_shadow": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "cedb421808f738202cfa9e01c2d7bf5289424371df422cf72d58aac23b7b876b",
+   "java_stdout_sha256": "7cce1664404a19183436a93c0ea5119adb9fe2eb6a46559187926b13c6eb91f3",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4d9eb73b8ca6ce00cb972ede2502a67d8fadeaa11856320cfbbf2d7e7090daf0"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4d9eb73b8ca6ce00cb972ede2502a67d8fadeaa11856320cfbbf2d7e7090daf0"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4d9eb73b8ca6ce00cb972ede2502a67d8fadeaa11856320cfbbf2d7e7090daf0"
+   }
+  },
+  "blank1_activity_shadow": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "ec9e6e59df5038057458b597a65e26c78d5c6496d355a55ff48a1253a29e7928",
+   "java_stdout_sha256": "2fee9f63cb3adfb9ea8012a5ea1b093a797224134946976094e8d1330a30f23b",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 9,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "87ba7ef8efe8641defca6c11212e044092fb6ae56f78740d56130a326067fae9"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "59728dabcb1f6e7d7d0f68d816f2404d61e2d85a7785ec39dfc8a87024eb584c"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "59728dabcb1f6e7d7d0f68d816f2404d61e2d85a7785ec39dfc8a87024eb584c"
+   }
+  },
+  "blank1_class_shadow": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "61f8e969f0703dba51db1b2dcca0ca65b8e300939ff984c935dfc003d669378f",
+   "java_stdout_sha256": "cdf2ce8f56484f99f9c88f7f2d24e509076d9d687ffa3d01031983b7a416c3a1",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 7,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4d9eb73b8ca6ce00cb972ede2502a67d8fadeaa11856320cfbbf2d7e7090daf0"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "d469caa8d4393909266f4d2f49fa3531d2b5ffcfc56633fa540b1666d1449f09"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "d469caa8d4393909266f4d2f49fa3531d2b5ffcfc56633fa540b1666d1449f09"
+   }
+  },
+  "blank3_activity_shadow": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "ccf9faddf4fd603cea810f4560c64d6f83800e0f5fa309fafc346c32c414febc",
+   "java_stdout_sha256": "6af3c95ea9dd801903ae27c1eef520a638a976469b445084fe537d0c3a12bbf8",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 9,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "87ba7ef8efe8641defca6c11212e044092fb6ae56f78740d56130a326067fae9"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "fd93666853b52f87efc6eba2c4fcd96279f6082cf01706f07f0df06441d9269e"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "fd93666853b52f87efc6eba2c4fcd96279f6082cf01706f07f0df06441d9269e"
+   }
+  },
+  "blank3_class_shadow": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "5e6403d0d419b1317677ed2fe95a8de3a33510a2dbaf2f08ab7df0aee7fc0665",
+   "java_stdout_sha256": "4ce3976ad5d335078d98bf400b5e6999c53889671ffc2ba68b2692fcb66b4650",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 7,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "4d9eb73b8ca6ce00cb972ede2502a67d8fadeaa11856320cfbbf2d7e7090daf0"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f657d2d99b5f44c5aaa71053d565f3f98669b15f8cb26162a2d089b24a314ba5"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f657d2d99b5f44c5aaa71053d565f3f98669b15f8cb26162a2d089b24a314ba5"
+   }
+  },
+  "cluster_entry_point": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "dd84adba8ba9ba7d28005f9da12418c16f726c27a2f5114f33851d2779b1eb39",
+   "java_stdout_sha256": "88f6863736956b8b4b1a7bdf6947c24da5c1bc6a1dc3bbb4e29efe3d8940d29c",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 27,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "65d11cba66f4c18c9449a7215a60d2f9d59733a503e698551e733b123dfd86b8"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9e25aa9e73f0864c921eaea8645688b5898dbdd802ff249b046d0a0c72d5ad05"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9e25aa9e73f0864c921eaea8645688b5898dbdd802ff249b046d0a0c72d5ad05"
+   }
+  },
+  "delay_legacy_leading": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "7f43ca2be4bb7cb3cf6d919859083dcbed5f6ce6b20b9d4f54c68dac8d5b1ae6",
+   "java_stdout_sha256": "bc32823e98213cfb94e79dca98072649ce537c228ea4368c61aef5be7d5e6022",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "35e686b752e3bbfb8c3e1b2eb461dbe2172e28cfbba264915ac517f10f333894"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "35e686b752e3bbfb8c3e1b2eb461dbe2172e28cfbba264915ac517f10f333894"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "35e686b752e3bbfb8c3e1b2eb461dbe2172e28cfbba264915ac517f10f333894"
+   }
+  },
+  "delay_legacy_short": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "b85be921691d6cba3ba25cc4c490a0198adb33d291453764d91aeb2043afc98a",
+   "java_stdout_sha256": "6b115bb0d21ee2f0cdee46cfc6fb465c44742d62198d787cc3703ba955126886",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 40,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "12e9b5db79985fa9d8b61ee3af3c31412a8e20e49e445fd8830f2080523ecbb2"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 40,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "bee766769cff1fe08c6fbb20a4164d6f77af819683367d9fca466cdf3078d125"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 40,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "bee766769cff1fe08c6fbb20a4164d6f77af819683367d9fca466cdf3078d125"
+   }
+  },
+  "delay_legacy_wide": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "f4a2e385b86e2587df45ff511f942e4f4cecd596cc6ab7485fa42bff21671867",
+   "java_stdout_sha256": "910e5cbe43d192d6b8c98e2f2cad1682abde2620236d278c587b44e06571b8cb",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 27,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "23d3b210225e6f2d8a1a7edb2743dd15abe6bb8cdc652e2443e39422679a5b59"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 27,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "23d3b210225e6f2d8a1a7edb2743dd15abe6bb8cdc652e2443e39422679a5b59"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 27,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "23d3b210225e6f2d8a1a7edb2743dd15abe6bb8cdc652e2443e39422679a5b59"
+   }
+  },
+  "delay_teoz_leading": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "b21f56a6b0ed8951331b17792b4f02ecebbb5c9a50fcca58f11459dfc4fa0d2b",
+   "java_stdout_sha256": "fec21c8fbab23f8e63f3e3c1aaca30858b3e7d3ca40921d05bac642d775b3964",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "779ea308b4f514279713c39877ac47afe041fc8c2b92aabccfc977958d3d6fc0"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "779ea308b4f514279713c39877ac47afe041fc8c2b92aabccfc977958d3d6fc0"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "779ea308b4f514279713c39877ac47afe041fc8c2b92aabccfc977958d3d6fc0"
+   }
+  },
+  "delay_teoz_medium": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "46d1187b0bad9cbc6102319a841abd2c6987e8e3db4052e4ec980f8a475cf988",
+   "java_stdout_sha256": "f911ecca155da153f492956ec192b173ab2b57c73b788d288e03b60ee98ac12b",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "53d924443d7f2707367c25e53c3ff1812b88537b8c98af37e93247fa28de1b14"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "53d924443d7f2707367c25e53c3ff1812b88537b8c98af37e93247fa28de1b14"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "53d924443d7f2707367c25e53c3ff1812b88537b8c98af37e93247fa28de1b14"
+   }
+  },
+  "deploy_alias_reverse_up": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "980fee06789a7c3be4720ef7b9deaae5f191888be3646db93986ce31cc3250de",
+   "java_stdout_sha256": "3ee1a08ed5d2ff6ed64100e608b08f66720499492ae5771d0ec86482dbd9d390",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 16,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "8f976d0c6e8f65d5764ae683fd7a0d0816304e84d6582c683c2cf63123284a16"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 15,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "8146c178ed6c9b2435442d1eb9c05f60aff1071666d82d403cdfd4781c324edd"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 15,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "8146c178ed6c9b2435442d1eb9c05f60aff1071666d82d403cdfd4781c324edd"
+   }
+  },
+  "deploy_unaliased_forms": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "13acf74f3c5bdc2baad067f589e2423b67159109c8b25765d21141fca6b0bcfc",
+   "java_stdout_sha256": "5ce99a9fb5b67e14cf234ba542b98750afd34ab863768d3051523399e4348bb3",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 24,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "11c2ae5c02be2ee39aea5a2a07f93e57a2f542109c55c52375367382e8867383"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "52dae5a7eb046c3f513063223e4da5fd43ebf0731f8a1e8e213e5acc258778e4"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "52dae5a7eb046c3f513063223e4da5fd43ebf0731f8a1e8e213e5acc258778e4"
+   }
+  },
+  "history_depth1_autarkic": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "280deff1dd4709be17fb6d9e62622f1ba81485cf886909382a3b5659c1642291",
+   "java_stdout_sha256": "9c5f220ed363f8d13168a6c24e2c2c05c0199c610ff7d7bd9351228832663590",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 33,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "058cd26c3795a2a3f4c1be6f8bd53f819482087f04426d8600e99f4b8a948214"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ac8db608216601e2eb0473c1f60664d5f70ae8d0c97865f709882add9305b824"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "ac8db608216601e2eb0473c1f60664d5f70ae8d0c97865f709882add9305b824"
+   }
+  },
+  "history_depth2_crossing": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "144bc139786216a7a4b3aa3592dc3f63483badd2ae5a21d0fc5f62ddd2920a48",
+   "java_stdout_sha256": "caa161b138aebea9b1959e8b9b7cdb6b25b86f3b0e90406517704582b26a2c76",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 27,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "0e9270a2c527674e16d3a1ac776364c76f4bfc9751ea81eabc14269d4e62952b"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "3a37d5e7084b51df03e7a7432f6eac40420099b4abe24de9a81a760ed92dc02f"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "3a37d5e7084b51df03e7a7432f6eac40420099b4abe24de9a81a760ed92dc02f"
+   }
+  },
+  "history_root_marker": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "34caa92ffb79af32979ebd165241464646f060a71cf412c3c96e087af7e52f9e",
+   "java_stdout_sha256": "538427f6f396ec3b20058343720658fa53d3f9a0437ffad18dc299b63bbaaca8",
+   "base": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "325457c281f53b8d8a8ac7cf729e3eb5333af219d56871ef6e26c685430b77f4"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "325457c281f53b8d8a8ac7cf729e3eb5333af219d56871ef6e26c685430b77f4"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "325457c281f53b8d8a8ac7cf729e3eb5333af219d56871ef6e26c685430b77f4"
+   }
+  },
+  "quark_reuse_crossing": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "2d898616eb146eb9f36947468ef8ed22fd3efd1f5f2d565766703bfe9333a32c",
+   "java_stdout_sha256": "bf75c4e035133a17daa7861071641185789e64f0b9646ed053aa1e2dd45a63e8",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 27,
+    "comments_exact": false,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "925ead4cf0899534deb86344d75372ce6b3b91d16f097d4f4c613b5cb9aca1ff"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "87dd66b0ec41f626cd3416f8393fc25bc7252d69df3a1634f5c8389f8d227278"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "87dd66b0ec41f626cd3416f8393fc25bc7252d69df3a1634f5c8389f8d227278"
+   }
+  },
+  "stroke_skinparam_css4": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "1f3a85d8b98b8c1ba285a8dc917f4b783255bfe4c9bfa326b455f6a2071ebff2",
+   "java_stdout_sha256": "400edb45297ecec4662e7f227da7174aba9a15b1739ef3030a31002e0e7b6cba",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 4,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "2ed67d421125fe33fedbf7bc6baed7445437e25aac41debe4c929b59e002a691"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9ca76054e10f918804f65a0b42e0b1286fc8c4224ad14275a88f667ae29e2ae3"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "9ca76054e10f918804f65a0b42e0b1286fc8c4224ad14275a88f667ae29e2ae3"
+   }
+  },
+  "stroke_state_style_transparent": {
+   "java_exit": 0,
+   "java_crash_page": false,
+   "java_error_marker": false,
+   "java_stderr": "",
+   "intended_valid": true,
+   "source_sha256": "ee9f8d475867e6ad6750e600951fd87e0df73a604495c6361df847e7ecdc8c6c",
+   "java_stdout_sha256": "e6eb2364bbc29ba226d95d83b1ade5798c0c34624aa550002dca63acc00a8bcb",
+   "base": {
+    "exit": 0,
+    "strict": "DIFF",
+    "ndiff": 10,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "deac676af0afd17277b64a40eddcf48cb94669dbf77183007103626e48661b2a"
+   },
+   "r3": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f48b5b50eb456347c9400a3e2ae992b5ab8f988b13f80d86d90892eced7024d9"
+   },
+   "tip": {
+    "exit": 0,
+    "strict": "MATCH",
+    "ndiff": 0,
+    "comments_exact": true,
+    "stderr": "",
+    "panic": false,
+    "stdout_sha256": "f48b5b50eb456347c9400a3e2ae992b5ab8f988b13f80d86d90892eced7024d9"
+   }
+  }
+ }
+}
