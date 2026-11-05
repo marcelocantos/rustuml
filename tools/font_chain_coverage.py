@@ -1,39 +1,32 @@
 """Generate crates/rustuml-render/src/font_chain_coverage.rs from FontChainExtract.swift output.
 
-Usage: python3 -I tools/font_chain_coverage.py <out.rs> <source_dir> [--plan-facts <tsv>] <Face>=<file.tsv> ...
+Usage: python3 -I tools/font_chain_coverage.py <out.rs> <source_dir> --primary <primary_dir> <Face>=<file.tsv>[:<own.tsv>] ...
 
 <source_dir> (repository-relative) is the extraction output as returned from the reference host: its SHA256SUMS is hashed
 into the generated provenance header (the drift gate compares that hash with the stored artifact),
 and every <file.tsv> is read from it. Face names are the generated constants font_chain::ChainFace
 reads; identical run tables are shared between faces.
 
-Per face the HarfBuzz plan facts (#hb_plan; HarfBuzz 10.0.1, which the reference JDK links) decide
-zeroes_unmapped_marks: glyph 0 is a mark (no GDEF glyph classes, so hb_synthesize_glyph_classes
-classifies by Unicode category, or a GDEF mark class) and zero_marks holds (no kerx, no state-machine
-kern; hb-ot-shape.cc 136-189); and fallback_positions_marks: adjust_mark_positioning_when_zeroing (no
-GPOS, no kerx, no cross-stream kern; 192-201), which with a fallback-positioning shaper runs
-_hb_ot_shape_fallback_mark_position. --plan-facts adds facts per face file (lines
-"<face file>\t<key=value>..."): every fact for an extraction without #hb_plan (round-5 tool), or the
-cross_kern bit, which the extraction does not record.
+Per face the raw HarfBuzz plan facts (#hb_plan of the extraction) are emitted as PlanFacts; font_chain
+ports HarfBuzz 15.0.0's planner over them per shaper. <primary_dir> is tools/PrimaryFaceExtract.swift's
+output (stored with its own SHA256SUMS): per face file "<own.tsv>" (default: the face file's stem +
+".own.tsv") gives the runs the face's own cmap maps (JDK slot 0) and the cross_kern, trak and STAT facts.
 """
 import hashlib, os, sys
 
 args = sys.argv[1:]
 out_path, source_dir = args[0], args[1]
 rest = args[2:]
-plan_facts = {}
-if rest and rest[0] == "--plan-facts":
-    for line in open(rest[1], encoding="utf-8"):
-        if line.strip() and not line.startswith("#"):
-            name, facts = line.rstrip("\n").split("\t", 1)
-            plan_facts[name] = facts.split("\t")
-    rest = rest[2:]
+assert rest[0] == "--primary", "--primary <dir> is required"
+primary_dir = rest[1]
+rest = rest[2:]
 specs = [a.split("=", 1) for a in rest]
 sums_sha = hashlib.sha256(open(os.path.join(source_dir, "SHA256SUMS"), "rb").read()).hexdigest()
+primary_sums_sha = hashlib.sha256(open(os.path.join(primary_dir, "SHA256SUMS"), "rb").read()).hexdigest()
 
 
 def load(path):
-    header, runs = [], {"S": [], "C": []}
+    header, runs = [], {"S": [], "C": [], "P": []}
     for line in open(path, encoding="utf-8"):
         fields = line.rstrip("\n").split("\t")
         if fields[0].startswith("#"):
@@ -55,42 +48,31 @@ def table(runs):
     return "\n".join(rows)
 
 
-def zeroes_unmapped_marks(facts):
-    f = dict(item.split("=", 1) for item in facts)
-    notdef_is_mark = f["gdef_glyph_classes"] == "0" or f["notdef_gdef_class"] == "3"
-    zero_marks = f["kerx"] == "0" and not (f["kern"] == "1" and f["machine_kern"] == "1")
-    result = notdef_is_mark and zero_marks
-    if result:
-        # font_chain's run rule assumes HarfBuzz chooses no OT script (no GSUB) and that morx turns
-        # every non-default shaper into _hb_ot_shaper_dumber (hb-ot-shape.cc 94-96).
-        assert f["gsub"] == "0" and f["morx"] == "1", facts
-    return result, f
-
-
-faces, tables, counts = [], {}, {"S": 0, "C": 0}
-for face, name in specs:
+faces, tables, counts = [], {}, {"S": 0, "C": 0, "P": 0}
+for face, spec in specs:
+    name, _, own = spec.partition(":")
+    own = own or name.rsplit(".", 1)[0] + ".own.tsv"
     header, runs = load(os.path.join(source_dir, name))
+    own_header, own_runs = load(os.path.join(primary_dir, own))
     info = {h[0]: h[1:] for h in header}
+    own_info = {h[0]: h[1:] for h in own_header}
     notdef = float(info["#notdef_advance_units"][0])
     upem = int(info["#notdef_advance_units"][2])
     assert upem == 2048 and notdef == int(notdef), (face, notdef, upem)
-    facts = list(info.get("#hb_plan") or []) + plan_facts.get(name, [])
-    zeroes, fact_map = zeroes_unmapped_marks(facts)
-    # hb_ot_layout_has_cross_kerning matters only when kern applies (no GPOS, no kerx).
-    fallback = (fact_map["gpos"] == "0" and fact_map["kerx"] == "0"
-                and (fact_map["kern"] == "0" or fact_map["cross_kern"] == "0"))
+    assert own_info["#face"][1] == info["#family"][1], (face, own_info["#face"], info["#family"])
+    facts = dict(item.split("=", 1) for item in info["#hb_plan"])
+    facts.update(item.split("=", 1) for item in own_info["#plan_extra"])
+    # hb-ot-shape.cc 218 (15.0.0): trak with STAT would change advances; not modelled.
+    assert not (facts["trak"] == "1" and facts["STAT"] == "1"), (face, facts)
     names = []
-    for kind, kind_runs in (("S", runs["S"]), ("C", runs["C"])):
+    for kind, kind_runs in (("S", runs["S"]), ("C", runs["C"]), ("P", own_runs["P"])):
         key = (kind, tuple(kind_runs))
         if key not in tables:
             counts[kind] += 1
-            tables[key] = f"{'SIMPLE_MISSING' if kind == 'S' else 'COMPLEX_MAPPED'}_{counts[kind]}"
+            prefix = {"S": "SIMPLE_MISSING", "C": "COMPLEX_MAPPED", "P": "PRIMARY_MAPPED"}[kind]
+            tables[key] = f"{prefix}_{counts[kind]}"
         names.append(tables[key])
-    plan_source = "extraction" if "#hb_plan" in info else "--plan-facts"
-    if "#hb_plan" in info and name in plan_facts:
-        plan_source += " + --plan-facts"
-    faces.append((face, int(notdef), names, info["#family"][1], info["#family"][2], info["#host"][0], zeroes,
-                  " ".join(facts), plan_source, fallback))
+    faces.append((face, int(notdef), names, info["#family"][1], info["#family"][2], info["#host"][0], facts))
 
 hosts = sorted({f[5] for f in faces})
 lines = [
@@ -101,10 +83,11 @@ lines = [
     "// tools/font_chain_coverage.py; do not edit by hand. Host: " + "; ".join(hosts) + ".",
     "// Per face: the .notdef advance in 2048ths of an em (glyph 0 of the primary font,",
     "// CTFontGetAdvancesForGlyphs), the BMP runs the JDK simple path cannot map, the runs the",
-    "// complex path (CFont.createCompositeFont cascade) maps, and the HarfBuzz plan facts that",
-    "// decide whether an unmapped nonspacing mark's .notdef is zeroed.",
+    "// complex path (CFont.createCompositeFont cascade) maps, the runs the face's own cmap maps",
+    "// (JDK composite slot 0; tools/PrimaryFaceExtract.swift on colossus, the same font files), and",
+    "// the sfnt facts HarfBuzz 15.0.0's planner reads (font_chain::plan).",
     "",
-    "use crate::font_chain::FaceCoverage;",
+    "use crate::font_chain::{FaceCoverage, PlanFacts};",
     "",
     "/// The stored extraction output (repository-relative) and the SHA256 of its",
     "/// SHA256SUMS file; the drift gate (font_chain tests) checks both.",
@@ -112,6 +95,11 @@ lines = [
     f'pub(crate) const SOURCE_DIR: &str = "{source_dir}";',
     "#[cfg(test)]",
     f'pub(crate) const SOURCE_SHA256SUMS_SHA256: &str = "{sums_sha}";',
+    "/// The stored primary-face extraction and the SHA256 of its SHA256SUMS.",
+    "#[cfg(test)]",
+    f'pub(crate) const PRIMARY_DIR: &str = "{primary_dir}";',
+    "#[cfg(test)]",
+    f'pub(crate) const PRIMARY_SHA256SUMS_SHA256: &str = "{primary_sums_sha}";',
     "",
 ]
 for (kind, key), name in tables.items():
@@ -120,15 +108,26 @@ for (kind, key), name in tables.items():
         lines.append(table(key))
     lines.append("];")
     lines.append("")
-for face, notdef, (s_name, c_name), family, font_path, _, zeroes, facts, plan_source, fallback in faces:
+def flag(facts, key):
+    return "true" if facts[key] == "1" else "false"
+
+
+for face, notdef, (s_name, c_name, p_name), family, font_path, _, facts in faces:
     lines.append(f"/// {family}, {font_path}.")
-    lines.append(f"/// HarfBuzz plan facts ({plan_source}): {facts}.")
     lines.append(f"pub(crate) const {face}: FaceCoverage = FaceCoverage {{")
     lines.append(f"    notdef_units: {notdef},")
     lines.append(f"    simple_missing: {s_name},")
     lines.append(f"    complex_mapped: {c_name},")
-    lines.append(f"    zeroes_unmapped_marks: {'true' if zeroes else 'false'},")
-    lines.append(f"    fallback_positions_marks: {'true' if fallback else 'false'},")
+    lines.append(f"    primary_mapped: {p_name},")
+    lines.append("    plan: PlanFacts {")
+    lines.append(f"        gdef_glyph_classes: {flag(facts, 'gdef_glyph_classes')},")
+    lines.append(f"        notdef_gdef_class: {int(facts['notdef_gdef_class'])},")
+    for key in ["gsub", "gpos", "morx", "kerx", "kern", "machine_kern", "cross_kern"]:
+        lines.append(f"        {key}: {flag(facts, key)},")
+    hebr = "hebr" in facts["gpos_scripts"].split(",")
+    lines.append(f"        gpos_hebrew_script: {'true' if hebr else 'false'},")
+    lines.append("    },")
     lines.append("};")
 open(out_path, "w", encoding="utf-8").write("\n".join(lines) + "\n")
-print(len(faces), "faces,", len(tables), "tables,", sum(len(k[1]) for k in tables), "runs; SHA256SUMS", sums_sha)
+print(len(faces), "faces,", len(tables), "tables,", sum(len(k[1]) for k in tables), "runs; SHA256SUMS", sums_sha,
+      "primary SHA256SUMS", primary_sums_sha)

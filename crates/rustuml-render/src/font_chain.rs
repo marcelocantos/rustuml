@@ -19,20 +19,19 @@
 //!   `.notdef`. HarfBuzz hides default-ignorable code points (zero advance).
 //!
 //! The coverage tables are an environment extraction
-//! (`tools/FontChainExtract.swift`, `tools/font_chain_coverage.py`) of the
-//! reference host's fonts.
+//! (`tools/FontChainExtract.swift`, `tools/PrimaryFaceExtract.swift`,
+//! `tools/font_chain_coverage.py`) of the reference host's fonts.
 //!
-//! HarfBuzz (10.0.1, which the reference JDK's libfontmanager links) also
-//! zeroes the advance of an unmapped nonspacing mark (Unicode 16 Mn) in two
-//! ways. With no GDEF glyph classes, `hb_synthesize_glyph_classes` makes the
-//! mark a MARK glyph and the default shaper's `zero_mark_widths_by_gdef`
-//! (BY_GDEF_LATE) zeroes it; with morx, any other shaper becomes
-//! `_hb_ot_shaper_dumber`, which zeroes nothing here (hb-ot-shape.cc 94-96).
-//! Without GPOS, kerx or cross-stream kern, a shaper with `fallback_position`
-//! (default, arabic, hebrew) also runs `_hb_ot_shape_fallback_mark_position`,
-//! which zeroes every Mn that follows a base in its cluster
-//! (hb-ot-shape-fallback.cc 188-205, 412-462). The run's script comes from
-//! JDK's `ScriptRun` over `ScriptRunData` (Unicode 3.2).
+//! HarfBuzz 15.0.0 (the library the reference JVM loads, T14.6.8) can also
+//! zero the advance of an unmapped character. JDK shapes one HarfBuzz buffer
+//! per `ScriptRun` run and composite slot run (`GlyphLayout.layout` 408-431,
+//! `FontRunIterator.next` 115-126). An unmapped character is in slot 0, the
+//! primary face, as is every character the primary face's own cmap maps
+//! (`CCompositeGlyphMapper.convertToGlyph` 54-67; `CTS_GetGlyphsAsIntsForCharacters`
+//! gives a positive code only for the font's own glyph). For each slot-0
+//! buffer, [`plan`] ports the planner (hb-ot-shape.cc 85-221) and
+//! [`fallback_zeroed`] ports `_hb_ot_shape_fallback_mark_position`
+//! (hb-ot-shape-fallback.cc 426-497).
 
 use crate::font_chain_coverage as coverage;
 use crate::font_chain_unicode as unicode;
@@ -45,14 +44,33 @@ pub(crate) struct FaceCoverage {
     pub(crate) simple_missing: &'static [(u32, u32)],
     /// Runs the complex path maps.
     pub(crate) complex_mapped: &'static [(u32, u32)],
-    /// HarfBuzz zeroes the `.notdef` of an unmapped nonspacing mark in a
-    /// default-shaped run (glyph 0 is a mark and the plan zeroes marks).
-    pub(crate) zeroes_unmapped_marks: bool,
-    /// `adjust_mark_positioning_when_zeroing` holds (no GPOS, kerx or
-    /// cross-stream kern), so fallback-positioning shapers zero marks that
-    /// follow a base.
-    pub(crate) fallback_positions_marks: bool,
+    /// Runs the face's own cmap maps (composite slot 0).
+    pub(crate) primary_mapped: &'static [(u32, u32)],
+    /// The sfnt facts HarfBuzz's planner reads.
+    pub(crate) plan: PlanFacts,
 }
+
+/// The sfnt facts HarfBuzz 15.0.0's planner reads for a face (horizontal text).
+pub(crate) struct PlanFacts {
+    /// GDEF has glyph classes (else `hb_synthesize_glyph_classes`).
+    pub(crate) gdef_glyph_classes: bool,
+    /// GDEF class of glyph 0 (`.notdef`), when there are classes.
+    pub(crate) notdef_gdef_class: u8,
+    pub(crate) gsub: bool,
+    pub(crate) gpos: bool,
+    pub(crate) morx: bool,
+    pub(crate) kerx: bool,
+    pub(crate) kern: bool,
+    /// A kern subtable is a state machine (`hb_ot_layout_has_machine_kerning`).
+    pub(crate) machine_kern: bool,
+    /// A kern subtable is cross-stream (`hb_ot_layout_has_cross_kerning`).
+    pub(crate) cross_kern: bool,
+    /// GPOS's ScriptList has `hebr`, the hebrew shaper's `gpos_tag`.
+    pub(crate) gpos_hebrew_script: bool,
+}
+
+/// GDEF glyph class MARK.
+const GDEF_MARK_CLASS: u8 = 3;
 
 /// The physical faces RustUML measures (`SansSerif` resolves to Lucida
 /// Grande and `Monospaced` to Menlo on macOS, `CFontManager`). Menlo and
@@ -79,32 +97,183 @@ pub(crate) enum ChainGlyph {
     /// No font maps it: the primary font's `.notdef`.
     Missing,
     /// HarfBuzz gives it zero advance in complex text: a hidden
-    /// default-ignorable, or an unmapped nonspacing mark it zeroes.
+    /// default-ignorable, or an unmapped character its plan zeroes.
     Hidden,
 }
 
-/// Which JDK measuring path a character takes and, for complex text, how
-/// HarfBuzz shapes its script run.
+/// Which JDK measuring path a character takes and, for complex text,
+/// whether HarfBuzz zeroes the advance of its glyph when it is unmapped
+/// (glyph 0 of slot 0) in its buffer.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub(crate) enum Complexity {
     /// `FontUtilities.isComplexText` is false for the measured string.
     Simple,
-    /// `TextLayout` path: the run's shaper and whether a base (a character
-    /// that is not a Unicode mark) precedes this one in its run with only
-    /// marks between.
-    Complex { shaper: RunShaper, after_base: bool },
+    /// `TextLayout` path.
+    Complex { zeroed: bool },
 }
 
-/// The class of shaper `hb_ot_shaper_categorize` picks for a run's script on
-/// a face without GSUB.
+/// HarfBuzz 15.0.0's `hb_ot_shaper_t`s that `hb_ot_shaper_categorize`
+/// (hb-ot-shaper.hh) picks for the ICU scripts JDK maps, plus `dumber`,
+/// which replaces any non-default shaper when morx applies (hb-ot-shape.cc
+/// 99-102).
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-pub(crate) enum RunShaper {
-    /// The default shaper (zeroes marks late, positions them by fallback).
+pub(crate) enum Shaper {
     Default,
-    /// arabic or hebrew: positions marks by fallback.
-    FallbackPositioned,
-    /// Any other complex shaper (no fallback positioning).
-    Other,
+    Dumber,
+    Arabic,
+    Hebrew,
+    Hangul,
+    Thai,
+    Indic,
+    Khmer,
+    Myanmar,
+    Use,
+}
+
+/// `hb_ot_shape_zero_width_marks_type_t`.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum ZeroWidthMarks {
+    None,
+    ByGdefEarly,
+    ByGdefLate,
+}
+
+impl Shaper {
+    pub(crate) const ALL: [Shaper; 10] = [
+        Shaper::Default,
+        Shaper::Dumber,
+        Shaper::Arabic,
+        Shaper::Hebrew,
+        Shaper::Hangul,
+        Shaper::Thai,
+        Shaper::Indic,
+        Shaper::Khmer,
+        Shaper::Myanmar,
+        Shaper::Use,
+    ];
+
+    /// `hb_ot_shaper_categorize` for an ICU script on a face without GSUB
+    /// (`chosen_script` NONE): the generated `SCRIPT_SHAPERS`, else default.
+    fn for_script(script: u8) -> Self {
+        unicode::SCRIPT_SHAPERS
+            .binary_search_by_key(&script, |(code, _)| *code)
+            .map_or(Shaper::Default, |index| unicode::SCRIPT_SHAPERS[index].1)
+    }
+
+    /// `zero_width_marks` (hb-ot-shaper-*.cc, 15.0.0).
+    fn zero_width_marks(self) -> ZeroWidthMarks {
+        match self {
+            Shaper::Default | Shaper::Arabic | Shaper::Hebrew | Shaper::Thai => {
+                ZeroWidthMarks::ByGdefLate
+            }
+            Shaper::Myanmar | Shaper::Use => ZeroWidthMarks::ByGdefEarly,
+            Shaper::Dumber | Shaper::Hangul | Shaper::Indic | Shaper::Khmer => ZeroWidthMarks::None,
+        }
+    }
+
+    /// `fallback_position` (hb-ot-shaper-*.cc, 15.0.0; hangul's is true since
+    /// HarfBuzz 12.2.0).
+    fn fallback_position(self) -> bool {
+        matches!(
+            self,
+            Shaper::Default | Shaper::Arabic | Shaper::Hebrew | Shaper::Hangul
+        )
+    }
+}
+
+/// What a HarfBuzz plan does to the marks of one buffer.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) struct MarkPlan {
+    /// `zero_mark_widths_by_gdef` runs (hb-ot-shape.cc 1051-1077): every
+    /// MARK glyph gets zero advance.
+    pub(crate) zero_by_gdef: bool,
+    /// `_hb_ot_shape_fallback_mark_position` runs (1086-1090).
+    pub(crate) fallback_mark_positioning: bool,
+}
+
+/// Port of `hb_ot_shape_planner_t` (hb-ot-shape.cc 85-103) and `compile`
+/// (152-221), HarfBuzz 15.0.0, for horizontal text and the plan facts that
+/// decide mark advances. `has_gpos_kern` (a GPOS `kern` feature for the
+/// chosen script) is not extracted; the drift gate checks that it cannot
+/// change the result for any face and shaper.
+pub(crate) fn plan(facts: &PlanFacts, categorized: Shaper, has_gpos_kern: bool) -> MarkPlan {
+    let script_zero_marks = categorized.zero_width_marks() != ZeroWidthMarks::None;
+    let script_fallback_position = categorized.fallback_position();
+    let apply_morx = facts.morx;
+    let shaper = if apply_morx && categorized != Shaper::Default {
+        Shaper::Dumber
+    } else {
+        categorized
+    };
+    // disable_gpos (133-134): only hebrew has a gpos_tag ('hebr'); GPOS's
+    // chosen script is 'hebr' only when its ScriptList has it.
+    let disable_gpos = shaper == Shaper::Hebrew && !facts.gpos_hebrew_script;
+    let has_gsub = !apply_morx && facts.gsub;
+    let has_gpos = !disable_gpos && facts.gpos;
+    let mut apply_kerx = facts.kerx && !(has_gsub && has_gpos);
+    let apply_gpos = !apply_kerx && has_gpos;
+    let mut apply_kern = false;
+    if !apply_kerx && (!has_gpos_kern || !apply_gpos) {
+        if facts.kerx {
+            apply_kerx = true;
+        } else if facts.kern {
+            // 15.0.0: "Not all shapers apply legacy `kern`".
+            apply_kern = script_fallback_position;
+        }
+    }
+    let zero_marks = script_zero_marks && !apply_kerx && (!apply_kern || !facts.machine_kern);
+    let adjust_mark_positioning_when_zeroing =
+        !apply_gpos && !apply_kerx && (!apply_kern || !facts.cross_kern);
+    MarkPlan {
+        zero_by_gdef: zero_marks && shaper.zero_width_marks() != ZeroWidthMarks::None,
+        fallback_mark_positioning: adjust_mark_positioning_when_zeroing && script_fallback_position,
+    }
+}
+
+/// Port of `_hb_ot_shape_fallback_mark_position` (hb-ot-shape-fallback.cc
+/// 470-497) over one buffer's code points: which of them get zero advance.
+/// Clusters split at characters that are neither Unicode marks nor hidden
+/// or default-ignorable (hidden is set only on default-ignorables,
+/// hb-ot-layout.hh 216-260). In a cluster of two or more,
+/// `position_cluster_impl` (426-453) takes each non-mark as a base and its
+/// marks up to the next non-mark, skipping default-ignorables;
+/// `position_around_base` (324-342) cannot read glyph extents through JDK's
+/// font functions (hb-jdk-font.cc 199-207), so `zero_mark_advances`
+/// (189-208) zeroes every Mn after the base in that span.
+fn fallback_zeroed(codes: &[u32]) -> Vec<bool> {
+    let mark = |code: u32| in_runs(unicode::UNICODE_MARKS, code);
+    let mut zeroed = vec![false; codes.len()];
+    let mut position_cluster = |start: usize, end: usize| {
+        if end - start < 2 {
+            return;
+        }
+        let mut base = start;
+        while base < end {
+            if mark(codes[base]) {
+                base += 1;
+                continue;
+            }
+            let mut next = base + 1;
+            while next < end && (is_default_ignorable(codes[next]) || mark(codes[next])) {
+                next += 1;
+            }
+            for index in base + 1..next {
+                if in_runs(unicode::NONSPACING_MARKS, codes[index]) {
+                    zeroed[index] = true;
+                }
+            }
+            base = next;
+        }
+    };
+    let mut start = 0;
+    for index in 1..codes.len() {
+        if !mark(codes[index]) && !is_default_ignorable(codes[index]) {
+            position_cluster(start, index);
+            start = index;
+        }
+    }
+    position_cluster(start, codes.len());
+    zeroed
 }
 
 /// Units per em of the extracted advances.
@@ -133,24 +302,15 @@ impl ChainFace {
     }
 
     /// How the chain draws `ch` at a position whose complexity is `complexity`
-    /// (see [`complexity_per_token`]).
+    /// (see [`ChainFace::complexity_per_token`]).
     pub(crate) fn resolve(self, ch: char, complexity: Complexity) -> ChainGlyph {
         let code = ch as u32;
         let coverage = self.coverage();
-        let (shaper, after_base) = match complexity {
-            Complexity::Simple => (RunShaper::Default, false),
-            Complexity::Complex { shaper, after_base } => (shaper, after_base),
-        };
         if code >= FIRST_SUPPLEMENTARY || complexity != Complexity::Simple {
-            let mark = in_runs(unicode::NONSPACING_MARKS, code);
-            let zeroed_by_gdef = coverage.zeroes_unmapped_marks && shaper == RunShaper::Default;
-            let zeroed_by_fallback =
-                coverage.fallback_positions_marks && shaper != RunShaper::Other && after_base;
+            let zeroed = complexity == Complexity::Complex { zeroed: true };
             return if in_runs(coverage.complex_mapped, code) {
                 ChainGlyph::Mapped
-            } else if is_hidden_default_ignorable(code)
-                || (mark && (zeroed_by_gdef || zeroed_by_fallback))
-            {
+            } else if is_default_ignorable(code) || zeroed {
                 ChainGlyph::Hidden
             } else {
                 ChainGlyph::Missing
@@ -161,6 +321,64 @@ impl ChainFace {
         } else {
             ChainGlyph::Mapped
         }
+    }
+
+    /// The [`Complexity`] of each Java token of `text` (one per
+    /// `java_utf16::tokens` item) measured in this face: `Simple` throughout
+    /// unless the string is complex. Complex text is split into HarfBuzz
+    /// buffers, `ScriptRun` runs by slot runs; in a slot-0 buffer the plan
+    /// for the run's script decides which unmapped glyphs it zeroes: MARK
+    /// glyphs by GDEF (glyph 0's class, or Mn and not default-ignorable when
+    /// classes are synthesized, hb-ot-shape.cc 856-879), and Mn after a base
+    /// by fallback positioning.
+    pub(crate) fn complexity_per_token(self, text: &str) -> Vec<Complexity> {
+        let codes: Vec<u32> = rustuml_parser::java_utf16::tokens(text)
+            .map(|token| match token {
+                rustuml_parser::java_utf16::Token::Unit(unit) => u32::from(unit),
+                rustuml_parser::java_utf16::Token::Char(ch) => ch as u32,
+            })
+            .collect();
+        if !is_complex_text(text) {
+            return vec![Complexity::Simple; codes.len()];
+        }
+        let coverage = self.coverage();
+        let scripts = script_run_codes(&codes);
+        let slot0: Vec<bool> = codes
+            .iter()
+            .map(|&code| {
+                in_runs(coverage.primary_mapped, code) || !in_runs(coverage.complex_mapped, code)
+            })
+            .collect();
+        let mut result = vec![Complexity::Complex { zeroed: false }; codes.len()];
+        let mut start = 0;
+        while start < codes.len() {
+            let mut end = start + 1;
+            while end < codes.len() && scripts[end] == scripts[start] && slot0[end] == slot0[start]
+            {
+                end += 1;
+            }
+            if slot0[start] {
+                let plan = plan(&coverage.plan, Shaper::for_script(scripts[start]), false);
+                let fallback = if plan.fallback_mark_positioning {
+                    fallback_zeroed(&codes[start..end])
+                } else {
+                    vec![false; end - start]
+                };
+                for index in start..end {
+                    let code = codes[index];
+                    let glyph_is_mark = if coverage.plan.gdef_glyph_classes {
+                        coverage.plan.notdef_gdef_class == GDEF_MARK_CLASS
+                    } else {
+                        in_runs(unicode::NONSPACING_MARKS, code) && !is_default_ignorable(code)
+                    };
+                    result[index] = Complexity::Complex {
+                        zeroed: (plan.zero_by_gdef && glyph_is_mark) || fallback[index - start],
+                    };
+                }
+            }
+            start = end;
+        }
+        result
     }
 }
 
@@ -179,44 +397,6 @@ pub(crate) fn is_complex_text(text: &str) -> bool {
             ch as u32 >= FIRST_SUPPLEMENTARY || is_complex_char_code(ch as u32)
         }
     })
-}
-
-/// The [`Complexity`] of each Java token of `text` (one per
-/// `java_utf16::tokens` item): `Simple` throughout unless the string is
-/// complex, then each token's `ScriptRun` run decides its shaper.
-pub(crate) fn complexity_per_token(text: &str) -> Vec<Complexity> {
-    let codes: Vec<u32> = rustuml_parser::java_utf16::tokens(text)
-        .map(|token| match token {
-            rustuml_parser::java_utf16::Token::Unit(unit) => u32::from(unit),
-            rustuml_parser::java_utf16::Token::Char(ch) => ch as u32,
-        })
-        .collect();
-    if !is_complex_text(text) {
-        return vec![Complexity::Simple; codes.len()];
-    }
-    let scripts = script_run_codes(&codes);
-    (0..codes.len())
-        .map(|index| {
-            let script = scripts[index];
-            let shaper = if !unicode::COMPLEX_SHAPED_SCRIPTS.contains(&script) {
-                RunShaper::Default
-            } else if unicode::FALLBACK_POSITIONED_SCRIPTS.contains(&script) {
-                RunShaper::FallbackPositioned
-            } else {
-                RunShaper::Other
-            };
-            // `_hb_ot_shape_fallback_mark_position`: a cluster is a base and
-            // the Unicode marks after it, inside the run's buffer.
-            // Walking back inside the run over marks, the first non-mark is
-            // the base.
-            let after_base = (0..index)
-                .rev()
-                .take_while(|&before| scripts[before] == script)
-                .find(|&before| !in_runs(unicode::UNICODE_MARKS, codes[before]))
-                .is_some();
-            Complexity::Complex { shaper, after_base }
-        })
-        .collect()
 }
 
 /// ICU `UScriptCode` of a code point in JDK's `ScriptRunData` (Unicode 3.2):
@@ -329,16 +509,17 @@ fn is_complex_char_code(code: u32) -> bool {
     )
 }
 
-/// HarfBuzz `_hb_unicode_is_default_ignorable`, the code points TextLayout
-/// hides with zero advance. Only unmapped ones reach this test.
-fn is_hidden_default_ignorable(code: u32) -> bool {
+/// HarfBuzz 15.0.0 `is_default_ignorable` (hb-unicode.hh 167-197; U+180F
+/// joined in 15.0.0's set): the code points TextLayout hides with zero
+/// advance, and that fallback mark positioning skips.
+fn is_default_ignorable(code: u32) -> bool {
     matches!(
         code,
         0x00AD
             | 0x034F
             | 0x061C
             | 0x17B4..=0x17B5
-            | 0x180B..=0x180E
+            | 0x180B..=0x180F
             | 0x200B..=0x200F
             | 0x202A..=0x202E
             | 0x2060..=0x206F
@@ -354,10 +535,25 @@ fn is_hidden_default_ignorable(code: u32) -> bool {
 mod tests {
     use super::*;
 
-    const COMPLEX: Complexity = Complexity::Complex {
-        shaper: RunShaper::Default,
-        after_base: true,
-    };
+    const UNZEROED: Complexity = Complexity::Complex { zeroed: false };
+
+    /// For each token of `text` in `face`: Simple, zeroed, or kept.
+    fn zeroing(face: ChainFace, text: &str) -> String {
+        face.complexity_per_token(text)
+            .into_iter()
+            .map(|c| match c {
+                Complexity::Simple => 's',
+                Complexity::Complex { zeroed: true } => 'z',
+                Complexity::Complex { zeroed: false } => '-',
+            })
+            .collect()
+    }
+
+    /// Whether the last token of `text` draws as `glyph` in `face`.
+    fn last_glyph(face: ChainFace, text: &str) -> ChainGlyph {
+        let complexity = *face.complexity_per_token(text).last().unwrap();
+        face.resolve(text.chars().last().unwrap(), complexity)
+    }
 
     #[test]
     fn unmapped_scalars_take_the_primary_notdef_on_both_paths() {
@@ -370,7 +566,7 @@ mod tests {
             '\u{0378}',
             '\u{F000}',
         ] {
-            assert_eq!(lucida.resolve(ch, COMPLEX), ChainGlyph::Missing, "{ch:?}");
+            assert_eq!(lucida.resolve(ch, UNZEROED), ChainGlyph::Missing, "{ch:?}");
         }
         assert_eq!(
             lucida.resolve('\u{0378}', Complexity::Simple),
@@ -382,77 +578,74 @@ mod tests {
     }
 
     #[test]
-    fn harfbuzz_hides_unmapped_supplementary_format_characters() {
-        assert_eq!(
-            ChainFace::LucidaGrande.resolve('\u{E0041}', COMPLEX),
-            ChainGlyph::Hidden
-        );
-        assert_eq!(
-            ChainFace::LucidaGrande.resolve('\u{1D173}', COMPLEX),
-            ChainGlyph::Hidden
-        );
+    fn harfbuzz_hides_unmapped_default_ignorables() {
+        for ch in ['\u{E0041}', '\u{1D173}', '\u{180F}'] {
+            assert_eq!(
+                ChainFace::LucidaGrande.resolve(ch, UNZEROED),
+                ChainGlyph::Hidden,
+                "{ch:?}"
+            );
+        }
         // U+1BCA0 is excluded from HarfBuzz's set.
         assert_eq!(
-            ChainFace::LucidaGrande.resolve('\u{1BCA0}', COMPLEX),
+            ChainFace::LucidaGrande.resolve('\u{1BCA0}', UNZEROED),
             ChainGlyph::Missing
+        );
+        // U+180F is default-ignorable in 15.0.0, so even a Thai run (thai ->
+        // dumber, which zeroes nothing) hides it.
+        assert_eq!(
+            last_glyph(ChainFace::LucidaGrande, "Vault \u{0E01}\u{180F}"),
+            ChainGlyph::Hidden
         );
     }
 
     #[test]
-    fn harfbuzz_zeroes_unmapped_nonspacing_marks_of_default_shaped_runs() {
-        // Synthesized glyph classes (no GDEF): Mn U+180F, U+1D17B, U+16FE4 and
-        // the Unicode 16 U+1E5EE are marks; the default shaper zeroes them,
-        // with or without a base before them.
-        let leading = Complexity::Complex {
-            shaper: RunShaper::Default,
-            after_base: false,
-        };
+    fn default_shaped_runs_zero_unmapped_marks_by_gdef() {
+        // Synthesized glyph classes (no GDEF): unmapped Mn are MARK glyphs and
+        // the default shaper zeroes them with or without a base, including
+        // the Unicode 17 and 18 marks of HarfBuzz 15.0.0's UCD.
         for face in [
             ChainFace::LucidaGrande,
             ChainFace::LucidaGrandeBold,
             ChainFace::Helvetica,
+            ChainFace::HelveticaBold,
             ChainFace::Menlo,
         ] {
-            for ch in [
-                '\u{180F}',
+            for mark in [
                 '\u{1D17B}',
                 '\u{16FE4}',
-                '\u{1DFA}',
                 '\u{1E5EE}',
+                '\u{1AD0}',
+                '\u{1E6E3}',
+                '\u{05C8}',
+                '\u{0B53}',
+                '\u{10EFA}',
             ] {
+                for text in [
+                    format!("Vault \u{10FFFD}{mark}"),
+                    format!("{mark}Vault \u{10FFFD}"),
+                ] {
+                    let tokens = face.complexity_per_token(&text);
+                    let at = text.chars().position(|c| c == mark).unwrap();
+                    assert_eq!(
+                        face.resolve(mark, tokens[at]),
+                        ChainGlyph::Hidden,
+                        "{face:?} {text:?}"
+                    );
+                }
+            }
+            // Mc and Me are not MARK glyphs under synthesized classes.
+            for other in ['\u{11F03}', '\u{1ABE}'] {
                 assert_eq!(
-                    face.resolve(ch, COMPLEX),
-                    ChainGlyph::Hidden,
-                    "{face:?} {ch:?}"
-                );
-                assert_eq!(
-                    face.resolve(ch, leading),
-                    ChainGlyph::Hidden,
-                    "{face:?} {ch:?}"
+                    last_glyph(face, &format!("Vault \u{10FFFD}{other}")),
+                    ChainGlyph::Missing
                 );
             }
-            // Hebrew (fallback-positioned, dumber under morx): zeroed only
-            // after a base.
-            let hebrew = |after_base| Complexity::Complex {
-                shaper: RunShaper::FallbackPositioned,
-                after_base,
-            };
-            assert_eq!(face.resolve('\u{1D17B}', hebrew(true)), ChainGlyph::Hidden);
-            assert_eq!(
-                face.resolve('\u{1D17B}', hebrew(false)),
-                ChainGlyph::Missing
-            );
-            // Thai/Indic/USE: never.
-            let other = Complexity::Complex {
-                shaper: RunShaper::Other,
-                after_base: true,
-            };
-            assert_eq!(face.resolve('\u{1D17B}', other), ChainGlyph::Missing);
         }
-        // GDEF classes glyph 0 as a base and GPOS disables fallback marks.
+        // GDEF classes make glyph 0 a base: never zeroed by GDEF.
         for face in [ChainFace::Arial, ChainFace::Verdana, ChainFace::CourierNew] {
             assert_eq!(
-                face.resolve('\u{1D17B}', COMPLEX),
+                last_glyph(face, "Vault \u{1D17B}"),
                 ChainGlyph::Missing,
                 "{face:?}"
             );
@@ -462,70 +655,153 @@ mod tests {
             ChainFace::LucidaGrande.resolve('\u{1AB0}', Complexity::Simple),
             ChainGlyph::Missing
         );
-        // Mc (U+1D165 is mapped elsewhere; U+11F03 Kawi Mc) is not zeroed.
+    }
+
+    #[test]
+    fn fallback_positioning_needs_a_base_in_the_same_buffer() {
+        use ChainFace::*;
+        // BJ decompositions: Lucida Grande does not map alef U+0627 (Geeza
+        // Pro slot), so the mark is alone in its slot-0 buffer.
+        assert_eq!(zeroing(LucidaGrande, "Vault \u{0627}\u{1D17B}"), "--------");
+        // Lucida Grande maps Hebrew alef itself: same buffer, zeroed.
+        assert_eq!(zeroing(LucidaGrande, "Vault \u{05D0}\u{1D17B}"), "-------z");
+        // Helvetica and Menlo do not (Lucida Grande slot): kept.
+        for face in [Helvetica, Menlo] {
+            assert_eq!(zeroing(face, "Vault \u{05D0}\u{1D17B}"), "--------");
+            // A slot-0 space in the Hebrew run is a base.
+            assert_eq!(zeroing(face, "Vault \u{05D0} \u{1D17B}"), "--------z");
+        }
+        // Syriac and U+FB1D are unmapped everywhere: slot 0, zeroed.
+        assert_eq!(zeroing(Helvetica, "Vault \u{0710}\u{1D17B}"), "-------z");
+        assert_eq!(zeroing(Helvetica, "Vault \u{FB1D}\u{1D17B}"), "-------z");
+        // A leading mark has no base.
+        assert_eq!(zeroing(LucidaGrande, "\u{1D17B}\u{05D0}"), "--");
+        // Thai and Devanagari shapers do not position by fallback.
+        assert_eq!(zeroing(LucidaGrande, "\u{0E01} \u{1D17B}"), "---");
+        assert_eq!(zeroing(LucidaGrande, "\u{0915} \u{1D17B}"), "---");
+        // A default-ignorable between the base and the mark is skipped.
+        assert_eq!(zeroing(LucidaGrande, "\u{05D0}\u{2060}\u{1D17B}"), "--z");
+        // GPOS faces: Arial and Courier New list 'hebr', so GPOS stays on and
+        // no fallback runs; Verdana's GPOS lists only 'latn', so the hebrew
+        // shaper's gpos_tag disables it and fallback positioning zeroes.
+        assert_eq!(zeroing(Arial, "\u{05D0} \u{1D17B}"), "---");
+        assert_eq!(zeroing(CourierNew, "\u{05D0} \u{1D17B}"), "---");
+        assert_eq!(zeroing(Verdana, "\u{05D0} \u{1D17B}"), "--z");
+    }
+
+    #[test]
+    fn fallback_port_follows_position_cluster() {
+        let zeroed = |codes: &[u32]| {
+            fallback_zeroed(codes)
+                .into_iter()
+                .map(|z| if z { 'z' } else { '-' })
+                .collect::<String>()
+        };
+        // Base, Mn, Mc, Mn: every Mn after the base; Mc keeps its advance.
+        assert_eq!(zeroed(&[0x5D0, 0x1D17B, 0x903, 0x1D17B]), "-z-z");
+        // Marks before any base are not zeroed.
+        assert_eq!(zeroed(&[0x1D17B, 0x1D17B, 0x5D0, 0x1D17B]), "---z");
+        // A non-mark default-ignorable at the start is a base (position_cluster_impl).
+        assert_eq!(zeroed(&[0x200B, 0x1D17B]), "-z");
+        // A lone base and mark buffer of one character does nothing.
+        assert_eq!(zeroed(&[0x1D17B]), "-");
+    }
+
+    #[test]
+    fn planner_ports_harfbuzz_15() {
+        let facts = |gpos, kern, cross_kern, morx, hebr| PlanFacts {
+            gdef_glyph_classes: gpos,
+            notdef_gdef_class: if gpos { 1 } else { 0 },
+            gsub: gpos,
+            gpos,
+            morx,
+            kerx: false,
+            kern,
+            machine_kern: false,
+            cross_kern,
+            gpos_hebrew_script: hebr,
+        };
+        let lucida = facts(false, false, false, true, false);
+        // morx: non-default shapers become dumber (no GDEF zeroing) but keep
+        // their fallback_position.
         assert_eq!(
-            ChainFace::LucidaGrande.resolve('\u{11F03}', COMPLEX),
-            ChainGlyph::Missing
+            plan(&lucida, Shaper::Default, false),
+            MarkPlan {
+                zero_by_gdef: true,
+                fallback_mark_positioning: true
+            }
         );
+        for shaper in [Shaper::Arabic, Shaper::Hebrew, Shaper::Hangul] {
+            assert_eq!(
+                plan(&lucida, shaper, false),
+                MarkPlan {
+                    zero_by_gdef: false,
+                    fallback_mark_positioning: true
+                }
+            );
+        }
+        for shaper in [Shaper::Thai, Shaper::Indic, Shaper::Use, Shaper::Myanmar] {
+            assert_eq!(
+                plan(&lucida, shaper, false),
+                MarkPlan {
+                    zero_by_gdef: false,
+                    fallback_mark_positioning: false
+                }
+            );
+        }
+        // Legacy kern applies only to fallback-positioning shapers: a
+        // cross-stream kern then blocks fallback marks.
+        let cross = facts(false, true, true, true, false);
+        assert!(!plan(&cross, Shaper::Default, false).fallback_mark_positioning);
+        assert!(!plan(&cross, Shaper::Hebrew, false).fallback_mark_positioning);
+        // GPOS: only the hebrew gpos_tag can disable it.
+        let verdana = facts(true, true, false, false, false);
+        assert!(plan(&verdana, Shaper::Hebrew, false).fallback_mark_positioning);
+        assert!(!plan(&verdana, Shaper::Arabic, false).fallback_mark_positioning);
+        let arial = facts(true, true, false, false, true);
+        assert!(!plan(&arial, Shaper::Hebrew, false).fallback_mark_positioning);
     }
 
     #[test]
     fn script_runs_follow_jdk_script_run() {
         let runs = |text: &str| {
-            complexity_per_token(text)
+            let codes: Vec<u32> = text.chars().map(|c| c as u32).collect();
+            script_run_codes(&codes)
                 .into_iter()
-                .map(|c| match c {
-                    Complexity::Simple => 's',
-                    Complexity::Complex {
-                        shaper: RunShaper::Default,
-                        ..
-                    } => 'd',
-                    Complexity::Complex {
-                        shaper: RunShaper::FallbackPositioned,
-                        ..
-                    } => 'f',
-                    Complexity::Complex {
-                        shaper: RunShaper::Other,
-                        ..
-                    } => 'o',
+                .map(|script| match Shaper::for_script(script) {
+                    Shaper::Default => 'd',
+                    Shaper::Hebrew | Shaper::Arabic => 'f',
+                    _ => 'o',
                 })
                 .collect::<String>()
         };
-        let bases = |text: &str| {
-            complexity_per_token(text)
-                .into_iter()
-                .map(|c| match c {
-                    Complexity::Complex {
-                        after_base: true, ..
-                    } => 'b',
-                    _ => '-',
-                })
-                .collect::<String>()
-        };
-        assert_eq!(runs("Vault"), "sssss");
         // Weak characters (unassigned in Unicode 3.2) join the Latin run.
         assert_eq!(runs("Vault \u{1D17B}"), "ddddddd");
-        // Hebrew is fallback-positioned; the mark after it joins its run.
+        // The mark after Hebrew joins its run.
         assert_eq!(runs("a \u{05D0}\u{1D17B}"), "ddff");
-        assert_eq!(bases("a \u{05D0}\u{1D17B}"), "-b-b");
-        // A leading mark takes the first strong script after it, and has no base.
+        // A leading mark takes the first strong script after it.
         assert_eq!(runs("\u{1D17B}\u{05D0}"), "ff");
-        assert_eq!(bases("\u{1D17B}\u{05D0}"), "--");
-        // Thai is neither default nor fallback-positioned.
         assert_eq!(runs("\u{0E01}\u{1D17B}"), "oo");
         // A closing bracket takes its opener's run script.
         assert_eq!(runs("\u{05D0}(\u{1D17B})"), "ffff");
         // When that script ends the current run, the opener is already popped:
         // the bracket starts a weak (COMMON, default-shaped) run.
         assert_eq!(runs("\u{05D0}(a)\u{1D17B}"), "ffddd");
-        // Marks between the base and the mark keep the cluster.
-        assert_eq!(bases("\u{05D0}\u{0301}\u{1D17B}"), "-bb");
     }
 
-    /// Drift gate (T14.6.8): the generated table is the stored reference-host
-    /// extraction. Its SHA256SUMS hashes to the recorded value, every stored
-    /// file matches SHA256SUMS, and each face's runs, `.notdef` advance and
-    /// HarfBuzz plan fact equal the stored TSV.
+    /// Faces whose plan can zero a glyph but whose font file the reference
+    /// host's record does not hash yet (relay request in
+    /// maker-round7-claude). The gate fails if this list is stale.
+    const PENDING_REFERENCE_HASH: &[&str] = &["Verdana-Bold"];
+
+    /// Drift gate (T14.6.8): the generated table is the stored extractions.
+    /// Each SHA256SUMS hashes to the recorded value and every stored file
+    /// matches it; each face's runs, `.notdef` advance, own-cmap runs and
+    /// every HarfBuzz plan fact (the kern cross-stream bit included) equal
+    /// the stored TSVs; the unextracted GPOS `kern` feature cannot change any
+    /// plan; and every face whose plan can zero a glyph has the same font
+    /// file on the reference host (Monkey Man record) as where its own cmap
+    /// was read.
     #[test]
     fn coverage_table_is_the_stored_reference_host_extraction() {
         use sha2::{Digest, Sha256};
@@ -535,84 +811,154 @@ mod tests {
                 .map(|b| format!("{b:02x}"))
                 .collect::<String>()
         };
-        let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../..")
-            .join(coverage::SOURCE_DIR);
-        let sums = std::fs::read(dir.join("SHA256SUMS")).expect("stored SHA256SUMS");
-        assert_eq!(hex(&sums), coverage::SOURCE_SHA256SUMS_SHA256);
-        for line in String::from_utf8(sums).unwrap().lines() {
-            let (hash, name) = line.split_once("  ").expect("shasum line");
-            let data = std::fs::read(dir.join(name)).unwrap_or_else(|e| panic!("{name}: {e}"));
-            assert_eq!(hex(&data), hash, "{name}");
-        }
+        let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+        let verify = |relative: &str, expected: &str| {
+            let dir = root.join(relative);
+            let sums = std::fs::read(dir.join("SHA256SUMS")).expect("stored SHA256SUMS");
+            assert_eq!(hex(&sums), expected, "{relative}");
+            for line in String::from_utf8(sums).unwrap().lines() {
+                let (hash, name) = line.split_once("  ").expect("shasum line");
+                let data = std::fs::read(dir.join(name)).unwrap_or_else(|e| panic!("{name}: {e}"));
+                assert_eq!(hex(&data), hash, "{name}");
+            }
+            dir
+        };
+        let dir = verify(coverage::SOURCE_DIR, coverage::SOURCE_SHA256SUMS_SHA256);
+        let primary = verify(coverage::PRIMARY_DIR, coverage::PRIMARY_SHA256SUMS_SHA256);
+        let font_hashes = |name: &str| -> std::collections::HashMap<String, String> {
+            std::fs::read_to_string(primary.join(name))
+                .unwrap()
+                .lines()
+                .filter_map(|line| {
+                    let (hash, path) = line.split_once("  ")?;
+                    (hash.len() == 64 && path.starts_with("/System/Library/Fonts/"))
+                        .then(|| (path.to_string(), hash.to_string()))
+                })
+                .collect()
+        };
+        let reference_host = font_hashes("monkeyman-hb-static.txt");
+        let colossus = font_hashes("colossus-font-files.sha256");
         let faces = [
-            (ChainFace::LucidaGrande, "LucidaGrande.tsv"),
-            (ChainFace::LucidaGrandeBold, "LucidaGrande-Bold.tsv"),
-            (ChainFace::Arial, "ArialMT.tsv"),
-            (ChainFace::ArialBold, "Arial-BoldMT.tsv"),
-            (ChainFace::Helvetica, "Helvetica.tsv"),
-            (ChainFace::HelveticaBold, "Helvetica-Bold.tsv"),
-            (ChainFace::Verdana, "Verdana.tsv"),
-            (ChainFace::VerdanaBold, "Verdana-Bold.tsv"),
-            (ChainFace::Menlo, "Menlo-Regular.tsv"),
-            (ChainFace::CourierNew, "CourierNewPSMT.tsv"),
+            (ChainFace::LucidaGrande, "LucidaGrande"),
+            (ChainFace::LucidaGrandeBold, "LucidaGrande-Bold"),
+            (ChainFace::Arial, "ArialMT"),
+            (ChainFace::ArialBold, "Arial-BoldMT"),
+            (ChainFace::Helvetica, "Helvetica"),
+            (ChainFace::HelveticaBold, "Helvetica-Bold"),
+            (ChainFace::Verdana, "Verdana"),
+            (ChainFace::VerdanaBold, "Verdana-Bold"),
+            (ChainFace::Menlo, "Menlo-Regular"),
+            (ChainFace::CourierNew, "CourierNewPSMT"),
         ];
+        let mut pending = Vec::new();
         for (face, name) in faces {
-            let text = std::fs::read_to_string(dir.join(name)).unwrap();
-            let (mut simple, mut complex) = (Vec::new(), Vec::new());
-            for line in text.lines() {
-                let fields: Vec<&str> = line.split('\t').collect();
-                match fields[0] {
-                    "#notdef_advance_units" => assert_eq!(
-                        fields[1].parse::<f64>().unwrap(),
-                        f64::from(face.coverage().notdef_units),
-                        "{name}"
-                    ),
-                    "#hb_plan" => {
-                        let fact = |key: &str| {
-                            fields
-                                .iter()
-                                .find_map(|f| f.strip_prefix(key)?.strip_prefix('='))
-                                .unwrap()
-                        };
-                        let notdef_is_mark =
-                            fact("gdef_glyph_classes") == "0" || fact("notdef_gdef_class") == "3";
-                        let zero_marks = fact("kerx") == "0"
-                            && !(fact("kern") == "1" && fact("machine_kern") == "1");
-                        assert_eq!(
-                            notdef_is_mark && zero_marks,
-                            face.coverage().zeroes_unmapped_marks,
+            let mut facts = std::collections::HashMap::new();
+            let (mut simple, mut complex, mut own) = (Vec::new(), Vec::new(), Vec::new());
+            let mut font_path = String::new();
+            for file in [format!("{name}.tsv"), format!("{name}.own.tsv")] {
+                let base = if file.ends_with(".own.tsv") {
+                    &primary
+                } else {
+                    &dir
+                };
+                let text = std::fs::read_to_string(base.join(&file)).unwrap();
+                for line in text.lines() {
+                    let fields: Vec<&str> = line.split('\t').collect();
+                    match fields[0] {
+                        "#notdef_advance_units" => assert_eq!(
+                            fields[1].parse::<f64>().unwrap(),
+                            f64::from(face.coverage().notdef_units),
                             "{name}"
-                        );
-                        // Fallback marks need no GPOS and no kerx; with a
-                        // kern table the cross-stream bit (not extracted)
-                        // also decides, so only the extracted part is gated.
-                        if fact("gpos") == "1" || fact("kerx") == "1" {
-                            assert!(!face.coverage().fallback_positions_marks, "{name}");
-                        } else if fact("kern") == "0" {
-                            assert!(face.coverage().fallback_positions_marks, "{name}");
+                        ),
+                        "#hb_plan" | "#plan_extra" => {
+                            for fact in &fields[1..] {
+                                let (key, value) = fact.split_once('=').unwrap();
+                                facts.insert(key.to_string(), value.to_string());
+                            }
                         }
-                    }
-                    "S" | "C" => {
-                        let run = (
-                            u32::from_str_radix(fields[1], 16).unwrap(),
-                            u32::from_str_radix(fields[2], 16).unwrap(),
-                        );
-                        if fields[0] == "S" {
-                            &mut simple
-                        } else {
-                            &mut complex
+                        "#face" => font_path = fields[3].to_string(),
+                        "S" | "C" | "P" => {
+                            let run = (
+                                u32::from_str_radix(fields[1], 16).unwrap(),
+                                u32::from_str_radix(fields[2], 16).unwrap(),
+                            );
+                            match fields[0] {
+                                "S" => &mut simple,
+                                "C" => &mut complex,
+                                _ => &mut own,
+                            }
+                            .push(run);
                         }
-                        .push(run);
+                        _ => {}
                     }
-                    _ => {}
                 }
             }
             simple.sort_unstable();
             complex.sort_unstable();
+            own.sort_unstable();
             assert_eq!(simple, face.coverage().simple_missing, "{name} simple");
             assert_eq!(complex, face.coverage().complex_mapped, "{name} complex");
+            assert_eq!(own, face.coverage().primary_mapped, "{name} own cmap");
+            let flag = |key: &str| facts[key] == "1";
+            let stored = &face.coverage().plan;
+            assert_eq!(
+                (
+                    stored.gdef_glyph_classes,
+                    stored.notdef_gdef_class,
+                    stored.gsub,
+                    stored.gpos,
+                    stored.morx,
+                    stored.kerx,
+                    stored.kern,
+                    stored.machine_kern,
+                    stored.cross_kern,
+                    stored.gpos_hebrew_script,
+                ),
+                (
+                    flag("gdef_glyph_classes"),
+                    facts["notdef_gdef_class"].parse::<u8>().unwrap(),
+                    flag("gsub"),
+                    flag("gpos"),
+                    flag("morx"),
+                    flag("kerx"),
+                    flag("kern"),
+                    flag("machine_kern"),
+                    flag("cross_kern"),
+                    facts["gpos_scripts"].split(',').any(|tag| tag == "hebr"),
+                ),
+                "{name} plan facts"
+            );
+            assert!(!(flag("trak") && flag("STAT")), "{name}: trak applies");
+            let glyph0_can_be_mark =
+                !stored.gdef_glyph_classes || stored.notdef_gdef_class == GDEF_MARK_CLASS;
+            let zeroes = |shaper: Shaper| {
+                let plan = plan(stored, shaper, false);
+                (plan.zero_by_gdef && glyph0_can_be_mark) || plan.fallback_mark_positioning
+            };
+            for shaper in Shaper::ALL {
+                assert_eq!(
+                    plan(stored, shaper, false),
+                    plan(stored, shaper, true),
+                    "{name} {shaper:?}: GPOS kern feature"
+                );
+                // With GSUB the categorized shaper depends on the chosen
+                // script; only hebrew (chosen regardless) may zero there.
+                if stored.gsub && shaper != Shaper::Hebrew {
+                    assert!(!zeroes(shaper), "{name} {shaper:?}");
+                }
+            }
+            if Shaper::ALL.into_iter().any(zeroes) {
+                let here = &colossus[&font_path];
+                match reference_host.get(&font_path) {
+                    Some(there) => assert_eq!(here, there, "{name}: {font_path}"),
+                    None => pending.push(name),
+                }
+            }
         }
+        assert_eq!(
+            pending, PENDING_REFERENCE_HASH,
+            "faces awaiting reference hashes"
+        );
     }
 
     #[test]

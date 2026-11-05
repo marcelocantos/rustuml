@@ -21,7 +21,7 @@ use std::fmt::Write;
 
 use crate::creole::{self, Segment, Style};
 use crate::filter_registry;
-use crate::font_chain::{self, ChainFace, ChainGlyph};
+use crate::font_chain::{ChainFace, ChainGlyph};
 use crate::plantuml_metrics as pm;
 use crate::svg::normalize_svg_link_title;
 use rustuml_parser::java_utf16;
@@ -1391,7 +1391,7 @@ fn chain_text_width(
     face: ChainFace,
     own: impl Fn(char) -> Option<f64>,
 ) -> f64 {
-    let complexity = font_chain::complexity_per_token(text);
+    let complexity = face.complexity_per_token(text);
     let mut buffer = [0_u8; 4];
     java_utf16::tokens(text)
         .zip(complexity)

@@ -29,7 +29,7 @@ pub fn text_width(text: &str, font_size: f64, bold: bool) -> f64 {
         ChainFace::LucidaGrande
     };
     // One complexity per Java token; without an escape, tokens are chars.
-    let complexity = crate::font_chain::complexity_per_token(text);
+    let complexity = face.complexity_per_token(text);
     if text.contains(rustuml_parser::java_utf16::ESCAPE) {
         // Escaped legitimate scalars of the carrier range measure as
         // themselves; unpaired units keep their one-em advance.
@@ -115,7 +115,7 @@ pub fn mono_text_width(text: &str, font_size: f64) -> f64 {
 /// unpaired unit and every scalar but a hidden default-ignorable (Menlo's and
 /// Courier New's `.notdef` advance equals their cell, 1233 and 1229 units).
 fn cell_count(text: &str, face: ChainFace) -> usize {
-    let complexity = crate::font_chain::complexity_per_token(text);
+    let complexity = face.complexity_per_token(text);
     java_utf16::tokens(text)
         .zip(complexity)
         .filter(|(token, complexity)| match token {
