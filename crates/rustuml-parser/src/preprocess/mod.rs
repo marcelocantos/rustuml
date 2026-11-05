@@ -103,7 +103,12 @@ fn preprocess_full_inner(
     let merged = merge_ending_backslash_lines(&input_lines);
     let mut lines = ctx.process_merged_lines(&merged.lines);
     if ctx.start_checks_ending_backslash {
-        lines = collapse_post_tim_ending_backslashes(lines);
+        lines = collapse_post_tim_ending_backslashes(lines, ctx.block_end.as_ref());
+    }
+    for line in &mut lines {
+        if line == DIRECTIVE_PLACEHOLDER {
+            line.clear();
+        }
     }
     let expanded_theme_source = expanded_theme_seed_source(
         input,
@@ -614,6 +619,10 @@ struct PreprocessContext {
     /// contains SEQUENCE, so `PSystemBuilder#createPSystem` builds the
     /// `UmlSource` with `checkEndingBackslash` (post-TIM join).
     start_checks_ending_backslash: bool,
+    /// The top-level block's end line as TIM passes it on: its diagram
+    /// source line and text. Java's TIM result list ends with it; the parser
+    /// stream does not carry it, but the post-TIM join can still reach it.
+    block_end: Option<(usize, String)>,
 }
 
 struct ThemeSeedExpansion {
@@ -708,6 +717,7 @@ impl PreprocessContext {
             preserve_teoz_pragma: false,
             source_identity_mode: false,
             start_checks_ending_backslash: false,
+            block_end: None,
         }
     }
 
@@ -733,7 +743,7 @@ impl PreprocessContext {
         // resulting diagram stream. Placeholders only represent directives
         // from the user's top-level source, never generated function bodies.
         if self.include_depth == 0 && self.in_diagram_block && self.local_vars.is_empty() {
-            output.push(String::new());
+            output.push(DIRECTIVE_PLACEHOLDER.to_string());
         }
     }
 
@@ -950,6 +960,9 @@ impl PreprocessContext {
                 return;
             }
             if trimmed.starts_with("@end") {
+                if self.in_diagram_block && self.block_end.is_none() {
+                    self.block_end = Some((self.current_diagram_source_line(), line.to_string()));
+                }
                 if self.source_identity_mode && self.in_diagram_block {
                     output.push(line_no_comment);
                 }
@@ -1583,7 +1596,7 @@ impl PreprocessContext {
                 && self.local_vars.is_empty()
             {
                 while output.len() < self.current_source_line {
-                    output.push(String::new());
+                    output.push(DIRECTIVE_PLACEHOLDER.to_string());
                 }
             }
 
@@ -3633,6 +3646,71 @@ struct MergedInput<'a> {
     swallowed_end: bool,
 }
 
+/// What `Pipe#readSingleDiagram` hands to `SourceStringReader` for one
+/// diagram: a prefix of the input and, when that prefix has no end line of
+/// Pipe's own kind, the end line Pipe appends.
+struct PipeDiagram {
+    /// Number of input lines kept: reading stops after Pipe's end line.
+    kept: usize,
+    appended_end: Option<String>,
+}
+
+/// Port of `Pipe#readSingleDiagram`'s start and end recognition
+/// (Pipe.java:180-224). Unlike `StartUtils`, Pipe looks only at column 0: a
+/// line that `startsWith("@start")` opens the diagram, and the diagram is
+/// complete at the first later line that `startsWith(expectedEnd)`, where
+/// `expectedEnd` is `@end` plus the start's type when the whole start line
+/// matches `@start([A-Za-z]*)`, and `@end` otherwise. An indented end, or one
+/// written with `\`, is not Pipe's end, so Pipe appends its own after it.
+///
+/// Not ported (they shift or drop lines rather than end the diagram): the
+/// `@startuml` Pipe prepends when no column-0 start exists, and its discard
+/// of the lines before the start.
+fn pipe_single_diagram(input: &[&str]) -> PipeDiagram {
+    #[derive(PartialEq)]
+    enum State {
+        NoContent,
+        StartMarkNotFound,
+        StartMarkFound,
+    }
+    // Pipe.java:217: `"@startuml\n" + sb + "@enduml\n"`.
+    const UNMARKED_END: &str = "@enduml";
+    let mut state = State::NoContent;
+    let mut expected_end = String::new();
+    for (index, line) in input.iter().enumerate() {
+        // `manageFormat` consumes these lines; they never reach `sb`.
+        if line.starts_with("@@@format ") {
+            continue;
+        }
+        if state == State::NoContent && !java_trim(line).is_empty() {
+            state = State::StartMarkNotFound;
+        }
+        if state == State::StartMarkNotFound && line.starts_with("@start") {
+            state = State::StartMarkFound;
+            // `Pattern.compile("@start([A-Za-z]*)").matcher(line).matches()`
+            let kind = line
+                .strip_prefix("@start")
+                .filter(|kind| kind.chars().all(|c| c.is_ascii_alphabetic()))
+                .unwrap_or("");
+            expected_end = format!("@end{kind}");
+        } else if state == State::StartMarkFound && line.starts_with(expected_end.as_str()) {
+            return PipeDiagram {
+                kept: index + 1,
+                appended_end: None,
+            };
+        }
+    }
+    PipeDiagram {
+        kept: input.len(),
+        appended_end: match state {
+            // Pipe returns null: there is no diagram to end.
+            State::NoContent => None,
+            State::StartMarkNotFound => Some(UNMARKED_END.to_string()),
+            State::StartMarkFound => Some(expected_end),
+        },
+    }
+}
+
 /// Port of `preproc2.ReadFilterMergeLines`, which `BlockUmlBuilder` applies
 /// (through `preproc2.Preprocessor`) to the raw input before any block
 /// splitting or TIM stage.
@@ -3643,23 +3721,13 @@ struct MergedInput<'a> {
 /// The line that is continued is never comment-filtered here; TIM's own
 /// comment stages see the merged text later. Start and end directives are
 /// recognised only on lines read as a new result, never on merged-in text.
-fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
-    // Pipe#readSingleDiagram (the -pipe reader that feeds BlockUmlBuilder)
-    // appends `@end<type>` when the input has no end line; a continued last
-    // line swallows that one as well.
-    const APPENDED_END: &str = "@enduml";
-    let appended_end = !input.iter().any(|line| is_end_directive(line));
-    let mut raw: Vec<&'a str> = input.to_vec();
-    if appended_end {
-        raw.push(APPENDED_END);
-    }
-
+fn read_filter_merge_lines<'a>(raw: &[Cow<'a, str>]) -> Vec<MergedInputLine<'a>> {
     let mut lines = Vec::with_capacity(raw.len());
     let mut manage_ending_backslash = true;
     let mut next_index = 0;
     while next_index < raw.len() {
         let first_index = next_index;
-        let result = raw[first_index];
+        let result = &raw[first_index];
         next_index += 1;
         if let Some(kind) = start_directive_type(java_trim(result))
             && start_type_is(kind, "ditaa")
@@ -3670,14 +3738,14 @@ fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
             manage_ending_backslash = true;
         }
 
-        let mut text = Cow::Borrowed(result);
+        let mut text = result.clone();
         while manage_ending_backslash && ends_with_backslash(&text) {
             // ReadFilterQuoteComment#readLine; `longComment` is local to
             // each call.
             let mut long_comment = false;
             let mut next = None;
             while next_index < raw.len() {
-                let line = raw[next_index];
+                let line: &str = &raw[next_index];
                 next_index += 1;
                 // `replace('\t', ' ').trim()`: a tab is <= U+0020.
                 let trim = java_trim(line);
@@ -3697,7 +3765,7 @@ fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
                     long_comment = true;
                     continue;
                 }
-                next = Some(remove_inner_comment(line));
+                next = Some(remove_inner_comment(line).into_owned());
                 break;
             }
             let Some(next) = next else {
@@ -3715,27 +3783,67 @@ fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
             consumed: next_index - first_index - 1,
         });
     }
+    lines
+}
 
-    let swallowed_end = !lines.iter().any(|line| is_end_directive(&line.text));
-    if appended_end
-        && lines
-            .last()
-            .is_some_and(|line| line.consumed == 0 && line.source_line == raw.len())
-    {
-        lines.pop();
+/// The block input as `BlockUmlBuilder` reads it in `-pipe` mode:
+/// `Pipe#readSingleDiagram`'s text (cut after Pipe's end line, or with Pipe's
+/// end appended) through `ReadFilterMergeLines`. An appended end stays in the
+/// list, as it does in Java's TIM input.
+fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
+    let pipe = pipe_single_diagram(input);
+    let mut raw: Vec<Cow<'a, str>> = input[..pipe.kept]
+        .iter()
+        .map(|line| Cow::Borrowed(*line))
+        .collect();
+    if let Some(end) = pipe.appended_end {
+        raw.push(Cow::Owned(end));
     }
+    let lines = read_filter_merge_lines(&raw);
+    let swallowed_end = !lines.iter().any(|line| is_end_directive(&line.text));
     MergedInput {
         lines,
         swallowed_end,
     }
 }
 
+/// For each input line, whether `ReadFilterMergeLines` merges it into an
+/// earlier continued line (as a continuation, or as a comment line
+/// `ReadFilterQuoteComment` skips on the way). `BlockUmlBuilder` tests start
+/// and end directives only on the merged lines, so such a line never starts
+/// or ends a block.
+pub(crate) fn lines_merged_into_previous(input: &[&str]) -> Vec<bool> {
+    let raw: Vec<Cow<'_, str>> = input.iter().map(|line| Cow::Borrowed(*line)).collect();
+    let mut merged_away = vec![false; input.len()];
+    for line in read_filter_merge_lines(&raw) {
+        // `source_line` is the 1-based first piece, so the absorbed lines
+        // are the 0-based indices that follow it.
+        for flag in &mut merged_away[line.source_line..line.source_line + line.consumed] {
+            *flag = true;
+        }
+    }
+    merged_away
+}
+
+/// Rust-only stand-in for a top-level line that TIM consumes (a directive,
+/// a comment, an inactive branch, procedure padding). It keeps the parser
+/// stream aligned with source lines but is no line of Java's TIM result
+/// list, so the post-TIM join passes over it. It becomes an empty line once
+/// that join has run.
+const DIRECTIVE_PLACEHOLDER: &str = "\x1ERSP";
+
 /// `UmlSource#loadInternal` with `checkEndingBackslash` (true for
 /// `@startuml`, whose `DiagramType#findStartTypes` contains SEQUENCE) on the
 /// parser stream: after TIM, a line that `endsWithBackslash` is joined with
 /// the following ones, and the joined line takes the last piece's location.
-/// A pending tail at the end of the list is dropped.
-fn collapse_post_tim_ending_backslashes(lines: Vec<String>) -> Vec<String> {
+/// Directive placeholders are not TIM lines and are passed over. The parser
+/// stream omits the block's end line, which Java's list ends with, so a tail
+/// still pending at the end joins with `block_end` (diagram source line and
+/// TIM text), as `pending.append(s)` does with the end line in Java.
+fn collapse_post_tim_ending_backslashes(
+    lines: Vec<String>,
+    block_end: Option<&(usize, String)>,
+) -> Vec<String> {
     if !lines
         .iter()
         .any(|line| ends_with_backslash(split_source_line_marker(line).map_or(line, |(_, t)| t)))
@@ -3748,6 +3856,10 @@ fn collapse_post_tim_ending_backslashes(lines: Vec<String>) -> Vec<String> {
     // equal source lines; later content lines carry explicit markers.
     let mut shifted = false;
     for (index, line) in lines.into_iter().enumerate() {
+        if line == DIRECTIVE_PLACEHOLDER {
+            result.push(line);
+            continue;
+        }
         let (source_line, text) = split_source_line_marker(&line).unwrap_or((index + 1, &line));
         if ends_with_backslash(text) {
             pending
@@ -3764,6 +3876,12 @@ fn collapse_post_tim_ending_backslashes(lines: Vec<String>) -> Vec<String> {
         } else {
             result.push(line);
         }
+    }
+    if let Some(mut joined) = pending
+        && let Some((end_line, end_text)) = block_end
+    {
+        joined.push_str(end_text);
+        result.push(source_line_marker(*end_line, &joined));
     }
     result
 }
@@ -4745,11 +4863,30 @@ $record(SaffronArchive)\n\
     fn escaped_backslash_and_ditaa_blocks_are_not_continued() {
         let (lines, _) = merged("@startuml\nA -> B : a\\\\\nB -> A\n@enduml");
         assert_eq!(lines[1].1, "A -> B : a\\\\");
-        let (lines, _) = merged("@startditaa\n/--\\\n|  |\n@endditaa\nx \\\ny");
+        let (lines, _) = merged("@startditaa\n/--\\\n|  |\n@endditaa");
         let texts: Vec<_> = lines.iter().map(|(_, t, _)| t.as_str()).collect();
+        assert_eq!(texts, vec!["@startditaa", "/--\\", "|  |", "@endditaa"]);
+        // The switch is keyed to the start directive's type, case-insensitive
+        // (DiagramType#findStartTypes), and an end directive turns the join
+        // back on for whatever the reader sees next.
+        let input = [
+            "@StartDitaa",
+            "/--\\",
+            "|  |",
+            "@endditaa",
+            "x \\",
+            "y",
+            "@startuml",
+            "ditaa",
+            "+-\\",
+            "+",
+            "@enduml",
+        ];
         assert_eq!(
-            texts,
-            vec!["@startditaa", "/--\\", "|  |", "@endditaa", "x y"]
+            lines_merged_into_previous(&input),
+            vec![
+                false, false, false, false, false, true, false, false, false, true, false
+            ]
         );
     }
 
@@ -4759,9 +4896,56 @@ $record(SaffronArchive)\n\
         // `@end…` to input without one, and that is swallowed too.
         assert!(merged("@startuml\nA -> B : x \\\n@enduml").1);
         assert!(merged("@startuml\nA -> B : x \\").1);
+        // Without a continuation the appended end stays in the list, as it
+        // does in the text Pipe hands on.
         let (lines, swallowed) = merged("@startuml\nA -> B : x");
         assert!(!swallowed);
+        assert_eq!(
+            lines,
+            vec![
+                (1, "@startuml".to_string(), 0),
+                (2, "A -> B : x".to_string(), 0),
+                (3, "@enduml".to_string(), 0),
+            ]
+        );
+    }
+
+    #[test]
+    fn pipe_ends_the_diagram_only_at_a_column_zero_end() {
+        // Pipe.java:203 `line.startsWith(expectedEnd)`: an indented end, a
+        // tab-indented one and a `\end…` line are not Pipe's end, so Pipe
+        // appends `@enduml` (line 219) and the continuation merges the
+        // indented line like any other text.
+        for end in ["  @enduml", "\t@enduml", "\\enduml"] {
+            let input = format!("@startuml\nKea -> Tui : last \\\n{end}");
+            let (lines, swallowed) = merged(&input);
+            assert!(!swallowed, "{end:?}");
+            assert_eq!(lines[1].1, format!("Kea -> Tui : last {end}"));
+            assert_eq!(lines[2], (4, "@enduml".to_string(), 0));
+        }
+        // The type comes from the start line: `@startmindmap` expects
+        // `@endmindmap`; a start line with more than letters expects `@end`.
+        let (lines, swallowed) = merged("@startmindmap\n* Root \\\n  @endmindmap");
+        assert!(!swallowed);
+        assert_eq!(lines[2].1, "@endmindmap");
+        let (lines, swallowed) = merged("@startuml(id=x)\nA -> B : a \\\n  @enduml");
+        assert!(!swallowed);
+        assert_eq!(lines[2].1, "@end");
+        // Reading stops after Pipe's end, so a later indented end is not part
+        // of the diagram and cannot rescue a swallowed one.
+        let (lines, swallowed) = merged("@startuml\nA -> B : x \\\n@enduml\n  @enduml");
+        assert!(swallowed);
         assert_eq!(lines.len(), 2);
+        // Content after an indented end belongs to the diagram up to the
+        // column-0 end.
+        let (lines, swallowed) =
+            merged("@startuml\nA -> B : x \\\n  @enduml\nB -> A : y\n@enduml\nC -> D");
+        assert!(!swallowed);
+        let texts: Vec<_> = lines.iter().map(|(_, t, _)| t.as_str()).collect();
+        assert_eq!(
+            texts,
+            vec!["@startuml", "A -> B : x   @enduml", "B -> A : y", "@enduml"]
+        );
     }
 
     #[test]
@@ -4806,6 +4990,81 @@ $record(SaffronArchive)\n\
             Some(dir.clone()),
         );
         assert!(out.lines.iter().any(|l| l.ends_with("one \\")));
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn post_tim_join_passes_placeholders_and_reaches_the_end_line() {
+        // UmlSource#loadInternal joins over Java's TIM result list: directive
+        // and comment lines are not in it, blank lines and the end line are.
+        let dir = std::env::temp_dir().join("rustuml_test_post_tim_tail");
+        let _ = std::fs::create_dir_all(&dir);
+        std::fs::write(dir.join("tail.iuml"), "Kea -> Tui : tail \\\n").unwrap();
+        let joined = |input: &str| -> Vec<(Option<usize>, String)> {
+            preprocess_full_for_parse(input, Some(dir.clone()))
+                .lines
+                .iter()
+                .filter(|l| !l.is_empty())
+                .map(|l| match split_source_line_marker(l) {
+                    Some((n, t)) => (Some(n), t.to_string()),
+                    None => (None, l.clone()),
+                })
+                .collect()
+        };
+        let cases = [
+            (
+                "!define LBL two\nTui -> Kea : LBL",
+                "Kea -> Tui : tail Tui -> Kea : two",
+                3,
+            ),
+            (
+                "!$v = 2\nTui -> Kea : two $v",
+                "Kea -> Tui : tail Tui -> Kea : two 2",
+                3,
+            ),
+            (
+                "' note\n!if 1\nTui -> Kea : in\n!endif",
+                "Kea -> Tui : tail Tui -> Kea : in",
+                4,
+            ),
+            ("", "Kea -> Tui : tail @enduml", 2),
+        ];
+        for (rest, expected, line) in cases {
+            let rest = if rest.is_empty() {
+                String::new()
+            } else {
+                format!("{rest}\n")
+            };
+            let input = format!("@startuml\n!include tail.iuml\n{rest}@enduml");
+            assert_eq!(
+                joined(&input),
+                vec![(Some(line), expected.to_string())],
+                "{rest:?}"
+            );
+        }
+        // A real blank line is a TIM line: the tail joins with it.
+        let lines = joined("@startuml\n!include tail.iuml\n\nTui -> Kea : after\n@enduml");
+        assert_eq!(lines[0], (Some(2), "Kea -> Tui : tail ".to_string()));
+        // Without an end the appended Pipe end is the last TIM line.
+        let lines = joined("@startuml\nKea -> Tui : head\n!include tail.iuml");
+        assert_eq!(
+            lines.last(),
+            Some(&(Some(3), "Kea -> Tui : tail @enduml".to_string()))
+        );
+        // The identity source joins the same list.
+        let out = preprocess_full_for_parse(
+            "@startuml\n!include tail.iuml\n!define LBL two\nTui -> Kea : LBL\n@enduml",
+            Some(dir.clone()),
+        );
+        assert_eq!(
+            out.uml_source,
+            "@startuml\nKea -> Tui : tail Tui -> Kea : two\n@enduml\n"
+        );
+        assert!(
+            preprocess_full_for_parse("@startuml\n!include tail.iuml\n@enduml", Some(dir.clone()))
+                .uml_source
+                .ends_with("Kea -> Tui : tail @enduml\n")
+        );
         let _ = std::fs::remove_dir_all(&dir);
     }
 

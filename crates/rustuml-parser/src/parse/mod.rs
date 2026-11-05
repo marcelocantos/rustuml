@@ -1005,12 +1005,18 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
     // drops back to 0 on an @end.
     let mut current_start: Option<OpenDiagramBlock<'_>> = None;
     let mut index = 0usize;
+    let input_lines: Vec<&str> = input.lines().collect();
+    // BlockUmlBuilder looks for start and end directives on
+    // ReadFilterMergeLines' output, so a line merged into a continued line
+    // is block content, never a start or an end.
+    let merged_away = preprocess::lines_merged_into_previous(&input_lines);
 
-    for (line_idx, line) in input.lines().enumerate() {
+    for (line_idx, &line) in input_lines.iter().enumerate() {
         let source_line = line_idx + 1;
         let trimmed = line.trim();
+        let directive = !merged_away[line_idx];
 
-        if let Some(rest) = trimmed.strip_prefix("@start") {
+        if directive && let Some(rest) = trimmed.strip_prefix("@start") {
             if current_start.is_none() {
                 // Starting a new top-level block.
                 let mut parts = rest.split_whitespace();
@@ -1029,7 +1035,7 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
                 block.lines.push(line);
                 block.depth += 1;
             }
-        } else if trimmed.starts_with("@end") {
+        } else if directive && trimmed.starts_with("@end") {
             if let Some(block) = &mut current_start {
                 block.lines.push(line);
                 block.depth -= 1;
@@ -2334,6 +2340,22 @@ Policy --> Retry
         assert_eq!(blocks[0].index, 0);
         assert_eq!(blocks[1].typ, "uml");
         assert_eq!(blocks[1].index, 1);
+    }
+
+    #[test]
+    fn split_blocks_tests_directives_on_merged_lines() {
+        // BlockUmlBuilder sees ReadFilterMergeLines' output: an end line
+        // merged into a continued line does not end the block.
+        let input = "@startuml\nKea -> Tui : x \\\n  @enduml\nTui -> Kea : y\n@enduml";
+        let blocks = split_blocks(input);
+        assert_eq!(blocks.len(), 1);
+        assert_eq!(blocks[0].source, input);
+        let diagram = parse_block(input, 0).expect("Java renders both messages");
+        let ast = format!("{diagram:?}");
+        assert!(
+            ast.contains("x   @enduml") && ast.contains("\"y\""),
+            "{ast}"
+        );
     }
 
     #[test]
