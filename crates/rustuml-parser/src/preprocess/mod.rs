@@ -4,6 +4,7 @@
 //! TIM preprocessor — handles variables, defines, conditionals,
 //! includes, and comments before diagram-specific parsing.
 
+use std::borrow::Cow;
 use std::collections::HashMap;
 use std::path::{Path, PathBuf};
 use std::sync::LazyLock;
@@ -791,11 +792,19 @@ impl PreprocessContext {
             return;
         }
         if trimmed.starts_with("/'") {
+            // TLineType COMMENT_LONG_START (`^\s*/'` with no `'/`) opens a
+            // long comment; COMMENT_SIMPLE2 (`^\s*/'.*'/\s*$`) is a whole-line
+            // comment. Any other `/'` line is PLAIN in Java and reaches
+            // removeInnerComment below, which keeps the text after `'/`.
             if !trimmed.contains("'/") || trimmed.ends_with("/'") {
                 self.in_block_comment = true;
+                self.push_directive_placeholder(output);
+                return;
             }
-            self.push_directive_placeholder(output);
-            return;
+            if trimmed.ends_with("'/") {
+                self.push_directive_placeholder(output);
+                return;
+            }
         }
 
         // Skip single-line comments — but NOT inside EBNF blocks where
@@ -805,6 +814,13 @@ impl PreprocessContext {
             self.push_directive_placeholder(output);
             return;
         }
+
+        // TContext#buildCodeIterator it40 (CodeIteratorInnerComment): every
+        // line that survives the long and short comment stages continues
+        // through TIM, and on to the diagram commands, with the text
+        // StringLocated#removeInnerComment returns.
+        let inner = remove_inner_comment(line);
+        let line: &str = &inner;
 
         // Strip inline comments (single-quote comment syntax) — but NOT
         // inside EBNF blocks. Java has no trailing-apostrophe comment form:
@@ -3449,6 +3465,53 @@ fn parens_balanced(s: &str) -> bool {
     depth == 0
 }
 
+/// Java `String#trim`: strips leading and trailing chars `<= U+0020`.
+fn java_trim(s: &str) -> &str {
+    s.trim_matches(|c: char| c <= ' ')
+}
+
+/// Port of `text.StringLocated#removeInnerComment`. A leading `/' … '/`
+/// (the line starts with `/'`) keeps the text after the first `'/`; a
+/// trailing one (the line ends with `'/`) keeps the text before the last
+/// `/'`; otherwise only `/'''word'''/` spans are removed. Java looks at no
+/// quotes: a span inside double quotes is removed like any other.
+fn remove_inner_comment(line: &str) -> Cow<'_, str> {
+    // `s.replace('\t', ' ').trim()`: a tab is <= U+0020, so java_trim
+    // already removes it at either end and nothing else reads `trim`'s tabs.
+    let trim = java_trim(line);
+    if trim.starts_with("/'")
+        && let Some(idx) = line.find("'/")
+    {
+        return Cow::Owned(remove_special_inner_comment(&line[idx + 2..]).into_owned());
+    }
+    if trim.ends_with("'/")
+        && let Some(idx) = line.rfind("/'")
+    {
+        return Cow::Owned(remove_special_inner_comment(&line[..idx]).into_owned());
+    }
+    if trim.contains(SPECIAL_COMMENT_OPEN) && trim.contains(SPECIAL_COMMENT_CLOSE) {
+        return remove_special_inner_comment(line);
+    }
+    Cow::Borrowed(line)
+}
+
+const SPECIAL_COMMENT_OPEN: &str = "/'''";
+const SPECIAL_COMMENT_CLOSE: &str = "'''/";
+
+/// `StringLocated#removeSpecialInnerComment`:
+/// `s.replaceAll("/'''[-\\w]*'''/", "")` when both delimiters occur. Java's
+/// `\w` (no UNICODE_CHARACTER_CLASS) is `[A-Za-z0-9_]`.
+fn remove_special_inner_comment(s: &str) -> Cow<'_, str> {
+    static SPECIAL: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"/'''[-A-Za-z0-9_]*'''/").expect("valid special comment regex")
+    });
+    if s.contains(SPECIAL_COMMENT_OPEN) && s.contains(SPECIAL_COMMENT_CLOSE) {
+        SPECIAL.replace_all(s, "")
+    } else {
+        Cow::Borrowed(s)
+    }
+}
+
 fn strip_inline_comment(line: &str) -> String {
     let mut in_quotes = false;
     let chars: Vec<char> = line.chars().collect();
@@ -4229,6 +4292,76 @@ $record(SaffronArchive)\n\
         assert_eq!(pp(input), vec!["A -> B", "C -> D"]);
         let numbered = preprocess(input);
         assert_eq!(numbered.iter().position(|l| l == "C -> D"), Some(6));
+    }
+
+    #[test]
+    fn remove_inner_comment_follows_string_located() {
+        // Leading: text after the first '/ (Java indexOf).
+        assert_eq!(remove_inner_comment("/' a '/ A -> B"), " A -> B");
+        assert_eq!(remove_inner_comment("  /'x'/ y '/ z"), " y '/ z");
+        assert_eq!(remove_inner_comment("/'/ X"), " X");
+        // Trailing: text before the last /' (Java lastIndexOf).
+        assert_eq!(remove_inner_comment("} /' end '/"), "} ");
+        assert_eq!(remove_inner_comment("</svg>/'end'/ \t"), "</svg>");
+        assert_eq!(remove_inner_comment("a /' b /' c '/"), "a /' b ");
+        // Trailing '/ with no /' anywhere: unchanged.
+        assert_eq!(remove_inner_comment("x '/"), "x '/");
+        // Only /'''[-\w]*'''/ spans go in the middle of a line.
+        assert_eq!(remove_inner_comment("F/'''row-1'''/0"), "F0");
+        assert_eq!(remove_inner_comment("F/''' row '''/0"), "F/''' row '''/0");
+        assert_eq!(remove_inner_comment("a /'''é'''/ b"), "a /'''é'''/ b");
+        assert_eq!(remove_inner_comment("a /'''x'''/ b /'''y'''/"), "a  b ");
+        // No quote handling, and plain apostrophes are untouched.
+        assert_eq!(
+            remove_inner_comment("A -> B : \"q /' x '/"),
+            "A -> B : \"q "
+        );
+        assert_eq!(
+            remove_inner_comment("A -> B : it's \"q ' q\""),
+            "A -> B : it's \"q ' q\""
+        );
+        // A middle /' ... '/ that neither starts nor ends the line stays.
+        assert_eq!(remove_inner_comment("a /' b '/ c"), "a /' b '/ c");
+        // Java trim strips chars <= U+0020 only.
+        assert_eq!(remove_inner_comment("\u{a0}/' a '/ b"), "\u{a0}/' a '/ b");
+    }
+
+    #[test]
+    fn inner_comments_reach_tim_and_commands_stripped() {
+        // A /'-prefixed line that continues after '/ is PLAIN (not a
+        // whole-line comment) and keeps its tail.
+        assert_eq!(pp("@startuml\n/' c '/ A -> B\n@enduml"), vec![" A -> B"]);
+        // Whole-line forms are still comments.
+        assert_eq!(pp("@startuml\n/' c '/\nA -> B\n@enduml"), vec!["A -> B"]);
+        assert_eq!(pp("@startuml\n/' c\nd '/\nA -> B\n@enduml"), vec!["A -> B"]);
+        // Trailing span on an ordinary line.
+        assert_eq!(
+            pp("@startuml\nclass Holder /' x '/\n@enduml"),
+            vec!["class Holder "]
+        );
+        // Sprite start, body and END lines lose the span before the
+        // sprite exemption decides anything.
+        let pixel = "sprite $dot [2x2/16] { /' s '/\nF0 /' r '/\n0F\n} /' e '/\nA -> B ' c";
+        assert_eq!(
+            pp(&format!("@startuml\n{pixel}\n@enduml")),
+            vec!["sprite $dot [2x2/16] { ", "F0 ", "0F", "} ", "A -> B "]
+        );
+        let svg =
+            "sprite $b <svg width=\"4\" height=\"4\">\n<rect/>/'''w'''/\n</svg>/'end'/\nA -> B";
+        assert_eq!(
+            pp(&format!("@startuml\n{svg}\n@enduml")),
+            vec![
+                "sprite $b <svg width=\"4\" height=\"4\">",
+                "<rect/>",
+                "</svg>",
+                "A -> B"
+            ]
+        );
+        // TIM directives see the stripped text.
+        assert_eq!(
+            pp("@startuml\n!$x = \"v\" /' c '/\nA -> $x\n@enduml"),
+            vec!["A -> v"]
+        );
     }
 
     #[test]
