@@ -1,0 +1,9 @@
+@startuml
+state Plant {
+  state Line {
+    Cutter --> out
+    state out <<exitPoint>>
+  }
+  out --> Packer
+}
+@enduml

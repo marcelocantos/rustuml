@@ -1,0 +1,17 @@
+@startuml
+state Farm {
+  state Barn {
+    state gate <<entryPoint>>
+    gate --> Hay
+    note right of Hay : dry
+    note left of Hay : baled
+  }
+  state Shed {
+    state door <<entryPoint>>
+    door --> Plough
+    note right of Plough : rusty
+  }
+  Hay --> Plough
+  Plough --> Field
+}
+@enduml

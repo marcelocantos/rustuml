@@ -1,0 +1,1733 @@
+{
+ "schema_version": 1,
+ "status": "independent checker measurements (claude, round 4); no production change; no Java run locally",
+ "identities": {
+  "review_branch": "review/shared-svg-round4-claude (from maker tip 7ec2e5af8a37ace145b37b78951ce217c0bab51a)",
+  "tested_tip": "7ec2e5af8a37ace145b37b78951ce217c0bab51a (code = f6b7f66f0 + 418aa5a46 test-only)",
+  "base": "3992971a7517c3a6a1009f1d4b7554de7c928942 (git diff --name-only 9834a7194 3992971a7 -- crates Cargo.lock Cargo.toml: 0 files)",
+  "round3_merge": "71d16da4a4885f02497e71ae7c0695f153bbfa59 (git diff --name-only e6f629944 71d16da4a -- crates Cargo.lock Cargo.toml: 0 files)",
+  "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "binaries": {
+   "3992971a7": {
+    "path": "~/Library/Caches/rustuml-shared-svg-round4-claude-checker/bin/rustuml-3992971a7",
+    "sha256": "c15324911bd2c846cf954200cd3e3ddb5963855337a08be9addb2f9d26ebd85e"
+   },
+   "71d16da4a": {
+    "path": "~/Library/Caches/rustuml-shared-svg-round4-claude-checker/bin/rustuml-71d16da4a",
+    "sha256": "ec3d3ae45127ccf04e00eaa05aa7fc386365cf379028819d5dcb00fcf4dca87e"
+   },
+   "7ec2e5af8": {
+    "path": "~/Library/Caches/rustuml-shared-svg-round4-claude-checker/bin/rustuml-7ec2e5af8",
+    "sha256": "afa527fe6147e32a20d9f4a8f406ab0ceb3563fcdd2f37c39294d5996a71c4d2"
+   }
+  },
+  "binary_build": "git archive <rev> | tar -x -C <private>/src/<rev>; cd there; CARGO_TARGET_DIR=<private>/target/<rev> cargo build --release -j 6 -p rustuml",
+  "comparator": {
+   "tool": "tools/checker-cmp-main.rs + tools/checker-cmp-Cargo.toml against the 3992971a7 export of crates/rustuml-oracle (git diff --name-only 3992971a7 7ec2e5af8 -- crates/rustuml-oracle: 0 files; GEOM_EPS 0.02)",
+   "binary_sha256": "020bc608418f5539a758cfb0b00a37105e9cc3ecfb3c442e6cea98dc77280c1d"
+  },
+  "environment": "macOS arm64 origin Mac; RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100; PLANTUML_STDLIB=pinned stdlib; TZ=GMT+11:00 for batches; each sweep source from its recorded cwd (tools/cwd_map.py: 918 repo sources, 0 disagreements with the round-3 checker map, 26 BB entries new)",
+  "maker_prediction_check": "all 34 BE cases x 3 trees in the maker's pre-registered rust-predictions.json (SHA256 e2e760fb2d1524100e3098aa024a6a1ec6f34a88be63a34433a2d893be43f08b) are byte-identical (stdout SHA256 and exit) to this checker's independently built binaries"
+ },
+ "commands": [
+  "python3 -I tools/sweep.py <bin> sweep-<rev> <repo> cwd_map.json test-diagrams/golden test-diagrams/perturbations   (each of 3 trees)",
+  "checker-cmp <list of golden.svg TAB sweep.svg>  -> cmp.tsv (49401 comparisons)",
+  "python3 -I tools/cohorts.py <work> <repo> cohorts.json",
+  "python3 -I tools/batch.py <work> <batch_dir> <label> rustuml-3992971a7=base rustuml-71d16da4a=r3 rustuml-7ec2e5af8=tip   (BE BC BB AW AU AR; each case's own final -t flag)",
+  "python3 -I tools/batch_summary.py <work> batch-summary.json BE BC BB AW AU AR",
+  "python3 -I tools/register.py <repo> pairs.json   (registers Java-valid -tsvg BE/BC pairs; measures each from its registered cwd)",
+  "python3 -I tools/probes.py <probes> probes.json; python3 -I tools/borderinv.py probes/state/*.svg",
+  "python3 -I tools/fonttrace.py font-trace.json   (environment diagnostic)",
+  "bash tools/gates.sh <export of 7ec2e5af8 with goldens cloned> tip <target> <gates>; base export: golden_no_oracle, parity_perturbations, harness_guards; python3 -I tools/gatelists.py"
+ ],
+ "goldens_12550": {
+  "sources": 12550,
+  "java_valid": 11351,
+  "java_error": 1199,
+  "strict_valid_matches": {
+   "3992971a7": 11181,
+   "71d16da4a": 11180,
+   "7ec2e5af8": 11181
+  },
+  "comment_lists_exact": {
+   "3992971a7": 11563,
+   "71d16da4a": 11781,
+   "7ec2e5af8": 11781
+  },
+  "exit_counts": {
+   "3992971a7": {
+    "1": 76,
+    "0": 12474
+   },
+   "71d16da4a": {
+    "1": 76,
+    "0": 12474
+   },
+   "7ec2e5af8": {
+    "1": 76,
+    "0": 12474
+   }
+  },
+  "panics": {
+   "3992971a7": 0,
+   "71d16da4a": 0,
+   "7ec2e5af8": 0
+  },
+  "timeouts": {
+   "3992971a7": 0,
+   "71d16da4a": 0,
+   "7ec2e5af8": 0
+  },
+  "nonempty_stderr": {
+   "3992971a7": 94,
+   "71d16da4a": 94,
+   "7ec2e5af8": 76
+  },
+  "base_to_tip": {
+   "comments_gained": 218,
+   "gained_match": [
+    "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+    "test-diagrams/golden/state/state_history_shallow.puml",
+    "test-diagrams/golden/state/state_note_composite.puml"
+   ],
+   "lost_match_GET_provenance": [
+    "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+   ],
+   "outputs_changed": 309,
+   "stderr_changed": [
+    "test-diagrams/golden/activity/act_action_ending_flow_final.puml",
+    "test-diagrams/golden/activity/act_action_ending_fork_bar.puml",
+    "test-diagrams/golden/activity/act_action_ending_input.puml",
+    "test-diagrams/golden/activity/act_action_ending_output.puml",
+    "test-diagrams/golden/activity/act_action_ending_receive.puml",
+    "test-diagrams/golden/activity/act_action_ending_send.puml",
+    "test-diagrams/golden/activity/act_edge_all_action_endings_in_if.puml",
+    "test-diagrams/golden/state/state_composite_entry_only.puml",
+    "test-diagrams/golden/state/state_composite_exit_only.puml",
+    "test-diagrams/golden/state/state_entry1_exit1.puml",
+    "test-diagrams/golden/state/state_entry1_exit2.puml",
+    "test-diagrams/golden/state/state_entry1_exit3.puml",
+    "test-diagrams/golden/state/state_entry2_exit1.puml",
+    "test-diagrams/golden/state/state_entry2_exit2.puml",
+    "test-diagrams/golden/state/state_entry2_exit3.puml",
+    "test-diagrams/golden/state/state_entry3_exit1.puml",
+    "test-diagrams/golden/state/state_entry3_exit2.puml",
+    "test-diagrams/golden/state/state_entry3_exit3.puml",
+    "test-diagrams/golden/state/state_entry_exit_both.puml",
+    "test-diagrams/golden/state/state_entry_exit_in_composite.puml",
+    "test-diagrams/golden/state/state_entry_in_composite.puml",
+    "test-diagrams/golden/state/state_exit_in_composite.puml",
+    "test-diagrams/golden/state/state_multiple_entry_points.puml",
+    "test-diagrams/golden/state/state_multiple_exit_points.puml",
+    "test-diagrams/golden/usecase/usecase_long_names.puml"
+   ]
+  },
+  "round3_to_tip": {
+   "gained_match": [
+    "test-diagrams/golden/state/state_note_composite.puml"
+   ],
+   "outputs_changed": [
+    "test-diagrams/golden/state/state_note_composite.puml"
+   ],
+   "stderr_changed": [
+    "test-diagrams/golden/state/state_composite_entry_only.puml",
+    "test-diagrams/golden/state/state_composite_exit_only.puml",
+    "test-diagrams/golden/state/state_entry1_exit1.puml",
+    "test-diagrams/golden/state/state_entry1_exit2.puml",
+    "test-diagrams/golden/state/state_entry1_exit3.puml",
+    "test-diagrams/golden/state/state_entry2_exit1.puml",
+    "test-diagrams/golden/state/state_entry2_exit2.puml",
+    "test-diagrams/golden/state/state_entry2_exit3.puml",
+    "test-diagrams/golden/state/state_entry3_exit1.puml",
+    "test-diagrams/golden/state/state_entry3_exit2.puml",
+    "test-diagrams/golden/state/state_entry3_exit3.puml",
+    "test-diagrams/golden/state/state_entry_exit_both.puml",
+    "test-diagrams/golden/state/state_entry_exit_in_composite.puml",
+    "test-diagrams/golden/state/state_entry_in_composite.puml",
+    "test-diagrams/golden/state/state_exit_in_composite.puml",
+    "test-diagrams/golden/state/state_multiple_entry_points.puml",
+    "test-diagrams/golden/state/state_multiple_exit_points.puml",
+    "test-diagrams/golden/usecase/usecase_long_names.puml"
+   ]
+  }
+ },
+ "perturbations_3917": {
+  "sources": 3917,
+  "java_valid": 3604,
+  "java_error": 313,
+  "strict_valid_matches": {
+   "3992971a7": 1730,
+   "71d16da4a": 2328,
+   "7ec2e5af8": 2331
+  },
+  "comment_lists_exact": {
+   "3992971a7": 2773,
+   "71d16da4a": 3296,
+   "7ec2e5af8": 3296
+  },
+  "exit_counts": {
+   "3992971a7": {
+    "0": 3821,
+    "1": 88,
+    "101": 8
+   },
+   "71d16da4a": {
+    "0": 3753,
+    "1": 160,
+    "101": 4
+   },
+   "7ec2e5af8": {
+    "0": 3753,
+    "1": 160,
+    "101": 4
+   }
+  },
+  "panics": {
+   "3992971a7": 8,
+   "71d16da4a": 4,
+   "7ec2e5af8": 4
+  },
+  "timeouts": {
+   "3992971a7": 0,
+   "71d16da4a": 0,
+   "7ec2e5af8": 0
+  },
+  "nonempty_stderr": {
+   "3992971a7": 120,
+   "71d16da4a": 196,
+   "7ec2e5af8": 164
+  },
+  "base_to_tip": {
+   "comments_gained": 525,
+   "comments_lost": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+   ],
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "gained_match": 601,
+   "outputs_changed": 1222,
+   "panic_removed": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "rejection_gained": 71,
+   "stderr_changed": 103
+  },
+  "round3_to_tip": {
+   "gained_match": [
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml"
+   ],
+   "outputs_changed": [
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_class.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_component.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_deployment.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_description.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_state.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_usecase.puml"
+   ],
+   "stderr_changed": [
+    "test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_lr_together_generic_rank_edge.puml",
+    "test-diagrams/perturbations/class-together-structural-layout/review2_note_target_squaremaker_together.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_entry_inside_autarkic_depth3.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_exitpoint_depth1.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_two_entry_points.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_depth2.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_depth3.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_depth4.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_entry_inside_autarkic.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml",
+    "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_integer_thresholds.puml",
+    "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.puml",
+    "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_short_labels.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/cardinal_abbreviation_grid.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/directional_left_up_groups.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/dual_composite_basic_ports.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_left_group_link_minimal.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_up_group_link_minimal.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/five_group_depth_reordered.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/four_groups_parallel_projection_order.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/mixed_parallel_direction_identity.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/reordered_basic_ports.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/reverse_explicit_direction_matrix.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_group_link_minimal.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_parallel_group_links.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/same_container_port_link.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_long_cubic_round4.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_short_cubic_round4.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_root_leaf_interleave.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.puml"
+   ]
+  }
+ },
+ "sweep_16467": {
+  "sources": 16467,
+  "java_valid": 14955,
+  "java_error": 1512,
+  "strict_valid_matches": {
+   "3992971a7": 12911,
+   "71d16da4a": 13508,
+   "7ec2e5af8": 13512
+  },
+  "comment_lists_exact": {
+   "3992971a7": 14336,
+   "71d16da4a": 15077,
+   "7ec2e5af8": 15077
+  },
+  "exit_counts": {
+   "3992971a7": {
+    "1": 164,
+    "0": 16295,
+    "101": 8
+   },
+   "71d16da4a": {
+    "1": 236,
+    "0": 16227,
+    "101": 4
+   },
+   "7ec2e5af8": {
+    "1": 236,
+    "0": 16227,
+    "101": 4
+   }
+  },
+  "panics": {
+   "3992971a7": 8,
+   "71d16da4a": 4,
+   "7ec2e5af8": 4
+  },
+  "timeouts": {
+   "3992971a7": 0,
+   "71d16da4a": 0,
+   "7ec2e5af8": 0
+  },
+  "nonempty_stderr": {
+   "3992971a7": 214,
+   "71d16da4a": 290,
+   "7ec2e5af8": 240
+  },
+  "base_to_tip": {
+   "comments_gained": 743,
+   "comments_lost": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+   ],
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "gained_match": 604,
+   "lost_match_GET_provenance": [
+    "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+   ],
+   "outputs_changed": 1531,
+   "panic_removed": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "rejection_gained": 71,
+   "stderr_changed": 128
+  },
+  "round3_to_tip": {
+   "gained_match": [
+    "test-diagrams/golden/state/state_note_composite.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml"
+   ],
+   "outputs_changed": [
+    "test-diagrams/golden/state/state_note_composite.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_class.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_component.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_deployment.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_description.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_state.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_usecase.puml"
+   ],
+   "stderr_changed": 54
+  }
+ },
+ "stderr_changes": {
+  "round3_to_tip_lines_lost": {
+   "Warning: node X port P unrecognized": 170,
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4,
+   "Warning: Unable to reclaim box space in spline routing for edge \"PCCT\" -> \"VPIFC\". Something is probably seriously wrong": 1,
+   "Warning: GenericPeerReview was already in a rankset, deleted from cluster G": 1,
+   "Warning: PlainPeerReview was already in a rankset, deleted from cluster G": 1,
+   "Warning: removing empty cluster": 1,
+   "Warning: ReviewNMemoN was already in a rankset, deleted from cluster G": 1
+  },
+  "round3_to_tip_lines_gained": {
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4
+  },
+  "round3_to_tip_sources": 54,
+  "base_to_tip_lines_lost": {
+   "Warning: node X port P unrecognized": 158,
+   "parse error: line N: unterminated activity action; multiline actions must end with ';'": 7,
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4,
+   "": 4,
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/preprocess/mod.rs:N:N:": 4,
+   "note: run with `RUST_BACKTRACE=N` environment variable to display a backtrace": 4,
+   "end byte index N is not a char boundary; it is inside '🚀' (bytes N..N of string)": 2,
+   "Warning: Unable to reclaim box space in spline routing for edge \"PCCT\" -> \"VPIFC\". Something is probably seriously wrong": 1,
+   "Warning: GenericPeerReview was already in a rankset, deleted from cluster G": 1,
+   "Warning: PlainPeerReview was already in a rankset, deleted from cluster G": 1,
+   "Warning: removing empty cluster": 1,
+   "Warning: ReviewNMemoN was already in a rankset, deleted from cluster G": 1,
+   "end byte index N is not a char boundary; it is inside '🦊' (bytes N..N of string)": 1,
+   "end byte index N is not a char boundary; it is inside 'é' (bytes N..N of string)": 1
+  },
+  "base_to_tip_lines_gained": {
+   "parse error: line N: Bad date pattern: unsupported letter Q": 17,
+   "parse error: line N: Integer literal outside signed N-bit range": 8,
+   "parse error: line N: unterminated activity action; multiline actions must end with ';'": 7,
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4,
+   "parse error: line N: Bad date pattern: X must have one to three letters": 4,
+   "parse error: line N: Substring index out of range": 4,
+   "parse error: line N: Cannot nest sub": 4,
+   "parse error: line N: Illegal call here. Is there a return directive in your function?": 3,
+   "parse error: line N: Bad sub name": 3,
+   "parse error: line N: Unknown built-in function %strlen": 2,
+   "parse error: line N: Unknown built-in function $emit": 2,
+   "parse error: line N: Cannot convert N.N to integer.": 2,
+   "parse error: line N: Bad date pattern: unterminated quote": 2,
+   "parse error: line N: Unknown built-in function %missing_checkerN": 2,
+   "parse error: line N: Data parsing error: missing intermediate member": 2,
+   "parse error: line N: Foreach requires a JSON array or object": 2,
+   "parse error: line N: Expression operand stack underflow": 2,
+   "parse error: line N: Unknown built-in function %fresh_unregistered": 1,
+   "export error: Invalid UTF-N surrogate detected: dNe N ?": 1,
+   "parse error: line N: Cannot convert  true  to boolean.": 1,
+   "export error: An invalid XML character (Unicode: NxdeN) was found in the node's character data content.": 1,
+   "parse error: line N: Division by zero": 1,
+   "parse error: line N: Function not found %strlen": 1,
+   "parse error: line N: Unknown built-in function $join": 1,
+   "parse error: line N: Cannot convert bad to integer.": 1,
+   "parse error: line N: Cannot convert +-N to integer.": 1,
+   "parse error: line N: Cannot convert -N to integer.": 1,
+   "parse error: line N: Cannot convert x to integer.": 1,
+   "parse error: line N: Unknown built-in function $inner": 1,
+   "parse error: line N: Cannot convert bad to boolean.": 1
+  },
+  "reading": "Versus round 3 the only stderr lines lost are Graphviz 'Warning:' lines (170 port P unrecognized, 1 spline routing, 3 rankset, 1 empty cluster); the class.rs panic line is the same panic with a different thread id. No corpus source emits a Graphviz 'Error:' line in any tree."
+ },
+ "GET_goldens": {
+  "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+   "3992971a7": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "71d16da4a": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "7ec2e5af8": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+   "3992971a7": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "71d16da4a": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "7ec2e5af8": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+   "3992971a7": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "71d16da4a": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "7ec2e5af8": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  }
+ },
+ "golden_failure_names": {
+  "java_valid_golden_failures": {
+   "base": 170,
+   "round3": 171,
+   "tip": 170
+  },
+  "tip_not_base": [
+   "activity/act_skinparam2_shadowing_true",
+   "activity/act_skinparam_shadowing",
+   "edge-cases/edge_whitespace_multiple_blank_lines"
+  ],
+  "base_not_tip": [
+   "preprocessing/preproc_complex_theme_override",
+   "state/state_history_shallow",
+   "state/state_note_composite"
+  ],
+  "tip_not_round3": [],
+  "round3_not_tip": [
+   "state/state_note_composite"
+  ]
+ },
+ "batches": {
+  "BE": {
+   "cases": 34,
+   "java_valid": 30,
+   "java_error_or_unavailable": [
+    "fmt_high_pdf",
+    "fmt_low_pdf",
+    "pua_b_after_lone_high",
+    "pua_b_then_lone_low"
+   ],
+   "base_valid_match": 0,
+   "base_comments_exact_valid": 2,
+   "base_panics": [
+    "pua_b_strlen_substr"
+   ],
+   "base_nonzero_exit": [
+    "pua_b_strlen_substr"
+   ],
+   "r3_valid_match": 3,
+   "r3_comments_exact_valid": 19,
+   "r3_panics": [],
+   "r3_nonzero_exit": [
+    "fmt_low_eps",
+    "fmt_low_pdf",
+    "fmt_low_png",
+    "fmt_pua_png",
+    "pua_b_sequence_message",
+    "pua_b_size12",
+    "pua_b_size18_bold",
+    "pua_b_state_note",
+    "pua_b_upper_escape_point"
+   ],
+   "tip_valid_match": 17,
+   "tip_comments_exact_valid": 22,
+   "tip_panics": [],
+   "tip_nonzero_exit": [
+    "pua_b_after_lone_high",
+    "pua_b_then_lone_low"
+   ],
+   "base_to_tip": {
+    "gained_match": [
+     "bp_short_entry_d2",
+     "bp_short_exit_d1",
+     "bp_short_exit_d3",
+     "bp_threshold_labels",
+     "bp_wide_entry_d1",
+     "bp_wide_entry_d3",
+     "bp_wide_exit_d2",
+     "no_d1_left_renamed",
+     "no_d2_mid_leaves",
+     "no_d3_deep",
+     "no_outer_note_on_leaf_beside_image",
+     "no_two_clusters_three_notes",
+     "pua_b_sequence_message",
+     "pua_b_size12",
+     "pua_b_size18_bold",
+     "pua_b_state_note",
+     "pua_b_strlen_substr"
+    ],
+    "outputs_changed": [
+     "bp_short_entry_d2",
+     "bp_short_exit_d1",
+     "bp_short_exit_d3",
+     "bp_threshold_labels",
+     "bp_wide_entry_d1",
+     "bp_wide_entry_d3",
+     "bp_wide_exit_d2",
+     "fmt_high_eps",
+     "fmt_high_pdf",
+     "fmt_high_png",
+     "fmt_low_eps",
+     "fmt_low_pdf",
+     "fmt_low_png",
+     "fmt_pua_png",
+     "fmt_seq_high_txt",
+     "fmt_seq_low_txt",
+     "no_d1_left_renamed",
+     "no_d2_mid_leaves",
+     "no_d3_deep",
+     "no_outer_note_left_of_image",
+     "no_outer_note_on_leaf_beside_image",
+     "no_outer_two_notes_on_image",
+     "no_root_cluster_note",
+     "no_root_two_clusters_notes",
+     "no_two_clusters_three_notes",
+     "pua_b_after_lone_high",
+     "pua_b_sequence_message",
+     "pua_b_size12",
+     "pua_b_size18_bold",
+     "pua_b_state_note",
+     "pua_b_strlen_substr",
+     "pua_b_then_lone_low",
+     "pua_b_upper_escape_point"
+    ],
+    "rejection_gained": [
+     "pua_b_after_lone_high",
+     "pua_b_then_lone_low"
+    ],
+    "stderr_changed": [
+     "pua_b_after_lone_high",
+     "pua_b_strlen_substr",
+     "pua_b_then_lone_low"
+    ]
+   },
+   "r3_to_tip": {
+    "stderr_changed": [
+     "bp_short_entry_d2",
+     "bp_short_exit_d1",
+     "bp_short_exit_d3",
+     "bp_threshold_labels",
+     "fmt_low_eps",
+     "fmt_low_pdf",
+     "fmt_low_png",
+     "fmt_pua_png",
+     "no_d1_left_renamed",
+     "no_d2_mid_leaves",
+     "no_d3_deep",
+     "no_two_clusters_three_notes",
+     "pua_b_after_lone_high",
+     "pua_b_sequence_message",
+     "pua_b_size12",
+     "pua_b_size18_bold",
+     "pua_b_state_note",
+     "pua_b_then_lone_low",
+     "pua_b_upper_escape_point"
+    ],
+    "gained_match": [
+     "bp_threshold_labels",
+     "bp_wide_entry_d1",
+     "bp_wide_entry_d3",
+     "bp_wide_exit_d2",
+     "no_d1_left_renamed",
+     "no_d2_mid_leaves",
+     "no_d3_deep",
+     "no_outer_note_on_leaf_beside_image",
+     "no_two_clusters_three_notes",
+     "pua_b_sequence_message",
+     "pua_b_size12",
+     "pua_b_size18_bold",
+     "pua_b_state_note",
+     "pua_b_strlen_substr"
+    ],
+    "outputs_changed": [
+     "bp_threshold_labels",
+     "bp_wide_entry_d1",
+     "bp_wide_entry_d3",
+     "bp_wide_exit_d2",
+     "fmt_low_eps",
+     "fmt_low_pdf",
+     "fmt_low_png",
+     "fmt_pua_png",
+     "fmt_seq_high_txt",
+     "fmt_seq_low_txt",
+     "no_d1_left_renamed",
+     "no_d2_mid_leaves",
+     "no_d3_deep",
+     "no_outer_note_left_of_image",
+     "no_outer_note_on_leaf_beside_image",
+     "no_outer_two_notes_on_image",
+     "no_root_cluster_note",
+     "no_root_two_clusters_notes",
+     "no_two_clusters_three_notes",
+     "pua_b_after_lone_high",
+     "pua_b_sequence_message",
+     "pua_b_size12",
+     "pua_b_size18_bold",
+     "pua_b_state_note",
+     "pua_b_strlen_substr",
+     "pua_b_then_lone_low",
+     "pua_b_upper_escape_point"
+    ],
+    "lost_rejection": [
+     "fmt_low_pdf"
+    ],
+    "rejection_gained": [
+     "pua_b_after_lone_high",
+     "pua_b_then_lone_low"
+    ]
+   },
+   "tip_failures_valid": {
+    "fmt_high_eps": {
+     "format": "-teps",
+     "strict": "N/A-eps",
+     "ndiff": -1,
+     "exit": 0,
+     "diff_head": ""
+    },
+    "fmt_high_png": {
+     "format": "-tpng",
+     "strict": "N/A-raster",
+     "ndiff": -1,
+     "exit": 0,
+     "diff_head": ""
+    },
+    "fmt_low_eps": {
+     "format": "-teps",
+     "strict": "N/A-eps",
+     "ndiff": -1,
+     "exit": 0,
+     "diff_head": ""
+    },
+    "fmt_low_png": {
+     "format": "-tpng",
+     "strict": "N/A-raster",
+     "ndiff": -1,
+     "exit": 0,
+     "diff_head": ""
+    },
+    "fmt_pua_png": {
+     "format": "-tpng",
+     "strict": "N/A-raster",
+     "ndiff": -1,
+     "exit": 0,
+     "diff_head": ""
+    },
+    "fmt_seq_high_txt": {
+     "format": "-ttxt",
+     "strict": "DIFF",
+     "ndiff": 1,
+     "exit": 0,
+     "diff_head": ""
+    },
+    "fmt_seq_low_txt": {
+     "format": "-ttxt",
+     "strict": "DIFF",
+     "ndiff": 1,
+     "exit": 0,
+     "diff_head": ""
+    },
+    "fmt_seq_pua_txt": {
+     "format": "-ttxt",
+     "strict": "DIFF",
+     "ndiff": 1,
+     "exit": 0,
+     "diff_head": ""
+    },
+    "no_outer_note_left_of_image": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 15,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 3, tag: \"path\", expected_attrs: [(\"d\", \"M95.15,7 L156.15,7 A12.5,12.5 0 0 1 168.65,19.5 L168.65,33.4883 L82.65,33.4883 L82.65,19.5 A12.5,12.5 0 0 1 95.15,7\"), (\"fill\", \"#F1F1F1\")], actual_attrs: [(\"d\", \"M96.15,7 L157.15,7 A12.5,12.5 0 0 1 169.65,19.5 L169.65,33.4883 L83.65,33."
+    },
+    "no_outer_two_notes_on_image": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 23,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 3, tag: \"path\", expected_attrs: [(\"d\", \"M110.73,7 L180.2779,7 A12.5,12.5 0 0 1 192.7779,19.5 L192.7779,33.4883 L98.23,33.4883 L98.23,19.5 A12.5,12.5 0 0 1 110.73,7\"), (\"fill\", \"#F1F1F1\")], actual_attrs: [(\"d\", \"M111.73,7 L181.2779,7 A12.5,12.5 0 0 1 193.7779,19.5 L193.7779,33."
+    },
+    "no_root_cluster_note": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 1,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 16, tag: \"g\", expected_attrs: [(\"class\", \"entity\"), (\"data-qualified-name\", \"Hall.GMN2\"), (\"data-source-line\", \"3\"), (\"id\", \"ent0003\")], actual_attrs: [(\"class\", \"entity\"), (\"data-qualified-name\", \"GMN2\"), (\"data-source-line\", \"3\"), (\"id\", \"ent0003\")] }]"
+    },
+    "no_root_two_clusters_notes": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 2,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 21, tag: \"g\", expected_attrs: [(\"class\", \"entity\"), (\"data-qualified-name\", \"East.GMN2\"), (\"data-source-line\", \"3\"), (\"id\", \"ent0003\")], actual_attrs: [(\"class\", \"entity\"), (\"data-qualified-name\", \"GMN2\"), (\"data-source-line\", \"3\"), (\"id\", \"ent0003\")] }, AttrMismatch { index: "
+    },
+    "pua_b_upper_escape_point": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 5,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"68px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:90px;height:68px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 90 68\"), (\"width\", \"90px\"), (\"zo"
+    }
+   },
+   "java_error_cases": {
+    "fmt_high_pdf": {
+     "java_exit": 1,
+     "java_crash": false,
+     "tip_exit": 0,
+     "tip_stderr": "",
+     "java_stderr_head": "java.lang.UnsupportedOperationException: PDF\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.createUGraphic(TextBlockExporter12026.java:267)\n\tat net.sourceforge.plantuml.core.TextBlockExporte"
+    },
+    "fmt_low_pdf": {
+     "java_exit": 1,
+     "java_crash": false,
+     "tip_exit": 0,
+     "tip_stderr": "",
+     "java_stderr_head": "java.lang.UnsupportedOperationException: PDF\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.createUGraphic(TextBlockExporter12026.java:267)\n\tat net.sourceforge.plantuml.core.TextBlockExporte"
+    },
+    "pua_b_after_lone_high": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 1,
+     "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83d dbff ?",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83d dbff ?\njava.io.IOException: Invalid UTF-16 surroga"
+    },
+    "pua_b_then_lone_low": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 1,
+     "tip_stderr": "export error: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xde80) was found in the node's character data content.\n\tat net.sourceforge."
+    }
+   }
+  },
+  "BC": {
+   "cases": 19,
+   "java_valid": 19,
+   "java_error_or_unavailable": [],
+   "base_valid_match": 0,
+   "base_comments_exact_valid": 4,
+   "base_panics": [
+    "pua_b_strlen"
+   ],
+   "base_nonzero_exit": [
+    "pua_b_strlen"
+   ],
+   "r3_valid_match": 3,
+   "r3_comments_exact_valid": 16,
+   "r3_panics": [],
+   "r3_nonzero_exit": [
+    "pua_b_class_last",
+    "pua_b_class_first_carrier",
+    "pua_b_sequence",
+    "pua_b_activity",
+    "pua_b_usecase"
+   ],
+   "tip_valid_match": 18,
+   "tip_comments_exact_valid": 18,
+   "tip_panics": [],
+   "tip_nonzero_exit": [],
+   "base_to_tip": {
+    "gained_match": [
+     "pua_b_class_last",
+     "pua_b_class_first_carrier",
+     "pua_b_pair_lookalike",
+     "pua_b_sequence",
+     "pua_b_state",
+     "pua_b_activity",
+     "pua_b_strlen",
+     "pua_b_title",
+     "pua_a_control",
+     "ex_wide_d1_image",
+     "en_wide_d2_image",
+     "ex_d2_widelabel",
+     "ex_d2_renamed",
+     "ex_wide_noimage",
+     "ex_d3",
+     "nc_note_in_cluster_renamed",
+     "nc_note_in_cluster_depth2",
+     "nc_two_clusters_notes"
+    ],
+    "outputs_changed": [
+     "pua_b_class_last",
+     "pua_b_class_first_carrier",
+     "pua_b_pair_lookalike",
+     "pua_b_sequence",
+     "pua_b_state",
+     "pua_b_activity",
+     "pua_b_strlen",
+     "pua_b_title",
+     "pua_b_usecase",
+     "pua_a_control",
+     "ex_wide_d1_image",
+     "en_wide_d2_image",
+     "ex_d2_widelabel",
+     "ex_d2_renamed",
+     "ex_wide_noimage",
+     "ex_d3",
+     "nc_note_in_cluster_renamed",
+     "nc_note_in_cluster_depth2",
+     "nc_two_clusters_notes"
+    ],
+    "stderr_changed": [
+     "pua_b_strlen"
+    ]
+   },
+   "r3_to_tip": {
+    "gained_match": [
+     "pua_b_class_last",
+     "pua_b_class_first_carrier",
+     "pua_b_pair_lookalike",
+     "pua_b_sequence",
+     "pua_b_state",
+     "pua_b_activity",
+     "pua_b_strlen",
+     "pua_b_title",
+     "pua_a_control",
+     "ex_wide_d1_image",
+     "en_wide_d2_image",
+     "ex_d2_widelabel",
+     "nc_note_in_cluster_renamed",
+     "nc_note_in_cluster_depth2",
+     "nc_two_clusters_notes"
+    ],
+    "outputs_changed": [
+     "pua_b_class_last",
+     "pua_b_class_first_carrier",
+     "pua_b_pair_lookalike",
+     "pua_b_sequence",
+     "pua_b_state",
+     "pua_b_activity",
+     "pua_b_strlen",
+     "pua_b_title",
+     "pua_b_usecase",
+     "pua_a_control",
+     "ex_wide_d1_image",
+     "en_wide_d2_image",
+     "ex_d2_widelabel",
+     "nc_note_in_cluster_renamed",
+     "nc_note_in_cluster_depth2",
+     "nc_two_clusters_notes"
+    ],
+    "stderr_changed": [
+     "pua_b_class_last",
+     "pua_b_class_first_carrier",
+     "pua_b_sequence",
+     "pua_b_activity",
+     "pua_b_usecase",
+     "ex_d2_renamed",
+     "ex_d3",
+     "nc_note_in_cluster_renamed",
+     "nc_note_in_cluster_depth2",
+     "nc_two_clusters_notes"
+    ]
+   },
+   "tip_failures_valid": {
+    "pua_b_usecase": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 12,
+     "exit": 0,
+     "diff_head": "[ElementCount { expected: 13, actual: 15 }, AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"185px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:63px;height:185px;background:#FFFFFF;\"), (\"version\", \"1.1\")"
+    }
+   },
+   "java_error_cases": {}
+  },
+  "BB": {
+   "cases": 36,
+   "java_valid": 26,
+   "java_error_or_unavailable": [
+    "sur_activity_low_end",
+    "sur_class_high_mid_valid",
+    "sur_class_high_then_nonascii",
+    "sur_class_low_end",
+    "sur_class_low_mid",
+    "sur_link_title_escape",
+    "sur_sequence_high_space",
+    "sur_sequence_participant_high",
+    "sur_state_link_title_escape",
+    "sur_tooltip_high_end"
+   ],
+   "base_valid_match": 2,
+   "base_comments_exact_valid": 8,
+   "base_panics": [],
+   "base_nonzero_exit": [],
+   "r3_valid_match": 22,
+   "r3_comments_exact_valid": 26,
+   "r3_panics": [],
+   "r3_nonzero_exit": [
+    "sur_activity_low_end",
+    "sur_class_high_mid_valid",
+    "sur_class_high_then_nonascii",
+    "sur_class_low_end",
+    "sur_class_low_mid",
+    "sur_sequence_high_space",
+    "sur_sequence_participant_high",
+    "sur_state_link_title_escape",
+    "sur_tooltip_high_end"
+   ],
+   "tip_valid_match": 25,
+   "tip_comments_exact_valid": 26,
+   "tip_panics": [],
+   "tip_nonzero_exit": [
+    "sur_activity_low_end",
+    "sur_class_high_mid_valid",
+    "sur_class_high_then_nonascii",
+    "sur_class_low_end",
+    "sur_class_low_mid",
+    "sur_sequence_high_space",
+    "sur_sequence_participant_high",
+    "sur_state_link_title_escape",
+    "sur_tooltip_high_end"
+   ],
+   "base_to_tip": {
+    "gained_match": [
+     "dot_root_before_groups",
+     "dot_root_both_sides",
+     "dot_root_depth4",
+     "img_cluster_depth2",
+     "img_cluster_depth3",
+     "img_cluster_depth4",
+     "img_cluster_exit_wide",
+     "img_note_before_later_state",
+     "img_note_depth2",
+     "img_note_depth3",
+     "img_note_first_left",
+     "img_note_in_cluster",
+     "img_two_notes",
+     "note_link_only_to_group",
+     "sur_activity_high_end",
+     "sur_class_high_bold18",
+     "sur_class_high_end",
+     "sur_class_high_then_ascii_only",
+     "sur_class_high_then_low_node",
+     "sur_sequence_high_end",
+     "sur_state_high_end",
+     "sur_title_high_end",
+     "sur_usecase_high_end"
+    ],
+    "outputs_changed": [
+     "dot_root_before_groups",
+     "dot_root_both_sides",
+     "dot_root_depth4",
+     "img_cluster_depth2",
+     "img_cluster_depth3",
+     "img_cluster_depth4",
+     "img_cluster_exit_wide",
+     "img_note_before_later_state",
+     "img_note_depth2",
+     "img_note_depth3",
+     "img_note_first_left",
+     "img_note_in_cluster",
+     "img_two_notes",
+     "note_link_only_to_group",
+     "sur_activity_high_end",
+     "sur_activity_low_end",
+     "sur_class_high_bold18",
+     "sur_class_high_end",
+     "sur_class_high_mid_valid",
+     "sur_class_high_then_ascii_only",
+     "sur_class_high_then_low_node",
+     "sur_class_high_then_nonascii",
+     "sur_class_low_end",
+     "sur_class_low_mid",
+     "sur_sequence_high_end",
+     "sur_sequence_high_space",
+     "sur_sequence_participant_high",
+     "sur_state_high_end",
+     "sur_state_link_title_escape",
+     "sur_title_high_end",
+     "sur_tooltip_high_end",
+     "sur_usecase_high_end"
+    ],
+    "rejection_gained": [
+     "sur_activity_low_end",
+     "sur_class_high_mid_valid",
+     "sur_class_high_then_nonascii",
+     "sur_class_low_end",
+     "sur_class_low_mid",
+     "sur_sequence_high_space",
+     "sur_sequence_participant_high",
+     "sur_state_link_title_escape",
+     "sur_tooltip_high_end"
+    ],
+    "stderr_changed": [
+     "sur_activity_low_end",
+     "sur_class_high_mid_valid",
+     "sur_class_high_then_nonascii",
+     "sur_class_low_end",
+     "sur_class_low_mid",
+     "sur_sequence_high_space",
+     "sur_sequence_participant_high",
+     "sur_state_link_title_escape",
+     "sur_tooltip_high_end"
+    ]
+   },
+   "r3_to_tip": {
+    "stderr_changed": [
+     "img_cluster_depth2",
+     "img_cluster_depth3",
+     "img_cluster_depth4",
+     "img_note_in_cluster"
+    ],
+    "gained_match": [
+     "img_cluster_exit_wide",
+     "img_note_in_cluster",
+     "note_link_only_to_group"
+    ],
+    "outputs_changed": [
+     "img_cluster_exit_wide",
+     "img_note_in_cluster",
+     "note_link_only_to_group"
+    ]
+   },
+   "tip_failures_valid": {
+    "sur_removed_entity": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 1,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"70px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:84px;height:70px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 84 70\"), (\"width\", \"84px\"), (\"zo"
+    }
+   },
+   "java_error_cases": {
+    "sur_activity_low_end": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 1,
+     "tip_stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n\tat net.sourceforge."
+    },
+    "sur_class_high_mid_valid": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 1,
+     "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e 77 ?",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 77 ?\njava.io.IOException: Invalid UTF-16 surrogate"
+    },
+    "sur_class_high_then_nonascii": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 1,
+     "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e e9 ?",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e e9 ?\njava.io.IOException: Invalid UTF-16 surrogate"
+    },
+    "sur_class_low_end": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 1,
+     "tip_stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n\tat net.sourceforge."
+    },
+    "sur_class_low_mid": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 1,
+     "tip_stderr": "export error: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdd89) was found in the node's character data content.\n\tat net.sourceforge."
+    },
+    "sur_link_title_escape": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 0,
+     "tip_stderr": "",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surroga"
+    },
+    "sur_sequence_high_space": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 1,
+     "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e 20 ?",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e 20 ?\njava.io.IOException: Invalid UTF-16 surrogate"
+    },
+    "sur_sequence_participant_high": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 1,
+     "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surroga"
+    },
+    "sur_state_link_title_escape": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 1,
+     "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surroga"
+    },
+    "sur_tooltip_high_end": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 1,
+     "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83e d83e ?",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83e d83e ?\njava.io.IOException: Invalid UTF-16 surroga"
+    }
+   }
+  },
+  "AW": {
+   "cases": 45,
+   "java_valid": 39,
+   "java_error_or_unavailable": [
+    "intval_fullwidth_overflow",
+    "intval_supplementary_digit",
+    "intval_superscript_digit",
+    "intval_double_sign",
+    "surrogate_upper_sequence",
+    "surrogate_activity_label"
+   ],
+   "base_valid_match": 6,
+   "base_comments_exact_valid": 20,
+   "base_panics": [
+    "surrogate_upper_sequence"
+   ],
+   "base_nonzero_exit": [
+    "surrogate_upper_sequence"
+   ],
+   "r3_valid_match": 30,
+   "r3_comments_exact_valid": 37,
+   "r3_panics": [],
+   "r3_nonzero_exit": [
+    "intval_fullwidth_overflow",
+    "intval_supplementary_digit",
+    "intval_superscript_digit",
+    "intval_double_sign",
+    "surrogate_upper_sequence",
+    "surrogate_activity_label"
+   ],
+   "tip_valid_match": 30,
+   "tip_comments_exact_valid": 37,
+   "tip_panics": [],
+   "tip_nonzero_exit": [
+    "intval_fullwidth_overflow",
+    "intval_supplementary_digit",
+    "intval_superscript_digit",
+    "intval_double_sign",
+    "surrogate_upper_sequence",
+    "surrogate_activity_label"
+   ],
+   "base_to_tip": {
+    "outputs_changed": [
+     "theme_plain_variable",
+     "theme_mono_inactive",
+     "theme_plain_then_cerulean",
+     "intval_arabic_indic_signed",
+     "intval_extended_arabic_bengali",
+     "intval_fullwidth_bounds",
+     "intval_myanmar_tai_laing",
+     "intval_fullwidth_overflow",
+     "intval_supplementary_digit",
+     "intval_superscript_digit",
+     "intval_double_sign",
+     "surrogate_high_class",
+     "surrogate_activity_label",
+     "surrogate_rejoined_pair",
+     "rc_exitpoint_depth1",
+     "rc_outputpin_lowercase",
+     "rc_root_note_depth2",
+     "rc_inner_note_autarkic",
+     "rc_entry_inside_autarkic_depth3",
+     "rc_quark_reuse_renamed",
+     "rc_two_entry_points",
+     "rh_suffix_nested",
+     "rh_deep_depth3",
+     "dep_bracket_spaces_links",
+     "dep_bracket_in_node",
+     "stroke_arrow_alpha",
+     "stroke_arrow_transparent_label",
+     "stroke_arrow_css4_dashed",
+     "stroke_style_arrow_transparent",
+     "stroke_skinparam_zero_alpha_bold",
+     "stroke_stereo_style_renamed"
+    ],
+    "gained_match": [
+     "theme_mono_inactive",
+     "intval_arabic_indic_signed",
+     "intval_extended_arabic_bengali",
+     "intval_fullwidth_bounds",
+     "intval_myanmar_tai_laing",
+     "surrogate_high_class",
+     "surrogate_rejoined_pair",
+     "rc_exitpoint_depth1",
+     "rc_outputpin_lowercase",
+     "rc_root_note_depth2",
+     "rc_inner_note_autarkic",
+     "rc_entry_inside_autarkic_depth3",
+     "rc_quark_reuse_renamed",
+     "rc_two_entry_points",
+     "rh_suffix_nested",
+     "rh_deep_depth3",
+     "dep_bracket_spaces_links",
+     "dep_bracket_in_node",
+     "stroke_arrow_alpha",
+     "stroke_arrow_transparent_label",
+     "stroke_arrow_css4_dashed",
+     "stroke_style_arrow_transparent",
+     "stroke_skinparam_zero_alpha_bold",
+     "stroke_stereo_style_renamed"
+    ],
+    "rejection_gained": [
+     "intval_fullwidth_overflow",
+     "intval_supplementary_digit",
+     "intval_superscript_digit",
+     "intval_double_sign",
+     "surrogate_activity_label"
+    ],
+    "stderr_changed": [
+     "intval_fullwidth_overflow",
+     "intval_supplementary_digit",
+     "intval_superscript_digit",
+     "intval_double_sign",
+     "surrogate_upper_sequence",
+     "surrogate_activity_label"
+    ]
+   },
+   "r3_to_tip": {
+    "stderr_changed": [
+     "rc_exitpoint_depth1",
+     "rc_entry_inside_autarkic_depth3",
+     "rc_two_entry_points"
+    ]
+   },
+   "tip_failures_valid": {
+    "theme_plain_activity": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 27,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"ACTIVITY\"), (\"height\", \"288px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:131px;height:288px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 131 288\"), (\"width\", \"131p"
+    },
+    "theme_mono_sequence": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 19,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"151px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:191px;height:151px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 191 151\"), (\"width\", \"191p"
+    },
+    "theme_amiga_class": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 19,
+     "exit": 0,
+     "diff_head": "[ElementCount { expected: 21, actual: 20 }, AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"175px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:111px;height:175px;background:#0B58A8;\"), (\"version\", \"1.1\"), (\"v"
+    },
+    "theme_plain_state": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 16,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"STATE\"), (\"height\", \"347px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:84px;height:347px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 84 347\"), (\"width\", \"84px\"), ("
+    },
+    "theme_mono_usecase": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 12,
+     "exit": 0,
+     "diff_head": "[ElementCount { expected: 13, actual: 15 }, AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"190px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:102px;height:190px;background:#FFFFFF;\"), (\"version\", \"1.1\""
+    },
+    "theme_amiga_component": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 17,
+     "exit": 0,
+     "diff_head": "[ElementCount { expected: 19, actual: 18 }, AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"DESCRIPTION\"), (\"height\", \"180px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:116px;height:180px;background:#0B58A8;\"), (\"version\", \"1.1\""
+    },
+    "theme_plain_variable": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 15,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"175px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:93px;height:175px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 93 175\"), (\"width\", \"93px\"), ("
+    },
+    "theme_plain_then_cerulean": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 9,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"203.125px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:104px;height:203px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 104 203\"), (\"width\", \"104"
+    },
+    "rh_suffix_undeclared": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 2,
+     "exit": 0,
+     "diff_head": "[ElementCount { expected: 10, actual: 3 }, AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"ACTIVITY\"), (\"height\", \"129px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:97px;height:129px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\""
+    }
+   },
+   "java_error_cases": {
+    "intval_fullwidth_overflow": {
+     "java_exit": 200,
+     "java_crash": false,
+     "tip_exit": 1,
+     "tip_stderr": "parse error: line 1: Cannot convert ２１４７４８３６４８ to integer.",
+     "java_stderr_head": "ERROR\n1\nCannot convert ２１４７４８３６４８ to integer."
+    },
+    "intval_supplementary_digit": {
+     "java_exit": 200,
+     "java_crash": false,
+     "tip_exit": 1,
+     "tip_stderr": "parse error: line 1: Cannot convert 𝟏 to integer.",
+     "java_stderr_head": "ERROR\n1\nCannot convert 𝟏 to integer."
+    },
+    "intval_superscript_digit": {
+     "java_exit": 200,
+     "java_crash": false,
+     "tip_exit": 1,
+     "tip_stderr": "parse error: line 1: Cannot convert ² to integer.",
+     "java_stderr_head": "ERROR\n1\nCannot convert ² to integer."
+    },
+    "intval_double_sign": {
+     "java_exit": 200,
+     "java_crash": false,
+     "tip_exit": 1,
+     "tip_stderr": "parse error: line 1: Cannot convert +-٥ to integer.",
+     "java_stderr_head": "ERROR\n1\nCannot convert +-٥ to integer."
+    },
+    "surrogate_upper_sequence": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 1,
+     "tip_stderr": "export error: An invalid XML character (Unicode: 0xdc9c) was found in the node's character data content.",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: An invalid XML character (Unicode: 0xdc9c) was found in the node's character data content.\n\tat net.sourceforge."
+    },
+    "surrogate_activity_label": {
+     "java_exit": 0,
+     "java_crash": true,
+     "tip_exit": 1,
+     "tip_stderr": "export error: Invalid UTF-16 surrogate detected: d83d 74 ?",
+     "java_stderr_head": "java.io.IOException: javax.xml.transform.TransformerException: org.xml.sax.SAXException: java.io.IOException: Invalid UTF-16 surrogate detected: d83d 74 ?\njava.io.IOException: Invalid UTF-16 surrogate"
+    }
+   }
+  },
+  "AU": {
+   "cases": 32,
+   "java_valid": 29,
+   "java_error_or_unavailable": [
+    "cluster_concurrent_crossing",
+    "raw_multi_blank_first_block",
+    "stroke_per_state_css4"
+   ],
+   "base_valid_match": 6,
+   "base_comments_exact_valid": 22,
+   "base_panics": [],
+   "base_nonzero_exit": [],
+   "r3_valid_match": 21,
+   "r3_comments_exact_valid": 29,
+   "r3_panics": [],
+   "r3_nonzero_exit": [],
+   "tip_valid_match": 21,
+   "tip_comments_exact_valid": 29,
+   "tip_panics": [],
+   "tip_nonzero_exit": [],
+   "base_to_tip": {
+    "outputs_changed": [
+     "cluster_concurrent_crossing",
+     "cluster_entry_inside_autarkic",
+     "cluster_inputpin_mixed_case",
+     "cluster_root_note_on_inner",
+     "deploy_alias_direction_matrix",
+     "deploy_nested_alias_reverse",
+     "history_external_suffix_form",
+     "raw_crlf_one_blank",
+     "raw_include_leading_blanks",
+     "raw_sequence_two_blanks",
+     "raw_unit_test_input",
+     "raw_whitespace_only_lines",
+     "stroke_arrow_skinparam_transparent",
+     "stroke_per_arrow_css4",
+     "stroke_stereo_skinparam_css4",
+     "stroke_stereo_style_css4",
+     "stroke_zero_alpha_nonblack"
+    ],
+    "gained_match": [
+     "cluster_entry_inside_autarkic",
+     "cluster_inputpin_mixed_case",
+     "cluster_root_note_on_inner",
+     "deploy_alias_direction_matrix",
+     "deploy_nested_alias_reverse",
+     "history_external_suffix_form",
+     "raw_crlf_one_blank",
+     "raw_include_leading_blanks",
+     "raw_unit_test_input",
+     "raw_whitespace_only_lines",
+     "stroke_arrow_skinparam_transparent",
+     "stroke_per_arrow_css4",
+     "stroke_stereo_skinparam_css4",
+     "stroke_stereo_style_css4",
+     "stroke_zero_alpha_nonblack"
+    ]
+   },
+   "r3_to_tip": {
+    "stderr_changed": [
+     "cluster_entry_inside_autarkic"
+    ]
+   },
+   "tip_failures_valid": {
+    "delay_legacy_lead2_creole": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 9,
+     "exit": 0,
+     "diff_head": "[ElementCount { expected: 42, actual: 41 }, AttrMismatch { index: 35, tag: \"text\", expected_attrs: [(\"fill\", \"#000000\"), (\"font-family\", \"sans-serif\"), (\"font-size\", \"11\"), (\"lengthAdjust\", \"spacing\"), (\"textLength\", \"6.9609\"), (\"x\", \"36.2903\"), (\"y\", \"100.4336\")], actual_attrs: [(\"fill\", \"#000000\")"
+    },
+    "delay_legacy_multiline": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 18,
+     "exit": 0,
+     "diff_head": "[ElementCount { expected: 41, actual: 40 }, AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"206px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:143px;height:206px;background:#FFFFFF;\"), (\"version\", \"1.1\"), "
+    },
+    "delay_teoz_lead3_multiline": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 17,
+     "exit": 0,
+     "diff_head": "[ElementCount { expected: 33, actual: 32 }, AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"214px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:148px;height:214px;background:#FFFFFF;\"), (\"version\", \"1.1\"), "
+    },
+    "raw_blank_before_start": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 7,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 2, tag: \"filter\", expected_attrs: [(\"height\", \"300%\"), (\"id\", \"fe1qw2wng4r90\"), (\"width\", \"300%\"), (\"x\", \"-1\"), (\"y\", \"-1\")], actual_attrs: [(\"height\", \"300%\"), (\"id\", \"frwspn3gohq7o\"), (\"width\", \"300%\"), (\"x\", \"-1\"), (\"y\", \"-1\")] }, AttrMismatch { index: 8, tag: \"g\", expected"
+    },
+    "raw_sequence_two_blanks": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 16,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"167px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:136px;height:167px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 136 167\"), (\"width\", \"136p"
+    },
+    "theme_mono_class": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 15,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"171px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:95px;height:171px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 95 171\"), (\"width\", \"95px\"), ("
+    },
+    "theme_plain_class_note": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 18,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"CLASS\"), (\"height\", \"175px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:192px;height:175px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 192 175\"), (\"width\", \"192px\")"
+    },
+    "theme_plain_sequence": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 16,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"124px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:172px;height:124px;background:#FFFFFF;\"), (\"version\", \"1.1\"), (\"viewBox\", \"0 0 172 124\"), (\"width\", \"172p"
+    }
+   },
+   "java_error_cases": {
+    "cluster_concurrent_crossing": {
+     "java_exit": 200,
+     "java_crash": false,
+     "tip_exit": 0,
+     "tip_stderr": "",
+     "java_stderr_head": "ERROR\n6\nThe state Blow cannot be used here. (Assumed diagram type: state)"
+    },
+    "raw_multi_blank_first_block": {
+     "java_exit": 200,
+     "java_crash": false,
+     "tip_exit": 0,
+     "tip_stderr": "",
+     "java_stderr_head": "ERROR\n1\nEmpty description (Assumed diagram type: sequence)"
+    },
+    "stroke_per_state_css4": {
+     "java_exit": 200,
+     "java_crash": false,
+     "tip_exit": 0,
+     "tip_stderr": "",
+     "java_stderr_head": "ERROR\n1\nNo such color (Assumed diagram type: state)"
+    }
+   }
+  },
+  "AR": {
+   "cases": 20,
+   "java_valid": 20,
+   "java_error_or_unavailable": [],
+   "base_valid_match": 6,
+   "base_comments_exact_valid": 13,
+   "base_panics": [],
+   "base_nonzero_exit": [],
+   "r3_valid_match": 17,
+   "r3_comments_exact_valid": 19,
+   "r3_panics": [],
+   "r3_nonzero_exit": [],
+   "tip_valid_match": 17,
+   "tip_comments_exact_valid": 19,
+   "tip_panics": [],
+   "tip_nonzero_exit": [],
+   "base_to_tip": {
+    "gained_match": [
+     "blank1_activity_shadow",
+     "blank1_class_shadow",
+     "blank3_activity_shadow",
+     "blank3_class_shadow",
+     "cluster_entry_point",
+     "deploy_unaliased_forms",
+     "history_depth1_autarkic",
+     "history_depth2_crossing",
+     "quark_reuse_crossing",
+     "stroke_skinparam_css4",
+     "stroke_state_style_transparent"
+    ],
+    "outputs_changed": [
+     "blank1_activity_shadow",
+     "blank1_class_shadow",
+     "blank3_activity_shadow",
+     "blank3_class_shadow",
+     "cluster_entry_point",
+     "delay_legacy_short",
+     "deploy_alias_reverse_up",
+     "deploy_unaliased_forms",
+     "history_depth1_autarkic",
+     "history_depth2_crossing",
+     "quark_reuse_crossing",
+     "stroke_skinparam_css4",
+     "stroke_state_style_transparent"
+    ]
+   },
+   "r3_to_tip": {},
+   "tip_failures_valid": {
+    "delay_legacy_short": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 40,
+     "exit": 0,
+     "diff_head": "[ElementCount { expected: 40, actual: 41 }, AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"193px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:148px;height:193px;background:#FFFFFF;\"), (\"version\", \"1.1\"), "
+    },
+    "delay_legacy_wide": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 27,
+     "exit": 0,
+     "diff_head": "[ElementCount { expected: 39, actual: 40 }, AttrMismatch { index: 0, tag: \"svg\", expected_attrs: [(\"contentStyleType\", \"text/css\"), (\"data-diagram-type\", \"SEQUENCE\"), (\"height\", \"193px\"), (\"preserveAspectRatio\", \"none\"), (\"style\", \"width:184px;height:193px;background:#FFFFFF;\"), (\"version\", \"1.1\"), "
+    },
+    "deploy_alias_reverse_up": {
+     "format": "-tsvg",
+     "strict": "DIFF",
+     "ndiff": 15,
+     "exit": 0,
+     "diff_head": "[AttrMismatch { index: 4, tag: \"polygon\", expected_attrs: [(\"fill\", \"#F1F1F1\"), (\"points\", \"16.8,122.49,26.8,112.49,127.4084,112.49,127.4084,148.9783,117.4084,158.9783,16.8,158.9783,16.8,122.49\"), (\"style\", \"stroke:#181818;stroke-width:0.5;\")], actual_attrs: [(\"fill\", \"#F1F1F1\"), (\"points\", \"16.8,16"
+    }
+   },
+   "java_error_cases": {}
+  }
+ },
+ "gates": {
+  "tip": [
+   "lib exit 0",
+   "pipe_mode exit 0",
+   "golden_no_oracle exit 101",
+   "golden_pairs exit 101",
+   "parity_perturbations exit 101",
+   "harness_guards exit 101",
+   "doc_claims exit 0"
+  ],
+  "base": [
+   "golden_no_oracle exit 101",
+   "parity_perturbations exit 101",
+   "harness_guards exit 101"
+  ],
+  "golden_no_oracle": "base and tip 11181/11251 eligible; tip fails only the ratchet on activity 1299->1297 and edge-cases 760->759 (the 3 GET goldens, T14.24); base fails 'progress not locked in' (class, preprocessing, rendering)",
+  "golden_pairs": "tip FAILED, family failure counts in gates/tip.golden_pairs_tail.txt (unchanged regression net)",
+  "parity_perturbations": "base 1365 failing, tip 1616 failing; 9 newly failing in directories that exist in base, 0 of them files that exist in base; identical to the round-3 checker's list (gates/added_failing_in_preexisting_dirs.txt); round3->tip 0 lost matches in the perturbation cohort (sweep)",
+  "harness_guards": "tip and base fail the same 2 tests (decimal_literal_ratchet, parity_review_records_are_complete); category diff only in evidence counts (latest accepted review cannot contain failing perturbations 1012->1221, not named in any review 198->306, latest review must be accepted 151->197) from rounds 1-3 evidence; decimal ratchet: tip adds svg.rs 0->1 versus base, identical to the maker's round-3 ratchet (no packet literal)",
+  "pipe_mode": "tip 17 passed",
+  "workspace_lib": "tip 0 failed (41+10+31+657+835 passed)",
+  "doc_claims": "tip ok"
+ },
+ "frozen_items": "git diff --name-only 3992971a7 7ec2e5af8 -- crates/rustuml-oracle: 0 (comparator slack GEOM_EPS 0.02, golden_has_syntax_error markers, park list, error census, guard allow-lists, the 14-entry strict-XML list all live there); 71d16da4a..7ec2e5af8 touches no test-diagrams file, Makefile, scripts or CI",
+ "font_trace": {
+  "rust_table": "CHAR_WIDTHS_14 (size 14 plain)",
+  "fonts": [
+   {
+    "file": "/System/Library/Fonts/LucidaGrande.ttc",
+    "name": "Lucida Grande",
+    "units_per_em": 2048,
+    "ascii_advances_equal_to_rust_table": 95,
+    "notdef_glyph": ".notdef",
+    "notdef_advance_units": 1536,
+    "notdef_advance_em": 0.75,
+    "maps_U+10FFFD": false,
+    "maps_U+10FFFF": false,
+    "maps_U+F0000": false,
+    "maps_U+F000": false
+   },
+   {
+    "file": "/System/Library/Fonts/LucidaGrande.ttc",
+    "name": "Lucida Grande Bold",
+    "units_per_em": 2048,
+    "ascii_advances_equal_to_rust_table": 2,
+    "notdef_glyph": ".notdef",
+    "notdef_advance_units": 1536,
+    "notdef_advance_em": 0.75,
+    "maps_U+10FFFD": false,
+    "maps_U+10FFFF": false,
+    "maps_U+F0000": false,
+    "maps_U+F000": false
+   },
+   {
+    "file": "/System/Library/Fonts/Helvetica.ttc",
+    "name": "Helvetica",
+    "units_per_em": 2048,
+    "ascii_advances_equal_to_rust_table": 0,
+    "notdef_glyph": ".notdef",
+    "notdef_advance_units": 1298,
+    "notdef_advance_em": 0.6337890625,
+    "maps_U+10FFFD": false,
+    "maps_U+10FFFF": false,
+    "maps_U+F0000": false,
+    "maps_U+F000": false
+   },
+   {
+    "file": "/System/Library/Fonts/Helvetica.ttc",
+    "name": "Helvetica Bold",
+    "units_per_em": 2048,
+    "ascii_advances_equal_to_rust_table": 0,
+    "notdef_glyph": ".notdef",
+    "notdef_advance_units": 1479,
+    "notdef_advance_em": 0.72216796875,
+    "maps_U+10FFFD": false,
+    "maps_U+10FFFF": false,
+    "maps_U+F0000": false,
+    "maps_U+F000": false
+   },
+   {
+    "file": "/System/Library/Fonts/Supplemental/Arial.ttf",
+    "name": "Arial",
+    "units_per_em": 2048,
+    "ascii_advances_equal_to_rust_table": 0,
+    "notdef_glyph": ".notdef",
+    "notdef_advance_units": 1536,
+    "notdef_advance_em": 0.75,
+    "maps_U+10FFFD": false,
+    "maps_U+10FFFF": false,
+    "maps_U+F0000": false,
+    "maps_U+F000": false
+   },
+   {
+    "file": "/System/Library/Fonts/SFNS.ttf",
+    "name": "System Font",
+    "units_per_em": 2048,
+    "ascii_advances_equal_to_rust_table": 0,
+    "notdef_glyph": ".notdef",
+    "notdef_advance_units": 2048,
+    "notdef_advance_em": 1.0,
+    "maps_U+10FFFD": false,
+    "maps_U+10FFFF": false,
+    "maps_U+F0000": false,
+    "maps_U+F000": false
+   }
+  ]
+ }
+}

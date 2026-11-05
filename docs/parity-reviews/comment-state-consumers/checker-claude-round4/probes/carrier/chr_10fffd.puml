@@ -1,0 +1,3 @@
+@startuml
+class "Vault %chr(1114109) end" as V
+@enduml

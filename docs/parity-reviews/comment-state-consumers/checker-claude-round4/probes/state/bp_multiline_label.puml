@@ -1,0 +1,9 @@
+@startuml
+state Yard {
+  state Shed {
+    Saw --> out1
+    state "Outgoing\nTimber\nStack" as out1 <<exitPoint>>
+  }
+  out1 --> Truck
+}
+@enduml

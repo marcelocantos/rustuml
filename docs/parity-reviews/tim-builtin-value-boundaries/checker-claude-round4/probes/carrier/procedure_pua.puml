@@ -1,0 +1,6 @@
+@startuml
+!procedure $p($x)
+class "$x" as P
+!endprocedure
+$p("􏿽")
+@enduml

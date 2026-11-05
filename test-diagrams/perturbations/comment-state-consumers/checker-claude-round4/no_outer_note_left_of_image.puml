@@ -1,0 +1,6 @@
+@startuml
+state Barn {
+  Hay --> Loft
+}
+note left of Barn : dry
+@enduml

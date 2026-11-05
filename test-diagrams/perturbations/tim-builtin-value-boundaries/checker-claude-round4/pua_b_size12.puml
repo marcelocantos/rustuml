@@ -1,0 +1,4 @@
+@startuml
+skinparam classFontSize 12
+class "Vault 􏿽 󰀀" as V
+@enduml

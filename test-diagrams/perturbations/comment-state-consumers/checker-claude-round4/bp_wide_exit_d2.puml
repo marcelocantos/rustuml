@@ -1,0 +1,12 @@
+@startuml
+state Works {
+  state Hall {
+    state Cell {
+      Weld --> finished
+      state "Finished Assemblies" as finished <<exitPoint>>
+    }
+    finished --> Inspect
+  }
+  Inspect --> Ship
+}
+@enduml

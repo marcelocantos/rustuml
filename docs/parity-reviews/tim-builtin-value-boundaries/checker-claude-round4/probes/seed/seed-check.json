@@ -1,0 +1,6 @@
+{
+ "method": "Rust-only output against the Java StringUtils.seed formula (31x wrapping signed-long hash over UTF-16 units, radix-36 absolute value) computed in Python over the source text; calibrated on an ASCII control",
+ "s_ascii": {"formula": "15h2sxpxh8y3w", "base_3992971a7": "f15h2sxpxh8y3w", "tip_7ec2e5af8": "f15h2sxpxh8y3w"},
+ "s_pua": {"formula": "1cnq00br5809s", "base_3992971a7": "f1cvq65hh6d7ov", "tip_7ec2e5af8": "f1cnq00br5809s"},
+ "reading": "the tip hashes Java's UTF-16 units of legitimate U+10FFFD (escapes decoded by java_utf16::units); base hashed it as a single unit"
+}

@@ -1,0 +1,11 @@
+@startuml
+state Plant {
+  state Line {
+    Feed --> incoming_material_entry
+    state Cell {
+      state incoming_material_entry <<entryPoint>>
+      incoming_material_entry --> Press
+    }
+  }
+}
+@enduml

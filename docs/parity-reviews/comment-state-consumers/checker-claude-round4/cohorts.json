@@ -1,0 +1,908 @@
+{
+ "goldens": {
+  "sources": 12550,
+  "java_valid": 11351,
+  "java_error": 1199,
+  "3992971a7_valid_strict_match": 11181,
+  "3992971a7_comments_exact": 11563,
+  "3992971a7_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "3992971a7_panics": 0,
+  "3992971a7_timeouts": 0,
+  "3992971a7_java_error_rejected": 76,
+  "3992971a7_nonempty_stderr": 94,
+  "71d16da4a_valid_strict_match": 11180,
+  "71d16da4a_comments_exact": 11781,
+  "71d16da4a_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "71d16da4a_panics": 0,
+  "71d16da4a_timeouts": 0,
+  "71d16da4a_java_error_rejected": 76,
+  "71d16da4a_nonempty_stderr": 94,
+  "7ec2e5af8_valid_strict_match": 11181,
+  "7ec2e5af8_comments_exact": 11781,
+  "7ec2e5af8_exit": {
+   "1": 76,
+   "0": 12474
+  },
+  "7ec2e5af8_panics": 0,
+  "7ec2e5af8_timeouts": 0,
+  "7ec2e5af8_java_error_rejected": 76,
+  "7ec2e5af8_nonempty_stderr": 76,
+  "3992971a7_to_7ec2e5af8": {
+   "comments_gained": 218,
+   "gained_match": [
+    "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+    "test-diagrams/golden/state/state_history_shallow.puml",
+    "test-diagrams/golden/state/state_note_composite.puml"
+   ],
+   "lost_match_GET_provenance": [
+    "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+   ],
+   "outputs_changed": 309,
+   "stderr_changed": [
+    "test-diagrams/golden/activity/act_action_ending_flow_final.puml",
+    "test-diagrams/golden/activity/act_action_ending_fork_bar.puml",
+    "test-diagrams/golden/activity/act_action_ending_input.puml",
+    "test-diagrams/golden/activity/act_action_ending_output.puml",
+    "test-diagrams/golden/activity/act_action_ending_receive.puml",
+    "test-diagrams/golden/activity/act_action_ending_send.puml",
+    "test-diagrams/golden/activity/act_edge_all_action_endings_in_if.puml",
+    "test-diagrams/golden/state/state_composite_entry_only.puml",
+    "test-diagrams/golden/state/state_composite_exit_only.puml",
+    "test-diagrams/golden/state/state_entry1_exit1.puml",
+    "test-diagrams/golden/state/state_entry1_exit2.puml",
+    "test-diagrams/golden/state/state_entry1_exit3.puml",
+    "test-diagrams/golden/state/state_entry2_exit1.puml",
+    "test-diagrams/golden/state/state_entry2_exit2.puml",
+    "test-diagrams/golden/state/state_entry2_exit3.puml",
+    "test-diagrams/golden/state/state_entry3_exit1.puml",
+    "test-diagrams/golden/state/state_entry3_exit2.puml",
+    "test-diagrams/golden/state/state_entry3_exit3.puml",
+    "test-diagrams/golden/state/state_entry_exit_both.puml",
+    "test-diagrams/golden/state/state_entry_exit_in_composite.puml",
+    "test-diagrams/golden/state/state_entry_in_composite.puml",
+    "test-diagrams/golden/state/state_exit_in_composite.puml",
+    "test-diagrams/golden/state/state_multiple_entry_points.puml",
+    "test-diagrams/golden/state/state_multiple_exit_points.puml",
+    "test-diagrams/golden/usecase/usecase_long_names.puml"
+   ]
+  },
+  "3992971a7_to_7ec2e5af8_counts": {
+   "comments_gained": 218,
+   "gained_match": 3,
+   "lost_match_GET_provenance": 3,
+   "outputs_changed": 309,
+   "stderr_changed": 25
+  },
+  "71d16da4a_to_7ec2e5af8": {
+   "gained_match": [
+    "test-diagrams/golden/state/state_note_composite.puml"
+   ],
+   "outputs_changed": [
+    "test-diagrams/golden/state/state_note_composite.puml"
+   ],
+   "stderr_changed": [
+    "test-diagrams/golden/state/state_composite_entry_only.puml",
+    "test-diagrams/golden/state/state_composite_exit_only.puml",
+    "test-diagrams/golden/state/state_entry1_exit1.puml",
+    "test-diagrams/golden/state/state_entry1_exit2.puml",
+    "test-diagrams/golden/state/state_entry1_exit3.puml",
+    "test-diagrams/golden/state/state_entry2_exit1.puml",
+    "test-diagrams/golden/state/state_entry2_exit2.puml",
+    "test-diagrams/golden/state/state_entry2_exit3.puml",
+    "test-diagrams/golden/state/state_entry3_exit1.puml",
+    "test-diagrams/golden/state/state_entry3_exit2.puml",
+    "test-diagrams/golden/state/state_entry3_exit3.puml",
+    "test-diagrams/golden/state/state_entry_exit_both.puml",
+    "test-diagrams/golden/state/state_entry_exit_in_composite.puml",
+    "test-diagrams/golden/state/state_entry_in_composite.puml",
+    "test-diagrams/golden/state/state_exit_in_composite.puml",
+    "test-diagrams/golden/state/state_multiple_entry_points.puml",
+    "test-diagrams/golden/state/state_multiple_exit_points.puml",
+    "test-diagrams/golden/usecase/usecase_long_names.puml"
+   ]
+  },
+  "71d16da4a_to_7ec2e5af8_counts": {
+   "gained_match": 1,
+   "outputs_changed": 1,
+   "stderr_changed": 18
+  }
+ },
+ "perturbations": {
+  "sources": 3917,
+  "java_valid": 3604,
+  "java_error": 313,
+  "3992971a7_valid_strict_match": 1730,
+  "3992971a7_comments_exact": 2773,
+  "3992971a7_exit": {
+   "0": 3821,
+   "1": 88,
+   "101": 8
+  },
+  "3992971a7_panics": 8,
+  "3992971a7_timeouts": 0,
+  "3992971a7_java_error_rejected": 84,
+  "3992971a7_nonempty_stderr": 120,
+  "71d16da4a_valid_strict_match": 2328,
+  "71d16da4a_comments_exact": 3296,
+  "71d16da4a_exit": {
+   "0": 3753,
+   "1": 160,
+   "101": 4
+  },
+  "71d16da4a_panics": 4,
+  "71d16da4a_timeouts": 0,
+  "71d16da4a_java_error_rejected": 155,
+  "71d16da4a_nonempty_stderr": 196,
+  "7ec2e5af8_valid_strict_match": 2331,
+  "7ec2e5af8_comments_exact": 3296,
+  "7ec2e5af8_exit": {
+   "0": 3753,
+   "1": 160,
+   "101": 4
+  },
+  "7ec2e5af8_panics": 4,
+  "7ec2e5af8_timeouts": 0,
+  "7ec2e5af8_java_error_rejected": 155,
+  "7ec2e5af8_nonempty_stderr": 164,
+  "3992971a7_to_7ec2e5af8": {
+   "comments_gained": 525,
+   "comments_lost": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+   ],
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "gained_match": 601,
+   "outputs_changed": 1222,
+   "panic_removed": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "rejection_gained": 71,
+   "stderr_changed": 103
+  },
+  "3992971a7_to_7ec2e5af8_counts": {
+   "comments_gained": 525,
+   "comments_lost": 2,
+   "error_now_renders_valid_ref": 3,
+   "gained_match": 601,
+   "outputs_changed": 1222,
+   "panic_removed": 4,
+   "rejection_gained": 71,
+   "stderr_changed": 103
+  },
+  "71d16da4a_to_7ec2e5af8": {
+   "gained_match": [
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml"
+   ],
+   "outputs_changed": [
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_class.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_component.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_deployment.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_description.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_state.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_usecase.puml"
+   ],
+   "stderr_changed": [
+    "test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_lr_together_generic_rank_edge.puml",
+    "test-diagrams/perturbations/class-together-structural-layout/review2_note_target_squaremaker_together.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_entry_inside_autarkic_depth3.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_exitpoint_depth1.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_two_entry_points.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_depth2.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_depth3.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_depth4.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_entry_inside_autarkic.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml",
+    "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_integer_thresholds.puml",
+    "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.puml",
+    "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_short_labels.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/cardinal_abbreviation_grid.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/directional_left_up_groups.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/dual_composite_basic_ports.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_left_group_link_minimal.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_up_group_link_minimal.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/five_group_depth_reordered.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/four_groups_parallel_projection_order.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/mixed_parallel_direction_identity.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/reordered_basic_ports.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/reverse_explicit_direction_matrix.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_group_link_minimal.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_parallel_group_links.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/same_container_port_link.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_long_cubic_round4.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_short_cubic_round4.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_root_leaf_interleave.puml",
+    "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.puml"
+   ]
+  },
+  "71d16da4a_to_7ec2e5af8_counts": {
+   "gained_match": 3,
+   "outputs_changed": 10,
+   "stderr_changed": 36
+  }
+ },
+ "all": {
+  "sources": 16467,
+  "java_valid": 14955,
+  "java_error": 1512,
+  "3992971a7_valid_strict_match": 12911,
+  "3992971a7_comments_exact": 14336,
+  "3992971a7_exit": {
+   "1": 164,
+   "0": 16295,
+   "101": 8
+  },
+  "3992971a7_panics": 8,
+  "3992971a7_timeouts": 0,
+  "3992971a7_java_error_rejected": 160,
+  "3992971a7_nonempty_stderr": 214,
+  "71d16da4a_valid_strict_match": 13508,
+  "71d16da4a_comments_exact": 15077,
+  "71d16da4a_exit": {
+   "1": 236,
+   "0": 16227,
+   "101": 4
+  },
+  "71d16da4a_panics": 4,
+  "71d16da4a_timeouts": 0,
+  "71d16da4a_java_error_rejected": 231,
+  "71d16da4a_nonempty_stderr": 290,
+  "7ec2e5af8_valid_strict_match": 13512,
+  "7ec2e5af8_comments_exact": 15077,
+  "7ec2e5af8_exit": {
+   "1": 236,
+   "0": 16227,
+   "101": 4
+  },
+  "7ec2e5af8_panics": 4,
+  "7ec2e5af8_timeouts": 0,
+  "7ec2e5af8_java_error_rejected": 231,
+  "7ec2e5af8_nonempty_stderr": 240,
+  "3992971a7_to_7ec2e5af8": {
+   "comments_gained": 743,
+   "comments_lost": [
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+   ],
+   "error_now_renders_valid_ref": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "gained_match": 604,
+   "lost_match_GET_provenance": [
+    "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+    "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+   ],
+   "outputs_changed": 1531,
+   "panic_removed": [
+    "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+    "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+    "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+   ],
+   "rejection_gained": 71,
+   "stderr_changed": 128
+  },
+  "3992971a7_to_7ec2e5af8_counts": {
+   "comments_gained": 743,
+   "comments_lost": 2,
+   "error_now_renders_valid_ref": 3,
+   "gained_match": 604,
+   "lost_match_GET_provenance": 3,
+   "outputs_changed": 1531,
+   "panic_removed": 4,
+   "rejection_gained": 71,
+   "stderr_changed": 128
+  },
+  "3992971a7_to_7ec2e5af8_stderr_lines_lost": {
+   "Warning: node X port P unrecognized": 158,
+   "parse error: line N: unterminated activity action; multiline actions must end with ';'": 7,
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4,
+   "": 4,
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/preprocess/mod.rs:N:N:": 4,
+   "note: run with `RUST_BACKTRACE=N` environment variable to display a backtrace": 4,
+   "end byte index N is not a char boundary; it is inside '\ud83d\ude80' (bytes N..N of string)": 2,
+   "Warning: Unable to reclaim box space in spline routing for edge \"PCCT\" -> \"VPIFC\". Something is probably seriously wrong": 1,
+   "Warning: GenericPeerReview was already in a rankset, deleted from cluster G": 1,
+   "Warning: PlainPeerReview was already in a rankset, deleted from cluster G": 1,
+   "Warning: removing empty cluster": 1,
+   "Warning: ReviewNMemoN was already in a rankset, deleted from cluster G": 1,
+   "end byte index N is not a char boundary; it is inside '\ud83e\udd8a' (bytes N..N of string)": 1,
+   "end byte index N is not a char boundary; it is inside '\u00e9' (bytes N..N of string)": 1
+  },
+  "3992971a7_to_7ec2e5af8_stderr_lines_gained": {
+   "parse error: line N: Bad date pattern: unsupported letter Q": 17,
+   "parse error: line N: Integer literal outside signed N-bit range": 8,
+   "parse error: line N: unterminated activity action; multiline actions must end with ';'": 7,
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4,
+   "parse error: line N: Bad date pattern: X must have one to three letters": 4,
+   "parse error: line N: Substring index out of range": 4,
+   "parse error: line N: Cannot nest sub": 4,
+   "parse error: line N: Illegal call here. Is there a return directive in your function?": 3,
+   "parse error: line N: Bad sub name": 3,
+   "parse error: line N: Unknown built-in function %strlen": 2,
+   "parse error: line N: Unknown built-in function $emit": 2,
+   "parse error: line N: Cannot convert N.N to integer.": 2,
+   "parse error: line N: Bad date pattern: unterminated quote": 2,
+   "parse error: line N: Unknown built-in function %missing_checkerN": 2,
+   "parse error: line N: Data parsing error: missing intermediate member": 2,
+   "parse error: line N: Foreach requires a JSON array or object": 2,
+   "parse error: line N: Expression operand stack underflow": 2,
+   "parse error: line N: Unknown built-in function %fresh_unregistered": 1,
+   "export error: Invalid UTF-N surrogate detected: dNe N ?": 1,
+   "parse error: line N: Cannot convert  true  to boolean.": 1,
+   "export error: An invalid XML character (Unicode: NxdeN) was found in the node's character data content.": 1,
+   "parse error: line N: Division by zero": 1,
+   "parse error: line N: Function not found %strlen": 1,
+   "parse error: line N: Unknown built-in function $join": 1,
+   "parse error: line N: Cannot convert bad to integer.": 1,
+   "parse error: line N: Cannot convert +-N to integer.": 1,
+   "parse error: line N: Cannot convert -N to integer.": 1,
+   "parse error: line N: Cannot convert x to integer.": 1,
+   "parse error: line N: Unknown built-in function $inner": 1,
+   "parse error: line N: Cannot convert bad to boolean.": 1
+  },
+  "71d16da4a_to_7ec2e5af8": {
+   "gained_match": [
+    "test-diagrams/golden/state/state_note_composite.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml"
+   ],
+   "outputs_changed": [
+    "test-diagrams/golden/state/state_note_composite.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_exit_wide.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml",
+    "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/note_link_only_to_group.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_class.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_component.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_deployment.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_description.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_state.puml",
+    "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_usecase.puml"
+   ],
+   "stderr_changed": 54
+  },
+  "71d16da4a_to_7ec2e5af8_counts": {
+   "gained_match": 4,
+   "outputs_changed": 11,
+   "stderr_changed": 54
+  },
+  "71d16da4a_to_7ec2e5af8_stderr_lines_lost": {
+   "Warning: node X port P unrecognized": 170,
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4,
+   "Warning: Unable to reclaim box space in spline routing for edge \"PCCT\" -> \"VPIFC\". Something is probably seriously wrong": 1,
+   "Warning: GenericPeerReview was already in a rankset, deleted from cluster G": 1,
+   "Warning: PlainPeerReview was already in a rankset, deleted from cluster G": 1,
+   "Warning: removing empty cluster": 1,
+   "Warning: ReviewNMemoN was already in a rankset, deleted from cluster G": 1
+  },
+  "71d16da4a_to_7ec2e5af8_stderr_lines_gained": {
+   "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4
+  },
+  "71d16da4a_to_7ec2e5af8_stderr_per_source": {
+   "test-diagrams/golden/state/state_composite_entry_only.puml": {
+    "lost": [
+     "Warning: node Composite.ep, port P unrecognized",
+     "Warning: node Composite.ep, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_composite_exit_only.puml": {
+    "lost": [
+     "Warning: node Composite.xp, port P unrecognized",
+     "Warning: node Composite.xp, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry1_exit1.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry1_exit2.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry1_exit3.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry2_exit1.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry2_exit2.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp1, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry2_exit3.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp1, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry3_exit1.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.ep2, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry3_exit2.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.ep2, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp1, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry3_exit3.puml": {
+    "lost": [
+     "Warning: node Composite.ep0, port P unrecognized",
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.ep2, port P unrecognized",
+     "Warning: node Composite.xp0, port P unrecognized",
+     "Warning: node Composite.xp1, port P unrecognized",
+     "Warning: node Composite.xp2, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry_exit_both.puml": {
+    "lost": [
+     "Warning: node Composite.ep, port P unrecognized",
+     "Warning: node Composite.ep, port P unrecognized",
+     "Warning: node Composite.xp, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry_exit_in_composite.puml": {
+    "lost": [
+     "Warning: node Composite.exit1, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_entry_in_composite.puml": {
+    "lost": [
+     "Warning: node Composite.ep, port P unrecognized",
+     "Warning: node Composite.ep, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_exit_in_composite.puml": {
+    "lost": [
+     "Warning: node Composite.xp, port P unrecognized",
+     "Warning: node Composite.xp, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_multiple_entry_points.puml": {
+    "lost": [
+     "Warning: node Composite.ep1, port P unrecognized",
+     "Warning: node Composite.ep2, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/state/state_multiple_exit_points.puml": {
+    "lost": [
+     "Warning: node Composite.xp1, port P unrecognized",
+     "Warning: node Composite.xp2, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/golden/usecase/usecase_long_names.puml": {
+    "lost": [
+     "Warning: Unable to reclaim box space in spline routing for edge \"PCCT\" -> \"VPIFC\". Something is probably seriously wrong."
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_lr_together_generic_rank_edge.puml": {
+    "lost": [
+     "Warning: GenericPeerReview was already in a rankset, deleted from cluster G",
+     "Warning: PlainPeerReview was already in a rankset, deleted from cluster G",
+     "Warning: removing empty cluster"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/class-together-structural-layout/review2_note_target_squaremaker_together.puml": {
+    "lost": [
+     "Warning: Review2Memo6503 was already in a rankset, deleted from cluster G"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_entry_inside_autarkic_depth3.puml": {
+    "lost": [
+     "Warning: node Plant.Hall.Bay.door, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_exitpoint_depth1.puml": {
+    "lost": [
+     "Warning: node Forge.vent, port P unrecognized",
+     "Warning: node Forge.vent, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round2/rc_two_entry_points.puml": {
+    "lost": [
+     "Warning: node Gatehouse.north, port P unrecognized",
+     "Warning: node Gatehouse.north, port P unrecognized",
+     "Warning: node Gatehouse.south, port P unrecognized",
+     "Warning: node Gatehouse.south, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_depth2.puml": {
+    "lost": [
+     "Warning: node Mine.Shaft.cage, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_depth3.puml": {
+    "lost": [
+     "Warning: node Mine.Shaft.Level.cage, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_cluster_depth4.puml": {
+    "lost": [
+     "Warning: node Tower.Floor.Room.Desk.slot, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-round3/img_note_in_cluster.puml": {
+    "lost": [
+     "Warning: node Works.Shed.gate, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_entry_inside_autarkic.puml": {
+    "lost": [
+     "Warning: node Works.Shed.gate, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml": {
+    "lost": [
+     "thread 'main' (48327883) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (48375218) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml": {
+    "lost": [
+     "thread 'main' (48327890) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (48375222) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml": {
+    "lost": [
+     "thread 'main' (48327901) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (48375228) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml": {
+    "lost": [
+     "thread 'main' (48327904) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ],
+    "gained": [
+     "thread 'main' (48375232) panicked at crates/rustuml-parser/src/parse/class.rs:285:57:"
+    ]
+   },
+   "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_integer_thresholds.puml": {
+    "lost": [
+     "Warning: node ThresholdCabinet.WWWJ, port P unrecognized",
+     "Warning: node ThresholdCabinet.WWWJ, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.puml": {
+    "lost": [
+     "Warning: node PortEnvelopeMatrix.ThresholdBasic, port P unrecognized",
+     "Warning: node PortEnvelopeMatrix.ThresholdBasic, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_short_labels.puml": {
+    "lost": [
+     "Warning: node ShortPortCabinet.I, port P unrecognized",
+     "Warning: node ShortPortCabinet.I, port P unrecognized",
+     "Warning: node ShortPortCabinet.O, port P unrecognized",
+     "Warning: node ShortPortCabinet.O, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/cardinal_abbreviation_grid.puml": {
+    "lost": [
+     "Warning: node EastQuay47.ei, port P unrecognized",
+     "Warning: node EastQuay47.ex, port P unrecognized",
+     "Warning: node NorthQuay47.ni, port P unrecognized",
+     "Warning: node NorthQuay47.nx, port P unrecognized",
+     "Warning: node SouthQuay47.si, port P unrecognized",
+     "Warning: node SouthQuay47.sx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/directional_left_up_groups.puml": {
+    "lost": [
+     "Warning: node EastCell.ei, port P unrecognized",
+     "Warning: node EastCell.ex, port P unrecognized",
+     "Warning: node NorthCell.ni, port P unrecognized",
+     "Warning: node NorthCell.nx, port P unrecognized",
+     "Warning: node WestCell.wi, port P unrecognized",
+     "Warning: node WestCell.wx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/dual_composite_basic_ports.puml": {
+    "lost": [
+     "Warning: node PodAlpha.qa, port P unrecognized",
+     "Warning: node PodAlpha.qz, port P unrecognized",
+     "Warning: node PodBeta.rb, port P unrecognized",
+     "Warning: node PodBeta.ry, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_left_group_link_minimal.puml": {
+    "lost": [
+     "Warning: node LeftNode.li, port P unrecognized",
+     "Warning: node LeftNode.lx, port P unrecognized",
+     "Warning: node RightNode.ri, port P unrecognized",
+     "Warning: node RightNode.rx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_up_group_link_minimal.puml": {
+    "lost": [
+     "Warning: node LowerNode.li, port P unrecognized",
+     "Warning: node LowerNode.lx, port P unrecognized",
+     "Warning: node UpperNode.ui, port P unrecognized",
+     "Warning: node UpperNode.ux, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/five_group_depth_reordered.puml": {
+    "lost": [
+     "Warning: node AlphaField47.ai, port P unrecognized",
+     "Warning: node AlphaField47.ax, port P unrecognized",
+     "Warning: node BetaField47.bi, port P unrecognized",
+     "Warning: node BetaField47.bx, port P unrecognized",
+     "Warning: node DeltaField47.di, port P unrecognized",
+     "Warning: node DeltaField47.dx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.puml": {
+    "lost": [
+     "Warning: node CedarBay.ci, port P unrecognized",
+     "Warning: node CedarBay.co, port P unrecognized",
+     "Warning: node MapleBay.mi, port P unrecognized",
+     "Warning: node MapleBay.mo, port P unrecognized",
+     "Warning: node PineBay.pi, port P unrecognized",
+     "Warning: node PineBay.po, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/four_groups_parallel_projection_order.puml": {
+    "lost": [
+     "Warning: node AlphaPack.ai, port P unrecognized",
+     "Warning: node AlphaPack.ax, port P unrecognized",
+     "Warning: node BetaPack.bi, port P unrecognized",
+     "Warning: node BetaPack.bx, port P unrecognized",
+     "Warning: node DeltaPack.di, port P unrecognized",
+     "Warning: node DeltaPack.dx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/mixed_parallel_direction_identity.puml": {
+    "lost": [
+     "Warning: node CobaltDock47.ci, port P unrecognized",
+     "Warning: node CobaltDock47.cx, port P unrecognized",
+     "Warning: node SableDock47.si, port P unrecognized",
+     "Warning: node SableDock47.sx, port P unrecognized",
+     "Warning: node UmberDock47.ui, port P unrecognized",
+     "Warning: node UmberDock47.ux, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/reordered_basic_ports.puml": {
+    "lost": [
+     "Warning: node ShellKappa.uh, port P unrecognized",
+     "Warning: node ShellKappa.vx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/reverse_explicit_direction_matrix.puml": {
+    "lost": [
+     "Warning: node IbisVault47.ii, port P unrecognized",
+     "Warning: node IbisVault47.ix, port P unrecognized",
+     "Warning: node LumenVault47.li, port P unrecognized",
+     "Warning: node LumenVault47.lx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_group_link_minimal.puml": {
+    "lost": [
+     "Warning: node FirstNode.fi, port P unrecognized",
+     "Warning: node FirstNode.fx, port P unrecognized",
+     "Warning: node SecondNode.si, port P unrecognized",
+     "Warning: node SecondNode.sx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_parallel_group_links.puml": {
+    "lost": [
+     "Warning: node CyanCell.ci, port P unrecognized",
+     "Warning: node CyanCell.cx, port P unrecognized",
+     "Warning: node RubyCell.ri, port P unrecognized",
+     "Warning: node RubyCell.rx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/same_container_port_link.puml": {
+    "lost": [
+     "Warning: node RelayBox.ln, port P unrecognized",
+     "Warning: node RelayBox.mq, port P unrecognized",
+     "Warning: node RelayBox.mq, port P unrecognized",
+     "Warning: node RelayBox.rt, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.puml": {
+    "lost": [
+     "Warning: node AspenArc.ai, port P unrecognized",
+     "Warning: node AspenArc.ax, port P unrecognized",
+     "Warning: node BirchArc.bi, port P unrecognized",
+     "Warning: node BirchArc.bx, port P unrecognized",
+     "Warning: node CedarArc.ci, port P unrecognized",
+     "Warning: node CedarArc.cx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_long_cubic_round4.puml": {
+    "lost": [
+     "Warning: node ZenithBay47.zi, port P unrecognized",
+     "Warning: node ZenithBay47.zx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_short_cubic_round4.puml": {
+    "lost": [
+     "Warning: node MicaGate47.mi, port P unrecognized",
+     "Warning: node MicaGate47.mx, port P unrecognized",
+     "Warning: node OpalGate47.oi, port P unrecognized",
+     "Warning: node OpalGate47.ox, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_root_leaf_interleave.puml": {
+    "lost": [
+     "Warning: node AmberZone.aa, port P unrecognized",
+     "Warning: node AmberZone.ax, port P unrecognized",
+     "Warning: node MossZone.ma, port P unrecognized",
+     "Warning: node MossZone.mx, port P unrecognized",
+     "Warning: node QuartzZone.qa, port P unrecognized",
+     "Warning: node QuartzZone.qx, port P unrecognized"
+    ],
+    "gained": []
+   },
+   "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.puml": {
+    "lost": [
+     "Warning: node BirchCell.bi, port P unrecognized",
+     "Warning: node BirchCell.bo, port P unrecognized",
+     "Warning: node CedarCell.ci, port P unrecognized",
+     "Warning: node CedarCell.co, port P unrecognized",
+     "Warning: node DeltaCell.di, port P unrecognized",
+     "Warning: node DeltaCell.do, port P unrecognized"
+    ],
+    "gained": []
+   }
+  }
+ },
+ "GET_goldens": {
+  "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+   "3992971a7": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "71d16da4a": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "7ec2e5af8": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+   "3992971a7": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "71d16da4a": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "7ec2e5af8": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  },
+  "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+   "3992971a7": {
+    "exit": 0,
+    "strict": "MATCH"
+   },
+   "71d16da4a": {
+    "exit": 0,
+    "strict": "DIFF"
+   },
+   "7ec2e5af8": {
+    "exit": 0,
+    "strict": "DIFF"
+   }
+  }
+ }
+}

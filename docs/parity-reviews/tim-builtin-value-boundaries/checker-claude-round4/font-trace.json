@@ -1,0 +1,83 @@
+{
+ "rust_table": "CHAR_WIDTHS_14 (size 14 plain)",
+ "fonts": [
+  {
+   "file": "/System/Library/Fonts/LucidaGrande.ttc",
+   "name": "Lucida Grande",
+   "units_per_em": 2048,
+   "ascii_advances_equal_to_rust_table": 95,
+   "notdef_glyph": ".notdef",
+   "notdef_advance_units": 1536,
+   "notdef_advance_em": 0.75,
+   "maps_U+10FFFD": false,
+   "maps_U+10FFFF": false,
+   "maps_U+F0000": false,
+   "maps_U+F000": false
+  },
+  {
+   "file": "/System/Library/Fonts/LucidaGrande.ttc",
+   "name": "Lucida Grande Bold",
+   "units_per_em": 2048,
+   "ascii_advances_equal_to_rust_table": 2,
+   "notdef_glyph": ".notdef",
+   "notdef_advance_units": 1536,
+   "notdef_advance_em": 0.75,
+   "maps_U+10FFFD": false,
+   "maps_U+10FFFF": false,
+   "maps_U+F0000": false,
+   "maps_U+F000": false
+  },
+  {
+   "file": "/System/Library/Fonts/Helvetica.ttc",
+   "name": "Helvetica",
+   "units_per_em": 2048,
+   "ascii_advances_equal_to_rust_table": 0,
+   "notdef_glyph": ".notdef",
+   "notdef_advance_units": 1298,
+   "notdef_advance_em": 0.6337890625,
+   "maps_U+10FFFD": false,
+   "maps_U+10FFFF": false,
+   "maps_U+F0000": false,
+   "maps_U+F000": false
+  },
+  {
+   "file": "/System/Library/Fonts/Helvetica.ttc",
+   "name": "Helvetica Bold",
+   "units_per_em": 2048,
+   "ascii_advances_equal_to_rust_table": 0,
+   "notdef_glyph": ".notdef",
+   "notdef_advance_units": 1479,
+   "notdef_advance_em": 0.72216796875,
+   "maps_U+10FFFD": false,
+   "maps_U+10FFFF": false,
+   "maps_U+F0000": false,
+   "maps_U+F000": false
+  },
+  {
+   "file": "/System/Library/Fonts/Supplemental/Arial.ttf",
+   "name": "Arial",
+   "units_per_em": 2048,
+   "ascii_advances_equal_to_rust_table": 0,
+   "notdef_glyph": ".notdef",
+   "notdef_advance_units": 1536,
+   "notdef_advance_em": 0.75,
+   "maps_U+10FFFD": false,
+   "maps_U+10FFFF": false,
+   "maps_U+F0000": false,
+   "maps_U+F000": false
+  },
+  {
+   "file": "/System/Library/Fonts/SFNS.ttf",
+   "name": "System Font",
+   "units_per_em": 2048,
+   "ascii_advances_equal_to_rust_table": 0,
+   "notdef_glyph": ".notdef",
+   "notdef_advance_units": 2048,
+   "notdef_advance_em": 1.0,
+   "maps_U+10FFFD": false,
+   "maps_U+10FFFF": false,
+   "maps_U+F0000": false,
+   "maps_U+F000": false
+  }
+ ]
+}

@@ -1,0 +1,6 @@
+test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_outer_note_left_of_image.puml
+test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_outer_two_notes_on_image.puml
+test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_root_cluster_note.puml
+test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_root_two_clusters_notes.puml
+test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_upper_escape_point.puml
+test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_usecase.puml

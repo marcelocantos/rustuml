@@ -1,0 +1,4 @@
+@startuml
+state "Mark 􏨀" as Mark
+[*] --> Mark
+@enduml

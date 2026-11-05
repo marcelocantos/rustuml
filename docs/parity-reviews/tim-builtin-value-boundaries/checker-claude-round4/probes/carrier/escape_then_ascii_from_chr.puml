@@ -1,0 +1,3 @@
+@startuml
+class "x %chr(1112063)a" as E
+@enduml
