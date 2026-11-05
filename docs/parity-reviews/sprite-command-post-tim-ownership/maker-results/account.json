@@ -58,5 +58,6 @@
    "rejection_contract.py (docs/parity-reviews/sequence-consumer-contract-packet/checker-9784-astra-b4b6/support) on Java-invalid inputs"
   ],
   "reported_separately": "lost passes, lost rejections, new valid-input errors, panics"
- }
+ },
+ "amendment_round3": "Correction recorded in round 3 (account of record maker-results-round3/account.json), without rewriting history: 'known_deviation_planned' above is wrong about the implementation. Round-2 production 95cf85252 offers a command-start line to the sprite group BEFORE the description (component.rs, deployment.rs, usecase.rs) and activity (activity.rs, both legacy and activity3) handlers, which is the Java order (DescriptionDiagramFactory, ActivityDiagramFactory and ActivityDiagramFactory3 #initCommandsList call CommonCommands#addCommonCommands1 before their own commands). A line both a description handler and a sprite command accept therefore becomes the sprite command, as in Java; no 'offered last' deviation exists. The round-2 commit message's 'description and activity families offer a command-start line before theirs' is the accurate statement."
 }

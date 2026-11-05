@@ -2,25 +2,22 @@
  "schema_version": 1,
  "mechanism": "sequence-participant-silent-residue",
  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
- "status": "guard-schema projection of maker-results/account.json (account of record, committed before the draft); independent review required",
+ "status": "guard-schema projection of maker-results-round3/account.json (round-3 account of record, committed before the round-3 drafts); round-2 account maker-results/account.json; independent review required",
  "java_locations": [
   "net.sourceforge.plantuml.sequencediagram.command.CommandParticipant#executeArg",
-  "net.sourceforge.plantuml.url.UrlBuilder#getUrl / Url#getTooltip",
-  "net.sourceforge.plantuml.stereo.Stereotype#build",
-  "net.sourceforge.plantuml.sequencediagram.SequenceDiagram#putParticipantInLast / #addWithOrder",
-  "net.sourceforge.plantuml.sequencediagram.command.CommandGrouping#executeArg",
-  "net.sourceforge.plantuml.sequencediagram.command.CommandReturn#getRegexConcat"
+  "net.sourceforge.plantuml.url.UrlBuilder#getUrl (QUOTED, ONLY_TOOLTIP, ONLY_TOOLTIP_AND_LABEL, LINK_TOOLTIP_NOLABEL, LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL; UrlMode.STRICT) / Url#<init>",
+  "net.sourceforge.plantuml.sequencediagram.SequenceDiagram#putParticipantInLast / #addWithOrder / #getOrCreateParticipant / #createNewParticipant"
  ],
  "rust_locations": [
-  "crates/rustuml-parser/src/diagram/sequence.rs::Participant (url_tooltip)",
-  "crates/rustuml-parser/src/parse/sequence.rs::{parse_sequence, try_participant_decl_in_command, SeqParser::report_put_participant_in_last, SeqParser::finish}",
-  "crates/rustuml-render/src/sequence.rs::participant_group_open"
+  "crates/rustuml-parser/src/parse/mod.rs (new url_builder_url: UrlBuilder#getUrl STRICT alternatives)",
+  "crates/rustuml-parser/src/parse/sequence.rs::try_participant_decl_in_command (participant URL and tooltip from url_builder_url)",
+  "crates/rustuml-parser/src/parse/sequence.rs::SeqParser (Java participantsList order and per-participant Java order; report_put_participant_in_last compares the list position before and after addWithOrder)"
  ],
- "invariant": "Participant and colour variants the renderer does not reproduce produce explicit residue on stderr, never silently wrong output; the participant link title is Url#getTooltip.",
- "causal_divergence": "Tooltips were discarded, multiple stereotypes collapsed into one label, re-declarations skipped putParticipantInLast, teoz participant anchors and CommandGrouping backColorGeneral were dropped, all without a warning.",
- "planned_change": "Record the URL tooltip and use it as the legacy anchor title; warn for multiple stereotype labels, creole links inside quoted displays, teoz participant anchors, reordering or reboxing re-declarations and the group general background colour.",
+ "invariant": "The participant anchor title is Url#getTooltip exactly as UrlBuilder#getUrl produces it; a re-declaration warns only when Java's participantsList position or box actually changes.",
+ "causal_divergence": "extract_link_tooltip took the first {...} anywhere in the link and trimmed it (and dropped an empty one); report_put_participant_in_last ordered by (order or index, index), which is Java's order only when no explicit order exists.",
+ "planned_change": "Port UrlBuilder#getUrl's five STRICT alternatives with Url's quote stripping and tooltip default for participant links (class keeps its existing tooltip reader, out of scope); keep a Java participantsList simulation (addWithOrder with Java order 0 by default) in the sequence parser and compare positions.",
  "perturbation_axes": [
-  "participant tooltip, multiple stereotypes, link inside quoted display, legacy and teoz",
-  "re-declaration order and box membership; group COLORS[1]; colour-free geometry controls"
+  "tooltip shapes: label owning {x}, spaced, empty, nested braces, tooltip-only [[{x}]] and [[{x} label]], quoted URL with tooltip and label, legacy and teoz",
+  "re-declaration with explicit orders (stable, lower, higher, negative), implicit participants, boxes"
  ]
 }

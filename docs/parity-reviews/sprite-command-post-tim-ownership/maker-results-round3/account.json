@@ -1,0 +1,85 @@
+{
+ "schema_version": 1,
+ "mechanism": "sprite-command-post-tim-ownership",
+ "round": 3,
+ "status": "preimplementation account of record for round 3, committed before the round-3 drafts; independent review required",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "rejection": "f803c8e333e33e15ccbde218f15df620617eb5bd (checker-claude review of round-2 maker tip 5cf1eac12)",
+ "integration_base": "a20ae0f6d (parity-recovery-2026-11-03; code identical to 9834a7194, only bullseye.yaml moved)",
+ "obligations": [
+  "1 (blocking): before the sprite dispatch each family owns every body Java's earlier-selected multiline commands own (addTitleCommands title/legend/header/footer/caption, description [ ... ] element bodies, legacy-activity note and legend bodies), ported from each factory's initCommandsList order",
+  "2 (blocking): no Rust-only trailing-apostrophe stripping on any line inside an open sprite command (start, body and END lines)",
+  "3: a pixel or SVG sprite inside a same-file !startsub block is registered (Java replays the startsub body in place)",
+  "6 (process): amend the round-2 account, which said description/activity sprites are offered last; the round-2 code offers them first, which is the Java order"
+ ],
+ "java_trace": {
+  "candidate_selection": [
+   "net.sourceforge.plantuml.command.PSystemCommandFactory#getCandidate: for the line at the iterator, every registered command is tried in initCommandsList order; OK selects one line, OK_PARTIAL runs #isMultilineCommandOk on a cloned iterator and the command is skipped (continue) if it never completes",
+   "PSystemCommandFactory#isMultilineCommandOk: lines are added one at a time through #addOneSingleLineManageEmbedded2 (a '{{...' embedded start pulls every line through the matching '}}' as one step) and Command#isValid is re-evaluated on the growing block; NOT_OK abandons, OK completes",
+   "Consequence: a body line of a selected multiline command is never itself offered to getCandidate, whichever command group (sprites included) is registered later or earlier. Registration order only decides between commands that accept the same start line."
+  ],
+  "multiline_base_classes": [
+   "command.CommandMultilines#isValid (CommandMultilinesTitle/Header/Footer/Caption): start Pattern2 on the trimmed first line, END Pattern2 on the trimmed last line",
+   "command.CommandMultilines2#isValid: cleanList(strategy), start IRegex on the trimmed first line, END on trimEnd(last line), finalVerification; #syntaxWithFinalBracket (CommandCreateClassMultilines only) accepts 'start' + ' {' on one line and BlocLines#eventuallyMoveBracket a lone '{' second line",
+   "command.CommandMultilinesBracket#isValid (CommandSkinParamMultilines): brace level counting with #isLineConsistent (SkinLoader.p1 or CommandMultilinesComment.COMMENT_SINGLE_LINE)",
+   "objectdiagram.command.CommandCreateJson#finalVerification: an END whose accumulated body does not parse as JSON stays OK_PARTIAL (the block extends to a later END)",
+   "MultilinesStrategy.REMOVE_STARTING_QUOTE drops lines starting with ' before END is tested; TIM (tim.iterator.CodeIteratorShortComment) has already removed such lines"
+  ],
+  "registration_orders": [
+   "command.CommonCommands#addCommonCommands1 = addTitleCommands (CommandTitle, CommandMainframe, CommandCaption, CommandMultilinesCaption, CommandMultilinesTitle, CommandMultilinesLegend, CommandLegend, CommandFooter, CommandMultilinesFooter, CommandHeader, CommandMultilinesHeader, CommandNamespaceSeparator) then addCommonCommands2 (... CommandSkinParamMultilines ... the seven sprite commands, CommandStyleMultilinesCSS ...)",
+   "descdiagram.DescriptionDiagramFactory#initCommandsList: addCommonCommands1 first; then CommandFactoryNote multi (note as), CommandFactoryNoteOnLink multi, CommandCreateElementFull (single, may accept a line CommandCreateElementMultilines TYPE1 would also start), CommandCreateElementMultilines TYPE0 (as \"...) and TYPE1 ([ ... ]), CommandFactoryNoteOnEntity multi with and without bracket, CommandCreateMap, CommandCreateJson, CommandArchimateMultilines",
+   "statediagram.StateDiagramFactory#initCommandsList: CommandFactoryNoteOnEntity multi (state CODE) with/without bracket, CommandFactoryNoteOnLink multi, CommandFactoryNote multi, CommandCreateMap, CommandCreateJson, then addCommonCommands1",
+   "activitydiagram.ActivityDiagramFactory#initCommandsList: addCommonCommands1, then CommandLinkLongActivity (multiline arrow label), CommandFactoryNoteActivity multi (note left|right|top|bottom), CommandFactoryNoteOnLink multi",
+   "classdiagram.ClassDiagramFactory#initCommandsList (class and object diagrams): CommandCreateClassMultilines, CommandCreateEntityObjectMultilines, CommandCreateMap, CommandCreateJson, CommandCreateElementFull2 x2 (single), CommandFactoryTipOnEntity multi with/without bracket, CommandFactoryNoteOnEntity multi (class CODE) with/without bracket, CommandFactoryNote multi, CommandFactoryNoteOnLink multi, CommandCreateElementMultilines TYPE0/TYPE1, then addTitleCommands and addCommonCommands2"
+  ],
+  "comment_handling": [
+   "tim.TContext#buildCodeIterator: CodeIteratorLongComment (/' ... '/), CodeIteratorShortComment (TLineType.COMMENT_SIMPLE: trimmed line starting with '), CodeIteratorInnerComment -> text.StringLocated#removeInnerComment (only /' ... '/ spans and /'''x'''/)",
+   "Java has no trailing-apostrophe comment form anywhere: '<text> 'hi'</text></svg>' and '</svg> ' done' reach CommandSpriteSvgMultiline unchanged; END (.*\\</svg\\>)$ with Matcher#matches decides completion"
+  ],
+  "startsub": [
+   "tim.iterator.CodeIteratorSub#peek (it50, before CodeIteratorReturnFunction/Procedure/If at it60-it70): on STARTSUB it collects every line to ENDSUB into a Sub, stores it in subs, then replays the collected lines in place through readingInProgress, so the rest of the chain (procedures, !if, defines) and the diagram see the body exactly where it was written",
+   "tim.TContext#executeIncludesub replays a Sub's lines again when an !includesub names it"
+  ]
+ },
+ "rust_locations": [
+  "crates/rustuml-parser/src/parse/command_spans.rs (new): per-factory registry of the multiline commands (and the single-line commands that can take one of their start lines first) in initCommandsList order; a getCandidate walk over the post-TIM lines marks the lines owned by a non-sprite multiline command",
+  "crates/rustuml-parser/src/parse/{component,deployment,usecase}.rs (DescriptionDiagramFactory), state.rs (StateDiagramFactory), object.rs and class.rs (ClassDiagramFactory), activity.rs parse_legacy_activity (ActivityDiagramFactory): the sprite group is not offered a line the walk assigns to another multiline command",
+  "crates/rustuml-parser/src/preprocess/mod.rs::PreprocessContext::process_one_line: the Rust-only strip_inline_comment is not applied to a line any sprite start grammar accepts, nor to lines while a sprite multiline command (CommandFactorySprite multiline, CommandSpriteSvgMultiline) is open, through its END line",
+  "crates/rustuml-parser/src/preprocess/mod.rs (!startsub): the collected body is also processed in place, except inside a !theme body expansion (whose sub blocks are already replayed into theme_tail) and the existing seed pass"
+ ],
+ "invariant": "A line that Java's getCandidate never offers as a command start (the body or END of a multiline command selected earlier) is never offered to the sprite group; a line owned by a sprite command reaches it with Java's text (no Rust-only comment stripping); a !startsub body takes part in the diagram where it is written.",
+ "causal_divergence": "Round 2 offered every line a family parser did not otherwise claim to the sprite group, but the Rust family parsers do not model all of Java's multiline commands (multiline header/footer/caption in description, state and object; [ ... ] element bodies; legacy-activity note bodies), so body text such as 'Sprite sheets are loaded' became CommandSpriteFile. Separately, the preprocessor's Rust-only trailing-apostrophe stripping only spared the SVG start line, and !startsub bodies were never emitted in place (masked earlier by the in-TIM sprite collector).",
+ "planned_change": "Port getCandidate's ownership rule per factory as a registry walk; gate the sprite dispatch on it. Exempt sprite start lines and open sprite command lines from the inline-comment stripping. Replay !startsub bodies in place outside theme expansion.",
+ "known_residue_planned": [
+  "Single-line commands are modelled only where they can accept a start line of a later modelled multiline command (the addTitleCommands singles, CommandCreateElementFull, CommandCreateElementFull2); the other singles are disjoint by leading keyword or required token, argued per factory in the module.",
+  "ColorParser PART2's negative lookahead (?![\\w;:.]) has no Rust regex equivalent. Every modelled grammar follows the colour leaf with end of line, whitespace, '{', '[', '#' or 'as'; for all but the last the lookahead-free form accepts the same lines, and the 'as' case needs a composite colour glued to 'as'.",
+  "FoxSignature prefilters are not applied in the walk (they only differ from the regex on a vertical-tab separator).",
+  "JSON validity in CommandCreateJson#finalVerification uses serde_json, not net.sourceforge.plantuml.json.JsonParser.",
+  "The comment exemption is tracked in the streaming preprocessor, so a sprite opened outside a procedure body and closed inside it is still stripped when the body is defined; unclosed sprite starts keep the exemption to end of file (Java strips nothing, and Java rejects such inputs)."
+ ],
+ "perturbation_axes": [
+  "every AT failure shape renamed: other body texts (Sprite file text, pixel/SVG header lookalikes, uppercase SPRITE), other families (usecase, deployment, component, state, object, class, legacy activity), other multiline owners (caption, positioned header/footer, legend top left, note on link, note of entity with/without bracket, TYPE0 as \"...\" bodies, map/json bodies, class bodies with a separate '{' line)",
+  "deeper nesting: bodies inside packages/composite states, embedded {{ }} inside a note body containing an END lookalike",
+  "apostrophes in SVG body/END lines and in pixel sprite END lines; trailing text after </svg> and after '}'",
+  "!startsub in the same file across families, with and without !includesub of the same block, inside !if"
+ ],
+ "precommitted_measurement": {
+  "builds": "private git-archive exports, CARGO_TARGET_DIR outside the repo, -j 6. Primary before = 93bf53e18 (pre-packet tree; code identical to dc1dfbb4a + a20ae0f6d). Secondary before = dea00b29 (round-2 tip merged with a20ae0f6d). After = round-3 tip.",
+  "cli": "actual rustuml CLI, unchanged compare_cli (docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs, sha256 d1424469...), four modes (-tsvg, --ast, -ttxt, --yaml, all -pipe) via the checker's unchanged replay.py",
+  "cohorts": [
+   "AT 45 (relay sprite-ownership-checker-batch1), AS 54, AQ 43, 790, 28 (prepare.py; manifests byte-identical to checker-claude fresh-manifest.json and fresh-at-manifest.json)",
+   "retained 4,174 (checker-claude retained-manifest.json)",
+   "all 12,550 goldens at SVG byte level",
+   "a new held-out maker batch, staged as an immutable relay request (results counted only once relayed)"
+  ],
+  "reported_separately_per_cohort": "lost matches, lost rejections, new valid-input errors, panics (bar: zero each), and gains; Java validity from raw SVG plus stderr markers",
+  "gates": [
+   "golden_no_oracle failure-name diff against 9834a7194",
+   "golden_pairs",
+   "parity_perturbations: zero new failures in pre-existing directories",
+   "harness_guards by category",
+   "pipe_mode, cargo test --release --workspace --lib",
+   "rejection_contract.py (unchanged) on the Java-invalid fresh inputs"
+  ]
+ }
+}

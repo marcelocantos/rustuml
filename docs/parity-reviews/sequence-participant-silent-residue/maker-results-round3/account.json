@@ -1,0 +1,43 @@
+{
+ "schema_version": 1,
+ "mechanism": "sequence-participant-silent-residue",
+ "round": 3,
+ "status": "preimplementation account of record for round 3, committed before the round-3 drafts; independent review required",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "rejection": "f803c8e333e33e15ccbde218f15df620617eb5bd (checker-claude review of round-2 maker tip 5cf1eac12)",
+ "obligations": [
+  "4 (blocking): the participant URL tooltip follows UrlBuilder#getUrl's alternatives in order (STRICT): untrimmed and possibly empty tooltip; [[url label{x}]] keeps {x} in the label and the tooltip is the URL; { rings } keeps its spaces; {} is an empty title; {a{b}c} is a{b}c",
+  "5: the re-declaration warning fires only when SequenceDiagram#putParticipantInLast (remove, then #addWithOrder) changes the participant's list position or its box"
+ ],
+ "java_trace": {
+  "url": [
+   "sequencediagram.command.CommandParticipant#executeArg: urlString = arg.get(UrlBuilder.URL_KEY, 0); new UrlBuilder(skinParam.getValue(\"topurl\"), UrlMode.STRICT).getUrl(urlString)",
+   "url.UrlBuilder#getUrl tries, in order and with Matcher#matches (STRICT): QUOTED  \\[\\[[%s]*[%g]([^%g]+)[%g](?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\] -> Url(withTopUrl(g1), g2, g3); ONLY_TOOLTIP \\[\\[[%s]*\\{(.*)\\}[%s]*\\]\\] -> Url(\"\", g1, null); ONLY_TOOLTIP_AND_LABEL \\[\\[[%s]*\\{([^{}]*)\\}[%s]*([^\\[%s\\{\\}\\[\\]][^\\[\\]]*)[%s]*\\]\\] -> Url(\"\", g1, g2); LINK_TOOLTIP_NOLABEL \\[\\[[%s]*([^\\s%g{}\\[\\]]+?)[%s]*\\{(.+)\\}[%s]*\\]\\] -> Url(withTopUrl(g1), g2, null); LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL \\[\\[[%s]*([^%s%g\\[\\]]+?)(?:[%s]*\\{([^{}]*)\\})?(?:[%s]([^%s\\{\\}\\[\\]][^\\[\\]]*))?[%s]*\\]\\] -> Url(withTopUrl(g1), g2, g3)",
+   "url.Url#<init>: url = StringUtils#eventuallyRemoveStartingAndEndingDoubleQuote(url); tooltip = tooltip == null ? url : tooltip (no trim; '' stays ''); label = label null/empty ? url : label",
+   "Consequences: [[https://example.org/ring ring{x}]] -> LINK_TOOLTIP_NOLABEL fails (the link group excludes whitespace and '{' must follow), the last alternative takes label 'ring{x}' and tooltip null -> title is the URL; [[u{ rings }]] -> ' rings '; [[u{}]] -> LINK_TOOLTIP_NOLABEL needs (.+) so the last alternative takes tooltip '' -> empty title; [[u{a{b}c}]] -> LINK_TOOLTIP_NOLABEL (.+) greedy -> 'a{b}c'"
+  ],
+  "redeclaration": [
+   "CommandParticipant#executeArg: if diagram.participantsContainsKey(code) then diagram.putParticipantInLast(code) and return",
+   "SequenceDiagram#putParticipantInLast: participantsList.remove(p); #addWithOrder(p); participantEnglobers2.put(p, participantEnglober)",
+   "SequenceDiagram#addWithOrder: insert before the first participant whose getOrder() is strictly greater, else append",
+   "SequenceDiagram#getOrCreateParticipant: implicit participants have order 0; CommandParticipant: ORDER absent -> 0, else Integer.parseInt (signed)"
+  ]
+ },
+ "rust_locations": [
+  "crates/rustuml-parser/src/parse/mod.rs (new url_builder_url: UrlBuilder#getUrl STRICT alternatives)",
+  "crates/rustuml-parser/src/parse/sequence.rs::try_participant_decl_in_command (participant URL and tooltip from url_builder_url)",
+  "crates/rustuml-parser/src/parse/sequence.rs::SeqParser (Java participantsList order and per-participant Java order; report_put_participant_in_last compares the list position before and after addWithOrder)"
+ ],
+ "invariant": "The participant anchor title is Url#getTooltip exactly as UrlBuilder#getUrl produces it; a re-declaration warns only when Java's participantsList position or box actually changes.",
+ "causal_divergence": "extract_link_tooltip took the first {...} anywhere in the link and trimmed it (and dropped an empty one); report_put_participant_in_last ordered by (order or index, index), which is Java's order only when no explicit order exists.",
+ "planned_change": "Port UrlBuilder#getUrl's five STRICT alternatives with Url's quote stripping and tooltip default for participant links (class keeps its existing tooltip reader, out of scope); keep a Java participantsList simulation (addWithOrder with Java order 0 by default) in the sequence parser and compare positions.",
+ "known_residue_planned": [
+  "topurl (Url#withTopUrl) is not applied: the participant model has no topurl skinparam plumbing; recorded, not changed.",
+  "Url#getLabel is not modelled for participants (the sequence renderer has no participant URL label)."
+ ],
+ "perturbation_axes": [
+  "tooltip shapes: label owning {x}, spaced, empty, nested braces, tooltip-only [[{x}]] and [[{x} label]], quoted URL with tooltip and label, legacy and teoz",
+  "re-declaration with explicit orders (stable, lower, higher, negative), implicit participants, boxes"
+ ],
+ "precommitted_measurement": "Same builds, cohorts and gates as sprite-command-post-tim-ownership/maker-results-round3/account.json; participant cases reported per cohort, and stderr warning counts before/after on the AT, AS, 790 and 28 participant cases."
+}
