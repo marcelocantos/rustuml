@@ -41,6 +41,11 @@ pub struct PreprocessOutput {
     /// SVG resources hash this expanded source, rather than the raw input,
     /// when deriving deterministic filter and gradient identifiers.
     pub uml_source: String,
+    /// Java export-time failure (T14.20): an unpaired UTF-16 surrogate was
+    /// projected into diagram text. Java's SVG serializer throws a SAXException
+    /// for it and `UgDiagram.exportDiagram` exports the crash diagram instead.
+    /// Fatal TIM errors and parser errors take precedence, as in Java.
+    pub export_failure: Option<PreprocessError>,
 }
 
 const SOURCE_LINE_PREFIX: &str = "\x1ERSL:";
@@ -129,6 +134,7 @@ fn preprocess_full_inner(
         sprites,
         uml_source,
         error: ctx.error,
+        export_failure: ctx.export_failure,
     }
 }
 
@@ -676,6 +682,9 @@ struct PreprocessContext {
     preserve_teoz_pragma: bool,
     /// Effects produced while evaluating the current statement expression.
     error: Option<PreprocessError>,
+    /// First unpaired surrogate projected by the current substitution.
+    unpaired_projection: Option<u16>,
+    export_failure: Option<PreprocessError>,
     expression_events: Vec<EvaluatedEvent>,
     text_consumed: bool,
     execution_kind: FunctionKind,
@@ -918,6 +927,8 @@ impl PreprocessContext {
             mark_function_body_source_lines,
             preserve_teoz_pragma: false,
             error: None,
+            unpaired_projection: None,
+            export_failure: None,
             expression_events: Vec::new(),
             text_consumed: false,
             execution_kind: FunctionKind::Procedure,
@@ -1371,6 +1382,7 @@ impl PreprocessContext {
         // Only output lines when all conditions are active.
         if self.is_active() {
             // Expand archimate macros before variable substitution.
+            let outer_projection = self.unpaired_projection.take();
             let line_to_process =
                 if let Some(expanded) = self.try_expand_archimate(line_no_comment.trim()) {
                     expanded
@@ -1379,6 +1391,7 @@ impl PreprocessContext {
                     // scan as variables. Never rescan the completed substitution.
                     self.substitute_vars(&line_no_comment)
                 };
+            let unpaired = std::mem::replace(&mut self.unpaired_projection, outer_projection);
             // A definelong expansion can produce multiple lines joined with '\n'.
             // Split them so each line is processed individually by the parser.
             // Blank lines are pushed too so that source-line indices match the
@@ -1387,6 +1400,9 @@ impl PreprocessContext {
             // blank lines but excludes the dropped `@startuml`.
             if self.text_consumed || self.execution_kind == FunctionKind::Return {
                 return;
+            }
+            if let Some(unit) = unpaired {
+                self.record_export_failure(unit);
             }
             for expanded_line in line_to_process.split('\n') {
                 self.push_content_line(output, expanded_line.to_string());
@@ -1882,9 +1898,14 @@ impl PreprocessContext {
             }
             output.extend(lines);
             if let Some(value) = ret {
-                let value = value.to_display();
-                if !value.is_empty() && self.execution_kind != FunctionKind::Return {
-                    self.push_content_line(output, value);
+                let outer_projection = self.unpaired_projection.take();
+                let text = self.project_value(&value);
+                let unpaired = std::mem::replace(&mut self.unpaired_projection, outer_projection);
+                if !text.is_empty() && self.execution_kind != FunctionKind::Return {
+                    if let Some(unit) = unpaired {
+                        self.record_export_failure(unit);
+                    }
+                    self.push_content_line(output, text);
                 }
             }
 
@@ -2652,6 +2673,34 @@ impl PreprocessContext {
         self.eval_expr_to_value(expr).truth()
     }
 
+    /// Project a TIM value into diagram text. Java keeps an unpaired UTF-16
+    /// unit in the StringLocated line; Rust's String cannot, so remember the
+    /// first such unit for the export-failure contract before the lossy text.
+    fn project_value(&mut self, value: &Value) -> String {
+        if self.unpaired_projection.is_none()
+            && let Value::Utf16(units) = value
+        {
+            self.unpaired_projection = char::decode_utf16(units.iter().copied())
+                .find_map(|decoded| decoded.err().map(|error| error.unpaired_surrogate()));
+        }
+        value.to_display()
+    }
+
+    /// The SAXException that `SvgGraphics` export raises for an unpaired unit
+    /// in character data (ToStream.accumDefaultEscape).
+    fn record_export_failure(&mut self, unit: u16) {
+        if self.export_failure.is_none() {
+            self.export_failure = Some(PreprocessError {
+                line: self
+                    .source_line_override
+                    .unwrap_or_else(|| self.current_diagram_source_line()),
+                message: format!(
+                    "An invalid XML character (Unicode: 0x{unit:x}) was found in the node's character data content."
+                ),
+            });
+        }
+    }
+
     fn fail(&mut self, message: String) {
         // EaterException unwinds the Java evaluator: the first diagnostic wins.
         if self.error.is_none() {
@@ -2785,18 +2834,16 @@ impl PreprocessContext {
                     && let Some(close) = find_matching_paren_from(line, name_end)
                 {
                     if ch == '%' {
-                        result.push_str(
-                            &self
-                                .eval_builtin_with_expr_args(name, &line[name_end + 1..close])
-                                .to_display(),
-                        );
+                        let value =
+                            self.eval_builtin_with_expr_args(name, &line[name_end + 1..close]);
+                        result.push_str(&self.project_value(&value));
                     } else {
                         let args = parse_call_args(&line[name_end + 1..close]);
                         let (value, mut events) =
                             self.call_function(&line[offset..name_end], &args);
                         if let Some(value) = value {
                             self.expression_events.extend(events);
-                            result.push_str(&value.to_display());
+                            result.push_str(&self.project_value(&value));
                         } else {
                             // TContext.pendingAdd / appendToLastResult. Keep
                             // every event variant, including themes and options.
@@ -2912,7 +2959,7 @@ impl PreprocessContext {
                     result.truncate(result.len() - 2);
                 }
                 let (value, end) = self.variable_path(value, line, offset + name.len());
-                result.push_str(&value.to_display());
+                result.push_str(&self.project_value(&value));
                 offset = end;
                 if line[offset..].starts_with("##") {
                     offset += 2;
@@ -4353,6 +4400,34 @@ mod tests {
             assert_eq!(
                 ctx.error.unwrap().message,
                 format!("Cannot convert {text} to integer.")
+            );
+        }
+    }
+
+    #[test]
+    fn unpaired_surrogate_in_diagram_text_is_an_export_failure() {
+        // Java keeps the lone unit in the diagram line; SvgGraphics export
+        // throws SAXException for it (T14.20). Values that never become text
+        // and re-joined pairs stay valid.
+        let failing = [
+            "@startuml\n!$a=%lower(%substr(\"🚀\",1,1))\nclass \"$a\" as Residue\n@enduml\n",
+            "@startuml\nclass \"x%substr(\"🚀\",0,1)\" as High\n@enduml\n",
+        ];
+        // Lines are diagram lines: Java data-source-line excludes @startuml.
+        for (source, (unit, line)) in failing.iter().zip([("0xde80", 2), ("0xd83d", 1)]) {
+            let output = preprocess_full(source, None);
+            assert!(output.error.is_none());
+            let failure = output.export_failure.expect(source);
+            assert!(failure.message.contains(unit), "{}", failure.message);
+            assert_eq!(failure.line, line);
+        }
+        for source in [
+            "@startuml\n!$a=%substr(\"🚀\",1,1)\nclass Quiet\n@enduml\n",
+            "@startuml\n!$a=%substr(\"🚀\",0,1)+%substr(\"🚀\",1,1)\nclass \"$a\" as Joined\n@enduml\n",
+        ] {
+            assert!(
+                preprocess_full(source, None).export_failure.is_none(),
+                "{source}"
             );
         }
     }
