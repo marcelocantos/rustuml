@@ -576,7 +576,13 @@ mod tests {
         let source = diagram.meta().source.as_deref().unwrap();
 
         // `SvgGraphics.shadowId`: StringUtils.seed over the post-reader source.
-        assert_eq!(shadow_id_for(source), "fbdz2fx1jlqnt");
+        // Raw-reader seed under the owner raw-input contract
+        // (docs/reference-bootstrap.md, b62d8ce96): pinned Java `-pipe` keeps
+        // the two blank lines and emits f1jczin02njk7 for this exact input
+        // (relay batch AU, reference-results.json SHA256
+        // 44959f34ee5ecaa773827942b7e46fa98a66de7821a0abe946b66808f2a51c60,
+        // case raw_unit_test_input). fbdz2fx1jlqnt was the GET-stripped seed.
+        assert_eq!(shadow_id_for(source), "f1jczin02njk7");
     }
 
     #[test]
