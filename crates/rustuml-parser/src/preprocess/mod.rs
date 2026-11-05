@@ -141,6 +141,7 @@ fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) ->
     let mut source = String::new();
     let mut in_block = false;
     let mut skip_initial_empty_lines = false;
+    let mut in_long_comment = false;
     for (index, line) in input.lines().enumerate() {
         let source_line = index + 1;
         let trimmed = line.trim_start();
@@ -167,7 +168,30 @@ fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) ->
                 source.push('\n');
             }
         } else {
-            source.push_str(line);
+            // The TIM result list (BlockUml#data) carries
+            // StringLocated#removeInnerComment's text for every line that
+            // passes the long and short comment stages. Lines those stages
+            // consume keep their raw text here, as before; the comment state
+            // mirrors process_one_line.
+            let trimmed = line.trim();
+            let plain = if in_long_comment {
+                if trimmed.contains("'/") {
+                    in_long_comment = false;
+                }
+                false
+            } else if trimmed.starts_with("/'") {
+                if !trimmed.contains("'/") || trimmed.ends_with("/'") {
+                    in_long_comment = true;
+                }
+                !in_long_comment && !trimmed.ends_with("'/")
+            } else {
+                !trimmed.starts_with('\'')
+            };
+            if plain {
+                source.push_str(&remove_inner_comment(line));
+            } else {
+                source.push_str(line);
+            }
             source.push('\n');
         }
 
@@ -4362,6 +4386,20 @@ $record(SaffronArchive)\n\
             pp("@startuml\n!$x = \"v\" /' c '/\nA -> $x\n@enduml"),
             vec!["A -> v"]
         );
+    }
+
+    #[test]
+    fn theme_seed_source_carries_inner_comment_removal() {
+        let seed = |body: &str| {
+            preprocess(&format!("@startuml\n!theme cerulean\n{body}\n@enduml\n"))
+                .into_iter()
+                .find(|line| line.starts_with("skinparam __svgIdSeed"))
+                .expect("theme seed")
+        };
+        assert_eq!(seed("class B /' c '/"), seed("class B "));
+        assert_ne!(seed("class B /' c '/"), seed("class B /' c"));
+        // Whole-line comments keep their raw text in the seed source.
+        assert_ne!(seed("' c\nclass B"), seed("class B"));
     }
 
     #[test]
