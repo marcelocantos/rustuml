@@ -367,6 +367,12 @@ fn literal_char_width(
     if (32..=126).contains(&code) {
         return table[(code - 32) as usize];
     }
+    if matches!(c, '\n' | '\r') {
+        // Lucida Grande maps LF and CR to glyph 2 (nonmarkingreturn), whose
+        // advance equals the space glyph's (648/2048 em regular, 675/2048
+        // bold; CoreText on the reference fonts).
+        return table[0];
+    }
     if matches!(c, '\u{200D}' | '\u{FE0E}' | '\u{FE0F}') || is_emoji_modifier(code) {
         return 0.0;
     }
