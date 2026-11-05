@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "mechanism": "comment-state-consumers",
+  "amends": "docs/parity-reviews/comment-state-consumers/maker-round3-claude/image-notes-and-nested-clusters-account.json (e9baaa591)",
+  "status": "maker account addendum before draft; independent review required",
+  "finding": "Measured after draft 4daea42ec over the 239 outputs whose bytes changed against the round-2 tip: exact rect/text/line/ellipse x/y agreement with Java rose, but 26 outputs with entry/exit border points moved farther. Java writes a border point's ellipse cx with two decimals (state_composite_* goldens, entry_exit_* perturbations: cx 143.33, 695.67), i.e. the rounded quantity for a border point is its circle center, not a corner.",
+  "java_locations": [
+    "svek/image/EntityImageStateBorder.drawU: the circle is drawn around the shielded SVEK port node of the border point; the serialized node coordinate Java receives from Graphviz is that of the port node, and the drawn ellipse center carries its two decimals."
+  ],
+  "rule": "Ordinary state leaves are painted at their two-decimal corner (no center rounding). Border points (StateEntityPosition::uses_port_p) keep the rounded circle center, as before 4daea42ec. render_non_autarkic_root_clusters keeps its quantized-center positions: switching that producer to corners moved 26 root-path outputs away from Java because its origin carries a sub-pixel drift Java does not have (declared residue below).",
+  "declared_residue": [
+    "Root-path cluster and edge x carry a sub-pixel drift relative to Java (quark_reuse_crossing: cluster rect 80.9424 vs Java 80.94 in base, round-2 tip and this tip). With corner painting, the leaves of the image inside that cluster now follow the cluster (96.9424 vs Java 96.94) in quark_reuse_crossing and rc_quark_reuse_renamed; both remain strict matches. Not addressed in this packet."
+  ],
+  "precommitted_measurement": "whole sweep against the round-2 tip and the merged base: zero lost strict matches; position agreement over changed outputs reported with the outputs that move farther listed by name"
+}
