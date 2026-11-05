@@ -102,8 +102,13 @@ pub(crate) fn normalize_svg_link_title(title: &str) -> String {
             .then(|| u32::from_str_radix(hex, 16).ok())
             .flatten()
             // `SvgGraphics.LinkData#getXlinkTitle` casts the parsed value to
-            // Java `char` before XML serialization.
-            .and_then(|value| char::from_u32(u32::from(value as u16)));
+            // Java `char` before XML serialization. A surrogate value stays an
+            // unpaired unit for the export step (svg_export).
+            .map(|value| value as u16)
+            .map(|unit| {
+                char::from_u32(u32::from(unit))
+                    .unwrap_or_else(|| rustuml_parser::java_utf16::carrier(unit))
+            });
         if let Some(decoded) = decoded {
             normalized.push(decoded);
             rest = &after_marker[end + 1..];

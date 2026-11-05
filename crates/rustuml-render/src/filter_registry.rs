@@ -422,12 +422,11 @@ fn plantuml_seed(s: &str) -> i64 {
     // post-TIM source line, including blank lines, before `StringUtils.seed`
     // hashes the resulting string.
     let mut h: u64 = 1_125_899_906_842_597;
-    for c in s.chars() {
-        // Java's `long h = 31 * h + s.charAt(i)` — `charAt` returns a 16-bit
-        // UTF-16 unit. For characters outside the BMP this would need
-        // surrogate-pair splitting, but the diagram source never hits that
-        // path (all creole tokens are ASCII or BMP code points).
-        h = h.wrapping_mul(31).wrapping_add(c as u32 as u64);
+    // Java's `long h = 31 * h + s.charAt(i)`: `charAt` returns a 16-bit
+    // UTF-16 unit, so astral characters contribute their surrogate pair and
+    // carried unpaired units their own unit (rustuml_parser::java_utf16).
+    for unit in rustuml_parser::java_utf16::units(s) {
+        h = h.wrapping_mul(31).wrapping_add(u64::from(unit));
     }
     h as i64
 }

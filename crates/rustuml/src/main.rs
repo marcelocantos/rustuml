@@ -131,10 +131,15 @@ fn main() {
                 );
             }
             OutputMode::Svg => {
-                print!(
-                    "{}",
-                    rustuml_render::render_svg_with_theme(&diagram, &theme)
-                );
+                // SvgGraphics export can fail (ToStream surrogate rule); Java
+                // then exports its crash diagram. Rust reports it (🎯T14.20).
+                match rustuml_render::try_render_svg_with_theme(&diagram, &theme) {
+                    Ok(svg) => print!("{svg}"),
+                    Err(e) => {
+                        eprintln!("export error: {e}");
+                        std::process::exit(1);
+                    }
+                }
             }
             OutputMode::Pdf => {
                 let svg = rustuml_render::render_svg_with_theme(&diagram, &theme);

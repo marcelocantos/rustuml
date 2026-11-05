@@ -1177,7 +1177,6 @@ pub fn parse_with_base(
     let lines = preprocess_out.lines;
     let sprites = preprocess_out.sprites;
     let uml_source = preprocess_out.uml_source;
-    let export_failure = preprocess_out.export_failure;
 
     // For non-sequence UML diagrams a `newpage` directive splits the diagram
     // into multiple pages, but PlantUML's SVG output renders only the first
@@ -1297,15 +1296,6 @@ pub fn parse_with_base(
             message: format!("unsupported diagram type: @start{other}"),
         }),
     }?;
-
-    // T14.20: the family parse succeeded, so Java reaches SVG export, where
-    // an unpaired surrogate in diagram text makes the serializer throw.
-    if let Some(failure) = export_failure {
-        return Err(ParseError {
-            line: failure.line,
-            message: failure.message,
-        });
-    }
 
     collapse_reassigned_skinparams(&mut diagram);
     diagram.meta_mut().style_program = style_program;

@@ -41,11 +41,6 @@ pub struct PreprocessOutput {
     /// SVG resources hash this expanded source, rather than the raw input,
     /// when deriving deterministic filter and gradient identifiers.
     pub uml_source: String,
-    /// Java export-time failure (T14.20): an unpaired UTF-16 surrogate was
-    /// projected into diagram text. Java's SVG serializer throws a SAXException
-    /// for it and `UgDiagram.exportDiagram` exports the crash diagram instead.
-    /// Fatal TIM errors and parser errors take precedence, as in Java.
-    pub export_failure: Option<PreprocessError>,
 }
 
 const SOURCE_LINE_PREFIX: &str = "\x1ERSL:";
@@ -134,7 +129,6 @@ fn preprocess_full_inner(
         sprites,
         uml_source,
         error: ctx.error,
-        export_failure: ctx.export_failure,
     }
 }
 
@@ -298,7 +292,7 @@ fn svg_id_seed_prefix(source: &str) -> String {
     // over UTF-16 code units; `SvgGraphics.getSeed` formats its absolute value
     // in radix 36.
     let mut hash: u64 = 1_125_899_906_842_597;
-    for unit in source.encode_utf16() {
+    for unit in crate::java_utf16::units(source) {
         hash = hash.wrapping_mul(31).wrapping_add(u64::from(unit));
     }
     let signed = hash as i64;
@@ -367,7 +361,9 @@ impl Value {
     fn to_display(&self) -> String {
         match self {
             Value::Str(s) => s.clone(),
-            Value::Utf16(units) => String::from_utf16_lossy(units),
+            // Unpaired units are carried to SVG export, where ToStream decides
+            // their outcome (crate::java_utf16).
+            Value::Utf16(units) => crate::java_utf16::text(units),
             Value::Json(v) => v.as_str().map_or_else(|| v.to_string(), str::to_string),
             Value::Int(n) => n.to_string(),
             Value::Float(f) => {
@@ -384,7 +380,7 @@ impl Value {
     fn utf16_units(&self) -> Vec<u16> {
         match self {
             Self::Utf16(units) => units.clone(),
-            _ => self.to_display().encode_utf16().collect(),
+            _ => crate::java_utf16::units(&self.to_display()),
         }
     }
 
@@ -682,9 +678,6 @@ struct PreprocessContext {
     preserve_teoz_pragma: bool,
     /// Effects produced while evaluating the current statement expression.
     error: Option<PreprocessError>,
-    /// First unpaired surrogate projected by the current substitution.
-    unpaired_projection: Option<u16>,
-    export_failure: Option<PreprocessError>,
     expression_events: Vec<EvaluatedEvent>,
     text_consumed: bool,
     execution_kind: FunctionKind,
@@ -927,8 +920,6 @@ impl PreprocessContext {
             mark_function_body_source_lines,
             preserve_teoz_pragma: false,
             error: None,
-            unpaired_projection: None,
-            export_failure: None,
             expression_events: Vec::new(),
             text_consumed: false,
             execution_kind: FunctionKind::Procedure,
@@ -1382,7 +1373,6 @@ impl PreprocessContext {
         // Only output lines when all conditions are active.
         if self.is_active() {
             // Expand archimate macros before variable substitution.
-            let outer_projection = self.unpaired_projection.take();
             let line_to_process =
                 if let Some(expanded) = self.try_expand_archimate(line_no_comment.trim()) {
                     expanded
@@ -1391,7 +1381,6 @@ impl PreprocessContext {
                     // scan as variables. Never rescan the completed substitution.
                     self.substitute_vars(&line_no_comment)
                 };
-            let unpaired = std::mem::replace(&mut self.unpaired_projection, outer_projection);
             // A definelong expansion can produce multiple lines joined with '\n'.
             // Split them so each line is processed individually by the parser.
             // Blank lines are pushed too so that source-line indices match the
@@ -1400,9 +1389,6 @@ impl PreprocessContext {
             // blank lines but excludes the dropped `@startuml`.
             if self.text_consumed || self.execution_kind == FunctionKind::Return {
                 return;
-            }
-            if let Some(unit) = unpaired {
-                self.record_export_failure(unit);
             }
             for expanded_line in line_to_process.split('\n') {
                 self.push_content_line(output, expanded_line.to_string());
@@ -1898,14 +1884,9 @@ impl PreprocessContext {
             }
             output.extend(lines);
             if let Some(value) = ret {
-                let outer_projection = self.unpaired_projection.take();
-                let text = self.project_value(&value);
-                let unpaired = std::mem::replace(&mut self.unpaired_projection, outer_projection);
-                if !text.is_empty() && self.execution_kind != FunctionKind::Return {
-                    if let Some(unit) = unpaired {
-                        self.record_export_failure(unit);
-                    }
-                    self.push_content_line(output, text);
+                let value = value.to_display();
+                if !value.is_empty() && self.execution_kind != FunctionKind::Return {
+                    self.push_content_line(output, value);
                 }
             }
 
@@ -2673,34 +2654,6 @@ impl PreprocessContext {
         self.eval_expr_to_value(expr).truth()
     }
 
-    /// Project a TIM value into diagram text. Java keeps an unpaired UTF-16
-    /// unit in the StringLocated line; Rust's String cannot, so remember the
-    /// first such unit for the export-failure contract before the lossy text.
-    fn project_value(&mut self, value: &Value) -> String {
-        if self.unpaired_projection.is_none()
-            && let Value::Utf16(units) = value
-        {
-            self.unpaired_projection = char::decode_utf16(units.iter().copied())
-                .find_map(|decoded| decoded.err().map(|error| error.unpaired_surrogate()));
-        }
-        value.to_display()
-    }
-
-    /// The SAXException that `SvgGraphics` export raises for an unpaired unit
-    /// in character data (ToStream.accumDefaultEscape).
-    fn record_export_failure(&mut self, unit: u16) {
-        if self.export_failure.is_none() {
-            self.export_failure = Some(PreprocessError {
-                line: self
-                    .source_line_override
-                    .unwrap_or_else(|| self.current_diagram_source_line()),
-                message: format!(
-                    "An invalid XML character (Unicode: 0x{unit:x}) was found in the node's character data content."
-                ),
-            });
-        }
-    }
-
     fn fail(&mut self, message: String) {
         // EaterException unwinds the Java evaluator: the first diagnostic wins.
         if self.error.is_none() {
@@ -2834,16 +2787,18 @@ impl PreprocessContext {
                     && let Some(close) = find_matching_paren_from(line, name_end)
                 {
                     if ch == '%' {
-                        let value =
-                            self.eval_builtin_with_expr_args(name, &line[name_end + 1..close]);
-                        result.push_str(&self.project_value(&value));
+                        result.push_str(
+                            &self
+                                .eval_builtin_with_expr_args(name, &line[name_end + 1..close])
+                                .to_display(),
+                        );
                     } else {
                         let args = parse_call_args(&line[name_end + 1..close]);
                         let (value, mut events) =
                             self.call_function(&line[offset..name_end], &args);
                         if let Some(value) = value {
                             self.expression_events.extend(events);
-                            result.push_str(&self.project_value(&value));
+                            result.push_str(&value.to_display());
                         } else {
                             // TContext.pendingAdd / appendToLastResult. Keep
                             // every event variant, including themes and options.
@@ -2959,7 +2914,7 @@ impl PreprocessContext {
                     result.truncate(result.len() - 2);
                 }
                 let (value, end) = self.variable_path(value, line, offset + name.len());
-                result.push_str(&self.project_value(&value));
+                result.push_str(&value.to_display());
                 offset = end;
                 if line[offset..].starts_with("##") {
                     offset += 2;
@@ -2970,7 +2925,9 @@ impl PreprocessContext {
             offset += ch.len_utf8();
         }
 
-        result
+        // Java splices units into one String: adjacent carried high and low
+        // units form the scalar they encode.
+        crate::java_utf16::normalize(&result)
     }
 
     // VariableManager.replaceJson: member names are identifier text; bracket
@@ -3334,7 +3291,7 @@ impl PreprocessContext {
                 return Value::Int(match values.first() {
                     Some(Value::Json(serde_json::Value::Array(a))) => a.len() as i32,
                     Some(Value::Json(serde_json::Value::Object(a))) => a.len() as i32,
-                    Some(Value::Str(s)) => s.encode_utf16().count() as i32,
+                    Some(Value::Str(s)) => crate::java_utf16::units(s).len() as i32,
                     Some(Value::Utf16(units)) => units.len() as i32,
                     _ => 0,
                 });
@@ -3361,9 +3318,9 @@ impl PreprocessContext {
 
     fn eval_one_builtin_args(&mut self, func: &str, args: &[&str]) -> String {
         match func {
-            "strlen" => args
-                .first()
-                .map_or("0".to_string(), |s| s.encode_utf16().count().to_string()),
+            "strlen" => args.first().map_or("0".to_string(), |s| {
+                crate::java_utf16::units(s).len().to_string()
+            }),
             "newline" => "\n".to_string(),
             "tab" => "\t".to_string(),
             // PlantUML's %true() and %false() return numeric 1 and 0, not
@@ -4405,31 +4362,38 @@ mod tests {
     }
 
     #[test]
-    fn unpaired_surrogate_in_diagram_text_is_an_export_failure() {
-        // Java keeps the lone unit in the diagram line; SvgGraphics export
-        // throws SAXException for it (T14.20). Values that never become text
-        // and re-joined pairs stay valid.
-        let failing = [
-            "@startuml\n!$a=%lower(%substr(\"🚀\",1,1))\nclass \"$a\" as Residue\n@enduml\n",
-            "@startuml\nclass \"x%substr(\"🚀\",0,1)\" as High\n@enduml\n",
-        ];
-        // Lines are diagram lines: Java data-source-line excludes @startuml.
-        for (source, (unit, line)) in failing.iter().zip([("0xde80", 2), ("0xd83d", 1)]) {
+    fn unpaired_units_reach_the_line_as_java_utf16() {
+        // Java keeps the lone unit in the StringLocated line; its outcome is
+        // decided by ToStream at SVG export (rustuml-render svg.rs), so the
+        // preprocessor only carries it. Re-joined units form the scalar.
+        let rocket: Vec<u16> = "🚀".encode_utf16().collect();
+        let line = |source: &str| {
             let output = preprocess_full(source, None);
-            assert!(output.error.is_none());
-            let failure = output.export_failure.expect(source);
-            assert!(failure.message.contains(unit), "{}", failure.message);
-            assert_eq!(failure.line, line);
-        }
+            assert!(output.error.is_none(), "{source}");
+            output.lines.concat()
+        };
+        let high = crate::java_utf16::carrier(rocket[0]);
+        let low = crate::java_utf16::carrier(rocket[1]);
+        assert!(
+            line("@startuml\nclass \"x%substr(\"🚀\",0,1)\" as High\n@enduml\n")
+                .contains(&format!("x{high}\""))
+        );
+        assert!(
+            line("@startuml\n!$a=%lower(%substr(\"🚀\",1,1))\nclass \"$a\" as Residue\n@enduml\n")
+                .contains(&format!("\"{low}\""))
+        );
         for source in [
-            "@startuml\n!$a=%substr(\"🚀\",1,1)\nclass Quiet\n@enduml\n",
             "@startuml\n!$a=%substr(\"🚀\",0,1)+%substr(\"🚀\",1,1)\nclass \"$a\" as Joined\n@enduml\n",
+            "@startuml\n!$h=%substr(\"🚀\",0,1)\n!$l=%substr(\"🚀\",1,1)\nclass \"$h$l\" as Joined\n@enduml\n",
         ] {
-            assert!(
-                preprocess_full(source, None).export_failure.is_none(),
-                "{source}"
-            );
+            assert!(line(source).contains("\"🚀\""), "{source}");
         }
+        let mut ctx = PreprocessContext::new(None, false);
+        assert_eq!(
+            ctx.eval_expr_to_value("%strlen(%substr(\"🚀\",0,1))")
+                .to_display(),
+            "1"
+        );
     }
 
     #[test]

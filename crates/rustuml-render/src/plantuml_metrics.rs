@@ -297,6 +297,12 @@ fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
     if matches!(c, '\u{200D}' | '\u{FE0E}' | '\u{FE0F}') || is_emoji_modifier(code) {
         return 0.0;
     }
+    if rustuml_parser::java_utf16::carried_unit(c).is_some() {
+        // An unpaired UTF-16 unit advances one em in Java's SansSerif: AW
+        // surrogate_high_class measures 'x' + a lone high unit at size 14 as
+        // textLength 22.5859 = 8.5859375 ('x') + 14.
+        return font_size;
+    }
     if is_color_emoji_fallback(code) {
         return (font_size * crate::non_ascii_widths::COLOR_EMOJI_STRIKE_SCALE).round();
     }
