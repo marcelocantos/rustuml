@@ -1,0 +1,23 @@
+r2_seq_tab_end_after_backslash                     jv=1 je=  0 mismatch       mismatch       valid-error    match         
+r2_seq_backslash_end_after_backslash               jv=1 je=  0 mismatch       valid-error    valid-error    match         
+r2_class_indented_end_after_backslash              jv=1 je=  0 mismatch       mismatch       valid-error    match         
+r2_mindmap_indented_end_after_backslash            jv=1 je=  0 mismatch       mismatch       valid-error    match         
+r2_seq_indented_end_then_more                      jv=1 je=  0 mismatch       mismatch       valid-error    match         
+r2_seq_col0_end_swallowed_then_indented            jv=0 je=100 nonpositive-ac nonpositive-ac nonpositive-re nonpositive-re
+r2_seq_named_start_indented_end                    jv=1 je=  0 mismatch       mismatch       valid-error    match         
+r2_seq_indented_start_and_end                      jv=1 je=  0 mismatch       mismatch       valid-error    mismatch      
+r2_state_indented_end_after_comment                jv=1 je=  0 mismatch       mismatch       valid-error    match         
+r2_seq_indented_end_crlf                           jv=1 je=  0 mismatch       mismatch       valid-error    match         
+r2_seq_include_tail_then_blank                     jv=1 je=  0 mismatch       mismatch       match          match         
+r2_seq_include_tail_then_comment                   jv=1 je=  0 mismatch       mismatch       mismatch       match         
+r2_seq_include_tail_then_if                        jv=1 je=  0 mismatch       mismatch       mismatch       match         
+r2_seq_include_tail_then_include                   jv=1 je=  0 mismatch       mismatch       mismatch       mismatch      
+r2_seq_include_two_tails_then_define               jv=1 je=  0 mismatch       valid-error    mismatch       match         
+r2_class_include_link_tail_before_end              jv=1 je=  0 mismatch       mismatch       mismatch       match         
+r2_seq_include_tail_no_end                         jv=1 je=  0 mismatch       mismatch       mismatch       match         
+r2_component_include_tail_then_variable            jv=1 je=  0 mismatch       mismatch       mismatch       valid-error   
+r2_ditaa_continued_row                             jv=1 je=  0 compare-101    compare-101    compare-101    compare-101   
+r2_ditaa_continued_row_joined                      jv=1 je=  0 compare-101    compare-101    compare-101    compare-101   
+r2_uml_ditaa_continued_row                         jv=0 je=200 nonpositive-ac nonpositive-re nonpositive-re nonpositive-re
+r2_uml_ditaa_continued_row_joined                  jv=0 je=200 nonpositive-ac nonpositive-re nonpositive-re nonpositive-re
+r2_ditaa_backslash_before_end                      jv=1 je=  0 compare-101    compare-101    compare-101    compare-101   

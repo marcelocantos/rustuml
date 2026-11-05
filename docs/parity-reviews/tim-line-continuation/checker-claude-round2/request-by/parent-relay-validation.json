@@ -1,0 +1,46 @@
+{
+  "validated": true,
+  "cases": 53,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.cAbnOlrY",
+  "hashes": {
+    "reference-results.json.gz": "8e23072c7dec124a940c6c0812a1745f5818edd5e736071bf9d39fceb7b311e6",
+    "reference-transport.json": "6b139df554eadc46f775bc138e936559734a16445a65440fba81b9e595e04330"
+  },
+  "remote_names": {
+    "reference-results.json.gz": "reference-results.json.gz",
+    "reference-transport.json": "reference-transport.json"
+  },
+  "exit_statuses": {
+    "100": 3,
+    "0": 43,
+    "50": 5,
+    "200": 2
+  },
+  "intended_invalid": [
+    "cr2_crlf_blank_only",
+    "cr2_empty_zero_bytes",
+    "cr2_nbsp_only",
+    "cr2_newlines_only",
+    "cr2_seq_chr30_rsp_line",
+    "cr2_seq_endumlx_col0_swallow",
+    "cr2_seq_named_start_col0_endother_swallow",
+    "cr2_seq_raw_rs_rsp_line",
+    "cr2_seq_trailing_space_start_endother_swallow",
+    "cr2_seq_two_blocks_first_swallowed",
+    "cr2_vt_ff_only",
+    "cr2_whitespace_only"
+  ],
+  "intended_invalid_exit0": [
+    "cr2_nbsp_only",
+    "cr2_seq_two_blocks_first_swallowed"
+  ],
+  "intended_valid_nonzero": [],
+  "nonempty_stderr": [
+    "cr2_seq_chr30_rsp_line",
+    "cr2_seq_note_chr30_rsp",
+    "cr2_seq_raw_rs_rsp_line"
+  ],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "classification": "Validity not inferred from exit status."
+}

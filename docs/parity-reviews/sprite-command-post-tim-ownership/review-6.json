@@ -1,0 +1,105 @@
+{
+ "schema_version": 1,
+ "mechanism": "sprite-command-post-tim-ownership",
+ "account_commit": "3573444dc8aa3e677a6a484eb9f2dc497fafb814",
+ "implementation_commit": "f2d12d0ef180886c660e2b7f3ea982d4893cd3fa",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "reviewer": {
+  "task_id": "T3 thread t3-860c09a0, branch review/tim-continuation-round2-claude",
+  "model": "claude-opus-5-5"
+ },
+ "commands": [
+  "git switch -c review/tim-continuation-round2-claude e3aa1c6b4; submodule test-diagrams/golden hydrated with --reference at 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "checker-claude-round2/support/build.sh: git archive f2d12d0ef / b0fb43c3e / 93bf53e18 / 9834a7194, each with its own CARGO_TARGET_DIR; compare_cli from unchanged source d1424469 linked against 93bf53e18 rustuml_oracle; hashes in binaries.sha256",
+  "gen_probes.py + stage_cr2.py + predict_rust.py: held-out batch CR2 (53 cases, 10 resources) staged and Rust outcomes at all four builds pre-registered in commit d0e5108a5 before any Java result; relayed as BY (tim-continuation-cr2, reference-results f00f906d)",
+  "prepare.py (unchanged) + strict_validity.py + no_diagram_validity.py (Java exit 50 = no diagram = invalid) for BW and BY; earlier cohorts re-verified against relay hashes (verify-fresh.json, 0 mismatches)",
+  "run_all.sh: unchanged replay.py/compare_cli, 4 modes (svg/ast/ascii/yaml), each case from its recorded cwd, cohorts BY BW BU BD BA AY AZ AX AV AT AS/AQ/790/28 retained-4174 golden-12550 at all four builds; summarize.py",
+  "rejection_contract.py (unchanged), tip vs each before, every fresh cohort",
+  "gates.sh: workspace lib, pipe_mode, golden_no_oracle, golden_pairs, parity_perturbations, harness_guards at the review branch; golden_no_oracle/golden_pairs at 9834a7194; parity_perturbations and harness_guards at b0fb43c3e",
+  "register.py: 29 Java-valid resource-free SVG pairs from BW/BY into test-diagrams/perturbations/tim-line-continuation/"
+ ],
+ "findings": [
+  "WHOLE-LINE VERDICT REJECT at maker tip e3aa1c6b4 (code f2d12d0ef). The sprite/participant line cannot merge: the continuation packet carries two packet-caused lost rejections vs the merged base (placeholder collision: cr2_seq_chr30_rsp_line, cr2_seq_raw_rs_rsp_line) and one new valid-input error vs the merged base (r2_component_include_tail_then_variable, root cause T14.21). Details: docs/parity-reviews/tim-line-continuation/review-2.json.",
+  "vs 93bf53e18 (pre-packet sprite baseline): lost matches ck4_procedure_sprite_end_comment_two, mk4_tim_sprite_in_procedure (T14.33); lost rejections ck3_svg_inline_quoted_apostrophe_seq (T14.32), mc1_seq_foreach_body (T14.52), cr2_seq_tail_then_backslash_end (accidental at 93bf53e18; Java Welcome via getTotalLineCount()==2, missing in the line), and the placeholder pair (packet).",
+  "vs 9834a7194 (parity-recovery code): no lost matches or rejections. New valid errors: the 11 known fresh (T14.21, ck4_seq_divider_trailing T14.31), 2 new held-out (r2_component_include_tail_then_variable T14.21; cr2_seq_pre_start_backslash_text T14.26), and the 13 approved retained (unchanged).",
+  "Round-1 rejection cause fixed: tc1_seq_indented_end_after_backslash matches; BW Pipe probes 8/9 match; BU +4 and BW +13 gains vs the merged base. Goldens: 0 SVG byte changes vs the merged base; no-oracle and golden_pairs failure names identical to 9834a7194; parity_perturbations 0 new."
+ ],
+ "verdict": "rejected",
+ "record": "docs/parity-reviews/tim-line-continuation/checker-claude-round2/",
+ "perturbations": [
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_comment_only_then_msg.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_comment_only_then_msg.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at f2d12d0ef",
+    "same result at b0fb43c3e and f2d12d0ef (compare_cli exit 0)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_next_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_next_leading.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at f2d12d0ef",
+    "same result at b0fb43c3e and f2d12d0ef (compare_cli exit 0)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_comment_then_backslash.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_comment_then_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at f2d12d0ef",
+    "same result at b0fb43c3e and f2d12d0ef (compare_cli exit 0)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_component_comment_then_backslash.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_component_comment_then_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at f2d12d0ef",
+    "same result at b0fb43c3e and f2d12d0ef (compare_cli exit 0)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_state_comment_then_backslash.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_state_comment_then_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at f2d12d0ef",
+    "same result at b0fb43c3e and f2d12d0ef (compare_cli exit 0)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_continuation_next_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_continuation_next_leading.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at f2d12d0ef",
+    "same result at b0fb43c3e and f2d12d0ef (compare_cli exit 0)"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_procedure_sprite_end_comment_two.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_procedure_sprite_end_comment_two.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at f2d12d0ef",
+    "same result at b0fb43c3e and f2d12d0ef (compare_cli exit 1)",
+    "T14.33 accidental-match residue"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_sprite_in_procedure.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_sprite_in_procedure.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at f2d12d0ef",
+    "same result at b0fb43c3e and f2d12d0ef (compare_cli exit 1)",
+    "T14.33 accidental-match residue"
+   ]
+  }
+ ]
+}

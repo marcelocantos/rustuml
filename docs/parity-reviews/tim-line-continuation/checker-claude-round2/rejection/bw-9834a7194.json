@@ -1,0 +1,93 @@
+{
+  "entries": 3,
+  "before_rejections": 0,
+  "after_rejections": 3,
+  "introduced_losses": [],
+  "after_false_accepts": [],
+  "results": [
+    {
+      "source": "r2_seq_col0_end_swallowed_then_indented.puml",
+      "intended_valid": false,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "r2_uml_ditaa_continued_row.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"ditaa\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    },
+    {
+      "source": "r2_uml_ditaa_continued_row_joined.puml",
+      "intended_valid": true,
+      "observed_valid": false,
+      "results": {
+        "before": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-9834a7194",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 0,
+          "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+          "stderr": ""
+        },
+        "after": {
+          "argv": [
+            "/Users/marcelo/Library/Caches/rustuml-tim-continuation-round2-claude-checker/bin/rustuml-f2d12d0ef",
+            "-tsvg",
+            "-pipe"
+          ],
+          "exit": 1,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"ditaa\"\n"
+        }
+      },
+      "introduced_rejection_loss": false
+    }
+  ]
+}

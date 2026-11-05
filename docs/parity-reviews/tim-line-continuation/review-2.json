@@ -1,0 +1,457 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-line-continuation",
+ "account_commit": "3573444dc8aa3e677a6a484eb9f2dc497fafb814",
+ "implementation_commit": "f2d12d0ef180886c660e2b7f3ea982d4893cd3fa",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "reviewer": {
+  "task_id": "T3 thread t3-860c09a0, branch review/tim-continuation-round2-claude",
+  "model": "claude-opus-5-5"
+ },
+ "commands": [
+  "git switch -c review/tim-continuation-round2-claude e3aa1c6b4; submodule test-diagrams/golden hydrated with --reference at 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "checker-claude-round2/support/build.sh: git archive f2d12d0ef / b0fb43c3e / 93bf53e18 / 9834a7194, each with its own CARGO_TARGET_DIR; compare_cli from unchanged source d1424469 linked against 93bf53e18 rustuml_oracle; hashes in binaries.sha256",
+  "gen_probes.py + stage_cr2.py + predict_rust.py: held-out batch CR2 (53 cases, 10 resources) staged and Rust outcomes at all four builds pre-registered in commit d0e5108a5 before any Java result; relayed as BY (tim-continuation-cr2, reference-results f00f906d)",
+  "prepare.py (unchanged) + strict_validity.py + no_diagram_validity.py (Java exit 50 = no diagram = invalid) for BW and BY; earlier cohorts re-verified against relay hashes (verify-fresh.json, 0 mismatches)",
+  "run_all.sh: unchanged replay.py/compare_cli, 4 modes (svg/ast/ascii/yaml), each case from its recorded cwd, cohorts BY BW BU BD BA AY AZ AX AV AT AS/AQ/790/28 retained-4174 golden-12550 at all four builds; summarize.py",
+  "rejection_contract.py (unchanged), tip vs each before, every fresh cohort",
+  "gates.sh: workspace lib, pipe_mode, golden_no_oracle, golden_pairs, parity_perturbations, harness_guards at the review branch; golden_no_oracle/golden_pairs at 9834a7194; parity_perturbations and harness_guards at b0fb43c3e",
+  "register.py: 29 Java-valid resource-free SVG pairs from BW/BY into test-diagrams/perturbations/tim-line-continuation/"
+ ],
+ "findings": [
+  "VERDICT REJECT (round 2). Packet-caused lost rejections vs the merged base b0fb43c3e: cr2_seq_chr30_rsp_line and cr2_seq_raw_rs_rsp_line (Java exit 200, syntax error + XML crash page; base rejects; tip silently drops the line). Cause: DIRECTIVE_PLACEHOLDER is the in-band string \"\\x1ERSP\" (preprocess/mod.rs:3833), cleared at :109 and skipped by the post-TIM join at :3859; a user line `%chr(30)RSP` or raw U+001E+RSP equals it. rejection_contract.py reports both as introduced_losses.",
+  "Residue 3 only half ported: after UmlSource#loadInternal joins a pending tail into the end line, Java's PSystemCommandFactory#finalizeDiagram returns the empty-diagram (Welcome) page when getTotalLineCount()==2 (PSystemCommandFactory.java:123). BY: cr2_seq_depth2_tail_then_end, cr2_seq_tail_then_indented_end, cr2_seq_chr92_tail_then_end are Java Welcome and merged-base Welcome but tip renders a message (uncounted by the classifier, which treats Welcome as nonpositive-accepted); cr2_seq_tail_then_backslash_end is a lost rejection vs 93bf53e18 for the same reason.",
+  "New valid-input error vs the merged base: r2_component_include_tail_then_variable (BW; Java one DESCRIPTION link). Exposed by the correct placeholder pass-over; the joined link with an arrow in its label is misrouted to sequence at every strict build (control). Root cause T14.21; needs T14.21 or an owner exception.",
+  "pipe_single_diagram is faithful to Pipe.java 180-224 for end recognition: expectedEnd via whole-line matches() (named start / trailing space -> @end, exact start -> @enduml, @endumlx prefix), CRLF, nested start in a continued line, content after the end: all match Java (BY + BW 8/9). Unported (T14.26): prepend, pre-start discard (cr2_seq_pre_start_backslash_text errors since 93bf53e18), @@@format.",
+  "Empty/whitespace stdin: Java exit 50 (ERROR_50_NO_FILE_FOUND), empty stdout/stderr; tip exit 1, empty stdout, stderr 'No valid @start/@end found'; earlier builds exit 0 with a 4,554-byte SVG. Correct rejection (6 cases incl. retained checker_092_empty); exit code and stderr differ.",
+  "split_blocks: 0 SVG byte changes on 12,550 goldens vs the merged base; ast/yaml differences on dot/* and sprites/sprite_multiple are run-to-run nondeterminism at both builds. Plain nested @start mismatches at every build (BlockUmlBuilder resets current; Rust counts depth): pre-existing.",
+  "Wrapped include files: Java runs ReadFilterMergeLines on the included file (DiagramDetector.java:71-99), so a tail joins the included @enduml; Rust does not (all builds).",
+  "Gates: lib 1,510/0; pipe_mode 13; no-oracle 11,181/11,251 and golden_pairs 754 failures, names byte-identical to 9834a7194; parity_perturbations 0 new, 1 fixed; harness_guards frozen-item guards pass, decimal ratchet and record guard identical to the merged base. Frozen paths unchanged b0fb43c3e..e3aa1c6b4; account precedes code; no fixture-keyed logic."
+ ],
+ "verdict": "rejected",
+ "record": "docs/parity-reviews/tim-line-continuation/checker-claude-round2/",
+ "perturbations": [
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_seq_tab_end_after_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_seq_tab_end_after_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "tab-indented @enduml after backslash",
+    "Pipe column-0 end",
+    "BW held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_seq_backslash_end_after_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_seq_backslash_end_after_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "\\enduml after backslash",
+    "Pipe column-0 end",
+    "BW held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_class_indented_end_after_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_class_indented_end_after_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "class",
+    "indented @enduml after backslash",
+    "link label",
+    "BW held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_mindmap_indented_end_after_backslash.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_mindmap_indented_end_after_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "mindmap",
+    "indented @endmindmap after backslash",
+    "BW held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_seq_indented_end_then_more.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_seq_indented_end_then_more.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "content after an indented end",
+    "BlockUmlBuilder merged-line directive test",
+    "BW held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_seq_named_start_indented_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_seq_named_start_indented_end.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "named start: expectedEnd @end",
+    "indented end",
+    "BW held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_seq_indented_start_and_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_seq_indented_start_and_end.svg",
+   "result": "fail",
+   "axes": [
+    "sequence",
+    "indented start: Pipe START_MARK_NOT_FOUND",
+    "indented end",
+    "BW held out",
+    "f2d12d0ef: mismatch",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_state_indented_end_after_comment.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_state_indented_end_after_comment.svg",
+   "result": "pass",
+   "axes": [
+    "state",
+    "ReadFilterQuoteComment skip",
+    "indented end",
+    "BW held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/r2_seq_indented_end_crlf.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/r2_seq_indented_end_crlf.svg",
+   "result": "pass",
+   "axes": [
+    "sequence",
+    "indented end",
+    "CRLF",
+    "line-endings:CRLF",
+    "BW held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_exact_start_col0_endother_merged.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_exact_start_col0_endother_merged.svg",
+   "result": "pass",
+   "axes": [
+    "pipe-end",
+    "exact @startuml -> expectedEnd @enduml",
+    "@endmindmap merged into message",
+    "BY held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_crlf_exact_start_endother_merged.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_crlf_exact_start_endother_merged.svg",
+   "result": "pass",
+   "axes": [
+    "pipe-end",
+    "CRLF",
+    "readLine strips CR so start matches exactly",
+    "line-endings:CRLF",
+    "BY held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_startUML_case_end_merged.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_startUML_case_end_merged.svg",
+   "result": "fail",
+   "axes": [
+    "pipe-end",
+    "expectedEnd keeps start case (@endUML)",
+    "case-insensitive start type",
+    "BY held out",
+    "f2d12d0ef: valid-error",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: valid-error"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_tab_end_plain_control.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_tab_end_plain_control.svg",
+   "result": "pass",
+   "axes": [
+    "control",
+    "tab-indented end, no continuation",
+    "BY held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: match",
+    "93bf53e18: match",
+    "9834a7194: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_after_end_continued_tail.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_after_end_continued_tail.svg",
+   "result": "pass",
+   "axes": [
+    "pipe-end",
+    "content after column-0 end",
+    "BY held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: match",
+    "93bf53e18: match",
+    "9834a7194: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_nested_start_in_continued_line.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_nested_start_in_continued_line.svg",
+   "result": "pass",
+   "axes": [
+    "split-blocks",
+    "start merged into continued line",
+    "BY held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: match",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_nested_start_plain_control.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_nested_start_plain_control.svg",
+   "result": "fail",
+   "axes": [
+    "control",
+    "split-blocks",
+    "BlockUmlBuilder resets at a nested start",
+    "BY held out",
+    "f2d12d0ef: mismatch",
+    "b0fb43c3e: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_start_line_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_start_line_continued.svg",
+   "result": "pass",
+   "axes": [
+    "pipe-end",
+    "start line ends with backslash",
+    "BY held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: match",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_chained_continuation_indented_end.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_chained_continuation_indented_end.svg",
+   "result": "pass",
+   "axes": [
+    "pipe-end",
+    "chained continuation into indented end",
+    "BY held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_pre_start_backslash_text.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_pre_start_backslash_text.svg",
+   "result": "fail",
+   "axes": [
+    "pipe-start",
+    "text before start ends with backslash (Pipe discards it)",
+    "BY held out",
+    "f2d12d0ef: valid-error",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_pre_start_blank_then_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_pre_start_blank_then_continued.svg",
+   "result": "fail",
+   "axes": [
+    "pipe-start",
+    "blank lines before start",
+    "BY held out",
+    "f2d12d0ef: mismatch",
+    "b0fb43c3e: valid-error",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_nbsp_only.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_nbsp_only.svg",
+   "result": "fail",
+   "axes": [
+    "whitespace",
+    "NBSP is not trimmed by String#trim",
+    "BY held out",
+    "f2d12d0ef: mismatch",
+    "b0fb43c3e: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_no_start_plain.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_no_start_plain.svg",
+   "result": "pass",
+   "axes": [
+    "pipe-start",
+    "no start: Pipe wraps",
+    "BY held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: match",
+    "93bf53e18: match",
+    "9834a7194: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_no_start_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_no_start_continued.svg",
+   "result": "pass",
+   "axes": [
+    "pipe-start",
+    "no start: Pipe wraps",
+    "continuation",
+    "BY held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: match",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_chr92_tail_then_directive.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_chr92_tail_then_directive.svg",
+   "result": "pass",
+   "axes": [
+    "post-TIM join",
+    "no include",
+    "directive passed over",
+    "BY held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_procedure_emits_tail.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_procedure_emits_tail.svg",
+   "result": "fail",
+   "axes": [
+    "post-TIM join",
+    "procedure output ends with backslash",
+    "BY held out",
+    "f2d12d0ef: mismatch",
+    "b0fb43c3e: mismatch",
+    "93bf53e18: mismatch",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_note_plain_rsp_control.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_note_plain_rsp_control.svg",
+   "result": "pass",
+   "axes": [
+    "control",
+    "note body",
+    "BY held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: match",
+    "93bf53e18: match",
+    "9834a7194: match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_theme_then_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_theme_then_continued.svg",
+   "result": "fail",
+   "axes": [
+    "theme",
+    "continuation",
+    "BY held out",
+    "f2d12d0ef: mismatch",
+    "b0fb43c3e: mismatch",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_procedure_body_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_procedure_body_continued.svg",
+   "result": "pass",
+   "axes": [
+    "procedure",
+    "continuation in body",
+    "BY held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: match",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_procedure_call_continued.puml",
+   "golden": "test-diagrams/perturbations/tim-line-continuation/cr2_seq_procedure_call_continued.svg",
+   "result": "pass",
+   "axes": [
+    "procedure",
+    "continued call line",
+    "BY held out",
+    "f2d12d0ef: match",
+    "b0fb43c3e: match",
+    "93bf53e18: valid-error",
+    "9834a7194: mismatch"
+   ]
+  }
+ ]
+}
