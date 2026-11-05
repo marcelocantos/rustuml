@@ -1,0 +1,15 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "status": "maker addendum after a measurement, before the change is committed; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "amends": "drawn-face-style-account.json (681fce4c4)",
+ "measurement_that_prompted_it": "Pre-registration check of the M10A probes at e1ee5ce7f/2a352f67b: for '<kind>FontStyle bold italic' the tip draws component, activity, participant and use-case labels bold italic (FontStyle read with contains('bold')/contains('italic')), while state names are drawn plain and state layout measures them bold italic (StateNodeFont: contains). The golden-corpus perturbation state-flat-svek-label-skinparams/checker_tb_bold_italic_reset_up_down (Java reference, 'skinparam stateFontStyle bold italic') draws every state name with no font-weight and no font-style.",
+ "cause": "The Java chain's value step was not ported in these renderers: Style.getUFont 209 reads value(PName.FontStyle).asFontFace(), and ValueImpl.asFontFace 159-178 maps only 'bold', 'italic', 'plain'/'normal' and CSS weights (UFontFace.fromCssWeight 118-140: normal, bold, lighter 300, bolder 800, a number clamped by UFontWeight.fromCssValue 67-90); every other value, 'bold italic' included, is UFontFace.normal(). Bold is weight >= 700 (UFontFace.isBold 158-159). FromSkinparamToStyle.convertNow (301-355) passes a FontStyle skinparam value through unchanged. state.rs apply_resolved_state_text_style already ports this for emission; StateNodeFont (layout) and the component, activity, sequence-participant and use-case parsers do not, so for such values layout and drawing disagree (state) or both disagree with Java (the others).",
+ "change": [
+  "style_cascade.rs: font_face(value) -> (bold, italic), the port of ValueImpl.asFontFace + fromCssWeight + isBold (one function).",
+  "Used for every FontStyle value feeding a face this packet measures: component (componentFontStyle skinparam, apply_component_entity_style), activity (activityFontStyle, activityDiamondFontStyle), sequence (participantFontStyle / sequenceParticipantFontStyle), usecase (usecase_font_face), state (StateNodeFont from stateFontStyle, and apply_resolved_state_text_style replaced by the shared function, same results).",
+  "Not changed: FontWeight overriding the weight (Style.getUFont 210-212) is not modelled in these renderers; class, note, arrow and other FontStyle readers are outside this packet."
+ ],
+ "expect": "No golden output changes (no golden carries a FontStyle value other than bold/italic/plain/normal outside state, and state emission already ports it). State perturbations with 'stateFontStyle bold italic' (state-flat-svek-label-skinparams*, times-new-roman-face-metrics checker_nested_bold_italic_faces / checker_attribute_face_channel_tb) can only move toward Java (layout now measures the plain face they are drawn in); any change is listed. BR/BQ/BP..AR unchanged (no batch case uses a two-word FontStyle value on these renderers). M10A '_bi' probes: Rust draws and measures plain, as Java's asFontFace."
+}
