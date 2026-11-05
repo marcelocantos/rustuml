@@ -2776,6 +2776,21 @@ fn autonomous_group_is_autarkic(diagram: &StateDiagram, group: &str) -> bool {
     })
 }
 
+/// Whether a state group owns any leaf or pseudo-state. Java
+/// `GroupMakerState.getImage` turns a childless group into a plain
+/// `EntityImageState`, so it is never a cluster.
+fn state_group_has_children(diagram: &StateDiagram, group: &str) -> bool {
+    diagram
+        .states
+        .iter()
+        .any(|state| state.parent.as_deref() == Some(group))
+        || diagram.transitions.iter().any(|transition| {
+            [&transition.from, &transition.to]
+                .into_iter()
+                .any(|endpoint| endpoint_parent_scope(diagram, endpoint) == Some(Some(group)))
+        })
+}
+
 /// Java `Entity.isAutarkic` for a state group: whether
 /// `CucaDiagramSimplifierState` replaces it with a `GroupMakerState` image
 /// instead of leaving it for `Cluster.drawU`.
@@ -3427,7 +3442,9 @@ fn build_state_group_outcome<'a>(
             .push(outcome);
     }
 
-    if !autonomous_group_is_autarkic(diagram, &composite.id) {
+    // CucaDiagramSimplifierState: only an autarkic group becomes a
+    // GroupMakerState image; any other group stays for Cluster.drawU.
+    if !java_state_group_is_autarkic(diagram, &composite.id) {
         if composite.concurrent_separator.is_some() {
             return None;
         }
@@ -4967,10 +4984,6 @@ fn apply_state_border_frontiers(
 /// endpoint and the `p0`/`p1` protection clusters represented by
 /// `LayoutGraph::add_svek_cluster`.
 fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
-    let has_border_points = diagram
-        .states
-        .iter()
-        .any(|state| !StateEntityPosition::of(state).is_normal());
     if !diagram.notes.is_empty()
         || diagram.meta.title.is_some()
         || !has_only_autonomous_layout_skinparams(diagram)
@@ -4992,21 +5005,19 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     let mut composites = diagram
         .states
         .iter()
-        .filter(|state| state.composite)
+        .filter(|state| state.composite && state_group_has_children(diagram, &state.id))
         .collect::<Vec<_>>();
     composites.sort_by_key(|state| state.decl_line.unwrap_or(state.source_line));
     if composites.is_empty()
-        || (!has_border_points && composites.len() < 2)
+        || composites
+            .iter()
+            .any(|group| java_state_group_is_autarkic(diagram, &group.id))
         || diagram.states.iter().any(|state| {
             state
                 .parent
                 .as_deref()
                 .is_some_and(|parent| !composites.iter().any(|group| group.id == parent))
         })
-        || !diagram
-            .transitions
-            .iter()
-            .any(|transition| matches!(transition_parent_scope(diagram, transition), Some(None)))
     {
         return None;
     }
@@ -5549,12 +5560,11 @@ fn emit_root_state_cluster(
     let style = autonomous_state_style(context.diagram, context.skin, Some(composite));
     let shadow_attr = autonomous_shadow_attr(context, style.shadow);
     // Cluster.drawU:309–311 uses the local Quark name and hides ## groups.
-    // Only groups that survive CucaDiagramSimplifierState reach Cluster.drawU;
-    // autarkic ones become GroupMakerState images, which emit no comment.
+    // Callers draw a cluster only for a group CucaDiagramSimplifierState left
+    // in place (java_state_group_is_autarkic is false), so drawing and comment
+    // are one decision.
     let comment_name = autonomous_endpoint_svg_name(&composite.id, false);
-    if !comment_name.starts_with("##")
-        && !java_state_group_is_autarkic(context.diagram, &composite.id)
-    {
+    if !comment_name.starts_with("##") {
         write!(
             svg,
             "<!--{}-->",
