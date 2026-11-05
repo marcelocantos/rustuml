@@ -32,7 +32,9 @@ enum QuarkLookup {
 pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
     let mut parser = ClassParser::new();
 
-    for (i, line) in lines.iter().enumerate() {
+    let mut i = 0;
+    while i < lines.len() {
+        let line = &lines[i];
         let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
         if parser.current_note.is_some() {
             // Java `CommandFactoryNote.createMultiLine` delegates to
@@ -40,12 +42,24 @@ pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
             // leading columns. Terminal spaces remain in the Display and
             // therefore contribute to note layout.
             parser.parse_line(source_line, super::source_text(line))?;
+            i += 1;
             continue;
         }
         if trimmed.is_empty() {
+            i += 1;
             continue;
         }
+        parser.unrecognized = false;
         parser.parse_line(source_line, trimmed)?;
+        // ClassDiagramFactory#initCommandsList registers
+        // CommonCommands#addCommonCommands2 (the sprite commands) after every
+        // class, link and note command: offer only a line none of them took.
+        if parser.unrecognized
+            && let Some(end) = super::sprite::dispatch(lines, i, &mut parser.meta, "class", true)?
+        {
+            i = end;
+        }
+        i += 1;
     }
 
     Ok(parser.finish())
@@ -96,6 +110,8 @@ struct ClassParser {
     title_line: Option<usize>,
     caption_line: Option<usize>,
     legend_line: Option<usize>,
+    /// The last top-level line reached the end of the class dispatch chain.
+    unrecognized: bool,
 }
 
 #[derive(Clone, Copy)]
@@ -136,6 +152,7 @@ impl ClassParser {
             title_line: None,
             caption_line: None,
             legend_line: None,
+            unrecognized: false,
         }
     }
 
@@ -352,9 +369,8 @@ impl ClassParser {
             if let Some(&idx) = self.package_by_path.get(&path) {
                 if self.packages[idx].phantom && self.packages[idx].source_line == 0 {
                     self.packages[idx].source_line = self.current_line;
-                    self.uid_events.push(ClassUidEvent::Package(
-                        self.packages[idx].name.clone(),
-                    ));
+                    self.uid_events
+                        .push(ClassUidEvent::Package(self.packages[idx].name.clone()));
                 }
                 continue;
             }
@@ -672,7 +688,9 @@ impl ClassParser {
             return Ok(());
         }
 
-        // Silently ignore unknown lines.
+        // Silently ignore unknown lines (the caller offers them to the
+        // sprite commands registered after the class commands).
+        self.unrecognized = true;
         Ok(())
     }
 

@@ -10,18 +10,18 @@ use std::sync::LazyLock;
 
 use regex::Regex;
 
-use crate::diagram::SpriteData;
-
 mod debug;
 mod stdlib;
 mod themes;
 
 use debug::{RenderClock, TzSpec};
 
-/// Output from the preprocessor: expanded lines plus any sprite definitions.
+/// Output from the preprocessor (TIM): expanded lines and source identity.
+///
+/// Sprite declarations are diagram commands (`CommonCommands`), executed by
+/// the family command dispatch after TIM, so they are not collected here.
 pub struct PreprocessOutput {
     pub lines: Vec<String>,
-    pub sprites: HashMap<String, SpriteData>,
     /// PlantUML's post-TIM `UmlSource.getPlainString("\n")`.
     ///
     /// SVG resources hash this expanded source, rather than the raw input,
@@ -62,8 +62,8 @@ pub fn preprocess_with_base(input: &str, base_dir: &Path) -> Vec<String> {
     preprocess_full(input, Some(base_dir.to_path_buf())).lines
 }
 
-/// Preprocess PlantUML source and return both expanded lines and sprite
-/// definitions collected from `sprite $name { ... }` blocks.
+/// Preprocess PlantUML source and return the expanded lines with their
+/// post-TIM source identity.
 pub fn preprocess_full(input: &str, base_dir: Option<PathBuf>) -> PreprocessOutput {
     let mut output = preprocess_full_inner(input, base_dir, false, false);
     output.lines = strip_source_line_markers(output.lines);
@@ -124,11 +124,7 @@ fn preprocess_full_inner(
         let identity_lines = strip_source_line_markers(identity_ctx.process_lines(&input_lines));
         uml_source_string(&identity_lines, preserve_teoz_pragma)
     });
-    PreprocessOutput {
-        lines,
-        sprites: ctx.sprites,
-        uml_source,
-    }
+    PreprocessOutput { lines, uml_source }
 }
 
 fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) -> Option<String> {
@@ -258,7 +254,7 @@ fn uml_source_string(lines: &[String], collapse_ending_backslashes: bool) -> Str
     source
 }
 
-/// Preprocess with a base directory, returning full output including sprites.
+/// Preprocess with a base directory, returning the full output.
 pub fn preprocess_full_with_base(input: &str, base_dir: &Path) -> PreprocessOutput {
     preprocess_full(input, Some(base_dir.to_path_buf()))
 }
@@ -488,14 +484,6 @@ fn rgb_to_hex(r: u8, g: u8, b: u8) -> String {
 // Core context
 // ---------------------------------------------------------------------------
 
-// CommandSpriteSvgMultiline and CommandFactorySprite have different END
-// patterns. A declaration owns its body until that command's terminator.
-#[derive(Clone, Copy)]
-enum SpriteBlockKind {
-    Pixel { pending_lines: usize },
-    Svg { pending_lines: usize },
-}
-
 struct PreprocessContext {
     /// `!$var = value` style variables.
     defines: HashMap<String, String>,
@@ -505,11 +493,6 @@ struct PreprocessContext {
     definelong_macros: HashMap<String, DefineLongDef>,
     cond_stack: Vec<CondState>,
     in_block_comment: bool,
-    in_sprite_block: Option<SpriteBlockKind>,
-    /// The name of the sprite currently being collected (if any).
-    current_sprite_name: Option<String>,
-    /// Sprite definitions parsed from `sprite $name { ... }` blocks.
-    sprites: HashMap<String, SpriteData>,
     archimate_enabled: bool,
     in_diagram_block: bool,
     /// True when inside an @startebnf block — disables single-quote comment
@@ -633,9 +616,6 @@ impl PreprocessContext {
             definelong_macros: HashMap::new(),
             cond_stack: Vec::new(),
             in_block_comment: false,
-            in_sprite_block: None,
-            current_sprite_name: None,
-            sprites: HashMap::new(),
             archimate_enabled: false,
             in_diagram_block: false,
             in_ebnf_block: false,
@@ -791,74 +771,6 @@ impl PreprocessContext {
     fn process_one_line(&mut self, line: &str, output: &mut Vec<String>) {
         let trimmed = line.trim();
 
-        // CommandMultilines2#isValid uses END.matcher(trimmed).matches().
-        // SVG END is (.*</svg>)$; pixel END is ^end[%s]?sprite|\}$.
-        // Pattern2 is ASCII case-insensitive; %s is Java whitespace plus NBSP.
-        if let Some(kind) = self.in_sprite_block {
-            static PIXEL_END: LazyLock<Regex> = LazyLock::new(|| {
-                Regex::new(r"\A(?:(?i-u:end)[\x09-\x0d \u{00a0}]?(?i-u:sprite)|\})\z").unwrap()
-            });
-            static SVG_END: LazyLock<Regex> = LazyLock::new(|| {
-                Regex::new(r"\A[^\r\n\u{0085}\u{2028}\u{2029}]*(?i-u:</svg>)\z").unwrap()
-            });
-            // StringUtils#trin, as used by Trim.BOTH; do not broaden the end
-            // condition to Unicode trimming or a substring search.
-            let body = line.trim_matches([' ', '\t', '\r', '\n', '\0']);
-            let (ended, pending_lines) = match kind {
-                SpriteBlockKind::Pixel { pending_lines } => {
-                    (PIXEL_END.is_match(body), pending_lines)
-                }
-                SpriteBlockKind::Svg { pending_lines } => (SVG_END.is_match(body), pending_lines),
-            };
-            if ended {
-                self.in_sprite_block = None;
-                self.current_sprite_name = None;
-                // CommandMultilines2#isValid is OK only after END. Until then,
-                // retain the incomplete command for downstream syntax admission.
-                // Include expansion can append a child output Vec to its caller.
-                // The command owns the pending suffix, not an absolute Vec index.
-                if let Some(start) = output.len().checked_sub(pending_lines) {
-                    for pending in &mut output[start..] {
-                        pending.clear();
-                    }
-                } else {
-                    // A caller that discarded pending output cannot complete the
-                    // command here; preserve the terminator and report the residue.
-                    eprintln!(
-                        "warning: sprite completion lost its pending source span; command remains unsupported"
-                    );
-                    output.push(line.to_owned());
-                    return;
-                }
-            } else if let SpriteBlockKind::Pixel { .. } = kind
-                && let Some(name) = self.current_sprite_name.as_ref()
-                && let Some(sprite) = self.sprites.get_mut(name)
-                && !trimmed.is_empty()
-                && trimmed.chars().all(|c| c.is_ascii_hexdigit())
-            {
-                sprite.rows.push(trimmed.to_string());
-                sprite.height = sprite.rows.len() as u32;
-            }
-            if !ended {
-                self.in_sprite_block = Some(match kind {
-                    SpriteBlockKind::Pixel { .. } => SpriteBlockKind::Pixel {
-                        pending_lines: pending_lines + 1,
-                    },
-                    SpriteBlockKind::Svg { .. } => SpriteBlockKind::Svg {
-                        pending_lines: pending_lines + 1,
-                    },
-                });
-            }
-            // Completed commands keep one placeholder per owned source line.
-            // Incomplete commands keep their source; they are not silent blanks.
-            output.push(if ended {
-                String::new()
-            } else {
-                line.to_owned()
-            });
-            return;
-        }
-
         // Handle block comments. We emit empty placeholder lines for each
         // comment line so downstream parsers preserve original source line
         // numbers (PlantUML's `data-source-line` attribute matches the
@@ -887,8 +799,17 @@ impl PreprocessContext {
         }
 
         // Strip inline comments (single-quote comment syntax) — but NOT
-        // inside EBNF blocks.
-        let line_no_comment = if self.in_ebnf_block {
+        // inside EBNF blocks. Java has no trailing-apostrophe comment form:
+        // StringLocated#removeInnerComment only removes /' ... '/ spans. Do
+        // not apply the Rust-only stripping to a line in the start grammar of
+        // CommandSpriteSvg/CommandSpriteSvgMultiline, whose SVG text may
+        // contain " '" and whose trailing text decides command completion.
+        static SPRITE_SVG_START: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"\A(?i-u:sprite)[\x09-\x0d \u{00a0}]+\$?[-\p{L}\p{N}_]+[\x09-\x0d \u{00a0}]+(?i-u:<svg)(?-u:\b)").unwrap()
+        });
+        let line_no_comment = if self.in_ebnf_block
+            || SPRITE_SVG_START.is_match(line.trim_matches([' ', '\t', '\r', '\n', '\0']))
+        {
             line.to_string()
         } else {
             strip_inline_comment(line)
@@ -922,87 +843,6 @@ impl PreprocessContext {
                 return;
             }
         } else if trimmed.starts_with("@start") || trimmed.starts_with("@end") {
-            return;
-        }
-
-        // CommandFactorySprite#multiline and CommandSpriteSvg[Multiline]
-        // #getRegexConcat: consume complete declarations before family parsing.
-        // Keep unsupported sprite materialization visible, but never expose its
-        // body as diagram commands. These are command patterns, not a prefix skip.
-        static SPRITE_PIXEL: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"\A(?i-u:sprite)[\x09-\x0d \u{00a0}]+\$?([-.\p{L}\p{N}_]+)[\x09-\x0d \u{00a0}]*(?:\[([0-9]+)(?i-u:x)([0-9]+)/(?:([0-9]+)(?i-u:z)?|(?i-u:color))\])?[\x09-\x0d \u{00a0}]*\{\z").unwrap()
-        });
-        static SPRITE_SVG: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"\A(?i-u:sprite)[\x09-\x0d \u{00a0}]+\$?([-\p{L}\p{N}_]+)[\x09-\x0d \u{00a0}]+((?i-u:<svg)(?-u:\b)[^\r\n\u{0085}\u{2028}\u{2029}]*)\z").unwrap()
-        });
-        // Other single-line sprite commands remain unsupported. Match their
-        // registered grammar (CommandFactorySprite#singleLine, CommandSprite
-        // Stdlib/StdlibSvg/File#getRegexConcat), independent of case/separators.
-        static SPRITE_SINGLE: LazyLock<Vec<Regex>> = LazyLock::new(|| {
-            [
-                r"sprite%s+\$?([-.%pLN_]+)%s*(?:\[([0-9]+)x([0-9]+)/(?:([0-9]+)z|color)\])?%s+([-_A-Za-z0-9]+)",
-                r"sprite%s+\$([-%pLN_]+)%s*#([^#]+)#([^%S]+)",
-                r"sprite%s+\$?([-%pLN_]+)%s*:([^:]+):([^%S]+)",
-                r#"sprite%s+\$?([-%pLN_]+)%s+([^<>"“”\u{e121}#]*)"#,
-            ]
-            .iter()
-            .map(|pattern| {
-                let pattern = pattern
-                    .replace("%s", r"[\x09-\x0d \u{00a0}]")
-                    .replace("%S", r"\x09-\x0d \u{00a0}")
-                    .replace("%pLN", r"\p{L}\p{N}");
-                // ASCII case folding of the input preserves Unicode names.
-                Regex::new(&format!(r"\A(?:{pattern})\z")).unwrap()
-            })
-            .collect()
-        });
-        // RegexConcat's required space signature is checked over the whole
-        // command; FoxSignature omits VT even though Pattern2 %s includes it.
-        let sprite_line = line_no_comment.trim_matches([' ', '\t', '\r', '\n', '\0']);
-        let sprite_space = sprite_line
-            .chars()
-            .any(|c| matches!(c, ' ' | '\t' | '\r' | '\n' | '\u{000c}' | '\u{00a0}'));
-        if sprite_space && let Some(caps) = SPRITE_PIXEL.captures(sprite_line) {
-            let name = caps[1].to_string();
-            let (width, height) = parse_sprite_dimensions(&sprite_line.to_ascii_lowercase());
-            self.sprites.insert(
-                name.clone(),
-                SpriteData {
-                    width,
-                    height,
-                    rows: Vec::new(),
-                },
-            );
-            self.current_sprite_name = Some(name);
-            self.in_sprite_block = Some(SpriteBlockKind::Pixel { pending_lines: 1 });
-            output.push(line_no_comment.clone());
-            return;
-        }
-        if sprite_space && let Some(caps) = SPRITE_SVG.captures(sprite_line) {
-            // CommandSpriteSvg precedes CommandSpriteSvgMultiline: a complete
-            // inline SVG never opens a body that could consume later commands.
-            if !caps[2].to_ascii_lowercase().ends_with("</svg>") {
-                self.in_sprite_block = Some(SpriteBlockKind::Svg { pending_lines: 1 });
-            }
-            eprintln!(
-                "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported"
-            );
-            output.push(if self.in_sprite_block.is_some() {
-                line_no_comment.clone()
-            } else {
-                String::new()
-            });
-            return;
-        }
-        if sprite_space
-            && SPRITE_SINGLE
-                .iter()
-                .any(|re| re.is_match(&sprite_line.to_ascii_lowercase()))
-        {
-            eprintln!(
-                "warning: single-line sprite declaration consumed; sprite execution remains unsupported"
-            );
-            output.push(String::new());
             return;
         }
 
@@ -3574,32 +3414,6 @@ fn parens_balanced(s: &str) -> bool {
     depth == 0
 }
 
-/// Parse optional `[WxH/Z]` dimension spec from a sprite header line.
-///
-/// The `rest` parameter is the text after `sprite $` (name included).
-/// Returns `(width, height)` where 0 means "infer from pixel data".
-fn parse_sprite_dimensions(rest: &str) -> (u32, u32) {
-    // Look for `[WxH/Z]` or `[WxH]` pattern anywhere in the rest string.
-    if let Some(start) = rest.find('[')
-        && let Some(end) = rest[start..].find(']')
-    {
-        let spec = &rest[start + 1..start + end];
-        // Format: WxH/Z  or WxH
-        let wh = spec.split('/').next().unwrap_or(spec);
-        let mut parts = wh.splitn(2, 'x');
-        let w: u32 = parts
-            .next()
-            .and_then(|s| s.trim().parse().ok())
-            .unwrap_or(0);
-        let h: u32 = parts
-            .next()
-            .and_then(|s| s.trim().parse().ok())
-            .unwrap_or(0);
-        return (w, h);
-    }
-    (0, 0)
-}
-
 fn strip_inline_comment(line: &str) -> String {
     let mut in_quotes = false;
     let chars: Vec<char> = line.chars().collect();
@@ -4305,53 +4119,71 @@ $record(SaffronArchive)\n\
         assert_eq!(lines, vec!["note : []|[hello]"]);
     }
 
+    // BlockUml#<init> runs TimLoader#load before any diagram command sees the
+    // source. Sprite declarations are CommonCommands, so TIM passes them
+    // through verbatim; only TIM directives decide which of them survive.
     #[test]
-    fn sprite_block_is_collected() {
-        let input =
-            "@startuml\nsprite $disk [8x8/16] {\nFF00FF00\n00FF00FF\n}\nnote : hello\n@enduml";
-        let out = preprocess_full(input, None);
-        // The sprite block should NOT appear as content in the preprocessed
-        // lines, but each block line is replaced by an empty placeholder so
-        // downstream source-line numbers stay aligned with the original source.
-        assert!(
-            !out.lines.iter().any(|l| l.contains("FF00FF00")),
-            "sprite pixel rows should not appear in output lines"
+    fn sprite_commands_pass_through_tim_unchanged() {
+        let input = "@startuml\nsprite $disk [8x8/16] {\nFF00FF00\n00FF00FF\n}\nnote : <$disk> hello\n@enduml";
+        assert_eq!(
+            pp(input),
+            vec![
+                "sprite $disk [8x8/16] {",
+                "FF00FF00",
+                "00FF00FF",
+                "}",
+                "note : <$disk> hello"
+            ]
         );
-        // 4 sprite-block lines (opener, 2 pixel rows, closer) → 4 placeholders.
-        assert_eq!(out.lines, vec!["", "", "", "", "note : hello"]);
-        // The sprite should be collected.
-        assert!(
-            out.sprites.contains_key("disk"),
-            "sprite 'disk' should be parsed"
-        );
-        let s = &out.sprites["disk"];
-        assert_eq!(s.rows, vec!["FF00FF00", "00FF00FF"]);
-        assert_eq!(s.width, 8);
-        assert_eq!(s.height, 2);
     }
 
     #[test]
-    fn sprite_ref_preserved_in_output() {
-        // <$name> references in diagram lines should be preserved.
-        let input =
-            "@startuml\nsprite $icon [4x4/16] {\nFFFF\nFFFF\n}\nnote : <$icon> hello\n@enduml";
-        let out = preprocess_full(input, None);
-        // 4 sprite-block lines become empty placeholders (source-line alignment).
-        assert_eq!(out.lines, vec!["", "", "", "", "note : <$icon> hello"]);
-        assert!(out.sprites.contains_key("icon"));
+    fn inactive_and_uninvoked_sprite_headers_never_reach_commands() {
+        for body in [
+            "!if %false()\nsprite $mark [2x2/16] {\n!endif\nA -> B",
+            "!procedure $p()\nsprite $mark <svg width=\"2\" height=\"2\">\n!endprocedure\nA -> B",
+        ] {
+            let lines = pp(&format!("@startuml\n{body}\n@enduml"));
+            assert_eq!(lines, vec!["A -> B"], "{body}");
+        }
+        // An invoked procedure and an active branch contribute their lines.
+        let lines = pp(
+            "@startuml\n!procedure $p()\nsprite $mark [2x2/16] {\nFF\n}\n!endprocedure\n$p()\n!if %true()\nA -> B\n!endif\n@enduml",
+        );
+        assert_eq!(lines, vec!["sprite $mark [2x2/16] {", "FF", "}", "A -> B"]);
     }
 
     #[test]
-    fn sprite_without_dimensions() {
-        // Sprite blocks without [WxH/Z] annotation should still be parsed.
-        let input = "@startuml\nsprite $dot {\nFF\n00\n}\nnote : test\n@enduml";
-        let out = preprocess_full(input, None);
-        assert!(
-            out.sprites.contains_key("dot"),
-            "sprite 'dot' should be parsed"
+    fn included_lines_complete_a_sprite_after_expansion() {
+        let nonce = std::process::id();
+        let dir = std::env::temp_dir().join(format!("rustuml-tim-sprite-include-{nonce}"));
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(dir.join("rows.inc"), "FF\n00\n}\n").unwrap();
+        let lines: Vec<String> = preprocess_with_base(
+            "@startuml\nsprite $mark [2x2/16] {\n!include rows.inc\nA -> B\n@enduml",
+            &dir,
+        )
+        .into_iter()
+        .filter(|line| !line.is_empty())
+        .collect();
+        let _ = std::fs::remove_dir_all(&dir);
+        assert_eq!(
+            lines,
+            vec!["sprite $mark [2x2/16] {", "FF", "00", "}", "A -> B"]
         );
-        let s = &out.sprites["dot"];
-        assert_eq!(s.rows, vec!["FF", "00"]);
+    }
+
+    #[test]
+    fn apostrophes_in_svg_sprite_lines_are_command_text() {
+        let line = "sprite $tag <svg width=\"4\" height=\"4\"><text> 'hi'</text></svg>";
+        assert_eq!(pp(&format!("@startuml\n{line}\n@enduml")), vec![line]);
+        let trailing = "SPRITE $tag <svg><rect/></svg> ' trailing";
+        assert_eq!(
+            pp(&format!("@startuml\n{trailing}\n@enduml")),
+            vec![trailing]
+        );
+        // Other lines keep the existing inline-comment handling.
+        assert_eq!(pp("@startuml\nA -> B ' note\n@enduml"), vec!["A -> B "]);
     }
 
     #[test]

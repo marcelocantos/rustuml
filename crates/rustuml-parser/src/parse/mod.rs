@@ -22,12 +22,15 @@ pub mod object;
 pub mod regex_diagram;
 pub mod salt;
 pub mod sequence;
+mod sprite;
 pub mod state;
 pub mod timing;
 pub mod usecase;
 pub mod wbs;
 
 mod style;
+
+use std::collections::HashMap;
 
 use crate::diagram::Diagram;
 use crate::preprocess;
@@ -1149,7 +1152,12 @@ pub fn parse_with_base(
             }
         }
     }
-    let uml_subtype = (typ == "uml").then(|| detect_uml_subtype(&preprocess_out.lines));
+    // Subtype detection stands in for PSystemBuilder trying each factory.
+    // Sprite commands are registered by every candidate UML factory, so they
+    // carry no discriminating signal; detection sees them consumed (this was
+    // the effect of the former in-TIM blanking).
+    let uml_subtype = (typ == "uml")
+        .then(|| detect_uml_subtype(&sprite::consume_complete_commands(&preprocess_out.lines).0));
     if matches!(uml_subtype, Some(UmlSubtype::Sequence)) {
         preprocess_out = match base_dir {
             Some(dir) => {
@@ -1160,7 +1168,6 @@ pub fn parse_with_base(
         style_program = style::extract_style_program(&mut preprocess_out.lines);
     }
     let lines = preprocess_out.lines;
-    let sprites = preprocess_out.sprites;
     let uml_source = preprocess_out.uml_source;
 
     // For non-sequence UML diagrams a `newpage` directive splits the diagram
@@ -1171,6 +1178,22 @@ pub fn parse_with_base(
         lines
     } else {
         truncate_at_newpage(lines)
+    };
+
+    // Families whose factories register CommonCommands but whose parsers do
+    // not yet offer lines to the sprite group at their dispatch position:
+    // consume complete sprite commands after TIM, context-free (residual).
+    let fallback_sprites = matches!(
+        uml_subtype,
+        Some(UmlSubtype::Timing | UmlSubtype::Archimate)
+    ) || matches!(
+        typ,
+        "mindmap" | "gantt" | "wbs" | "salt" | "nwdiag" | "regex" | "board" | "ebnf"
+    );
+    let (lines, sprites) = if fallback_sprites {
+        sprite::consume_complete_commands(&lines)
+    } else {
+        (lines, HashMap::new())
     };
 
     let mut diagram = match typ {
@@ -1285,10 +1308,9 @@ pub fn parse_with_base(
     collapse_reassigned_skinparams(&mut diagram);
     diagram.meta_mut().style_program = style_program;
 
-    // Inject sprite definitions from the preprocessor into the diagram's meta.
+    // Sprites executed by the post-TIM fallback consumption.
     if !sprites.is_empty() {
-        let meta = diagram.meta_mut();
-        meta.sprites = sprites;
+        diagram.meta_mut().sprites.extend(sprites);
     }
 
     // Stash PlantUML's post-TIM `UmlSource.getPlainString("\n")` for

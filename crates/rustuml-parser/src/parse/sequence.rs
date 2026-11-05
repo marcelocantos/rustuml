@@ -63,7 +63,7 @@ static EXTERNAL_MESSAGE_OUT_RE: LazyLock<Regex> = LazyLock::new(|| {
 
 // Pattern2#transform/compileInternal: ASCII case folding and Java's default
 // ASCII predefined classes; Unicode identity properties remain Unicode.
-fn registered_regex(pattern: &str) -> Regex {
+pub(super) fn registered_regex(pattern: &str) -> Regex {
     let expanded = pattern
         .replace("%pLN", r"\p{L}\p{N}")
         .replace("%s", r"\x09-\x0d \u{00a0}")
@@ -108,13 +108,13 @@ fn registered_regex(pattern: &str) -> Regex {
 }
 
 // StringLocated#getTrimmed -> StringUtils#trin, not Unicode str::trim.
-fn sequence_command_trim(line: &str) -> &str {
+pub(super) fn sequence_command_trim(line: &str) -> &str {
     line.trim_matches([' ', '\t', '\r', '\n', '\0'])
 }
 
 // FoxSignature's masks table and getFoxSignatureFromRealString. The required
 // masks in the inventory are derived from RegexConcat#foxRegex, not fitted.
-fn sequence_fox_signature(line: &str) -> u64 {
+pub(super) fn sequence_fox_signature(line: &str) -> u64 {
     const SYMBOLS: &str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0!\"#$%&'()*+,-./:;<=>?@[\\]^_{|}~";
     let mut result = 0;
     for ch in line.chars() {
@@ -1068,6 +1068,22 @@ static REGISTERED_SEQUENCE_COMMANDS: LazyLock<Vec<RegisteredSequenceCommand>> = 
 );
 
 /// Parse preprocessed lines into a sequence diagram.
+/// The compiled start pattern, signature and END of a registered command.
+#[cfg(test)]
+pub(super) fn registered_grammar(class: &str) -> Option<(String, u64, Option<String>)> {
+    let command = REGISTERED_SEQUENCE_COMMANDS
+        .iter()
+        .find(|command| command.class == class)?;
+    let RegisteredPattern::Plain(start) = &command.pattern else {
+        return None;
+    };
+    let end = match &command.end {
+        CommandEnd::End(end) => Some(end.as_str().to_string()),
+        CommandEnd::Single | CommandEnd::Brace => None,
+    };
+    Some((start.as_str().to_string(), command.signature, end))
+}
+
 pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
     let mut parser = SeqParser::new();
 
@@ -1107,6 +1123,19 @@ pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
                 "warning: sequence command {} has an execution-valid composite/gradient color; complete style materialization remains unsupported at line {source_line}",
                 command.class
             );
+        }
+        // CommonCommands sprite commands: the registry above selected the
+        // command after TIM; its executeNow/executeArg failures are errors.
+        // Sequence rendering does not draw sprite references, so execution
+        // still reports the command as unimplemented below.
+        if command.class.starts_with("CommandFactorySprite")
+            || command.class.starts_with("CommandSprite")
+        {
+            super::sprite::execute_selected(lines, index, end, command.class, &mut parser.meta)
+                .map_err(|message| ParseError {
+                    line: source_line,
+                    message,
+                })?;
         }
         if !command.implemented {
             eprintln!(
@@ -2974,9 +3003,9 @@ mod tests {
                 let pre = crate::preprocess::preprocess_full(&source, None);
                 let diagram = parse_sequence(&pre.lines).unwrap();
                 assert_eq!(diagram.events.len(), 1, "{source}");
-                assert_eq!(pre.sprites.contains_key("mark"), pixel);
+                assert_eq!(diagram.meta.sprites.contains_key("mark"), pixel);
                 if pixel {
-                    assert_eq!(pre.sprites["mark"].rows, ["FF", "00"]);
+                    assert_eq!(diagram.meta.sprites["mark"].rows, ["FF", "00"]);
                 }
             }
         }
@@ -3030,6 +3059,66 @@ mod tests {
             let pre = crate::preprocess::preprocess_full(&source, None);
             assert!(parse_sequence(&pre.lines).is_err());
         }
+    }
+
+    // TimLoader#load runs before PSystemCommandFactory: a sprite header in an
+    // inactive branch or an uninvoked procedure never reaches the registry,
+    // and an included body completes the command after expansion.
+    #[test]
+    fn sprite_commands_see_only_tim_output() {
+        for header in [
+            "sprite $mark <svg width=\"2\" height=\"2\">",
+            "sprite $mark [2x2/16] {",
+        ] {
+            for wrapped in [
+                format!("!if %false()\n{header}\nFF\n!endif"),
+                format!("!procedure $unused()\n{header}\nFF\n!endprocedure"),
+            ] {
+                let source =
+                    format!("@startuml\nparticipant A\nparticipant B\n{wrapped}\nA -> B\n@enduml");
+                for teoz in ["", "!pragma teoz true\n"] {
+                    let source = source.replacen("@startuml\n", &format!("@startuml\n{teoz}"), 1);
+                    let diagram = crate::parse::parse(&source).expect(&source);
+                    assert!(
+                        matches!(diagram, crate::diagram::Diagram::Sequence(_)),
+                        "{source}"
+                    );
+                }
+            }
+            // The same header active and unclosed is a Java error.
+            for wrapped in [
+                format!("!if %true()\n{header}\nFF\n!endif"),
+                format!("!procedure $used()\n{header}\nFF\n!endprocedure\n$used()"),
+            ] {
+                let source =
+                    format!("@startuml\nparticipant A\nparticipant B\n{wrapped}\nA -> B\n@enduml");
+                assert!(crate::parse::parse(&source).is_err(), "{source}");
+            }
+        }
+    }
+
+    // Multiline note/legend/ref commands own their bodies through END, so body
+    // text is never offered to the sprite commands.
+    #[test]
+    fn command_bodies_are_not_sprite_commands() {
+        for body in [
+            "note over A\nSprite sheets are loaded\nend note",
+            "note over A\nSprite frame {\nend note",
+            "note right of B\nsprite atlas {\nend note",
+            "legend\nSPRITE atlas version two\nendlegend",
+            "ref over A, B\nSprite cache warm\nend ref",
+        ] {
+            let source =
+                format!("@startuml\nparticipant A\nparticipant B\n{body}\nA -> B\n@enduml");
+            let pre = crate::preprocess::preprocess_full(&source, None);
+            parse_sequence(&pre.lines).expect(&source);
+        }
+        // At a command start the same text is CommandSpriteFile: Cannot read.
+        let pre = crate::preprocess::preprocess_full(
+            "@startuml\nparticipant A\nSprite sheets are loaded\n@enduml",
+            None,
+        );
+        assert!(parse_sequence(&pre.lines).is_err());
     }
 
     #[test]

@@ -15,17 +15,28 @@ pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
     let mut parser = StateParser::new();
     parser.predeclare_state_structure(lines);
     parser.reset_after_predeclaration();
-    for (i, line) in lines.iter().enumerate() {
-        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
+    let mut i = 0;
+    while i < lines.len() {
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, &lines[i]);
         if trimmed.is_empty() {
             // Empty lines may terminate a multi-line note with content already
             // accumulated — keep buffering (blank lines are part of note body).
             if let Some(buf) = &mut parser.note_buffer {
                 buf.text.push('\n');
             }
+            i += 1;
             continue;
         }
+        parser.unrecognized = false;
         parser.parse_line(source_line, trimmed)?;
+        // StateDiagramFactory#initCommandsList registers addCommonCommands1
+        // (the sprite commands) after the state, link and note commands.
+        if parser.unrecognized
+            && let Some(end) = super::sprite::dispatch(lines, i, &mut parser.meta, "state", false)?
+        {
+            i = end;
+        }
+        i += 1;
     }
     // Flush any unclosed note buffer.
     parser.flush_note();
@@ -113,6 +124,8 @@ struct NoteBuffer {
 }
 
 struct StateParser {
+    /// The last line reached the end of the state dispatch chain.
+    unrecognized: bool,
     meta: DiagramMeta,
     direction: StateLayoutDirection,
     states: Vec<State>,
@@ -152,6 +165,7 @@ struct ScopeFrame {
 impl StateParser {
     fn new() -> Self {
         Self {
+            unrecognized: false,
             meta: DiagramMeta::default(),
             direction: StateLayoutDirection::TopToBottom,
             states: Vec::new(),
@@ -181,11 +195,15 @@ impl StateParser {
     fn predeclare_state_structure(&mut self, lines: &[String]) {
         let mut in_note = false;
         let mut in_skinparam_block = false;
+        let mut sprite_end: Option<usize> = None;
 
         for (i, line) in lines.iter().enumerate() {
             let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
             self.current_line = source_line;
 
+            if sprite_end.is_some_and(|end| i <= end) {
+                continue;
+            }
             if in_note {
                 if matches!(trimmed, "end note" | "endnote") {
                     in_note = false;
@@ -223,8 +241,10 @@ impl StateParser {
                 self.scope_stack.pop();
                 continue;
             }
-            if !self.try_state_decl(trimmed) {
-                let _ = self.try_state_description(trimmed);
+            if !self.try_state_decl(trimmed) && !self.try_state_description(trimmed) {
+                // The main pass offers this line to the sprite commands; skip
+                // the body a complete sprite command owns.
+                sprite_end = super::sprite::complete_span(lines, i);
             }
         }
     }
@@ -507,7 +527,9 @@ impl StateParser {
         if self.try_note(line) {
             return Ok(());
         }
-        // Silently ignore unknown lines (}, state body, etc.)
+        // Silently ignore unknown lines (}, state body, etc.); the caller
+        // offers them to the sprite commands registered after these.
+        self.unrecognized = true;
         Ok(())
     }
 
