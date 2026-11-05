@@ -45,6 +45,7 @@ pub fn parse_json_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
 /// Parse a `@startyaml` / `@endyaml` block.
 pub fn parse_yaml_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
     let (_highlights, content) = extract_body(lines);
+    let content = keep_quoted_backslashes(&content);
     let value: serde_yml::Value = crate::java_utf16::decode_carried(
         &content,
         |text| serde_yml::from_str(text),
@@ -60,6 +61,108 @@ pub fn parse_yaml_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
         format: DataFormat::Yaml,
         root,
     })
+}
+
+/// PlantUML's YAML parser (`yaml/parser/YamlLine.build`) splits a line's key
+/// and value at the first colon outside quotes and only strips one pair of
+/// surrounding quotes (`unquote`): a backslash in a quoted key or value is
+/// literal. serde_yml would decode it in a double-quoted scalar, so such a
+/// scalar is handed to serde single-quoted with the same characters.
+/// Flow sequences (`[...]`) are left to serde.
+fn keep_quoted_backslashes(content: &str) -> std::borrow::Cow<'_, str> {
+    if !content.contains('\\') {
+        return std::borrow::Cow::Borrowed(content);
+    }
+    let mut out = String::with_capacity(content.len() + 8);
+    // Lines of a block scalar ('key: |' / 'key: >') are text, not scalars.
+    let mut block_indent: Option<usize> = None;
+    for (index, line) in content.split('\n').enumerate() {
+        if index > 0 {
+            out.push('\n');
+        }
+        let indent = line.len() - line.trim_start().len();
+        if let Some(block) = block_indent {
+            if line.trim().is_empty() || indent > block {
+                out.push_str(line);
+                continue;
+            }
+            block_indent = None;
+        }
+        let trimmed = line.trim();
+        if trimmed.ends_with(": |") || trimmed.ends_with(": >") {
+            block_indent = Some(indent);
+        }
+        if trimmed.starts_with('#') {
+            out.push_str(line);
+        } else {
+            out.push_str(&keep_quoted_backslashes_in_line(line));
+        }
+    }
+    std::borrow::Cow::Owned(out)
+}
+
+fn keep_quoted_backslashes_in_line(line: &str) -> String {
+    let mut start = line.len() - line.trim_start().len();
+    if line[start..].starts_with("- ") {
+        start += 2;
+    }
+    // YamlLine.removeYamlComment: ' #' outside quotes starts a comment.
+    let mut end = line.len();
+    let mut quote = None;
+    let bytes = line.as_bytes();
+    for (offset, ch) in line[start..].char_indices() {
+        let at = start + offset;
+        if ch == '\'' || ch == '"' {
+            match quote {
+                None => quote = Some(ch),
+                Some(open) if open == ch => quote = None,
+                Some(_) => {}
+            }
+        }
+        if quote.is_none() && ch == ' ' && bytes.get(at + 1) == Some(&b'#') {
+            end = at;
+            break;
+        }
+    }
+    let body = &line[start..end];
+    // YamlLine.findColonSeparator: the first ':' outside quotes.
+    let mut quote = None;
+    let mut colon = None;
+    for (offset, ch) in body.char_indices() {
+        match quote {
+            Some(open) if ch == open => quote = None,
+            Some(_) => {}
+            None if ch == '"' || ch == '\'' => quote = Some(ch),
+            None if ch == ':' => {
+                colon = Some(offset);
+                break;
+            }
+            None => {}
+        }
+    }
+    let spans = match colon {
+        Some(colon) => vec![0..colon, colon + 1..body.len()],
+        None => vec![0..body.len()],
+    };
+    let mut result = line.to_string();
+    for span in spans.into_iter().rev() {
+        let part = &body[span.clone()];
+        let trimmed = part.trim();
+        if trimmed.len() >= 2
+            && trimmed.starts_with('"')
+            && trimmed.ends_with('"')
+            && trimmed.contains('\\')
+        {
+            let inner = &trimmed[1..trimmed.len() - 1];
+            let lead = part.len() - part.trim_start().len();
+            let at = start + span.start + lead;
+            result.replace_range(
+                at..at + trimmed.len(),
+                &format!("'{}'", inner.replace('\'', "''")),
+            );
+        }
+    }
+    result
 }
 
 /// Insert commas where PlantUML's lenient parser allows them to be omitted.
@@ -228,6 +331,22 @@ fn yaml_value_to_node(key: Option<String>, value: &serde_yml::Value) -> JsonNode
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn yaml_quoted_backslashes_stay_literal_as_in_yaml_line_unquote() {
+        let lines = |text: &str| text.lines().map(str::to_string).collect::<Vec<_>>();
+        let diagram = parse_yaml_diagram(&lines(
+            "\"Key \\x\": \"Amber \\U0010FFFD it's\" # note\nplain: \"no escape\"\nlist:\n  - \"a\\nb\"\ntext: |\n  \"kept \\t\"\n",
+        ))
+        .unwrap();
+        let shown = format!("{:?}", diagram.root);
+        // Debug shows each literal backslash doubled.
+        assert!(shown.contains(r"Amber \\U0010FFFD it's"), "{shown}");
+        assert!(shown.contains(r"Key \\x"), "{shown}");
+        assert!(shown.contains(r"a\\nb"), "{shown}");
+        assert!(shown.contains("no escape"), "{shown}");
+        assert!(shown.contains(r#"\"kept \\t\""#), "{shown}");
+    }
     use crate::diagram::json_diagram::JsonNodeValue;
 
     fn lines(s: &str) -> Vec<String> {
