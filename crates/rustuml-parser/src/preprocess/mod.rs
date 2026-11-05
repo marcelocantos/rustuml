@@ -2490,7 +2490,7 @@ impl PreprocessContext {
             return Expression::Not(Box::new(self.prepare_expression(rest)));
         }
         if matches!(expr.chars().next(), Some('{' | '['))
-            && let Ok(json) = serde_json::from_str(expr)
+            && let Ok(json) = decode_carried_json(expr)
         {
             return Expression::Value(Value::Json(json));
         }
@@ -2520,7 +2520,7 @@ impl PreprocessContext {
         // resulting display value (numeric-looking non-JSON strings stay text).
         if (expr.contains('.') || expr.contains('[')) && expr.parse::<f64>().is_err() {
             let expanded = self.substitute_vars(expr);
-            if let Ok(json) = serde_json::from_str(&expanded) {
+            if let Ok(json) = decode_carried_json(&expanded) {
                 return Expression::Value(Value::Json(json));
             }
             if expanded != expr {
@@ -3289,7 +3289,7 @@ impl PreprocessContext {
                 return Value::Str(String::new());
             }
             "str2json" => {
-                return serde_json::from_str(refs.first().copied().unwrap_or(""))
+                return decode_carried_json(refs.first().copied().unwrap_or(""))
                     .map(Value::Json)
                     .unwrap_or_else(|_| Value::Str(String::new()));
             }
@@ -3956,6 +3956,16 @@ fn remove_inner_comment(line: &str) -> String {
     };
     static SPECIAL: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"/'''[-\w]*'''/").unwrap());
     SPECIAL.replace_all(content, "").into_owned()
+}
+
+/// TIM JSON (`!$j = {...}`, member access, `%str2json`) decodes JSON escapes
+/// in carried text; its strings are escaped where they are decoded.
+fn decode_carried_json(text: &str) -> serde_json::Result<serde_json::Value> {
+    crate::java_utf16::decode_carried(
+        text,
+        |text| serde_json::from_str(text),
+        crate::java_utf16::escape_json,
+    )
 }
 
 #[cfg(test)]

@@ -21,12 +21,19 @@ use super::ParseError;
 /// and, on failure, fall back to a lenient pass that inserts missing commas.
 pub fn parse_json_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
     let (highlights, content) = extract_body(lines);
-    let value: serde_json::Value = serde_json::from_str(&content)
-        .or_else(|_| serde_json::from_str(&insert_missing_commas(&content)))
-        .map_err(|e| ParseError {
-            line: e.line(),
-            message: format!("JSON parse error: {e}"),
-        })?;
+    // Carried text: decoded escapes are escaped where serde decodes them.
+    let value: serde_json::Value = crate::java_utf16::decode_carried(
+        &content,
+        |text| {
+            serde_json::from_str(text)
+                .or_else(|_| serde_json::from_str(&insert_missing_commas(text)))
+        },
+        crate::java_utf16::escape_json,
+    )
+    .map_err(|e| ParseError {
+        line: e.line(),
+        message: format!("JSON parse error: {e}"),
+    })?;
     let root = json_value_to_node(None, &value, &highlights, &[]);
     Ok(JsonDiagram {
         meta: DiagramMeta::default(),
@@ -38,7 +45,12 @@ pub fn parse_json_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
 /// Parse a `@startyaml` / `@endyaml` block.
 pub fn parse_yaml_diagram(lines: &[String]) -> Result<JsonDiagram, ParseError> {
     let (_highlights, content) = extract_body(lines);
-    let value: serde_yml::Value = serde_yml::from_str(&content).map_err(|e| ParseError {
+    let value: serde_yml::Value = crate::java_utf16::decode_carried(
+        &content,
+        |text| serde_yml::from_str(text),
+        crate::java_utf16::escape_yaml,
+    )
+    .map_err(|e| ParseError {
         line: e.location().map_or(0, |l| l.line()),
         message: format!("YAML parse error: {e}"),
     })?;

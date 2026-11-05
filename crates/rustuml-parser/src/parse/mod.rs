@@ -1084,18 +1084,38 @@ pub fn parse_named(input: &str, name: &str) -> Result<Diagram, ParseError> {
 /// Parse YAML input into a diagram model.
 pub fn parse_yaml(input: &str) -> Result<Diagram, ParseError> {
     // Model text enters here without TIM: escape it for the unit carrier.
-    serde_yml::from_str(&crate::java_utf16::escape(input)).map_err(|e| ParseError {
+    let direct = serde_yml::from_str(&crate::java_utf16::escape(input)).map_err(|e| ParseError {
         line: e.location().map_or(0, |l| l.line()),
         message: format!("YAML parse error: {e}"),
-    })
+    });
+    // A decoded escape (\U0010FFFD) is escaped where serde decodes it.
+    if direct.is_ok()
+        && let Ok(mut value) = serde_yml::from_str::<serde_yml::Value>(input)
+        && crate::java_utf16::escape_yaml(&mut value)
+        && let Ok(diagram) = serde_yml::from_value(value)
+    {
+        return Ok(diagram);
+    }
+    direct
 }
 
 /// Parse JSON input into a diagram model.
 pub fn parse_json(input: &str) -> Result<Diagram, ParseError> {
-    serde_json::from_str(&crate::java_utf16::escape(input)).map_err(|e| ParseError {
+    let direct = serde_json::from_str(&crate::java_utf16::escape(input)).map_err(|e| ParseError {
         line: e.line(),
         message: format!("JSON parse error: {e}"),
-    })
+    });
+    // A decoded escape (\uDBFF\uDFFD) is escaped where serde decodes it; the
+    // escaped value is re-read as JSON text, whose raw scalars serde keeps.
+    if direct.is_ok()
+        && let Ok(mut value) = serde_json::from_str::<serde_json::Value>(input)
+        && crate::java_utf16::escape_json(&mut value)
+        && let Ok(text) = serde_json::to_string(&value)
+        && let Ok(diagram) = serde_json::from_str(&text)
+    {
+        return Ok(diagram);
+    }
+    direct
 }
 
 /// Detect input format and parse accordingly.

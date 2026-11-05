@@ -162,6 +162,89 @@ pub fn display(text: &str, unpaired: char) -> std::borrow::Cow<'_, str> {
     )
 }
 
+/// Run a decoder that interprets escape sequences (serde_json, serde_yml) on
+/// carried text so that its output strings are carried text again.
+///
+/// A decoder turns `\U0010FFFD` or `\uDBFF\uDFFD` into an unescaped reserved
+/// scalar, which [`tokens`] would read as an unpaired unit. Java decodes the
+/// same escape into an ordinary pair. So, unless the text carries an unpaired
+/// unit, the decoder reads the plain Java text (escapes removed) and every
+/// string it produces is escaped where it is decoded (`escape_strings`, see
+/// [`escape_json`] and [`escape_yaml`]). Text without reserved scalars is
+/// decoded unchanged.
+pub fn decode_carried<T, E>(
+    text: &str,
+    decode: impl FnOnce(&str) -> Result<T, E>,
+    escape_strings: impl FnOnce(&mut T) -> bool,
+) -> Result<T, E> {
+    if tokens(text).any(|token| matches!(token, Token::Unit(_))) {
+        return decode(text);
+    }
+    let mut value = decode(&display(text, char::REPLACEMENT_CHARACTER))?;
+    escape_strings(&mut value);
+    Ok(value)
+}
+
+fn escape_in_place(text: &mut String) -> bool {
+    match escape(text) {
+        std::borrow::Cow::Owned(escaped) => {
+            *text = escaped;
+            true
+        }
+        std::borrow::Cow::Borrowed(_) => false,
+    }
+}
+
+/// Escape every string and key a JSON decoder produced; true when any changed.
+pub fn escape_json(value: &mut serde_json::Value) -> bool {
+    match value {
+        serde_json::Value::String(text) => escape_in_place(text),
+        serde_json::Value::Array(items) => items
+            .iter_mut()
+            .fold(false, |changed, item| escape_json(item) | changed),
+        serde_json::Value::Object(map) => {
+            if !map.keys().any(|key| is_carried(key)) {
+                return map
+                    .values_mut()
+                    .fold(false, |changed, item| escape_json(item) | changed);
+            }
+            let entries = std::mem::take(map);
+            for (mut key, mut item) in entries {
+                escape_in_place(&mut key);
+                escape_json(&mut item);
+                map.insert(key, item);
+            }
+            true
+        }
+        serde_json::Value::Null | serde_json::Value::Bool(_) | serde_json::Value::Number(_) => {
+            false
+        }
+    }
+}
+
+/// Escape every string, key and tagged value a YAML decoder produced; true
+/// when any changed.
+pub fn escape_yaml(value: &mut serde_yml::Value) -> bool {
+    match value {
+        serde_yml::Value::String(text) => escape_in_place(text),
+        serde_yml::Value::Sequence(items) => items
+            .iter_mut()
+            .fold(false, |changed, item| escape_yaml(item) | changed),
+        serde_yml::Value::Mapping(mapping) => {
+            let mut changed = false;
+            let entries = std::mem::take(mapping);
+            for (mut key, mut item) in entries {
+                changed |= escape_yaml(&mut key);
+                changed |= escape_yaml(&mut item);
+                mapping.insert(key, item);
+            }
+            changed
+        }
+        serde_yml::Value::Tagged(tagged) => escape_yaml(&mut tagged.value),
+        serde_yml::Value::Null | serde_yml::Value::Bool(_) | serde_yml::Value::Number(_) => false,
+    }
+}
+
 /// Serialized form of a model whose strings are shown as plain text
 /// ([`display`]), or `None` when no string is carried.
 pub fn display_value<T: serde::Serialize>(model: &T, unpaired: char) -> Option<serde_yml::Value> {
@@ -214,6 +297,26 @@ pub fn display_model<T: serde::Serialize + serde::de::DeserializeOwned>(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn decoder_output_is_carried_text_again() {
+        // serde decodes the escape into U+10FFFD; it must not read as a unit.
+        let json: serde_json::Value = decode_carried(
+            r#"{"\uDBFF\uDFFD": ["x\uDBFF\uDFFD", "\uDBFF\uDC00"]}"#,
+            |text| serde_json::from_str(text),
+            escape_json,
+        )
+        .unwrap();
+        let (key, items) = json.as_object().unwrap().iter().next().unwrap();
+        assert_eq!(units(key), vec![0xDBFF, 0xDFFD]);
+        assert!(tokens(items[0].as_str().unwrap()).all(|token| matches!(token, Token::Char(_))));
+        assert_eq!(units(items[1].as_str().unwrap()), vec![0xDBFF, 0xDC00]);
+        // An escaped literal in the entering text is escaped once, not twice.
+        let literal = escape("k: \u{10FFFD}").into_owned();
+        let yaml: serde_yml::Value =
+            decode_carried(&literal, |text| serde_yml::from_str(text), escape_yaml).unwrap();
+        assert_eq!(units(yaml["k"].as_str().unwrap()), vec![0xDBFF, 0xDFFD]);
+    }
 
     #[test]
     fn carriers_round_trip_every_unpaired_unit() {
