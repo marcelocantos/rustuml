@@ -5903,8 +5903,12 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     }
     let origin_x = 6.0 - painted_min_x;
     let origin_y = 6.0 - painted_min_y;
-    let width = origin_x + painted_max_x + 15.0;
-    let height = origin_y + painted_max_y + 15.0;
+    // SvekResult.calculateDimension (max - min + 15) inside
+    // CucaDiagram.getDefaultMargins (5 on the positive axes).
+    let width =
+        painted_max_x - painted_min_x + SVEK_RESULT_DIMENSION_PAD + CUCA_POSITIVE_AXIS_MARGIN;
+    let height =
+        painted_max_y - painted_min_y + SVEK_RESULT_DIMENSION_PAD + CUCA_POSITIVE_AXIS_MARGIN;
     if width <= 0.0 || height <= 0.0 {
         return None;
     }
@@ -5971,8 +5975,9 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
             crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
         }),
     };
-    let width = scope.width.ceil() as i64;
-    let height = scope.height.ceil() as i64;
+    // Java `SvgGraphics.ensureVisible` (142-147): `(int)(x + 1)`.
+    let width = svg_ensure_visible_dimension(scope.width) as i64;
+    let height = svg_ensure_visible_dimension(scope.height) as i64;
     let mut svg = String::with_capacity(4096);
     let defs = context
         .shadow_filter_id
