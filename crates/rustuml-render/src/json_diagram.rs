@@ -1250,8 +1250,10 @@ mod tests {
             svg.contains(">go</text>") && svg.contains(">on</text>"),
             "{svg}"
         );
-        // Two lines in the first row: 2 x 16.4883 + 4.
-        assert!(svg.contains(r#"y1="10" y2="46.9766""#), "{svg}");
+        // Two lines in the first row: two text heights plus the 2 + 2 margin.
+        let bottom = super::MARGIN + 2.0 * super::text_height(super::FONT_SIZE) + super::ROW_EXTRA;
+        let separator = format!(r#"y1="10" y2="{}""#, super::fmt_coord(bottom));
+        assert!(svg.contains(&separator), "{svg}");
     }
 
     #[test]
