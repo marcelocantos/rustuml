@@ -4165,8 +4165,15 @@ fn emit_autonomous_scope_entities(
         };
         // SvekResult.drawU paints the node at SvekNode.getMinX, the corner
         // Graphviz serialized with two decimals; the solved center already
-        // carries that corner, so it is not rounded again here.
-        let cx = cx + state_position_image_offset_x(state);
+        // carries that corner, so it is not rounded again here. A border
+        // point is drawn around its shielded port node, whose circle center
+        // Java writes with two decimals (ellipse cx), so it keeps the rounded
+        // center.
+        let cx = if StateEntityPosition::of(state).uses_port_p() {
+            quantize_svek_coord(cx + state_position_image_offset_x(state))
+        } else {
+            cx
+        };
         // A childless group is GroupMakerState's plain EntityImageState.
         if skip_composites
             && state.composite
