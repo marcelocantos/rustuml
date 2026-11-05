@@ -510,6 +510,7 @@ mod tests {
                     stereotype: None,
                     stereotype_position_bottom: false,
                     url: None,
+                    url_tooltip: None,
                     color: None,
                     source_line: i + 1,
                 })

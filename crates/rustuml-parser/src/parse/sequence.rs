@@ -1114,6 +1114,20 @@ pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
             .is_some_and(|code| parser.participant_ids.iter().any(|id| id == code));
         if !existing_participant {
             command.validate_colors(&folded, color, source_line)?;
+        } else if let Some(code) = command.participant_code(text, color) {
+            parser.report_put_participant_in_last(code, source_line);
+        }
+        // CommandGrouping#executeArg: COLORS[1] is backColorGeneral, the
+        // colour of the whole group area; only COLORS[0] reaches the model.
+        if command.class == "CommandGrouping"
+            && let RegisteredPattern::Plain(regex) = &command.pattern
+            && regex
+                .captures(&folded)
+                .is_some_and(|caps| caps.name("seq_color1").is_some())
+        {
+            eprintln!(
+                "warning: sequence group second colour (CommandGrouping backColorGeneral) is not painted as the group background at line {source_line}"
+            );
         }
         if !existing_participant
             && command.class != "CommandParticipantMultilines"
@@ -1547,7 +1561,29 @@ impl SeqParser {
         }
     }
 
+    /// CommandParticipant#executeArg returns early for an existing CODE but
+    /// first calls SequenceDiagram#putParticipantInLast: the participant is
+    /// re-added with addWithOrder and takes the current box (englober).
+    fn report_put_participant_in_last(&self, code: &str, source_line: usize) {
+        let Some(index) = self.participants.iter().position(|p| p.id == code) else {
+            return;
+        };
+        let key = |i: usize| (self.participants[i].order.unwrap_or(i), i);
+        let reorders = (0..self.participants.len()).any(|i| i != index && key(i) > key(index));
+        let recorded_box = self.boxes.iter().position(|b| b.members.contains(&index));
+        if reorders || recorded_box != self.current_box {
+            eprintln!(
+                "warning: sequence participant re-declaration moves {code:?} to last and into the current box in Java (SequenceDiagram#putParticipantInLast); this reorder is not modelled at line {source_line}"
+            );
+        }
+    }
+
     fn finish(self) -> SequenceDiagram {
+        if self.teoz && self.participants.iter().any(|p| p.url.is_some()) {
+            eprintln!(
+                "warning: teoz participant link anchors ([[url]]) are not emitted; the links are dropped from the SVG"
+            );
+        }
         SequenceDiagram {
             meta: self.meta,
             participants: self.participants,
@@ -1576,6 +1612,7 @@ impl SeqParser {
                 stereotype: None,
                 stereotype_position_bottom: false,
                 url: None,
+                url_tooltip: None,
                 color: None,
                 source_line,
             });
@@ -1857,6 +1894,18 @@ impl SeqParser {
             return false;
         }
         let (url, clean_line) = super::extract_link_url(line);
+        // Url#getTooltip: the {tooltip} part, else the URL itself.
+        let url_tooltip = url.as_ref().and_then(|_| super::extract_link_tooltip(line));
+        // A [[link]] inside the quoted FULL display is creole display text in
+        // Java (no participant URL); this parser lifts it to the participant.
+        let link_in_display = line.find("[[").is_some_and(|link| {
+            line.find('"').is_some_and(|open| {
+                open < link
+                    && line[open + 1..]
+                        .find('"')
+                        .is_some_and(|close| link < open + 1 + close)
+            })
+        });
         let line = clean_line.as_str();
         // Matches these forms (label = display text, id = entity key):
         //   1. keyword "Long Label" as alias  <<stereotype>>
@@ -1949,6 +1998,22 @@ impl SeqParser {
                 .and_then(|m| m.as_str().parse::<usize>().ok());
 
             if !self.participant_ids.contains(&id) {
+                // Stereotype#build splits '<<a>><<b>>' into one label each.
+                if stereotype
+                    .as_deref()
+                    .is_some_and(|s| s.contains(">>") && s.contains("<<"))
+                {
+                    eprintln!(
+                        "warning: sequence participant has multiple stereotypes (Stereotype#build label list); rendering them as separate labels remains unsupported at line {}",
+                        self.current_line
+                    );
+                }
+                if link_in_display {
+                    eprintln!(
+                        "warning: sequence participant display contains a creole [[link]]; its label and tooltip are not rendered (treated as a participant link) at line {}",
+                        self.current_line
+                    );
+                }
                 self.participant_ids.push(id.clone());
                 let idx = self.participants.len();
                 self.participants.push(Participant {
@@ -1959,6 +2024,7 @@ impl SeqParser {
                     stereotype,
                     stereotype_position_bottom,
                     url,
+                    url_tooltip,
                     color,
                     source_line: self.current_line,
                 });
@@ -3119,6 +3185,20 @@ mod tests {
             None,
         );
         assert!(parse_sequence(&pre.lines).is_err());
+    }
+
+    // Url#getTooltip: the {tooltip} of [[url{tooltip} label]] is the anchor
+    // title; without one the URL is.
+    #[test]
+    fn participant_link_tooltip_is_recorded() {
+        let d = parse("participant Cedar [[https://example.org/ring{rings} ring]]\nA -> Cedar");
+        assert_eq!(
+            d.participants[0].url.as_deref(),
+            Some("https://example.org/ring")
+        );
+        assert_eq!(d.participants[0].url_tooltip.as_deref(), Some("rings"));
+        let d = parse("participant Cedar [[https://example.org/ring]]\nA -> Cedar");
+        assert_eq!(d.participants[0].url_tooltip, None);
     }
 
     #[test]

@@ -3222,6 +3222,8 @@ struct ParticipantLayout {
     lifeline_line_x: f64,
     /// Optional `[[url]]` link attached to the participant declaration.
     url: Option<String>,
+    /// Url#getTooltip of that link when a `{tooltip}` was declared.
+    url_tooltip: Option<String>,
     /// Optional per-participant background colour from the declaration.
     color: Option<String>,
     /// 1-based line number within the `@startuml` block.
@@ -4576,6 +4578,8 @@ struct PlantUmlSvg {
     /// `participant_group_open` and consumed by `participant_group_close`. When
     /// present the shape contents are wrapped in a PlantUML `[[url]]` anchor.
     active_participant_url: Option<String>,
+    /// Url#getTooltip of the active participant link, when declared.
+    active_participant_title: Option<String>,
     /// Corner radius (rx/ry) for participant head/tail boxes. Defaults to
     /// `HEAD_BOX_RX` (2.5 = RoundCorner 5 / 2) and is overridden to
     /// `RoundCorner / 2` by `skinparam RoundCorner N`.
@@ -4620,6 +4624,7 @@ impl PlantUmlSvg {
             lifeline_border: "#181818".into(),
             lifeline_border_thickness: "0.5".into(),
             active_participant_url: None,
+            active_participant_title: None,
             head_box_rx: HEAD_BOX_RX,
             note_corner_radius: 0.0,
             note_border_thickness: "0.5".into(),
@@ -4971,9 +4976,11 @@ impl PlantUmlSvg {
         // shape contents (text + glyph) in a link anchor inside the group.
         if let Some(url) = self.active_participant_url.clone() {
             let h = escape_xml(&url);
+            // Url#getTooltip: the declared {tooltip}, else the URL.
+            let t = escape_xml(self.active_participant_title.as_deref().unwrap_or(&url));
             write!(
                 self.buf,
-                r#"<a href="{h}" target="_top" title="{h}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{h}" xlink:type="simple">"#,
+                r#"<a href="{h}" target="_top" title="{t}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{t}" xlink:type="simple">"#,
             )
             .unwrap();
         }
@@ -6682,6 +6689,7 @@ fn render_participant_shape(
     // Make the participant's link (if any) available to the group open/close
     // helpers so the shape contents get wrapped in a link anchor.
     svg.active_participant_url = p.url.clone();
+    svg.active_participant_title = p.url_tooltip.clone();
     let outer_font_size = svg.participant_font_size;
     svg.participant_font_size = p.font_size;
     match p.kind {
@@ -6832,6 +6840,7 @@ fn render_participant_shape(
         }
     }
     svg.active_participant_url = None;
+    svg.active_participant_title = None;
     svg.participant_font_size = outer_font_size;
 }
 
@@ -7947,6 +7956,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 center_x: 0.0,
                 lifeline_line_x: 0.0,
                 url: p.url.clone(),
+                url_tooltip: p.url_tooltip.clone(),
                 color: p.color.clone(),
                 source_line: p.source_line as u32,
             }
@@ -17058,6 +17068,7 @@ mod tests {
                     stereotype: None,
                     stereotype_position_bottom: false,
                     url: None,
+                    url_tooltip: None,
                     color: None,
                     source_line: 1,
                 },
@@ -17069,6 +17080,7 @@ mod tests {
                     stereotype: None,
                     stereotype_position_bottom: false,
                     url: None,
+                    url_tooltip: None,
                     color: None,
                     source_line: 1,
                 },

@@ -53,6 +53,10 @@ pub struct Participant {
     pub stereotype_position_bottom: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    /// `{tooltip}` of the `[[url{tooltip} label]]` link (Url#getTooltip);
+    /// the anchor title falls back to the URL when absent.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url_tooltip: Option<String>,
     /// Optional background color (e.g., "#red", "#FF0000").
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
