@@ -1,0 +1,146 @@
+[
+ {
+  "source": "mk4b_theme_trailing_comment_seq.puml",
+  "golden": "mk4b_theme_trailing_comment_seq.svg",
+  "cohort": "AZ",
+  "name": "mk4b_theme_trailing_comment_seq",
+  "intended_valid": true,
+  "axes": [
+   "!theme seed source",
+   "trailing /' '/",
+   "sequence"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "0235ddbeb4b825753833aaa43869d86740127a5f3866f6d65ab8fd03ff44fdb0",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4b_theme_trailing_comment_usecase.puml",
+  "golden": "mk4b_theme_trailing_comment_usecase.svg",
+  "cohort": "AZ",
+  "name": "mk4b_theme_trailing_comment_usecase",
+  "intended_valid": true,
+  "axes": [
+   "!theme seed source",
+   "trailing /' '/",
+   "usecase"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "005f69a3b3dd9d269d9488e34699de54cb55430b984260e3e9f3870f0ccb32ac",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4b_theme_leading_comment_component.puml",
+  "golden": "mk4b_theme_leading_comment_component.svg",
+  "cohort": "AZ",
+  "name": "mk4b_theme_leading_comment_component",
+  "intended_valid": true,
+  "axes": [
+   "!theme seed source",
+   "leading /' '/ (PLAIN, tail kept)",
+   "component"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "25b127229dcbec5c858095b5f9110fce9159875ee47c49d42b16419a0f9517eb",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4b_theme_triple_word_state.puml",
+  "golden": "mk4b_theme_triple_word_state.svg",
+  "cohort": "AZ",
+  "name": "mk4b_theme_triple_word_state",
+  "intended_valid": true,
+  "axes": [
+   "!theme seed source",
+   "mid-line /'''word'''/",
+   "state"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e2670f9ad849ec65a63c8b4efba264317b62b0dd0b594ef5675ea114058520aa",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4b_theme_comment_before_theme_class.puml",
+  "golden": "mk4b_theme_comment_before_theme_class.svg",
+  "cohort": "AZ",
+  "name": "mk4b_theme_comment_before_theme_class",
+  "intended_valid": true,
+  "axes": [
+   "!theme after an inner-comment line",
+   "trailing /' '/",
+   "class"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "09b74129be62a6a58dbeb764aec0a3d8c133389e5d4d07c5abb568dbde51be9b",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4b_theme_pixel_sprite_end_comment_object.puml",
+  "golden": "mk4b_theme_pixel_sprite_end_comment_object.svg",
+  "cohort": "AZ",
+  "name": "mk4b_theme_pixel_sprite_end_comment_object",
+  "intended_valid": true,
+  "axes": [
+   "!theme seed source",
+   "pixel END trailing /' '/",
+   "object"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b9cd14cdb8da4573079f4291f511a677c7fd2da1b7edc373e109b7bc0e72bdfb",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4b_theme_whole_line_comment_class.puml",
+  "golden": "mk4b_theme_whole_line_comment_class.svg",
+  "cohort": "AZ",
+  "name": "mk4b_theme_whole_line_comment_class",
+  "intended_valid": true,
+  "axes": [
+   "!theme seed source",
+   "whole-line ' comment (residue: raw text kept in Rust seed source)",
+   "class"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "2ff22bf5620a8a78e734d92c92d5fb48e7c486ba62de6ff8b182d0f491f41551",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk4b_theme_block_comment_class.puml",
+  "golden": "mk4b_theme_block_comment_class.svg",
+  "cohort": "AZ",
+  "name": "mk4b_theme_block_comment_class",
+  "intended_valid": true,
+  "axes": [
+   "!theme seed source",
+   "block comment (residue: raw text kept in Rust seed source)",
+   "class"
+  ],
+  "mechanism": null,
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "c3bf7eb98a7dbf278f0c3fd9e547d23377b2aab5b5834c7ab603f2b9e4d8ec3a",
+  "java_markers": [],
+  "observed_valid": true
+ }
+]

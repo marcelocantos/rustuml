@@ -1,0 +1,4 @@
+@startgantt
+[Build] lasts 3 days /' g '/
+[Test] lasts 2 days
+@endgantt

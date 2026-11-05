@@ -1,0 +1,4 @@
+@startuml
+!theme cerulean
+Alder -> Birch : hi /' c '/
+@enduml

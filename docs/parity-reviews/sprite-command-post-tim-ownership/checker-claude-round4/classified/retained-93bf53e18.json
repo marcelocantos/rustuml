@@ -1,0 +1,245 @@
+{
+ "pairs": {
+  "mismatch->mismatch": 1056,
+  "match->match": 2645,
+  "nonpositive-accepted->nonpositive-accepted": 66,
+  "valid-error->valid-error": 17,
+  "nonpositive-rejected->nonpositive-rejected": 368,
+  "mismatch->match": 20,
+  "nonpositive-accepted->nonpositive-rejected": 2
+ },
+ "changes": [
+  {
+   "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_comments_and_origins.puml",
+   "cohort": "parent-added145",
+   "name": null,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_dynamic_sub_sprite.puml",
+   "cohort": "parent-added145",
+   "name": null,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_inner_comment.puml",
+   "cohort": "parent-added145",
+   "name": null,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_subblock_state.puml",
+   "cohort": "parent-added145",
+   "name": null,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_28_plain.puml",
+   "cohort": "checker509",
+   "name": "bd087_reg_28_plain",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_28_unusual.puml",
+   "cohort": "checker509",
+   "name": "bd087_reg_28_unusual",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_accent.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_accent",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_nbsp.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_nbsp",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_nbsp.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_url_nbsp",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_astral.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_astral",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_tab.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_tab",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_tab.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_url_tab",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_cr.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_cr",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-accepted",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_cr.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_url_cr",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-accepted",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_amp.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_amp",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_lt.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_lt",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_gt.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_gt",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_quot.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_quot",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_tooltip_apos.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_tooltip_apos",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_44.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_quoted_url_44",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_45.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_tooltip_45",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_47.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_quoted_url_47",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_48.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_tooltip_48",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_50.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_quoted_url_50",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_51.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_tooltip_51",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_53.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_quoted_url_53",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_54.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_tooltip_54",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_56.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_quoted_url_56",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_tooltip_57.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_tooltip_57",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  }
+ ]
+}

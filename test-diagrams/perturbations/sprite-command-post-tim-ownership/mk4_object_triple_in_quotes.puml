@@ -1,0 +1,3 @@
+@startuml
+object "Store/'''x'''/Front" as S
+@enduml

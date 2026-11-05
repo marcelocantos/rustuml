@@ -1,0 +1,6 @@
+@startuml
+class Larch {
++name : String /' field '/
++size() : int
+}
+@enduml

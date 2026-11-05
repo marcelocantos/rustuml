@@ -1,0 +1,7 @@
+@startuml
+sprite $dot [2x2/16] {
+F/'''r1'''/0
+0F
+}
+class Cask
+@enduml

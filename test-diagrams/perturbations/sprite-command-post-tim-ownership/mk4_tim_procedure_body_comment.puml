@@ -1,0 +1,6 @@
+@startuml
+!procedure $call($x)
+Alder -> $x : ping /' b '/
+!endprocedure
+$call("Birch")
+@enduml

@@ -1,0 +1,347 @@
+{
+ "changes": [
+  {
+   "name": "ck3_deployment_style_block_sprite_line",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_component_note_left_of_bracket_code",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_component_note_of_color_url",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_component_note_as_stereo_color",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_class_generic_extends_body",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_object_quoted_as_color_body",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_component_legend_nested_header_text",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_nwdiag_legend_body",
+   "cohort": "AX",
+   "java_valid": false,
+   "intended_valid": true,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-accepted",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_activity3_note_body",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_seq_ref_body",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_svg_inline_quoted_apostrophe_seq",
+   "cohort": "AX",
+   "java_valid": false,
+   "intended_valid": true,
+   "before": "nonpositive-rejected",
+   "after": "nonpositive-accepted",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 1: sprite $txt <svg width=\"20\" height=\"10\"><text x=\"0\" y=\"8\">it ' s</text></svg>\n"
+  },
+  {
+   "name": "ck3_pixel_end_inner_comment_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 1: sprite $dot [2x2/16] {\n"
+  },
+  {
+   "name": "ck3_svg_end_inner_comment_teoz",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 2: sprite $box <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "ck3_svg_end_inner_comment_usecase",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 1: sprite $box <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "ck3_include_whole_with_subs_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_include_then_includesub_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_includesub_pixel_sprite_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 1: sprite $dot [2x2/16] {\n"
+  },
+  {
+   "name": "ck3_nested_startsub_seq",
+   "cohort": "AX",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-accepted",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_in_procedure_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_in_while_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_endsub_in_false_if_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": false,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_unterminated_seq",
+   "cohort": "AX",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-accepted",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_activity3",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_mindmap",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_gantt",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_timing",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_salt",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_class",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_url_guillemet_strip_legacy",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_url_topurl_legacy",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_url_uppercase_legacy",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_url_unicode_tooltip_legacy",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_url_entity_quoted_tooltip_legacy",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  }
+ ],
+ "losses": [
+  {
+   "name": "ck3_svg_inline_quoted_apostrophe_seq",
+   "cohort": "AX",
+   "java_valid": false,
+   "intended_valid": true,
+   "before": "nonpositive-rejected",
+   "after": "nonpositive-accepted",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 1: sprite $txt <svg width=\"20\" height=\"10\"><text x=\"0\" y=\"8\">it ' s</text></svg>\n"
+  }
+ ],
+ "disagreements": []
+}

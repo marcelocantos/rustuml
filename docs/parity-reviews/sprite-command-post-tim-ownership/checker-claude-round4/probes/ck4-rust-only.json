@@ -1,0 +1,2040 @@
+{
+ "batch": "/Users/marcelo/Library/Caches/rustuml-sprite-round4-claude-checker/ck4",
+ "manifest_sha256": "cc33567828a33e804c7d4c273d46ba65058bb9e095f72b0343a9ad240ad0f2c0",
+ "rows": [
+  {
+   "name": "ck4_seq_apostrophe_word_trailing",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "trailing",
+    "apostrophe"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "8c0c525211728d33e84348a0aceca78a34c7ad39d0236fe2b00a03aedb9508e3",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "8c0c525211728d33e84348a0aceca78a34c7ad39d0236fe2b00a03aedb9508e3",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "880f3876c8cb6afe7dc28e80ecc2ec474643f1f59484c26fc394af37ab6b3f0b",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_url_trailing",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "trailing",
+    "url"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "2f2c143aa51ce6d9a0d388e2cdac00bc496d415e696e50b7f61f2244e1acfbbb",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "2f2c143aa51ce6d9a0d388e2cdac00bc496d415e696e50b7f61f2244e1acfbbb",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "36ac82eb7ef2417b5e55e02c0ce78527fa54781077c0414252af730823e74b83",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_creole_trailing",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "trailing",
+    "creole"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "32c2d9dbc813c36ec1d10a59085ba62f299c5a5201be2f364053cd8cd8e878ea",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "32c2d9dbc813c36ec1d10a59085ba62f299c5a5201be2f364053cd8cd8e878ea",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "b9334c99318798229021dee89196cf1c0cf9d369b36f5dcc47c7a134e1f372e9",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_quoted_then_trailing",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "trailing",
+    "quotes"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Long Name\\\" as L /' c\"\n"
+    },
+    "044f73657": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"Long Name\\\" as L /' c\"\n"
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "b03738d71c29d949c37e7ef350e9cc3b0ec3aef7a9b6d9327de294bf8a0ba86e",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_span_in_quotes_trailing",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "trailing",
+    "quotes-unbalanced"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "e539def2c636a9a849b0ca61ba0da24140c4f21f8e1d726060a6ae92a9a74a11",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "e539def2c636a9a849b0ca61ba0da24140c4f21f8e1d726060a6ae92a9a74a11",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"participant \\\"a\"\n"
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": true
+  },
+  {
+   "name": "ck4_seq_triple_in_quotes",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "special",
+    "quotes"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "c0792882084c9b8ebda95a4283de7da18753dce6f65ee1bf21fc7e58e42d081d",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "c0792882084c9b8ebda95a4283de7da18753dce6f65ee1bf21fc7e58e42d081d",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "a0d527cecf7b19911bb79b17fe886810b0fc10f3057e7edbdb9e01b693d2edb4",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_triple_name",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "special",
+    "identifier"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"Al/'''n'''/ice -> Bob : hi\"\n"
+    },
+    "044f73657": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"Al/'''n'''/ice -> Bob : hi\"\n"
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "2431eb08f59ae442906fbab821b7e011efb09272ba109678c846a307cfc0e8a3",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_double_trailing_top",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "trailing-twice",
+    "top-level-single-pass"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "58293d9302ba2d4c9115a0e529b8f72c80ed3ceb16481b9eb548e945b4a3e103",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "58293d9302ba2d4c9115a0e529b8f72c80ed3ceb16481b9eb548e945b4a3e103",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "58293d9302ba2d4c9115a0e529b8f72c80ed3ceb16481b9eb548e945b4a3e103",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_double_leading_top",
+   "intended_valid": false,
+   "axes": [
+    "sequence",
+    "leading-twice",
+    "top-level-single-pass"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"/' b\"\n"
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": true
+  },
+  {
+   "name": "ck4_seq_note_multiline_body",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "note",
+    "leading",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "2b6379498e7cfb31a5074927d0074c5ba79bd7e8a5423155802d4650de373a1f",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "2b6379498e7cfb31a5074927d0074c5ba79bd7e8a5423155802d4650de373a1f",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "5ace359f1634c2a08a81caeddc4ad03ab4ee16cef2588e057d6719d5a994810e",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_note_inline_trailing",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "note",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "4dd63b203c546f5ddac1c522a24539bf87540cf9e19d52f426bfb625f6e83f0a",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "4dd63b203c546f5ddac1c522a24539bf87540cf9e19d52f426bfb625f6e83f0a",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "13879f313fa50ae3e4e3416aa9d0406c4ca9a25e199f4843a7e9912093cd2ed3",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_continuation_next_leading",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "continuation",
+    "leading"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "7ea77e87a2b582fa2be4bb073c0e56c016eec9f45907448c78ed6dc70bf77f44",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "7ea77e87a2b582fa2be4bb073c0e56c016eec9f45907448c78ed6dc70bf77f44",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"two\"\n"
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": true
+  },
+  {
+   "name": "ck4_seq_continuation_comment_only_then_msg",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "continuation",
+    "comment-then-backslash"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "e77f9b50fa366431ffc9c94b03ee4cc10346766072f1d699bdffbebcc33b740b",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "e77f9b50fa366431ffc9c94b03ee4cc10346766072f1d699bdffbebcc33b740b",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\\\\"\n"
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": true
+  },
+  {
+   "name": "ck4_seq_crlf_trailing",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "crlf",
+    "trailing",
+    "leading",
+    "line-endings:CRLF"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "933b4b82a7ceb41d1268a06bac675e95beb4c4b355adb9e56e745d3c2a457005",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "933b4b82a7ceb41d1268a06bac675e95beb4c4b355adb9e56e745d3c2a457005",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "569f6d4d7e7f8034ad0c453ff7670875a8d5132ffd10ffdca47beb7beb0797ac",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_quote_slash_no_comment",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "no-comment",
+    "quote-slash"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "a636bcfdef98acb6f369dd50d738ca1f8ca647c912926462abc1c45459f5fdaa",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "a636bcfdef98acb6f369dd50d738ca1f8ca647c912926462abc1c45459f5fdaa",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "a636bcfdef98acb6f369dd50d738ca1f8ca647c912926462abc1c45459f5fdaa",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_trailing_slash_quote_only",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "no-open",
+    "trailing-close-only"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "189b9473ff0812c9391135e19dddd6cefb2e910201d07176f51c59fade7d51e8",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "189b9473ff0812c9391135e19dddd6cefb2e910201d07176f51c59fade7d51e8",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "189b9473ff0812c9391135e19dddd6cefb2e910201d07176f51c59fade7d51e8",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_leading_space_trailing_spaces",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "leading",
+    "whitespace"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "30a45d05636b587f8df0d92dcad286fc34e8cb9e6c6e61eaed57e63530f4db53",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_divider_trailing",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "middle-not-removed"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"== Part /' c\"\n"
+    },
+    "044f73657": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"== Part /' c\"\n"
+    },
+    "c9e11493c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"== Part /' c\"\n"
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_divider_end_trailing",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"== Part == /' c\"\n"
+    },
+    "044f73657": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"== Part == /' c\"\n"
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "0b789cc3665688b21bf188d1a193dfd0a91ca83052c888ee3fc8841f5040db25",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_title_leading",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "leading",
+    "title"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "d1acf2b55c4ef2cad76cf203b2ee2a11cb29dfe2c6361e90d060af099c9e8021",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "d1acf2b55c4ef2cad76cf203b2ee2a11cb29dfe2c6361e90d060af099c9e8021",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "052f38d3e74e2584e293ee472d3f5f3d56ae4f3078105fdb6ea62786c0e783f8",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_seq_skinparam_block",
+   "intended_valid": true,
+   "axes": [
+    "sequence",
+    "skinparam-block"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "9d5639808e68d4a548607c15724e3d430272cf73e6fcd0f098aab291c6a558f7",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "9d5639808e68d4a548607c15724e3d430272cf73e6fcd0f098aab291c6a558f7",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "26ab0fe64cede62e2a33155cfd7da750dfca5f7d7105f5a866e056fdbdc8c743",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_class_body_member_leading",
+   "intended_valid": true,
+   "axes": [
+    "class",
+    "body",
+    "leading",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "3d24880b58a0bc057fa6436c8ecb5bf4a32ba1d0a03a23fc30f18e53e170848d",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "3d24880b58a0bc057fa6436c8ecb5bf4a32ba1d0a03a23fc30f18e53e170848d",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "8e005d31749a195b21d185344c8d018baff0a9faeea7807f77289b279ead589f",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_class_comment_then_backslash",
+   "intended_valid": true,
+   "axes": [
+    "class",
+    "continuation",
+    "comment-then-backslash"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "68678531ab3f9221fc36d54387bf065aa695284b9177d9b1dcc061c40702c9f2",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "68678531ab3f9221fc36d54387bf065aa695284b9177d9b1dcc061c40702c9f2",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "68678531ab3f9221fc36d54387bf065aa695284b9177d9b1dcc061c40702c9f2",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_class_note_multiline",
+   "intended_valid": true,
+   "axes": [
+    "class",
+    "note"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "62595864e4c9f4657c524899fd77cbabbadbbffdafdfbcb8ef3a28c351b09762",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "62595864e4c9f4657c524899fd77cbabbadbbffdafdfbcb8ef3a28c351b09762",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "73334311dab74c27870a11c60b08a324c0480d18ef5ee2048d37322dbd240ebc",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_class_relation_label",
+   "intended_valid": true,
+   "axes": [
+    "class",
+    "relation",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "520022f9593206b9fa8a3ba6cc37192d31159b12369505c99d6ac0d0c141f8fc",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "520022f9593206b9fa8a3ba6cc37192d31159b12369505c99d6ac0d0c141f8fc",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "29350eedf84c4463e5724cdad34210737282e894612c215bb75c3540d885df98",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_class_special_in_name",
+   "intended_valid": true,
+   "axes": [
+    "class",
+    "special"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "38d2b0b225d608e6813d85011dfdf6a95726851af5f9a21fc65994e1d66062b5",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "38d2b0b225d608e6813d85011dfdf6a95726851af5f9a21fc65994e1d66062b5",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "a58a27f9822ff4a3c3c7e6fb9ad40ca98e1e024f978b850a126e313eb32ffef7",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_usecase_leading_actor_line",
+   "intended_valid": true,
+   "axes": [
+    "usecase",
+    "leading"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"Clerk --> (Pay)\"\n"
+    },
+    "044f73657": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"Clerk --> (Pay)\"\n"
+    },
+    "c9e11493c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"Clerk --> (Pay)\"\n"
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_component_bracket_trailing",
+   "intended_valid": true,
+   "axes": [
+    "component",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "2df5eda33ed7120fa7298f6586f613eb9bb6c9ba0dc39b23805fd20b002247f7",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "2df5eda33ed7120fa7298f6586f613eb9bb6c9ba0dc39b23805fd20b002247f7",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "a5af003540bb15b5f870fd9339db2d8135515ffbd17c9587f05273992aa8f6a7",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_state_body_leading",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "body",
+    "leading"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "a743487d4882eddbe62c434a3fb4d9d53255da949800da14fe3cb6b00e8ad0ab",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "a743487d4882eddbe62c434a3fb4d9d53255da949800da14fe3cb6b00e8ad0ab",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "32a4d783c81460fb46ece6b7d552261db581efafb8b3d4144e9519a973941b8b",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_activity3_if_trailing",
+   "intended_valid": true,
+   "axes": [
+    "activity3",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "ad9f155e77c851d6ca569c2c8f65639a7555241b72b5dd06649fa69f90eb4f60",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "ad9f155e77c851d6ca569c2c8f65639a7555241b72b5dd06649fa69f90eb4f60",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "e85ebf033aceca662195273860a1b3daa9077a8e6f361cda1499d2bccd751292",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_activity_legacy_trailing",
+   "intended_valid": true,
+   "axes": [
+    "activity-legacy",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "66cea7dd0622e3bca0d930786779fc41640528cfc702c80593f471ca2420f113",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "66cea7dd0622e3bca0d930786779fc41640528cfc702c80593f471ca2420f113",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "66cea7dd0622e3bca0d930786779fc41640528cfc702c80593f471ca2420f113",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_object_field_trailing",
+   "intended_valid": true,
+   "axes": [
+    "object",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "65495508b5cb10e6f9a7ecd90b5eee8a39129941cc485cbc4d77f82689d04344",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "65495508b5cb10e6f9a7ecd90b5eee8a39129941cc485cbc4d77f82689d04344",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "582def282c7a69b62519338fc61fb7de491a945d69f0ccff498c971bebf509eb",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_yaml_trailing",
+   "intended_valid": true,
+   "axes": [
+    "yaml",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "befe1d55146758511b3ea58fc828001d669c502c9e976b4ab8bae092598b38d3",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "befe1d55146758511b3ea58fc828001d669c502c9e976b4ab8bae092598b38d3",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "8021b03e06d20b4e31ae5845e919ae137ce542ed676e57ba66da1b3cfb9fcc83",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_json_leading_member",
+   "intended_valid": true,
+   "axes": [
+    "json",
+    "leading"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "5601fad5cec22041bd4ad41c22648ab7f816a423f66e37fd9c7ba79954b28028",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "5601fad5cec22041bd4ad41c22648ab7f816a423f66e37fd9c7ba79954b28028",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "5b1549b2f1838d6df383ae1b3299bbe79377583eac9b2b4afc55b37c2ba4242d",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_mindmap_leading",
+   "intended_valid": true,
+   "axes": [
+    "mindmap",
+    "leading"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "9167c1aaae42a8b7352461ecad78de4feddab50d0698e784eae64c220c80b92c",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "9167c1aaae42a8b7352461ecad78de4feddab50d0698e784eae64c220c80b92c",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "83bb8f14748bc6bbb790e1fd430262874f37c6d7ec1cedc7b22d091fd02af3ee",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_wbs_trailing",
+   "intended_valid": true,
+   "axes": [
+    "wbs",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "64367f94d517d2ae3a3717c4e937373973b301bb03f42180d2e5e6fdfc3f93e6",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "64367f94d517d2ae3a3717c4e937373973b301bb03f42180d2e5e6fdfc3f93e6",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "6382d68073834315a1767ea89b807cbb530a24f6e97391da141a0410975426df",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_timing_trailing",
+   "intended_valid": true,
+   "axes": [
+    "timing",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "ad3d3a34b33c760f2dc8bad60025fa6ae03a0b4e4ecf12c64bad10b103c82d10",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "ad3d3a34b33c760f2dc8bad60025fa6ae03a0b4e4ecf12c64bad10b103c82d10",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "322b10e589e3091ab11acfc445817456364d10ff0d7e947bc3ca2c4f6b4f416c",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_nwdiag_trailing",
+   "intended_valid": true,
+   "axes": [
+    "nwdiag",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "6d6dc5ea7fb3c119a6536fec24cbf1f29497d3b36a0e75cdbac8b06df1d2cb4d",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_ebnf_trailing",
+   "intended_valid": true,
+   "axes": [
+    "ebnf",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "0068e514fefa5dd2192ae351edf68faa8334da6741ae48bd55a6e88e67b1379b",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "0068e514fefa5dd2192ae351edf68faa8334da6741ae48bd55a6e88e67b1379b",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "62a99cda662ac8493b71fdfee612975647120bc9786b67d78420ab91020bc419",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_gantt_leading",
+   "intended_valid": true,
+   "axes": [
+    "gantt",
+    "leading"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "ac846c9239bd06038e575d73c074734ba9f58da27e68827f12dfd04e48fc60e9",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "ac846c9239bd06038e575d73c074734ba9f58da27e68827f12dfd04e48fc60e9",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "ac846c9239bd06038e575d73c074734ba9f58da27e68827f12dfd04e48fc60e9",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_salt_trailing",
+   "intended_valid": true,
+   "axes": [
+    "salt",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "6a64ad823c69549f1b2daf8e87c594580892670194a3f5ade94b6fac71e59e2e",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "6a64ad823c69549f1b2daf8e87c594580892670194a3f5ade94b6fac71e59e2e",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "6755ad72596433736d89668412f3b74511ad3a65e5a98230a44474fc0e719dcd",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_tim_procedure_double_trailing",
+   "intended_valid": true,
+   "axes": [
+    "tim",
+    "procedure",
+    "double-pass"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "c16eaf9fe0fb1476eeaae75196aa77dd9367d4c83491b62df9cff7e72c50cec0",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "c16eaf9fe0fb1476eeaae75196aa77dd9367d4c83491b62df9cff7e72c50cec0",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "c16eaf9fe0fb1476eeaae75196aa77dd9367d4c83491b62df9cff7e72c50cec0",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_tim_procedure_double_leading",
+   "intended_valid": true,
+   "axes": [
+    "tim",
+    "procedure",
+    "double-pass"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_tim_function_return_trailing",
+   "intended_valid": true,
+   "axes": [
+    "tim",
+    "function",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "d509e81a70c9771ee1f2a5e6ae73baa2ceea050939c5409ec37a1bd5037d51c0",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "d509e81a70c9771ee1f2a5e6ae73baa2ceea050939c5409ec37a1bd5037d51c0",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "18006b7c737a2eb466f0a3d00e723f6b6b2ff00bc84f1d731b5284de92567a7d",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_tim_define_value_trailing",
+   "intended_valid": true,
+   "axes": [
+    "tim",
+    "define",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "9fc6d7436341db02d3d1b7e20ab3387d8ff1561eb20547826ac273210466ef51",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "9fc6d7436341db02d3d1b7e20ab3387d8ff1561eb20547826ac273210466ef51",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "3a77f83df0b697e45fcd8963ad6cdfbd6699b8d97f6c4c69d93ffb4c56f3b056",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_tim_definelong_body",
+   "intended_valid": true,
+   "axes": [
+    "tim",
+    "definelong",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "3e96b148b21b6ef077587c10fb3e5e0bb4c22a87f921517190e262c6ac271ee9",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "3e96b148b21b6ef077587c10fb3e5e0bb4c22a87f921517190e262c6ac271ee9",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "74d84c3460a1606e3ca1d309589279b2b93829c303940bfe0f82fafabe04a7da",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_tim_while_body",
+   "intended_valid": true,
+   "axes": [
+    "tim",
+    "while",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "e6488e0b72c3d5272547af019e75e1a738f104a78d243c930e2f6161ce3ecca3",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_tim_foreach_body",
+   "intended_valid": true,
+   "axes": [
+    "tim",
+    "foreach",
+    "leading"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "d699d42cb19ac37d91ad59661ca6f7bb344154fb3cfb43e775ef1031fe57621f",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_tim_include_trailing",
+   "intended_valid": true,
+   "axes": [
+    "tim",
+    "include",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!include ck4inc.iuml /' c\"\n"
+    },
+    "044f73657": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"!include ck4inc.iuml /' c\"\n"
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "0acb8d00ecf3b040cdd5f5c56756ec4f9be1491f0b164e965992be0b7fe1a19c",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_tim_include_body_comments",
+   "intended_valid": true,
+   "axes": [
+    "tim",
+    "include-body",
+    "leading",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "c2ea80e9432eb369e319a3218081eb587baf54bb8a58fd32541ff104aea67424",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "c2ea80e9432eb369e319a3218081eb587baf54bb8a58fd32541ff104aea67424",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "fecd62f89095e754b9bf64e45be1e8ff8b7b67b50919eee2753964c0a43308fa",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_tim_var_string_comment",
+   "intended_valid": true,
+   "axes": [
+    "tim",
+    "string-middle"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "38aede5faf697409aa70ea27af20925994bc564327d16a93c4e4fabe65041213",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "38aede5faf697409aa70ea27af20925994bc564327d16a93c4e4fabe65041213",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "38aede5faf697409aa70ea27af20925994bc564327d16a93c4e4fabe65041213",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_tim_if_else_comment",
+   "intended_valid": true,
+   "axes": [
+    "tim",
+    "if",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "f4798b6b2331ed6981cd7d976b1469c152e38c1864c04729882af0ae155a3ea0",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_tim_startsub_inplace_double",
+   "intended_valid": true,
+   "axes": [
+    "tim",
+    "startsub-in-place",
+    "single-pass"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "d2cd4ecb507ea9cb4a41fa9e81b3d1189478673f135bfb67bc2fc324b94e9fc8",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "d2cd4ecb507ea9cb4a41fa9e81b3d1189478673f135bfb67bc2fc324b94e9fc8",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_tim_includesub_double",
+   "intended_valid": true,
+   "axes": [
+    "tim",
+    "includesub",
+    "double-pass"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "5463e369406dbfbf1fe12ea10eb81e273440d753cf0703f83dc7b096d23bfc86",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "5463e369406dbfbf1fe12ea10eb81e273440d753cf0703f83dc7b096d23bfc86",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "cd0faab3b0960deaad0d753fd0b53e15c63c7cf254fffbce8c2aa312264005e1",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_activity3_comment_then_backslash",
+   "intended_valid": true,
+   "axes": [
+    "activity3",
+    "continuation",
+    "comment-then-backslash"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "a0eb6dadf0e735430bb944cadb9e769d5f3aeec0f6208e588edf6043d91f4552",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "a0eb6dadf0e735430bb944cadb9e769d5f3aeec0f6208e588edf6043d91f4552",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "a0eb6dadf0e735430bb944cadb9e769d5f3aeec0f6208e588edf6043d91f4552",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_component_comment_then_backslash",
+   "intended_valid": true,
+   "axes": [
+    "component",
+    "continuation",
+    "comment-then-backslash"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "2df5eda33ed7120fa7298f6586f613eb9bb6c9ba0dc39b23805fd20b002247f7",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "2df5eda33ed7120fa7298f6586f613eb9bb6c9ba0dc39b23805fd20b002247f7",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "2df5eda33ed7120fa7298f6586f613eb9bb6c9ba0dc39b23805fd20b002247f7",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_state_comment_then_backslash",
+   "intended_valid": true,
+   "axes": [
+    "state",
+    "continuation",
+    "comment-then-backslash"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "ed8fb2bda981a75f9a81ce2ed0f2b51b187d9f97ae63b0aafa5d3a4d857bbc1a",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "ed8fb2bda981a75f9a81ce2ed0f2b51b187d9f97ae63b0aafa5d3a4d857bbc1a",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "ed8fb2bda981a75f9a81ce2ed0f2b51b187d9f97ae63b0aafa5d3a4d857bbc1a",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_class_continuation_next_leading",
+   "intended_valid": true,
+   "axes": [
+    "class",
+    "continuation",
+    "leading"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "bd4e4e196bac39890ceca5f29ea30cf8f4b77302ccc35c312727b9510e9705f0",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "bd4e4e196bac39890ceca5f29ea30cf8f4b77302ccc35c312727b9510e9705f0",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "bd4e4e196bac39890ceca5f29ea30cf8f4b77302ccc35c312727b9510e9705f0",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_ctl_procedure_four_classes",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "procedure",
+    "source-line"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "cd5f25ad94679afb1d1ab0416b0ba9c422658e163b9b1eeced1b2cb4dafc8abf",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "cd5f25ad94679afb1d1ab0416b0ba9c422658e163b9b1eeced1b2cb4dafc8abf",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "cd5f25ad94679afb1d1ab0416b0ba9c422658e163b9b1eeced1b2cb4dafc8abf",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_ctl_procedure_sprite_nocomment",
+   "intended_valid": true,
+   "axes": [
+    "control",
+    "procedure",
+    "sprite",
+    "source-line"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "9eecf6882a1b3553cd066b72cc345a69eefc8db712e7fe423ac002c9679fc2ba",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "2ff69466ee67e95e6e0f498948aea974226840a0e9a24032c29180fc33073ece",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "2ff69466ee67e95e6e0f498948aea974226840a0e9a24032c29180fc33073ece",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_procedure_sprite_end_comment_two",
+   "intended_valid": true,
+   "axes": [
+    "procedure",
+    "sprite",
+    "source-line",
+    "trailing"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "c7871e18b6c8e9d2ffed2b61c1e9e2cb8fc80c7e5078e1d8259d338dfae7ef41",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 2: Cannot read: [2x2/16] {\n"
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "0ff50b425f2ed6d0ef84e09f8598cbe011f1657c02c39bfdaf666339b0655f78",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_inv_nbsp_leading_comment_seq",
+   "intended_valid": false,
+   "axes": [
+    "sequence",
+    "nbsp",
+    "java-trim"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"\\u{a0}/' c\"\n"
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": true
+  },
+  {
+   "name": "ck4_inv_include_missing_after_comment",
+   "intended_valid": false,
+   "axes": [
+    "tim",
+    "include",
+    "leading"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "1f5906f65634a99d80fdd8af1f91662c24e55d9560c8aed54e9a241c2c3aa966",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "1f5906f65634a99d80fdd8af1f91662c24e55d9560c8aed54e9a241c2c3aa966",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 0,
+     "svg_sha256": "1f5906f65634a99d80fdd8af1f91662c24e55d9560c8aed54e9a241c2c3aa966",
+     "panic": false,
+     "stderr": ""
+    }
+   },
+   "changed_vs_044f73657": false,
+   "changed_vs_93bf53e18": false,
+   "accept_to_error_vs_044f73657": false
+  },
+  {
+   "name": "ck4_inv_class_after_leading_two",
+   "intended_valid": false,
+   "axes": [
+    "class",
+    "leading-twice"
+   ],
+   "results": {
+    "93bf53e18": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "044f73657": {
+     "exit": 0,
+     "svg_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "panic": false,
+     "stderr": ""
+    },
+    "c9e11493c": {
+     "exit": 1,
+     "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "panic": false,
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"/' b\"\n"
+    }
+   },
+   "changed_vs_044f73657": true,
+   "changed_vs_93bf53e18": true,
+   "accept_to_error_vs_044f73657": true
+  }
+ ]
+}

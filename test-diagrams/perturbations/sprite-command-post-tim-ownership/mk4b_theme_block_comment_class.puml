@@ -1,0 +1,6 @@
+@startuml
+!theme cerulean
+/' a
+b '/
+class Pine
+@enduml

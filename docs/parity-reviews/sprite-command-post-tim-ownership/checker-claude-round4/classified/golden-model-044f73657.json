@@ -1,0 +1,43 @@
+{
+ "label": "golden-044",
+ "categories": {
+  "yaml: order-only (svg same)": 7,
+  "ast: order-only (svg same)": 7
+ },
+ "examples": {
+  "yaml: order-only (svg same)": [
+   "test-diagrams/golden/dot/dot_edge_labels.puml",
+   "test-diagrams/golden/dot/dot_graph_attributes.puml",
+   "test-diagrams/golden/dot/dot_multi_edge.puml",
+   "test-diagrams/golden/dot/dot_node_colors.puml",
+   "test-diagrams/golden/dot/dot_node_url.puml"
+  ],
+  "ast: order-only (svg same)": [
+   "test-diagrams/golden/dot/dot_graph_attributes.puml",
+   "test-diagrams/golden/dot/dot_multi_edge.puml",
+   "test-diagrams/golden/dot/dot_node_colors.puml",
+   "test-diagrams/golden/dot/dot_node_url.puml",
+   "test-diagrams/golden/dot/dot_record_ports.puml"
+  ]
+ },
+ "all": {
+  "yaml: order-only (svg same)": [
+   "test-diagrams/golden/dot/dot_edge_labels.puml",
+   "test-diagrams/golden/dot/dot_graph_attributes.puml",
+   "test-diagrams/golden/dot/dot_multi_edge.puml",
+   "test-diagrams/golden/dot/dot_node_colors.puml",
+   "test-diagrams/golden/dot/dot_node_url.puml",
+   "test-diagrams/golden/dot/dot_record_ports.puml",
+   "test-diagrams/golden/dot/dot_record_simple.puml"
+  ],
+  "ast: order-only (svg same)": [
+   "test-diagrams/golden/dot/dot_graph_attributes.puml",
+   "test-diagrams/golden/dot/dot_multi_edge.puml",
+   "test-diagrams/golden/dot/dot_node_colors.puml",
+   "test-diagrams/golden/dot/dot_node_url.puml",
+   "test-diagrams/golden/dot/dot_record_ports.puml",
+   "test-diagrams/golden/dot/dot_record_simple.puml",
+   "test-diagrams/golden/dot/dot_weighted_edges.puml"
+  ]
+ }
+}

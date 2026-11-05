@@ -1,0 +1,6 @@
+@startuml
+!startsub PART /' s '/
+class Elm
+!endsub
+class Ash
+@enduml
