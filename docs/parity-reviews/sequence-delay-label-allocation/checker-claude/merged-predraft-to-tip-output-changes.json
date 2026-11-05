@@ -1,0 +1,26 @@
+{
+ "changed": [
+  "golden/edge-cases/edge_seq_delay_texts.puml",
+  "golden/edge-cases/edge_sequence_delay.puml",
+  "perturbations/comment-state-consumers/checker-independent-astra-20261105/circle_root_alpha.puml",
+  "perturbations/comment-state-consumers/checker-independent-astra-20261105/circle_root_rebecca.puml",
+  "perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_alias_collision.puml",
+  "perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_nested_groups.puml",
+  "perturbations/comment-state-consumers/checker-independent-astra-20261105/group_identity_collision.puml",
+  "perturbations/comment-state-consumers/checker-independent-astra-20261105/state_history_nested_identity.puml",
+  "perturbations/comment-state-consumers/state_history_names.puml",
+  "perturbations/description-bracket-shorthand-factory-selection/checker_negative_abstract_class_body.puml",
+  "perturbations/sequence-delay-label-allocation/checker_d382_e0_trailing.puml",
+  "perturbations/sequence-delay-label-allocation/checker_d382_e1_trailing.puml",
+  "perturbations/shared-svg-corrective/checker-independent-astra/shape_deep_history.puml",
+  "perturbations/shared-svg-corrective/checker-independent-astra/shape_history.puml",
+  "perturbations/state-parser-pass-entity-order/review_root_quark_no_reparent.puml",
+  "perturbations/state-parser-pass-entity-order/root_quark_nested_reuse_control.puml"
+ ],
+ "sequence": [
+  "golden/edge-cases/edge_seq_delay_texts.puml",
+  "golden/edge-cases/edge_sequence_delay.puml",
+  "perturbations/sequence-delay-label-allocation/checker_d382_e0_trailing.puml",
+  "perturbations/sequence-delay-label-allocation/checker_d382_e1_trailing.puml"
+ ]
+}

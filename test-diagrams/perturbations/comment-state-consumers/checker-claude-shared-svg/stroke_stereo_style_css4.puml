@@ -1,0 +1,10 @@
+@startuml
+<style>
+.hot {
+  LineColor RebeccaPurple
+}
+</style>
+state Boil <<hot>>
+state Calm
+Boil --> Calm
+@enduml

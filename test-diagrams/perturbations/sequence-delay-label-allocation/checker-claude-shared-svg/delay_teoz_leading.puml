@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+Kestrel -> Osprey : ping
+... later on...
+Osprey -> Kestrel : pong
+@enduml

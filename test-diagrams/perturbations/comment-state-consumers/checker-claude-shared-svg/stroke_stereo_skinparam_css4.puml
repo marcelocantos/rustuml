@@ -1,0 +1,8 @@
+@startuml
+skinparam state<<hot>> {
+  BorderColor RebeccaPurple
+}
+state Boil <<hot>>
+state Calm
+Boil --> Calm
+@enduml

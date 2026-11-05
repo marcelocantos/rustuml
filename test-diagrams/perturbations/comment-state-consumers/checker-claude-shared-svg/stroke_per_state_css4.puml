@@ -1,0 +1,5 @@
+@startuml
+state Boil #lightblue ##RebeccaPurple
+state Calm
+Boil --> Calm
+@enduml

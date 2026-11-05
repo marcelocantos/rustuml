@@ -1,0 +1,6 @@
+@startuml
+skinparam stateBorderColor RebeccaPurple
+skinparam ArrowColor navy
+[*] --> Quay
+Quay --> Berth
+@enduml

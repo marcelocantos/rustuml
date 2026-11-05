@@ -1,0 +1,7 @@
+@startuml
+node "Tide Mill"
+[Grain Store]
+artifact Ledger
+"Tide Mill" --> "Grain Store"
+"Grain Store" <.. Ledger
+@enduml

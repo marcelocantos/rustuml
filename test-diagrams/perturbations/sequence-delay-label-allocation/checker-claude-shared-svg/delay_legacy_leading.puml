@@ -1,0 +1,5 @@
+@startuml
+Kestrel -> Osprey : ping
+...   three spaces first...
+Osprey -> Kestrel : pong
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+node "Copper Bay" as Copper_Bay
+node Pier
+Copper_Bay <-left- Pier
+Pier -left-> Copper_Bay
+Copper_Bay <-> Pier
+Copper_Bay .. Pier
+Copper_Bay <-down- Pier
+@enduml

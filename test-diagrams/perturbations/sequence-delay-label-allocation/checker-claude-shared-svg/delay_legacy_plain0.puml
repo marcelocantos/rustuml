@@ -1,0 +1,5 @@
+@startuml
+Harrier -> Merlin : ping
+...ninety seconds...
+Merlin -> Harrier : pong
+@enduml

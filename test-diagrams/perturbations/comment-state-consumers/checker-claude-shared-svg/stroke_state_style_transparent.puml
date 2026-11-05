@@ -1,0 +1,11 @@
+@startuml
+<style>
+stateDiagram {
+  state { LineColor transparent }
+  arrow { LineColor #2d6a4f80 }
+}
+</style>
+[*] --> Quay
+Quay --> Berth
+Berth --> [*]
+@enduml

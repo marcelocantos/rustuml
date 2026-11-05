@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+Harrier -> Merlin : ping
+...   three spaces...
+Merlin -> Harrier : pong
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+skinparam ArrowColor transparent
+state Boil
+state Calm
+Boil --> Calm
+@enduml

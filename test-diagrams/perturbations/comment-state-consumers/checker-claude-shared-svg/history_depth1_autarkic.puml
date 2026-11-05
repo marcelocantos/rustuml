@@ -1,0 +1,8 @@
+@startuml
+state Reservoir {
+  [*] --> Fill
+  Fill --> [H]
+  [H] --> Drain
+}
+Reservoir --> Spillway
+@enduml

@@ -1,0 +1,774 @@
+{
+ "cases": [
+  {
+   "axes": [
+    "cluster autarky",
+    "concurrent regions",
+    "crossing link into a region"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "cluster_concurrent_crossing",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/cluster_concurrent_crossing.puml",
+   "source_sha256": "7afced43c5ab1e2eba0c72ced824bc32fd1e0156a9ae9b11c81e5428b8587164",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "cluster autarky",
+    "entryPoint leaf in nested group",
+    "outer group with only inner links"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "cluster_entry_inside_autarkic",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/cluster_entry_inside_autarkic.puml",
+   "source_sha256": "99928f591b9f28d8b5278cb99619112e6c8065e605e98ae3dc496ff7852096d1",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "cluster autarky",
+    "direct leaf <<InputPin>> mixed case (EntityPosition.fromStereotype equalsIgnoreCase)"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "cluster_inputpin_mixed_case",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/cluster_inputpin_mixed_case.puml",
+   "source_sha256": "5db07a2f01d43e5de0f9ea19fe973d8c6ed796768596443adb3765e2eb83a12f",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "cluster autarky",
+    "root-level note attached to inner leaf (note link crosses group)"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "cluster_root_note_on_inner",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/cluster_root_note_on_inner.puml",
+   "source_sha256": "0d0050450fc4b6b5726bf64a47754f077fa9073135bea13ff9f5f38cd31461dc",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "delay spacer",
+    "legacy",
+    "empty label (bare ...)"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "delay_legacy_empty",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/delay_legacy_empty.puml",
+   "source_sha256": "bba5fd07a46064198a25bf90a2842ed97ca5f9fa780c41ce7bf97b6ad0f9e8b0",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "delay spacer",
+    "legacy",
+    "leading spacer run of 1"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "delay_legacy_lead1",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/delay_legacy_lead1.puml",
+   "source_sha256": "45c32ad70bdfb6154805d59bc06af09d05cd4cc3ea319449b4aefde4a8779ef6",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "delay spacer",
+    "legacy",
+    "leading spacer run of 2 before creole bold"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "delay_legacy_lead2_creole",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/delay_legacy_lead2_creole.puml",
+   "source_sha256": "c3cc9dbc03e07b83624744ef51052975deb059b886e8a500ee8cd23be492d148",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "delay spacer",
+    "legacy",
+    "two-line label via \\n",
+    "no leading spacer"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "delay_legacy_multiline",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/delay_legacy_multiline.puml",
+   "source_sha256": "8f07db75966ea0588fae4d7c8b87a120bcd355fa15cc6088be450f36c9b29ba7",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "delay spacer",
+    "legacy",
+    "no leading spacer",
+    "medium label"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "delay_legacy_plain0",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/delay_legacy_plain0.puml",
+   "source_sha256": "da3f8a0e38486ed0d12e1aaba93230dac9e82eadc315104967cc6bb7dbd4f58c",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "delay spacer",
+    "teoz",
+    "empty label (bare ...)"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "delay_teoz_empty",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/delay_teoz_empty.puml",
+   "source_sha256": "36f34e176e34f27d4ce650d2e8689684a8ba6126ed6fb91bd21258843ebe5f9d",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "delay spacer",
+    "teoz",
+    "leading spacer run of 3"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "delay_teoz_lead3",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/delay_teoz_lead3.puml",
+   "source_sha256": "df29d27a9f1c34400c5e93d6ee241512c6d3d9521fb7e45130626f21fce983e8",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "delay spacer",
+    "teoz",
+    "leading spacer run of 3",
+    "two-line label"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "delay_teoz_lead3_multiline",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/delay_teoz_lead3_multiline.puml",
+   "source_sha256": "01d9a40293b790f287e221ec3fab23034abe6552b185a0b8daba6c6b52fbd1e3",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "deployment link reversal",
+    "explicit alias equal to projection",
+    "left-head with left direction, right-head with left direction, both heads, undecorated dotted, left-head with down direction"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "deploy_alias_direction_matrix",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/deploy_alias_direction_matrix.puml",
+   "source_sha256": "60d87f52024ea9bc0f4d9225bbfe7567e39198ef7a82d8242b30d104e5d50749",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "deployment identity",
+    "nested aliased node",
+    "left-head and up-direction dotted reversal"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "deploy_nested_alias_reverse",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/deploy_nested_alias_reverse.puml",
+   "source_sha256": "bdc0380c9b32dcbea3b24026d9ef7f26d562c50875a14a6af1a41c094dbaa3d9",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "history identity",
+    "Vault[H] and Vault[H*] suffix endpoints from root (getHistorical(location, idShort))"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "history_external_suffix_form",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/history_external_suffix_form.puml",
+   "source_sha256": "61e08f0356599f41588d4b2a665d8fdedb468d033fa7eaf4e92c30e07087c9da",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "T14.24",
+    "2 blank lines before @startuml (Pipe NO_CONTENT discard)",
+    "class shadowing"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "raw_blank_before_start",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/raw_blank_before_start.puml",
+   "source_sha256": "dee5d644fe13991af54aa4c1b5fb9356f2c9a5ad5a3c6cb016fbc74559546bb1",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "T14.24",
+    "CRLF line terminators (CR occurs only before LF)",
+    "1 blank after @startuml",
+    "class shadowing"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "raw_crlf_one_blank",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/raw_crlf_one_blank.puml",
+   "source_sha256": "8cf2372102e6b2b8bdb1bc3c46d2ddbaab77f357028587a0b4e60c9e3c8d517f",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "T14.24",
+    "!include of a file starting with 2 blank lines",
+    "class shadowing",
+    "resource inc_leading_blank.iuml in PRIVATE_CWD"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "raw_include_leading_blanks",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/raw_include_leading_blanks.puml",
+   "source_sha256": "3f590c3ef36c80c8456d4b051de00018b79a6ba21fc85bb776baf37d9d5db9d6",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "T14.24",
+    "multi-diagram stdin",
+    "first block blank-only",
+    "second block 1 leading blank, class shadowing"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "raw_multi_blank_first_block",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/raw_multi_blank_first_block.puml",
+   "source_sha256": "3ee90343ca49794a07d6bf011acbc4aff60ec2dce8334242dabc17d8fe9b6d1a",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "T14.24",
+    "2 blanks after @startuml",
+    "sequence family shadowing",
+    "note"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "raw_sequence_two_blanks",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/raw_sequence_two_blanks.puml",
+   "source_sha256": "7609c6091cd07e85bbddf35159e990adbe97b460aa830f66691798ed00910fa4",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "T14.24",
+    "2 blank lines before @enduml",
+    "class shadowing"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "raw_trailing_blanks",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/raw_trailing_blanks.puml",
+   "source_sha256": "e3cbfb68cd2c808c5892d123b8940cea127a1223426d14778e23bf55468ee3bb",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "T14.24",
+    "exact input of renderer unit test parser_source_identity_matches_java_shadow_id_after_initial_blanks",
+    "2 blanks after @startuml",
+    "activity shadowing"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "raw_unit_test_input",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/raw_unit_test_input.puml",
+   "source_sha256": "1999a3efa55a37dfe2bbe3b44f2a56d49f1893cb5a800afd56dee3fc7462b8a5",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "T14.24",
+    "space-only and tab-only lines after @startuml",
+    "class shadowing"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "raw_whitespace_only_lines",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/raw_whitespace_only_lines.puml",
+   "source_sha256": "a4c8ebcdb29b0211bb41eebcb6ce035f8db185696126466ddf474297431fb6c5",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "stroke scope",
+    "skinparam ArrowColor transparent"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "stroke_arrow_skinparam_transparent",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/stroke_arrow_skinparam_transparent.puml",
+   "source_sha256": "313778ba1cedb1d5e5c2313e523151749567dba464ddba94e1bf16af98839c0c",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "stroke scope",
+    "per-arrow -[#CSS4-only]-> color"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "stroke_per_arrow_css4",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/stroke_per_arrow_css4.puml",
+   "source_sha256": "dca0ff1b2ee8d9cb076e63b60e968f71b347f530d73eb2694bc7447051b80fdc",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "stroke scope",
+    "per-state ##CSS4-only line color"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "stroke_per_state_css4",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/stroke_per_state_css4.puml",
+   "source_sha256": "c12b27845f21f353c78e8ecd91f6b01d4680f1370eb64a7cc3c2e8709cb700d2",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "stroke scope",
+    "skinparam state<<stereo>> BorderColor CSS4-only name"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "stroke_stereo_skinparam_css4",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/stroke_stereo_skinparam_css4.puml",
+   "source_sha256": "505708d285558528153fa3cd726d5d6938aee09af5c604f5a49e6d3a6f2cd828",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "stroke scope",
+    "<style> stereotype selector LineColor CSS4-only name"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "stroke_stereo_style_css4",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/stroke_stereo_style_css4.puml",
+   "source_sha256": "5d7e936bb386cfd70c56f3bb25d876da3586286f0f26f15803593458d7388dd1",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "stroke scope",
+    "state style LineColor #FF000000 (zero alpha, non-black RGB)"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "stroke_zero_alpha_nonblack",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/stroke_zero_alpha_nonblack.puml",
+   "source_sha256": "410e9bdf632be6c1eb4c902a1fcac05f8ccf04324b35a607a28ec8b2c79d4736",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "unbundled theme",
+    "!theme mono",
+    "class"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "theme_mono_class",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/theme_mono_class.puml",
+   "source_sha256": "908a38eeb2bb885b193f62733839a19743ed1245a675e13e2c63ee105ac4151b",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "unbundled theme",
+    "!theme plain",
+    "class with note"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "theme_plain_class_note",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/theme_plain_class_note.puml",
+   "source_sha256": "1469cd79983134f8c981bd41c76080aba3498981ab4b752c79eceb5381c2eb1c",
+   "timezone": "GMT+11:00"
+  },
+  {
+   "axes": [
+    "unbundled theme",
+    "!theme plain",
+    "sequence"
+   ],
+   "cwd": "PRIVATE_CWD",
+   "env": {},
+   "intended_valid": true,
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "name": "theme_plain_sequence",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-claude-checker/batch-c1/sources/theme_plain_sequence.puml",
+   "source_sha256": "71e42eca685267f72c5604a4509a3dbc1c2ef72d3f3e93f2cc5f5f4aa7cb232a",
+   "timezone": "GMT+11:00"
+  }
+ ],
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "schema_version": 1
+}

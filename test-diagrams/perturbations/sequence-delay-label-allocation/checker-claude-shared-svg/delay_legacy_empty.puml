@@ -1,0 +1,5 @@
+@startuml
+Harrier -> Merlin : ping
+...
+Merlin -> Harrier : pong
+@enduml
