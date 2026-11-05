@@ -33,6 +33,13 @@
 //! document in Java's node order and applies the rule above. Comments are not
 //! character data for it (`ToStream.comment` writes them through the
 //! StreamEncoder, where `svg::comment_text` already wrote `?`).
+//!
+//! The same writers also escape a carriage return: `CharInfo` sets CR in its
+//! special-character table (OpenJDK 21 CharInfo.java 201/302, 326-334), so
+//! `outputCharacters` hands it to `processDirty` and `accumDefaultEscape`
+//! writes `&#13;` (ToStream.java 1619-1650, 1696-1776; `writeAttrString`
+//! likewise for attribute values). Rust renderers may leave a raw CR in
+//! text; this pass writes it as Java does.
 
 use rustuml_parser::java_utf16;
 
@@ -73,7 +80,7 @@ struct Unit {
 
 /// Apply `ToStream`'s surrogate rule to a finished SVG document.
 pub fn serialize(document: String) -> Result<String, SvgExportError> {
-    if !carries_unpaired_unit(&document) {
+    if !carries_unpaired_unit(&document) && !document.contains('\r') {
         return Ok(document);
     }
     let mut serializer = Serializer {
@@ -269,6 +276,14 @@ impl Serializer<'_> {
         span: std::ops::Range<usize>,
         escaped: bool,
     ) -> Result<(), SvgExportError> {
+        if escaped {
+            // A raw CR is written as a character reference (module doc).
+            let start = span.start;
+            for (offset, _) in self.document[span.clone()].match_indices('\r') {
+                self.edits
+                    .push((start + offset..start + offset + 1, "&#13;".to_string()));
+            }
+        }
         let (units, escapes) = decode(self.document, span, kind, escaped);
         // An escape prefix (rustuml_parser::java_utf16::ESCAPE) is not Java
         // text: the scalar after it is ordinary character data.
@@ -440,6 +455,18 @@ mod tests {
     fn documents_without_carried_units_are_unchanged() {
         let document = "<svg><text x=\"1\">a&amp;b 🚀 &#233;</text><!--c--></svg>".to_string();
         assert_eq!(serialize(document.clone()), Ok(document));
+    }
+
+    #[test]
+    fn a_carriage_return_in_character_data_is_a_character_reference() {
+        // BJ j8_decoded_cr: Java writes 'a&#13;b'; comments and processing
+        // instructions are not character data.
+        let document =
+            "<svg><text title=\"p\rq\">a\rb</text><!--c\rd--><?pi e\rf?></svg>".to_string();
+        assert_eq!(
+            serialize(document).unwrap(),
+            "<svg><text title=\"p&#13;q\">a&#13;b</text><!--c\rd--><?pi e\rf?></svg>"
+        );
     }
 
     #[test]
