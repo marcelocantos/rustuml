@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-builtin-value-boundaries",
+  "sub_mechanism": "unpaired UTF-16 unit reaching SVG export: ToStream's pending-high-surrogate state machine (round-3 correction of 61f3883ff)",
+  "status": "maker causal account before draft; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jdk": "Temurin 21.0.13 src.zip (read-only), java.xml module",
+  "java_locations": [
+    "tim/builtin/SubStr.java (and Lower/Upper): Java String operations are UTF-16; %substr(astral,0,1) is a lone high unit and %substr(astral,1,1) a lone low unit. TContext.applyFunctionsAndVariables splices the unit into the StringLocated line, so it travels through parsing, layout and drawing unchanged.",
+    "klimt/drawing/svg/SvgGraphics.java#getTransformer (lines 769-781): identity Transformer with OutputKeys.ENCODING \"us-ascii\". #createXmlInternal (801-834) transforms the DOMSource.",
+    "com/sun/org/apache/xalan/internal/xsltc/trax/TransformerImpl#transformIdentity (line 719) -> DOM2TO.parse: one handler.characters(String) per Text node (243), handler.comment for Comment nodes (125), handler.addAttribute per attribute in NamedNodeMap order (155-200; Xerces AttributeMap keeps attributes sorted by name, matching the alphabetical attribute order of every Java SVG).",
+    "ToStream.setOutputStreamInternal (689-735): \"us-ascii\" is not the literal \"US-ASCII\", so the writer is Encodings.getWriter -> OutputStreamWriter/StreamEncoder with REPLACE; it never sees a surrogate from text or attributes (they are always dirty, see below), only from comments.",
+    "ToStream.outputCharacters (1424-1525) and ToStream.writeAttrString (2030-2063): every char >= 127 is dirty because escapingNotNeeded (912-927) asks the us-ascii EncodingInfo; dirty chars go to accumDefaultEscape (via processDirty for text). Text: '\\n' is written by processDirty without accumDefaultEscape; CR and C0/C1 controls are dirty. Attributes: TAB/LF/CR are special attribute chars with no entity string (CharInfo 190-201, 356), so they reach accumDefaultEscape.",
+    "ToStream.accumDefaultEntity (1021-1056): '&', '<', '>' (and '\"' in attributes) have entity strings and return i+1, skipping the surrogate check.",
+    "ToStream.accumDefaultEscape (1693-1781) with the field m_highSurrogate (line 200), which persists across characters() and writeAttrString calls: (a) pending high != 0 and the next checked char is not a low unit -> throwIOE(high, ch) 'Invalid UTF-16 surrogate detected: <high> <ch> ?' (lines 1711-1714, 1807-1812); a low unit joins it and writeCharRef(high, low) writes &#cp; (1715-1717); (b) a high unit with i + 1 >= len (last char of the text node or attribute value) is saved in m_highSurrogate and advanced over without output (1721-1726); (c) a high unit followed in the same chunk by any non-low char -> throwIOE(high, next) (1728-1734); (d) any other surrogate, i.e. a lone low unit, fails XMLChar.isInvalid -> SAXException 'An invalid XML character (Unicode: 0x<unit>) was found in the node's character data content.' (1747-1751; the same key for attribute values). Nothing flushes m_highSurrogate at endDocument, so a pending high unit with no later checked char is dropped.",
+    "ToStream.comment (2275-2330): comment chars are written raw to the StreamEncoder, which replaces an unmappable or malformed unit with '?'. Comments never touch m_highSurrogate.",
+    "UGraphicSvg.writeToStream (138) wraps the failure as IOException; UgDiagram.exportDiagram catches it and exports the crash diagram with exit 0 (the T14.20 class)."
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs Value::to_display / project_value: Utf16 values project lossily (U+FFFD) and round 2 recorded export_failure at projection time, i.e. before Java would know whether the unit reaches an SVG text node at all (review-2: surrogate_high_class).",
+    "crates/rustuml-parser/src/parse/mod.rs parse_with_base: returns that projection-time failure as a ParseError.",
+    "crates/rustuml-render/src/svg.rs escape_attribute / comment_text and the per-family text escapers: the only place the SVG document is serialized; render_svg_with_theme is infallible.",
+    "crates/rustuml/src/main.rs: the CLI prints render_svg_with_theme output."
+  ],
+  "causal_divergence": "The outcome is a property of ToStream's character state over the whole serialized document (text nodes and attribute values in document order), not of the preprocessed line. Rust decided at TIM projection time, so a high unit that ends a text node (Java: silently dropped) became an error, and a unit on a line that never reaches SVG became an error too.",
+  "invariant": "An unpaired unit is carried from TIM projection to SVG export unchanged. Export runs ToStream's rule over the finished document in Java's node order (text nodes and attribute values in document order, attributes of one element sorted by name): checked chars are those that reach accumDefaultEscape's surrogate check; a lone low unit fails with the invalid-character message; a high unit followed in its own node by any char fails with the surrogate message unless that char is the matching low unit; a high unit that ends its node is held and either joins a low unit that is the next checked char, fails on any other next checked char, or is dropped at end of document. Comments write '?' for the unit. Any failure is a structured error and a nonzero CLI exit (T14.20); TIM and parser errors keep precedence because they occur before rendering.",
+  "representation": "Rust String cannot hold an unpaired unit. A new rustuml-parser module java_utf16 maps unit u (0xD800..=0xDFFF) to the scalar U+10F800 + (u - 0xD800), the last 2048 code points of Supplementary Private Use Area-B (unassigned by Unicode), and back. Value::to_display, utf16_units, %strlen/%size and the uml_source seed hash go through it, so TIM sees exactly Java's UTF-16 units; projected lines are re-normalized so an adjacent high and low unit become the real scalar, as Java's concatenated String would. A user literal in U+10F800..U+10FFFF is therefore read as an unpaired unit: declared residue (the parent's probe rule already excludes PUA input).",
+  "width": "AW surrogate_high_class gives Java textLength 22.5859 at size 14 plain for 'x' + a lone high unit; 'x' is 8.5859375 in CHAR_WIDTHS_14, so the unit advances exactly one em (14). Rust measured the lossy U+FFFD with its em fallback and matched (previous tip DIFF 1, text only). The draft measures the carrier scalar with an explicit one-em rule cited to that datum; other sizes and bold are relayed as probes, not assumed.",
+  "planned_change": [
+    "Add rustuml_parser::java_utf16 (carrier mapping, text<->units, normalize).",
+    "Preprocessor: Utf16 projection through the carrier; delete export_failure, record_export_failure and the parse_with_base early return; UTF-16 counts and the seed through java_utf16.",
+    "Render: svg::java_export_serialize(document) -> Result<String, SvgExportError> implementing the accumDefaultEscape state machine over text nodes and attribute values (comment, PI, CDATA and markup are not character data for it); try_render_svg_with_theme returns it; render_svg_with_theme keeps its String signature for harness callers and returns an empty document on export failure (never a normal diagram, never malformed XML); the CLI uses try_render_svg_with_theme for -tsvg and reports 'export error: <Java message>' with exit 1.",
+    "SvgGraphics.LinkData.getXlinkTitle's (char) cast of <U+XXXX> keeps a surrogate value as the carrier instead of the literal text, so link titles follow the same rule.",
+    "filter_registry::plantuml_seed hashes UTF-16 units (StringUtils.seed uses charAt), via java_utf16.",
+    "Replace the round-2 unit test with serializer-rule tests: trailing high dropped, high + next char fails with Java's surrogate message, lone low fails with the invalid-character message, high pending across nodes then a later non-ASCII char fails, high pending then a low unit joins, unit only in a comment is '?'."
+  ],
+  "declared_residue": [
+    "User literals in U+10F800..U+10FFFF (carrier collision).",
+    "PNG/PDF/EPS are not Java's XML serializer path; they are unchanged.",
+    "The one-em width is one Java datum (size 14, plain); relayed probes decide other sizes and bold."
+  ],
+  "perturbation_axes": [
+    "lone high and lone low units, at the end of a text node, mid-text, followed by a valid character, followed by an invalid character",
+    "units in attributes (link title, tooltip), in a diagram title and in comments",
+    "a high unit pending across nodes followed by later non-ASCII text (expected crash) and by a later lone low unit (expected join)",
+    "units on lines that never reach SVG: removed entity, hidden members, unused skinparam value",
+    "class, sequence, activity, state and usecase families; renamed labels"
+  ],
+  "precommitted_measurement": {
+    "oracle": "whole CLI output from recorded cwd for all 12,550 goldens, the 16,402-source sweep, AW/AU/AR and own probes; strict compare plus exact comment lists",
+    "expect_fixed": [
+      "AW surrogate_high_class strict-matches Java (exit 0, text 'x', textLength 22.5859)"
+    ],
+    "expect_kept_rejected": [
+      "AW surrogate_upper_sequence (lone low) and surrogate_activity_label (high followed by 't') exit nonzero with Java's two messages",
+      "perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue and tim-builtin-typed-contracts/checker4_surrogate_projection exit nonzero"
+    ],
+    "expect": "zero lost matches, zero lost rejections, zero new valid-input errors and zero panics against the merged base; surrogate_unused_variable, surrogate_rejoined_pair and surrogate_in_comment_line keep their bytes"
+  }
+}
