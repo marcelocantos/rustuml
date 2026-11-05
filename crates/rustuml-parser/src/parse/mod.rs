@@ -1215,6 +1215,16 @@ pub fn parse_with_base(
         Some(dir) => preprocess::preprocess_full_for_parse(input, Some(dir.to_path_buf())),
         None => preprocess::preprocess_full_for_parse(input, None),
     };
+    // PSystemBuilder#createPSystem tries PSystemWelcomeFactory first for a
+    // `@startuml` source (its diagram type is SEQUENCE), and it returns the
+    // Welcome diagram when the post-TIM `UmlSource` has exactly two lines,
+    // before any family factory or command runs. A swallowed end means there
+    // is no block at all, which is reported below.
+    if preprocess_out.two_line_source && !preprocess_out.swallowed_end_directive {
+        let mut diagram = Diagram::Sequence(sequence::parse_sequence(&[])?);
+        diagram.meta_mut().source = Some(preprocess_out.uml_source);
+        return Ok(diagram);
+    }
     let mut style_program = style::extract_style_program(&mut preprocess_out.lines);
     if typ == "uml" {
         for (index, line) in preprocess_out.lines.iter().enumerate() {
@@ -1488,6 +1498,31 @@ mod tests {
                 "@enduml\n",
             )),
         );
+    }
+
+    #[test]
+    fn two_line_join_gives_the_welcome_diagram_first() {
+        // PSystemWelcomeFactory runs before any family factory, so even a
+        // joined line no command accepts gives the empty diagram.
+        for input in [
+            "@startuml\nKea -> Tui : tail %chr(92)\n@enduml",
+            "@startuml\nnot a command %chr(92)\n@enduml",
+            "@startuml\nKea -> Tui : one\n@enduml \\\nTui -> Kea : two",
+        ] {
+            let diagram = parse(input).expect(input);
+            let Diagram::Sequence(seq) = diagram else {
+                panic!("{input}: not the empty @startuml diagram");
+            };
+            assert!(
+                seq.participants.is_empty() && seq.events.is_empty(),
+                "{input}"
+            );
+        }
+        // Three lines: the joined message renders.
+        let diagram =
+            parse("@startuml\nKea -> Tui : a %chr(92)\nb\nTui -> Kea : c\n@enduml").unwrap();
+        let ast = format!("{diagram:?}");
+        assert!(ast.contains("a b"), "{ast}");
     }
 
     #[test]
