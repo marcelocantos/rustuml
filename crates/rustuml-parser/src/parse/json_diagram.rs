@@ -140,9 +140,9 @@ fn keep_quoted_backslashes_in_line(line: &str) -> String {
             None => {}
         }
     }
-    let spans = match colon {
+    let spans: Vec<std::ops::Range<usize>> = match colon {
         Some(colon) => vec![0..colon, colon + 1..body.len()],
-        None => vec![0..body.len()],
+        None => std::iter::once(0..body.len()).collect(),
     };
     let mut result = line.to_string();
     for span in spans.into_iter().rev() {
