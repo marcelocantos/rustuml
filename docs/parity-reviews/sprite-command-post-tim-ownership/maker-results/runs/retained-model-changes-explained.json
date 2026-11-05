@@ -1,0 +1,207 @@
+{
+ "categories": {
+  "diagram/meta/source + diagram/meta/sprites": 1,
+  "diagram/meta/source": 32
+ },
+ "rows": [
+  {
+   "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_dynamic_sub_sprite.puml",
+   "differing_paths": [
+    "diagram/meta/source",
+    "diagram/meta/sprites"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_22_plain.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_22_unusual.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_23_plain.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_23_unusual.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_24_plain.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_24_unusual.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_25_plain.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_25_unusual.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_26_plain.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_26_unusual.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_plain.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_unusual.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_sprite_inline.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_sprite_inline_colour.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_sprite_internal.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_sprite_internal_other.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_sprite_lib.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_sprite_lib_svg.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_upper_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_upper_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_nbsp_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_nbsp_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_inline_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_inline_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_upper_end_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_upper_end_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_nbsp_brace_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_nbsp_brace_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_compact_end_legacy.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_compact_end_teoz.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_class.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_state.puml",
+   "differing_paths": [
+    "diagram/meta/source"
+   ]
+  }
+ ]
+}

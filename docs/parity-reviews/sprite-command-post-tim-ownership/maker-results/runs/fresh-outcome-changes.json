@@ -1,0 +1,653 @@
+{
+ "pairs": {
+  "match->match": 180,
+  "nonpositive-accepted->nonpositive-rejected": 20,
+  "nonpositive-accepted->nonpositive-accepted": 5,
+  "mismatch->mismatch": 339,
+  "nonpositive-rejected->nonpositive-rejected": 267,
+  "valid-error->match": 22,
+  "mismatch->match": 28
+ },
+ "changes": [
+  {
+   "source": "c75_sprite_pixel_inline_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_pixel_inline_legacy",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_pixel_inline_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_pixel_inline_teoz",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_procedure_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_procedure_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_function_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_function_legacy",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-accepted",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_parent_to_child_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_parent_to_child_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_parent_to_child_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_parent_to_child_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_sibling_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_sibling_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_sibling_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_sibling_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_pixel_into_include_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_pixel_into_include_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_pixel_into_include_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_pixel_into_include_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_unclosed_svg_class.puml",
+   "cohort": "fresh-main",
+   "name": "c75_unclosed_svg_class",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_unclosed_pixel_class.puml",
+   "cohort": "fresh-main",
+   "name": "c75_unclosed_pixel_class",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_unclosed_svg_state.puml",
+   "cohort": "fresh-main",
+   "name": "c75_unclosed_svg_state",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_unclosed_pixel_state.puml",
+   "cohort": "fresh-main",
+   "name": "c75_unclosed_pixel_state",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_unclosed_svg_activity.puml",
+   "cohort": "fresh-main",
+   "name": "c75_unclosed_svg_activity",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_unclosed_pixel_activity.puml",
+   "cohort": "fresh-main",
+   "name": "c75_unclosed_pixel_activity",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_unclosed_svg_usecase.puml",
+   "cohort": "fresh-main",
+   "name": "c75_unclosed_svg_usecase",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_unclosed_pixel_usecase.puml",
+   "cohort": "fresh-main",
+   "name": "c75_unclosed_pixel_usecase",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_unclosed_svg_component.puml",
+   "cohort": "fresh-main",
+   "name": "c75_unclosed_svg_component",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_unclosed_pixel_component.puml",
+   "cohort": "fresh-main",
+   "name": "c75_unclosed_pixel_component",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_link_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_link_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_combined_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_combined_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_link_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_link_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_combined_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_combined_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_link_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_link_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_link_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_link_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_link_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_link_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_link_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_link_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_link_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_link_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_link_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_link_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_link_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_link_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_link_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_link_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_combined_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_combined_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_inactive_unclosed_svg_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_inactive_unclosed_svg_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_inactive_unclosed_pixel_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_inactive_unclosed_pixel_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_macro_uninvoked_unclosed_svg_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_macro_uninvoked_unclosed_svg_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_macro_uninvoked_unclosed_pixel_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_macro_uninvoked_unclosed_pixel_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_participant_link_inside_label_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_participant_link_inside_label_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_sprite_empty_pixel_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_sprite_empty_pixel_legacy",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_sprite_palette_invalid_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_sprite_palette_invalid_legacy",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_inactive_unclosed_svg_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_inactive_unclosed_svg_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_inactive_unclosed_pixel_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_inactive_unclosed_pixel_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_macro_uninvoked_unclosed_svg_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_macro_uninvoked_unclosed_svg_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_macro_uninvoked_unclosed_pixel_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_macro_uninvoked_unclosed_pixel_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_sprite_empty_pixel_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_sprite_empty_pixel_teoz",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_sprite_palette_invalid_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_sprite_palette_invalid_teoz",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_note_upper_legacy.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_note_upper_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_note_caps_legacy.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_note_caps_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_note_lower_legacy.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_note_lower_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_note_brace_legacy.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_note_brace_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_note_brace_lower_legacy.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_note_brace_lower_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_legend_upper_legacy.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_legend_upper_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_ref_upper_legacy.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_ref_upper_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_inline_svg_apostrophe_legacy.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_inline_svg_apostrophe_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_inline_svg_apostrophe_attr_legacy.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_inline_svg_apostrophe_attr_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_inline_svg_trailing_comment_legacy.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_inline_svg_trailing_comment_legacy",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_note_upper_teoz.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_note_upper_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_note_caps_teoz.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_note_caps_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_note_lower_teoz.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_note_lower_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_note_brace_teoz.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_note_brace_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_note_brace_lower_teoz.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_note_brace_lower_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_legend_upper_teoz.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_legend_upper_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_ref_upper_teoz.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_ref_upper_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_inline_svg_apostrophe_teoz.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_inline_svg_apostrophe_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_inline_svg_apostrophe_attr_teoz.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_inline_svg_apostrophe_attr_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_seq_inline_svg_trailing_comment_teoz.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_seq_inline_svg_trailing_comment_teoz",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_class_link_upper.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_class_link_upper",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_class_link_lower.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_class_link_lower",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_object_link_upper.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_object_link_upper",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_object_link_lower.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_object_link_lower",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_class_aggregation_label.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_class_aggregation_label",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_class_dotted.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_class_dotted",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_class_member_upper.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_class_member_upper",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_class_member_brace.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_class_member_brace",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_class_note_upper.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_class_note_upper",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_state_note_upper.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_state_note_upper",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_activity_note_upper.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_activity_note_upper",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_component_link_upper.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_component_link_upper",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_usecase_link_upper.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_usecase_link_upper",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "cl_component_note_upper.puml",
+   "cohort": "fresh-batch1",
+   "name": "cl_component_note_upper",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  }
+ ]
+}

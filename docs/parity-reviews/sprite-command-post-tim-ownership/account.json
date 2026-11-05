@@ -1,0 +1,35 @@
+{
+ "schema_version": 1,
+ "mechanism": "sprite-command-post-tim-ownership",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "status": "guard-schema projection of maker-results/account.json (account of record, committed before the draft); independent review required",
+ "java_locations": [
+  "net.sourceforge.plantuml.BlockUml#<init> (TimLoader#load before commands)",
+  "net.sourceforge.plantuml.tim.TContext#executeLines (!if, !procedure, !include)",
+  "net.sourceforge.plantuml.command.PSystemCommandFactory#getCandidate / #isMultilineCommandOk / #executeFewLines",
+  "net.sourceforge.plantuml.command.CommonCommands#addCommonCommands2 (sprite command order)",
+  "net.sourceforge.plantuml.command.CommandMultilines2#isValid",
+  "net.sourceforge.plantuml.command.CommandFactorySprite#executeNow / #executeInternal",
+  "net.sourceforge.plantuml.command.CommandSpriteSvg / CommandSpriteSvgMultiline / CommandSpriteStdlib / CommandSpriteStdlibSvg #getRegexConcat",
+  "net.sourceforge.plantuml.command.CommandSpriteFile#executeArg",
+  "net.sourceforge.plantuml.text.FoxSignature#getFoxSignatureFromRealString",
+  "net.sourceforge.plantuml.text.StringLocated#removeInnerComment",
+  "classdiagram.ClassDiagramFactory / statediagram.StateDiagramFactory / descdiagram.DescriptionDiagramFactory / activitydiagram3.ActivityDiagramFactory3 / activitydiagram.ActivityDiagramFactory #initCommandsList"
+ ],
+ "rust_locations": [
+  "crates/rustuml-parser/src/preprocess/mod.rs::PreprocessContext::process_one_line (sprite ownership removed from TIM; SVG sprite start lines exempt from inline-comment stripping)",
+  "crates/rustuml-parser/src/parse/sprite.rs (new)",
+  "crates/rustuml-parser/src/parse/sequence.rs::parse_sequence (sprite execution failures)",
+  "crates/rustuml-parser/src/parse/{class,object,state,activity,usecase,component,deployment}.rs (family dispatch position)",
+  "crates/rustuml-parser/src/parse/mod.rs::parse_with_base (detection masking, fallback families)"
+ ],
+ "invariant": "Only lines that survive TIM (!if, !procedure, !include) can open, extend or close a sprite command, and only at a family command-start position after the family commands Java registers before CommonCommands; bodies of multiline commands are never sprite commands.",
+ "causal_divergence": "The rejected packet matched the sprite grammar inside the TIM line loop, before conditional, procedure and include resolution, and on every line regardless of command context; Java runs the preprocessor first and offers sprite commands only through PSystemCommandFactory#getCandidate in each factory's registration order.",
+ "planned_change": "Move sprite command recognition and execution out of TIM into a shared post-TIM CommonCommands sprite group called from each family's dispatch at its Java position; model CommandMultilines2 completion, CommandFactorySprite and CommandSpriteFile execution failures; keep context-free consumption only for families whose dispatch position is not ported and for subtype detection.",
+ "perturbation_axes": [
+  "sprite headers inside !if false/true, uninvoked/invoked !procedure, across !include boundaries",
+  "Sprite-prefixed text in notes, legends, refs and class bodies, and class links",
+  "unclosed SVG and pixel blocks per family",
+  "execution failures: empty body, graylevel, missing file"
+ ]
+}

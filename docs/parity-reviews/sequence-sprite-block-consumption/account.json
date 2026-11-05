@@ -12,7 +12,7 @@
     "command.CommandMultilines2#isValid",
     "regex.Pattern2#transform",
     "regex.RegexConcat#match",
-    "regex.FoxSignature#getMask"
+    "text.FoxSignature#getMask"
   ],
   "rust_locations": [
     "crates/rustuml-parser/src/preprocess/mod.rs::PreprocessContext (field and initializer)",

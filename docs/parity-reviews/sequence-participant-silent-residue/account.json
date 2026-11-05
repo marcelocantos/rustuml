@@ -1,0 +1,26 @@
+{
+ "schema_version": 1,
+ "mechanism": "sequence-participant-silent-residue",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "status": "guard-schema projection of maker-results/account.json (account of record, committed before the draft); independent review required",
+ "java_locations": [
+  "net.sourceforge.plantuml.sequencediagram.command.CommandParticipant#executeArg",
+  "net.sourceforge.plantuml.url.UrlBuilder#getUrl / Url#getTooltip",
+  "net.sourceforge.plantuml.stereo.Stereotype#build",
+  "net.sourceforge.plantuml.sequencediagram.SequenceDiagram#putParticipantInLast / #addWithOrder",
+  "net.sourceforge.plantuml.sequencediagram.command.CommandGrouping#executeArg",
+  "net.sourceforge.plantuml.sequencediagram.command.CommandReturn#getRegexConcat"
+ ],
+ "rust_locations": [
+  "crates/rustuml-parser/src/diagram/sequence.rs::Participant (url_tooltip)",
+  "crates/rustuml-parser/src/parse/sequence.rs::{parse_sequence, try_participant_decl_in_command, SeqParser::report_put_participant_in_last, SeqParser::finish}",
+  "crates/rustuml-render/src/sequence.rs::participant_group_open"
+ ],
+ "invariant": "Participant and colour variants the renderer does not reproduce produce explicit residue on stderr, never silently wrong output; the participant link title is Url#getTooltip.",
+ "causal_divergence": "Tooltips were discarded, multiple stereotypes collapsed into one label, re-declarations skipped putParticipantInLast, teoz participant anchors and CommandGrouping backColorGeneral were dropped, all without a warning.",
+ "planned_change": "Record the URL tooltip and use it as the legacy anchor title; warn for multiple stereotype labels, creole links inside quoted displays, teoz participant anchors, reordering or reboxing re-declarations and the group general background colour.",
+ "perturbation_axes": [
+  "participant tooltip, multiple stereotypes, link inside quoted display, legacy and teoz",
+  "re-declaration order and box membership; group COLORS[1]; colour-free geometry controls"
+ ]
+}

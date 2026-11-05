@@ -9,7 +9,7 @@
     "sequencediagram.command.CommandParticipant#executeArg",
     "sequencediagram.command.CommandParticipantMultilines#executeNow",
     "sequencediagram.command.CommandBoxStart#executeArg",
-    "sequencediagram.command.FactorySequenceNoteCommand#executeInternal",
+    "command.note.sequence.FactorySequenceNoteCommand#executeInternal",
     "klimt.color.HColorSet#parseColor / parseSimpleColor",
     "klimt.color.Colors#Colors",
     "command.SingleLineCommand2#execute"

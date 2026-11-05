@@ -1,0 +1,11 @@
+{
+ "sequence-command-specific-color-paths|match|match|False": 63,
+ "sequence-command-specific-color-paths|mismatch|mismatch|False": 23,
+ "sequence-command-specific-color-paths|mismatch|mismatch|True": 131,
+ "sequence-command-specific-color-paths|nonpositive-rejected|nonpositive-rejected|False": 179,
+ "sequence-participant-complete-consumption|match|match|False": 72,
+ "sequence-participant-complete-consumption|mismatch|match|False": 9,
+ "sequence-participant-complete-consumption|mismatch|mismatch|True": 123,
+ "sequence-participant-complete-consumption|nonpositive-rejected|nonpositive-rejected|False": 72,
+ "sequence-participant-residue-preservation|mismatch|mismatch|True": 42
+}

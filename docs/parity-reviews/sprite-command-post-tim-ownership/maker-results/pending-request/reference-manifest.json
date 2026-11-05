@@ -1,0 +1,1333 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "cases": [
+  {
+   "name": "mk2_if_false_pixel_seq_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_if_false_pixel_seq_legacy.puml",
+   "source_sha256": "3701fb7a3e3e0687f59f64c794c24ec6f862ed088c102d4628d272a4813bef2d",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "!if false",
+    "unclosed pixel",
+    "legacy"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_else_branch_pixel_seq_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_else_branch_pixel_seq_legacy.puml",
+   "source_sha256": "c1f6c3317b61f0499867c792b5f32d6b83ecc931f167480707a17a106076d255",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "!if false then !else",
+    "closed pixel",
+    "legacy"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_proc_invoked_closed_pixel_seq_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_proc_invoked_closed_pixel_seq_legacy.puml",
+   "source_sha256": "44ab5ded0d1054368ff17fe2333827eda292891c3b3e87a7dd5d2d5ba053fd0a",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "invoked procedure",
+    "closed pixel",
+    "legacy"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_proc_invoked_unclosed_svg_seq_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_proc_invoked_unclosed_svg_seq_legacy.puml",
+   "source_sha256": "87015b94146cebb81d0e338df59f66b85a9d2093741815450efcdde37e3fd7d9",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "invoked procedure",
+    "unclosed svg",
+    "legacy"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_include_close_only_seq_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_include_close_only_seq_legacy.puml",
+   "source_sha256": "2caae5706a46453810496ca0644aab1dfffc2ac3f5d315d0872c886512fba0ed",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "!include supplies body and END",
+    "svg",
+    "legacy"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_seq_note_svg_lookalike_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_seq_note_svg_lookalike_legacy.puml",
+   "source_sha256": "5b00516db7cb405197cb1cf447cb2fcf7fb6a82a3be7659ddc600ad05f8ec793",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "note body",
+    "svg header lookalike",
+    "legacy"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_seq_top_level_text_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_seq_top_level_text_legacy.puml",
+   "source_sha256": "c72ffe145b8347695cc8947dc48bc793a8ee0ac839ab755f0a4ab2363700ade2",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "top-level Sprite text",
+    "CommandSpriteFile",
+    "legacy"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_redeclare_into_box_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_redeclare_into_box_legacy.puml",
+   "source_sha256": "c5a57eaaf4f02ecdb9e4fb6db607ba2e04157f8a16653b99d04e1e8bec88bd25",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "putParticipantInLast",
+    "box englober",
+    "legacy"
+   ],
+   "mechanism": "sequence-participant-silent-residue"
+  },
+  {
+   "name": "mk2_multi_stereo_three_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_multi_stereo_three_legacy.puml",
+   "source_sha256": "f00617aed82281bded1824fa798aabb531c557a79694272ee6a3405c23d00962",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "three stereotypes",
+    "legacy"
+   ],
+   "mechanism": "sequence-participant-silent-residue"
+  },
+  {
+   "name": "mk2_tooltip_in_box_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_tooltip_in_box_legacy.puml",
+   "source_sha256": "f15c9152771960a8fbc923fb511c36c7f646a7799d899bce8dfe42ef13aff823",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "participant url tooltip",
+    "inside box",
+    "legacy"
+   ],
+   "mechanism": "sequence-participant-silent-residue"
+  },
+  {
+   "name": "mk2_if_false_pixel_seq_teoz",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_if_false_pixel_seq_teoz.puml",
+   "source_sha256": "26036d0a7178197d5cae9bf339d83da8bf65178155e9e7c0826557481f09112a",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "!if false",
+    "unclosed pixel",
+    "teoz"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_else_branch_pixel_seq_teoz",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_else_branch_pixel_seq_teoz.puml",
+   "source_sha256": "7db9fe1d692050994c28079251f056490e9423c41466a25c88f0d400cafe4e4b",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "!if false then !else",
+    "closed pixel",
+    "teoz"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_proc_invoked_closed_pixel_seq_teoz",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_proc_invoked_closed_pixel_seq_teoz.puml",
+   "source_sha256": "e0a67ab52c2b93d285b42cec9f0d84ca5a9f9de9d6786c4b0325789e05c2a5d2",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "invoked procedure",
+    "closed pixel",
+    "teoz"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_proc_invoked_unclosed_svg_seq_teoz",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_proc_invoked_unclosed_svg_seq_teoz.puml",
+   "source_sha256": "2820b6b9753259675ad0ebc84bf7afe1e96117c81ada315bb0c6c868f2e2f20b",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "invoked procedure",
+    "unclosed svg",
+    "teoz"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_include_close_only_seq_teoz",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_include_close_only_seq_teoz.puml",
+   "source_sha256": "461607560ea8e03df3f9526bf633509e8121c4432901f40cc1a6e95b970fb01a",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "!include supplies body and END",
+    "svg",
+    "teoz"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_seq_note_svg_lookalike_teoz",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_seq_note_svg_lookalike_teoz.puml",
+   "source_sha256": "c0dc586116e15dd4caabc12284131ac57a3d23b6173448fee1d953e0c250228e",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "note body",
+    "svg header lookalike",
+    "teoz"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_seq_top_level_text_teoz",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_seq_top_level_text_teoz.puml",
+   "source_sha256": "9aebd5506b464806867ec57fe3f8162c8e99601065e6cfeccd61ad2fd237255b",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "top-level Sprite text",
+    "CommandSpriteFile",
+    "teoz"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_redeclare_into_box_teoz",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_redeclare_into_box_teoz.puml",
+   "source_sha256": "d9a3eaa107b51aa27e2a19029371e219a5fd43b254a92dbfd3d38906673cf020",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "putParticipantInLast",
+    "box englober",
+    "teoz"
+   ],
+   "mechanism": "sequence-participant-silent-residue"
+  },
+  {
+   "name": "mk2_multi_stereo_three_teoz",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_multi_stereo_three_teoz.puml",
+   "source_sha256": "bc6b8f6ad159715015523c89fa206c9160999f04f36f3c2c6652e86af13a8f5c",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "three stereotypes",
+    "teoz"
+   ],
+   "mechanism": "sequence-participant-silent-residue"
+  },
+  {
+   "name": "mk2_tooltip_in_box_teoz",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_tooltip_in_box_teoz.puml",
+   "source_sha256": "cd9feb03f828d89e25f2cc317f9db0b47c8b36d6a1617eb8c08b76703d4d94d0",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "participant url tooltip",
+    "inside box",
+    "teoz"
+   ],
+   "mechanism": "sequence-participant-silent-residue"
+  },
+  {
+   "name": "mk2_note_across_plain_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_note_across_plain_legacy.puml",
+   "source_sha256": "d4383954f5a5b00a4aa4b54051a1df6e0dd97eb530f28c9f2e71a80efaa347c5",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "note across",
+    "no colour control"
+   ],
+   "mechanism": "sequence-participant-silent-residue"
+  },
+  {
+   "name": "mk2_hnote_over_plain_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_hnote_over_plain_legacy.puml",
+   "source_sha256": "cdf9076a5b90b985f47469c7c43b394f3467d04408306a0fb5b730d5fb8ba2fa",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "hnote over several",
+    "no colour control"
+   ],
+   "mechanism": "sequence-participant-silent-residue"
+  },
+  {
+   "name": "mk2_rnote_across_multi_plain_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_rnote_across_multi_plain_legacy.puml",
+   "source_sha256": "1c61dc5ba6ff05890e2d7ceeed413821f5c136224e840726fa5177491603459b",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "rnote across multiline",
+    "no colour control"
+   ],
+   "mechanism": "sequence-participant-silent-residue"
+  },
+  {
+   "name": "mk2_hnote_right_plain_teoz",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_hnote_right_plain_teoz.puml",
+   "source_sha256": "d95e19720da4fde28fabaf8dd05f211a58e41b0726fb61ebc9b2d3d5ae744b98",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "hnote right",
+    "no colour control",
+    "teoz"
+   ],
+   "mechanism": "sequence-participant-silent-residue"
+  },
+  {
+   "name": "mk2_box_plain_teoz",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_box_plain_teoz.puml",
+   "source_sha256": "2d20da31951b07970aa8bf9538510b15ae4c3fff2201bd6de881afffa02e1731",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "box",
+    "no colour control",
+    "teoz"
+   ],
+   "mechanism": "sequence-participant-silent-residue"
+  },
+  {
+   "name": "mk2_group_space_colour_teoz",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_group_space_colour_teoz.puml",
+   "source_sha256": "6b7b994bf9fb5bbd04ad5fee432db256de1f04204c34bdfb3598070e66cde29f",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "group COLORS[1] only",
+    "teoz"
+   ],
+   "mechanism": "sequence-participant-silent-residue"
+  },
+  {
+   "name": "mk2_return_hash_label_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_return_hash_label_legacy.puml",
+   "source_sha256": "a0e109b23b5fdb0eac580ee38e5acf41579d44ad7abc2f7058aec4b9be3d0756",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "return label starting with #",
+    "creole list"
+   ],
+   "mechanism": "sequence-participant-silent-residue"
+  },
+  {
+   "name": "mk2_if_false_svg_class",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_if_false_svg_class.puml",
+   "source_sha256": "b1527067044b1794b379c25a527b7612b8e92b8c6932d925d9c3a0061b2c3c32",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "!if false",
+    "unclosed svg",
+    "class"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_if_true_closed_pixel_component",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_if_true_closed_pixel_component.puml",
+   "source_sha256": "d5d5f703df9768ededa81bf19ee5b9e6ff566ddbd94d8a42cde5817516cd1083",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "!if true",
+    "closed pixel",
+    "component"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_if_true_unclosed_pixel_state",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_if_true_unclosed_pixel_state.puml",
+   "source_sha256": "0afffb92df3d2e0f016b806047e044b025405100873d2da0f54bd8301127509d",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "!if true",
+    "unclosed pixel",
+    "state"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_proc_uninvoked_svg_usecase",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_proc_uninvoked_svg_usecase.puml",
+   "source_sha256": "be247b515dc2db2444a295bdd2edb3f8e33ac5947e4ba7f1755a8821e6e9178a",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "uninvoked procedure",
+    "unclosed svg",
+    "usecase"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_include_header_only_class",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_include_header_only_class.puml",
+   "source_sha256": "37eb538459767144caef328144a3ac69fdec6b644ed38f2c0e233c51834decd6",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "!include supplies header and rows",
+    "pixel",
+    "class"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_include_unclosed_component",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_include_unclosed_component.puml",
+   "source_sha256": "29d8856628f9c9bdde04f20ad835dc3df5ff3c018716bbf922559e70fc7be8ce",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "!include opens pixel never closed",
+    "component"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_state_note_brace",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_state_note_brace.puml",
+   "source_sha256": "d42f047e4abdf935d368220496a5f850e4291416040f44525410d2ccfa84fb00",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "state note body",
+    "pixel header lookalike"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_activity_note_svg",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_activity_note_svg.puml",
+   "source_sha256": "39cce5248073e625faf28201af323424707f0b39799f133ba234d789b23aedd8",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "activity note body",
+    "svg header lookalike"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_usecase_note_upper",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_usecase_note_upper.puml",
+   "source_sha256": "052f6ac040a5125ef1cda96d78df32086b320fb69707e48e9fddb203a1c12e5e",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "usecase note body",
+    "Sprite capitalised"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_deployment_note_brace",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_deployment_note_brace.puml",
+   "source_sha256": "93b7b71fa2c527c2eecf8ef93559980f816de2f02ffe30b1c395b3e725021524",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "deployment note body",
+    "pixel header lookalike"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_component_legend_upper",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_component_legend_upper.puml",
+   "source_sha256": "16fbfeab3cbc22ce12ad5f21b66a49485be18cb594f7a3d3e424c7b05abf7ab2",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "legend body",
+    "component"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_class_member_svg",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_class_member_svg.puml",
+   "source_sha256": "0f572451758f16e4d3963eaf902382fb0b1df1667f9f1d6ed22e0e0efccd18f0",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "class body",
+    "svg header lookalike"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_class_top_level_text",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_class_top_level_text.puml",
+   "source_sha256": "407ec00c50dd17fb84b6f747773a9f449253cf23b08bb4f41d4e4eae17a4027a",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "top-level Sprite text",
+    "class",
+    "CommandSpriteFile"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_component_top_level_text",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_component_top_level_text.puml",
+   "source_sha256": "814a65250399792b4cd0ab0a48fff3b14545641876717f2aa12de07c05938f8b",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "top-level Sprite text",
+    "component",
+    "CommandSpriteFile"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_unclosed_pixel_object",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_unclosed_pixel_object.puml",
+   "source_sha256": "5f3e43473a76dddd1c900806003e859b0b27c339132eafe8d4c705fb71fcad34",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "unclosed pixel",
+    "object"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_unclosed_svg_object",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_unclosed_svg_object.puml",
+   "source_sha256": "3060d263cbb0a72f1fd947fac480c3dd8cc0ef70764cc27c7db85ab6311a4db4",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "unclosed svg",
+    "object"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_unclosed_pixel_deployment",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_unclosed_pixel_deployment.puml",
+   "source_sha256": "92a710e3deb689d2de71c20c43c142de2c33e5a88dc91108f27e3c8c2d6e84f2",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "unclosed pixel",
+    "deployment"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_unclosed_svg_deployment",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_unclosed_svg_deployment.puml",
+   "source_sha256": "9ced2334496acc58b1df3d2fb5d02ab40d10c4caee1edbdf2b8c3cad5fe596bd",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "unclosed svg",
+    "deployment"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_unclosed_pixel_activity_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_unclosed_pixel_activity_legacy.puml",
+   "source_sha256": "cc1cd60483ab6d57abd30a70fd1cea13a1425d28efb50efee6183444814cb73f",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "unclosed pixel",
+    "activity_legacy"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_unclosed_svg_activity_legacy",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_unclosed_svg_activity_legacy.puml",
+   "source_sha256": "26317ccdb78cc6dc616a9d5749967b023d54cd95135a8b44f957aeeecd0c9a90",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "unclosed svg",
+    "activity_legacy"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_unclosed_pixel_timing",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_unclosed_pixel_timing.puml",
+   "source_sha256": "c3bdea491df6bade342fa7d034f4eeec0572e5df411b2ea7f64c656eeacb6606",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "unclosed pixel",
+    "timing"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_unclosed_svg_timing",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_unclosed_svg_timing.puml",
+   "source_sha256": "3a27719f35105f92b9e122441caf5215da7418921f2cdf6ae82fe75b721a227d",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "unclosed svg",
+    "timing"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_unclosed_svg_mindmap",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_unclosed_svg_mindmap.puml",
+   "source_sha256": "cf729fbe8f8951ca3826116341a50ac02548b7e4cccb7d7208ca1d4796717986",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "unclosed svg",
+    "mindmap"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_empty_pixel_class",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_empty_pixel_class.puml",
+   "source_sha256": "f51272ac2def175f603c3dedce37713de7ca3a065ddaeab9c7f8a9320dd0be22",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "empty pixel body",
+    "No sprite defined.",
+    "class"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_graylevel_component",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_graylevel_component.puml",
+   "source_sha256": "b3773a46ca4daa3ecb0cc0c6ee9894365a168637e8fc168ece523eb6f377a519",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "graylevel 7",
+    "component"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_sprite_file_missing_deployment",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_sprite_file_missing_deployment.puml",
+   "source_sha256": "db7568348dd6484cfdbf3d89fce44c02bb762f81398613ac1e584a95ba739ab6",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "CommandSpriteFile",
+    "missing file",
+    "deployment"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  },
+  {
+   "name": "mk2_compressed_bad_class",
+   "source": "/Users/marcelo/Library/Caches/rustuml-sprite-claude-maker/batch2/inputs/mk2_compressed_bad_class.puml",
+   "source_sha256": "b5a29ef40c34a260ad5d9741212f654f07abfa160c1c547b6d3a379940e0c9ca",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": false,
+   "axes": [
+    "z-compressed",
+    "Cannot decode sprite.",
+    "class"
+   ],
+   "mechanism": "sprite-command-post-tim-ownership"
+  }
+ ]
+}

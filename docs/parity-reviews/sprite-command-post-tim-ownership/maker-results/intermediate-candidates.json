@@ -1,0 +1,39 @@
+{
+ "after-c1": {
+  "match": 221,
+  "nonpositive-rejected": 286,
+  "nonpositive-accepted": 6,
+  "mismatch": 348
+ },
+ "after-c2": {
+  "match": 221,
+  "nonpositive-rejected": 287,
+  "nonpositive-accepted": 5,
+  "mismatch": 348
+ },
+ "after-c3": {
+  "match": 229,
+  "nonpositive-rejected": 287,
+  "nonpositive-accepted": 5,
+  "mismatch": 340
+ },
+ "before": {
+  "match": 180,
+  "nonpositive-accepted": 25,
+  "mismatch": 367,
+  "nonpositive-rejected": 267,
+  "valid-error": 22
+ },
+ "notes": {
+  "after-c1": "post-TIM sprite group; sprite offered last in every family",
+  "after-c2": "description/activity families offer command starts first (Java addCommonCommands1 position); production 95cf85252",
+  "after-c3": "+ participant tooltip/residue warnings; production ecbd75ec8",
+  "after-c4": "+ created head without link anchor; production 87bdb0feb (final)"
+ },
+ "after-c4": {
+  "match": 230,
+  "nonpositive-rejected": 287,
+  "nonpositive-accepted": 5,
+  "mismatch": 339
+ }
+}

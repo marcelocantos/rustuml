@@ -1,0 +1,20 @@
+{
+ "pairs": {
+  "nonpositive-rejected->nonpositive-rejected": 201,
+  "match->match": 11181,
+  "nonpositive-accepted->nonpositive-accepted": 997,
+  "mismatch->mismatch": 70,
+  "nonpositive-accepted->nonpositive-rejected": 1,
+  "compare-101->compare-101": 100
+ },
+ "changes": [
+  {
+   "source": "test-diagrams/golden/edge-cases/edge_render_sprite.puml",
+   "cohort": "golden",
+   "name": null,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  }
+ ]
+}
