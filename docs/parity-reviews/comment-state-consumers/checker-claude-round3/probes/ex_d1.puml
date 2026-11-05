@@ -1,0 +1,9 @@
+@startuml
+state Yard {
+  state Gate {
+    Truck --> out
+    state out <<exitPoint>>
+  }
+  out --> Scale
+}
+@enduml

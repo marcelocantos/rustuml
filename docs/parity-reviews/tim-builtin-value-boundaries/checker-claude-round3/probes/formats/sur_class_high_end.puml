@@ -1,0 +1,3 @@
+@startuml
+class "Lantern%substr("🦉",0,1)" as Owl
+@enduml

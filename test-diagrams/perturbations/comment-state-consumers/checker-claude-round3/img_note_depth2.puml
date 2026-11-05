@@ -1,0 +1,10 @@
+@startuml
+state Farm {
+  state Barn {
+    Hay --> Feed
+    note right of Feed : dry
+  }
+  Barn --> Yard
+}
+Farm --> Market
+@enduml

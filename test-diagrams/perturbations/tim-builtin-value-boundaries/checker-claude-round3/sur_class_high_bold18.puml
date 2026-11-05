@@ -1,0 +1,5 @@
+@startuml
+skinparam classFontSize 18
+skinparam classFontStyle bold
+class "Gull%substr("🦉",0,1)" as Gull
+@enduml

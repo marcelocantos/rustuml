@@ -1,0 +1,11 @@
+@startuml
+state Plant {
+  state Line {
+    state Cell {
+      Press --> done
+      state done <<exitPoint>>
+    }
+    done --> Trim
+  }
+}
+@enduml

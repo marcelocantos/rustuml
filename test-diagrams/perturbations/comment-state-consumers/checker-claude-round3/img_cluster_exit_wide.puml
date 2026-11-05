@@ -1,0 +1,12 @@
+@startuml
+state "Assembly Building" as Asm {
+  state "Paint Wing West" as Wing {
+    state "Spray Booth" as Booth {
+      Primer --> exitway
+      state exitway <<exitPoint>>
+    }
+    exitway --> Varnish
+  }
+  Varnish --> Dispatch
+}
+@enduml

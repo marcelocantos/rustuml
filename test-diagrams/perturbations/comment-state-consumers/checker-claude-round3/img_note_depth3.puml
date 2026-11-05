@@ -1,0 +1,13 @@
+@startuml
+state Ship {
+  state Deck {
+    state Cabin {
+      Bunk --> Lamp
+      note left of Lamp : dim
+    }
+    Cabin --> Rail
+  }
+  Deck --> Hull
+}
+Ship --> Port
+@enduml

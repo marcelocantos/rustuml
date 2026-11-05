@@ -1,0 +1,5 @@
+@startuml
+class "Ash%substr("🦉",0,1)" as Ash
+class "%substr("🦉",1,1)Elm" as Elm
+Ash --> Elm
+@enduml

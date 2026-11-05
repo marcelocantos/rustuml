@@ -1,0 +1,12 @@
+@startuml
+state R1 {
+  state R2 {
+    state R3 {
+      state R4 {
+        [*] --> Pith
+      }
+    }
+  }
+}
+Bark --> Pith
+@enduml

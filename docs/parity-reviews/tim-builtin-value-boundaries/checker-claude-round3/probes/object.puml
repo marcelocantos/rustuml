@@ -1,0 +1,5 @@
+@startuml
+object "Order%substr("🦉",0,1)" as O
+object Item
+O --> Item
+@enduml

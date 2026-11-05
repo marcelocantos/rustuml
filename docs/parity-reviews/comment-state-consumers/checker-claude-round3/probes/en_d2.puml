@@ -1,0 +1,12 @@
+@startuml
+state Plant {
+  state Line {
+    Feed --> start1
+    state Cell {
+      state start1 <<entryPoint>>
+      start1 --> Press
+    }
+  }
+  Press --> Ship
+}
+@enduml

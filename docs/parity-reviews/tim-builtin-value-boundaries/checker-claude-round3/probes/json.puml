@@ -1,0 +1,3 @@
+@startjson
+{"k": "v%substr("🦉",0,1)"}
+@endjson

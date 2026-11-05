@@ -1,0 +1,9 @@
+@startuml
+Valve --> Core
+state Shell {
+  state Mantle {
+    [*] --> Core
+    Core --> [H*]
+  }
+}
+@enduml

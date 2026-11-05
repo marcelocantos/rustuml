@@ -1,0 +1,3 @@
+@startuml
+Alice -> Bob : ping%substr("🦉",0,1)
+@enduml

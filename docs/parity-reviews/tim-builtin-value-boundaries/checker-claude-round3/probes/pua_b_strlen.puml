@@ -1,0 +1,4 @@
+@startuml
+!$s = "􏿽"
+class "len %strlen($s)" as Len
+@enduml

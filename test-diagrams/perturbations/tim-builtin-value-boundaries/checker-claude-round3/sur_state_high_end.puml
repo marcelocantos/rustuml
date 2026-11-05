@@ -1,0 +1,4 @@
+@startuml
+state "Dock%substr("🦉",0,1)" as Dock
+[*] --> Dock
+@enduml

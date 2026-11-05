@@ -1,0 +1,5 @@
+@startuml
+actor Pilot
+usecase "Glide%substr("🦉",0,1)" as UC1
+Pilot --> UC1
+@enduml

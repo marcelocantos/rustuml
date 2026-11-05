@@ -1,0 +1,448 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "cases": [
+  {
+   "name": "pua_b_class_last",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/pua_b_class_last.puml",
+   "source_sha256": "6e4e631aeef7f400085708582d2b07d3cd9f4933b217e2db061ded52241ba986",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "literal U+10FFFD (Supplementary PUA-B) at end of class label",
+    "carrier collision",
+    "class"
+   ]
+  },
+  {
+   "name": "pua_b_class_first_carrier",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/pua_b_class_first_carrier.puml",
+   "source_sha256": "386f3e565dea90feabe126e361ebc756128af9a0d86c9a1df67bdae168ab6476",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "literal U+10F800 mid-label",
+    "carrier collision",
+    "class"
+   ]
+  },
+  {
+   "name": "pua_b_pair_lookalike",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/pua_b_pair_lookalike.puml",
+   "source_sha256": "02840169a5cc56de601dffec8e9ee9b1d9fae77dbd788514a0f1cc26dc33c931",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "literal U+10F83D U+10FE80 (carriers of the U+1F680 pair)",
+    "carrier rejoin",
+    "class"
+   ]
+  },
+  {
+   "name": "pua_b_sequence",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/pua_b_sequence.puml",
+   "source_sha256": "4a742f17fadf45bdd24155e9d697cbf4c6688f02401da59671f5b4795bafb5f9",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "literal U+10FFF0 in message text",
+    "carrier collision",
+    "sequence"
+   ]
+  },
+  {
+   "name": "pua_b_state",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/pua_b_state.puml",
+   "source_sha256": "22efadcfacb44d4dbb761e5aff9b342203d10b5b70a31439fcb25c3e0045b2db",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "literal U+10FA00 at end of state label",
+    "carrier collision (high carrier dropped)",
+    "state"
+   ]
+  },
+  {
+   "name": "pua_b_activity",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/pua_b_activity.puml",
+   "source_sha256": "11f41fa692f414765222efa6a878b8d64b8a3e60a09e8cc186d8c0de40df9764",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "literal U+10FC10 in activity label",
+    "carrier collision",
+    "activity"
+   ]
+  },
+  {
+   "name": "pua_b_strlen",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/pua_b_strlen.puml",
+   "source_sha256": "e2ec20f2b64ca166d284cf0da9ad4f9d997ed028c2d77110f4996982817e5155",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "%strlen of literal U+10FFFD",
+    "UTF-16 length",
+    "class"
+   ]
+  },
+  {
+   "name": "pua_b_title",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/pua_b_title.puml",
+   "source_sha256": "1d17135c89b1ac49455e1a983de63654dcae2a58d0568f802a8ba82942f98c1a",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "literal U+10F900 at end of title",
+    "carrier collision (high carrier dropped)",
+    "class"
+   ]
+  },
+  {
+   "name": "pua_b_usecase",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/pua_b_usecase.puml",
+   "source_sha256": "2180806ddfeddd0b6f6c2d71d3f5f676ca1de4228d794fc93b9e1f2b86ce751c",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "literal U+10FB00 in actor label drawn twice",
+    "carrier collision",
+    "usecase"
+   ]
+  },
+  {
+   "name": "pua_a_control",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/pua_a_control.puml",
+   "source_sha256": "a8c949515c9e5e1e932372cd2166b890c8a7a88c47a633629789cbc52854f92f",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "literal U+FFFFD (PUA-A, outside carrier range)",
+    "control",
+    "class"
+   ]
+  },
+  {
+   "name": "ex_wide_d1_image",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/ex_wide_d1_image.puml",
+   "source_sha256": "89f8e68546db89dcfdd4a10affaf171b380222cfade47067e0ff4ba24eea24ed",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "exitPoint with wide label in a cluster at depth 1 inside an image"
+   ]
+  },
+  {
+   "name": "en_wide_d2_image",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/en_wide_d2_image.puml",
+   "source_sha256": "8740bcb6f29a305d1eb377624ec727a80804275a1395720a4ae2184fa7ad657b",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "entryPoint with wide label in a cluster at depth 2 inside an image"
+   ]
+  },
+  {
+   "name": "ex_d2_widelabel",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/ex_d2_widelabel.puml",
+   "source_sha256": "cdf7fe28977bccf8e2ac187cae75b246f8d88156f6418e0ffad8ca89b7c0ed47",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "exitPoint with wide label, clusters nested 2 deep inside an image (renamed img_cluster_exit_wide)"
+   ]
+  },
+  {
+   "name": "ex_d2_renamed",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/ex_d2_renamed.puml",
+   "source_sha256": "7685394bbd9ace0a0d55bedecf47f2276819d68770ab797dfaead5ccbdda7cd2",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "exitPoint with short label, clusters nested 2 deep inside an image (control)"
+   ]
+  },
+  {
+   "name": "ex_wide_noimage",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/ex_wide_noimage.puml",
+   "source_sha256": "cc9137909ac08282609c7667714d70c057bc807a7023aa532a062c35f7ae2c64",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "exitPoint with wide label, root cluster path (control)"
+   ]
+  },
+  {
+   "name": "ex_d3",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/ex_d3.puml",
+   "source_sha256": "9088aec1f69547edea2ec502f8dd0634ce07d3a2558ffe27f7c3fec242df0f37",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "exitPoint, clusters nested 3 deep inside an image"
+   ]
+  },
+  {
+   "name": "nc_note_in_cluster_renamed",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/nc_note_in_cluster_renamed.puml",
+   "source_sha256": "d5abc6437887c6203a70068f48c221d0d1648853a3127f1bc5c2f592bbf49a0c",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "note inside a live cluster inside an image (renamed img_note_in_cluster)",
+    "paint order"
+   ]
+  },
+  {
+   "name": "nc_note_in_cluster_depth2",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/nc_note_in_cluster_depth2.puml",
+   "source_sha256": "a44192c6a34759b990a60067666bf8e25341fa26eea607a4462871515467a9bf",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "note inside a cluster nested 2 deep inside an image",
+    "paint order"
+   ]
+  },
+  {
+   "name": "nc_two_clusters_notes",
+   "source": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round3-claude-checker/batch-c3a/sources/nc_two_clusters_notes.puml",
+   "source_sha256": "94d730c4132c164f11cef18630b6df8165fbe8fba4344901227f35b4ca722f1a",
+   "cwd": "PRIVATE_CWD",
+   "timezone": "GMT+11:00",
+   "invocation": [
+    "/Users/marcelo/rustuml-reference/bin/reference",
+    "--cwd",
+    "PRIVATE_CWD",
+    "--timezone",
+    "GMT+11:00",
+    "--",
+    "-pipe",
+    "-tsvg"
+   ],
+   "env": {},
+   "intended_valid": true,
+   "axes": [
+    "notes in two sibling live clusters inside an image",
+    "paint order"
+   ]
+  }
+ ]
+}

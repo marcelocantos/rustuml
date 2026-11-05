@@ -1,0 +1,325 @@
+{
+ "pua_b_class_last": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "325f4ff19d16ee5421d9e1a6eae12192405c9982d6b1ad7072bf8b2baf9126dd",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "3a14de15acbf40a11b16c5a571ba5a3125a2a5f10e74f991586dd7f4bd41cd73",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: An invalid XML character (Unicode: 0xdffd) was found in the node's character data content.\n"
+  }
+ },
+ "pua_b_class_first_carrier": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "77dd711d25c99d00b31d13c30eef4953c921c05d08e4eaff78b7d483dc72cfec",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "9c26151518460ab42cf214a53c2d6b46504d171a735a6671ee7948e46f8d3927",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: Invalid UTF-16 surrogate detected: d800 20 ?\n"
+  }
+ },
+ "pua_b_pair_lookalike": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "93c0d371a92900bb79a727655bd668945f076d69ffbcb55eb0483d108f755a0f",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "f7c7ffa1b79b87d213dfc8499176e7c682f5b040282f93960823714eff8666af",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "22468cd36a987d650beb32e647a9dfa3e7140970cc2ced7cc19255ea006cfe4b",
+   "stderr_head": ""
+  }
+ },
+ "pua_b_sequence": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "fb5709446b98ac519b4ed0ce758886565d4b89b895006ac0eb3a8a9fe8abf381",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "fb5709446b98ac519b4ed0ce758886565d4b89b895006ac0eb3a8a9fe8abf381",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: An invalid XML character (Unicode: 0xdff0) was found in the node's character data content.\n"
+  }
+ },
+ "pua_b_state": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "04f06f390387aa5aae6f30737b2a2928590e84a887fe90698b3b6f98fef267d5",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "04f06f390387aa5aae6f30737b2a2928590e84a887fe90698b3b6f98fef267d5",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "5c687b39ff36a179d48abc6c375c0f1999ad20c74f245175c7b9403f605e9de6",
+   "stderr_head": ""
+  }
+ },
+ "pua_b_activity": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "32420e4566d9f0f2ef3767068aaa2e7d95241debf16b5e216ca597f13e183b68",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "32420e4566d9f0f2ef3767068aaa2e7d95241debf16b5e216ca597f13e183b68",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: An invalid XML character (Unicode: 0xdc10) was found in the node's character data content.\n"
+  }
+ },
+ "pua_b_strlen": {
+  "6617e48b8": {
+   "exit": 101,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "\nthread 'main' (45847525) panicked at crates/rustuml-parser/src/preprocess/mod.rs:2587:39:\nend byte index 20 is not a char boundary; it is inside '\\u{10fffd}' ("
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "94ba8549c9dd7c37aca8acb744f1240981719b1d34516b89f5ca3f20ac7f01c6",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "9a2137be63e463f67cf94428ca34c7837aa433e700f2566500b4dacc4defddc4",
+   "stderr_head": ""
+  }
+ },
+ "pua_b_title": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "6f028e611bb114a00cf43664112f1de0272b730ed2af031fb481280e0d19386a",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "6f028e611bb114a00cf43664112f1de0272b730ed2af031fb481280e0d19386a",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "df55897fecde4cdb3d8eda469ad0cd5c682dd6276f3bfc70279bb64c6d548e1f",
+   "stderr_head": ""
+  }
+ },
+ "pua_b_usecase": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "ab64433e199b4c28024b15e554495e8dfbc4cfdd2dbe8805c549c7e1ec39ebc4",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "ab64433e199b4c28024b15e554495e8dfbc4cfdd2dbe8805c549c7e1ec39ebc4",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 1,
+   "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "stderr_head": "export error: Invalid UTF-16 surrogate detected: db00 db00 ?\n"
+  }
+ },
+ "pua_a_control": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "0a5a22b7b19de9e9d69bbf08128b5269a1b5739cbda6ca8d4e608c3e772ffd6c",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "a560d235937ac19e021f02563b4a974fc9f4b721ba8d1c93f078c0881afe2a4c",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "a560d235937ac19e021f02563b4a974fc9f4b721ba8d1c93f078c0881afe2a4c",
+   "stderr_head": ""
+  }
+ },
+ "ex_wide_d1_image": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "7dad203b248c8cd77eb12b3c81ec85f7e00f748edae66f49dc45736e77e23e10",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "246485e93e747e2e7f6bca06f11b89be73c03e0a933de1a780f0fbe8da150e76",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "3741119f6e5461d3d8774993427bf395dd69112dee4611e623185095c3f37a57",
+   "stderr_head": ""
+  }
+ },
+ "en_wide_d2_image": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "879786b81ce41b2bbd8cda48d32f930b1eed3504485b0db9a9edd69989f53cbf",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "1c7627a23ca9d85963e31111a41b123f53b3133078ee033c58cdcc0697022a81",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "bbaecbd0c4fdcb0907e94337df891b519a4874e1c5f902a29bf52be764678b3e",
+   "stderr_head": ""
+  }
+ },
+ "ex_d2_widelabel": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "3bd5073ebd1e36eefcb2bc5d621c21c5b87fec2d8eb4c16445ca730060a8e3a0",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "b251a3dd37210cc37f696827f0aef83de158792810389acec4f3085308402c35",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "019706a4ef95dada1be14bbe7d09a4a1b372476a86beceb192a2c306fc5be1bd",
+   "stderr_head": ""
+  }
+ },
+ "ex_d2_renamed": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "c63c570332f0ba1b8aa53d80281b3935e950680917004a5655aafbdcf3a95b53",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "44e0bb6304addbf1bed84723ed3b7e1eff9a99beb7c33a9254fd96971383d863",
+   "stderr_head": "Warning: node Plant.Line.Cell.done, port P unrecognized\nWarning: node Plant.Line.Cell.done, port P unrecognized\n"
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "4e2cfe84851d7c1a8619974763a0a0ac4e220c96367417b3ab33aee469f31cad",
+   "stderr_head": "Warning: node Plant.Line.Cell.done, port P unrecognized\nWarning: node Plant.Line.Cell.done, port P unrecognized\n"
+  }
+ },
+ "ex_wide_noimage": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "51508646ab53c342abde1434cfb752494ac1a2925737b3acce0d1fe0cdc2d5ab",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "ba9891bc2cbcc5883b921f33f8d4ddcc72061c0b525f6fb92e13c77dc815e81c",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "7c731917793bdcb037516e5027e84a24fd72d0b83d270a04911f50dd84f7412c",
+   "stderr_head": ""
+  }
+ },
+ "ex_d3": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "341c97bcca18ffcbbb605498abc4519e55f2c9c6f066b9bb940a99c2a97449e6",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "3abd0f28d7eabb6eb130c3020d30b417f1b078c1cc1c0b275eeef515271706eb",
+   "stderr_head": "Warning: node Site.Hall.Bay.Rig.stop1, port P unrecognized\nWarning: node Site.Hall.Bay.Rig.stop1, port P unrecognized\n"
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "390da115b1ee8d74c2b8c317ac9bfc2b6a4e07bd2eb6a5808f83fe46efe90d2b",
+   "stderr_head": "Warning: node Site.Hall.Bay.Rig.stop1, port P unrecognized\nWarning: node Site.Hall.Bay.Rig.stop1, port P unrecognized\n"
+  }
+ },
+ "nc_note_in_cluster_renamed": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "566ad5cb4712f5c19e690cc6e1f1b2b2fa4dd35834a711624c9e9ffa73d12eef",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "fc3bb29d0fbdaa18991c97c7bba6896539abe4b9243de9f03f0c8ab6da9e3a00",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "654504262358739a264d266f9adaf46fb1847ffb8b54439e085446a0c62b2ba9",
+   "stderr_head": "Warning: node Depot.Bay.dock, port P unrecognized\n"
+  }
+ },
+ "nc_note_in_cluster_depth2": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "90384dd89137ee8e05603fbf3ac7f8d89e9e5ca7872832243489398227c5a4a5",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "188ca09ecc43b182168c54f026b3ab085c095da8dbd32ec6d7211deff60d2538",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "b979fcfd05a33d052339d634954dddbc15ba9b035c0951f7a23422c3ea255786",
+   "stderr_head": "Warning: node Depot.Wing.Bay.dock, port P unrecognized\n"
+  }
+ },
+ "nc_two_clusters_notes": {
+  "6617e48b8": {
+   "exit": 0,
+   "stdout_sha256": "6552e77a8d3449b0b3aa1112a475557f5ce8426d55c6e77dfce57217fbbbb581",
+   "stderr_head": ""
+  },
+  "6c52f2cfd": {
+   "exit": 0,
+   "stdout_sha256": "0db95d825e5b3a265e1240030b8379e9f70fa06245ce5061ebec52f0450542bf",
+   "stderr_head": ""
+  },
+  "e6f629944": {
+   "exit": 0,
+   "stdout_sha256": "22eea8036a0c373e6ba458eaf628b864bc5e20c76b4c049523275f741c7d4a2d",
+   "stderr_head": "Warning: node Depot.Bay.dock, port P unrecognized\nWarning: node Depot.Yard.gate, port P unrecognized\n"
+  }
+ }
+}

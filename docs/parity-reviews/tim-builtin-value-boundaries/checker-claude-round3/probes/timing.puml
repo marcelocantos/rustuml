@@ -1,0 +1,5 @@
+@startuml
+robust "Line%substr("🦉",0,1)" as L
+@0
+L is Idle
+@enduml
