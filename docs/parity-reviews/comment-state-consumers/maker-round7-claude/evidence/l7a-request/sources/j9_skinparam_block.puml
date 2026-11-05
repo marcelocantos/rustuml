@@ -1,0 +1,6 @@
+@startjson
+skinparam {
+  RoundCorner 20
+}
+{"k": 1}
+@endjson

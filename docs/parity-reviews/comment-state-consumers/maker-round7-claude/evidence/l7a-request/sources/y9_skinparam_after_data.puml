@@ -1,0 +1,4 @@
+@startyaml
+k: v
+skinparam tabSize 4
+@endyaml

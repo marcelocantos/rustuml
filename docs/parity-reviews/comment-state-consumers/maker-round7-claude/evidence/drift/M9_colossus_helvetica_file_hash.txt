@@ -1,0 +1,5 @@
+thread 'font_chain::tests::coverage_table_is_the_stored_reference_host_extraction' (54051820) panicked at crates/rustuml-render/src/font_chain.rs:954:36:
+assertion `left == right` failed: Helvetica: /System/Library/Fonts/Helvetica.ttc
+  left: "000000007497145281cb0ec45ff2fe7c6e18062b2a38f837d0d792d9be3a9ba3"
+ right: "658718d77497145281cb0ec45ff2fe7c6e18062b2a38f837d0d792d9be3a9ba3"
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 850 filtered out; finished in 0.05s
