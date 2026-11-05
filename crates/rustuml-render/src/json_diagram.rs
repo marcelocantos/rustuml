@@ -376,67 +376,43 @@ fn render_box_at(rows: &[FlatRow], geom: &crate::layout_oracle::JsonBox) -> Stri
     }
 
     let has_keys = rows.iter().any(|r| !r.key.is_empty());
-
-    let key_text_w = rows
-        .iter()
-        .map(|r| text_width(&r.key, FONT_SIZE, true))
-        .fold(0.0_f64, f64::max);
-    let val_text_w = rows
-        .iter()
-        .map(|r| text_width(&r.value, FONT_SIZE, false))
-        .fold(0.0_f64, f64::max);
-
-    let key_col_w = if has_keys {
-        key_text_w + 2.0 * CELL_PAD
-    } else {
-        0.0
-    };
-    let val_col_w = val_text_w + 2.0 * CELL_PAD;
-    let box_w = key_col_w + val_col_w;
-
-    let row_h = text_height(FONT_SIZE) + ROW_EXTRA;
-    let box_h = row_h * rows.len() as f64;
-
+    let metrics = box_layout_metrics(rows);
+    let (box_w, box_h) = (metrics.width, metrics.height);
     let box_right = box_x + box_w;
-    let val_col_x = box_x + key_col_w;
+    let val_col_x = box_x + metrics.key_width;
 
-    // Consume the oracle's exact y coordinates. Fall back to computed values
+    // Consume the oracle's exact y coordinates while every cell is one line
+    // (one captured text baseline per row). Fall back to computed values
     // when (defensively) the captured counts don't line up.
+    let single_line = rows
+        .iter()
+        .all(|r| r.key_cell().lines.len() == 1 && r.value_cell().lines.len() == 1);
     let baseline_of = |i: usize, row_top: f64| {
         geom.text_ys
             .get(i)
             .copied()
+            .filter(|_| single_line)
             .unwrap_or(row_top + TEXT_TOP_PAD + ascent(FONT_SIZE))
     };
-    let mut line_iter = geom.line_ys.iter();
+    let mut line_iter = geom.line_ys.iter().filter(|_| single_line);
 
     out.push_str(&rounded_rect(box_x, box_y, box_w, box_h, FILL, FILL, 1.5));
 
-    let highlight_rect = |y: f64| highlight_box(box_x, y, box_w, row_h);
     if rows[0].highlighted {
-        out.push_str(&highlight_rect(box_y));
+        out.push_str(&highlight_box(box_x, box_y, box_w, metrics.row_heights[0]));
     }
 
     let mut row_top = box_y;
     for (i, row) in rows.iter().enumerate() {
         let baseline = baseline_of(i, row_top);
-        let row_bottom = row_top + row_h;
+        let row_bottom = row_top + metrics.row_heights[i];
 
         if has_keys && !row.key.is_empty() {
-            out.push_str(&key_text(
-                box_x + CELL_PAD,
-                baseline,
-                &row.key,
-                text_width(&row.key, FONT_SIZE, true),
-            ));
+            row.key_cell()
+                .emit(&mut out, box_x + CELL_PAD, baseline, true);
         }
-
-        out.push_str(&value_text(
-            val_col_x + CELL_PAD,
-            baseline,
-            &row.value,
-            text_width(&row.value, FONT_SIZE, false),
-        ));
+        row.value_cell()
+            .emit(&mut out, val_col_x + CELL_PAD, baseline, false);
 
         // Vertical key/value separator (per row). Emit using the oracle's y's
         // when available so rounded box-relative coordinates match exactly.
@@ -450,7 +426,12 @@ fn render_box_at(rows: &[FlatRow], geom: &crate::layout_oracle::JsonBox) -> Stri
         // Horizontal separator below this row (except after the last).
         if i + 1 < rows.len() {
             if rows[i + 1].highlighted {
-                out.push_str(&highlight_rect(row_bottom));
+                out.push_str(&highlight_box(
+                    box_x,
+                    row_bottom,
+                    box_w,
+                    metrics.row_heights[i + 1],
+                ));
             }
             match line_iter.next() {
                 Some((y1, y2)) => out.push_str(&line_raw_y(box_x, box_right, y1, y2)),
@@ -497,25 +478,11 @@ fn box_layout_metrics(rows: &[FlatRow]) -> BoxLayoutMetrics {
         };
     }
     let has_keys = rows.iter().any(|r| !r.key.is_empty());
-    let key_text_w = rows
-        .iter()
-        .map(|r| text_width(&r.key, FONT_SIZE, true))
-        .fold(0.0_f64, f64::max);
-    let val_text_w = rows
-        .iter()
-        .map(|r| text_width(&r.value, FONT_SIZE, false))
-        .fold(0.0_f64, f64::max);
-    let key_col_w = if has_keys {
-        key_text_w + 2.0 * CELL_PAD
-    } else {
-        0.0
-    };
-    let val_col_w = val_text_w + 2.0 * CELL_PAD;
-    let row_h = text_height(FONT_SIZE) + ROW_EXTRA;
-    let row_heights = vec![row_h; rows.len()];
+    let (key_col_w, val_col_w) = column_widths(rows);
+    let row_heights: Vec<f64> = rows.iter().map(|row| row.height(has_keys)).collect();
     BoxLayoutMetrics {
         width: key_col_w + val_col_w,
-        height: row_heights.iter().sum(),
+        height: row_heights_sum(&row_heights),
         graph_width: key_col_w + val_col_w,
         key_width: key_col_w,
         value_width: val_col_w,
@@ -532,50 +499,38 @@ fn render_box_rows_at(rows: &[FlatRow], box_x: f64, box_y: f64) -> String {
     }
 
     let has_keys = rows.iter().any(|r| !r.key.is_empty());
-    let (box_w, box_h) = box_dimensions(rows);
-    let key_text_w = rows
-        .iter()
-        .map(|r| text_width(&r.key, FONT_SIZE, true))
-        .fold(0.0_f64, f64::max);
-    let key_col_w = if has_keys {
-        key_text_w + 2.0 * CELL_PAD
-    } else {
-        0.0
-    };
-    let val_col_x = box_x + key_col_w;
-    let row_h = text_height(FONT_SIZE) + ROW_EXTRA;
+    let metrics = box_layout_metrics(rows);
+    let (box_w, box_h) = (metrics.width, metrics.height);
+    let val_col_x = box_x + metrics.key_width;
     let box_right = box_x + box_w;
     let mut out = String::new();
 
     out.push_str(&rounded_rect(box_x, box_y, box_w, box_h, FILL, FILL, 1.5));
-    let highlight_rect = |y: f64| highlight_box(box_x, y, box_w, row_h);
     if rows[0].highlighted {
-        out.push_str(&highlight_rect(box_y));
+        out.push_str(&highlight_box(box_x, box_y, box_w, metrics.row_heights[0]));
     }
     let mut row_top = box_y;
     for (i, row) in rows.iter().enumerate() {
+        let row_h = metrics.row_heights[i];
         let baseline = row_top + TEXT_TOP_PAD + ascent(FONT_SIZE);
         let row_bottom = row_top + row_h;
         if has_keys && !row.key.is_empty() {
-            out.push_str(&key_text(
-                box_x + CELL_PAD,
-                baseline,
-                &row.key,
-                text_width(&row.key, FONT_SIZE, true),
-            ));
+            row.key_cell()
+                .emit(&mut out, box_x + CELL_PAD, baseline, true);
         }
-        out.push_str(&value_text(
-            val_col_x + CELL_PAD,
-            baseline,
-            &row.value,
-            text_width(&row.value, FONT_SIZE, false),
-        ));
+        row.value_cell()
+            .emit(&mut out, val_col_x + CELL_PAD, baseline, false);
         if has_keys {
             out.push_str(&line(val_col_x, row_top, val_col_x, row_bottom));
         }
         if i + 1 < rows.len() {
             if rows[i + 1].highlighted {
-                out.push_str(&highlight_rect(row_bottom));
+                out.push_str(&highlight_box(
+                    box_x,
+                    row_bottom,
+                    box_w,
+                    metrics.row_heights[i + 1],
+                ));
             }
             out.push_str(&line(box_x, row_bottom, box_right, row_bottom));
         }
@@ -585,6 +540,30 @@ fn render_box_rows_at(rows: &[FlatRow], box_x: f64, box_y: f64) -> String {
         box_x, box_y, box_w, box_h, "none", BORDER, 1.5,
     ));
     out
+}
+
+/// Key and value column widths: 5px padding either side of the widest cell.
+fn column_widths(rows: &[FlatRow]) -> (f64, f64) {
+    let has_keys = rows.iter().any(|r| !r.key.is_empty());
+    let key_text_w = rows
+        .iter()
+        .map(|r| r.key_cell().width(true))
+        .fold(0.0_f64, f64::max);
+    let val_text_w = rows
+        .iter()
+        .map(|r| r.value_cell().width(false))
+        .fold(0.0_f64, f64::max);
+    let key_col_w = if has_keys {
+        key_text_w + 2.0 * CELL_PAD
+    } else {
+        0.0
+    };
+    (key_col_w, val_text_w + 2.0 * CELL_PAD)
+}
+
+/// `TextBlockJson.getTotalHeight`: rows summed in order.
+fn row_heights_sum(row_heights: &[f64]) -> f64 {
+    row_heights.iter().sum()
 }
 
 fn render_nested_connector(edge: &EdgePath, dx: f64, dy: f64) -> String {
@@ -767,6 +746,211 @@ fn json_arrow_path(base: (f64, f64), tip: (f64, f64)) -> String {
     format!(r##"<path d="{d}" fill="#000000"/>"##)
 }
 
+// ── Cell text (Display.getWithNewlines + AtomText) ─────────────────────────────
+
+/// Java `Jaws` characters `Display.getWithNewlines` interprets.
+const JAWS_NEWLINE: char = '\u{E100}';
+const JAWS_NEWLINE_LEFT_ALIGN: char = '\u{E101}';
+const JAWS_NEWLINE_RIGHT_ALIGN: char = '\u{E102}';
+const JAWS_BREAKLINE: char = '\u{E103}';
+const JAWS_REAL_BACKSLASH: char = '\u{E110}';
+const JAWS_REAL_TABULATION: char = '\u{E111}';
+const JAWS_INVISIBLE_QUOTE: char = '\u{E121}';
+/// `FontConfiguration` tab size: `AtomText.tabString` is eight spaces.
+const TAB_STRING: &str = "        ";
+
+/// Horizontal alignment of a cell's lines (`Display.create0`: the natural
+/// alignment, when a line break set one, overrides the style's LEFT).
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum LineAlign {
+    Left,
+    Right,
+}
+
+/// A key or value as `TextBlockJson.getTextBlock` (341-350) draws it: the
+/// lines of `Display.getWithNewlines`, each an `AtomText` in NO_CREOLE mode.
+struct CellText {
+    lines: Vec<String>,
+    align: LineAlign,
+}
+
+impl CellText {
+    /// Port of `Display.getWithNewlines` (Display.java 258-342; the legacy
+    /// backslash rule is always on, `Pragma.legacyReplaceBackslashNByNewline`),
+    /// then `AtomText`'s `StringUtils.manageEscapedTabs` per line.
+    fn of(text: &str) -> Self {
+        let chars: Vec<char> = text.chars().collect();
+        let mut lines = Vec::new();
+        let mut current = String::new();
+        let mut align = None;
+        let mut raw = false;
+        let mut i = 0;
+        let starts = |at: usize, prefix: &str| {
+            prefix
+                .chars()
+                .enumerate()
+                .all(|(k, ch)| chars.get(at + k) == Some(&ch))
+        };
+        while i < chars.len() {
+            let c = chars[i];
+            if starts(i, "<math>") || starts(i, "<latex>") || starts(i, "[[") {
+                raw = true;
+            } else if starts(i, "</math>") || starts(i, "</latex>") || starts(i, "]]") {
+                raw = false;
+            }
+            if !raw && c == '\\' && i + 1 < chars.len() {
+                let c2 = chars[i + 1];
+                i += 1;
+                match c2 {
+                    'n' | 'r' | 'l' => {
+                        if c2 == 'r' {
+                            align = Some(LineAlign::Right);
+                        } else if c2 == 'l' {
+                            align = Some(LineAlign::Left);
+                        }
+                        lines.push(std::mem::take(&mut current));
+                    }
+                    't' => current.push('\t'),
+                    '\\' => current.push('\\'),
+                    _ => {
+                        current.push(c);
+                        current.push(c2);
+                    }
+                }
+            } else if c == JAWS_REAL_TABULATION {
+                current.push(c);
+            } else if c == JAWS_REAL_BACKSLASH {
+                current.push('\\');
+            } else if c == JAWS_NEWLINE_LEFT_ALIGN {
+                align = Some(LineAlign::Left);
+                lines.push(std::mem::take(&mut current));
+            } else if c == JAWS_INVISIBLE_QUOTE {
+            } else if c == JAWS_NEWLINE_RIGHT_ALIGN {
+                align = Some(LineAlign::Right);
+                lines.push(std::mem::take(&mut current));
+            } else if (!raw && c == JAWS_NEWLINE) || c == JAWS_BREAKLINE {
+                // `BackSlash.hiddenNewLine()` is `BLOCK_E1_NEWLINE` too.
+                lines.push(std::mem::take(&mut current));
+            } else {
+                current.push(c);
+            }
+            i += 1;
+        }
+        lines.push(current);
+        for line in &mut lines {
+            if line.contains("\\t") {
+                *line = line.replace("\\t", "\t");
+            }
+        }
+        CellText {
+            lines,
+            align: align.unwrap_or(LineAlign::Left),
+        }
+    }
+
+    fn width(&self, bold: bool) -> f64 {
+        self.lines
+            .iter()
+            .map(|line| line_width(line, bold))
+            .fold(0.0_f64, f64::max)
+    }
+
+    fn height(&self) -> f64 {
+        self.lines.len() as f64 * text_height(FONT_SIZE)
+    }
+
+    /// Emit every line; `baseline` is the first line's.
+    fn emit(&self, out: &mut String, x: f64, baseline: f64, bold: bool) {
+        let block = self.width(bold);
+        for (index, line) in self.lines.iter().enumerate() {
+            let offset = match self.align {
+                LineAlign::Left => 0.0,
+                LineAlign::Right => block - line_width(line, bold),
+            };
+            let y = baseline + index as f64 * text_height(FONT_SIZE);
+            emit_line(out, line, x + offset, y, bold);
+        }
+    }
+}
+
+fn is_tab(c: char) -> bool {
+    c == '\t' || c == JAWS_REAL_TABULATION
+}
+
+/// `AtomText.getWidth` (165-180): TAB advances to the next multiple of the
+/// width of eight spaces; other tokens advance by their width.
+fn line_width(line: &str, bold: bool) -> f64 {
+    let tab = text_width(TAB_STRING, FONT_SIZE, bold);
+    let mut x = 0.0;
+    for (token, tabbed) in tab_tokens(line) {
+        if tabbed {
+            x += tab - x % tab;
+        } else {
+            x += text_width(token, FONT_SIZE, bold);
+        }
+    }
+    x
+}
+
+/// `StringTokenizer(text, "\t" + BLOCK_E1_REAL_TABULATION, true)`: maximal
+/// non-TAB tokens and single TAB tokens (flagged `true`).
+fn tab_tokens(line: &str) -> Vec<(&str, bool)> {
+    let mut tokens = Vec::new();
+    let mut start = 0;
+    for (at, c) in line.char_indices() {
+        if is_tab(c) {
+            if start < at {
+                tokens.push((&line[start..at], false));
+            }
+            tokens.push((&line[at..at + c.len_utf8()], true));
+            start = at + c.len_utf8();
+        }
+    }
+    if start < line.len() {
+        tokens.push((&line[start..], false));
+    }
+    tokens
+}
+
+/// `AtomText.drawU` (135-158): one `UText` per non-TAB token at its x;
+/// `DriverTextSvg` (115-125) turns an all-whitespace text into NBSPs, shifts
+/// x past leading spaces and trims (`StringUtils.trin`) before writing it.
+fn emit_line(out: &mut String, line: &str, x: f64, y: f64, bold: bool) {
+    let tab = text_width(TAB_STRING, FONT_SIZE, bold);
+    let mut advance = 0.0;
+    for (token, tabbed) in tab_tokens(line) {
+        if tabbed {
+            advance += tab - advance % tab;
+            continue;
+        }
+        let token_width = text_width(token, FONT_SIZE, bold);
+        let mut text: String = if token.chars().all(is_java_regex_space) {
+            token.replace(' ', "\u{00a0}")
+        } else {
+            token.to_string()
+        };
+        let mut shift = 0.0;
+        while text.starts_with(' ') {
+            shift += text_width(" ", FONT_SIZE, bold);
+            text.remove(0);
+        }
+        let text = text.trim_matches(|c| matches!(c, ' ' | '\t' | '\r' | '\n' | '\0'));
+        let width = text_width(text, FONT_SIZE, bold);
+        let at = x + advance + shift;
+        out.push_str(&if bold {
+            key_text(at, y, text, width)
+        } else {
+            value_text(at, y, text, width)
+        });
+        advance += token_width;
+    }
+}
+
+/// Java regex `\s`: `[ \t\n\x0B\f\r]`.
+fn is_java_regex_space(c: char) -> bool {
+    matches!(c, ' ' | '\t' | '\n' | '\u{0B}' | '\u{0C}' | '\r')
+}
+
 // ── Single-box (flat) rendering ───────────────────────────────────────────────
 
 struct FlatRow {
@@ -775,6 +959,27 @@ struct FlatRow {
     /// Display text for the value (already in PlantUML display form).
     value: String,
     highlighted: bool,
+}
+
+impl FlatRow {
+    fn key_cell(&self) -> CellText {
+        CellText::of(&self.key)
+    }
+
+    fn value_cell(&self) -> CellText {
+        CellText::of(&self.value)
+    }
+
+    /// `TextBlockJson.Line.getHeightOfRow`: the taller block plus the 2 + 2
+    /// margin of `TextBlockUtils.withMargin(result, 5, 2)`.
+    fn height(&self, has_keys: bool) -> f64 {
+        let key = if has_keys {
+            self.key_cell().height()
+        } else {
+            0.0
+        };
+        key.max(self.value_cell().height()) + ROW_EXTRA
+    }
 }
 
 /// If `node` is an object or array whose every value is a scalar, return its
@@ -854,95 +1059,16 @@ fn scalar_display(v: &JsonNodeValue, format: DataFormat) -> Option<String> {
 }
 
 fn render_single_box(rows: &[FlatRow], diagram_type: &str) -> String {
-    let has_keys = rows.iter().any(|r| !r.key.is_empty());
-
-    // Column widths: 5px padding either side of the widest text in each column.
-    let key_text_w = rows
-        .iter()
-        .map(|r| text_width(&r.key, FONT_SIZE, true))
-        .fold(0.0_f64, f64::max);
-    let val_text_w = rows
-        .iter()
-        .map(|r| text_width(&r.value, FONT_SIZE, false))
-        .fold(0.0_f64, f64::max);
-
-    let key_col_w = if has_keys {
-        key_text_w + 2.0 * CELL_PAD
-    } else {
-        0.0
-    };
-    let val_col_w = val_text_w + 2.0 * CELL_PAD;
-    let box_w = key_col_w + val_col_w;
-
-    let row_h = text_height(FONT_SIZE) + ROW_EXTRA;
-    let box_h = row_h * rows.len() as f64;
-
-    let box_x = MARGIN;
-    let box_y = MARGIN;
-    let box_right = box_x + box_w;
-    let val_col_x = box_x + key_col_w;
+    let (box_w, box_h) = box_dimensions(rows);
+    let box_right = MARGIN + box_w;
 
     // Canvas dimensions: box plus the outer margin, rounded up and padded by
     // one pixel to match PlantUML's reported integer px in the root <svg>.
     let canvas_w = (box_right + MARGIN).ceil() + 1.0;
-    let canvas_h = (box_y + box_h + MARGIN).ceil() + 1.0;
+    let canvas_h = (MARGIN + box_h + MARGIN).ceil() + 1.0;
 
     let mut svg = SvgBuilder::new_plantuml(canvas_w, canvas_h, diagram_type);
-
-    // Background fill rect (stroke matches fill so only the fill shows).
-    svg.raw_inline(&rounded_rect(box_x, box_y, box_w, box_h, FILL, FILL, 1.5));
-
-    // The highlight rect for a row is emitted just before that row's top edge:
-    // immediately after the fill for the first row, otherwise just before the
-    // horizontal separator above the row.
-    let highlight_rect = |y: f64| highlight_box(box_x, y, box_w, row_h);
-    if rows[0].highlighted {
-        svg.raw_inline(&highlight_rect(box_y));
-    }
-
-    let mut row_top = box_y;
-    for (i, row) in rows.iter().enumerate() {
-        let baseline = row_top + TEXT_TOP_PAD + ascent(FONT_SIZE);
-        let row_bottom = row_top + row_h;
-
-        if has_keys && !row.key.is_empty() {
-            svg.raw_inline(&key_text(
-                box_x + CELL_PAD,
-                baseline,
-                &row.key,
-                text_width(&row.key, FONT_SIZE, true),
-            ));
-        }
-
-        svg.raw_inline(&value_text(
-            val_col_x + CELL_PAD,
-            baseline,
-            &row.value,
-            text_width(&row.value, FONT_SIZE, false),
-        ));
-
-        // Vertical separator at the key/value column boundary (per row).
-        if has_keys {
-            svg.raw_inline(&line(val_col_x, row_top, val_col_x, row_bottom));
-        }
-
-        // Horizontal separator below this row, except after the last. The next
-        // row's highlight rect (if any) is drawn immediately before it.
-        if i + 1 < rows.len() {
-            if rows[i + 1].highlighted {
-                svg.raw_inline(&highlight_rect(row_bottom));
-            }
-            svg.raw_inline(&line(box_x, row_bottom, box_right, row_bottom));
-        }
-
-        row_top = row_bottom;
-    }
-
-    // Border rect.
-    svg.raw_inline(&rounded_rect(
-        box_x, box_y, box_w, box_h, "none", BORDER, 1.5,
-    ));
-
+    svg.raw_inline(&render_box_rows_at(rows, MARGIN, MARGIN));
     svg.finalize_plantuml()
 }
 
@@ -1093,6 +1219,39 @@ mod tests {
     fn render_input(input: &str) -> String {
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         crate::render_svg(&diagram)
+    }
+
+    #[test]
+    fn cells_follow_display_get_with_newlines() {
+        use super::{CellText, LineAlign};
+        let lines = |text: &str| CellText::of(text).lines;
+        assert_eq!(lines(r"Ink\nWell"), ["Ink", "Well"]);
+        assert_eq!(lines(r"x\ty"), ["x\ty"]);
+        assert_eq!(lines(r"p\\q"), [r"p\q"]);
+        // Unknown pairs stay literal; a doubled backslash before t leaves
+        // backslash-t, which AtomText's manageEscapedTabs turns into a TAB.
+        assert_eq!(lines(r"c\u0041 \q"), [r"c\u0041 \q"]);
+        assert_eq!(lines(r"a\\tb"), ["a\tb"]);
+        let right = CellText::of(r"wide line\rx");
+        assert_eq!(right.lines, ["wide line", "x"]);
+        assert!(right.align == LineAlign::Right);
+        // Raw mode keeps backslash pairs inside [[...]].
+        assert_eq!(lines(r"[[a\nb]]"), [r"[[a\nb]]"]);
+    }
+
+    #[test]
+    fn renamed_yaml_cells_split_lines_and_tab_stops() {
+        let svg = render_input("@startyaml\nkey: \"Ink\\nWell\"\nother: \"go \\t on\"\n@endyaml");
+        assert!(
+            svg.contains(">Ink</text>") && svg.contains(">Well</text>"),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(">go</text>") && svg.contains(">on</text>"),
+            "{svg}"
+        );
+        // Two lines in the first row: 2 x 16.4883 + 4.
+        assert!(svg.contains(r#"y1="10" y2="46.9766""#), "{svg}");
     }
 
     #[test]
