@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "mechanism": "comment-state-consumers",
+  "sub_mechanism": "Graphviz node creation order in a state SVEK scope that has live clusters (Basin/Lock family: history_depth2_crossing, AW rh_deep_depth3; review-3 obligation 4)",
+  "status": "maker causal account before draft; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "svek/DotStringFactory.java#createDotString (lines 184-192): root.printCluster1 (inverted-link start nodes), lines0, root.printCluster2, lines1.",
+    "svek/Cluster.java#printCluster2 (538-575): the cluster's own NORMAL nodes (getNodesOrderedWithoutTop, Bibliotekon creation order) are appended first, then each child cluster's printInternal; ClusterDotString.printInternal (74-180) emits the child's ranked border points and its own nodes before its subclusters.",
+    "Graphviz's DOT reader creates nodes in textual order, and dot's initial mincross order follows node creation: the root's own node (Probe/Pump) is created before every node of the Ring1/Basin subgraph, so it is placed left of the cluster in both Java references."
+  ],
+  "rust_locations": [
+    "crates/rustuml-layout/src/graph.rs#graphviz_node_creation_order: with plantuml_svek_node_order and SVEK clusters, the unclustered nodes come first and clusters are then visited in preorder (exactly printCluster2); without the flag, clusters are visited first and the unclustered nodes are appended at the end.",
+    "crates/rustuml-render/src/state.rs#layout_autonomous_scope: builds its LayoutGraph without with_plantuml_svek_node_order, unlike render_non_autarkic_root_clusters (and the class, component, deployment, usecase and archimate SVEK paths)."
+  ],
+  "causal_divergence": "A state scope with live clusters (the outer scope of build_autonomous_composite, or an image region) creates its own nodes after the cluster nodes, the reverse of Java's DOT text, so Graphviz mirrors the layout: Probe right of Ring1 (rh_deep_depth3), Pump right of Basin (history_depth2_crossing).",
+  "invariant": "Every state SVEK scope creates its Graphviz nodes in Java's DOT text order: inverted-link starts and line0 nodes, then the scope's own nodes, then each live cluster's nodes in preorder.",
+  "planned_change": "layout_autonomous_scope builds its LayoutGraph with with_plantuml_svek_node_order(). The flag only changes graphviz_node_creation_order when SVEK clusters exist, so scopes without live clusters keep their DOT input.",
+  "declared_residue": [
+    "The order of a cluster's own nodes is Rust's layout id order; Java's is Bibliotekon creation order. The two agree on the relayed cases; probes with leaves created in a different order are relayed."
+  ],
+  "perturbation_axes": [
+    "a root node linked into clusters nested 1-4 deep, declared before and after the groups",
+    "two root nodes on either side, renamed labels",
+    "clusters inside an image with a sibling leaf in the image"
+  ],
+  "precommitted_measurement": {
+    "oracle": "strict compare on history_depth2_crossing and AW rh_deep_depth3 plus fresh probes; whole CLI output over the 16,441-source sweep against the merged base",
+    "expect_fixed": [
+      "history_depth2_crossing and AW rh_deep_depth3 strict-match"
+    ],
+    "expect": "only state diagrams whose autonomous scopes have live clusters change; zero lost strict matches"
+  }
+}
