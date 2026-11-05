@@ -1,0 +1,25 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "status": "maker addendum after relay results, before the data change is committed; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "amends": "per-face-facts-account.json (c518a95d5), text-line-runs-account.json; results.json (98e14bc09)",
+ "relay_results": {
+  "Monkey Man per-style extraction": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round9-mm-styles (out/SHA256SUMS ad8e6566043819726c0146b76261b2aea3710eb83372d59547b46c3132f3ed55, run.stdout d117fa00..., exit 0, empty stderr); extractor sources equal the maker branch's tools/ (c240a99b..., 7920e8dc...)",
+  "Java face probe": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round9-face-probe/probe.stdout (8679536...)",
+  "BP (M9A)": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round9-m9a (reference-results.json 7afd0ed9...)"
+ },
+ "findings": [
+  "Monkey Man round 9 equals monkeyman-round6 byte for byte (except #host) on all 12 faces round 6 covered: no reference-host drift since round 6.",
+  "The 24 own-cmap/plan extractions equal colossus's (except #host).",
+  "The ten italic faces' chain runs on Monkey Man differ from the provisional colossus extraction by 215-219 complex-path code points and 5 simple-path code points (the T14.6.8 host difference, e.g. PingFang from a MobileAsset), so the provisional data is replaced.",
+  "Verdana Italic a1149e84..., Verdana Bold Italic 252ef50e... on the reference host (equal to colossus).",
+  "BP: every U+2029/U+0085 probe and control is rejected by Java (exit 200, 'Syntax Error? (Assumed diagram type: sequence)', error line 2 = the class line). PlantUML command regexes use '.', which java.util.regex does not match against U+0085, U+2028 or U+2029 without DOTALL, so no single-line command can carry them. AtomText (71806a23 klimt/creole/legacy/AtomText.java 80-86) converts <U+XXXX> and &#N; after command parsing, but RustUML does not port that conversion (it draws '<U+2029>' literally), so such a probe cannot isolate obligation 2. Multi-line note and activity bodies are collected without a content regex; probes of that form discriminate merge from tip and are requested as M9B."
+ ],
+ "change": [
+  "tools/font-chain-reference/monkeyman-round9 = the relay's out/ byte for byte (55 files, SHA256SUMS ad8e6566...) plus an unlisted README; font_chain_coverage.rs is regenerated with it as both the chain and the own-cmap directory for all 22 faces.",
+  "tools/font-chain-reference/colossus-styled-chain is removed (superseded). colossus-primary-faces stays (earlier Monkey Man hash records, colossus file hashes), pinned by the test.",
+  "Drift gate: PROVISIONAL_CHAIN and PENDING_REFERENCE_HASH are removed (both empty); every zeroing face's file must be hashed by the reference host's records, including the extraction's own font-hashes.txt."
+ ],
+ "expect": "No golden, perturbation or batch output changes from the data swap except text holding one of the code points where the italic faces' Monkey Man chain runs differ from colossus's, measured in an italic modelled face; BO and BP outputs unchanged."
+}
