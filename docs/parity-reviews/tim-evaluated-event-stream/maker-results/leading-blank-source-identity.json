@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "target": "T14.24",
+  "status": "maker trace; no production change; owner decision required (target conflicts with owner-selected input contract b62d8ce96)",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_trace": [
+    "Pipe.java#readSingleDiagram (lines 180-210): once @start is seen, every following line, blank or not, is appended with \\n; only lines before the start marker are discarded.",
+    "Pipe.java#managePipe (lines 87-91) passes that string to SourceStringReader.",
+    "BlockUmlBuilder.java#init (lines 95-135): every preprocessor line from the start directive to the end directive is added to the block; no blank-line trimming.",
+    "core/UmlSource.java#loadInternal: keeps every located line; getPlainString/seed therefore include the leading blanks, and StringLocated locations keep their raw line numbers.",
+    "picoweb/PicoWebServer.handleGET -> code/TranscoderImpl.decode -> DiagramSourceCompressor.decompress/clean: GET alone trims outer blank lines before SourceStringReader (traced and reproduced in tim-evaluated-event-stream/checker-support/README.md)."
+  ],
+  "finding": "The three goldens named in T14.24 (activity/act_skinparam_shadowing, activity/act_skinparam2_shadowing_true, edge-cases/edge_whitespace_multiple_blank_lines) were generated through picoweb GET, whose DiagramSourceCompressor removes the leading blanks. Pinned Java pipe/file/POST keep them, giving shadow id fj5dajj5vm98p and data-source-line 4/8/12 (checker reproduction), which is exactly what the shipped Rust CLI on this branch emits. docs/reference-bootstrap.md (owner-selected input contract, policy commit b62d8ce96, present in parity-recovery 9834a7194) adopts the raw CLI/file behavior, forbids applying GET's decompress normalization to raw input, and names these same three goldens as documented historical mismatches.",
+  "unit_test": "filter_registry::tests::parser_source_identity_matches_java_shadow_id_after_initial_blanks (added in 0c18b0be6, July 2026, before the contract) expects fbdz2fx1jlqnt, the seed of the source with its two leading blanks removed (GET normalization). Under raw pipe semantics the seed of the same input is f1jczin02njk7. The test is left unchanged and failing; changing its expectation needs the same owner sign-off as the parser assertion update 136ee057e.",
+  "decision_not_taken": "Porting DiagramSourceCompressor into the reader would satisfy T14.24's acceptance items 2 and 3 but contradicts the owner contract and pinned Java pipe output, and would fail acceptance item 4 (fresh raw-pipe references with 1 and 3 leading blanks). Not implemented.",
+  "theme_override_gain": "preprocessing/preproc_complex_theme_override passes after the packet because the identity source now includes the evaluated !theme stream (bdda66260, TIM evaluated events): the gradient prefix becomes the golden's g5uh6twufn3b0. The source has no leading blanks, so the front ends agree; the gain is genuine.",
+  "held_out_requested": "refs-batch1: blank0/blank1/blank3 x activity/class with shadowing on, raw -pipe references (relay pending)"
+}
