@@ -5094,8 +5094,9 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
             crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
         }),
     };
-    let width = outer.width.ceil() as i64;
-    let height = outer.height.ceil() as i64;
+    // Java `SvgGraphics.ensureVisible` (142-147): `(int)(x + 1)`.
+    let width = svg_ensure_visible_dimension(outer.width) as i64;
+    let height = svg_ensure_visible_dimension(outer.height) as i64;
     let mut svg = String::with_capacity(4096);
     let defs = context
         .shadow_filter_id
