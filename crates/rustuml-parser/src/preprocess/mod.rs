@@ -231,6 +231,62 @@ fn extract_sprites(lines: &mut [String]) -> HashMap<String, SpriteData> {
     sprites
 }
 
+/// First code point of each Unicode 15.0 (JDK 21 `java.lang.Character`) BMP
+/// run of general category Nd. Every run is ten consecutive digits 0..9.
+const BMP_DECIMAL_DIGIT_ZEROS: [u16; 37] = [
+    0x0030, 0x0660, 0x06F0, 0x07C0, 0x0966, 0x09E6, 0x0A66, 0x0AE6, 0x0B66, 0x0BE6, 0x0C66, 0x0CE6,
+    0x0D66, 0x0DE6, 0x0E50, 0x0ED0, 0x0F20, 0x1040, 0x1090, 0x17E0, 0x1810, 0x1946, 0x19D0, 0x1A80,
+    0x1A90, 0x1B50, 0x1BB0, 0x1C40, 0x1C50, 0xA620, 0xA8D0, 0xA900, 0xA9D0, 0xA9F0, 0xAA50, 0xABF0,
+    0xFF10,
+];
+
+/// Java `Character.digit(char, 10)`: the decimal value of a UTF-16 unit whose
+/// category is Nd. Surrogate units are never digits.
+fn java_decimal_digit(unit: u16) -> Option<i32> {
+    const RADIX: u16 = 10;
+    BMP_DECIMAL_DIGIT_ZEROS
+        .iter()
+        .find(|&&zero| (zero..zero + RADIX).contains(&unit))
+        .map(|&zero| i32::from(unit - zero))
+}
+
+/// Java `Integer.parseInt(s, 10)` over UTF-16 units: an optional leading
+/// sign, then at least one `Character.digit` digit, accumulated negatively
+/// with the JDK's `multmin` and `limit + digit` overflow checks.
+fn java_parse_int(units: &[u16]) -> Option<i32> {
+    const RADIX: i32 = 10;
+    let (&first, _) = units.split_first()?;
+    let mut index = 0;
+    let mut negative = false;
+    let mut limit = -i32::MAX;
+    if first < u16::from(b'0') {
+        if first == u16::from(b'-') {
+            negative = true;
+            limit = i32::MIN;
+        } else if first != u16::from(b'+') {
+            return None;
+        }
+        if units.len() == 1 {
+            return None;
+        }
+        index = 1;
+    }
+    let multmin = limit / RADIX;
+    let mut result: i32 = 0;
+    for &unit in &units[index..] {
+        let digit = java_decimal_digit(unit)?;
+        if result < multmin {
+            return None;
+        }
+        result *= RADIX;
+        if result < limit + digit {
+            return None;
+        }
+        result -= digit;
+    }
+    Some(if negative { result } else { -result })
+}
+
 fn svg_id_seed_prefix(source: &str) -> String {
     // Java provenance: `StringUtils.seed` is a wrapping signed-long 31x hash
     // over UTF-16 code units; `SvgGraphics.getSeed` formats its absolute value
@@ -3060,9 +3116,9 @@ impl PreprocessContext {
                 // IntVal.executeReturnFunction uses Integer.parseInt on TValue's
                 // complete display, not numeric coercion or floating truncation.
                 let text = values[0].to_display();
-                return match text.parse::<i32>() {
-                    Ok(value) => Value::Int(value),
-                    Err(_) => {
+                return match java_parse_int(&values[0].utf16_units()) {
+                    Some(value) => Value::Int(value),
+                    None => {
                         self.fail(format!("Cannot convert {text} to integer."));
                         Value::Str(String::new())
                     }
@@ -4279,9 +4335,51 @@ mod tests {
             assert!(matches!(ctx.eval_expr_to_value(expression), Value::Int(n) if n == expected));
             assert!(ctx.error.is_none());
         }
-        for text in ["12.5", " 7", "2147483648", "", "-2147483649"] {
+        for text in [
+            "12.5",
+            " 7",
+            "2147483648",
+            "",
+            "-2147483649",
+            "+",
+            "-",
+            "+-1",
+            "²",
+            "Ⅻ",
+            "𝟎",
+        ] {
             let mut ctx = PreprocessContext::new(None, false);
             ctx.eval_expr_to_value(&format!("%intval(\"{text}\")+%strlen()"));
+            assert_eq!(
+                ctx.error.unwrap().message,
+                format!("Cannot convert {text} to integer.")
+            );
+        }
+    }
+
+    #[test]
+    fn intval_follows_integer_parse_int_unicode_digits() {
+        // Integer.parseInt uses Character.digit(char, 10): any BMP Nd unit.
+        for (expression, expected) in [
+            ("%intval(\"+１２３\")", 123),
+            ("%intval(\"-٤٢\")", -42),
+            ("%intval(\"1२3\")", 123),
+            ("%intval(\"۰۹\")", 9),
+            ("%intval(\"꧰꧹\")", 9),
+            ("%intval(\"-２１４７４８３６４８\")", i32::MIN),
+            ("%intval(\"２１４７４８３６４７\")", i32::MAX),
+        ] {
+            let mut ctx = PreprocessContext::new(None, false);
+            let value = ctx.eval_expr_to_value(expression);
+            assert!(
+                matches!(value, Value::Int(n) if n == expected),
+                "{expression}: {value:?}"
+            );
+            assert!(ctx.error.is_none());
+        }
+        for text in ["２１４７４８３６４８", "-２１４７４８３６４９", "١٢x"] {
+            let mut ctx = PreprocessContext::new(None, false);
+            ctx.eval_expr_to_value(&format!("%intval(\"{text}\")"));
             assert_eq!(
                 ctx.error.unwrap().message,
                 format!("Cannot convert {text} to integer.")
