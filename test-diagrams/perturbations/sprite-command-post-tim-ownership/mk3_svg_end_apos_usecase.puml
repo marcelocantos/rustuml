@@ -1,0 +1,5 @@
+@startuml
+sprite $mark <svg width="4" height="4">
+<text x="0" y="3"> 'v'</text></svg>
+actor Hero
+@enduml

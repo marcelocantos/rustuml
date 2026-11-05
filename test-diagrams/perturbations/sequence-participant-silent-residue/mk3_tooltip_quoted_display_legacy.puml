@@ -1,0 +1,5 @@
+@startuml
+participant "Long name" as L [[https://example.org/l{ l }]]
+participant Moss
+L -> Moss : go
+@enduml

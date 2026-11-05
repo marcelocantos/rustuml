@@ -1,0 +1,1347 @@
+[
+ {
+  "source": "ck3_component_skinparam_block_sprite_line.puml",
+  "golden": "ck3_component_skinparam_block_sprite_line.svg",
+  "cohort": "AX",
+  "name": "ck3_component_skinparam_block_sprite_line",
+  "intended_valid": true,
+  "axes": [
+   "skinparam { } body",
+   "sprite-file lookalike",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "9024d114e89b194366f8074b0b56d8e8304f93ccb309cc748a63117423fb6d6f",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_deployment_style_block_sprite_line.puml",
+  "golden": "ck3_deployment_style_block_sprite_line.svg",
+  "cohort": "AX",
+  "name": "ck3_deployment_style_block_sprite_line",
+  "intended_valid": true,
+  "axes": [
+   "<style> then note-of body",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "a33eabf184727532009777ac5a98658b67e9b003285aa253e1d0ff2c4b3a0138",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_component_type1_stereo_color_url.puml",
+  "golden": "ck3_component_type1_stereo_color_url.svg",
+  "cohort": "AX",
+  "name": "ck3_component_type1_stereo_color_url",
+  "intended_valid": true,
+  "axes": [
+   "TYPE1 with stereotype, colour and url",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "0a90ac3b557584b2fe358b51367cac1fab314505b570400062e0e250589a37d5",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_usecase_business_actor_type1.puml",
+  "golden": "ck3_usecase_business_actor_type1.svg",
+  "cohort": "AX",
+  "name": "ck3_usecase_business_actor_type1",
+  "intended_valid": true,
+  "axes": [
+   "TYPE1 actor/",
+   "usecase"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ml.PSystemBuilder.createPSystem(PSystemBuilder.java:237)\n\tat net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)\n\tat net.sourceforge.plantuml.SourceStringReader.updateStatus(SourceStringReader.java:276)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:93)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\nYou should send a mail to plantuml@gmail.com or post to https://plantuml.com/qa with this log (V1.2026.3beta6)\nError java.lang.IllegalStateException\njava.lang.IllegalStateException\n\tat net.sourceforge.plantuml.descdiagram.command.CommandCreateElementMultilines.executeNow(CommandCreateElementMultilines.java:146)\n\tat net.sourceforge.plantuml.descdiagram.command.CommandCreateElementMultilines.executeNow(CommandCreateElementMultilines.java:71)\n\tat net.sourceforge.plantuml.command.CommandMultilines2.execute(CommandMultilines2.java:117)\n\tat net.sourceforge.plantuml.command.ProtectedCommand.execute(ProtectedCommand.java:57)\n\tat net.sourceforge.plantuml.core.AbstractDiagram.executeCommand(AbstractDiagram.java:169)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.executeFewLines(PSystemCommandFactory.java:148)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:104)\n\tat net.sourceforge.plantuml.command.PSystemCommandFactory.createSystem(PSystemCommandFactory.java:61)\n\tat net.sourceforge.plantuml.PSystemBuilder.createPSystem(PSystemBuilder.java:237)\n\tat net.sourceforge.plantuml.BlockUml.getDiagram(BlockUml.java:193)\n\tat net.sourceforge.plantuml.SourceStringReader.updateStatus(SourceStringReader.java:276)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:93)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\nYou should send a mail to plantuml@gmail.com or post to https://plantuml.com/qa with this log (V1.2026.3beta6)\nERROR\n4\nYou should send a mail to plantuml@gmail.com or post to https://plantuml.com/qa with this log (V1.2026.3beta6) java.lang.IllegalStateException (Assumed diagram type: class)\n",
+  "java_svg_sha256": "96843e972dab4b86bc5ba846d49b6c9198e0fd0e1badc98d85fa499f26162abc",
+  "java_markers": [
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck3_component_note_left_of_bracket_code.puml",
+  "golden": "ck3_component_note_left_of_bracket_code.svg",
+  "cohort": "AX",
+  "name": "ck3_component_note_left_of_bracket_code",
+  "intended_valid": true,
+  "axes": [
+   "note of [code] body",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "26615601578eb0a85ccb65892ba91d04b8d69885c11c17d9fb9d77405af095e4",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_usecase_note_top_of_paren.puml",
+  "golden": "ck3_usecase_note_top_of_paren.svg",
+  "cohort": "AX",
+  "name": "ck3_usecase_note_top_of_paren",
+  "intended_valid": true,
+  "axes": [
+   "note of (usecase) body",
+   "usecase"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "dd311231a84e454c28331270d5583219e311443a6bf687ddc9948415b320ec80",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_component_note_of_color_url.puml",
+  "golden": "ck3_component_note_of_color_url.svg",
+  "cohort": "AX",
+  "name": "ck3_component_note_of_color_url",
+  "intended_valid": true,
+  "axes": [
+   "note of entity with colour and url",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "5ea4ea1ad971be553fc205f07c4b118ea6a60b5c369c455f69209b95409daf3c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_component_note_as_stereo_color.puml",
+  "golden": "ck3_component_note_as_stereo_color.svg",
+  "cohort": "AX",
+  "name": "ck3_component_note_as_stereo_color",
+  "intended_valid": true,
+  "axes": [
+   "note as code with stereotype and colour",
+   "sprite-file lookalike",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "937604429d9f3b2d5e3d6613a996b472306a904182f930c3c21c9fa3c1cc79b9",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_state_note_left_of_color.puml",
+  "golden": "ck3_state_note_left_of_color.svg",
+  "cohort": "AX",
+  "name": "ck3_state_note_left_of_color",
+  "intended_valid": true,
+  "axes": [
+   "state note of entity with colour",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "f18475abbb472872201690144d6762b871f154939f1dc131d01fec2c356ed18d",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_state_note_bracket_body.puml",
+  "golden": "ck3_state_note_bracket_body.svg",
+  "cohort": "AX",
+  "name": "ck3_state_note_bracket_body",
+  "intended_valid": true,
+  "axes": [
+   "state note with { } body",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e447f3a91d767f0da1408caea0d7b72fb05a3b7fed4eafa9fd5e50498faf7fe3",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_class_generic_extends_body.puml",
+  "golden": "ck3_class_generic_extends_body.svg",
+  "cohort": "AX",
+  "name": "ck3_class_generic_extends_body",
+  "intended_valid": true,
+  "axes": [
+   "class generic + extends body",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "55ddffb27e2633cf1bb242defd74641bf9fe873d69601150a17ee4f33aa8e67d",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_class_enum_upper_body.puml",
+  "golden": "ck3_class_enum_upper_body.svg",
+  "cohort": "AX",
+  "name": "ck3_class_enum_upper_body",
+  "intended_valid": true,
+  "axes": [
+   "enum body",
+   "uppercase",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "5484ce36415b7112fb46ca24c706d83ad45b1760f61e578afef91f224cc38b4c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_object_quoted_as_color_body.puml",
+  "golden": "ck3_object_quoted_as_color_body.svg",
+  "cohort": "AX",
+  "name": "ck3_object_quoted_as_color_body",
+  "intended_valid": true,
+  "axes": [
+   "object quoted as, colour",
+   "object"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "4763afb9f6519b25ce1370a7ba5157b9739af188b7e835737aec0e8382b16695",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_activity_legacy_note_on_link_body.puml",
+  "golden": "ck3_activity_legacy_note_on_link_body.svg",
+  "cohort": "AX",
+  "name": "ck3_activity_legacy_note_on_link_body",
+  "intended_valid": true,
+  "axes": [
+   "legacy note on link body",
+   "activity legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "c18ff84497fa17cc90dcd06929827b9e8a53209d1c3882d2be0afb82830c995d",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_activity_legacy_long_link_arrow_label.puml",
+  "golden": "ck3_activity_legacy_long_link_arrow_label.svg",
+  "cohort": "AX",
+  "name": "ck3_activity_legacy_long_link_arrow_label",
+  "intended_valid": true,
+  "axes": [
+   "legacy long link with arrow label",
+   "activity legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "6c6b3a3f05b2e8e0a0c95e7937f923e3ec6801326460ec82f986236ee7a1cfd9",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_activity_legacy_partition_note.puml",
+  "golden": "ck3_activity_legacy_partition_note.svg",
+  "cohort": "AX",
+  "name": "ck3_activity_legacy_partition_note",
+  "intended_valid": true,
+  "axes": [
+   "legacy note inside partition",
+   "deeper nesting"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "a984727a150c6a8fdfa6196c595b69ce26963f62cc46e21d1c1a64528a450d19",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_component_legend_nested_header_text.puml",
+  "golden": "ck3_component_legend_nested_header_text.svg",
+  "cohort": "AX",
+  "name": "ck3_component_legend_nested_header_text",
+  "intended_valid": true,
+  "axes": [
+   "legend body containing header lookalike",
+   "nested"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e940bec2ff4e7e67302b6b42285a2d3cc1c52373aebbad00d4bdab2a1a99551c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_state_header_embedded_end_lookalike.puml",
+  "golden": "ck3_state_header_embedded_end_lookalike.svg",
+  "cohort": "AX",
+  "name": "ck3_state_header_embedded_end_lookalike",
+  "intended_valid": true,
+  "axes": [
+   "header body with embedded diagram",
+   "END lookalike inside {{ }}",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "688a18d6935a13a092c720ad028fa55b52086a9e748b9625168096aaffaeade3",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_deployment_unterminated_legend_at_enduml.puml",
+  "golden": "ck3_deployment_unterminated_legend_at_enduml.svg",
+  "cohort": "AX",
+  "name": "ck3_deployment_unterminated_legend_at_enduml",
+  "intended_valid": false,
+  "axes": [
+   "unterminated legend body ends at @enduml",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n2\nSyntax error: legend (Assumed diagram type: component)\n",
+  "java_svg_sha256": "a239e6ff4893a515334a3cf64fa2ba6ce0df14c549d7ff90bb2dfa783b1f14e8",
+  "java_markers": [
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck3_component_unterminated_type0_before_sprite.puml",
+  "golden": "ck3_component_unterminated_type0_before_sprite.svg",
+  "cohort": "AX",
+  "name": "ck3_component_unterminated_type0_before_sprite",
+  "intended_valid": false,
+  "axes": [
+   "unterminated TYPE0 body",
+   "real sprite after",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "32d705949feac677002e67d5b110d9edb2d03dc64966127e079d93996b3f93d4",
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck3_class_map_then_sprite_lookalike.puml",
+  "golden": "ck3_class_map_then_sprite_lookalike.svg",
+  "cohort": "AX",
+  "name": "ck3_class_map_then_sprite_lookalike",
+  "intended_valid": true,
+  "axes": [
+   "map body",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "017d89c711e959af500fa892eb07ee8ff2619166b4a777992c56191d28e74471",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_multi_diagram_header_then_sprite.puml",
+  "golden": "ck3_multi_diagram_header_then_sprite.svg",
+  "cohort": "AX",
+  "name": "ck3_multi_diagram_header_then_sprite",
+  "intended_valid": true,
+  "axes": [
+   "multi-diagram file",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "5528cb4d69b1da70e44f2acc56323a761061683325082399cc4f3460af4a9d97",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_timing_legend_body.puml",
+  "golden": "ck3_timing_legend_body.svg",
+  "cohort": "AX",
+  "name": "ck3_timing_legend_body",
+  "intended_valid": true,
+  "axes": [
+   "legend body",
+   "timing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e319b9ed14a28eb9dccca04422a475414f9ed94c5e48aad8fde78f7a4794a813",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_mindmap_header_body.puml",
+  "golden": "ck3_mindmap_header_body.svg",
+  "cohort": "AX",
+  "name": "ck3_mindmap_header_body",
+  "intended_valid": true,
+  "axes": [
+   "header body",
+   "mindmap"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "f5842e1092322e1ad9e1cd92871db7c206e704186aa83a015be2cf805c2abaef",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_wbs_caption_body.puml",
+  "golden": "ck3_wbs_caption_body.svg",
+  "cohort": "AX",
+  "name": "ck3_wbs_caption_body",
+  "intended_valid": true,
+  "axes": [
+   "caption body",
+   "wbs"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "0a0e81795c5093fa2ba6c697e507efba02f369470977c77736e5f882684dd411",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_gantt_title_body.puml",
+  "golden": "ck3_gantt_title_body.svg",
+  "cohort": "AX",
+  "name": "ck3_gantt_title_body",
+  "intended_valid": true,
+  "axes": [
+   "title body",
+   "gantt"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "3c1a495a74cd92c61eee08e4e32a8c80400c93c2b9296032da47b78a4ef5f6c0",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_nwdiag_legend_body.puml",
+  "golden": "ck3_nwdiag_legend_body.svg",
+  "cohort": "AX",
+  "name": "ck3_nwdiag_legend_body",
+  "intended_valid": true,
+  "axes": [
+   "legend body",
+   "nwdiag"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "7e4f7673cc8e1178fbc70d996c976a5c1491ca0242c4c856449500f09a846bcc",
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck3_activity3_note_body.puml",
+  "golden": "ck3_activity3_note_body.svg",
+  "cohort": "AX",
+  "name": "ck3_activity3_note_body",
+  "intended_valid": true,
+  "axes": [
+   "note body",
+   "activity3"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "d581d9d7bb2ae85feb6a93e79159f5be7e514d13619b3629967390b51eb45526",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_activity3_header_body.puml",
+  "golden": "ck3_activity3_header_body.svg",
+  "cohort": "AX",
+  "name": "ck3_activity3_header_body",
+  "intended_valid": true,
+  "axes": [
+   "header body",
+   "activity3"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "7738e2cfea40e77225ed53eb34bae3cd48be4efa5ca388cfdabe83fd6c70a460",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_seq_ref_body.puml",
+  "golden": "ck3_seq_ref_body.svg",
+  "cohort": "AX",
+  "name": "ck3_seq_ref_body",
+  "intended_valid": true,
+  "axes": [
+   "ref body",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "0a4d2c749d860f99a513f47de556b8201e3e278a42e37887c6cbb23bfea2fc2e",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_pixel_body_inner_comment_seq.puml",
+  "golden": "ck3_pixel_body_inner_comment_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_pixel_body_inner_comment_seq",
+  "intended_valid": true,
+  "axes": [
+   "pixel body line ending in /' '/",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "c50a00219a791438fbb646d0afe7ba760b08c36c247b9de14a1105e2446882da",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_svg_body_inner_comment_seq.puml",
+  "golden": "ck3_svg_body_inner_comment_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_svg_body_inner_comment_seq",
+  "intended_valid": true,
+  "axes": [
+   "svg body line ending in /' '/",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "2f59aaba47be3f1c16be112baa4523732ad268cebfb58fd5868ba4212a3472bf",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_svg_start_inner_comment_teoz.puml",
+  "golden": "ck3_svg_start_inner_comment_teoz.svg",
+  "cohort": "AX",
+  "name": "ck3_svg_start_inner_comment_teoz",
+  "intended_valid": true,
+  "axes": [
+   "svg start line ending in /' '/",
+   "teoz"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "613a1fdfa321e54777d6fea1c23640c3831882e29790e6662574f16718f8247e",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_block_comment_inside_pixel_body.puml",
+  "golden": "ck3_block_comment_inside_pixel_body.svg",
+  "cohort": "AX",
+  "name": "ck3_block_comment_inside_pixel_body",
+  "intended_valid": true,
+  "axes": [
+   "/' '/ block spanning pixel body lines",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "19aa8193d88534299227328552ae75793f5998ac100f5c4940f1e9fd35acb695",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_svg_inline_quoted_apostrophe_seq.puml",
+  "golden": "ck3_svg_inline_quoted_apostrophe_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_svg_inline_quoted_apostrophe_seq",
+  "intended_valid": true,
+  "axes": [
+   "' inside svg text and quoted label",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "java.lang.NullPointerException: Cannot invoke \"String.startsWith(String)\" because \"s\" is null\n\tat net.sourceforge.plantuml.klimt.color.HColorSet.parseColor(HColorSet.java:76)\n\tat net.sourceforge.plantuml.klimt.color.HColorSet.getColorOrWhite(HColorSet.java:60)\n\tat net.sourceforge.plantuml.svg.parser.SvgNanoParser.drawText(SvgNanoParser.java:302)\n\tat net.sourceforge.plantuml.svg.parser.SvgNanoParser.drawU(SvgNanoParser.java:164)\n\tat net.sourceforge.plantuml.svg.parser.SvgNanoParser$1.drawU(SvgNanoParser.java:477)\n\tat net.sourceforge.plantuml.klimt.creole.atom.AtomSprite.drawU(AtomSprite.java:77)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock1.drawU(SheetBlock1.java:215)\n\tat net.sourceforge.plantuml.klimt.creole.SheetBlock2.drawU(SheetBlock2.java:106)\n\tat net.sourceforge.plantuml.skin.rose.ComponentRoseArrow.drawInternalU(ComponentRoseArrow.java:179)\n\tat net.sourceforge.plantuml.skin.AbstractComponent.drawU(AbstractComponent.java:147)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.MessageArrow.drawInternalU(MessageArrow.java:156)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.GraphicalElement.drawU(GraphicalElement.java:60)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawPlaygroundU(DrawableSet.java:399)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet.drawU22(DrawableSet.java:313)\n\tat net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet$2.drawU(DrawableSet.java:288)\n\tat net.sourceforge.plantuml.klimt.shape.TextBlockUtils$2.drawU(TextBlockUtils.java:156)\n\tat net.sourceforge.plantuml.core.TextBlockExporter12026.exportTo(TextBlockExporter12026.java:172)\n\tat net.sourceforge.plantuml.UgDiagram.exportDiagram(UgDiagram.java:93)\n\tat net.sourceforge.plantuml.SourceStringReader.outputImage(SourceStringReader.java:192)\n\tat net.sourceforge.plantuml.Pipe.generateDiagram(Pipe.java:112)\n\tat net.sourceforge.plantuml.Pipe.managePipe(Pipe.java:103)\n\tat net.sourceforge.plantuml.Run.main(Run.java:183)\n",
+  "java_svg_sha256": "1c6de058a67fa92cef4a6ad4f538dc1301fe885d42f61ae13c23f5f7d905f1f4",
+  "java_markers": [
+   "An error has occured"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck3_lookalike_leak_then_note_component.puml",
+  "golden": "ck3_lookalike_leak_then_note_component.svg",
+  "cohort": "AX",
+  "name": "ck3_lookalike_leak_then_note_component",
+  "intended_valid": true,
+  "axes": [
+   "svg start lookalike in legend body",
+   "later ' text",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "a2892f3be7b8491b59151b45b74539d746f17e82d1df88b72674a1534f20fa49",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_lookalike_leak_then_message_seq.puml",
+  "golden": "ck3_lookalike_leak_then_message_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_lookalike_leak_then_message_seq",
+  "intended_valid": true,
+  "axes": [
+   "pixel start lookalike in note body",
+   "later ' text",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "097f25fe92234af3b92c93b6b3707e441c84fbeb608d11b448fe11591d979ece",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_svg_end_inner_comment_state.puml",
+  "golden": "ck3_svg_end_inner_comment_state.svg",
+  "cohort": "AX",
+  "name": "ck3_svg_end_inner_comment_state",
+  "intended_valid": true,
+  "axes": [
+   "svg END line followed by /' '/",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "84e8a5adb5ce11c3eb47eabd72abbdef944fd64e9dab75a03b0f57c0a9f5a671",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_pixel_end_inner_comment_class.puml",
+  "golden": "ck3_pixel_end_inner_comment_class.svg",
+  "cohort": "AX",
+  "name": "ck3_pixel_end_inner_comment_class",
+  "intended_valid": true,
+  "axes": [
+   "pixel END line followed by /' '/",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "6ddeba12052a949d5c4a4907b7a361bd6c052174513fcafc7c856558a66c8c51",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_pixel_end_inner_comment_seq.puml",
+  "golden": "ck3_pixel_end_inner_comment_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_pixel_end_inner_comment_seq",
+  "intended_valid": true,
+  "axes": [
+   "pixel END line followed by /' '/",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "defde1221955d1490062ca29e8e6291f1318d4e26e421209eae719a85ba1fd48",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_svg_end_inner_comment_nospace_component.puml",
+  "golden": "ck3_svg_end_inner_comment_nospace_component.svg",
+  "cohort": "AX",
+  "name": "ck3_svg_end_inner_comment_nospace_component",
+  "intended_valid": true,
+  "axes": [
+   "svg END line glued to /' '/",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "9f21f3e7e893d763fcbabf3d8d67844d40d5b86110d3d3830c15ebd940497f2d",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_svg_end_inner_comment_teoz.puml",
+  "golden": "ck3_svg_end_inner_comment_teoz.svg",
+  "cohort": "AX",
+  "name": "ck3_svg_end_inner_comment_teoz",
+  "intended_valid": true,
+  "axes": [
+   "svg END line followed by /' '/",
+   "teoz"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "6fc2452f7d975aa452bf4bce6562eb2ed6c4b0c672a84c647afe35caa791d599",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_svg_inline_inner_comment_object.puml",
+  "golden": "ck3_svg_inline_inner_comment_object.svg",
+  "cohort": "AX",
+  "name": "ck3_svg_inline_inner_comment_object",
+  "intended_valid": true,
+  "axes": [
+   "single-line svg sprite followed by /' '/",
+   "object"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "3cd805c5f18624853389d0a830afe416ba4f46d05617788c1d26b11a8c252492",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_pixel_start_inner_comment_deployment.puml",
+  "golden": "ck3_pixel_start_inner_comment_deployment.svg",
+  "cohort": "AX",
+  "name": "ck3_pixel_start_inner_comment_deployment",
+  "intended_valid": true,
+  "axes": [
+   "pixel start line followed by /' '/",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "46b0d8d713c362942940381b5b539886536ef9fae079ff9d1794575fc4895a1f",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_svg_end_inner_comment_usecase.puml",
+  "golden": "ck3_svg_end_inner_comment_usecase.svg",
+  "cohort": "AX",
+  "name": "ck3_svg_end_inner_comment_usecase",
+  "intended_valid": true,
+  "axes": [
+   "svg END line followed by /' '/",
+   "usecase"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "bf9bb9649fc6fb4e0eb9c11d4ce3bcbabd5cdd559dba3ed333516568a1c34085",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_includesub_resource_one_sub_seq.puml",
+  "golden": "ck3_includesub_resource_one_sub_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_includesub_resource_one_sub_seq",
+  "intended_valid": true,
+  "axes": [
+   "!includesub one sub of another file",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "a9b0762b02e88a9bf2e75edfd0b4a15750ce24e0a7c553a8ea0759a1bcf17a83",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_include_whole_with_subs_seq.puml",
+  "golden": "ck3_include_whole_with_subs_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_include_whole_with_subs_seq",
+  "intended_valid": true,
+  "axes": [
+   "!include of a file with subs: bodies in place",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "05c5d3b553669d3ed8b6cd115a9f3ac11fc202f08fc89dedb9dfae5976169983",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_include_then_includesub_seq.puml",
+  "golden": "ck3_include_then_includesub_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_include_then_includesub_seq",
+  "intended_valid": true,
+  "axes": [
+   "!include then !includesub same sub",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "ba3b47d6bfd4484af4907865083cda7a932584c238e085917a749ed5564db62e",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_includesub_pixel_sprite_seq.puml",
+  "golden": "ck3_includesub_pixel_sprite_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_includesub_pixel_sprite_seq",
+  "intended_valid": true,
+  "axes": [
+   "!includesub pixel sprite",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "79dbe18a18a2491fceb2db87d1b37e25519b3794f05392f1ff77d561c98a2378",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_nested_startsub_seq.puml",
+  "golden": "ck3_nested_startsub_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_nested_startsub_seq",
+  "intended_valid": false,
+  "axes": [
+   "nested !startsub (Cannot nest sub)",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n0\nCannot nest sub\n",
+  "java_svg_sha256": "d11c901a9c02dba3e14520ee20d749b330e53714ce6c0f4f870702f567368a91",
+  "java_markers": [
+   "Welcome to PlantUML",
+   "[From string"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck3_startsub_in_procedure_seq.puml",
+  "golden": "ck3_startsub_in_procedure_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_startsub_in_procedure_seq",
+  "intended_valid": true,
+  "axes": [
+   "!startsub inside a procedure invoked twice",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "9a8a3494a8b081349165ff5f360a24a96923cc35cbf034b6276aa829072f0ca5",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_startsub_in_uninvoked_procedure_seq.puml",
+  "golden": "ck3_startsub_in_uninvoked_procedure_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_startsub_in_uninvoked_procedure_seq",
+  "intended_valid": true,
+  "axes": [
+   "!startsub inside an uninvoked procedure",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "dca07d6c13f1e5e5e4e44a80e91a71a36ebcacf496035afc8cf887bb3a22a73c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_startsub_in_while_seq.puml",
+  "golden": "ck3_startsub_in_while_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_startsub_in_while_seq",
+  "intended_valid": true,
+  "axes": [
+   "!startsub inside !while",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "58d5d833342a89371a551863cfb5110fa95d3439143026dba25a54c163272435",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_startsub_endsub_in_false_if_seq.puml",
+  "golden": "ck3_startsub_endsub_in_false_if_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_startsub_endsub_in_false_if_seq",
+  "intended_valid": false,
+  "axes": [
+   "!endsub inside !if false",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "77afb174696b5526086299d4b485a6c29ce9cf3f3612f2920c04df859525f2f7",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_startsub_unterminated_seq.puml",
+  "golden": "ck3_startsub_unterminated_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_startsub_unterminated_seq",
+  "intended_valid": false,
+  "axes": [
+   "unterminated !startsub",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n2\nCompile Error null STARTSUB\n",
+  "java_svg_sha256": "3debbbd65458996704d2ba72b430588921ea64ed618762d1df09e07eeb1c1ad4",
+  "java_markers": [
+   "Welcome to PlantUML",
+   "[From string"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck3_theme_local_startsub_seq.puml",
+  "golden": "ck3_theme_local_startsub_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_theme_local_startsub_seq",
+  "intended_valid": true,
+  "axes": [
+   "local !theme with !startsub",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "290031080f7eb6075f0623d48d9e7e055b96e526248c828c60f7150aef733832",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_startsub_activity3.puml",
+  "golden": "ck3_startsub_activity3.svg",
+  "cohort": "AX",
+  "name": "ck3_startsub_activity3",
+  "intended_valid": true,
+  "axes": [
+   "!startsub in place",
+   "activity3"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "6e7b521b657003aa93301ca8c6c7de72cc4e328e170b84fa9af40cb3f0fd4ebf",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_startsub_mindmap.puml",
+  "golden": "ck3_startsub_mindmap.svg",
+  "cohort": "AX",
+  "name": "ck3_startsub_mindmap",
+  "intended_valid": true,
+  "axes": [
+   "!startsub in place",
+   "mindmap"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b4177c8a6ed62e2b5cfc5b09bab12f61f0bdc452b48047c72c5d7b72e71a492f",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_startsub_gantt.puml",
+  "golden": "ck3_startsub_gantt.svg",
+  "cohort": "AX",
+  "name": "ck3_startsub_gantt",
+  "intended_valid": true,
+  "axes": [
+   "!startsub in place",
+   "gantt"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "53db008a97523437450dac76204b65682fda74efa84cac961b1adaaac1e735fa",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_startsub_timing.puml",
+  "golden": "ck3_startsub_timing.svg",
+  "cohort": "AX",
+  "name": "ck3_startsub_timing",
+  "intended_valid": true,
+  "axes": [
+   "!startsub in place",
+   "timing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "cb6457d6bb6fc56a7efb82070f0032f5321a8ea55ffbb182c698e0cd83968b72",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_startsub_salt.puml",
+  "golden": "ck3_startsub_salt.svg",
+  "cohort": "AX",
+  "name": "ck3_startsub_salt",
+  "intended_valid": true,
+  "axes": [
+   "!startsub in place",
+   "salt"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "a85a1a5b4d76a09227b3997bdc5941a3362a8cc7c6da7588f25a40aa1a0d2eac",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_startsub_class.puml",
+  "golden": "ck3_startsub_class.svg",
+  "cohort": "AX",
+  "name": "ck3_startsub_class",
+  "intended_valid": true,
+  "axes": [
+   "!startsub in place",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e2c3b05afa05668e78a42665323a90bb9044c04e0e9193b148f58085491a520d",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_startsub_definelong_seq.puml",
+  "golden": "ck3_startsub_definelong_seq.svg",
+  "cohort": "AX",
+  "name": "ck3_startsub_definelong_seq",
+  "intended_valid": true,
+  "axes": [
+   "!startsub inside !definelong",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n6\nSyntax Error? (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "65489c826f44d4e981f56931b879000d7a255107ba9773862503eff7bb628beb",
+  "java_markers": [
+   "Syntax Error",
+   "Welcome to PlantUML",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck3_url_guillemet_strip_legacy.puml",
+  "golden": "ck3_url_guillemet_strip_legacy.svg",
+  "cohort": "AX",
+  "name": "ck3_url_guillemet_strip_legacy",
+  "intended_valid": true,
+  "axes": [
+   "Url quote strip with guillemets",
+   "legacy"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "d0e1b1c5f92b4cd4b9a4176dee3f3c5433c748c487184e96df7dbd442e66f622",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_url_spaces_inside_legacy.puml",
+  "golden": "ck3_url_spaces_inside_legacy.svg",
+  "cohort": "AX",
+  "name": "ck3_url_spaces_inside_legacy",
+  "intended_valid": true,
+  "axes": [
+   "spaces inside [[ ]]",
+   "legacy"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "6598d85b13b18bac0e07feba82d94179dadb07d172426aa0e3b8f707408d4512",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_url_quoted_spaces_teoz.puml",
+  "golden": "ck3_url_quoted_spaces_teoz.svg",
+  "cohort": "AX",
+  "name": "ck3_url_quoted_spaces_teoz",
+  "intended_valid": true,
+  "axes": [
+   "QUOTED url with a space",
+   "teoz"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "3077a6d4110fd3d7701fbfa1a6422e0f9d29e84ad65c922d3bf610384acd00dc",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_url_topurl_legacy.puml",
+  "golden": "ck3_url_topurl_legacy.svg",
+  "cohort": "AX",
+  "name": "ck3_url_topurl_legacy",
+  "intended_valid": true,
+  "axes": [
+   "topurl relative link (declared residue)",
+   "legacy"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b9b4b95a36be2a0e0258546f6dd4d85ab7d98555bffbfbb75d1c39b51b0c3380",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_url_uppercase_legacy.puml",
+  "golden": "ck3_url_uppercase_legacy.svg",
+  "cohort": "AX",
+  "name": "ck3_url_uppercase_legacy",
+  "intended_valid": true,
+  "axes": [
+   "uppercase keyword and link",
+   "legacy"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "7ad40e144be5518d135d8c36258e8118c4574659642b3ea9c3dfb8a25271d29f",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_url_label_only_actor_teoz.puml",
+  "golden": "ck3_url_label_only_actor_teoz.svg",
+  "cohort": "AX",
+  "name": "ck3_url_label_only_actor_teoz",
+  "intended_valid": true,
+  "axes": [
+   "link with label only",
+   "actor",
+   "teoz"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "3138e75a3aebe733ce050bd66def8e474a9983f67fba746de8278b0a0d849266",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_url_unicode_tooltip_legacy.puml",
+  "golden": "ck3_url_unicode_tooltip_legacy.svg",
+  "cohort": "AX",
+  "name": "ck3_url_unicode_tooltip_legacy",
+  "intended_valid": true,
+  "axes": [
+   "non-ASCII url and tooltip",
+   "legacy"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "2cd13f6c30943275707e3c545625452ca38814fcb5b2ebf115a319d88c5e36f7",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_url_tooltip_label_teoz.puml",
+  "golden": "ck3_url_tooltip_label_teoz.svg",
+  "cohort": "AX",
+  "name": "ck3_url_tooltip_label_teoz",
+  "intended_valid": true,
+  "axes": [
+   "ONLY_TOOLTIP_AND_LABEL",
+   "teoz"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "c41179bc96068661b9a30146c6461ffc16ecb8b7da69a15a1033d3449bd4254e",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_url_entity_quoted_tooltip_legacy.puml",
+  "golden": "ck3_url_entity_quoted_tooltip_legacy.svg",
+  "cohort": "AX",
+  "name": "ck3_url_entity_quoted_tooltip_legacy",
+  "intended_valid": true,
+  "axes": [
+   "QUOTED with tooltip",
+   "entity",
+   "legacy"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "6a92536f174a8016a4923f18b6d2812d95d781200c2c579c0af69fa8a5f45be7",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_redeclare_tie_order_legacy.puml",
+  "golden": "ck3_redeclare_tie_order_legacy.svg",
+  "cohort": "AX",
+  "name": "ck3_redeclare_tie_order_legacy",
+  "intended_valid": true,
+  "axes": [
+   "equal explicit orders, re-declared first moves last",
+   "legacy"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "98780694e02ac2954de6bab6e2a624356676f9cbb7c34e86a67cfd80f6f9bef0",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_redeclare_explicit_zero_legacy.puml",
+  "golden": "ck3_redeclare_explicit_zero_legacy.svg",
+  "cohort": "AX",
+  "name": "ck3_redeclare_explicit_zero_legacy",
+  "intended_valid": true,
+  "axes": [
+   "explicit order 0 ties default",
+   "legacy"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "c2fb57416807f6fefadeb012a06d9ca5012064eb3dc20ad984c9fbc226c53e12",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_redeclare_lower_order_teoz.puml",
+  "golden": "ck3_redeclare_lower_order_teoz.svg",
+  "cohort": "AX",
+  "name": "ck3_redeclare_lower_order_teoz",
+  "intended_valid": true,
+  "axes": [
+   "re-declared highest order keeps last",
+   "teoz"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "1ed01ecadeb4c63e9d154243c37ff0989494bc312bbaf134e30d4321c838ee3a",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_redeclare_out_of_box_legacy.puml",
+  "golden": "ck3_redeclare_out_of_box_legacy.svg",
+  "cohort": "AX",
+  "name": "ck3_redeclare_out_of_box_legacy",
+  "intended_valid": true,
+  "axes": [
+   "re-declaration after the box leaves it",
+   "legacy"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "f134d1e958ff027c1b96132fa1054e2abd3424420b89cf3f3602bde69ff1283b",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck3_redeclare_actor_kind_change_legacy.puml",
+  "golden": "ck3_redeclare_actor_kind_change_legacy.svg",
+  "cohort": "AX",
+  "name": "ck3_redeclare_actor_kind_change_legacy",
+  "intended_valid": true,
+  "axes": [
+   "re-declaration with another kind",
+   "legacy"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "a02d1b48258e8789d90cc9e207302ca8a7b248fbad3f6cbb3b57417440c3267c",
+  "java_markers": [],
+  "observed_valid": true
+ }
+]

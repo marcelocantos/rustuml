@@ -1,0 +1,6 @@
+@startgantt
+title
+Sprite sheets are loaded
+end title
+[Task] lasts 3 days
+@endgantt

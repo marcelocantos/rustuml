@@ -1,0 +1,14 @@
+@startuml
+json J {
+"a": {
+"b": 1
+}
+}
+sprite $tile [4x4/16] {
+F00F
+0FF0
+0FF0
+F00F
+}
+state Idle : <$tile> ready
+@enduml

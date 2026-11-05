@@ -1,0 +1,6 @@
+@startuml
+title
+sprite $s <svg width="2">
+endtitle
+[Engine]
+@enduml

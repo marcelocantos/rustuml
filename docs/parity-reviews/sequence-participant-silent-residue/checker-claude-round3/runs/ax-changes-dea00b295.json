@@ -1,0 +1,237 @@
+{
+ "changes": [
+  {
+   "name": "ck3_component_type1_stereo_color_url",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_usecase_business_actor_type1",
+   "cohort": "AX",
+   "java_valid": false,
+   "intended_valid": true,
+   "before": "nonpositive-rejected",
+   "after": "nonpositive-accepted",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_activity_legacy_note_on_link_body",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_activity_legacy_long_link_arrow_label",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_multi_diagram_header_then_sprite",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "compare-3",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_lookalike_leak_then_note_component",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_lookalike_leak_then_message_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_include_whole_with_subs_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_include_then_includesub_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_nested_startsub_seq",
+   "cohort": "AX",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-accepted",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_in_procedure_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_in_while_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_endsub_in_false_if_seq",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": false,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_unterminated_seq",
+   "cohort": "AX",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-accepted",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_activity3",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_mindmap",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_gantt",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_timing",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_salt",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_startsub_class",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_url_guillemet_strip_legacy",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck3_url_entity_quoted_tooltip_legacy",
+   "cohort": "AX",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  }
+ ],
+ "losses": [
+  {
+   "name": "ck3_usecase_business_actor_type1",
+   "cohort": "AX",
+   "java_valid": false,
+   "intended_valid": true,
+   "before": "nonpositive-rejected",
+   "after": "nonpositive-accepted",
+   "svg_changed": true,
+   "after_stderr": ""
+  }
+ ],
+ "disagreements": []
+}

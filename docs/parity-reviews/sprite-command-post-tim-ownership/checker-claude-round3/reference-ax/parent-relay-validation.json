@@ -1,0 +1,45 @@
+{
+  "validated": true,
+  "cases": 77,
+  "timeouts": 0,
+  "worker": "/Users/marcelo/rustuml-reference/scratch/worker.Ev4XXZVK",
+  "hashes": {
+    "reference-results.json.gz": "5140c2915ea51c96fd57807eae02366446f5dbc9c464a3eeec798e0ab3e55ea2",
+    "reference-transport.json": "d46d0e375efa573df40131e92e6f03c248b1c94cc2d81c1b981935c9b0337816"
+  },
+  "remote_names": {
+    "reference-results.json.gz": "reference-results.json.gz",
+    "reference-transport.json": "reference-transport.json"
+  },
+  "exit_statuses": {
+    "0": 70,
+    "200": 7
+  },
+  "intended_invalid": [
+    "ck3_component_unterminated_type0_before_sprite",
+    "ck3_deployment_unterminated_legend_at_enduml",
+    "ck3_nested_startsub_seq",
+    "ck3_startsub_endsub_in_false_if_seq",
+    "ck3_startsub_unterminated_seq"
+  ],
+  "intended_invalid_exit0": [
+    "ck3_startsub_endsub_in_false_if_seq"
+  ],
+  "intended_valid_nonzero": [
+    "ck3_nwdiag_legend_body",
+    "ck3_startsub_definelong_seq",
+    "ck3_usecase_business_actor_type1"
+  ],
+  "nonempty_stderr": [
+    "ck3_component_unterminated_type0_before_sprite",
+    "ck3_deployment_unterminated_legend_at_enduml",
+    "ck3_nested_startsub_seq",
+    "ck3_nwdiag_legend_body",
+    "ck3_startsub_definelong_seq",
+    "ck3_startsub_unterminated_seq",
+    "ck3_svg_inline_quoted_apostrophe_seq",
+    "ck3_usecase_business_actor_type1"
+  ],
+  "java_argv_provenance": "Derived from unchanged pinned wrapper execve construction and exact invocation arguments; not independently process-traced",
+  "classification": "Validity not inferred from exit status."
+}

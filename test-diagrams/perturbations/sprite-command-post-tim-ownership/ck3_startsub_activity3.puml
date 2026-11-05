@@ -1,0 +1,8 @@
+@startuml
+start
+!startsub S
+:in sub;
+!endsub
+:after;
+stop
+@enduml

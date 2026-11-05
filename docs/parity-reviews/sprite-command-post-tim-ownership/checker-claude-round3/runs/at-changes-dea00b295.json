@@ -1,0 +1,296 @@
+{
+ "changes": [
+  {
+   "name": "ck_component_bracket_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_component_bracket_lower",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_deployment_node_bracket_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_deployment_bracket_upper",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_usecase_rectangle_bracket_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_component_header_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_component_footer_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_deployment_header_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_deployment_footer_upper",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_state_header_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_state_legend_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_state_title_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_object_header_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_object_legend_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_activity_legacy_note_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_activity_legacy_note_brace",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_activity_legacy_legend_body",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_svg_body_apos_end_legacy",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 3: sprite $tag <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "ck_svg_body_trailing_after_end_legacy",
+   "cohort": "AT",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\">\"\n"
+  },
+  {
+   "name": "ck_svg_body_apos_end_teoz",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 4: sprite $tag <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "ck_svg_body_trailing_after_end_teoz",
+   "cohort": "AT",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\">\"\n"
+  },
+  {
+   "name": "ck_svg_body_apos_end_class",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: class sprite command CommandSpriteSvgMultiline is recognized; sprite materialization remains unsupported at line 1: sprite $tag <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "ck_svg_body_apos_end_component",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: component sprite command CommandSpriteSvgMultiline is recognized; sprite materialization remains unsupported at line 1: sprite $tag <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "ck_svg_body_trailing_after_end_class",
+   "cohort": "AT",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Syntax Error? sprite command never completed: sprite $tag <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "ck_startsub_sprite_deployment",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_tooltip_label_brace_legacy",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_tooltip_spaced_legacy",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_tooltip_empty_legacy",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "ck_tooltip_nested_brace_legacy",
+   "cohort": "AT",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  }
+ ],
+ "losses": [],
+ "disagreements": []
+}

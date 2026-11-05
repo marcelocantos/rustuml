@@ -1,0 +1,7 @@
+@startuml
+(*) --> "load"
+note left
+SPRITE ROWS
+end note
+"load" --> (*)
+@enduml

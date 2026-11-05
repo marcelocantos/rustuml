@@ -1,0 +1,6 @@
+@startuml
+object Player
+title
+Sprite atlas ready
+end title
+@enduml

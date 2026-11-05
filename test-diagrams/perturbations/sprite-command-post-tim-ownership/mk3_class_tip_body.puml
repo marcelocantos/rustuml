@@ -1,0 +1,8 @@
+@startuml
+class Player {
+  name : String
+}
+note left of Player::name
+Sprite tip text
+end note
+@enduml

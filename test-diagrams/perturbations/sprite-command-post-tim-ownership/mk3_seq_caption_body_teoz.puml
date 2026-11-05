@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+caption
+Sprite sheets are loaded
+endcaption
+Alder -> Birch : go
+@enduml

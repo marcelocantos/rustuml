@@ -1,0 +1,11 @@
+@startuml
+!startsub ICONS
+sprite $tile [4x4/16] {
+F00F
+0FF0
+0FF0
+F00F
+}
+!endsub
+state Idle : <$tile> ready
+@enduml

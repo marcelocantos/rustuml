@@ -1,0 +1,8 @@
+@startuml
+partition Work {
+(*) --> "Do"
+note left
+Sprite stays here
+end note
+}
+@enduml

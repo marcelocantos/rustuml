@@ -1,0 +1,5 @@
+@startuml
+PARTICIPANT Cedar [[HTTPS://EXAMPLE.ORG/P{Tip Text}]]
+participant Moss
+Cedar -> Moss : go
+@enduml

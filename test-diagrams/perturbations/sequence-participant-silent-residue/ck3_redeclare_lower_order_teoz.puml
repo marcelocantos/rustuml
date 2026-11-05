@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Alder order 3
+participant Birch order 1
+participant Cedar order 2
+participant Alder
+Alder -> Cedar : go
+@enduml

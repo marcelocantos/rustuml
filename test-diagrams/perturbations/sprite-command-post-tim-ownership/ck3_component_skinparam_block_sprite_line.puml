@@ -1,0 +1,7 @@
+@startuml
+skinparam component {
+BackgroundColor #EEEEEE
+sprite $x foo
+}
+[Engine]
+@enduml

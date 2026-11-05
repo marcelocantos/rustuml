@@ -1,0 +1,6 @@
+@startuml
+state Idle
+note left of Idle #pink
+Sprite keeper online
+end note
+@enduml

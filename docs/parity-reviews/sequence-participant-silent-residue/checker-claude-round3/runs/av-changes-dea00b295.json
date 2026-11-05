@@ -1,0 +1,166 @@
+{
+ "changes": [
+  {
+   "name": "mk3_deployment_center_footer_pixel_lookalike",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_deployment_nested_package_header",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_state_left_footer_pixel_lookalike",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_state_composite_header_body",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_activity_legacy_header_body",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_activity_legacy_caption_svg_lookalike",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_svg_end_apos_usecase",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 1: sprite $mark <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "mk3_svg_end_trailing_deployment",
+   "cohort": "AV",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Syntax Error? sprite command never completed: sprite $mark <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "mk3_pixel_end_trailing_class",
+   "cohort": "AV",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Cannot read: [2x2/16] {\n"
+  },
+  {
+   "name": "mk3_pixel_end_trailing_seq_legacy",
+   "cohort": "AV",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Cannot read: [2x2/16] {\n"
+  },
+  {
+   "name": "mk3_startsub_two_blocks_component",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "compare-3",
+   "after": "compare-3",
+   "svg_changed": true,
+   "after_stderr": "warning: component sprite command CommandFactorySprite$1 executed; component rendering of sprite references remains unsupported at line 2\n"
+  },
+  {
+   "name": "mk3_tooltip_quoted_label_legacy",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_tooltip_two_groups_legacy",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_tooltip_label_brace_actor_legacy",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_tooltip_quoted_display_legacy",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_tooltip_empty_database_legacy",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  }
+ ],
+ "losses": [],
+ "disagreements": []
+}

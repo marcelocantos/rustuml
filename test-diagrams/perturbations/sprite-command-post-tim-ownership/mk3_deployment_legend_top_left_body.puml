@@ -1,0 +1,6 @@
+@startuml
+node Server
+legend top left
+Sprite cache warm
+endlegend
+@enduml

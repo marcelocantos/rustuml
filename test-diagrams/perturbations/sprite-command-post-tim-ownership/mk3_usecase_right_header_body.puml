@@ -1,0 +1,7 @@
+@startuml
+right header
+sprite pool warmed
+endheader
+actor Hero
+Hero -- (Play)
+@enduml

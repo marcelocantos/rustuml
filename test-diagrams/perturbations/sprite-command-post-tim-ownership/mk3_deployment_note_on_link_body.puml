@@ -1,0 +1,8 @@
+@startuml
+node A
+node B
+A --> B
+note on link
+Sprite link text
+end note
+@enduml

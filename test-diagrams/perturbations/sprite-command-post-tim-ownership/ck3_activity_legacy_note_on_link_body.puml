@@ -1,0 +1,7 @@
+@startuml
+(*) --> "Load"
+note on link
+Sprite sheets are loaded
+end note
+"Load" --> (*)
+@enduml

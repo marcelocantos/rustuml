@@ -1,0 +1,7 @@
+@startuml
+!startsub C
+class Alpha
+!endsub
+class Beta
+Alpha --> Beta
+@enduml

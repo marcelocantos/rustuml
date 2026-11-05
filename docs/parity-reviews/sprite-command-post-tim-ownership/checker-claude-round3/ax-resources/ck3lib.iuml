@@ -1,0 +1,7 @@
+!startsub AA
+Alder -> Birch : from AA
+!endsub
+!startsub BB
+Birch -> Cedar : from BB
+!endsub
+Cedar -> Dove : outside subs

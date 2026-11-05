@@ -1,0 +1,13 @@
+@startuml
+!if %false()
+!startsub ICONS
+sprite $tile [4x4/16] {
+F00F
+0FF0
+0FF0
+F00F
+}
+!endsub
+!endif
+node "<$tile> Server" as S
+@enduml

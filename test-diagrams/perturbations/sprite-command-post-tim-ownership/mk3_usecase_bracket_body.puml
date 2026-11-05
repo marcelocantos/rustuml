@@ -1,0 +1,8 @@
+@startuml
+actor Hero
+usecase U1 [
+first step
+Sprite deck shuffled
+]
+Hero -- U1
+@enduml

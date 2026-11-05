@@ -1,0 +1,6 @@
+@startuml
+component C as "first
+Sprite text shown
+last"
+[C] --> [D]
+@enduml

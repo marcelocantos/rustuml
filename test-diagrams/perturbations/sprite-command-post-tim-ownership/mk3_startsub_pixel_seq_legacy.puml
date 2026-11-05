@@ -1,0 +1,12 @@
+@startuml
+!startsub ICONS
+sprite $tile [4x4/16] {
+F00F
+0FF0
+0FF0
+F00F
+}
+!endsub
+participant "<$tile> Alder" as A
+A -> A : go
+@enduml

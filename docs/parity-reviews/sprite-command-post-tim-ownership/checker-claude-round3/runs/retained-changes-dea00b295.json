@@ -1,0 +1,92 @@
+{
+ "pairs": {
+  "mismatch->mismatch": 1057,
+  "match->match": 2658,
+  "nonpositive-accepted->nonpositive-accepted": 66,
+  "valid-error->valid-error": 17,
+  "nonpositive-rejected->nonpositive-rejected": 370,
+  "mismatch->match": 6
+ },
+ "changes": [
+  {
+   "source": "test-diagrams/perturbations/tim-evaluated-event-stream/checker_dynamic_sub_sprite.puml",
+   "cohort": "parent-added145",
+   "name": null,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/tim-theme-post-expansion-source-identity/checker_subblock_state.puml",
+   "cohort": "parent-added145",
+   "name": null,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_nbsp.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_url_nbsp",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_tab.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_url_tab",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_attribute_url_cr.puml",
+   "cohort": "checker509",
+   "name": "bd087_attribute_url_cr",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-accepted",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_44.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_quoted_url_44",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_47.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_quoted_url_47",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_50.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_quoted_url_50",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_53.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_quoted_url_53",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-local-attribute-serialization/bd087_s_attribute_quoted_url_56.puml",
+   "cohort": "supplement62",
+   "name": "bd087_s_attribute_quoted_url_56",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  }
+ ]
+}

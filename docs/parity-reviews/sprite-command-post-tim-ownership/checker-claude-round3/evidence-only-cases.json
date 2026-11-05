@@ -1,0 +1,179 @@
+[
+ {
+  "name": "mk3_svg_end_trailing_deployment",
+  "cohort": "AV",
+  "outcome_after": "nonpositive-rejected",
+  "axes": [
+   "text after </svg> on END line",
+   "deployment"
+  ],
+  "java_valid": false,
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "mk3_pixel_end_trailing_class",
+  "cohort": "AV",
+  "outcome_after": "nonpositive-rejected",
+  "axes": [
+   "text after } on pixel END line",
+   "class"
+  ],
+  "java_valid": false,
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "mk3_pixel_end_trailing_seq_legacy",
+  "cohort": "AV",
+  "outcome_after": "nonpositive-rejected",
+  "axes": [
+   "text after } on pixel END line",
+   "sequence legacy"
+  ],
+  "java_valid": false,
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck3_usecase_business_actor_type1",
+  "cohort": "AX",
+  "outcome_after": "nonpositive-accepted",
+  "axes": [
+   "TYPE1 actor/",
+   "usecase"
+  ],
+  "java_valid": false,
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck3_deployment_unterminated_legend_at_enduml",
+  "cohort": "AX",
+  "outcome_after": "nonpositive-accepted",
+  "axes": [
+   "unterminated legend body ends at @enduml",
+   "deployment"
+  ],
+  "java_valid": false,
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck3_component_unterminated_type0_before_sprite",
+  "cohort": "AX",
+  "outcome_after": "nonpositive-accepted",
+  "axes": [
+   "unterminated TYPE0 body",
+   "real sprite after",
+   "component"
+  ],
+  "java_valid": false,
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck3_nwdiag_legend_body",
+  "cohort": "AX",
+  "outcome_after": "nonpositive-accepted",
+  "axes": [
+   "legend body",
+   "nwdiag"
+  ],
+  "java_valid": false,
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck3_svg_inline_quoted_apostrophe_seq",
+  "cohort": "AX",
+  "outcome_after": "nonpositive-accepted",
+  "axes": [
+   "' inside svg text and quoted label",
+   "sequence legacy"
+  ],
+  "java_valid": false,
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck3_includesub_resource_one_sub_seq",
+  "cohort": "AX",
+  "outcome_after": "match",
+  "axes": [
+   "!includesub one sub of another file",
+   "sequence legacy"
+  ],
+  "java_valid": true,
+  "reason": "needs a sibling resource file"
+ },
+ {
+  "name": "ck3_include_whole_with_subs_seq",
+  "cohort": "AX",
+  "outcome_after": "mismatch",
+  "axes": [
+   "!include of a file with subs: bodies in place",
+   "sequence legacy"
+  ],
+  "java_valid": true,
+  "reason": "needs a sibling resource file"
+ },
+ {
+  "name": "ck3_include_then_includesub_seq",
+  "cohort": "AX",
+  "outcome_after": "mismatch",
+  "axes": [
+   "!include then !includesub same sub",
+   "sequence legacy"
+  ],
+  "java_valid": true,
+  "reason": "needs a sibling resource file"
+ },
+ {
+  "name": "ck3_includesub_pixel_sprite_seq",
+  "cohort": "AX",
+  "outcome_after": "mismatch",
+  "axes": [
+   "!includesub pixel sprite",
+   "sequence legacy"
+  ],
+  "java_valid": true,
+  "reason": "needs a sibling resource file"
+ },
+ {
+  "name": "ck3_nested_startsub_seq",
+  "cohort": "AX",
+  "outcome_after": "nonpositive-accepted",
+  "axes": [
+   "nested !startsub (Cannot nest sub)",
+   "sequence legacy"
+  ],
+  "java_valid": false,
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck3_startsub_unterminated_seq",
+  "cohort": "AX",
+  "outcome_after": "nonpositive-accepted",
+  "axes": [
+   "unterminated !startsub",
+   "sequence legacy"
+  ],
+  "java_valid": false,
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck3_theme_local_startsub_seq",
+  "cohort": "AX",
+  "outcome_after": "mismatch",
+  "axes": [
+   "local !theme with !startsub",
+   "sequence legacy"
+  ],
+  "java_valid": true,
+  "reason": "needs a sibling resource file"
+ },
+ {
+  "name": "ck3_startsub_definelong_seq",
+  "cohort": "AX",
+  "outcome_after": "nonpositive-rejected",
+  "axes": [
+   "!startsub inside !definelong",
+   "sequence legacy"
+  ],
+  "java_valid": false,
+  "reason": "Java-invalid reference"
+ }
+]

@@ -1,0 +1,6 @@
+@startuml
+map Config {
+Sprite pool => full
+}
+object Player
+@enduml

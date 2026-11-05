@@ -1,0 +1,1089 @@
+[
+ {
+  "source": "mk3_component_caption_body.puml",
+  "golden": "mk3_component_caption_body.svg",
+  "cohort": "AV",
+  "name": "mk3_component_caption_body",
+  "intended_valid": true,
+  "axes": [
+   "caption body",
+   "file-form text",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b405d2b6b7f4f6af9a9c8d766c65841587bdeed61bbaa78e3808fa673f999896",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_usecase_right_header_body.puml",
+  "golden": "mk3_usecase_right_header_body.svg",
+  "cohort": "AV",
+  "name": "mk3_usecase_right_header_body",
+  "intended_valid": true,
+  "axes": [
+   "positioned header body",
+   "lowercase file-form",
+   "usecase"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "64b0de48b09334298277fc4c980607088e1f1c3681cd06bbe3c72e355b908743",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_deployment_center_footer_pixel_lookalike.puml",
+  "golden": "mk3_deployment_center_footer_pixel_lookalike.svg",
+  "cohort": "AV",
+  "name": "mk3_deployment_center_footer_pixel_lookalike",
+  "intended_valid": true,
+  "axes": [
+   "positioned footer body",
+   "pixel header lookalike",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "308e1642e2158b17be40b28c6c401ff924d82b68e56c77dfc48b0738087af061",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_component_title_svg_lookalike.puml",
+  "golden": "mk3_component_title_svg_lookalike.svg",
+  "cohort": "AV",
+  "name": "mk3_component_title_svg_lookalike",
+  "intended_valid": true,
+  "axes": [
+   "title body",
+   "svg header lookalike",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "9b4788b23ac112dde00f7bdd85aefc9fda225257436b755957da46b92aa4225f",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_deployment_legend_top_left_body.puml",
+  "golden": "mk3_deployment_legend_top_left_body.svg",
+  "cohort": "AV",
+  "name": "mk3_deployment_legend_top_left_body",
+  "intended_valid": true,
+  "axes": [
+   "legend with position",
+   "file-form",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "d398e42564492a5171abf3a7217d566b5b83a56870a21f8aee7232961603601a",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_usecase_bracket_body.puml",
+  "golden": "mk3_usecase_bracket_body.svg",
+  "cohort": "AV",
+  "name": "mk3_usecase_bracket_body",
+  "intended_valid": true,
+  "axes": [
+   "description [ ] body",
+   "usecase element",
+   "usecase"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "95cbb1866898a07c7b23899c0b1ee965f2da5ac09b5cc9afe9e61b9794fb2ed3",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_component_as_quote_body.puml",
+  "golden": "mk3_component_as_quote_body.svg",
+  "cohort": "AV",
+  "name": "mk3_component_as_quote_body",
+  "intended_valid": true,
+  "axes": [
+   "description as \"...\" body (TYPE0)",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "5891dd240c00ebf564bbba67eb927cef38e5292978e6afda78a63b68f0acd630",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_deployment_database_bracket_upper.puml",
+  "golden": "mk3_deployment_database_bracket_upper.svg",
+  "cohort": "AV",
+  "name": "mk3_deployment_database_bracket_upper",
+  "intended_valid": true,
+  "axes": [
+   "description [ ] body",
+   "uppercase",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "389423ace42d249a60b7627dc4125153db8b41b8086f7a16d0c2c8fae42c41f3",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_component_note_of_body.puml",
+  "golden": "mk3_component_note_of_body.svg",
+  "cohort": "AV",
+  "name": "mk3_component_note_of_body",
+  "intended_valid": true,
+  "axes": [
+   "note of entity body",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "895edddcf4cece0da03514c9d974a2e9cc6a206f4185e5432cd159f747ecd895",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_deployment_note_on_link_body.puml",
+  "golden": "mk3_deployment_note_on_link_body.svg",
+  "cohort": "AV",
+  "name": "mk3_deployment_note_on_link_body",
+  "intended_valid": true,
+  "axes": [
+   "note on link body",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "3e807c47094f720e330af7a73304f910c93bece9ddabe43b234b8f39b44f1cff",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_component_floating_note_body.puml",
+  "golden": "mk3_component_floating_note_body.svg",
+  "cohort": "AV",
+  "name": "mk3_component_floating_note_body",
+  "intended_valid": true,
+  "axes": [
+   "floating note body",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "66d6768550654c919407411b0b22aae7731c1496df00395ab49c2b7aa048652d",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_component_map_body.puml",
+  "golden": "mk3_component_map_body.svg",
+  "cohort": "AV",
+  "name": "mk3_component_map_body",
+  "intended_valid": true,
+  "axes": [
+   "map body",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b2fc77f96550de8a52e31e67ce627a3fe7b063c499682c0ab78c2bbdcf2692ef",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_deployment_archimate_body.puml",
+  "golden": "mk3_deployment_archimate_body.svg",
+  "cohort": "AV",
+  "name": "mk3_deployment_archimate_body",
+  "intended_valid": true,
+  "axes": [
+   "archimate [ ] body",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "d7bea56eb691fa50036c9434765cbeb152d7d5b38f90fb58f48c243e7a30ee87",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_deployment_nested_package_header.puml",
+  "golden": "mk3_deployment_nested_package_header.svg",
+  "cohort": "AV",
+  "name": "mk3_deployment_nested_package_header",
+  "intended_valid": true,
+  "axes": [
+   "header body inside a package",
+   "deeper nesting",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "2becc34bed7df9b0bc7c945a8ca71ac3fe474fe19a82f2596de8fb9430fa7aa2",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_component_note_embedded_end_lookalike.puml",
+  "golden": "mk3_component_note_embedded_end_lookalike.svg",
+  "cohort": "AV",
+  "name": "mk3_component_note_embedded_end_lookalike",
+  "intended_valid": true,
+  "axes": [
+   "note body with embedded diagram",
+   "END lookalike inside {{ }}",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "babb287e1c42095ed90b1052b4dc89debe311e76b3fa9d82bcf1b5a20ae48626",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_state_caption_body.puml",
+  "golden": "mk3_state_caption_body.svg",
+  "cohort": "AV",
+  "name": "mk3_state_caption_body",
+  "intended_valid": true,
+  "axes": [
+   "caption body",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "9fc869752de069f1f0c23a5da7dc65d484b05570862fe490588a0321acbeea01",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_state_left_footer_pixel_lookalike.puml",
+  "golden": "mk3_state_left_footer_pixel_lookalike.svg",
+  "cohort": "AV",
+  "name": "mk3_state_left_footer_pixel_lookalike",
+  "intended_valid": true,
+  "axes": [
+   "positioned footer body",
+   "pixel header lookalike",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "649abab8ab4808067d344462ba882675585b4c5e9fd38645dd69ab300d64562d",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_state_note_on_link_body.puml",
+  "golden": "mk3_state_note_on_link_body.svg",
+  "cohort": "AV",
+  "name": "mk3_state_note_on_link_body",
+  "intended_valid": true,
+  "axes": [
+   "note on link body",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "9e094e9fcac506f717d994f8bab2f96c566d24d97bad306fa8fdea7dae9bfa51",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_state_floating_note_body.puml",
+  "golden": "mk3_state_floating_note_body.svg",
+  "cohort": "AV",
+  "name": "mk3_state_floating_note_body",
+  "intended_valid": true,
+  "axes": [
+   "floating note body",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "4b0aad496a449be82d413cdddc82856aa70e39c2e4e70e44fbd9ce8712b850ec",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_state_composite_header_body.puml",
+  "golden": "mk3_state_composite_header_body.svg",
+  "cohort": "AV",
+  "name": "mk3_state_composite_header_body",
+  "intended_valid": true,
+  "axes": [
+   "header body inside a composite",
+   "deeper nesting",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "54ba8711b1d92a5b14732982ca1032eb2fdd9c663e7b8df87459dc00a09c39d0",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_state_json_then_sprite.puml",
+  "golden": "mk3_state_json_then_sprite.svg",
+  "cohort": "AV",
+  "name": "mk3_state_json_then_sprite",
+  "intended_valid": true,
+  "axes": [
+   "json body extends to valid JSON",
+   "sprite after json",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "20a998912c9bc60653237da06d8678a2f49f5fc3eb1dafba0f569c230556d267",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_object_title_body.puml",
+  "golden": "mk3_object_title_body.svg",
+  "cohort": "AV",
+  "name": "mk3_object_title_body",
+  "intended_valid": true,
+  "axes": [
+   "title body",
+   "object"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "126bb92c324108365de49f05b9a6c933e742d5786fbb945220c2d7373f1b260c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_object_caption_body.puml",
+  "golden": "mk3_object_caption_body.svg",
+  "cohort": "AV",
+  "name": "mk3_object_caption_body",
+  "intended_valid": true,
+  "axes": [
+   "caption body",
+   "uppercase",
+   "object"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "d4c00937aadaa0d9d1117f3f324290412998f7b16fe40a3187b168e4b27c196f",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_object_note_top_body.puml",
+  "golden": "mk3_object_note_top_body.svg",
+  "cohort": "AV",
+  "name": "mk3_object_note_top_body",
+  "intended_valid": true,
+  "axes": [
+   "note of entity body",
+   "object"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "8b0a0d933abb1a5f74ba25e2ac687510495f120515f99ca82965452fe214ba59",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_object_map_body.puml",
+  "golden": "mk3_object_map_body.svg",
+  "cohort": "AV",
+  "name": "mk3_object_map_body",
+  "intended_valid": true,
+  "axes": [
+   "map body",
+   "object"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "74ce46ae902f1bd30698df9782854e1451b9ace1be625761ed609dae3114ae53",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_class_footer_svg_lookalike.puml",
+  "golden": "mk3_class_footer_svg_lookalike.svg",
+  "cohort": "AV",
+  "name": "mk3_class_footer_svg_lookalike",
+  "intended_valid": true,
+  "axes": [
+   "footer body",
+   "svg header lookalike",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "35018541293f7a00741dd6261490e7ce6bc02aae6e5c56de41e54f48bd8c98d8",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_class_body_separate_bracket.puml",
+  "golden": "mk3_class_body_separate_bracket.svg",
+  "cohort": "AV",
+  "name": "mk3_class_body_separate_bracket",
+  "intended_valid": true,
+  "axes": [
+   "class body with { on its own line",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "1dd12ae20196529feecd6d41b56b84f27b16204475fafbb825f0b768a2df9c19",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_class_tip_body.puml",
+  "golden": "mk3_class_tip_body.svg",
+  "cohort": "AV",
+  "name": "mk3_class_tip_body",
+  "intended_valid": true,
+  "axes": [
+   "member tip body",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "efc77db27f4624ae4af46e8fe6e8baaae4da49f7ea0ef47773c20055e567ead0",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_activity_legacy_note_left_upper.puml",
+  "golden": "mk3_activity_legacy_note_left_upper.svg",
+  "cohort": "AV",
+  "name": "mk3_activity_legacy_note_left_upper",
+  "intended_valid": true,
+  "axes": [
+   "legacy activity note body",
+   "uppercase"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "62e54af1577a8d1f8c2c63819a2e8a6c81b9efe0d36bfd6a239eb583454e4594",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_activity_legacy_long_link_body.puml",
+  "golden": "mk3_activity_legacy_long_link_body.svg",
+  "cohort": "AV",
+  "name": "mk3_activity_legacy_long_link_body",
+  "intended_valid": true,
+  "axes": [
+   "legacy multiline link label",
+   "file-form body"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "f2e04ac10a8cf0a1db33cf196118584814552fb8fe54721273137fc30acd93d4",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_activity_legacy_header_body.puml",
+  "golden": "mk3_activity_legacy_header_body.svg",
+  "cohort": "AV",
+  "name": "mk3_activity_legacy_header_body",
+  "intended_valid": true,
+  "axes": [
+   "legacy activity header body"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "86b6747578b56887b8a3555f7a15a947b5e2a3f4aa67d14750f25979fb0a3e84",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_activity_legacy_caption_svg_lookalike.puml",
+  "golden": "mk3_activity_legacy_caption_svg_lookalike.svg",
+  "cohort": "AV",
+  "name": "mk3_activity_legacy_caption_svg_lookalike",
+  "intended_valid": true,
+  "axes": [
+   "legacy activity caption body",
+   "svg header lookalike"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "9572ab0ff5ba07bda71683cea2c8446d54b707145888a50d78eba1e0e061530c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_seq_caption_body_legacy.puml",
+  "golden": "mk3_seq_caption_body_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_seq_caption_body_legacy",
+  "intended_valid": true,
+  "axes": [
+   "caption body",
+   "sequence legacy control"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "93d1baba017a95b99ff80feaa0fe144fbe61ef8ddc4895bc9c7cc7db61b3e859",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_seq_caption_body_teoz.puml",
+  "golden": "mk3_seq_caption_body_teoz.svg",
+  "cohort": "AV",
+  "name": "mk3_seq_caption_body_teoz",
+  "intended_valid": true,
+  "axes": [
+   "caption body",
+   "sequence teoz control"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "07236cd064116a21126d739d017cac0e8207359f453d242082fbe817e9a31775",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_component_sprite_used_after_bodies.puml",
+  "golden": "mk3_component_sprite_used_after_bodies.svg",
+  "cohort": "AV",
+  "name": "mk3_component_sprite_used_after_bodies",
+  "intended_valid": true,
+  "axes": [
+   "sprite after an owned body is still a command",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "87e6ffb2524bf016d8c7d6c9ea5c89b2f7645252dffbc839484071afa942c30b",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_svg_end_apos_usecase.puml",
+  "golden": "mk3_svg_end_apos_usecase.svg",
+  "cohort": "AV",
+  "name": "mk3_svg_end_apos_usecase",
+  "intended_valid": true,
+  "axes": [
+   "svg END line with ' text",
+   "usecase"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "78b6a04b14d4c5f1ab9f1f32ab086011657565b1c456120bfa3293809ec246dd",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_svg_mid_apos_state.puml",
+  "golden": "mk3_svg_mid_apos_state.svg",
+  "cohort": "AV",
+  "name": "mk3_svg_mid_apos_state",
+  "intended_valid": true,
+  "axes": [
+   "svg body line with ' text",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "4cdce11db793bf8f6b6375d78ed56f0e4efe5b34dd7437c4e7821fece6ad4f43",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_svg_end_trailing_deployment.puml",
+  "golden": "mk3_svg_end_trailing_deployment.svg",
+  "cohort": "AV",
+  "name": "mk3_svg_end_trailing_deployment",
+  "intended_valid": false,
+  "axes": [
+   "text after </svg> on END line",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "5f9531372463ab4b55c136cd8072a4af388d407da00536eceb88c0f18472424e",
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "mk3_pixel_end_trailing_class.puml",
+  "golden": "mk3_pixel_end_trailing_class.svg",
+  "cohort": "AV",
+  "name": "mk3_pixel_end_trailing_class",
+  "intended_valid": false,
+  "axes": [
+   "text after } on pixel END line",
+   "class"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\nCannot read: [2x2/16] { (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "fd949eeb3a2e6d2a7ec5e2c34a9e522ff86a7faaccfbe90c859b102cc1aa3680",
+  "java_markers": [
+   "Cannot read",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "mk3_pixel_end_trailing_seq_legacy.puml",
+  "golden": "mk3_pixel_end_trailing_seq_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_pixel_end_trailing_seq_legacy",
+  "intended_valid": false,
+  "axes": [
+   "text after } on pixel END line",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\nCannot read: [2x2/16] { (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "0a8e80a8c8282aa1170377897358f6613de407cbcb5c85953a8b60040984e57f",
+  "java_markers": [
+   "Cannot read",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "mk3_svg_start_trailing_apos_component.puml",
+  "golden": "mk3_svg_start_trailing_apos_component.svg",
+  "cohort": "AV",
+  "name": "mk3_svg_start_trailing_apos_component",
+  "intended_valid": true,
+  "axes": [
+   "' text after <svg ...> on the start line",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e5fd19f0d599aa7ee645c87ca0f97974509f6039d3c775dea2fbf3d48a9f0ee8",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_svg_inline_apos_object.puml",
+  "golden": "mk3_svg_inline_apos_object.svg",
+  "cohort": "AV",
+  "name": "mk3_svg_inline_apos_object",
+  "intended_valid": true,
+  "axes": [
+   "inline svg with ' text",
+   "object"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "69f75e77bdc173b5fe8d6b6c34bd036d35bfd3106dc04de9248977aa50d7cc87",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_startsub_pixel_component.puml",
+  "golden": "mk3_startsub_pixel_component.svg",
+  "cohort": "AV",
+  "name": "mk3_startsub_pixel_component",
+  "intended_valid": true,
+  "axes": [
+   "!startsub pixel sprite",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "fbe720491d0f40f5d80a17e69a4e7096d8ea8c109b2fbdf9724dbbb021f2ad95",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_startsub_svg_usecase.puml",
+  "golden": "mk3_startsub_svg_usecase.svg",
+  "cohort": "AV",
+  "name": "mk3_startsub_svg_usecase",
+  "intended_valid": true,
+  "axes": [
+   "!startsub svg sprite",
+   "usecase"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "7df9f95847dd4795c55b2adcf512558baacfab753aa0bc6132a19ce967fcf12b",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_startsub_inside_false_if_deployment.puml",
+  "golden": "mk3_startsub_inside_false_if_deployment.svg",
+  "cohort": "AV",
+  "name": "mk3_startsub_inside_false_if_deployment",
+  "intended_valid": true,
+  "axes": [
+   "!startsub inside !if false",
+   "deployment"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "aa31eeee20cb51bce0d3c33191364ec8a701d2988ef843169033c1e4780b5406",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_startsub_pixel_seq_legacy.puml",
+  "golden": "mk3_startsub_pixel_seq_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_startsub_pixel_seq_legacy",
+  "intended_valid": true,
+  "axes": [
+   "!startsub pixel sprite",
+   "sequence legacy"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "8158770f8c9c98240799ed61dab85e1af1c67c1bf89fd05395a098da30e916ed",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_startsub_pixel_state.puml",
+  "golden": "mk3_startsub_pixel_state.svg",
+  "cohort": "AV",
+  "name": "mk3_startsub_pixel_state",
+  "intended_valid": true,
+  "axes": [
+   "!startsub pixel sprite",
+   "state"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "1f1ea91e3eccd31579febbbd10d29bfe8be778712cce4445923ba325f304ac99",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_startsub_two_blocks_component.puml",
+  "golden": "mk3_startsub_two_blocks_component.svg",
+  "cohort": "AV",
+  "name": "mk3_startsub_two_blocks_component",
+  "intended_valid": true,
+  "axes": [
+   "two !startsub blocks in place",
+   "component"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "343e5abb5975e6627d4a71f73ab1b58579b57afa3d4130a66c1cf05ac056bea3",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_tooltip_only_legacy.puml",
+  "golden": "mk3_tooltip_only_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_tooltip_only_legacy",
+  "intended_valid": true,
+  "axes": [
+   "ONLY_TOOLTIP"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "25ea6a1c8d26f8eb124fca2d7ad0e36d66eea521d018e979ba0cb9fa6678564d",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_tooltip_and_label_legacy.puml",
+  "golden": "mk3_tooltip_and_label_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_tooltip_and_label_legacy",
+  "intended_valid": true,
+  "axes": [
+   "ONLY_TOOLTIP_AND_LABEL"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "902d2411df73a99364f9e0ee82047e712c5f60f6d8c786b0053082fd4946a11f",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_tooltip_quoted_label_legacy.puml",
+  "golden": "mk3_tooltip_quoted_label_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_tooltip_quoted_label_legacy",
+  "intended_valid": true,
+  "axes": [
+   "QUOTED with tooltip and label",
+   "untrimmed"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "c43aa32254ec4db3bd49e52d42a86c27ed0525edf290b9785d4590040784b867",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_tooltip_with_label_legacy.puml",
+  "golden": "mk3_tooltip_with_label_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_tooltip_with_label_legacy",
+  "intended_valid": true,
+  "axes": [
+   "link, tooltip and label"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "82476277ebfc8c07e5383ec0bd7d79d8e3653c5aec5c66033d4bc8644f0e0a8c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_tooltip_space_before_brace_legacy.puml",
+  "golden": "mk3_tooltip_space_before_brace_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_tooltip_space_before_brace_legacy",
+  "intended_valid": true,
+  "axes": [
+   "LINK_TOOLTIP_NOLABEL with space before {"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "4d2b3a651e9a5762fbdc3b0e2b4bd5a17819010eb3f6720d4078663f1976c790",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_tooltip_two_groups_legacy.puml",
+  "golden": "mk3_tooltip_two_groups_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_tooltip_two_groups_legacy",
+  "intended_valid": true,
+  "axes": [
+   "LINK_TOOLTIP_NOLABEL greedy across two groups"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "3dc07b4c9e608cf35fcc46886a087892ca1e1641ab162bbcc12a44a6420895af",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_tooltip_label_brace_actor_legacy.puml",
+  "golden": "mk3_tooltip_label_brace_actor_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_tooltip_label_brace_actor_legacy",
+  "intended_valid": true,
+  "axes": [
+   "label owns {y}",
+   "actor"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "30934c619e086f0a9c69cddc012acfead8d7a4722a6d55547f4837bb0777b7c2",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_tooltip_quoted_display_legacy.puml",
+  "golden": "mk3_tooltip_quoted_display_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_tooltip_quoted_display_legacy",
+  "intended_valid": true,
+  "axes": [
+   "quoted display",
+   "spaced tooltip"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "385016e6c210fb493d22bbd64180f95c0836a1de30a072cee6af7d398c4da950",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_tooltip_empty_database_legacy.puml",
+  "golden": "mk3_tooltip_empty_database_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_tooltip_empty_database_legacy",
+  "intended_valid": true,
+  "axes": [
+   "empty tooltip",
+   "database"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "853fe7c1137d1f9d7dc0a56180ccc878a853fb896a58762034dcd6c530da9b7a",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_tooltip_nested_teoz.puml",
+  "golden": "mk3_tooltip_nested_teoz.svg",
+  "cohort": "AV",
+  "name": "mk3_tooltip_nested_teoz",
+  "intended_valid": true,
+  "axes": [
+   "nested braces",
+   "teoz"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "5662110fbaed1ba9a17ccf20bf418dc315291bc9c7a132bb4e6686d89045d4ea",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_redeclare_default_moves_legacy.puml",
+  "golden": "mk3_redeclare_default_moves_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_redeclare_default_moves_legacy",
+  "intended_valid": true,
+  "axes": [
+   "default order: re-declared participant moves last"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "1278986cd0a2b91e82d37f0e90ca2428b11b70d21ee22444b2c1002c7c61d904",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_redeclare_negative_order_legacy.puml",
+  "golden": "mk3_redeclare_negative_order_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_redeclare_negative_order_legacy",
+  "intended_valid": true,
+  "axes": [
+   "negative explicit order keeps first place"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b61dc681f5222a2b736f4f75516914ddd03fb1747532b5f93a0d7472683bb6f4",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_redeclare_implicit_then_order_legacy.puml",
+  "golden": "mk3_redeclare_implicit_then_order_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_redeclare_implicit_then_order_legacy",
+  "intended_valid": true,
+  "axes": [
+   "implicit participant re-declared with an order"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "489264b5688e0fef95ee67605121642ee4cef56706e9758f1c4ed84f44e02b9c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_redeclare_higher_order_teoz.puml",
+  "golden": "mk3_redeclare_higher_order_teoz.svg",
+  "cohort": "AV",
+  "name": "mk3_redeclare_higher_order_teoz",
+  "intended_valid": true,
+  "axes": [
+   "explicit orders, re-declared highest keeps last",
+   "teoz"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "36242b534e48c76ce33c19909b5ed2bec9486759c9af64dc9aa9d345d06617fe",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "mk3_redeclare_into_box_legacy.puml",
+  "golden": "mk3_redeclare_into_box_legacy.svg",
+  "cohort": "AV",
+  "name": "mk3_redeclare_into_box_legacy",
+  "intended_valid": true,
+  "axes": [
+   "re-declaration inside a box moves into it"
+  ],
+  "mechanism": "sequence-participant-silent-residue",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "49236a798fc5d9e7f3bbd622b371406ef74590b5a9233f5aad01f5f126b45a53",
+  "java_markers": [],
+  "observed_valid": true
+ }
+]

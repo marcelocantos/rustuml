@@ -1,0 +1,6 @@
+@startuml
+map Settings {
+Sprite => loaded
+}
+class Holder
+@enduml

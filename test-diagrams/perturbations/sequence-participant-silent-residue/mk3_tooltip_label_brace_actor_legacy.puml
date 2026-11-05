@@ -1,0 +1,5 @@
+@startuml
+actor Moss [[https://example.org/m moss{y}]]
+participant Cedar
+Moss -> Cedar : go
+@enduml

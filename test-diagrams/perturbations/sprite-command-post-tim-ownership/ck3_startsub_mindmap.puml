@@ -1,0 +1,7 @@
+@startmindmap
+* root
+!startsub M
+** child
+!endsub
+** sibling
+@endmindmap

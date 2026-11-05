@@ -1,0 +1,9 @@
+@startuml
+sprite $dot [2x2/16] {
+/' comment
+still comment '/
+F0
+0F
+}
+Alder -> Birch : <$dot>
+@enduml

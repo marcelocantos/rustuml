@@ -1,0 +1,8 @@
+@startuml
+state Outer {
+header
+Sprite sheets are loaded
+endheader
+state Inner
+}
+@enduml

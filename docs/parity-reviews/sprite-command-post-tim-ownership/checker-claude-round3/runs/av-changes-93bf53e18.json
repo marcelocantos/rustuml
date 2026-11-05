@@ -1,0 +1,166 @@
+{
+ "changes": [
+  {
+   "name": "mk3_component_note_of_body",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_deployment_note_on_link_body",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_component_floating_note_body",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_state_note_on_link_body",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_state_floating_note_body",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_svg_end_trailing_deployment",
+   "cohort": "AV",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Syntax Error? sprite command never completed: sprite $mark <svg width=\"4\" height=\"4\">\n"
+  },
+  {
+   "name": "mk3_pixel_end_trailing_class",
+   "cohort": "AV",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Cannot read: [2x2/16] {\n"
+  },
+  {
+   "name": "mk3_pixel_end_trailing_seq_legacy",
+   "cohort": "AV",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 1: Cannot read: [2x2/16] {\n"
+  },
+  {
+   "name": "mk3_startsub_inside_false_if_deployment",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_startsub_two_blocks_component",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "compare-3",
+   "after": "compare-3",
+   "svg_changed": true,
+   "after_stderr": "warning: component sprite command CommandFactorySprite$1 executed; component rendering of sprite references remains unsupported at line 2\n"
+  },
+  {
+   "name": "mk3_tooltip_quoted_label_legacy",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_tooltip_with_label_legacy",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_tooltip_space_before_brace_legacy",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_tooltip_two_groups_legacy",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_tooltip_quoted_display_legacy",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk3_tooltip_empty_database_legacy",
+   "cohort": "AV",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  }
+ ],
+ "losses": [],
+ "disagreements": []
+}

@@ -1,0 +1,5 @@
+@startuml
+participant Cedar [[https://example.org/x{tip} label text]]
+participant Moss
+Cedar -> Moss : go
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+sprite $mark <svg width="4" height="4"> ' c
+<rect width="1" height="1"/>
+</svg>
+[Engine]
+@enduml

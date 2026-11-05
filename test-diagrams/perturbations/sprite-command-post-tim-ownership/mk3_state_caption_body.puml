@@ -1,0 +1,6 @@
+@startuml
+state Idle
+caption
+Sprite atlas ready
+endcaption
+@enduml

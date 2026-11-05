@@ -1,0 +1,5 @@
+@startuml
+(*) --> "load
+Sprite sheets are loaded" as L
+L --> (*)
+@enduml

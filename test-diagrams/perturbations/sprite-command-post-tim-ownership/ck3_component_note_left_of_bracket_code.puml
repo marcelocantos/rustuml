@@ -1,0 +1,6 @@
+@startuml
+[Comp]
+note left of [Comp]
+Sprite frame here
+end note
+@enduml

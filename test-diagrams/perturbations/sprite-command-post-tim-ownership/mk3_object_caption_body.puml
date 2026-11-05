@@ -1,0 +1,6 @@
+@startuml
+caption
+SPRITE QUEUE FLUSHED
+endcaption
+object Player
+@enduml

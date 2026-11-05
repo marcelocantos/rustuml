@@ -1,0 +1,8 @@
+@startuml
+!startsub ICONS
+sprite $mark <svg width="4" height="4">
+<rect width="2" height="2"/>
+</svg>
+!endsub
+actor Hero
+@enduml

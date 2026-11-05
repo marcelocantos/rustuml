@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+sprite $box <svg width="4" height="4"> /' start '/
+<rect width="4" height="4" fill="red"/>
+</svg>
+Alder -> Birch : <$box>
+@enduml
