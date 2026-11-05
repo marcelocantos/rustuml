@@ -1,0 +1,380 @@
+{
+ "m8b_lucida_arabic_digit": {
+  "java": 51.9811,
+  "base": 65.9811,
+  "merge": 51.9811,
+  "tip": 51.9811
+ },
+ "m8b_lucida_arabic_digit_ctrl": {
+  "java": 51.9811,
+  "base": 51.9811,
+  "merge": 51.9811,
+  "tip": 51.9811
+ },
+ "m8b_verdana_arabic_digit": {
+  "java": 63.3766,
+  "base": 63.3766,
+  "merge": 63.3766,
+  "tip": 63.3766
+ },
+ "m8b_verdana_arabic_digit_ctrl": {
+  "java": 49.3766,
+  "base": 49.3766,
+  "merge": 49.3766,
+  "tip": 49.3766
+ },
+ "m8b_verdana_heb_alm_digit": {
+  "java": 62.3027,
+  "base": 70.0342,
+  "merge": 56.0342,
+  "tip": 70.0342
+ },
+ "m8b_verdana_heb_alm_digit_ctrl": {
+  "java": 48.3027,
+  "base": 56.0342,
+  "merge": 56.0342,
+  "tip": 56.0342
+ },
+ "m8b_lucida_thai_alm_digit": {
+  "java": 46.6074,
+  "base": 68.3389,
+  "merge": 64.8389,
+  "tip": 54.3389
+ },
+ "m8b_lucida_thai_alm_digit_ctrl": {
+  "java": 46.6074,
+  "base": 54.3389,
+  "merge": 54.3389,
+  "tip": 54.3389
+ },
+ "m8b_lucida_thai_arabic_digit": {
+  "java": 59.9928,
+  "base": 73.9928,
+  "merge": 59.9928,
+  "tip": 59.9928
+ },
+ "m8b_lucida_thai_arabic_digit_ctrl": {
+  "java": 59.9928,
+  "base": 59.9928,
+  "merge": 59.9928,
+  "tip": 59.9928
+ },
+ "m8b_verdana_heb_alm_es": {
+  "java": 82.6602,
+  "base": 90.3916,
+  "merge": 76.3916,
+  "tip": 90.3916
+ },
+ "m8b_verdana_heb_alm_es_ctrl": {
+  "java": 68.6602,
+  "base": 76.3916,
+  "merge": 76.3916,
+  "tip": 76.3916
+ },
+ "m8b_helv_arabic_digit": {
+  "java": 49.3507,
+  "base": 63.3507,
+  "merge": 49.3507,
+  "tip": 49.3507
+ },
+ "m8b_helv_arabic_digit_ctrl": {
+  "java": 49.3507,
+  "base": 49.3507,
+  "merge": 49.3507,
+  "tip": 49.3507
+ },
+ "m8b_lucida_rle_digit": {
+  "java": 46.6074,
+  "base": 76.0703,
+  "merge": 72.5703,
+  "tip": 62.0703
+ },
+ "m8b_lucida_rle_digit_ctrl": {
+  "java": 46.6074,
+  "base": 62.0703,
+  "merge": 62.0703,
+  "tip": 62.0703
+ },
+ "m8b_lucida_rlo_digit": {
+  "java": 46.6074,
+  "base": 76.0703,
+  "merge": 72.5703,
+  "tip": 62.0703
+ },
+ "m8b_lucida_rlo_digit_ctrl": {
+  "java": 46.6074,
+  "base": 62.0703,
+  "merge": 62.0703,
+  "tip": 62.0703
+ },
+ "m8b_verdana_lro_space": {
+  "java": 64.3057,
+  "base": 81.5186,
+  "merge": 67.5186,
+  "tip": 81.5186
+ },
+ "m8b_verdana_lro_space_ctrl": {
+  "java": 50.3057,
+  "base": 67.5186,
+  "merge": 67.5186,
+  "tip": 67.5186
+ },
+ "m8b_verdana_lre_hebrew": {
+  "java": 64.3057,
+  "base": 81.5186,
+  "merge": 67.5186,
+  "tip": 81.5186
+ },
+ "m8b_verdana_lre_hebrew_ctrl": {
+  "java": 50.3057,
+  "base": 67.5186,
+  "merge": 67.5186,
+  "tip": 67.5186
+ },
+ "m8b_lucida_rli_with_hebrew": {
+  "java": 58.9189,
+  "base": 88.3818,
+  "merge": 69.4189,
+  "tip": 58.9189
+ },
+ "m8b_lucida_rli_with_hebrew_ctrl": {
+  "java": 58.9189,
+  "base": 74.3818,
+  "merge": 58.9189,
+  "tip": 58.9189
+ },
+ "m8b_lucida_rli_alone": {
+  "java": 57.1074,
+  "base": 76.0703,
+  "merge": 57.1074,
+  "tip": 57.1074
+ },
+ "m8b_lucida_rli_alone_ctrl": {
+  "java": 46.6074,
+  "base": 62.0703,
+  "merge": 46.6074,
+  "tip": 46.6074
+ },
+ "m8b_lucida_fsi_hebrew": {
+  "java": 54.4893,
+  "base": 83.9521,
+  "merge": 54.4893,
+  "tip": 54.4893
+ },
+ "m8b_lucida_fsi_hebrew_ctrl": {
+  "java": 54.4893,
+  "base": 69.9521,
+  "merge": 54.4893,
+  "tip": 54.4893
+ },
+ "m8b_verdana_rlm_deva": {
+  "java": 65.2009,
+  "base": 72.9323,
+  "merge": 72.9323,
+  "tip": 72.9323
+ },
+ "m8b_verdana_rlm_deva_ctrl": {
+  "java": 51.2009,
+  "base": 58.9323,
+  "merge": 58.9323,
+  "tip": 58.9323
+ },
+ "m8b_verdana_heb_bracket_nsm": {
+  "java": 72.0986,
+  "base": 73.8486,
+  "merge": 59.8486,
+  "tip": 73.8486
+ },
+ "m8b_verdana_heb_bracket_nsm_ctrl": {
+  "java": 58.0986,
+  "base": 59.8486,
+  "merge": 59.8486,
+  "tip": 59.8486
+ },
+ "m8b_verdana_heb_bracket_latin": {
+  "java": 74.4023,
+  "base": 74.4023,
+  "merge": 74.4023,
+  "tip": 74.4023
+ },
+ "m8b_verdana_heb_bracket_latin_ctrl": {
+  "java": 60.4023,
+  "base": 60.4023,
+  "merge": 60.4023,
+  "tip": 60.4023
+ },
+ "m8b_verdanabold_heb_tail_comma": {
+  "java": 63.5947,
+  "base": 63.5947,
+  "merge": 49.5947,
+  "tip": 63.5947
+ },
+ "m8b_verdanabold_heb_tail_comma_ctrl": {
+  "java": 49.5947,
+  "base": 49.5947,
+  "merge": 49.5947,
+  "tip": 49.5947
+ },
+ "m8b_verdana_heb_digits_tail": {
+  "java": 83.4805,
+  "base": 83.4805,
+  "merge": 69.4805,
+  "tip": 83.4805
+ },
+ "m8b_verdana_heb_digits_tail_ctrl": {
+  "java": 69.4805,
+  "base": 69.4805,
+  "merge": 69.4805,
+  "tip": 69.4805
+ },
+ "m8b_arial_heb_tail_space": {
+  "java": 50.7637,
+  "base": 54.5576,
+  "merge": 51.0576,
+  "tip": 51.0576
+ },
+ "m8b_arial_heb_tail_space_ctrl": {
+  "java": 36.374,
+  "base": 36.668,
+  "merge": 36.668,
+  "tip": 36.668
+ },
+ "m8g_cnew_deva": {
+  "java": 52.7868,
+  "base": 58.8096,
+  "merge": 58.8096,
+  "tip": 50.4082
+ },
+ "m8g_cnew_deva_ctrl": {
+  "java": 52.7868,
+  "base": 50.4082,
+  "merge": 50.4082,
+  "tip": 50.4082
+ },
+ "m8g_cnew_mymr": {
+  "java": 57.7428,
+  "base": 58.8096,
+  "merge": 58.8096,
+  "tip": 50.4082
+ },
+ "m8g_cnew_mymr_ctrl": {
+  "java": 57.7428,
+  "base": 50.4082,
+  "merge": 50.4082,
+  "tip": 50.4082
+ },
+ "m8g_cnew_tibt": {
+  "java": 49.2384,
+  "base": 58.8096,
+  "merge": 58.8096,
+  "tip": 50.4082
+ },
+ "m8g_cnew_tibt_ctrl": {
+  "java": 49.2384,
+  "base": 50.4082,
+  "merge": 50.4082,
+  "tip": 50.4082
+ },
+ "m8g_cnew_khmer": {
+  "java": 58.8096,
+  "base": 58.8096,
+  "merge": 58.8096,
+  "tip": 58.8096
+ },
+ "m8g_cnew_khmer_ctrl": {
+  "java": 50.4082,
+  "base": 50.4082,
+  "merge": 50.4082,
+  "tip": 50.4082
+ },
+ "m8g_cnew_hangul": {
+  "java": 62.5182,
+  "base": 58.8096,
+  "merge": 58.8096,
+  "tip": 58.8096
+ },
+ "m8g_cnew_hangul_ctrl": {
+  "java": 54.1168,
+  "base": 50.4082,
+  "merge": 50.4082,
+  "tip": 50.4082
+ },
+ "m8g_cnew_arabic": {
+  "java": 50.4082,
+  "base": 58.8096,
+  "merge": 58.8096,
+  "tip": 50.4082
+ },
+ "m8g_cnew_arabic_ctrl": {
+  "java": 50.4082,
+  "base": 50.4082,
+  "merge": 50.4082,
+  "tip": 50.4082
+ },
+ "m8g_cnew_syriac": {
+  "java": 50.4082,
+  "base": 58.8096,
+  "merge": 58.8096,
+  "tip": 50.4082
+ },
+ "m8g_cnew_syriac_ctrl": {
+  "java": 55.0268,
+  "base": 50.4082,
+  "merge": 50.4082,
+  "tip": 50.4082
+ },
+ "m8g_cnew_mc_after_mark": {
+  "java": 58.8096,
+  "base": 67.2109,
+  "merge": 67.2109,
+  "tip": 58.8096
+ },
+ "m8g_cnew_mc_after_mark_ctrl": {
+  "java": 58.8096,
+  "base": 58.8096,
+  "merge": 58.8096,
+  "tip": 58.8096
+ },
+ "m8g_cnewbold_deva": {
+  "java": 53.1788,
+  "base": 58.8096,
+  "merge": 58.8096,
+  "tip": 50.4082
+ },
+ "m8g_cnewbold_deva_ctrl": {
+  "java": 53.1788,
+  "base": 50.4082,
+  "merge": 50.4082,
+  "tip": 50.4082
+ },
+ "m8g_cnew_size13": {
+  "java": 46.8076,
+  "base": 62.4102,
+  "merge": 62.4102,
+  "tip": 46.8076
+ },
+ "m8g_cnew_size13_ctrl": {
+  "java": 46.8076,
+  "base": 46.8076,
+  "merge": 46.8076,
+  "tip": 46.8076
+ },
+ "m8g_arial_deva": {
+  "java": 50.0661,
+  "base": 53.5661,
+  "merge": 50.0661,
+  "tip": 50.0661
+ },
+ "m8g_arial_deva_ctrl": {
+  "java": 39.5661,
+  "base": 39.5661,
+  "merge": 39.5661,
+  "tip": 39.5661
+ },
+ "m8g_cnew_sequence": {
+  "java": null,
+  "base": null,
+  "merge": null,
+  "tip": null
+ }
+}

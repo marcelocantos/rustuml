@@ -1,0 +1,21 @@
+# local hb-shape diagnostic (colossus; NOT the Java oracle): hb-shape (HarfBuzz) 15.0.0; brew harfbuzz harfbuzz 15.0.0_1
+# glyph 0 = .notdef for U+1D167 after 'x'; features -kern,-liga; JDK passes no glyph extents, irrelevant to GDEF zeroing
+Courier New.ttf Latn [91=0+1229|0=0+0]
+Courier New.ttf Hebr [0=0+0|91=0+1229]
+Courier New Bold.ttf Latn [91=0+1229|0=0+0]
+Courier New Bold.ttf Hebr [0=0+0|91=0+1229]
+Courier New Italic.ttf Latn [91=0+1229|0=0+1229]
+Courier New Italic.ttf Hebr [0=0+1229|91=0+1229]
+Courier New Bold Italic.ttf Latn [91=0+1229|0=0+1229]
+Courier New Bold Italic.ttf Hebr [0=0+1229|91=0+1229]
+Times New Roman.ttf Latn [91=0+1024|0=0+1593]
+Times New Roman.ttf Hebr [0=0+1593|91=0+1024]
+Times New Roman Italic.ttf Latn [91=0+909|0=0+0]
+Times New Roman Italic.ttf Hebr [0=0+0|91=0+909]
+Times New Roman Bold Italic.ttf Latn [91=0+1024|0=0+0]
+Times New Roman Bold Italic.ttf Hebr [0=0+0|91=0+1024]
+# Helvetica.ttc face 0 bidi mirroring U+2E04/U+2E05
+ltr ⸄⸄ [1923=0+409|1923=1+409]
+ltr ⸅⸅ [1924=0+408|1924=1+408]
+rtl ⸄⸄ [1924=1+408|1924=0+408]
+rtl ⸅⸅ [1923=1+409|1923=0+409]
