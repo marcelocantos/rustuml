@@ -1,0 +1,397 @@
+{
+ "schema_version": 1,
+ "batch": "r6a",
+ "cases": [
+  {
+   "name": "yd7_nested_key_value",
+   "axes": [
+    "yaml",
+    "depth 2",
+    "backslash-n in key",
+    "doubled backslash in value"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "yd7_two_tabs",
+   "axes": [
+    "yaml",
+    "two tabs",
+    "tab past the first stop"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "yd7_right_align",
+   "axes": [
+    "yaml",
+    "backslash-r natural RIGHT alignment"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "yd7_left_align",
+   "axes": [
+    "yaml",
+    "backslash-l natural LEFT alignment"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "yd7_unknown_pair_escaped_tab",
+   "axes": [
+    "yaml",
+    "unknown pair kept",
+    "doubled backslash then t -> manageEscapedTabs"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "yd7_block_mid_document",
+   "axes": [
+    "yaml",
+    "block scalar mid-document",
+    "blank line inside block"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "yd7_list_newline",
+   "axes": [
+    "yaml",
+    "list item backslash-n"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "yd7_padded_value",
+   "axes": [
+    "yaml",
+    "leading and trailing spaces"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "yd7_raw_brackets",
+   "axes": [
+    "yaml",
+    "raw mode [[ ]] keeps backslash-n"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "jd7_nested_encoded_newline",
+   "axes": [
+    "json",
+    "encoded backslash-n in key",
+    "encoded backslash-t",
+    "nested"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "jd7_decoded_newline",
+   "axes": [
+    "json",
+    "decoded newline (real LF) inside a line"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "jd7_highlight_multiline",
+   "axes": [
+    "json",
+    "highlighted multi-line row"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "jd7_array_multiline_nested",
+   "axes": [
+    "json",
+    "nested array box with uneven row heights"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_1dfa_complex",
+   "axes": [
+    "mark",
+    "U+1DFA Mn (Unicode 14) BMP, complex via U+10FFFD"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_1df6_complex",
+   "axes": [
+    "mark",
+    "U+1DF6 Mn BMP, complex"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_1ace_complex",
+   "axes": [
+    "mark",
+    "U+1ACE Mn (Unicode 14), complex"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_11f00",
+   "axes": [
+    "mark",
+    "U+11F00 Kawi Mn (Unicode 15), weak in Unicode 3.2"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_1e4ec",
+   "axes": [
+    "mark",
+    "U+1E4EC Nag Mundari Mn (Unicode 15)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_10efd",
+   "axes": [
+    "mark",
+    "U+10EFD Arabic Extended-C Mn (Unicode 15)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_1e08f",
+   "axes": [
+    "mark",
+    "U+1E08F Cyrillic Extended-D Mn (Unicode 15)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_0897_u16",
+   "axes": [
+    "mark",
+    "U+0897 Mn only from Unicode 16 (Cn in HarfBuzz 8.2.2): .notdef"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_1e5ee_u16",
+   "axes": [
+    "mark",
+    "U+1E5EE Mn only from Unicode 16: .notdef"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_lead_mark",
+   "axes": [
+    "mark",
+    "mark at the start of the text"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_after_hebrew",
+   "axes": [
+    "mark",
+    "after a Hebrew letter: hebrew shaper -> dumber (morx): .notdef"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_after_bracket",
+   "axes": [
+    "mark",
+    "after a closing bracket that ends the Hebrew run (ScriptRun stack)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_bold",
+   "axes": [
+    "mark",
+    "Lucida Grande Bold"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_helvetica",
+   "axes": [
+    "mark",
+    "Helvetica (no GDEF, morx, OT kern)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_arial",
+   "axes": [
+    "mark",
+    "Arial (GDEF: glyph 0 base): .notdef"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_mono",
+   "axes": [
+    "mark",
+    "Monospaced (Menlo, no GDEF)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "mk7_seq",
+   "axes": [
+    "mark",
+    "sequence message"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_31bc_simple",
+   "axes": [
+    "font environment",
+    "U+31BC simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_31bc_complex",
+   "axes": [
+    "font environment",
+    "U+31BC complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_f817_simple",
+   "axes": [
+    "font environment",
+    "U+F817 simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_f817_complex",
+   "axes": [
+    "font environment",
+    "U+F817 complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_31d0_simple",
+   "axes": [
+    "font environment",
+    "U+31D0 simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_31d0_complex",
+   "axes": [
+    "font environment",
+    "U+31D0 complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_fe20_simple",
+   "axes": [
+    "font environment",
+    "U+FE20 simple path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_fe20_complex",
+   "axes": [
+    "font environment",
+    "U+FE20 complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_1f101",
+   "axes": [
+    "font environment",
+    "U+1F101 complex path (PingFang asset)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_f8b7_simple",
+   "axes": [
+    "font environment",
+    "U+F8B7 simple path (user font / asset)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_f8b7_complex",
+   "axes": [
+    "font environment",
+    "U+F8B7 complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_20b7_simple",
+   "axes": [
+    "font environment",
+    "U+20B7 simple path (user font / asset)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_20b7_complex",
+   "axes": [
+    "font environment",
+    "U+20B7 complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_f880_simple",
+   "axes": [
+    "font environment",
+    "U+F880 simple path (user font / asset)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "fe7_f880_complex",
+   "axes": [
+    "font environment",
+    "U+F880 complex path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv7_integer_outer",
+   "axes": [
+    "canvas",
+    "outer image path, renamed integral-extent variant"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv7_root_group_note",
+   "axes": [
+    "canvas",
+    "root cluster path, fractional width"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cv7_root_note_later_inner",
+   "axes": [
+    "canvas",
+    "root cluster path, outer note anchored to a later inner state"
+   ],
+   "intended_valid": true
+  }
+ ]
+}

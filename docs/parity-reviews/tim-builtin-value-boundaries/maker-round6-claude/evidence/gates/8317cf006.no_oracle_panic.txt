@@ -1,0 +1,6 @@
+thread 'golden_no_oracle' (52401458) panicked at crates/rustuml-oracle/tests/golden_no_oracle.rs:219:5:
+no-oracle progress not locked in (or corpus changed) — rerun with HARNESS_WRITE_BASELINES=1 and commit the baseline:
+  class: pass 1962 -> 1963 (eligible 1971 -> 1971)
+  preprocessing: pass 284 -> 285 (eligible 307 -> 307)
+  rendering: pass 91 -> 95 (eligible 98 -> 98)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace

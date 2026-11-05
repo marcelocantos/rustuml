@@ -1,0 +1,145 @@
+{
+ "LucidaGrande": {
+  "simple_missing_r5": 10680,
+  "simple_missing_r6": 10330,
+  "now_mapped_in_simple": 351,
+  "now_missing_in_simple": 1,
+  "now_mapped_sample": "20B7 218A 218B F800 F801 F80D F80E F80F F810 F811 F812 F813 F814 F815 F816 F83C F83E F851 F852 F853 F854 F855 F856 F857 F858 F859 F85A F85B F85C F85D F85E F86C F86D F86E F86F F882 F883 F884 F885 F886",
+  "now_missing_sample": "FE0F",
+  "complex_mapped_r5": 60892,
+  "complex_mapped_r6": 60892,
+  "complex_diff": 0
+ },
+ "LucidaGrande-Bold": {
+  "simple_missing_r5": 10680,
+  "simple_missing_r6": 10330,
+  "now_mapped_in_simple": 351,
+  "now_missing_in_simple": 1,
+  "now_mapped_sample": "20B7 218A 218B F800 F801 F80D F80E F80F F810 F811 F812 F813 F814 F815 F816 F83C F83E F851 F852 F853 F854 F855 F856 F857 F858 F859 F85A F85B F85C F85D F85E F86C F86D F86E F86F F882 F883 F884 F885 F886",
+  "now_missing_sample": "FE0F",
+  "complex_mapped_r5": 60800,
+  "complex_mapped_r6": 60800,
+  "complex_diff": 0
+ },
+ "ArialMT": {
+  "simple_missing_r5": 10680,
+  "simple_missing_r6": 10331,
+  "now_mapped_in_simple": 351,
+  "now_missing_in_simple": 2,
+  "now_mapped_sample": "20B7 218A 218B F800 F801 F80D F80E F80F F810 F811 F812 F813 F814 F815 F816 F83C F83E F851 F852 F853 F854 F855 F856 F857 F858 F859 F85A F85B F85C F85D F85E F86C F86D F86E F86F F882 F883 F884 F885 F886",
+  "now_missing_sample": "FE0E FE0F",
+  "complex_mapped_r5": 60971,
+  "complex_mapped_r6": 60971,
+  "complex_diff": 0
+ },
+ "Arial-BoldMT": {
+  "simple_missing_r5": 10680,
+  "simple_missing_r6": 10331,
+  "now_mapped_in_simple": 351,
+  "now_missing_in_simple": 2,
+  "now_mapped_sample": "20B7 218A 218B F800 F801 F80D F80E F80F F810 F811 F812 F813 F814 F815 F816 F83C F83E F851 F852 F853 F854 F855 F856 F857 F858 F859 F85A F85B F85C F85D F85E F86C F86D F86E F86F F882 F883 F884 F885 F886",
+  "now_missing_sample": "FE0E FE0F",
+  "complex_mapped_r5": 60879,
+  "complex_mapped_r6": 60879,
+  "complex_diff": 0
+ },
+ "Helvetica": {
+  "simple_missing_r5": 10670,
+  "simple_missing_r6": 10321,
+  "now_mapped_in_simple": 351,
+  "now_missing_in_simple": 2,
+  "now_mapped_sample": "20B7 218A 218B F800 F801 F80D F80E F80F F810 F811 F812 F813 F814 F815 F816 F83C F83E F851 F852 F853 F854 F855 F856 F857 F858 F859 F85A F85B F85C F85D F85E F86C F86D F86E F86F F882 F883 F884 F885 F886",
+  "now_missing_sample": "FE0E FE0F",
+  "complex_mapped_r5": 60892,
+  "complex_mapped_r6": 60892,
+  "complex_diff": 0
+ },
+ "Helvetica-Bold": {
+  "simple_missing_r5": 10670,
+  "simple_missing_r6": 10321,
+  "now_mapped_in_simple": 351,
+  "now_missing_in_simple": 2,
+  "now_mapped_sample": "20B7 218A 218B F800 F801 F80D F80E F80F F810 F811 F812 F813 F814 F815 F816 F83C F83E F851 F852 F853 F854 F855 F856 F857 F858 F859 F85A F85B F85C F85D F85E F86C F86D F86E F86F F882 F883 F884 F885 F886",
+  "now_missing_sample": "FE0E FE0F",
+  "complex_mapped_r5": 60800,
+  "complex_mapped_r6": 60800,
+  "complex_diff": 0
+ },
+ "Verdana": {
+  "simple_missing_r5": 10680,
+  "simple_missing_r6": 10331,
+  "now_mapped_in_simple": 351,
+  "now_missing_in_simple": 2,
+  "now_mapped_sample": "20B7 218A 218B F800 F801 F80D F80E F80F F810 F811 F812 F813 F814 F815 F816 F83C F83E F851 F852 F853 F854 F855 F856 F857 F858 F859 F85A F85B F85C F85D F85E F86C F86D F86E F86F F882 F883 F884 F885 F886",
+  "now_missing_sample": "FE0E FE0F",
+  "complex_mapped_r5": 60892,
+  "complex_mapped_r6": 60892,
+  "complex_diff": 0
+ },
+ "Verdana-Bold": {
+  "simple_missing_r5": 10680,
+  "simple_missing_r6": 10331,
+  "now_mapped_in_simple": 351,
+  "now_missing_in_simple": 2,
+  "now_mapped_sample": "20B7 218A 218B F800 F801 F80D F80E F80F F810 F811 F812 F813 F814 F815 F816 F83C F83E F851 F852 F853 F854 F855 F856 F857 F858 F859 F85A F85B F85C F85D F85E F86C F86D F86E F86F F882 F883 F884 F885 F886",
+  "now_missing_sample": "FE0E FE0F",
+  "complex_mapped_r5": 60800,
+  "complex_mapped_r6": 60800,
+  "complex_diff": 0
+ },
+ "Menlo-Regular": {
+  "simple_missing_r5": 10679,
+  "simple_missing_r6": 10330,
+  "now_mapped_in_simple": 351,
+  "now_missing_in_simple": 2,
+  "now_mapped_sample": "20B7 218A 218B F800 F801 F80D F80E F80F F810 F811 F812 F813 F814 F815 F816 F83C F83E F851 F852 F853 F854 F855 F856 F857 F858 F859 F85A F85B F85C F85D F85E F86C F86D F86E F86F F882 F883 F884 F885 F886",
+  "now_missing_sample": "FE0E FE0F",
+  "complex_mapped_r5": 60965,
+  "complex_mapped_r6": 60965,
+  "complex_diff": 0
+ },
+ "Menlo-Bold": {
+  "simple_missing_r5": 10679,
+  "simple_missing_r6": 10330,
+  "now_mapped_in_simple": 351,
+  "now_missing_in_simple": 2,
+  "now_mapped_sample": "20B7 218A 218B F800 F801 F80D F80E F80F F810 F811 F812 F813 F814 F815 F816 F83C F83E F851 F852 F853 F854 F855 F856 F857 F858 F859 F85A F85B F85C F85D F85E F86C F86D F86E F86F F882 F883 F884 F885 F886",
+  "now_missing_sample": "FE0E FE0F",
+  "complex_mapped_r5": 60872,
+  "complex_mapped_r6": 60872,
+  "complex_diff": 0
+ },
+ "CourierNewPSMT": {
+  "simple_missing_r5": 10680,
+  "simple_missing_r6": 10331,
+  "now_mapped_in_simple": 351,
+  "now_missing_in_simple": 2,
+  "now_mapped_sample": "20B7 218A 218B F800 F801 F80D F80E F80F F810 F811 F812 F813 F814 F815 F816 F83C F83E F851 F852 F853 F854 F855 F856 F857 F858 F859 F85A F85B F85C F85D F85E F86C F86D F86E F86F F882 F883 F884 F885 F886",
+  "now_missing_sample": "FE0E FE0F",
+  "complex_mapped_r5": 60965,
+  "complex_mapped_r6": 60965,
+  "complex_diff": 0
+ },
+ "CourierNewPS-BoldMT": {
+  "simple_missing_r5": 10680,
+  "simple_missing_r6": 10331,
+  "now_mapped_in_simple": 351,
+  "now_missing_in_simple": 2,
+  "now_mapped_sample": "20B7 218A 218B F800 F801 F80D F80E F80F F810 F811 F812 F813 F814 F815 F816 F83C F83E F851 F852 F853 F854 F855 F856 F857 F858 F859 F85A F85B F85C F85D F85E F86C F86D F86E F86F F882 F883 F884 F885 F886",
+  "now_missing_sample": "FE0E FE0F",
+  "complex_mapped_r5": 60872,
+  "complex_mapped_r6": 60872,
+  "complex_diff": 0
+ },
+ "TimesNewRomanPSMT": {
+  "simple_missing_r5": 10680,
+  "simple_missing_r6": 10331,
+  "now_mapped_in_simple": 351,
+  "now_missing_in_simple": 2,
+  "now_mapped_sample": "20B7 218A 218B F800 F801 F80D F80E F80F F810 F811 F812 F813 F814 F815 F816 F83C F83E F851 F852 F853 F854 F855 F856 F857 F858 F859 F85A F85B F85C F85D F85E F86C F86D F86E F86F F882 F883 F884 F885 F886",
+  "now_missing_sample": "FE0E FE0F",
+  "complex_mapped_r5": 57631,
+  "complex_mapped_r6": 57631,
+  "complex_diff": 0
+ }
+}

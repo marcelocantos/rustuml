@@ -1,0 +1,4 @@
+@startyaml
+k: "keep \q here"
+j: "a\\tb"
+@endyaml

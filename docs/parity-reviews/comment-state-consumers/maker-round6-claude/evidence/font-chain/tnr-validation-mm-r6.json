@@ -1,0 +1,356 @@
+{
+ "oracle": "times_new_roman_unicode.rs (Java AWT extraction, PhysicalFontMetricsExtract --rust-unicode-ranges)",
+ "extract_header": {
+  "#host": [
+   [
+    "Version 27.2 (Build 26B123)"
+   ]
+  ],
+  "#family": [
+   [
+    "TimesNewRomanPSMT",
+    "TimesNewRomanPSMT",
+    "/System/Library/Fonts/Supplemental/Times New Roman.ttf",
+    "system"
+   ]
+  ],
+  "#notdef_advance_units": [
+   [
+    "1593.0",
+    "units_per_em",
+    "2048"
+   ]
+  ],
+  "#hb_plan": [
+   [
+    "gdef_glyph_classes=1",
+    "notdef_gdef_class=1",
+    "gsub=1",
+    "gpos=1",
+    "morx=0",
+    "kerx=0",
+    "kern=1",
+    "kern_formats=0",
+    "machine_kern=0"
+   ]
+  ],
+  "#cascade_languages": [
+   [
+    "631"
+   ]
+  ],
+  "#slot_dropped": [
+   [
+    ".TimesFB"
+   ]
+  ],
+  "#slot": [
+   [
+    "AppleSymbols",
+    "/System/Library/Fonts/Apple Symbols.ttf",
+    "system",
+    "registered"
+   ],
+   [
+    "LucidaGrande",
+    "/System/Library/Fonts/LucidaGrande.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "GeezaPro",
+    "/System/Library/Fonts/GeezaPro.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "NotoNastaliqUrdu",
+    "/System/Library/Fonts/NotoNastaliq.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "Kokonor",
+    "/System/Library/Fonts/Supplemental/Kokonor.ttf",
+    "system",
+    "registered"
+   ],
+   [
+    "HiraMinProN-W3",
+    "/System/Library/Fonts/\u30d2\u30e9\u30ad\u3099\u30ce\u660e\u671d ProN.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "AppleMyungjo",
+    "/System/Library/Fonts/Supplemental/AppleMyungjo.ttf",
+    "system",
+    "registered"
+   ],
+   [
+    "NotoSerifMyanmar-Regular",
+    "/System/Library/Fonts/NotoSerifMyanmar.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "STSongti-SC-Regular",
+    "/System/Library/Fonts/Supplemental/Songti.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "STSongti-TC-Regular",
+    "/System/Library/Fonts/Supplemental/Songti.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "NotoSansZawgyi-Regular",
+    "/System/Library/Fonts/NotoSansMyanmar.ttc",
+    "system",
+    "by_name"
+   ],
+   [
+    "Thonburi",
+    "/System/Library/Fonts/Supplemental/Thonburi.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "ITFDevanagari-Book",
+    "/System/Library/Fonts/Supplemental/ITFDevanagari.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "KohinoorBangla-Regular",
+    "/System/Library/Fonts/KohinoorBangla.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "KohinoorGujarati-Regular",
+    "/System/Library/Fonts/KohinoorGujarati.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "MuktaMahee-Regular",
+    "/System/Library/Fonts/MuktaMahee.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "KannadaMN",
+    "/System/Library/Fonts/Supplemental/Kannada MN.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "KhmerMN",
+    "/System/Library/Fonts/Supplemental/Khmer MN.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "LaoMN",
+    "/System/Library/Fonts/Supplemental/Lao MN.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "MalayalamMN",
+    "/System/Library/Fonts/Supplemental/Malayalam MN.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "OriyaMN",
+    "/System/Library/Fonts/Supplemental/Oriya MN.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "SinhalaMN",
+    "/System/Library/Fonts/Supplemental/Sinhala MN.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "TamilSangamMN",
+    "/System/Library/Fonts/Supplemental/Tamil Sangam MN.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "KohinoorTelugu-Regular",
+    "/System/Library/Fonts/KohinoorTelugu.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "NotoSansArmenian-Regular",
+    "/System/Library/Fonts/NotoSansArmenian.ttc",
+    "system",
+    "by_name"
+   ],
+   [
+    "EuphemiaUCAS",
+    "/System/Library/Fonts/Supplemental/EuphemiaCAS.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "Helvetica",
+    "/System/Library/Fonts/Helvetica.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "Menlo-Regular",
+    "/System/Library/Fonts/Menlo.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "STIXTwoMath-Regular",
+    "/System/Library/Fonts/Supplemental/STIXTwoMath.otf",
+    "system",
+    "registered"
+   ],
+   [
+    "Galvji",
+    "/System/Library/Fonts/Supplemental/Galvji.ttc",
+    "system",
+    "registered"
+   ],
+   [
+    "KefaIII-Regular",
+    "/System/Library/Fonts/Supplemental/KefaIII.ttf",
+    "system",
+    "registered"
+   ],
+   [
+    "AppleColorEmoji",
+    "/System/Library/Fonts/Apple Color Emoji.ttc",
+    "system",
+    "registered"
+   ]
+  ],
+  "#simple_substitutions": [
+   [
+    "asset",
+    "41"
+   ],
+   [
+    "system",
+    "52013"
+   ],
+   [
+    "user",
+    "351"
+   ]
+  ]
+ },
+ "java_defined_scalars": 286591,
+ "agree": 286291,
+ "disagree": 300,
+ "classes": {
+  "java=missing model=missing agree supplementary": 218913,
+  "java=advance model=mapped agree bmp": 53700,
+  "java=missing model=missing agree bmp": 7132,
+  "java=advance model=mapped agree supplementary": 5389,
+  "java=zero model=mapped agree bmp": 775,
+  "java=zero model=ignorable agree supplementary": 318,
+  "java=missing model=mapped DISAGREE bmp": 286,
+  "java=zero model=mapped agree supplementary": 64,
+  "java=advance model=missing DISAGREE bmp": 12,
+  "java=zero model=missing DISAGREE bmp": 1,
+  "java=missing model=mapped DISAGREE supplementary": 1
+ },
+ "disagreement_examples": {
+  "java=missing model=mapped DISAGREE bmp": [
+   "U+01CC",
+   "U+026F",
+   "U+0270",
+   "U+0271",
+   "U+03E3",
+   "U+1D6F",
+   "U+1D86",
+   "U+1DF5",
+   "U+1E3F",
+   "U+1E41",
+   "U+1E43",
+   "U+20A5",
+   "U+211A",
+   "U+218A",
+   "U+218B",
+   "U+22AD",
+   "U+31BC",
+   "U+31BD",
+   "U+31BE",
+   "U+31BF",
+   "U+327E",
+   "U+A8FB",
+   "U+F800",
+   "U+F801",
+   "U+F80D",
+   "U+F80E",
+   "U+F80F",
+   "U+F810",
+   "U+F811",
+   "U+F812",
+   "U+F813",
+   "U+F814",
+   "U+F815",
+   "U+F816",
+   "U+F817",
+   "U+F818",
+   "U+F819",
+   "U+F81A",
+   "U+F81B",
+   "U+F81C",
+   "U+F81D",
+   "U+F828",
+   "U+F829",
+   "U+F82A",
+   "U+F82B",
+   "U+F82C",
+   "U+F82D",
+   "U+F82E",
+   "U+F82F",
+   "U+F830",
+   "U+F831",
+   "U+F832",
+   "U+F833",
+   "U+F834",
+   "U+F835",
+   "U+F836",
+   "U+F837",
+   "U+F838",
+   "U+F839",
+   "U+F83A"
+  ],
+  "java=advance model=missing DISAGREE bmp": [
+   "U+0528",
+   "U+0529",
+   "U+052A",
+   "U+052B",
+   "U+052C",
+   "U+052D",
+   "U+A698",
+   "U+A699",
+   "U+A69A",
+   "U+A69B",
+   "U+A69C",
+   "U+A69D"
+  ],
+  "java=zero model=missing DISAGREE bmp": [
+   "U+A69E"
+  ],
+  "java=missing model=mapped DISAGREE supplementary": [
+   "U+11FD2"
+  ]
+ }
+}
