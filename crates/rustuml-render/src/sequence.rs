@@ -14870,9 +14870,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // CommandDelay preserves spacer atoms. SVG emits the ink text
                 // after leading spacers, while allocation includes both sides.
                 let leading = &t[..t.len() - t.trim_start().len()];
-                let leading_width = text_width_with_family(
+                // The leading spacers are a prefix of the label's stripe, not
+                // a stripe of their own, so none means zero width.
+                let leading_width = text_render::measure_atom_run_with_family(
                     leading,
                     DELAY_LABEL_FONT_SIZE as f64,
+                    false,
                     &message_font_family,
                 );
                 text_render::emit_text(

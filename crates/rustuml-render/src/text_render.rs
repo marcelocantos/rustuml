@@ -433,6 +433,38 @@ pub fn total_width(content: &str, base: &TextBase<'_>) -> f64 {
     advance
 }
 
+/// Width of a run of atoms that is only part of one stripe, such as the
+/// spacer atoms before a label's first ink atom.
+///
+/// Java provenance: `StripeSimple.getAtoms` adds its single `" "` atom only
+/// when a whole stripe has no atoms. A prefix of a stripe is not a stripe, so
+/// an empty run is zero atoms and has zero width. Whole lines must keep using
+/// [`measure_with_family`].
+pub fn measure_atom_run_with_family(
+    content: &str,
+    font_size: f64,
+    bold: bool,
+    font_family: &str,
+) -> f64 {
+    let base = TextBase {
+        x: 0.0,
+        y: 0.0,
+        font_size: font_size as u32,
+        font_family,
+        fill: "#000000",
+        bold,
+        italic: false,
+        underline: false,
+        skip_underline: false,
+    };
+    let content = normalize_tab_escapes(content);
+    let mut advance = 0.0;
+    for seg in &creole::parse_segments(&content) {
+        advance = segment_advance(seg, &base, advance);
+    }
+    advance
+}
+
 fn normalize_tab_escapes(s: &str) -> Cow<'_, str> {
     if !s.contains("\\t") {
         return Cow::Borrowed(s);
@@ -1782,6 +1814,18 @@ fn write_text_element(
 
 #[cfg(test)]
 mod tests {
+    #[test]
+    fn atom_run_measurement_does_not_apply_the_empty_stripe_space() {
+        assert_eq!(measure_atom_run_with_family("", 11.0, false, "sans-serif"), 0.0);
+        assert!(measure_with_family("", 11.0, false, "sans-serif") > 0.0);
+        for run in [" ", "   ", "\t"] {
+            assert_eq!(
+                measure_atom_run_with_family(run, 11.0, false, "sans-serif"),
+                measure_with_family(run, 11.0, false, "sans-serif"),
+            );
+        }
+    }
+
     use super::*;
 
     #[test]
