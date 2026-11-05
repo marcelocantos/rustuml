@@ -2675,11 +2675,16 @@ fn endpoint_parent_scope<'a>(
     diagram: &'a StateDiagram,
     endpoint: &'a str,
 ) -> Option<Option<&'a str>> {
-    if endpoint == "[*]" {
-        return Some(None);
-    }
-    if let Some(scope) = endpoint.strip_prefix("[*]") {
-        return Some(Some(scope));
+    // `StateDiagram.getStart/getEnd/getHistorical/getDeepHistory` create
+    // the pseudo leaf as a Quark child of the current group (at the root
+    // when unscoped), so the marker's parent container is that group.
+    for marker in ["[*]", "[H*]", "[H]"] {
+        if endpoint == marker {
+            return Some(None);
+        }
+        if let Some(scope) = endpoint.strip_prefix(marker) {
+            return Some(Some(scope));
+        }
     }
     diagram
         .states
@@ -2754,6 +2759,31 @@ fn autonomous_group_is_autarkic(diagram: &StateDiagram, group: &str) -> bool {
         autonomous_endpoint_is_inside(diagram, &transition.from, group)
             == autonomous_endpoint_is_inside(diagram, &transition.to, group)
     })
+}
+
+/// Java `Entity.isAutarkic` for a state group: whether
+/// `CucaDiagramSimplifierState` replaces it with a `GroupMakerState` image
+/// instead of leaving it for `Cluster.drawU`.
+///
+/// Concurrent regions are always autarkic. Otherwise every link must be a
+/// pure inner link (`EntityUtils.isPureInnerLink3`) and every direct leaf
+/// must have `EntityPosition.NORMAL`.
+fn java_state_group_is_autarkic(diagram: &StateDiagram, group: &str) -> bool {
+    let is_concurrent_region = diagram.states.iter().any(|state| {
+        state
+            .concurrent_regions
+            .iter()
+            .any(|region| region.id == group)
+    });
+    if is_concurrent_region {
+        return true;
+    }
+    autonomous_group_is_autarkic(diagram, group)
+        && diagram
+            .states
+            .iter()
+            .filter(|state| !state.composite && state.parent.as_deref() == Some(group))
+            .all(|state| StateEntityPosition::of(state).is_normal())
 }
 
 fn state_edge_label_margin(transition: &Transition) -> f64 {
@@ -4138,8 +4168,10 @@ fn emit_autonomous_scope_links(
         };
         // Java provenance: `Link.commentForSvg` and `Link.idCommentForSvg`
         // build both values from `Entity.getName()`, not the display label.
-        let from_name = autonomous_endpoint_svg_name(&transition.from, true);
-        let to_name = autonomous_endpoint_svg_name(&transition.to, false);
+        // Project each lossless endpoint id once, so history markers keep
+        // their `*historical*`/`*deephistory*` names.
+        let from_name = state_comment_endpoint(&transition.from, true);
+        let to_name = state_comment_endpoint(&transition.to, false);
         let (edge_from_name, edge_to_name) = if solved_reversed {
             (&to_name, &from_name)
         } else {
@@ -4150,9 +4182,7 @@ fn emit_autonomous_scope_links(
                 svg,
                 "<!--{svg_comment}-->",
                 svg_comment = crate::svg::comment_text(&format!(
-                    "reverse link {} to {}",
-                    state_comment_endpoint(edge_from_name, true),
-                    state_comment_endpoint(edge_to_name, false)
+                    "reverse link {edge_from_name} to {edge_to_name}"
                 )),
             )
             .unwrap();
@@ -4161,9 +4191,7 @@ fn emit_autonomous_scope_links(
                 svg,
                 "<!--{svg_comment}-->",
                 svg_comment = crate::svg::comment_text(&format!(
-                    "link {} to {}",
-                    state_comment_endpoint(edge_from_name, true),
-                    state_comment_endpoint(edge_to_name, false)
+                    "link {edge_from_name} to {edge_to_name}"
                 )),
             )
             .unwrap();
@@ -5505,8 +5533,12 @@ fn emit_root_state_cluster(
     let style = autonomous_state_style(context.diagram, context.skin, Some(composite));
     let shadow_attr = autonomous_shadow_attr(context, style.shadow);
     // Cluster.drawU:309–311 uses the local Quark name and hides ## groups.
+    // Only groups that survive CucaDiagramSimplifierState reach Cluster.drawU;
+    // autarkic ones become GroupMakerState images, which emit no comment.
     let comment_name = autonomous_endpoint_svg_name(&composite.id, false);
-    if !comment_name.starts_with("##") {
+    if !comment_name.starts_with("##")
+        && !java_state_group_is_autarkic(context.diagram, &composite.id)
+    {
         write!(
             svg,
             "<!--{}-->",
