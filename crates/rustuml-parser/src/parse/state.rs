@@ -353,6 +353,21 @@ impl StateParser {
         if raw.starts_with('[') && raw.ends_with(']') {
             return self.qualify(raw);
         }
+        // CommandLinkStateCommon: `X[H]` / `X[H*]` call StateDiagram
+        // getHistorical/getDeepHistory(location, X), which resolve X with
+        // quarkInContext(true, ...), enter it as a STATE group and create the
+        // history pseudo-state inside it.
+        for marker in ["[H*]", "[H]"] {
+            if let Some(base) = raw.strip_suffix(marker)
+                && !base.is_empty()
+            {
+                let group = self.ensure_state(base);
+                if let Some(state) = self.states.iter_mut().find(|state| state.id == group) {
+                    state.composite = true;
+                }
+                return format!("{marker}{group}");
+            }
+        }
         let id = self.resolve_state_id(raw);
         let parent = self.current_scope().map(String::from);
         if let Some(state) = self.states.iter_mut().find(|state| state.id == id) {
@@ -525,7 +540,7 @@ impl StateParser {
             // `<` to keep this loose; typed direction and command orientation
             // are derived from the captured arrow token.
             Regex::new(
-                r"^(\[[\w*]*\]|[\w.]+)\s*([-.<>][-.<>\[\]#,=\w]*[->])\s*(\[[\w*]*\]|[\w.]+)(?:\s*:\s*(.+))?$",
+                r"^(\[[\w*]*\]|[\w.]+(?:\[H\*?\])?)\s*([-.<>][-.<>\[\]#,=\w]*[->])\s*(\[[\w*]*\]|[\w.]+(?:\[H\*?\])?)(?:\s*:\s*(.+))?$",
             )
             .unwrap()
         });
@@ -1442,5 +1457,30 @@ mod tests {
         ));
         assert_eq!(d.notes[0].source_line, 2);
         assert_eq!(d.notes[0].command_line, 1);
+    }
+
+    #[test]
+    fn suffix_history_endpoints_enter_the_named_group() {
+        // StateDiagram.getHistorical/getDeepHistory(location, idShort).
+        let d = parse(
+            "state Outer {\n\
+             state Cellar {\n\
+             [*] --> Cask\n\
+             }\n\
+             Porter --> Cellar[H]\n\
+             }\n\
+             Porter --> Attic[H*]",
+        );
+        let endpoints: Vec<_> = d.transitions.iter().map(|t| t.to.as_str()).collect();
+        assert_eq!(
+            endpoints,
+            ["Outer.Cellar.Cask", "[H]Outer.Cellar", "[H*]Attic"]
+        );
+        for group in ["Outer.Cellar", "Attic"] {
+            assert!(
+                d.states.iter().any(|s| s.id == group && s.composite),
+                "{group}"
+            );
+        }
     }
 }
