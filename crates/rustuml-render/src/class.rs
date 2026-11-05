@@ -11524,11 +11524,7 @@ fn render_relationship_svg(
                 || skinparam.key.eq_ignore_ascii_case("ArrowThickness")
         })
         .and_then(|skinparam| skinparam.value.trim().parse::<f64>().ok());
-    let arrow_style = StyleCascade::new(&diagram.meta.style_program).resolve_link_at_source_line(
-        &StyleSignature::from_selectors(["root", "element", "classDiagram", "arrow"]),
-        StyleScheme::Regular,
-        rel.source_line,
-    );
+    let arrow_style = relationship_arrow_style(diagram, rel);
     let default_arrow_color = arrow_style
         .property("lineColor")
         .map(crate::sequence::resolve_color)
@@ -11541,14 +11537,7 @@ fn render_relationship_svg(
         .property("fontColor")
         .map(crate::sequence::resolve_color)
         .unwrap_or_else(|| "#000000".to_string());
-    let arrow_font_family = arrow_style
-        .property("fontName")
-        .map(canonical_class_font_family)
-        .unwrap_or_else(|| "sans-serif".to_string());
-    let arrow_font_size = arrow_style
-        .property("fontSize")
-        .and_then(|value| value.parse::<f64>().ok())
-        .unwrap_or(RELATIONSHIP_LABEL_FONT_SIZE);
+    let (arrow_font_family, arrow_font_size) = relationship_label_font(&arrow_style);
     let edge_color = rel
         .style
         .color
@@ -11855,7 +11844,13 @@ fn render_relationship_svg(
             let content_height = rel
                 .label
                 .as_deref()
-                .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
+                .map(|label| {
+                    text_render::label_height_with_family(
+                        label,
+                        arrow_font_size,
+                        &arrow_font_family,
+                    )
+                })
                 .unwrap_or(0.0)
                 .max(LINK_ARROW_BLOCK_SIZE);
             let block_top = block_y + (content_height - LINK_ARROW_BLOCK_SIZE) / 2.0;
@@ -12810,12 +12805,14 @@ fn relationship_center_layout(
     }
 
     let margin = relationship_label_margin(relationship);
+    let (font_family, font_size) =
+        relationship_label_font(&relationship_arrow_style(diagram, relationship));
     let label_width = if has_label {
         relationship
             .label
             .as_deref()
             .map(|label| {
-                text_render::measure_no_underline(label, RELATIONSHIP_LABEL_FONT_SIZE, false)
+                text_render::measure_no_underline_with_family(label, font_size, false, &font_family)
             })
             .unwrap_or(0.0)
             + if relationship.label_arrow == LinkArrow::None {
@@ -12831,7 +12828,7 @@ fn relationship_center_layout(
         relationship
             .label
             .as_deref()
-            .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
+            .map(|label| text_render::label_height_with_family(label, font_size, &font_family))
             .unwrap_or(0.0)
             .max(LINK_ARROW_BLOCK_SIZE)
             + 2.0 * margin
@@ -12856,6 +12853,34 @@ fn relationship_center_layout(
         note_paint_width: note_width.floor(),
         note_paint_height: note_height.floor(),
     })
+}
+
+/// The arrow style a relationship was created under (`Link#getStyleBuilder`).
+fn relationship_arrow_style<'a>(
+    diagram: &'a ClassDiagram,
+    relationship: &Relationship,
+) -> crate::style_cascade::ResolvedStyle<'a> {
+    StyleCascade::new(&diagram.meta.style_program).resolve_link_at_source_line(
+        &StyleSignature::from_selectors(["root", "element", "classDiagram", "arrow"]),
+        StyleScheme::Regular,
+        relationship.source_line,
+    )
+}
+
+/// The font family and size of a relationship's center label. Java builds
+/// one `TextBlock` from the arrow style's font configuration
+/// (`GraphvizImageBuilder` 233-241 -> `SvekEdge` 279-319) and both sizes the
+/// dot label with it and draws it, so layout and emission share this font.
+fn relationship_label_font(arrow_style: &crate::style_cascade::ResolvedStyle<'_>) -> (String, f64) {
+    let family = arrow_style
+        .property("fontName")
+        .map(canonical_class_font_family)
+        .unwrap_or_else(|| "sans-serif".to_string());
+    let size = arrow_style
+        .property("fontSize")
+        .and_then(|value| value.parse::<f64>().ok())
+        .unwrap_or(RELATIONSHIP_LABEL_FONT_SIZE);
+    (family, size)
 }
 
 fn relationship_label_margin(relationship: &Relationship) -> f64 {
@@ -12901,11 +12926,13 @@ fn synthesize_ortho_edge_labels(diagram: &ClassDiagram, edge_paths: &mut [EdgePa
         };
         let midpoint = ((start.0 + end.0) / 2.0, (start.1 + end.1) / 2.0);
         let margin = relationship_label_margin(relationship);
+        let (font_family, font_size) =
+            relationship_label_font(&relationship_arrow_style(diagram, relationship));
         let width = (relationship
             .label
             .as_deref()
             .map(|label| {
-                text_render::measure_no_underline(label, RELATIONSHIP_LABEL_FONT_SIZE, false)
+                text_render::measure_no_underline_with_family(label, font_size, false, &font_family)
             })
             .unwrap_or(0.0)
             + if relationship.label_arrow == LinkArrow::None {
@@ -12918,7 +12945,7 @@ fn synthesize_ortho_edge_labels(diagram: &ClassDiagram, edge_paths: &mut [EdgePa
         let height = (relationship
             .label
             .as_deref()
-            .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
+            .map(|label| text_render::label_height_with_family(label, font_size, &font_family))
             .unwrap_or(0.0)
             .max(LINK_ARROW_BLOCK_SIZE)
             + 2.0 * margin)
