@@ -21,8 +21,10 @@ use std::fmt::Write;
 
 use crate::creole::{self, Segment, Style};
 use crate::filter_registry;
+use crate::font_chain::{self, ChainFace, ChainGlyph};
 use crate::plantuml_metrics as pm;
 use crate::svg::normalize_svg_link_title;
+use rustuml_parser::java_utf16;
 
 const TAB_STOP_SPACES: usize = 8;
 
@@ -1254,18 +1256,15 @@ fn family_table_text_width(
     bold: bool,
     plain_table: &[f64; 95],
     bold_table: &[f64; 95],
+    face: ChainFace,
 ) -> f64 {
     let table = if bold { bold_table } else { plain_table };
-    text.chars()
-        .map(|c| {
-            let code = c as usize;
-            if (32..=126).contains(&code) {
-                table[code - 32] * font_size
-            } else {
-                sans_text_width(&c.to_string(), font_size, bold)
-            }
-        })
-        .sum()
+    chain_text_width(text, font_size, bold, face, |c| {
+        let code = c as usize;
+        (32..=126)
+            .contains(&code)
+            .then(|| table[code - 32] * font_size)
+    })
 }
 
 const HELVETICA_UPM: f64 = 2048.0;
@@ -1365,15 +1364,52 @@ fn helvetica_bold_char_units(c: char) -> Option<f64> {
 }
 
 fn helvetica_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
-    text.chars()
-        .map(|c| {
-            match if bold {
-                helvetica_bold_char_units(c)
-            } else {
-                helvetica_char_units(c)
-            } {
-                Some(units) => units / HELVETICA_UPM * font_size,
-                None => sans_text_width(&c.to_string(), font_size, bold),
+    let face = if bold {
+        ChainFace::HelveticaBold
+    } else {
+        ChainFace::Helvetica
+    };
+    chain_text_width(text, font_size, bold, face, |c| {
+        if bold {
+            helvetica_bold_char_units(c)
+        } else {
+            helvetica_char_units(c)
+        }
+        .map(|units| units / HELVETICA_UPM * font_size)
+    })
+}
+
+/// Width of carried text in a physical face whose own table covers some
+/// characters (`own`): an unpaired unit and a table miss keep the SansSerif
+/// measurement, except that a character the face's chain cannot map takes
+/// the face's `.notdef` and an unmapped default-ignorable of complex text is
+/// hidden (font_chain). The escape prefix is never measured.
+fn chain_text_width(
+    text: &str,
+    font_size: f64,
+    bold: bool,
+    face: ChainFace,
+    own: impl Fn(char) -> Option<f64>,
+) -> f64 {
+    let complex = font_chain::is_complex_text(text);
+    let mut buffer = [0_u8; 4];
+    java_utf16::tokens(text)
+        .map(|token| match token {
+            java_utf16::Token::Unit(unit) => sans_text_width(
+                java_utf16::carrier(unit).encode_utf8(&mut buffer),
+                font_size,
+                bold,
+            ),
+            java_utf16::Token::Char(c) => {
+                own(c).unwrap_or_else(|| match face.resolve(c, complex) {
+                    ChainGlyph::Missing => face.notdef_per_em() * font_size,
+                    ChainGlyph::Hidden => 0.0,
+                    ChainGlyph::Mapped => sans_text_width(
+                        &java_utf16::escape(c.encode_utf8(&mut buffer)),
+                        font_size,
+                        bold,
+                    ),
+                })
             }
         })
         .sum()
@@ -1389,13 +1425,31 @@ fn family_text_width(
     match family {
         MetricFamily::Mono => pm::mono_text_width(text, font_size),
         MetricFamily::CourierNew => pm::courier_new_text_width(text, font_size),
-        MetricFamily::Arial => {
-            family_table_text_width(text, font_size, bold, &ARIAL_WIDTH, &ARIAL_BOLD_WIDTH)
-        }
+        MetricFamily::Arial => family_table_text_width(
+            text,
+            font_size,
+            bold,
+            &ARIAL_WIDTH,
+            &ARIAL_BOLD_WIDTH,
+            if bold {
+                ChainFace::ArialBold
+            } else {
+                ChainFace::Arial
+            },
+        ),
         MetricFamily::Helvetica => helvetica_text_width(text, font_size, bold),
-        MetricFamily::Verdana => {
-            family_table_text_width(text, font_size, bold, &VERDANA_WIDTH, &VERDANA_BOLD_WIDTH)
-        }
+        MetricFamily::Verdana => family_table_text_width(
+            text,
+            font_size,
+            bold,
+            &VERDANA_WIDTH,
+            &VERDANA_BOLD_WIDTH,
+            if bold {
+                ChainFace::VerdanaBold
+            } else {
+                ChainFace::Verdana
+            },
+        ),
         MetricFamily::TimesNewRoman => {
             pm::times_new_roman_text_width(text, font_size, bold, italic)
         }
@@ -1830,6 +1884,49 @@ mod tests {
     }
 
     use super::*;
+
+    #[test]
+    fn every_family_measures_java_characters_not_the_escape_prefix() {
+        // A legitimate U+10FFFD enters as ESCAPE + itself (java_utf16::escape).
+        let escaped = java_utf16::escape("Vault \u{10FFFD}").into_owned();
+        assert_ne!(escaped, "Vault \u{10FFFD}");
+        for family in [
+            "sans-serif",
+            "Arial",
+            "Helvetica",
+            "Verdana",
+            "Courier New",
+            "Courier",
+            "Monospaced",
+            "Times New Roman",
+        ] {
+            let control = measure_with_family("Vault ", 14.0, false, family);
+            let width = measure_with_family(&escaped, 14.0, false, family);
+            // One missing glyph: the family's .notdef (Times keeps its Java table).
+            let notdef = width - control;
+            let expected = match family {
+                "sans-serif" | "Arial" => 10.5,
+                "Helvetica" => 1298.0 / 2048.0 * 14.0,
+                "Verdana" => 14.0,
+                "Courier New" => pm::courier_new_text_width(" ", 14.0),
+                "Courier" | "Monospaced" => pm::mono_text_width(" ", 14.0),
+                _ => 1593.0 / 2048.0 * 14.0,
+            };
+            assert!(
+                (notdef - expected).abs() < 1e-3,
+                "{family}: {notdef} vs {expected}"
+            );
+        }
+    }
+
+    #[test]
+    fn unmapped_supplementary_format_characters_are_hidden_in_every_family() {
+        for family in ["sans-serif", "Arial", "Courier", "Monospaced"] {
+            let control = measure_with_family("Vault ", 14.0, false, family);
+            let tagged = measure_with_family("Vault \u{E0041}", 14.0, false, family);
+            assert!((tagged - control).abs() < 1e-9, "{family}");
+        }
+    }
 
     #[test]
     fn inline_colors_use_the_legacy_plantuml_palette() {

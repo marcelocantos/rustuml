@@ -737,7 +737,8 @@ fn widget_dim(widget: &SaltWidget) -> (f64, f64) {
         SaltWidget::Dropdown(t) | SaltWidget::DropdownOpen(t) => {
             let display = strip_creole(t);
             let tw = pm::text_width(display.trim(), FONT_SIZE, false);
-            let char_len = display.trim().chars().count() as f64;
+            // AbstractElementText.getCharNumber: String.length(), Java's units.
+            let char_len = rustuml_parser::java_utf16::units(display.trim()).len() as f64;
             let managed = tw.max(char_len * CHAR_SPACE);
             (managed + 4.0 + DROP_BOX, th + 4.0)
         }
@@ -1420,7 +1421,7 @@ fn emit_gray_line(buf: &mut String, x1: f64, y1: f64, x2: f64, y2: f64) {
 fn managed_text_width(t: &str) -> f64 {
     let stripped = strip_creole(t);
     let tw = pm::text_width(stripped.trim(), FONT_SIZE, false);
-    let char_len = stripped.chars().count() as f64;
+    let char_len = rustuml_parser::java_utf16::units(&stripped).len() as f64;
     tw.max(char_len * CHAR_SPACE)
 }
 

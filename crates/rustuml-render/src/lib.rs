@@ -39,6 +39,8 @@ pub mod dot_diagram;
 pub mod ebnf;
 pub mod eps;
 pub mod filter_registry;
+pub(crate) mod font_chain;
+mod font_chain_coverage;
 pub mod font_metrics;
 pub mod ftile;
 pub mod gantt;
