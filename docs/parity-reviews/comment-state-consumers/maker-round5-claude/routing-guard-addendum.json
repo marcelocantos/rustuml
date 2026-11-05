@@ -1,0 +1,19 @@
+{
+ "schema_version": 1,
+ "mechanism": "comment-state-consumers",
+ "kind": "account addendum for a post-measurement change already committed in round 4",
+ "commit": "f6b7f66f006108c8041bb5923d70a7d327f28053",
+ "amends": "docs/parity-reviews/comment-state-consumers/maker-round4-claude/outer-image-notes-account.json",
+ "answers": "docs/parity-reviews/comment-state-consumers/review-5.json (per_mechanism_verdicts 'routing guard f6b7f66f0', bounded_next_obligations[2])",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "change": "build_autonomous_composite returns None (the diagram goes to the next renderer) when it would accept outer notes while it built no GroupMakerState image (composites.is_empty()).",
+ "java_routing_reason": [
+  "Java has one root builder: svek/GraphvizImageBuilder.buildImage for the root group. dot/CucaDiagramSimplifierState.simplify (57-70) first replaces each autarkic group (abel/Entity.isAutarkic 686-705) by its GroupMakerState image; every other group stays a cluster drawn by Cluster.drawU.",
+  "When simplify replaced no group, the root builder's input is leaves, notes and live clusters only. RustUML ports that case in render_non_autarkic_root_clusters (ClusterDotString.printInternal special points and p0/p1 protection clusters, notes as SVEK nodes inside their cluster).",
+  "build_autonomous_composite ports the same root builder for the case where simplify produced at least one image. With no image, its outer scope would be a second, less complete port of the root cluster path (layout_autonomous_scope adds live clusters without the protection clusters that render_non_autarkic_root_clusters emits).",
+  "So the guard is a routing condition between two Rust ports of one Java builder, keyed on the Java fact that decides the input (no group was simplified to an image). It changes no geometry rule."
+ ],
+ "why_it_was_needed": "Round-4 measurement: accepting outer notes in build_autonomous_composite made image-free diagrams with notes (rc_root_note_depth2, cluster_root_note_on_inner) leave the root cluster path, which had already matched; the guard restored them. Before 5c6421973 those diagrams fell through for the same structural reason (any note made the image path decline).",
+ "structural_not_fixture_keyed": "composites.is_empty() is the image count, not a label, node count or fixture property.",
+ "evidence": "BE no_root_cluster_note and no_root_two_clusters_notes stay on the root cluster path (element order equal to Java's, review-5 findings[1]); round-5 measurements report the same cohorts again."
+}

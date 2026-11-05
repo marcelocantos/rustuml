@@ -1,0 +1,46 @@
+{
+ "schema_version": 1,
+ "mechanism": "comment-state-consumers",
+ "sub_mechanism": "origin and size of the outer GraphvizImageBuilder image on the state image path (round-5 obligation 1, BLOCKING)",
+ "status": "maker causal account before draft; independent review required",
+ "answers": "docs/parity-reviews/comment-state-consumers/review-5.json (findings[0], bounded_next_obligations[0]; held-out BE no_outer_note_left_of_image, no_outer_two_notes_on_image)",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "java_locations": [
+  "svek/SvekResult.java#calculateDimension (128-136): minMax = TextBlockUtils.getMinMax(this, stringBounder, false); clusterManager.moveDelta(6 - minMax.getMinX(), 6 - minMax.getMinY()); the dimension is minMax.getDimension().delta(15, 15). This holds for every SvekResult, the root one included; nothing assumes which shape is leftmost or topmost.",
+  "klimt/drawing/LimitFinder.java#drawRectangle (175-179) adds (x - 1, y - 1) and (x + w - 1 + 2*shadow, y + h - 1 + 2*shadow); #drawUPath (155-158) adds the path's own min and max with no adjustment; #drawEllipse (197-201) adds (x, y) without the -1; #drawDotPath (181-185) adds the path's MinMax. The Opale note body is a UPath (svek/image/Opale.drawU 108-114, getPolygonNormal/Left/Right), so a note that is the leftmost or topmost painted item moves the SVEK origin by one pixel relative to a rectangle.",
+  "net/atmp/CucaDiagram.java#getDefaultMargins (803-806): topRightBottomLeft(0, 5, 5, 0), applied around the root SvekResult by the image builder (core/TextBlockExporter12026.calculateMargin, 478-484, when no document Margin style is set)."
+ ],
+ "rust_locations": [
+  "crates/rustuml-render/src/state.rs#layout_autonomous_scope: the scope's origin is the fixed SVEK_ORIGIN_X (7) and SVEK_ORIGIN_Y (6) + 1 when a Box is on the top rank, and width/height are origin + max node corner + SVEK_TRAILING_PAD. That is SvekResult's rule only when a URectangle is leftmost and the bottom/right corner is a node corner.",
+  "crates/rustuml-render/src/state.rs#build_autonomous_composite: the outer scope is passed through normalize_autonomous_scope (LimitFinder bounds, 6 - min, max - min + 15) and CUCA_POSITIVE_AXIS_MARGIN only when it has live clusters; an outer scope of images, leaves and notes keeps the fixed origin.",
+  "autonomous_scope_painted_bounds plus the note corners added in layout_autonomous_scope already implement the LimitFinder bounds above (Box x-1/y-1, Circle/Port no adjust, Diamond polygon overscan, clusters, DotPath edges, arrowheads, labels; notes as UPath without adjustment)."
+ ],
+ "invariant": "The outer image of the state image path is a SvekResult like every region image: its origin is 6 - LimitFinder min and its size is LimitFinder max - min + 15, then CucaDiagram's (0, 5, 5, 0) margin. The shape that happens to be leftmost (rectangle, ellipse, note path) is not a case distinction.",
+ "planned_change": [
+  "build_autonomous_composite: normalize the outer scope with normalize_autonomous_scope and add CUCA_POSITIVE_AXIS_MARGIN on the positive axes for every outer scope, not only for scopes with live clusters.",
+  "No new constant; no change to the region path or to the painted-bounds rules."
+ ],
+ "declared_residue": [
+  "Outer notes declared above or below an image (note top/bottom of) and a note on an outer leaf that links to an image keep their current routing (fall-through); this account changes only the outer origin and size.",
+  "If autonomous_scope_painted_bounds misses a painted item of some outer layout (for example a transition label box), the normalized size inherits that defect; the precommitted measurement reports every changed output."
+ ],
+ "perturbation_axes": [
+  "note left of an image at the root (leftmost item is the note), renamed labels",
+  "two and three notes left/right of one image",
+  "note left of an image whose top rank also holds an ellipse (start state) or only rectangles",
+  "outer layouts without notes (rectangle leftmost) must not change"
+ ],
+ "precommitted_measurement": {
+  "oracle": "unchanged strict comparator and exact comment lists, whole CLI output from the recorded cwd; all 12,550 goldens, the 16,467-source sweep, batches BF, BE, BC, BB, AW, AU, AR; before = merge commit (code of 7ec2e5af8), after = this draft",
+  "expect_fixed": [
+   "BE no_outer_note_left_of_image",
+   "BE no_outer_two_notes_on_image",
+   "BF st_np_outer_note_left_multiline"
+  ],
+  "expect_kept": [
+   "BB note_link_only_to_group and BE no_outer_note_on_leaf_beside_image (right-side and on-leaf notes)",
+   "every golden and batch match of the image path without outer notes"
+  ],
+  "expect": "outputs change only where the outer image's LimitFinder minimum differs from the fixed origin or its maximum from the node corners; zero lost strict matches, zero new errors. Any lost match stops the draft and gets an addendum before a further commit."
+ }
+}

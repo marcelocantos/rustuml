@@ -1,0 +1,59 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-builtin-value-boundaries",
+ "sub_mechanism": "advance of a character Java's font chain cannot map (round-5 obligation 2, BLOCKING)",
+ "status": "maker causal account before draft; independent review required",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-4.json (findings[0..1], bounded_next_obligations[0]; held-out BE pua_b_upper_escape_point)",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jdk": "Temurin 21.0.13 source (lib/src.zip of the origin JDK; read, not run)",
+ "java_locations": [
+  "PlantUML FileFormat.getJavaDimension (220-238): FontMetrics.getStringBounds(text, gg) on UFontImpl.getUnderlayingFont -> FontStack.getFont (109-122), the first (here the only) family of the stack, derived for the face.",
+  "JDK java/awt/Font.getStringBounds(char[], ...) (2614-2650): text is 'simple' unless FontUtilities.isComplexText(chars) (190-201): any UTF-16 surrogate unit (isNonSimpleChar 214-218) or a char with isComplexCharCode (239-311: 0300-036F, 0590-06FF, 0900-0E7F, 0F00-109F, 1100-11FE, 1780-17FF, 200C-200D, 202A-202E, 206A-206F). Simple text is measured by FontDesignMetrics.getSimpleBounds on the Font2D's own mapper; complex text by new TextLayout(str, font, frc).",
+  "Simple path, JDK sun/font/CCharToGlyphMapper (macOS): the CFont's glyph, or for a character the font lacks, nativeCharsToGlyphs (98, 134) returns the glyph CoreText substitutes (negative code, 'measures exactly as a real glyph'); 'missing characters for any font on the system will be returned as 0' (missingGlyph = 0, line 39): the primary font's .notdef.",
+  "Complex path, JDK sun/font/CFont.createCompositeFont (203-240): slots = the CFont + getCascadeList (CTFontCopyDefaultCascadeListForLanguages) names + 'GeezaPro', each by CFontManager.getOrCreateFallbackFont (328-338: names starting with '.' are dropped; '.AppleSymbolsFB' is renamed AppleSymbols); CCompositeGlyphMapper.convertToGlyph (54-68) takes the first slot whose code is > 0, else missingGlyph (slot 0's .notdef). TextLayout shapes with HarfBuzz, which hides default-ignorable code points (hb _hb_unicode_is_default_ignorable: in planes 1-16 only U+1D173..U+1D17A and U+E0000..U+E0FFF) with zero advance.",
+  "Font metric source (environment, read from the font files on the origin Mac through CoreText CTFontGetAdvancesForGlyphs on glyph 0 at 2048 units/em): .notdef advance Lucida Grande 1536 (regular and bold), Arial 1536, Helvetica 1298 / Helvetica Bold 1479, Verdana 2048, Menlo 1233 (= the Monospaced cell, MONO_WIDTH_PER_SIZE), Courier New 1229 (= COURIER_NEW_WIDTH_PER_SIZE); Times New Roman 1593 is already the Java-extracted MISSING_FIXED_UNITS of times_new_roman_unicode.rs."
+ ],
+ "validation_of_the_chain_model": {
+  "oracle": "times_new_roman_unicode.rs is a Java AWT extraction (tools/PhysicalFontMetricsExtract.java --rust-unicode-ranges): Font.getStringBounds of every scalar Java defines, alone, for Times New Roman. Its MISSING_FIXED_UNITS (1593) marks scalars Java measured with the missing glyph.",
+  "method": "The extraction tool below applied to Times New Roman predicts, per scalar measured alone: supplementary or isComplexCharCode -> complex path (composite cmap coverage; HarfBuzz default-ignorable -> zero); else simple path (own glyph or CoreText substitution, LastResort/no glyph/user font -> missing).",
+  "result": "286,520 of 286,591 Java-defined scalars agree (99.975%). Disagreements: 52 with a Java advance the model calls missing (U+0528..U+052D and similar, fonts changed by later OS updates), 17 Java-missing the model maps (e.g. U+01CC, a glyph whose advance happens to equal 1593 units, or later font additions), U+A69E (Java zero) and U+11FD2. Recorded in maker-round5-claude/measurements/font-chain-validation.json.",
+  "consistency_with_sans_table": "NON_ASCII_WIDTHS (Java SansSerif advances of 409 corpus scalars): 408 agree with the Lucida Grande chain (mapped, or 0.75 em when missing); U+FE0F is 0.75 em in Java but CoreText substitutes Apple Color Emoji. literal_char_width already gives U+FE0F zero before the table (unchanged)."
+ },
+ "rust_locations": [
+  "crates/rustuml-render/src/plantuml_metrics.rs#literal_char_width: only planes-15/16 private use get 0.75 em (is_supplementary_private_use); other unmapped scalars fall to approximations ('a' width below U+3000, one em from U+3000).",
+  "crates/rustuml-render/src/text_render.rs#family_table_text_width (Arial, Verdana) and helvetica_text_width: a non-table scalar is measured by the SansSerif path; plantuml_metrics::mono_text_width and courier_new_text_width count one cell for every scalar."
+ ],
+ "planned_change": [
+  "tools/FontChainExtract.swift (environment extraction, not Java): emits per face the BMP runs the simple path cannot map and the runs the complex path maps (complex-BMP ranges and planes 1-16), with each face's .notdef advance in font units. tools/font_chain_coverage.py turns that output into crates/rustuml-render/src/font_chain_coverage.rs (identical run tables shared between faces).",
+  "font_chain_coverage::resolve(face, ch, complex_text) -> Mapped | Missing | Hidden, with complex_text = FontUtilities.isComplexText over the measured string's Java units, and notdef_per_em(face).",
+  "plantuml_metrics::literal_char_width: after the ASCII table, zero-width joiners, colour emoji and NON_ASCII_WIDTHS (Java-measured), Missing -> Lucida Grande (Bold) .notdef 1536/2048 per size and Hidden -> 0, before the remaining approximations. is_supplementary_private_use and its 0.75 constant are removed (subsumed).",
+  "family_table_text_width (Arial, Verdana) and helvetica_text_width: Missing -> that face's .notdef, Hidden -> 0, otherwise unchanged. mono_text_width and courier_new_text_width: Hidden -> 0 (Missing is one cell already, .notdef = cell). Times New Roman keeps its Java table."
+ ],
+ "unchanged": [
+  "An unpaired unit keeps one em (AW surrogate_high_class) in the SansSerif paths, one cell in Monospaced/Courier New, and its former table lookup in Times New Roman.",
+  "Every Java-measured table (CHAR_WIDTHS_*, NON_ASCII_WIDTHS, Arabic/cluster tables, Times New Roman) takes precedence; mapped scalars outside them keep their approximations."
+ ],
+ "declared_residue": [
+  "The coverage is the origin Mac's system fonts (macOS 27.2 here; user fonts in ~/Library/Fonts excluded). The reference runs on Monkey Man (different macOS and JDK 21.0.5); font coverage can differ there. Probes in relay batch m5a measure it.",
+  "For BMP scalars inside complex text only unmapped scalars change (Missing/Hidden); mapped default-ignorables that HarfBuzz would hide keep their table or approximate advance.",
+  "Mapped scalars without Java-measured advances keep the existing approximations; their advances are not derived here.",
+  "Serif (Gantt only, 'Times' face) has no chain table; it keeps its approximations."
+ ],
+ "perturbation_axes": [
+  "unmapped scalars from several blocks: BMP unassigned (U+0378), BMP noncharacter (U+FDD0), BMP private use (U+E123), plane-1 script missing from the cascade (U+12000 Cuneiform), plane-2 unassigned (U+2FFFD), shorthand format control (U+1BCA0, not ignorable), variation selector supplement (U+E0100, hidden), musical formatting (U+1D173, hidden), planes 15/16 (U+F0000, U+10FFFE)",
+  "a BMP scalar CoreText substitutes but the cascade lacks (U+A500 Vai) alone and next to a supplementary scalar",
+  "each family: SansSerif, bold SansSerif at size 18, Arial, Helvetica (bold), Verdana, Courier New, Monospaced, Times New Roman"
+ ],
+ "precommitted_measurement": {
+  "oracle": "unchanged strict comparator, whole CLI output; goldens, sweep, BF, BE, BC, BB, AW, AU, AR; before = merge commit, after = this draft",
+  "expect_fixed": [
+   "BE pua_b_upper_escape_point",
+   "BF w_sans_nonchar_10ffff, w_sans_nonchar_10fffe, w_sans_unassigned_3fffd, w_sans_tag_e0041, w_sans_bmp_pua_f000, w_arial_nonchar_10ffff (with obligation 3 also w_arial_pua_b)"
+  ],
+  "expect_kept": [
+   "BE pua_b_size12, pua_b_size18_bold, BC pua_* matches (0.75 em kept through the chain rule)",
+   "BC must not regress"
+  ],
+  "expect": "outputs change only for sources holding scalars the chain cannot map (or hidden supplementary format characters) outside the Java tables; zero lost matches, zero new errors"
+ }
+}

@@ -1,0 +1,39 @@
+{
+ "schema_version": 1,
+ "mechanism": "comment-state-consumers",
+ "sub_mechanism": "qualified name of an attached note declared inside a group, on every state rendering path (round-5 obligation 5)",
+ "status": "maker causal account before draft; independent review required",
+ "answers": "docs/parity-reviews/comment-state-consumers/review-5.json (findings[1], bounded_next_obligations[1]; BE no_root_cluster_note, no_root_two_clusters_notes; BF st_np_root_three_clusters)",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "java_locations": [
+  "command/note/CommandFactoryNoteOnEntity.java#executeInternal (258-260): tmp = diagram.getUniqueSequence(\"GMN\"); quark = diagram.quarkInContext(true, tmp); note = diagram.reallyCreateLeaf(location, quark, display, LeafType.NOTE, null). The name is fixed when the note command executes, before and independently of any renderer.",
+  "net/atmp/CucaDiagram.java#quarkInContextSafe (249-275): with the namespace separator set and no existing entity of that name, the result is getCurrentGroup().getQuark().child(full): a note declared while group G is current is G's child, so its qualified name is G's qualified name + '.' + GMNn (Hall.GMN2, Mill.Floor.Bay.Cell.GMN2 in BE no_d3_deep). A note declared at root is root's child (GMN2).",
+  "The SVG entity group writes that quark's qualified name in data-qualified-name whichever path draws it (GroupMakerState image, Cluster.drawU on the root cluster path, or a flat layout)."
+ ],
+ "rust_locations": [
+  "crates/rustuml-render/src/state.rs#attached_note_specs: spec.id = StateNoteSvgIds.qualified_name (bare GMNn) for every path.",
+  "build_state_group_outcome (region notes) and build_autonomous_composite (outer notes) prefix spec.id with note.parent themselves; render_non_autarkic_root_clusters and the flat path keep the bare name."
+ ],
+ "invariant": "An attached note's qualified name is its declaring group's qualified name + '.' + GMNn (bare GMNn at root), the same on every path, because Java fixes it at parse time.",
+ "planned_change": [
+  "attached_note_specs: build spec.id from the declaring group (diagram.notes[i].parent) once, for every caller.",
+  "Remove the two path-local prefixes in build_state_group_outcome and build_autonomous_composite so the name is not prefixed twice."
+ ],
+ "declared_residue": [
+  "Floating notes (no anchor) and notes on links keep their present naming; neither is in this obligation's evidence."
+ ],
+ "perturbation_axes": [
+  "note inside a root-path (non-autarkic) group at depth 1 and depth 2",
+  "two root-path groups with notes on either side",
+  "notes declared at root next to root-path groups (bare name kept)"
+ ],
+ "precommitted_measurement": {
+  "oracle": "same cohorts and comparator as outer-image-origin-account.json",
+  "expect_fixed": [
+   "BE no_root_cluster_note",
+   "BE no_root_two_clusters_notes",
+   "BF st_np_root_three_clusters"
+  ],
+  "expect": "only data-qualified-name of notes declared inside groups changes, on the root cluster and flat paths; image-path outputs are byte-identical; zero lost matches, zero new errors"
+ }
+}

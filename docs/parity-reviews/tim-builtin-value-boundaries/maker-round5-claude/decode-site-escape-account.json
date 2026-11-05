@@ -1,0 +1,36 @@
+{
+ "schema_version": 1,
+ "mechanism": "tim-builtin-value-boundaries",
+ "sub_mechanism": "text that a parser decodes after entry is escaped where it is decoded (round-5 obligation 4, BLOCKING)",
+ "status": "maker causal account before draft; independent review required",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-4.json (findings[3], bounded_next_obligations[2]; BF cr_yaml_u_escape, cr_json_u_escape)",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "java_locations": [
+  "Java decodes '\\U0010FFFD' (YAML double-quoted) and '\\uDBFF\\uDFFD' (JSON) into the Java String units DBFF DFFD: an ordinary, legitimate pair, indistinguishable from the literal U+10FFFD. BF Java references render both as 'Vault &#1114109; end' (exit 0).",
+  "There is no carrier in Java; the RustUML invariant to keep is java_utf16's: every legitimate reserved scalar in carried text is ESCAPE + itself, so tokens() never reads it as an unpaired unit."
+ ],
+ "rust_locations": [
+  "crates/rustuml-parser/src/parse/json_diagram.rs#parse_json_diagram, #parse_yaml_diagram (@startjson / @startyaml): serde_json / serde_yml decode escape sequences in already-escaped carried text, so a decoded reserved scalar arrives without ESCAPE and reads as a unit (export error 0xdffd).",
+  "crates/rustuml-parser/src/parse/mod.rs#parse_yaml, #parse_json (model input) and #parse_auto_with_base's JSON fallback: escape() is applied to the raw text before the decoder, with the same defect.",
+  "crates/rustuml-parser/src/preprocess/mod.rs: TIM JSON literals (prepare_expression: '{'/'[' expressions and member/index expansion) and %str2json run serde_json::from_str on carried text; decoded strings become Value::Json text the same way."
+ ],
+ "invariant": "A decoder's output strings are carried text: reserved scalars it produces are escaped once, reserved scalars that were escaped in its input stay escaped once.",
+ "planned_change": [
+  "java_utf16::decoded(text, parse, escape_strings): when the carried text holds no unpaired unit, decode the plain Java text (each Token::Char once, ESCAPE removed) and then apply escape() to every decoded string (JSON keys and strings; YAML strings, mapping keys and tagged values). When the text holds an unpaired unit (only TIM can produce one), keep the current call (declared residue).",
+  "Apply it at each decode site listed in rust_locations; parse_yaml/parse_json no longer pre-escape the raw text. Model input goes through serde_yml::Value / serde_json::Value, then from_value; on any error the previous direct call runs, so error text and lines are unchanged."
+ ],
+ "declared_residue": [
+  "Text that already carries an unpaired unit and also has a decoder escape producing a reserved scalar keeps the round-4 behaviour.",
+  "Creole numeric entities (&#1114109;) are not decoded by the Rust class renderer at all (BF cr_ent_dec_10fffd fails in base too); that is not a carrier defect and is out of this obligation."
+ ],
+ "perturbation_axes": [
+  "YAML \\U0010FFFD and \\U0010F7FF in values and keys, renamed",
+  "JSON surrogate-pair escapes nested in objects and arrays, and as a key",
+  "TIM !$j = {\"a\": \"\\uDBFF\\uDFFD\"} member access and %str2json"
+ ],
+ "precommitted_measurement": {
+  "oracle": "same cohorts and comparator as missing-glyph-account.json; Rust-only renamed variants checked for exit 0 and the decoded scalar in output",
+  "expect_fixed": ["BF cr_yaml_u_escape", "BF cr_json_u_escape"],
+  "expect": "outputs change only for sources whose decoder input contains escape sequences or reserved scalars; zero lost matches, zero new errors"
+ }
+}
