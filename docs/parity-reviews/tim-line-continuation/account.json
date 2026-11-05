@@ -16,10 +16,34 @@
   "not_pre_tim_merged": "TContext#executeInclude (file, URL, stdlib) and #executeIncludesub read through ReadLineReader (+UncommentReadLine for includesub) without ReadFilterMergeLines; theme.ThemeUtils loads themes through ReadLineReader only. Procedure, !define, !definelong and multiline command bodies written in the main source are already joined pre-TIM because the join runs on raw text.",
   "post_tim_join": "PSystemBuilder#createPSystem: UmlSource.createWithRaw(source, findStartTypes(source.get(0)).contains(SEQUENCE), rawSource); UmlSource#loadInternal with checkEndingBackslash joins every TIM output line that endsWithBackslash with the following line(s) (pending.append(s, 0, len-1)), and the joined StringLocated takes the LAST piece's location. findStartTypes gives SEQUENCE only for @startuml, so this second join applies to every @startuml diagram (all UML families) and to no other start type. A pending tail at the end of the list is dropped. UmlSource#seed hashes the joined list (getPlainString), so SVG resource ids follow the joined source."
  },
+ "java_locations": [
+  "net.sourceforge.plantuml.BlockUmlBuilder#<init> (ReadLineReader -> UncommentReadLine -> preproc2.Preprocessor)",
+  "net.sourceforge.plantuml.preproc2.Preprocessor#<init> (ReadFilterAddConfig, ReadFilterMergeLines)",
+  "net.sourceforge.plantuml.preproc2.ReadFilterMergeLines#applyFilter / readLine (manageEndingBackslash, isDitaa)",
+  "net.sourceforge.plantuml.preproc2.ReadFilterQuoteComment#applyFilter / readLine",
+  "net.sourceforge.plantuml.text.StringLocated#mergeEndBackslash, #removeInnerComment",
+  "net.sourceforge.plantuml.StringUtils#endsWithBackslash",
+  "net.sourceforge.plantuml.utils.StartUtils#isStartDirective, #isEndDirective, #startsWithDirectiveKeyword; core.DiagramType#findStartTypes, #check",
+  "net.sourceforge.plantuml.Pipe#readSingleDiagram; SourceStringReader#outputImage, #noValidStartFound",
+  "net.sourceforge.plantuml.PSystemBuilder#createPSystem; core.UmlSource#createWithRaw, #loadInternal, #seed, #getPlainString",
+  "net.sourceforge.plantuml.tim.TContext#executeInclude, #executeIncludesub; theme.ThemeUtils (no pre-TIM merge)"
+ ],
  "rust_locations": [
   "crates/rustuml-parser/src/preprocess/mod.rs: new merge_ending_backslash_lines, a port of ReadFilterMergeLines + ReadFilterQuoteComment (+ StringUtils#endsWithBackslash, StartUtils start/end directive tests, the ditaa switch). Applied in preprocess_full_inner to the top-level block input after source_identity_input_lines, for the parse pass, the source-identity pass and expanded_theme_seed_source. Each merged line keeps the 1-based number of its first piece; once a merge consumes lines, later output lines carry explicit source-line markers (the existing include mechanism), so following data-source-line values stay Java's.",
   "crates/rustuml-parser/src/preprocess/mod.rs: the existing post-TIM collapse in uml_source_string (UmlSource#loadInternal) is keyed to the block's @startuml start instead of the sequence-parse flag, and the same collapse is applied to the parser line stream for @startuml blocks, with the joined line taking the last piece's source line.",
   "crates/rustuml-parser/src/preprocess/mod.rs + parse/mod.rs: when the merge swallows the block's end directive (real, or the one Pipe#readSingleDiagram appends), Java has no BlockUml; Rust reports a parse error instead of rendering the merged text."
+ ],
+ "planned_change": "Add merge_ending_backslash_lines (ReadFilterMergeLines + ReadFilterQuoteComment port) and run the top-level block input through it before TIM in the parse, identity and theme-seed passes, numbering each merged line by its first piece and marking later lines once lines are absorbed; key the post-TIM UmlSource#loadInternal collapse to the @startuml start and apply it to the parser stream too; report a parse error when the merge swallows the end directive; hand plain lines to parsers that read no source-line markers.",
+ "perturbation_axes": [
+  "continuation in !procedure / !define / !definelong / !foreach bodies",
+  "continuation with !theme",
+  "continuation in !include files (post-TIM join)",
+  "comment lines and inner comments between a continued line and its continuation",
+  "multiple continued lines and following data-source-line",
+  "escaped \\\\ and backslash-space (not continued)",
+  "CRLF line endings",
+  "backslash before @enduml or at EOF (swallowed end)",
+  "non-UML families (mindmap, json)"
  ],
  "invariant": "TIM and the diagram commands see exactly the lines ReadFilterMergeLines produces from the block input (first-line numbers), and @startuml diagram commands see UmlSource#loadInternal's post-TIM join (last-line numbers).",
  "causal_divergence": "Rust has no pre-TIM merge: 'A -> B : one \\\\' + 'two' reaches the sequence parser as two lines and the second is a syntax error; '/' c '/ \\\\' reaches TIM as a PLAIN line whose tail is a lone '\\\\' after round 4. The only Rust join is the post-TIM seed collapse, applied to the sequence identity pass only, plus an activity-parser-local emulation for multiline actions.",
