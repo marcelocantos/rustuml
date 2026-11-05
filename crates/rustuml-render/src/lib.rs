@@ -47,6 +47,8 @@ pub mod ftile;
 pub mod gantt;
 pub mod git_diagram;
 pub(crate) mod handwritten;
+mod java_bidi;
+mod java_bidi_data;
 pub mod json_diagram;
 pub mod layout_oracle;
 pub mod math;

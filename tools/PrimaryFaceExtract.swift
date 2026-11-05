@@ -17,6 +17,10 @@
 //  gsub_scripts, gpos_scripts  the ScriptList tags hb_ot_layout_table_select_script (hb-ot-layout.cc,
 //            15.0.0) chooses from; the hebrew shaper's gpos_tag 'hebr' disables GPOS when the GPOS
 //            table's chosen script is not 'hebr' (hb-ot-shape.cc 133-134, hb-ot-shaper-hebrew.cc).
+//  gdef_length, gsub_length, gpos_length  the CTFontCopyTable byte counts (0 when absent): JDK's
+//            HarfBuzz face reads tables through hb-jdk-font.cc reference_table -> CFont.getTableBytes
+//            -> AWTFont.m Java_sun_font_CFont_getTableBytesNative (CTFontCopyTable, no options), and
+//            OT::GDEF::is_blocklisted (hb-ot-layout.cc 152-266, 15.0.0) keys on these three lengths.
 //
 // Usage:
 //   swiftc -O tools/PrimaryFaceExtract.swift -o /tmp/primary-face-extract
@@ -59,7 +63,7 @@ func scriptTags(_ tag: String) -> String {
         return String(bytes: t[o..<o + 4], encoding: .ascii) ?? "?"
     }.joined(separator: ",")
 }
-print("#plan_extra\tcross_kern=\(crossKern)\ttrak=\(table("trak") != nil ? 1 : 0)\tSTAT=\(table("STAT") != nil ? 1 : 0)\tgsub_scripts=\(scriptTags("GSUB"))\tgpos_scripts=\(scriptTags("GPOS"))")
+print("#plan_extra\tcross_kern=\(crossKern)\ttrak=\(table("trak") != nil ? 1 : 0)\tSTAT=\(table("STAT") != nil ? 1 : 0)\tgsub_scripts=\(scriptTags("GSUB"))\tgpos_scripts=\(scriptTags("GPOS"))\tgdef_length=\(table("GDEF")?.count ?? 0)\tgsub_length=\(table("GSUB")?.count ?? 0)\tgpos_length=\(table("GPOS")?.count ?? 0)")
 
 var run: (UInt32, UInt32)? = nil
 func flush() {

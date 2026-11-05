@@ -1,1 +1,1 @@
-swiftc -O tools/PrimaryFaceExtract.swift -o primary-face-extract; for f in LucidaGrande LucidaGrande-Bold ArialMT Arial-BoldMT Helvetica Helvetica-Bold Verdana Verdana-Bold Menlo-Regular CourierNewPSMT; do primary-face-extract $f > $f.own.tsv; done
+swiftc -O tools/PrimaryFaceExtract.swift -o primary-face-extract; for f in LucidaGrande LucidaGrande-Bold ArialMT Arial-BoldMT Helvetica Helvetica-Bold Verdana Verdana-Bold Menlo-Regular CourierNewPSMT CourierNewPS-BoldMT; do primary-face-extract $f > $f.own.tsv; done

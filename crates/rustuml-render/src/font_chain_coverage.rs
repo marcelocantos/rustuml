@@ -23,7 +23,7 @@ pub(crate) const SOURCE_SHA256SUMS_SHA256: &str =
 pub(crate) const PRIMARY_DIR: &str = "tools/font-chain-reference/colossus-primary-faces";
 #[cfg(test)]
 pub(crate) const PRIMARY_SHA256SUMS_SHA256: &str =
-    "483ba7caf170d024a750a75bb61ddd7c74475030dbdb71733601f77fb4e14ad8";
+    "cb1d5187da284e4202ddf5010db5e1575fb25a346823d68e8bceec11ab7540c6";
 
 const SIMPLE_MISSING_1: &[(u32, u32)] = &[
     (0x378, 0x379),
@@ -23210,6 +23210,10 @@ pub(crate) const LUCIDA_GRANDE: FaceCoverage = FaceCoverage {
         machine_kern: false,
         cross_kern: false,
         gpos_hebrew_script: false,
+        gsub_scripts: &[],
+        gdef_length: 0,
+        gsub_length: 0,
+        gpos_length: 0,
     },
 };
 /// LucidaGrande-Bold, /System/Library/Fonts/LucidaGrande.ttc.
@@ -23229,6 +23233,10 @@ pub(crate) const LUCIDA_GRANDE_BOLD: FaceCoverage = FaceCoverage {
         machine_kern: false,
         cross_kern: false,
         gpos_hebrew_script: false,
+        gsub_scripts: &[],
+        gdef_length: 0,
+        gsub_length: 0,
+        gpos_length: 0,
     },
 };
 /// ArialMT, /System/Library/Fonts/Supplemental/Arial.ttf.
@@ -23248,6 +23256,10 @@ pub(crate) const ARIAL: FaceCoverage = FaceCoverage {
         machine_kern: false,
         cross_kern: false,
         gpos_hebrew_script: true,
+        gsub_scripts: &[*b"arab", *b"cyrl", *b"grek", *b"hebr", *b"latn"],
+        gdef_length: 706,
+        gsub_length: 7064,
+        gpos_length: 45346,
     },
 };
 /// Arial-BoldMT, /System/Library/Fonts/Supplemental/Arial Bold.ttf.
@@ -23267,6 +23279,10 @@ pub(crate) const ARIAL_BOLD: FaceCoverage = FaceCoverage {
         machine_kern: false,
         cross_kern: false,
         gpos_hebrew_script: true,
+        gsub_scripts: &[*b"arab", *b"cyrl", *b"grek", *b"hebr", *b"latn"],
+        gdef_length: 694,
+        gsub_length: 7068,
+        gpos_length: 44728,
     },
 };
 /// Helvetica, /System/Library/Fonts/Helvetica.ttc.
@@ -23286,6 +23302,10 @@ pub(crate) const HELVETICA: FaceCoverage = FaceCoverage {
         machine_kern: false,
         cross_kern: false,
         gpos_hebrew_script: false,
+        gsub_scripts: &[],
+        gdef_length: 0,
+        gsub_length: 0,
+        gpos_length: 0,
     },
 };
 /// Helvetica-Bold, /System/Library/Fonts/Helvetica.ttc.
@@ -23305,6 +23325,10 @@ pub(crate) const HELVETICA_BOLD: FaceCoverage = FaceCoverage {
         machine_kern: false,
         cross_kern: false,
         gpos_hebrew_script: false,
+        gsub_scripts: &[],
+        gdef_length: 0,
+        gsub_length: 0,
+        gpos_length: 0,
     },
 };
 /// Verdana, /System/Library/Fonts/Supplemental/Verdana.ttf.
@@ -23324,6 +23348,10 @@ pub(crate) const VERDANA: FaceCoverage = FaceCoverage {
         machine_kern: false,
         cross_kern: false,
         gpos_hebrew_script: false,
+        gsub_scripts: &[*b"latn"],
+        gdef_length: 30,
+        gsub_length: 148,
+        gpos_length: 56,
     },
 };
 /// Verdana-Bold, /System/Library/Fonts/Supplemental/Verdana Bold.ttf.
@@ -23343,6 +23371,10 @@ pub(crate) const VERDANA_BOLD: FaceCoverage = FaceCoverage {
         machine_kern: false,
         cross_kern: false,
         gpos_hebrew_script: false,
+        gsub_scripts: &[*b"latn"],
+        gdef_length: 30,
+        gsub_length: 148,
+        gpos_length: 56,
     },
 };
 /// Menlo-Regular, /System/Library/Fonts/Menlo.ttc.
@@ -23362,6 +23394,10 @@ pub(crate) const MENLO: FaceCoverage = FaceCoverage {
         machine_kern: false,
         cross_kern: false,
         gpos_hebrew_script: false,
+        gsub_scripts: &[],
+        gdef_length: 0,
+        gsub_length: 0,
+        gpos_length: 0,
     },
 };
 /// CourierNewPSMT, /System/Library/Fonts/Supplemental/Courier New.ttf.
@@ -23381,5 +23417,9 @@ pub(crate) const COURIER_NEW: FaceCoverage = FaceCoverage {
         machine_kern: false,
         cross_kern: false,
         gpos_hebrew_script: true,
+        gsub_scripts: &[*b"arab", *b"hebr", *b"latn"],
+        gdef_length: 588,
+        gsub_length: 5078,
+        gpos_length: 14418,
     },
 };

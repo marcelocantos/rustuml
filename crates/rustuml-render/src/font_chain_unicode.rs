@@ -5,8 +5,12 @@
 // Sources (https://www.unicode.org/Public/):
 //   3.2-Update/Scripts-3.2.0.txt sha256 16b3db9e2d1b87600831209df02ecff41aeaf0c2aab0f034684fda14189c1aa5
 //   18.0.0/ucd/UnicodeData.txt sha256 0736451de439ae7baf1425136617da495e09ee5afbe6e394374db7009ea08950
+// HarfBuzz 15.0.0 (https://github.com/harfbuzz/harfbuzz, 35f656a1a2bab548ea7f54a6dd3fba2b09680d14):
+//   src/hb-ot-shaper.hh sha256 3eb84b0a89a8c4dbee0930e66bd071bb374d76e9f2748ac441d84e79dc34cce3
+//   src/hb-script-list.h sha256 898de25adaf9253471d9f1351a6c90e3547e1470dd2f468ab19a86561868182b
+//   src/hb-ot-layout.cc sha256 3c4e62bc11c6ad2726b0898dc6c74437c1ad2327ffec561b2b09d24ffc204004
 
-use crate::font_chain::Shaper;
+use crate::font_chain::ShaperGroup;
 
 /// General category Mn in Unicode 18.0.0 (HarfBuzz 15.0.0's UCD).
 pub(crate) const NONSPACING_MARKS: &[(u32, u32)] = &[
@@ -1063,31 +1067,86 @@ pub(crate) const SCRIPTS: &[(u32, u32, u8)] = &[
     (0x2F800, 0x2FA1D, 17),
 ];
 
-/// ICU codes whose HarfBuzz 15.0.0 shaper is not the default one for a face
-/// without GSUB (`hb_ot_shaper_categorize`, chosen script NONE), sorted.
-pub(crate) const SCRIPT_SHAPERS: &[(u8, Shaper)] = &[
-    (2, Shaper::Arabic),
-    (4, Shaper::Indic),
-    (10, Shaper::Indic),
-    (15, Shaper::Indic),
-    (16, Shaper::Indic),
-    (18, Shaper::Hangul),
-    (19, Shaper::Hebrew),
-    (21, Shaper::Indic),
-    (23, Shaper::Khmer),
-    (24, Shaper::Thai),
-    (26, Shaper::Indic),
-    (27, Shaper::Use),
-    (28, Shaper::Myanmar),
-    (31, Shaper::Indic),
-    (33, Shaper::Use),
-    (34, Shaper::Arabic),
-    (35, Shaper::Indic),
-    (36, Shaper::Indic),
-    (38, Shaper::Thai),
-    (39, Shaper::Use),
-    (42, Shaper::Use),
-    (43, Shaper::Use),
-    (44, Shaper::Use),
-    (45, Shaper::Use),
+/// The HarfBuzz script tag of each ICU `UScriptCode` JDK maps (scriptMapping.c).
+pub(crate) const HB_SCRIPTS: [[u8; 4]; 46] = [
+    *b"Zyyy", *b"Zinh", *b"Arab", *b"Armn", *b"Beng", *b"Bopo", *b"Cher", *b"Copt", *b"Cyrl",
+    *b"Dsrt", *b"Deva", *b"Ethi", *b"Geor", *b"Goth", *b"Grek", *b"Gujr", *b"Guru", *b"Hani",
+    *b"Hang", *b"Hebr", *b"Hira", *b"Knda", *b"Kana", *b"Khmr", *b"Laoo", *b"Latn", *b"Mlym",
+    *b"Mong", *b"Mymr", *b"Ogam", *b"Ital", *b"Orya", *b"Runr", *b"Sinh", *b"Syrc", *b"Taml",
+    *b"Telu", *b"Thaa", *b"Thai", *b"Tibt", *b"Cans", *b"Yiii", *b"Tglg", *b"Hano", *b"Buhd",
+    *b"Tagb",
+];
+
+/// ICU codes whose HarfBuzz script is in a non-default case group of
+/// `hb_ot_shaper_categorize` (15.0.0), sorted.
+pub(crate) const SCRIPT_SHAPERS: &[(u8, ShaperGroup)] = &[
+    (2, ShaperGroup::Arabic),
+    (4, ShaperGroup::Indic),
+    (10, ShaperGroup::Indic),
+    (15, ShaperGroup::Indic),
+    (16, ShaperGroup::Indic),
+    (18, ShaperGroup::Hangul),
+    (19, ShaperGroup::Hebrew),
+    (21, ShaperGroup::Indic),
+    (23, ShaperGroup::Khmer),
+    (24, ShaperGroup::Thai),
+    (26, ShaperGroup::Indic),
+    (27, ShaperGroup::Use),
+    (28, ShaperGroup::Myanmar),
+    (31, ShaperGroup::Indic),
+    (33, ShaperGroup::Use),
+    (34, ShaperGroup::Arabic),
+    (35, ShaperGroup::Indic),
+    (36, ShaperGroup::Indic),
+    (38, ShaperGroup::Thai),
+    (39, ShaperGroup::Use),
+    (42, ShaperGroup::Use),
+    (43, ShaperGroup::Use),
+    (44, ShaperGroup::Use),
+    (45, ShaperGroup::Use),
+];
+
+/// `OT::GDEF::is_blocklisted` (hb-ot-layout.cc, 15.0.0): GDEF, GSUB and GPOS
+/// table lengths whose GDEF HarfBuzz discards.
+pub(crate) const GDEF_BLOCKLIST: &[(u32, u32, u32)] = &[
+    (442, 2874, 42038),
+    (430, 2874, 40662),
+    (442, 2874, 39116),
+    (430, 2874, 39374),
+    (490, 3046, 41638),
+    (478, 3046, 41902),
+    (898, 12554, 46470),
+    (910, 12566, 47732),
+    (928, 23298, 59332),
+    (940, 23310, 60732),
+    (964, 23836, 60072),
+    (976, 23832, 61456),
+    (994, 24474, 60336),
+    (1006, 24470, 61740),
+    (1006, 24576, 61346),
+    (1018, 24572, 62828),
+    (1006, 24576, 61352),
+    (1018, 24572, 62834),
+    (832, 7324, 47162),
+    (844, 7302, 45474),
+    (180, 13054, 7254),
+    (192, 12638, 7254),
+    (192, 12690, 7254),
+    (188, 248, 3852),
+    (188, 264, 3426),
+    (1058, 47032, 11818),
+    (1046, 47030, 12600),
+    (1058, 71796, 16770),
+    (1046, 71790, 17862),
+    (1046, 71788, 17112),
+    (1058, 71794, 17514),
+    (1330, 109904, 57938),
+    (1330, 109904, 58972),
+    (1004, 59092, 14836),
+    (588, 5078, 14418),
+    (588, 5078, 14238),
+    (894, 17162, 33960),
+    (894, 17154, 34472),
+    (816, 7868, 17052),
+    (816, 7868, 17138),
 ];

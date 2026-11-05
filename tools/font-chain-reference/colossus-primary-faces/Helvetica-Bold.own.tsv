@@ -1,6 +1,6 @@
 #host	Version 27.2 (Build 26B123)
 #face	Helvetica-Bold	Helvetica-Bold	/System/Library/Fonts/Helvetica.ttc
-#plan_extra	cross_kern=0	trak=0	STAT=0	gsub_scripts=	gpos_scripts=
+#plan_extra	cross_kern=0	trak=0	STAT=0	gsub_scripts=	gpos_scripts=	gdef_length=0	gsub_length=0	gpos_length=0
 P	0	0
 P	8	A
 P	D	D

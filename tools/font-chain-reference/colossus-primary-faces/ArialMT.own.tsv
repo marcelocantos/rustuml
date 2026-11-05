@@ -1,6 +1,6 @@
 #host	Version 27.2 (Build 26B123)
 #face	ArialMT	ArialMT	/System/Library/Fonts/Supplemental/Arial.ttf
-#plan_extra	cross_kern=0	trak=0	STAT=0	gsub_scripts=arab,cyrl,grek,hebr,latn	gpos_scripts=arab,cyrl,grek,hebr,latn
+#plan_extra	cross_kern=0	trak=0	STAT=0	gsub_scripts=arab,cyrl,grek,hebr,latn	gpos_scripts=arab,cyrl,grek,hebr,latn	gdef_length=706	gsub_length=7064	gpos_length=45346
 P	9	A
 P	D	D
 P	20	7E

@@ -1,6 +1,6 @@
 #host	Version 27.2 (Build 26B123)
 #face	CourierNewPSMT	CourierNewPSMT	/System/Library/Fonts/Supplemental/Courier New.ttf
-#plan_extra	cross_kern=0	trak=0	STAT=0	gsub_scripts=arab,hebr,latn	gpos_scripts=arab,hebr,latn
+#plan_extra	cross_kern=0	trak=0	STAT=0	gsub_scripts=arab,hebr,latn	gpos_scripts=arab,hebr,latn	gdef_length=588	gsub_length=5078	gpos_length=14418
 P	9	A
 P	D	D
 P	20	7E

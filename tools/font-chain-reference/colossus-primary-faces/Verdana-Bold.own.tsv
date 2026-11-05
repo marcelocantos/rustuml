@@ -1,6 +1,6 @@
 #host	Version 27.2 (Build 26B123)
 #face	Verdana-Bold	Verdana-Bold	/System/Library/Fonts/Supplemental/Verdana Bold.ttf
-#plan_extra	cross_kern=0	trak=0	STAT=0	gsub_scripts=latn	gpos_scripts=latn
+#plan_extra	cross_kern=0	trak=0	STAT=0	gsub_scripts=latn	gpos_scripts=latn	gdef_length=30	gsub_length=148	gpos_length=56
 P	9	A
 P	D	D
 P	20	7E

@@ -1,6 +1,6 @@
 #host	Version 27.2 (Build 26B123)
 #face	Arial-BoldMT	Arial-BoldMT	/System/Library/Fonts/Supplemental/Arial Bold.ttf
-#plan_extra	cross_kern=0	trak=0	STAT=0	gsub_scripts=arab,cyrl,grek,hebr,latn	gpos_scripts=arab,cyrl,grek,hebr,latn
+#plan_extra	cross_kern=0	trak=0	STAT=0	gsub_scripts=arab,cyrl,grek,hebr,latn	gpos_scripts=arab,cyrl,grek,hebr,latn	gdef_length=694	gsub_length=7068	gpos_length=44728
 P	9	A
 P	D	D
 P	20	7E

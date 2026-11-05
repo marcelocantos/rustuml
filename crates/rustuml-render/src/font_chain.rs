@@ -67,6 +67,153 @@ pub(crate) struct PlanFacts {
     pub(crate) cross_kern: bool,
     /// GPOS's ScriptList has `hebr`, the hebrew shaper's `gpos_tag`.
     pub(crate) gpos_hebrew_script: bool,
+    /// GSUB's ScriptList tags (`hb_ot_layout_table_select_script` chooses
+    /// the shaper's `gsub_script` from them).
+    pub(crate) gsub_scripts: &'static [[u8; 4]],
+    /// GDEF, GSUB and GPOS table lengths as JDK hands them to HarfBuzz
+    /// (`CTFontCopyTable`); 0 when absent.
+    pub(crate) gdef_length: u32,
+    pub(crate) gsub_length: u32,
+    pub(crate) gpos_length: u32,
+}
+
+impl PlanFacts {
+    /// `OT::GDEF::is_blocklisted` (hb-ot-layout.cc 152-266, 15.0.0): the
+    /// (GDEF, GSUB, GPOS) lengths are a listed broken font's.
+    pub(crate) fn gdef_blocklisted(&self) -> bool {
+        unicode::GDEF_BLOCKLIST.contains(&(self.gdef_length, self.gsub_length, self.gpos_length))
+    }
+
+    /// `hb_ot_layout_has_glyph_classes` (hb-ot-layout.cc 299-302): GDEF has
+    /// glyph classes and is not blocklisted (GDEF.hh 974-985 replaces a
+    /// blocklisted GDEF by the empty blob); otherwise
+    /// `hb_synthesize_glyph_classes`.
+    pub(crate) fn has_glyph_classes(&self) -> bool {
+        self.gdef_glyph_classes && !self.gdef_blocklisted()
+    }
+
+    /// `hb_ot_layout_table_select_script` (hb-ot-layout.cc 563-611) over
+    /// GSUB for `script` (an ICU code): the first of the script's OT tags
+    /// GSUB lists, else `DFLT`, `dflt`, `latn`, else none.
+    fn gsub_chosen_script(&self, script: u8) -> Option<[u8; 4]> {
+        if !self.gsub {
+            return None;
+        }
+        let hb_script = unicode::HB_SCRIPTS
+            .get(usize::from(script))
+            .copied()
+            .unwrap_or(*b"Zyyy");
+        ot_script_tags(hb_script)
+            .into_iter()
+            .flatten()
+            .chain([*b"DFLT", *b"dflt", *b"latn"])
+            .find(|tag| self.gsub_scripts.contains(tag))
+    }
+
+    /// The shaper `hb_ot_shape_planner_t` categorizes for `script` (an ICU
+    /// code) on this face (hb-ot-shape.cc 83-93).
+    pub(crate) fn shaper(&self, script: u8) -> Shaper {
+        let group = unicode::SCRIPT_SHAPERS
+            .binary_search_by_key(&script, |(code, _)| *code)
+            .map_or(ShaperGroup::Default, |index| {
+                unicode::SCRIPT_SHAPERS[index].1
+            });
+        group.categorize(script, self.gsub_chosen_script(script))
+    }
+}
+
+/// `hb_ot_all_tags_from_script` (hb-ot-tag.cc 157-181, 15.0.0): the new
+/// Indic/Myanmar tags (`hb_ot_new_tag_from_script` 87-104; `mym2` has no
+/// `'3'` form), then the old tag (`hb_ot_old_tag_from_script` 44-68).
+fn ot_script_tags(script: [u8; 4]) -> [Option<[u8; 4]>; 3] {
+    let new = match &script {
+        b"Beng" => Some(*b"bng2"),
+        b"Deva" => Some(*b"dev2"),
+        b"Gujr" => Some(*b"gjr2"),
+        b"Guru" => Some(*b"gur2"),
+        b"Knda" => Some(*b"knd2"),
+        b"Mlym" => Some(*b"mlm2"),
+        b"Orya" => Some(*b"ory2"),
+        b"Taml" => Some(*b"tml2"),
+        b"Telu" => Some(*b"tel2"),
+        b"Mymr" => Some(*b"mym2"),
+        _ => None,
+    };
+    let three = new
+        .filter(|tag| tag != b"mym2")
+        .map(|[a, b, c, _]| [a, b, c, b'3']);
+    let old = match &script {
+        b"Hira" | b"Hrkt" => *b"kana",
+        b"Laoo" => *b"lao ",
+        b"Yiii" => *b"yi  ",
+        b"Nkoo" => *b"nko ",
+        b"Vaii" => *b"vai ",
+        [first, rest @ ..] => [first.to_ascii_lowercase(), rest[0], rest[1], rest[2]],
+    };
+    [three, new, Some(old)]
+}
+
+/// The case groups of `hb_ot_shaper_categorize` (hb-ot-shaper.hh 176-421,
+/// 15.0.0); the generated `SCRIPT_SHAPERS` puts each ICU script in one.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub(crate) enum ShaperGroup {
+    Default,
+    Arabic,
+    Thai,
+    Hangul,
+    Hebrew,
+    Indic,
+    Khmer,
+    Myanmar,
+    Use,
+}
+
+/// ICU ARABIC (`hb_ot_shaper_categorize` uses the arabic shaper for Arabic
+/// even when GSUB has only `DFLT`).
+const ARABIC_SCRIPT: u8 = 2;
+
+impl ShaperGroup {
+    /// The shaper of the group for the GSUB chosen script (horizontal text).
+    fn categorize(self, script: u8, gsub_script: Option<[u8; 4]>) -> Shaper {
+        let generic = matches!(gsub_script, Some(tag) if &tag == b"DFLT" || &tag == b"latn");
+        match self {
+            ShaperGroup::Default => Shaper::Default,
+            ShaperGroup::Arabic => {
+                if gsub_script != Some(*b"DFLT") || script == ARABIC_SCRIPT {
+                    Shaper::Arabic
+                } else {
+                    Shaper::Default
+                }
+            }
+            ShaperGroup::Thai => Shaper::Thai,
+            ShaperGroup::Hangul => Shaper::Hangul,
+            ShaperGroup::Hebrew => Shaper::Hebrew,
+            ShaperGroup::Indic => {
+                if generic {
+                    Shaper::Default
+                } else if matches!(gsub_script, Some([_, _, _, b'3'])) {
+                    Shaper::Use
+                } else {
+                    Shaper::Indic
+                }
+            }
+            ShaperGroup::Khmer => Shaper::Khmer,
+            ShaperGroup::Myanmar => {
+                if generic || gsub_script == Some(*b"mymr") {
+                    Shaper::Default
+                } else {
+                    Shaper::Myanmar
+                }
+            }
+            ShaperGroup::Use => {
+                if generic {
+                    Shaper::Default
+                } else {
+                    Shaper::Use
+                }
+            }
+        }
+    }
 }
 
 /// GDEF glyph class MARK.
@@ -152,14 +299,6 @@ impl Shaper {
         Shaper::Myanmar,
         Shaper::Use,
     ];
-
-    /// `hb_ot_shaper_categorize` for an ICU script on a face without GSUB
-    /// (`chosen_script` NONE): the generated `SCRIPT_SHAPERS`, else default.
-    fn for_script(script: u8) -> Self {
-        unicode::SCRIPT_SHAPERS
-            .binary_search_by_key(&script, |(code, _)| *code)
-            .map_or(Shaper::Default, |index| unicode::SCRIPT_SHAPERS[index].1)
-    }
 
     /// `zero_width_marks` (hb-ot-shaper-*.cc, 15.0.0).
     fn zero_width_marks(self) -> ZeroWidthMarks {
@@ -327,14 +466,20 @@ impl ChainFace {
     /// The [`Complexity`] of each Java token of `text` (one per
     /// `java_utf16::tokens` item) measured in this face: `Simple` throughout
     /// unless the string is complex. Complex text is split into HarfBuzz
-    /// buffers, `ScriptRun` runs by slot runs; in a slot-0 buffer the plan
-    /// for the run's script decides which unmapped glyphs it zeroes: MARK
-    /// glyphs by GDEF (glyph 0's class, or Mn and not default-ignorable when
-    /// classes are synthesized, hb-ot-shape.cc 856-879), and Mn after a base
-    /// by fallback positioning.
+    /// buffers: `TextLine` components (runs of equal bidi level,
+    /// [`java_bidi::text_line_levels`]), then `ScriptRun` runs and slot runs
+    /// inside each component (`GlyphLayout.layout` 408-431 runs both over
+    /// the component only). In a slot-0 buffer the plan for the run's
+    /// script decides which unmapped glyphs it zeroes: MARK glyphs by GDEF
+    /// (glyph 0's class, or Mn and not default-ignorable when classes are
+    /// synthesized, hb-ot-shape.cc 856-879), and Mn after a base by fallback
+    /// positioning.
     pub(crate) fn complexity_per_token(self, text: &str) -> Vec<Complexity> {
-        let codes: Vec<u32> = rustuml_parser::java_utf16::tokens(text)
-            .map(|token| match token {
+        let tokens: Vec<rustuml_parser::java_utf16::Token> =
+            rustuml_parser::java_utf16::tokens(text).collect();
+        let codes: Vec<u32> = tokens
+            .iter()
+            .map(|token| match *token {
                 rustuml_parser::java_utf16::Token::Unit(unit) => u32::from(unit),
                 rustuml_parser::java_utf16::Token::Char(ch) => ch as u32,
             })
@@ -342,8 +487,21 @@ impl ChainFace {
         if !is_complex_text(text) {
             return vec![Complexity::Simple; codes.len()];
         }
+        let mut units = Vec::with_capacity(codes.len());
+        let mut first_unit = Vec::with_capacity(codes.len());
+        for token in &tokens {
+            first_unit.push(units.len());
+            match *token {
+                rustuml_parser::java_utf16::Token::Unit(unit) => units.push(unit),
+                rustuml_parser::java_utf16::Token::Char(ch) => {
+                    units.extend_from_slice(ch.encode_utf16(&mut [0; 2]));
+                }
+            }
+        }
+        // Both units of a pair share a level (the lead is BN, adjustWSLevels).
+        let levels = crate::java_bidi::text_line_levels(&units);
+        let level = |token: usize| levels.as_ref().map_or(0, |l| l[first_unit[token]]);
         let coverage = self.coverage();
-        let scripts = script_run_codes(&codes);
         let slot0: Vec<bool> = codes
             .iter()
             .map(|&code| {
@@ -351,33 +509,45 @@ impl ChainFace {
             })
             .collect();
         let mut result = vec![Complexity::Complex { zeroed: false }; codes.len()];
-        let mut start = 0;
-        while start < codes.len() {
-            let mut end = start + 1;
-            while end < codes.len() && scripts[end] == scripts[start] && slot0[end] == slot0[start]
-            {
-                end += 1;
+        let mut component = 0;
+        while component < codes.len() {
+            let mut component_end = component + 1;
+            while component_end < codes.len() && level(component_end) == level(component) {
+                component_end += 1;
             }
-            if slot0[start] {
-                let plan = plan(&coverage.plan, Shaper::for_script(scripts[start]), false);
-                let fallback = if plan.fallback_mark_positioning {
-                    fallback_zeroed(&codes[start..end])
-                } else {
-                    vec![false; end - start]
-                };
-                for index in start..end {
-                    let code = codes[index];
-                    let glyph_is_mark = if coverage.plan.gdef_glyph_classes {
-                        coverage.plan.notdef_gdef_class == GDEF_MARK_CLASS
-                    } else {
-                        in_runs(unicode::NONSPACING_MARKS, code) && !is_default_ignorable(code)
-                    };
-                    result[index] = Complexity::Complex {
-                        zeroed: (plan.zero_by_gdef && glyph_is_mark) || fallback[index - start],
-                    };
+            let scripts = script_run_codes(&codes[component..component_end]);
+            let mut start = component;
+            while start < component_end {
+                let script = scripts[start - component];
+                let mut end = start + 1;
+                while end < component_end
+                    && scripts[end - component] == script
+                    && slot0[end] == slot0[start]
+                {
+                    end += 1;
                 }
+                if slot0[start] {
+                    let plan = plan(&coverage.plan, coverage.plan.shaper(script), false);
+                    let fallback = if plan.fallback_mark_positioning {
+                        fallback_zeroed(&codes[start..end])
+                    } else {
+                        vec![false; end - start]
+                    };
+                    for index in start..end {
+                        let code = codes[index];
+                        let glyph_is_mark = if coverage.plan.has_glyph_classes() {
+                            coverage.plan.notdef_gdef_class == GDEF_MARK_CLASS
+                        } else {
+                            in_runs(unicode::NONSPACING_MARKS, code) && !is_default_ignorable(code)
+                        };
+                        result[index] = Complexity::Complex {
+                            zeroed: (plan.zero_by_gdef && glyph_is_mark) || fallback[index - start],
+                        };
+                    }
+                }
+                start = end;
             }
-            start = end;
+            component = component_end;
         }
         result
     }
@@ -532,6 +702,40 @@ fn is_default_ignorable(code: u32) -> bool {
     )
 }
 
+/// SHA256 of `tools/font-chain-reference/shaping-sources/SHA256SUMS`, the
+/// pinned upstream files the drift gate re-derives the shaping tables from.
+#[cfg(test)]
+const SHAPING_SOURCES_SHA256SUMS_SHA256: &str =
+    "b7e96abae07facf76b6f70a6b477d75e516fbea41cedff25ab60d882b54a3b81";
+
+/// A pinned upstream file, checked against the stored SHA256SUMS, itself
+/// checked against [`SHAPING_SOURCES_SHA256SUMS_SHA256`].
+#[cfg(test)]
+pub(crate) fn pinned_shaping_source(relative: &str) -> Vec<u8> {
+    use sha2::{Digest, Sha256};
+    let hex = |bytes: &[u8]| -> String {
+        Sha256::digest(bytes)
+            .iter()
+            .map(|b| format!("{b:02x}"))
+            .collect()
+    };
+    let dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("../../tools/font-chain-reference/shaping-sources");
+    let sums = std::fs::read(dir.join("SHA256SUMS")).unwrap();
+    assert_eq!(
+        hex(&sums),
+        SHAPING_SOURCES_SHA256SUMS_SHA256,
+        "shaping-sources SHA256SUMS"
+    );
+    let data = std::fs::read(dir.join(relative)).unwrap();
+    let line = format!("{}  {relative}\n", hex(&data));
+    assert!(
+        String::from_utf8(sums).unwrap().contains(&line),
+        "{relative}"
+    );
+    data
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -644,13 +848,22 @@ mod tests {
             }
         }
         // GDEF classes make glyph 0 a base: never zeroed by GDEF.
-        for face in [ChainFace::Arial, ChainFace::Verdana, ChainFace::CourierNew] {
+        for face in [ChainFace::Arial, ChainFace::Verdana] {
             assert_eq!(
                 last_glyph(face, "Vault \u{1D17B}"),
                 ChainGlyph::Missing,
                 "{face:?}"
             );
         }
+        // HarfBuzz 15.0.0 blocklists the macOS Courier New GDEF (588, 5078,
+        // 14418): classes are synthesized, so an unmapped Mn is a MARK the
+        // default shaper zeroes, leading or not; Mc and Me are not.
+        let courier = ChainFace::CourierNew;
+        assert!(courier.coverage().plan.gdef_blocklisted());
+        assert_eq!(zeroing(courier, "Wharf x\u{1D167}"), "-------z");
+        assert_eq!(zeroing(courier, "\u{1D167}Wharf"), "z-----");
+        assert_eq!(zeroing(courier, "Wharf x\u{11F03}"), "--------");
+        assert_eq!(zeroing(courier, "Wharf x\u{1ABE}\u{10FFFD}"), "---------");
         // Simple text never reaches HarfBuzz.
         assert_eq!(
             ChainFace::LucidaGrande.resolve('\u{1AB0}', Complexity::Simple),
@@ -682,11 +895,12 @@ mod tests {
         assert_eq!(zeroing(LucidaGrande, "\u{0915} \u{1D17B}"), "---");
         // A default-ignorable between the base and the mark is skipped.
         assert_eq!(zeroing(LucidaGrande, "\u{05D0}\u{2060}\u{1D17B}"), "--z");
-        // GPOS faces: Arial and Courier New list 'hebr', so GPOS stays on and
-        // no fallback runs; Verdana's GPOS lists only 'latn', so the hebrew
-        // shaper's gpos_tag disables it and fallback positioning zeroes.
+        // GPOS faces: Arial lists 'hebr', so GPOS stays on and no fallback
+        // runs; Verdana's GPOS lists only 'latn', so the hebrew shaper's
+        // gpos_tag disables it and fallback positioning zeroes. (Courier New
+        // also lists 'hebr', but its blocklisted GDEF zeroes the MARK.)
         assert_eq!(zeroing(Arial, "\u{05D0} \u{1D17B}"), "---");
-        assert_eq!(zeroing(CourierNew, "\u{05D0} \u{1D17B}"), "---");
+        assert_eq!(zeroing(CourierNew, "\u{05D0} \u{1D17B}"), "--z");
         assert_eq!(zeroing(Verdana, "\u{05D0} \u{1D17B}"), "--z");
     }
 
@@ -721,6 +935,10 @@ mod tests {
             machine_kern: false,
             cross_kern,
             gpos_hebrew_script: hebr,
+            gsub_scripts: &[],
+            gdef_length: 0,
+            gsub_length: 0,
+            gpos_length: 0,
         };
         let lucida = facts(false, false, false, true, false);
         // morx: non-default shapers become dumber (no GDEF zeroing) but keep
@@ -769,7 +987,7 @@ mod tests {
             let codes: Vec<u32> = text.chars().map(|c| c as u32).collect();
             script_run_codes(&codes)
                 .into_iter()
-                .map(|script| match Shaper::for_script(script) {
+                .map(|script| match coverage::LUCIDA_GRANDE.plan.shaper(script) {
                     Shaper::Default => 'd',
                     Shaper::Hebrew | Shaper::Arabic => 'f',
                     _ => 'o',
@@ -791,9 +1009,14 @@ mod tests {
     }
 
     /// Faces whose plan can zero a glyph but whose font file the reference
-    /// host's record does not hash yet (relay request in
-    /// maker-round7-claude). The gate fails if this list is stale.
-    const PENDING_REFERENCE_HASH: &[&str] = &["Verdana-Bold"];
+    /// host's records do not hash yet. The gate fails if this list is stale.
+    /// (Verdana Bold resolved by the Monkey Man record of the round-7 relay,
+    /// `monkeyman-round7-font-hash.txt`, sha256 a5591bab...)
+    const PENDING_REFERENCE_HASH: &[&str] = &[];
+
+    /// The faces whose GDEF HarfBuzz 15.0.0 blocklists (their stored table
+    /// lengths are listed in `GDEF_BLOCKLIST`).
+    const GDEF_BLOCKLISTED: &[&str] = &["CourierNewPSMT", "CourierNewPS-BoldMT"];
 
     /// Drift gate (T14.6.8): the generated table is the stored extractions.
     /// Each SHA256SUMS hashes to the recorded value and every stored file
@@ -837,8 +1060,33 @@ mod tests {
                 })
                 .collect()
         };
-        let reference_host = font_hashes("monkeyman-hb-static.txt");
+        // Both Monkey Man records; where both hash a file they must agree.
+        let mut reference_host = font_hashes("monkeyman-hb-static.txt");
+        for (path, hash) in font_hashes("monkeyman-round7-font-hash.txt") {
+            if let Some(previous) = reference_host.insert(path.clone(), hash.clone()) {
+                assert_eq!(previous, hash, "{path}: Monkey Man records disagree");
+            }
+        }
         let colossus = font_hashes("colossus-font-files.sha256");
+        let plan_extra = |name: &str| -> std::collections::HashMap<String, String> {
+            let text = std::fs::read_to_string(primary.join(format!("{name}.own.tsv"))).unwrap();
+            text.lines()
+                .filter(|line| line.starts_with("#plan_extra\t"))
+                .flat_map(|line| line.split('\t').skip(1))
+                .map(|fact| {
+                    let (key, value) = fact.split_once('=').unwrap();
+                    (key.to_string(), value.to_string())
+                })
+                .collect()
+        };
+        let lengths = |facts: &std::collections::HashMap<String, String>| {
+            let length = |key: &str| facts[key].parse::<u32>().unwrap();
+            (
+                length("gdef_length"),
+                length("gsub_length"),
+                length("gpos_length"),
+            )
+        };
         let faces = [
             (ChainFace::LucidaGrande, "LucidaGrande"),
             (ChainFace::LucidaGrandeBold, "LucidaGrande-Bold"),
@@ -914,6 +1162,12 @@ mod tests {
                     stored.machine_kern,
                     stored.cross_kern,
                     stored.gpos_hebrew_script,
+                    stored
+                        .gsub_scripts
+                        .iter()
+                        .map(|tag| String::from_utf8(tag.to_vec()).unwrap())
+                        .collect::<Vec<_>>(),
+                    (stored.gdef_length, stored.gsub_length, stored.gpos_length),
                 ),
                 (
                     flag("gdef_glyph_classes"),
@@ -926,29 +1180,38 @@ mod tests {
                     flag("machine_kern"),
                     flag("cross_kern"),
                     facts["gpos_scripts"].split(',').any(|tag| tag == "hebr"),
+                    facts["gsub_scripts"]
+                        .split(',')
+                        .filter(|tag| !tag.is_empty())
+                        .map(str::to_string)
+                        .collect::<Vec<_>>(),
+                    lengths(&facts),
                 ),
                 "{name} plan facts"
             );
             assert!(!(flag("trak") && flag("STAT")), "{name}: trak applies");
+            // The blocklist decision, from the stored table lengths.
+            assert_eq!(
+                stored.gdef_blocklisted(),
+                GDEF_BLOCKLISTED.contains(&name),
+                "{name}: GDEF blocklist decision"
+            );
             let glyph0_can_be_mark =
-                !stored.gdef_glyph_classes || stored.notdef_gdef_class == GDEF_MARK_CLASS;
-            let zeroes = |shaper: Shaper| {
-                let plan = plan(stored, shaper, false);
-                (plan.zero_by_gdef && glyph0_can_be_mark) || plan.fallback_mark_positioning
-            };
+                !stored.has_glyph_classes() || stored.notdef_gdef_class == GDEF_MARK_CLASS;
             for shaper in Shaper::ALL {
                 assert_eq!(
                     plan(stored, shaper, false),
                     plan(stored, shaper, true),
                     "{name} {shaper:?}: GPOS kern feature"
                 );
-                // With GSUB the categorized shaper depends on the chosen
-                // script; only hebrew (chosen regardless) may zero there.
-                if stored.gsub && shaper != Shaper::Hebrew {
-                    assert!(!zeroes(shaper), "{name} {shaper:?}");
-                }
             }
-            if Shaper::ALL.into_iter().any(zeroes) {
+            // Every ICU script JDK maps (scriptMapping.c 0..45), categorized
+            // with this face's GSUB chosen script.
+            let zeroes = (0..unicode::HB_SCRIPTS.len() as u8).any(|script| {
+                let plan = plan(stored, stored.shaper(script), false);
+                (plan.zero_by_gdef && glyph0_can_be_mark) || plan.fallback_mark_positioning
+            });
+            if zeroes {
                 let here = &colossus[&font_path];
                 match reference_host.get(&font_path) {
                     Some(there) => assert_eq!(here, there, "{name}: {font_path}"),
@@ -960,6 +1223,316 @@ mod tests {
             pending, PENDING_REFERENCE_HASH,
             "faces awaiting reference hashes"
         );
+        // Courier New Bold is measured as Courier New (one ChainFace): same
+        // blocklist decision and GSUB scripts, and the same file on Monkey Man.
+        let bold = plan_extra("CourierNewPS-BoldMT");
+        let plain = plan_extra("CourierNewPSMT");
+        assert!(
+            unicode::GDEF_BLOCKLIST.contains(&lengths(&bold))
+                && GDEF_BLOCKLISTED.contains(&"CourierNewPS-BoldMT")
+        );
+        assert_eq!(bold["gsub_scripts"], plain["gsub_scripts"]);
+        assert_eq!(bold["gpos_scripts"], plain["gpos_scripts"]);
+        let bold_path = "/System/Library/Fonts/Supplemental/Courier New Bold.ttf";
+        assert_eq!(colossus[bold_path], reference_host[bold_path]);
+    }
+
+    #[test]
+    fn harfbuzz_buffers_split_at_bidi_level_changes() {
+        use ChainFace::*;
+        // The mark's zeroing in each string ('z' zeroed, '-' kept).
+        let mark = |face: ChainFace, text: &str| {
+            let at = text
+                .chars()
+                .position(|c| c == '\u{1D167}' || c == '\u{1D17B}');
+            zeroing(face, text).chars().nth(at.unwrap()).unwrap()
+        };
+        // A neutral or digit and the mark after the last Hebrew letter are an
+        // LTR component of COMMON (or Latin) script: default shaper, Verdana
+        // GPOS on, mark kept (BK mk9_verdana_hebrew_space, BL
+        // c7m_heb_verdana_digit/verdanabold_digit/verdana_usecase, BM
+        // c7b_verdana_tail_space/digit_rtl).
+        for (face, text) in [
+            (Verdana, "Reef \u{05D0} \u{1D17B}z"),
+            (Verdana, "Quay \u{05D0}1\u{1D167}"),
+            (VerdanaBold, "Quay \u{05D0}2\u{1D167}"),
+            (Verdana, "Quay \u{05D0}.\u{1D167}"),
+            (Verdana, "Wharf \u{05D0} \u{1D167}"),
+            (Verdana, "Wharf \u{05D0}7\u{1D167}\u{05D1}"),
+        ] {
+            assert_eq!(mark(face, text), '-', "{face:?} {text:?}");
+        }
+        // Inside one RTL component the hebrew shaper still zeroes (BM
+        // c7b_verdana_rtl_space, c7b_verdanabold_rtl_space).
+        for face in [Verdana, VerdanaBold] {
+            assert_eq!(mark(face, "Wharf \u{05D0} \u{1D167}\u{05D1}"), 'z');
+        }
+        // RLM (R) splits off the EN + NSM component: COMMON, default shaper,
+        // Lucida Grande's synthesized MARK zeroed (BM c7b_thai_rlm_digit,
+        // c7b_deva_rlm_digit); without it the Thai/Devanagari run keeps it.
+        for letter in ['\u{0E01}', '\u{0915}'] {
+            assert_eq!(
+                mark(LucidaGrande, &format!("Wharf {letter}\u{200F}7\u{1D167}")),
+                'z'
+            );
+            assert_eq!(
+                mark(LucidaGrande, &format!("Wharf {letter}7\u{1D167}")),
+                '-'
+            );
+            // ALM is AL: W2 makes the digit AN, the same level 2 component.
+            assert_eq!(
+                mark(LucidaGrande, &format!("Wharf {letter}\u{061C}7\u{1D167}")),
+                'z'
+            );
+            // An explicit RLE embedding: the digit and mark are level 2.
+            assert_eq!(
+                mark(
+                    LucidaGrande,
+                    &format!("Wharf {letter}\u{202B}7\u{1D167}\u{202C}")
+                ),
+                'z'
+            );
+            // An isolate initiator alone does not make requiresBidi true.
+            assert_eq!(
+                mark(
+                    LucidaGrande,
+                    &format!("Wharf {letter}\u{2067}7\u{1D167}\u{2069}")
+                ),
+                '-'
+            );
+        }
+    }
+
+    #[test]
+    fn gsub_chosen_script_categorizes_the_shaper() {
+        use ChainFace::*;
+        let shaper = |face: ChainFace, script: u8| face.coverage().plan.shaper(script);
+        // ICU DEVANAGARI 10, MYANMAR 28, TIBETAN 39, SYRIAC 34, ARABIC 2,
+        // THAI 38, HANGUL 18, KHMER 23.
+        // No GSUB: chosen script NONE.
+        assert_eq!(shaper(LucidaGrande, 10), Shaper::Indic);
+        assert_eq!(shaper(LucidaGrande, 28), Shaper::Myanmar);
+        assert_eq!(shaper(LucidaGrande, 39), Shaper::Use);
+        assert_eq!(shaper(LucidaGrande, 34), Shaper::Arabic);
+        // Courier New's GSUB lists arab, hebr, latn: Indic, Myanmar and USE
+        // scripts fall back to 'latn' and the default shaper; Syriac gets
+        // 'latn' (not 'DFLT'), so arabic.
+        assert_eq!(shaper(CourierNew, 10), Shaper::Default);
+        assert_eq!(shaper(CourierNew, 28), Shaper::Default);
+        assert_eq!(shaper(CourierNew, 39), Shaper::Default);
+        assert_eq!(shaper(CourierNew, 34), Shaper::Arabic);
+        assert_eq!(shaper(CourierNew, 2), Shaper::Arabic);
+        for face in [CourierNew, Verdana, LucidaGrande] {
+            assert_eq!(shaper(face, 38), Shaper::Thai);
+            assert_eq!(shaper(face, 18), Shaper::Hangul);
+            assert_eq!(shaper(face, 23), Shaper::Khmer);
+        }
+        // Courier New: a mark after Devanagari is zeroed by the default
+        // shaper's GDEF-synthesized MARK; Lucida Grande's indic shaper becomes
+        // dumber under morx and keeps it.
+        assert_eq!(zeroing(CourierNew, "Wharf \u{0915}\u{1D167}"), "-------z");
+        assert_eq!(
+            zeroing(LucidaGrande, "Wharf \u{0915} \u{1D167}"),
+            "---------"
+        );
+        assert_eq!(
+            ot_script_tags(*b"Deva"),
+            [Some(*b"dev3"), Some(*b"dev2"), Some(*b"deva")]
+        );
+        assert_eq!(
+            ot_script_tags(*b"Mymr"),
+            [None, Some(*b"mym2"), Some(*b"mymr")]
+        );
+        assert_eq!(ot_script_tags(*b"Laoo"), [None, None, Some(*b"lao ")]);
+    }
+
+    fn pinned(relative: &str) -> Vec<u8> {
+        pinned_shaping_source(relative)
+    }
+
+    /// Drift gate: the Mn and Mn/Mc/Me tables are those of the official
+    /// Unicode 18.0.0 UnicodeData.txt (stored gzipped; its decompressed
+    /// SHA256 is the official file's).
+    #[test]
+    fn unicode_mark_tables_are_ucd_18() {
+        use sha2::{Digest, Sha256};
+        use std::io::Read;
+        let mut text = String::new();
+        flate2::read::GzDecoder::new(&pinned("unicode-18.0.0/UnicodeData.txt.gz")[..])
+            .read_to_string(&mut text)
+            .unwrap();
+        let hash: String = Sha256::digest(text.as_bytes())
+            .iter()
+            .map(|b| format!("{b:02x}"))
+            .collect();
+        assert_eq!(
+            hash,
+            "0736451de439ae7baf1425136617da495e09ee5afbe6e394374db7009ea08950"
+        );
+        let runs = |categories: &[&str]| {
+            let mut runs: Vec<(u32, u32)> = Vec::new();
+            for line in text.lines() {
+                let fields: Vec<&str> = line.split(';').collect();
+                if !categories.contains(&fields[2]) {
+                    continue;
+                }
+                let code = u32::from_str_radix(fields[0], 16).unwrap();
+                match runs.last_mut() {
+                    Some(run) if run.1 + 1 == code => run.1 = code,
+                    _ => runs.push((code, code)),
+                }
+            }
+            runs
+        };
+        assert_eq!(runs(&["Mn"]), unicode::NONSPACING_MARKS);
+        assert_eq!(runs(&["Mn", "Mc", "Me"]), unicode::UNICODE_MARKS);
+    }
+
+    /// Drift gate: `HB_SCRIPTS`, `SCRIPT_SHAPERS` and `GDEF_BLOCKLIST` are
+    /// re-derived from the stored HarfBuzz 15.0.0 sources.
+    #[test]
+    fn shaper_groups_and_gdef_blocklist_are_harfbuzz_15() {
+        let text = |relative: &str| String::from_utf8(pinned(relative)).unwrap();
+        // JDK scriptMapping.c ICU_to_Harfbuzz_ScriptCode, ICU codes 0..45.
+        const HB_NAMES: [&str; 46] = [
+            "COMMON",
+            "INHERITED",
+            "ARABIC",
+            "ARMENIAN",
+            "BENGALI",
+            "BOPOMOFO",
+            "CHEROKEE",
+            "COPTIC",
+            "CYRILLIC",
+            "DESERET",
+            "DEVANAGARI",
+            "ETHIOPIC",
+            "GEORGIAN",
+            "GOTHIC",
+            "GREEK",
+            "GUJARATI",
+            "GURMUKHI",
+            "HAN",
+            "HANGUL",
+            "HEBREW",
+            "HIRAGANA",
+            "KANNADA",
+            "KATAKANA",
+            "KHMER",
+            "LAO",
+            "LATIN",
+            "MALAYALAM",
+            "MONGOLIAN",
+            "MYANMAR",
+            "OGHAM",
+            "OLD_ITALIC",
+            "ORIYA",
+            "RUNIC",
+            "SINHALA",
+            "SYRIAC",
+            "TAMIL",
+            "TELUGU",
+            "THAANA",
+            "THAI",
+            "TIBETAN",
+            "CANADIAN_SYLLABICS",
+            "YI",
+            "TAGALOG",
+            "HANUNOO",
+            "BUHID",
+            "TAGBANWA",
+        ];
+        let list = text("harfbuzz-15.0.0/hb-script-list.h");
+        for (code, name) in HB_NAMES.iter().enumerate() {
+            let key = format!("  HB_SCRIPT_{name}");
+            let line = list
+                .lines()
+                .find(|line| {
+                    line.starts_with(&key) && line[key.len()..].trim_start().starts_with('=')
+                })
+                .unwrap_or_else(|| panic!("{name}"));
+            let tag: Vec<u8> = line
+                .split("HB_TAG (")
+                .nth(1)
+                .unwrap()
+                .split(')')
+                .next()
+                .unwrap()
+                .split(',')
+                .map(|c| c.trim().as_bytes()[1])
+                .collect();
+            assert_eq!(unicode::HB_SCRIPTS[code], tag[..], "{name}");
+        }
+        let shaper = text("harfbuzz-15.0.0/hb-ot-shaper.hh");
+        let body = &shaper[shaper
+            .find("hb_ot_shaper_categorize (hb_script_t script")
+            .unwrap()..];
+        let body = &body[..body.find("\n}\n").unwrap()];
+        let mut group_of = std::collections::HashMap::new();
+        let (mut labels, mut returns): (Vec<&str>, Vec<&str>) = (Vec::new(), Vec::new());
+        let mut close = |labels: &mut Vec<&str>, returns: &mut Vec<&str>| {
+            let group = match returns.as_slice() {
+                ["arabic", "default"] => Some(ShaperGroup::Arabic),
+                ["thai"] => Some(ShaperGroup::Thai),
+                ["hangul"] => Some(ShaperGroup::Hangul),
+                ["hebrew"] => Some(ShaperGroup::Hebrew),
+                ["default", "use", "indic"] => Some(ShaperGroup::Indic),
+                ["khmer"] => Some(ShaperGroup::Khmer),
+                ["default", "myanmar"] => Some(ShaperGroup::Myanmar),
+                ["default", "use"] => Some(ShaperGroup::Use),
+                ["default"] => Some(ShaperGroup::Default),
+                ["myanmar_zawgyi"] => None,
+                other => panic!("unknown case group {other:?}"),
+            };
+            for label in labels.drain(..) {
+                group_of.insert(label.to_string(), group);
+            }
+            returns.clear();
+        };
+        for line in body.lines() {
+            let trimmed = line.trim();
+            let case = trimmed
+                .strip_prefix("case HB_SCRIPT_")
+                .and_then(|r| r.strip_suffix(':'));
+            if (case.is_some() || trimmed == "default:") && !returns.is_empty() {
+                close(&mut labels, &mut returns);
+            }
+            if let Some(name) = case {
+                labels.push(name);
+            }
+            if let Some(rest) = trimmed.split("return &_hb_ot_shaper_").nth(1) {
+                returns.push(rest.trim_end_matches(';'));
+            }
+        }
+        close(&mut labels, &mut returns);
+        let derived: Vec<(u8, ShaperGroup)> = HB_NAMES
+            .iter()
+            .enumerate()
+            .filter_map(|(code, name)| match group_of.get(*name) {
+                Some(Some(group)) if *group != ShaperGroup::Default => Some((code as u8, *group)),
+                _ => None,
+            })
+            .collect();
+        assert_eq!(derived, unicode::SCRIPT_SHAPERS);
+        let layout = text("harfbuzz-15.0.0/hb-ot-layout.cc");
+        let body = &layout[layout.find("OT::GDEF::is_blocklisted").unwrap()..];
+        let body = &body[..body.find("\n}\n").unwrap()];
+        let blocklist: Vec<(u32, u32, u32)> = body
+            .split("case HB_CODEPOINT_ENCODE3 (")
+            .skip(1)
+            .map(|rest| {
+                let numbers: Vec<u32> = rest
+                    .split(')')
+                    .next()
+                    .unwrap()
+                    .split(',')
+                    .map(|n| n.trim().parse().unwrap())
+                    .collect();
+                (numbers[0], numbers[1], numbers[2])
+            })
+            .collect();
+        assert_eq!(blocklist, unicode::GDEF_BLOCKLIST);
+        assert!(blocklist.contains(&(588, 5078, 14418)) && blocklist.contains(&(588, 5078, 14238)));
     }
 
     #[test]

@@ -10,7 +10,9 @@ reads; identical run tables are shared between faces.
 Per face the raw HarfBuzz plan facts (#hb_plan of the extraction) are emitted as PlanFacts; font_chain
 ports HarfBuzz 15.0.0's planner over them per shaper. <primary_dir> is tools/PrimaryFaceExtract.swift's
 output (stored with its own SHA256SUMS): per face file "<own.tsv>" (default: the face file's stem +
-".own.tsv") gives the runs the face's own cmap maps (JDK slot 0) and the cross_kern, trak and STAT facts.
+".own.tsv") gives the runs the face's own cmap maps (JDK slot 0), the cross_kern, trak and STAT facts, the
+GSUB ScriptList tags and the GDEF/GSUB/GPOS table lengths (CTFontCopyTable, the JDK path) that
+OT::GDEF::is_blocklisted keys on.
 """
 import hashlib, os, sys
 
@@ -126,6 +128,10 @@ for face, notdef, (s_name, c_name, p_name), family, font_path, _, facts in faces
         lines.append(f"        {key}: {flag(facts, key)},")
     hebr = "hebr" in facts["gpos_scripts"].split(",")
     lines.append(f"        gpos_hebrew_script: {'true' if hebr else 'false'},")
+    gsub_tags = [t for t in facts["gsub_scripts"].split(",") if t]
+    lines.append("        gsub_scripts: &[" + ", ".join(f'*b"{t}"' for t in gsub_tags) + "],")
+    for key in ["gdef_length", "gsub_length", "gpos_length"]:
+        lines.append(f"        {key}: {int(facts[key])},")
     lines.append("    },")
     lines.append("};")
 open(out_path, "w", encoding="utf-8").write("\n".join(lines) + "\n")
