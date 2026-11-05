@@ -516,6 +516,9 @@ struct PreprocessContext {
     /// Seed-only pass: consume `!startsub` markers while processing their
     /// bodies in place, matching PlantUML's theme include source.
     expand_subs_inline: bool,
+    /// Nesting depth of `!theme` body expansion, whose `!startsub` blocks
+    /// try_theme replays into theme_tail rather than in place.
+    theme_body_depth: usize,
     /// Local variable scopes for function calls (stack of saved scopes).
     local_vars: Vec<HashMap<String, String>>,
     /// Pending return value from a `!return` inside a function body.
@@ -636,6 +639,7 @@ impl PreprocessContext {
             collecting_sub: None,
             collecting_sub_lines: Vec::new(),
             expand_subs_inline: false,
+            theme_body_depth: 0,
             local_vars: Vec::new(),
             return_signal: None,
             current_source_line: 0,
@@ -888,13 +892,22 @@ impl PreprocessContext {
                         lines: std::mem::take(&mut self.collecting_sub_lines),
                     });
                 }
-            } else if let Some(name) = self.collecting_sub.clone() {
+                self.push_directive_placeholder(output);
+                return;
+            }
+            if let Some(name) = self.collecting_sub.clone() {
                 let line = line.to_string();
                 self.subs.entry(name).or_default().push(line.clone());
                 self.collecting_sub_lines.push(line);
             }
-            self.push_directive_placeholder(output);
-            return;
+            // CodeIteratorSub#peek stores the body and then replays it in
+            // place (readingInProgress) through the rest of TIM, so the body
+            // is part of the diagram where it is written. A `!theme` body's
+            // sub blocks are replayed into theme_tail by try_theme instead.
+            if self.theme_body_depth > 0 {
+                self.push_directive_placeholder(output);
+                return;
+            }
         }
 
         // Function definition collection.
@@ -1802,7 +1815,9 @@ impl PreprocessContext {
                 self.mark_function_body_source_lines = false;
                 let sub_start = self.sub_blocks.len();
                 self.include_depth += 1;
+                self.theme_body_depth += 1;
                 let expanded = self.process(body);
+                self.theme_body_depth -= 1;
                 self.include_depth -= 1;
                 // Preserve `<style>` blocks for the shared parser-owned style
                 // pass, and flatten grouped `skinparam X { ... }` declarations
@@ -4204,6 +4219,16 @@ $record(SaffronArchive)\n\
         );
         // Other lines keep the existing inline-comment handling.
         assert_eq!(pp("@startuml\nA -> B ' note\n@enduml"), vec!["A -> B "]);
+    }
+
+    #[test]
+    fn startsub_bodies_are_replayed_in_place() {
+        // CodeIteratorSub#peek: the stored body is also read where it is
+        // written, through the rest of TIM (here an inactive !if).
+        let input = "@startuml\n!startsub GEMS\nA -> B\n!if %false()\nX -> Y\n!endif\n!endsub\nC -> D\n@enduml";
+        assert_eq!(pp(input), vec!["A -> B", "C -> D"]);
+        let numbered = preprocess(input);
+        assert_eq!(numbered.iter().position(|l| l == "C -> D"), Some(6));
     }
 
     #[test]
