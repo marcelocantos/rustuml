@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-builtin-value-boundaries",
+  "sub_mechanism": "lone UTF-16 surrogate reaching diagram text (T14.20 export failure)",
+  "status": "maker results; independent review required",
+  "account_commit": "a15b09dde",
+  "implementation_commit": "61f3883ff",
+  "java_trace": "SubStr/Lower keep the lone unit; TContext.applyFunctionsAndVariables splices it into the diagram line; at export SvgGraphics' transformer (ToStream.accumDefaultEscape) throws SAXException 'An invalid XML character (Unicode: 0xde80) was found in the node's character data content.', wrapped as IOException by UGraphicSvg.writeToStream; UgDiagram.exportDiagram exports the crash diagram.",
+  "rust_outcome": "PreprocessContext.project_value records the first unpaired unit projected into a content line (substitute_vars builtin, function and variable sites; standalone-call return); PreprocessOutput.export_failure carries it; parse_with_base returns it as ParseError only after the family parse succeeds, so TIM fatal errors and parser errors keep precedence. CLI: 'parse error: line N: An invalid XML character (Unicode: 0x...) was found in the node's character data content.', exit 1. No crash SVG, no character deletion, no panic.",
+  "measured": {
+    "checker5/surrogate_display_residue": "exit 1 with the SAX message for 0xde80 (base: panic 101; 55c92692d: normal exit-0 diagram, a lost rejection)",
+    "checker5/units_rejoin": "exit 0, normal diagram (re-joined pair)",
+    "unit_test": "unpaired_surrogate_in_diagram_text_is_an_export_failure (low and high units, diagram line numbers; unused variable and re-joined pair stay valid)"
+  },
+  "declared_residue": [
+    "Java fails only when the text reaches the SVG writer; a content line the parser discards still raises the Rust error. A ' comment line does not, because TIM never substitutes it (probe surrogate_in_comment_line exits 0).",
+    "The message always names character data, never 'attribute value'."
+  ],
+  "held_out_probes": "relay batch r2a (pending): surrogate_high_class, surrogate_upper_sequence, surrogate_activity_label (intended invalid); surrogate_unused_variable, surrogate_rejoined_pair, surrogate_in_comment_line (valid)"
+}

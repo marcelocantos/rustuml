@@ -1,0 +1,71 @@
+{
+ "sources": 16402,
+ "matches_before": 13433,
+ "matches_after": 13453,
+ "events": {
+  "bytes_changed": [
+   "test-diagrams/golden/edge-cases/edge_theme_plain.puml",
+   "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/header_center.puml",
+   "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/header_left.puml",
+   "test-diagrams/perturbations/class-command-grammar-closure/retained-maker/prior31/header_right.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_entry_inside_autarkic.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_entry_point.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_inputpin_mixed_case.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_root_note_on_inner.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/deploy_unaliased_forms.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/history_depth1_autarkic.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/history_depth2_crossing.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/history_external_suffix_form.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/quark_reuse_crossing.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/stroke_arrow_skinparam_transparent.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/stroke_per_arrow_css4.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/state_history_nested_identity.puml",
+   "test-diagrams/perturbations/comment-state-consumers/state_history_names.puml",
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_deep_history.puml",
+   "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/shape_history.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/renamed_late_nested_declarations.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/review2_note_keyword_code_boundary.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/review2_note_prefix_sibling_scope.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/review_late_description_order.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/review_late_nested_count_topology.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/review_note_prefix_description_collision.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/review_root_quark_no_reparent.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/root_quark_nested_reuse_control.puml",
+   "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_projection.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+   "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-shared-svg/theme_plain_class_note.puml",
+   "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_digits.puml",
+   "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_json.puml"
+  ],
+  "error_now_renders_valid_ref": [
+   "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_digits.puml",
+   "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_json.puml"
+  ],
+  "gained_match": [
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_entry_inside_autarkic.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_entry_point.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_inputpin_mixed_case.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/cluster_root_note_on_inner.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/deploy_unaliased_forms.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/history_depth1_autarkic.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/history_external_suffix_form.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/quark_reuse_crossing.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/stroke_arrow_skinparam_transparent.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-claude-shared-svg/stroke_per_arrow_css4.puml",
+   "test-diagrams/perturbations/comment-state-consumers/checker-independent-astra-20261105/state_history_nested_identity.puml",
+   "test-diagrams/perturbations/comment-state-consumers/state_history_names.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/renamed_late_nested_declarations.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/review2_note_keyword_code_boundary.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/review2_note_prefix_sibling_scope.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/review_late_description_order.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/review_late_nested_count_topology.puml",
+   "test-diagrams/perturbations/state-parser-pass-entity-order/review_note_prefix_description_collision.puml",
+   "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_digits.puml",
+   "test-diagrams/perturbations/tim-intval-conversion/checker6/intval_unicode_json.puml"
+  ],
+  "rejection_gained": [
+   "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_projection.puml",
+   "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml"
+  ]
+ }
+}

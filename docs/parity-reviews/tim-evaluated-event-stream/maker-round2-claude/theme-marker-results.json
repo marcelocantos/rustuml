@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-evaluated-event-stream",
+  "sub_mechanism": "unshipped-theme marker",
+  "status": "maker results; independent review required",
+  "account_commit": "a15b09dde",
+  "implementation_commit": "1537ada52",
+  "java_trace": "EaterTheme.getTheme -> ThemeUtils.loadTheme -> loadBundledOrLocalTheme finds /themes/puml-theme-NAME.puml in the pinned jar for amiga, blueprint, carbon-gray, crt-amber, crt-green, mimeograph, mono, plain, sunlust; TContext.executeTheme runs it. Rust ships none of these nine (licence), so try_theme emits the base parser-only 'skinparam __theme NAME' marker at the directive's source line (JAVA_BUNDLED_UNSHIPPED_THEMES). Bundled themes keep the evaluated Theme event; 'from' themes, unknown names, inactive and too-deep directives are unchanged.",
+  "measured": {
+    "unit_test": "class::tests::plain_theme_uses_legacy_class_icon_and_font_defaults passes (failed on 55c92692d)",
+    "unshipped_theme_sources": "all 4 sources in the corpus that load an unshipped theme are byte-identical to the merged base 50f4f5414: golden edge-cases/edge_theme_plain and this directory's checker-claude-shared-svg theme_mono_class, theme_plain_class_note, theme_plain_sequence",
+    "preproc_complex_theme_override": "still a no-oracle pass (the gain over 9834a7194 is kept)",
+    "residual": "the three theme_* pairs fail strict compare in both trees; the renderer emulation of these themes is incomplete, as in base"
+  },
+  "held_out_probes": "relay batch r2a (pending): theme_plain_activity, theme_mono_sequence, theme_amiga_class, theme_plain_state, theme_mono_usecase, theme_amiga_component, theme_plain_variable, theme_mono_inactive, theme_plain_then_cerulean"
+}
