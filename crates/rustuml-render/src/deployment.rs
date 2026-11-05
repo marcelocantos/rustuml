@@ -775,25 +775,19 @@ fn skin_border_colors(
     map
 }
 
-/// Compute the "own" qualified-name (last segment) for a node.
+/// Compute the "own" qualified-name (last segment) for a node from the
+/// parser-recorded Quark local name.
 fn own_qname(node: &DeploymentNode) -> String {
-    let derived = label_to_id(&node.label);
-    if derived == node.id && node.id != node.label {
-        qname_label_segment(&node.label)
-    } else {
-        node.id.clone()
+    match &node.quark_name {
+        Some(name) => qname_label_segment(name),
+        None => node.id.clone(),
     }
 }
 
 // EntityImageDescription.drawU:289 / Cluster.drawU:309 use the local Quark
-// name, not the display or metadata-translated name. T14.23 owns the
-// remaining explicit-alias/derived-id ambiguity in DeploymentNode.
+// name, not the display or metadata-translated name.
 fn deployment_comment_name(node: &DeploymentNode) -> &str {
-    if label_to_id(&node.label) == node.id {
-        &node.label
-    } else {
-        &node.id
-    }
+    node.quark_name.as_deref().unwrap_or(&node.id)
 }
 
 fn deployment_comment_endpoint<'a>(diagram: &'a DeploymentDiagram, id: &'a str) -> &'a str {
@@ -1202,20 +1196,7 @@ fn stereotype_refs_sprite(
 }
 
 fn qualified_name(node: &DeploymentNode, parent_qname: Option<&str>) -> String {
-    // Heuristic: when the parser's `id` was derived from the label
-    // (no explicit alias), the qualified-name uses the label.
-    // When an alias was used, the qualified-name uses the id.
-    let derived = label_to_id(&node.label);
-    let own = if derived == node.id && node.id != node.label {
-        // Quoted-form, no alias: id was auto-derived. Use label.
-        qname_label_segment(&node.label)
-    } else if node.id == node.label {
-        // Bare form: id == label. Either works.
-        node.id.clone()
-    } else {
-        // Alias used. Use the explicit id.
-        node.id.clone()
-    };
+    let own = own_qname(node);
     match parent_qname {
         Some(p) => format!("{p}.{own}"),
         None => own,
@@ -1237,22 +1218,6 @@ fn resolve_fill(raw: &str) -> String {
     } else {
         // Not a recognised name — treat the token as a bare hex value.
         format!("#{normalized}")
-    }
-}
-
-fn label_to_id(label: &str) -> String {
-    let mut id = String::new();
-    for ch in label.chars() {
-        if ch.is_alphanumeric() || ch == '_' {
-            id.push(ch);
-        } else if ch == ' ' || ch == '-' || ch == '.' {
-            id.push('_');
-        }
-    }
-    if id.is_empty() {
-        label.replace(|c: char| !c.is_alphanumeric(), "_")
-    } else {
-        id
     }
 }
 
@@ -5755,25 +5720,20 @@ fn render_no_oracle_edges(
         } else {
             conn.arrow_at_end
         };
-        if reversed {
-            svg.raw(&format!(
-                "<!--{svg_comment}-->",
-                svg_comment = crate::svg::comment_text(&format!(
-                    "reverse link {} to {}",
-                    deployment_comment_endpoint(diagram, &conn.to),
-                    deployment_comment_endpoint(diagram, &conn.from)
-                )),
-            ));
+        let (entity1, entity2, form) = deployment_link_svg_identity(conn);
+        let prefix = if form == LinkSvgForm::Reverted {
+            "reverse link"
         } else {
-            svg.raw(&format!(
-                "<!--{svg_comment}-->",
-                svg_comment = crate::svg::comment_text(&format!(
-                    "link {} to {}",
-                    deployment_comment_endpoint(diagram, &conn.from),
-                    deployment_comment_endpoint(diagram, &conn.to)
-                )),
-            ));
-        }
+            "link"
+        };
+        svg.raw(&format!(
+            "<!--{svg_comment}-->",
+            svg_comment = crate::svg::comment_text(&format!(
+                "{prefix} {} to {}",
+                deployment_comment_endpoint(diagram, entity1),
+                deployment_comment_endpoint(diagram, entity2)
+            )),
+        ));
         let link_type = if conn.arrow_at_start || conn.arrow_at_end {
             "dependency"
         } else {
@@ -5807,14 +5767,10 @@ fn render_no_oracle_edges(
             },
         );
         if let Some(d) = edge_path_d(&points) {
-            let mut path_id = deployment_connection_path_base_id(diagram, conn, reversed);
+            let mut path_id = deployment_connection_path_base_id(diagram, conn);
             let duplicate_index = diagram.connections[..i]
                 .iter()
-                .filter(|previous| {
-                    let (_, _, previous_reversed) = deployment_connection_layout(previous);
-                    deployment_connection_path_base_id(diagram, previous, previous_reversed)
-                        == path_id
-                })
+                .filter(|previous| deployment_connection_path_base_id(diagram, previous) == path_id)
                 .count();
             if duplicate_index > 0 {
                 write!(path_id, "-{duplicate_index}").unwrap();
@@ -5912,29 +5868,66 @@ fn deployment_connection_layout(conn: &DeploymentConnection) -> (&str, &str, boo
     }
 }
 
+/// SVG identity form of a deployment link, from Java `LinkType`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum LinkSvgForm {
+    /// `looksLikeRevertedForSvg`: decor1 is NONE and decor2 is not.
+    Reverted,
+    /// `looksLikeNoDecorAtAllSvg`: both or neither end decorated.
+    NoDecor,
+    Forward,
+}
+
+/// The `Link` endpoints and SVG form Java builds for a deployment arrow.
+///
+/// Java provenance: `CommandLinkElement.getLinkType` constructs
+/// `LinkType(decor1 = right head, decor2 = left head)`, and `executeArg`
+/// replaces LEFT/UP links with `Link.getInv()`, swapping both the entities
+/// and the decorations. `Link.commentForSvg`/`idCommentForSvg` then read the
+/// resulting entity order and `LinkType` form.
+fn deployment_link_svg_identity(conn: &DeploymentConnection) -> (&str, &str, LinkSvgForm) {
+    let (entity1, entity2, decor1, decor2) = match conn.direction {
+        Some(DeploymentLinkDirection::Up | DeploymentLinkDirection::Left) => (
+            conn.to.as_str(),
+            conn.from.as_str(),
+            conn.arrow_at_start,
+            conn.arrow_at_end,
+        ),
+        _ => (
+            conn.from.as_str(),
+            conn.to.as_str(),
+            conn.arrow_at_end,
+            conn.arrow_at_start,
+        ),
+    };
+    let form = if !decor1 && decor2 {
+        LinkSvgForm::Reverted
+    } else if decor1 == decor2 {
+        LinkSvgForm::NoDecor
+    } else {
+        LinkSvgForm::Forward
+    };
+    (entity1, entity2, form)
+}
+
 fn deployment_connection_path_base_id(
     diagram: &DeploymentDiagram,
     conn: &DeploymentConnection,
-    reversed: bool,
 ) -> String {
-    let from_name = diagram
-        .nodes
-        .iter()
-        .find(|node| node.id == conn.from)
-        .map(own_qname)
-        .unwrap_or_else(|| conn.from.clone());
-    let to_name = diagram
-        .nodes
-        .iter()
-        .find(|node| node.id == conn.to)
-        .map(own_qname)
-        .unwrap_or_else(|| conn.to.clone());
-    if conn.arrow_at_start == conn.arrow_at_end {
-        format!("{from_name}-{to_name}")
-    } else if reversed {
-        format!("{to_name}-backto-{from_name}")
-    } else {
-        format!("{from_name}-to-{to_name}")
+    let own_name = |id: &str| {
+        diagram
+            .nodes
+            .iter()
+            .find(|node| node.id == id)
+            .map(own_qname)
+            .unwrap_or_else(|| id.to_string())
+    };
+    let (entity1, entity2, form) = deployment_link_svg_identity(conn);
+    let (name1, name2) = (own_name(entity1), own_name(entity2));
+    match form {
+        LinkSvgForm::Reverted => format!("{name1}-backto-{name2}"),
+        LinkSvgForm::NoDecor => format!("{name1}-{name2}"),
+        LinkSvgForm::Forward => format!("{name1}-to-{name2}"),
     }
 }
 
