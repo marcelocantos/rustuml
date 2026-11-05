@@ -1,0 +1,62 @@
+{
+ "schema_version": 1,
+ "mechanism": "sprite-command-post-tim-ownership",
+ "round": 4,
+ "status": "preimplementation account of record for round 4, committed before the round-4 draft; independent review required",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "rejection": "6fd931656304d1c960c77474f16ca3f10f74428f (checker-claude round-3 review review-2.json of maker tip 607890d0d: sprite ownership rejected, participant residue accepted)",
+ "integration_base": "merge of parity-recovery-2026-11-03 a0ed69740 (code unchanged since 9834a7194; only bullseye.yaml moved). The merged base is the before tree; its code is byte-identical to 607890d0d.",
+ "obligation": "Port Java's inner-comment removal (TContext#buildCodeIterator -> CodeIteratorInnerComment -> StringLocated#removeInnerComment) as a preprocessor stage applied to every line, at Java's position in the iterator chain (after the long and short comment stages, before !startsub/procedures/!if/defines and before the round-3 sprite comment exemption).",
+ "java_trace": {
+  "chain": "tim.TContext#buildCodeIterator: it10 CodeIteratorImpl -> it20 CodeIteratorLongComment -> it30 CodeIteratorShortComment -> it40 CodeIteratorInnerComment -> it50 CodeIteratorSub -> it60 CodeIteratorReturnFunction -> it61 CodeIteratorProcedure -> it70 CodeIteratorIf -> it80 CodeIteratorLegacyDefine -> it90 CodeIteratorWhile -> it100 CodeIteratorForeach -> it110 CodeIteratorAffectation. executeLines/executeLinesInternal build this chain for the main source, every !include body, and every procedure/function/definelong body when it runs.",
+  "long_comment": "tim.iterator.CodeIteratorLongComment#peek with text.TLineType#getFromLineInternal: COMMENT_LONG_START = ^\\s*/' and the line contains no '/; lines are skipped until one whose trimmed text endsWith '/.",
+  "short_comment": "tim.iterator.CodeIteratorShortComment#peek: TLineType COMMENT_SIMPLE = ^\\s*' (SIMPLE1) or ^\\s*/'.*'/\\s*$ (SIMPLE2); the whole line is dropped.",
+  "inner_comment": "tim.iterator.CodeIteratorInnerComment#peek returns source.peek().removeInnerComment() for every surviving line. text.StringLocated#removeInnerComment: trim = s.replace('\\t',' ').trim() (Java String#trim: strips chars <= U+0020). (1) leading: trim.startsWith(\"/'\") and idx = s.indexOf(\"'/\") != -1 -> removeSpecialInnerComment(s.substring(idx + 2)). (2) trailing: trim.endsWith(\"'/\") and idx = s.lastIndexOf(\"/'\") != -1 -> removeSpecialInnerComment(s.substring(0, idx)). (3) triple: trim contains \"/'''\" and \"'''/\" -> removeSpecialInnerComment(s). Otherwise unchanged. removeSpecialInnerComment: if s contains both \"/'''\" and \"'''/\", s.replaceAll(\"/'''[-\\\\w]*'''/\", \"\") (Java \\w without UNICODE_CHARACTER_CLASS = [A-Za-z0-9_]); otherwise unchanged.",
+  "quotes": "removeInnerComment has no quote handling: a /' ... '/ span is removed whether or not it sits inside double quotes, and an apostrophe that is not part of /' or '/ is never touched. Java has no trailing-apostrophe comment form at all.",
+  "not_in_scope": "preproc2.ReadFilterQuoteComment (used only by ReadFilterMergeLines for backslash-continued lines and by ReadFilterAddConfig) also calls removeInnerComment; it belongs to the line-continuation reader, not this stage."
+ },
+ "rust_locations": [
+  "crates/rustuml-parser/src/preprocess/mod.rs::remove_inner_comment (new): literal port of StringLocated#removeInnerComment and #removeSpecialInnerComment, Java String#trim semantics",
+  "crates/rustuml-parser/src/preprocess/mod.rs::PreprocessContext::process_one_line: after the existing long-comment and whole-line ' handling, the line is replaced by remove_inner_comment(line) before every later stage (sprite role/exemption, strip_inline_comment, @start/@end, definelong/sub collection, function definition, while/foreach, directives, output). A line that starts with /' and contains '/ but does not end with '/ (or /') is no longer dropped as a whole-line comment: Java's TLineType gives it PLAIN, and removeInnerComment keeps the text after the first '/."
+ ],
+ "invariant": "Every line that survives Java's long/short comment stages reaches the rest of TIM, and through it the diagram commands, with exactly the text StringLocated#removeInnerComment returns; the sprite exemption and Rust's other comment handling then act on that text.",
+ "causal_divergence": "Rust has no removeInnerComment. On ordinary lines the Rust-only strip_inline_comment cuts at the apostrophe of a trailing '/ (leaving \"/' end\" in the line); on sprite-owned lines the round-3 exemption skips all comment handling, so CommandFactorySprite / CommandSpriteSvgMultiline see the /' ... '/ text and their start or END grammar fails. A line that starts with /' ... '/ and continues is dropped whole instead of keeping its tail.",
+ "planned_change": "Add remove_inner_comment and apply it in process_one_line at Java's it40 position. Narrow the whole-line /' check so that only Java's COMMENT_LONG_START (kept with Rust's existing ends_with(\"/'\") extension) and COMMENT_SIMPLE2 (trimmed text ends with '/) drop the line; other /'-prefixed lines go to remove_inner_comment. No other comment behaviour changes: block-comment termination, whole-line ', the EBNF exemption, strip_inline_comment and the sprite exemption are unchanged.",
+ "cross_family_scope": "The stage runs on every line of every diagram type (all @start kinds, includes, procedure/definelong/sub bodies, theme bodies, the source-identity pass that feeds UmlSource). Any line containing /' or '/ or /''' can change. Pre-implementation scan (Java rule over the repository): 0 goldens, 17 lines in test-diagrams/perturbations (ck3 sprite pairs, tim-evaluated-event-stream, tim-expression-event-sink, tim-theme-post-expansion-source-identity and the retained copies under class-command-*). Every SVG byte change must be explained by a removeInnerComment trace.",
+ "ck3_svg_inline_quoted_apostrophe_seq": "Pre-implementation trace: its two lines contain no /', '/ or /''', so removeInnerComment does not change them. Java's internal-exception page is a java.lang.NullPointerException at klimt.color.HColorSet#parseColor (HColorSet.java:76) from svg.parser.SvgNanoParser#drawText (SvgNanoParser.java:302): the sprite's <text> has no fill, getFillString returns null and getColorOrWhite(null) dereferences it. 93bf53e18 rejected the input only because the Rust-only strip_inline_comment truncated the SVG at \" ' s\" (sprite never completed). This port cannot, and will not, make it rejected; restoring the Rust-only truncation would be a regression away from Java. Held-out probes (same input with a fill on <text>; a fill-less <text> without any apostrophe) are requested to confirm the mechanism.",
+ "known_residue_planned": [
+  "Rust's block-comment terminator (any line containing '/) and its extra block start (a /'-line ending with /') differ from CodeIteratorLongComment; unchanged here (they are long-comment behaviour, not removeInnerComment).",
+  "ReadFilterQuoteComment on backslash-continued lines is not ported here (line continuation reader).",
+  "strip_inline_comment (Rust-only trailing apostrophe stripping) is unchanged on non-sprite lines; Java has no such form.",
+  "ck3_svg_inline_quoted_apostrophe_seq needs a SvgNanoParser#drawText fill-less <text> port (render crate), a separate mechanism."
+ ],
+ "perturbation_axes": [
+  "trailing /' ... '/ on SVG start, body and END lines and on pixel start, body and END lines, with and without a separating space",
+  "leading /' ... '/ before a sprite start line, an SVG body line and an ordinary command",
+  "/'''word'''/ and /''' spaced '''/ inside pixel rows and SVG body lines (only [-\\w]* is removed)",
+  "inner comments on non-sprite lines across families: sequence messages, class/object/component/state/usecase/activity3/mindmap/gantt/json/salt declarations",
+  "quote interaction: /' ... '/ inside or after double-quoted text, apostrophes that are not comment delimiters",
+  "TIM interaction: inner comments on !define/!procedure/!if/!startsub lines and inside procedure bodies and includes"
+ ],
+ "precommitted_measurement": {
+  "builds": "git archive of the merged base (before) and of the round-4 tip (after) into ~/Library/Caches/rustuml-sprite-round4-claude-maker/src/<rev>; CARGO_TARGET_DIR=<cache>/target-<rev>; cargo build --release -j 6 -p rustuml",
+  "comparator": "unchanged compare_cli (docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs) built against the before tree's rustuml_oracle rlib",
+  "replay": "checker-claude-round3 support/replay.py unchanged: -tsvg, --ast, -ttxt, --yaml with -pipe, each case from its recorded cwd, RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100, PLANTUML_STDLIB pinned, 6 workers",
+  "cohorts": [
+   "AX 77 (relay sprite-round3-ck3), AV 63 (sprite-round3-mk3), AT 45 (sprite-ownership-checker-batch1): prepared with checker-claude-round3 support/prepare.py, validity from raw Java SVG plus stderr",
+   "fresh 915 = AS 54 + AQ 43 + 790 + 28",
+   "retained 4,174 (checker-claude-round3 retained-manifest.json)",
+   "all 12,550 goldens, SVG byte level",
+   "round-4 maker probes (staged relay request; counted only once Java references are relayed)"
+  ],
+  "reported_separately": "lost matches, lost rejections, new valid-input errors, panics (bar: zero on every cohort); gains; every SVG byte change explained by a removeInnerComment trace",
+  "gates": [
+   "golden_no_oracle failure-name diff against 9834a7194",
+   "golden_pairs",
+   "parity_perturbations: zero new failures in pre-existing directories",
+   "harness_guards by category",
+   "pipe_mode; cargo test --release --workspace --lib",
+   "rejection_contract.py (unchanged) on the Java-invalid inputs of fresh, AT, AV and AX"
+  ]
+ }
+}
