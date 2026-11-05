@@ -1,0 +1,7 @@
+@startuml
+state Mill {
+  Grain --> Flour
+}
+Sack --> Mill
+note on link : carry
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+state Lab {
+  Beaker --> Flask
+  note left of Beaker : same
+  note right of Flask : same
+}
+Door --> Beaker
+@enduml

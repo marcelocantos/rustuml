@@ -1,0 +1,28 @@
+U+0528	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+052D	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+20B7	own=false	fb=Hack-Regular	glyph=true	/Users/marcelo/Library/Fonts/Hack-Regular.ttf
+U+A698	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+A69D	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+A69E	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+F880	own=false	fb=MesloLGS-NF-Regular	glyph=true	/Users/marcelo/Library/Fonts/MesloLGS NF Regular.ttf
+U+F8B7	own=false	fb=MesloLGS-NF-Regular	glyph=true	/Users/marcelo/Library/Fonts/MesloLGS NF Regular.ttf
+U+F8E5	own=false	fb=MesloLGS-NF-Regular	glyph=true	/Users/marcelo/Library/Fonts/MesloLGS NF Regular.ttf
+U+F8FE	own=false	fb=MesloLGS-NF-Regular	glyph=true	/Users/marcelo/Library/Fonts/MesloLGS NF Regular.ttf
+U+211A	own=false	fb=Helvetica	glyph=true	/System/Library/Fonts/Helvetica.ttc
+U+22AD	own=false	fb=AppleSymbols	glyph=true	/System/Library/Fonts/Apple Symbols.ttf
+U+A8FB	own=false	fb=.SFDevanagari-Regular	glyph=true	/System/Library/Fonts/SFIndia.ttc
+U+FE0E	own=true	fb=LucidaGrande	glyph=true	/System/Library/Fonts/LucidaGrande.ttc
+U+FE0F	own=false	fb=.AppleColorEmojiUI	glyph=true	/System/Library/Fonts/Apple Color Emoji.ttc
+U+E123	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+F000	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+0378	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+0870	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+1C80	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+2E5E	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+1AB0	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+0D80	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+2065	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+FFF0	own=false	fb=LastResort	glyph=true	/System/Library/Fonts/LastResort.otf
+U+180F	own=false	fb=NotoSansMongolian-Regular	glyph=true	/System/Library/Fonts/Supplemental/NotoSansMongolian-Regular.ttf
+U+A500	own=false	fb=NotoSansVai-Regular	glyph=true	/System/Library/Fonts/Supplemental/NotoSansVai-Regular.ttf
+U+1E900	own=false	fb=NotoSansAdlam-Regular	glyph=true	/System/Library/Fonts/Supplemental/NotoSansAdlam-Regular.ttf

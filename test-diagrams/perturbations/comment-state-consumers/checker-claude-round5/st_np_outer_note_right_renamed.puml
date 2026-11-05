@@ -1,0 +1,6 @@
+@startuml
+state Cellar {
+  Cask --> Barrel
+}
+note right of Cellar : damp
+@enduml

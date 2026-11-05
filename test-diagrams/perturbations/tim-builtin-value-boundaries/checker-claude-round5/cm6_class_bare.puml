@@ -1,0 +1,4 @@
+@startuml
+!$u = %substr("🚀", 0, 1)
+class Q$u
+@enduml

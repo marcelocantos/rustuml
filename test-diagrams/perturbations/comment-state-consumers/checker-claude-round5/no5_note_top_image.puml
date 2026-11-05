@@ -1,0 +1,6 @@
+@startuml
+state Pier {
+  Rope --> Knot
+}
+note top of Pier : salty
+@enduml

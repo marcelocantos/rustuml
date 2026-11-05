@@ -1,0 +1,6 @@
+@startyaml
+outer:
+  inner: "a\\b"
+  list:
+    - "c\u0041"
+@endyaml

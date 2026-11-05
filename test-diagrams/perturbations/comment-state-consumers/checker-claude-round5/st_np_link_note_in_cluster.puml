@@ -1,0 +1,11 @@
+@startuml
+state Mill {
+  state Gear {
+    state feed <<entryPoint>>
+    feed --> Cog
+    Cog --> Axle
+    note on link : spins
+  }
+  Axle --> Belt
+}
+@enduml

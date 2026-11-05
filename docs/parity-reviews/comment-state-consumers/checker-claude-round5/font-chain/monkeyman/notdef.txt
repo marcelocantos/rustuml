@@ -1,0 +1,11 @@
+LucidaGrande	LucidaGrande	upem=2048	notdef=1536.0	/System/Library/Fonts/LucidaGrande.ttc
+LucidaGrande-Bold	LucidaGrande-Bold	upem=2048	notdef=1536.0	/System/Library/Fonts/LucidaGrande.ttc
+ArialMT	ArialMT	upem=2048	notdef=1536.0	/System/Library/Fonts/Supplemental/Arial.ttf
+Arial-BoldMT	Arial-BoldMT	upem=2048	notdef=1536.0	/System/Library/Fonts/Supplemental/Arial Bold.ttf
+Helvetica	Helvetica	upem=2048	notdef=1298.0	/System/Library/Fonts/Helvetica.ttc
+Helvetica-Bold	Helvetica-Bold	upem=2048	notdef=1479.0	/System/Library/Fonts/Helvetica.ttc
+Verdana	Verdana	upem=2048	notdef=2048.0	/System/Library/Fonts/Supplemental/Verdana.ttf
+Verdana-Bold	Verdana-Bold	upem=2048	notdef=2048.0	/System/Library/Fonts/Supplemental/Verdana Bold.ttf
+Menlo-Regular	Menlo-Regular	upem=2048	notdef=1233.0	/System/Library/Fonts/Menlo.ttc
+CourierNewPSMT	CourierNewPSMT	upem=2048	notdef=1229.0	/System/Library/Fonts/Supplemental/Courier New.ttf
+TimesNewRomanPSMT	TimesNewRomanPSMT	upem=2048	notdef=1593.0	/System/Library/Fonts/Supplemental/Times New Roman.ttf

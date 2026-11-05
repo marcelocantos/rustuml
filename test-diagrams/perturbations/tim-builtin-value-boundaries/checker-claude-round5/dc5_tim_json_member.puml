@@ -1,0 +1,4 @@
+@startuml
+!$j = { "a": { "b": "Reed \uDBFF\uDFFD" } }
+class "$j.a.b" as J
+@enduml

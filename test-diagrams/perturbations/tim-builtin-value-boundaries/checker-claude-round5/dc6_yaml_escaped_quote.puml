@@ -1,0 +1,3 @@
+@startyaml
+msg: "say \"hi\" now"
+@endyaml

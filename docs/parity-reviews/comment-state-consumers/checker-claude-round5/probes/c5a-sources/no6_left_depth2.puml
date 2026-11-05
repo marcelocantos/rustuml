@@ -1,0 +1,8 @@
+@startuml
+state Yard {
+  state Shed {
+    Rake --> Hoe
+  }
+}
+note left of Yard : tools
+@enduml

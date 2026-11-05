@@ -1,0 +1,7 @@
+@startuml
+[*] --> Kiln
+state Kiln {
+  Clay --> Ware
+}
+note left of Kiln : hot
+@enduml

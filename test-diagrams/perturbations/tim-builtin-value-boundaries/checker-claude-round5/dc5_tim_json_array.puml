@@ -1,0 +1,4 @@
+@startuml
+!$j = ["x", "Reed \uDBFF\uDC00"]
+class "$j[1]" as J
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+[*] --> Bay
+state Bay {
+  Gull --> Tern
+}
+note left of Bay : birds
+Bay --> [*]
+@enduml

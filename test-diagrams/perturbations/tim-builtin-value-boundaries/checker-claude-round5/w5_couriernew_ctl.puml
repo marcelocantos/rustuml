@@ -1,0 +1,4 @@
+@startuml
+skinparam defaultFontName Courier New
+class "Ledger " as V
+@enduml

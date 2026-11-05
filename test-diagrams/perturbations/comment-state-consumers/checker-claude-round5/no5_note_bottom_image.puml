@@ -1,0 +1,6 @@
+@startuml
+state Dune {
+  Sand --> Glass
+}
+note bottom of Dune : hot sand
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+state A1 {
+  state B1 {
+    state C1 {
+      X1 --> Y1
+      note left of Y1 : deep
+    }
+  }
+}
+Z1 --> X1
+@enduml

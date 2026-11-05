@@ -1,0 +1,12 @@
+@startuml
+state Works {
+  state Oven {
+    state "Raw Dough Arrives" as raw <<entryPoint>>
+    state "Baked Loaves Leave" as baked <<exitPoint>>
+    raw --> Bake
+    Bake --> baked
+  }
+  Mix --> raw
+  baked --> Pack
+}
+@enduml

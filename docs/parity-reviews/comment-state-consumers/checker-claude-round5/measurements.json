@@ -1,0 +1,776 @@
+{
+ "schema_version": 1,
+ "identities": {
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "base": "fbb2e59ed (parity-recovery; crates identical to 9834a7194)",
+  "merge": "d6f63a8aa (crates identical to round-4 tip 7ec2e5af8)",
+  "tip": "8dda18b1bf819f379c0c13d1cadd158400eed147",
+  "builds": {
+   "fbb2e59ed": "c55d1d7a81b47aae8f7d63d7b7335f0aa8536c9289797a8f757677937fa2b4d9",
+   "d6f63a8aa": "c02842278d99cbe30f5557dc584b06b486bc260fb65fae32c407870d3c135d52",
+   "8dda18b1b": "b0b43bc64f752b5331f27c0b1d12e1edcd1ac0f555368ce4b97d29570bcb4761",
+   "tip-ev": "74c0cac14db63e2f04d2bb4055c3924c039652d1be28aa9765e3ed565ecc4846"
+  },
+  "build_method": "git archive export per revision, CARGO_TARGET_DIR private, cargo build --release -j 6 -p rustuml (tools/build.sh)",
+  "tip-ev": "PRIVATE evidence build, not a proposed change: tip with state.rs:5097-5098 ceil() replaced by the existing svg_ensure_visible_dimension ((int)(x + 1)); canvas/evidence-build.diff",
+  "comparator": "rustuml_oracle::compare::compare_svg_strict built from the base export (tools/checker-cmp-*); unchanged fbb2e59ed..8dda18b1b"
+ },
+ "contract": "whole CLI output, -pipe and the case -t flag, recorded cwd (PRIVATE_CWD = private dir per batch; sweep = cwd_map from review records else source dir), RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100, TZ=GMT+11:00, PLANTUML_STDLIB pinned; SVG pass = strict MATCH and exact comment list",
+ "sweep": {
+  "goldens": {
+   "sources": 12550,
+   "java_valid": 11351,
+   "java_error": 1199,
+   "fbb2e59ed_valid_strict_match": 11181,
+   "fbb2e59ed_comments_exact": 11563,
+   "fbb2e59ed_exit": {
+    "1": 76,
+    "0": 12474
+   },
+   "fbb2e59ed_panics": 0,
+   "fbb2e59ed_timeouts": 0,
+   "fbb2e59ed_java_error_rejected": 76,
+   "fbb2e59ed_nonempty_stderr": 94,
+   "d6f63a8aa_valid_strict_match": 11181,
+   "d6f63a8aa_comments_exact": 11781,
+   "d6f63a8aa_exit": {
+    "1": 76,
+    "0": 12474
+   },
+   "d6f63a8aa_panics": 0,
+   "d6f63a8aa_timeouts": 0,
+   "d6f63a8aa_java_error_rejected": 76,
+   "d6f63a8aa_nonempty_stderr": 76,
+   "8dda18b1b_valid_strict_match": 11181,
+   "8dda18b1b_comments_exact": 11781,
+   "8dda18b1b_exit": {
+    "1": 76,
+    "0": 12474
+   },
+   "8dda18b1b_panics": 0,
+   "8dda18b1b_timeouts": 0,
+   "8dda18b1b_java_error_rejected": 76,
+   "8dda18b1b_nonempty_stderr": 76,
+   "fbb2e59ed_to_8dda18b1b": {
+    "comments_gained": 218,
+    "gained_match": [
+     "test-diagrams/golden/preprocessing/preproc_complex_theme_override.puml",
+     "test-diagrams/golden/state/state_history_shallow.puml",
+     "test-diagrams/golden/state/state_note_composite.puml"
+    ],
+    "lost_match_GET_provenance": [
+     "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+     "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+     "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+    ],
+    "outputs_changed": 394,
+    "stderr_changed": [
+     "test-diagrams/golden/activity/act_action_ending_flow_final.puml",
+     "test-diagrams/golden/activity/act_action_ending_fork_bar.puml",
+     "test-diagrams/golden/activity/act_action_ending_input.puml",
+     "test-diagrams/golden/activity/act_action_ending_output.puml",
+     "test-diagrams/golden/activity/act_action_ending_receive.puml",
+     "test-diagrams/golden/activity/act_action_ending_send.puml",
+     "test-diagrams/golden/activity/act_edge_all_action_endings_in_if.puml",
+     "test-diagrams/golden/state/state_composite_entry_only.puml",
+     "test-diagrams/golden/state/state_composite_exit_only.puml",
+     "test-diagrams/golden/state/state_entry1_exit1.puml",
+     "test-diagrams/golden/state/state_entry1_exit2.puml",
+     "test-diagrams/golden/state/state_entry1_exit3.puml",
+     "test-diagrams/golden/state/state_entry2_exit1.puml",
+     "test-diagrams/golden/state/state_entry2_exit2.puml",
+     "test-diagrams/golden/state/state_entry2_exit3.puml",
+     "test-diagrams/golden/state/state_entry3_exit1.puml",
+     "test-diagrams/golden/state/state_entry3_exit2.puml",
+     "test-diagrams/golden/state/state_entry3_exit3.puml",
+     "test-diagrams/golden/state/state_entry_exit_both.puml",
+     "test-diagrams/golden/state/state_entry_exit_in_composite.puml",
+     "test-diagrams/golden/state/state_entry_in_composite.puml",
+     "test-diagrams/golden/state/state_exit_in_composite.puml",
+     "test-diagrams/golden/state/state_multiple_entry_points.puml",
+     "test-diagrams/golden/state/state_multiple_exit_points.puml",
+     "test-diagrams/golden/usecase/usecase_long_names.puml"
+    ]
+   },
+   "fbb2e59ed_to_8dda18b1b_counts": {
+    "comments_gained": 218,
+    "gained_match": 3,
+    "lost_match_GET_provenance": 3,
+    "outputs_changed": 394,
+    "stderr_changed": 25
+   },
+   "d6f63a8aa_to_8dda18b1b": {
+    "outputs_changed": 148
+   },
+   "d6f63a8aa_to_8dda18b1b_counts": {
+    "outputs_changed": 148
+   }
+  },
+  "perturbations": {
+   "sources": 3958,
+   "java_valid": 3645,
+   "java_error": 313,
+   "fbb2e59ed_valid_strict_match": 1730,
+   "fbb2e59ed_comments_exact": 2779,
+   "fbb2e59ed_exit": {
+    "0": 3860,
+    "1": 88,
+    "101": 10
+   },
+   "fbb2e59ed_panics": 10,
+   "fbb2e59ed_timeouts": 0,
+   "fbb2e59ed_java_error_rejected": 84,
+   "fbb2e59ed_nonempty_stderr": 122,
+   "d6f63a8aa_valid_strict_match": 2366,
+   "d6f63a8aa_comments_exact": 3336,
+   "d6f63a8aa_exit": {
+    "0": 3794,
+    "1": 160,
+    "101": 4
+   },
+   "d6f63a8aa_panics": 4,
+   "d6f63a8aa_timeouts": 0,
+   "d6f63a8aa_java_error_rejected": 155,
+   "d6f63a8aa_nonempty_stderr": 164,
+   "8dda18b1b_valid_strict_match": 2374,
+   "8dda18b1b_comments_exact": 3336,
+   "8dda18b1b_exit": {
+    "0": 3794,
+    "1": 160,
+    "101": 4
+   },
+   "8dda18b1b_panics": 4,
+   "8dda18b1b_timeouts": 0,
+   "8dda18b1b_java_error_rejected": 155,
+   "8dda18b1b_nonempty_stderr": 164,
+   "fbb2e59ed_to_8dda18b1b": {
+    "comments_gained": 559,
+    "comments_lost": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+     "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+    ],
+    "error_now_renders_valid_ref": [
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+     "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+    ],
+    "gained_match": 644,
+    "outputs_changed": 1265,
+    "panic_removed": [
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+     "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+    ],
+    "rejection_gained": 71,
+    "stderr_changed": 105
+   },
+   "fbb2e59ed_to_8dda18b1b_counts": {
+    "comments_gained": 559,
+    "comments_lost": 2,
+    "error_now_renders_valid_ref": 5,
+    "gained_match": 644,
+    "outputs_changed": 1265,
+    "panic_removed": 6,
+    "rejection_gained": 71,
+    "stderr_changed": 105
+   },
+   "d6f63a8aa_to_8dda18b1b": {
+    "gained_match": [
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_outer_note_left_of_image.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_outer_two_notes_on_image.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_root_cluster_note.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_root_two_clusters_notes.puml",
+     "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_concurrent_nested_labels.puml",
+     "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_root_ellipse_nested_chain.puml",
+     "test-diagrams/perturbations/state-parallel-transition-route-identity/review_compound_endpoint_parallel_order.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_upper_escape_point.puml"
+    ],
+    "outputs_changed": 150,
+    "stderr_changed": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+    ]
+   },
+   "d6f63a8aa_to_8dda18b1b_counts": {
+    "gained_match": 8,
+    "outputs_changed": 150,
+    "stderr_changed": 4
+   }
+  },
+  "all": {
+   "sources": 16508,
+   "java_valid": 14996,
+   "java_error": 1512,
+   "fbb2e59ed_valid_strict_match": 12911,
+   "fbb2e59ed_comments_exact": 14342,
+   "fbb2e59ed_exit": {
+    "1": 164,
+    "0": 16334,
+    "101": 10
+   },
+   "fbb2e59ed_panics": 10,
+   "fbb2e59ed_timeouts": 0,
+   "fbb2e59ed_java_error_rejected": 160,
+   "fbb2e59ed_nonempty_stderr": 216,
+   "d6f63a8aa_valid_strict_match": 13547,
+   "d6f63a8aa_comments_exact": 15117,
+   "d6f63a8aa_exit": {
+    "1": 236,
+    "0": 16268,
+    "101": 4
+   },
+   "d6f63a8aa_panics": 4,
+   "d6f63a8aa_timeouts": 0,
+   "d6f63a8aa_java_error_rejected": 231,
+   "d6f63a8aa_nonempty_stderr": 240,
+   "8dda18b1b_valid_strict_match": 13555,
+   "8dda18b1b_comments_exact": 15117,
+   "8dda18b1b_exit": {
+    "1": 236,
+    "0": 16268,
+    "101": 4
+   },
+   "8dda18b1b_panics": 4,
+   "8dda18b1b_timeouts": 0,
+   "8dda18b1b_java_error_rejected": 231,
+   "8dda18b1b_nonempty_stderr": 240,
+   "fbb2e59ed_to_8dda18b1b": {
+    "comments_gained": 777,
+    "comments_lost": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/unicode_activity.puml",
+     "test-diagrams/perturbations/tim-sub-marker-layers/checker5/sub_suffix_continuation.puml"
+    ],
+    "error_now_renders_valid_ref": [
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+     "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+    ],
+    "gained_match": 647,
+    "lost_match_GET_provenance": [
+     "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+     "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+     "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml"
+    ],
+    "outputs_changed": 1659,
+    "panic_removed": [
+     "test-diagrams/perturbations/tim-builtin-typed-contracts/checker4_surrogate_case_conversion.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_strlen_substr.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/surrogate_display_residue.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker5/units_rejoin.puml",
+     "test-diagrams/perturbations/tim-expression-quoted-tokens/checker2_unicode_opposite_quotes.puml"
+    ],
+    "rejection_gained": 71,
+    "stderr_changed": 130
+   },
+   "fbb2e59ed_to_8dda18b1b_counts": {
+    "comments_gained": 777,
+    "comments_lost": 2,
+    "error_now_renders_valid_ref": 5,
+    "gained_match": 647,
+    "lost_match_GET_provenance": 3,
+    "outputs_changed": 1659,
+    "panic_removed": 6,
+    "rejection_gained": 71,
+    "stderr_changed": 130
+   },
+   "fbb2e59ed_to_8dda18b1b_stderr_lines_lost": {
+    "Warning: node X port P unrecognized": 158,
+    "parse error: line N: unterminated activity action; multiline actions must end with ';'": 7,
+    "": 6,
+    "thread 'main' (N) panicked at crates/rustuml-parser/src/preprocess/mod.rs:N:N:": 6,
+    "note: run with `RUST_BACKTRACE=N` environment variable to display a backtrace": 6,
+    "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4,
+    "end byte index N is not a char boundary; it is inside '🚀' (bytes N..N of string)": 2,
+    "Warning: Unable to reclaim box space in spline routing for edge \"PCCT\" -> \"VPIFC\". Something is probably seriously wrong": 1,
+    "Warning: GenericPeerReview was already in a rankset, deleted from cluster G": 1,
+    "Warning: PlainPeerReview was already in a rankset, deleted from cluster G": 1,
+    "Warning: removing empty cluster": 1,
+    "Warning: ReviewNMemoN was already in a rankset, deleted from cluster G": 1,
+    "end byte index N is not a char boundary; it is inside '🦊' (bytes N..N of string)": 1,
+    "end byte index N is not a char boundary; it is inside '\\u{Nfffd}' (bytes N..N of string)": 1,
+    "end byte index N is not a char boundary; it is inside '\\u{NfeN}' (bytes N..N of string)": 1,
+    "end byte index N is not a char boundary; it is inside 'é' (bytes N..N of string)": 1
+   },
+   "fbb2e59ed_to_8dda18b1b_stderr_lines_gained": {
+    "parse error: line N: Bad date pattern: unsupported letter Q": 17,
+    "parse error: line N: Integer literal outside signed N-bit range": 8,
+    "parse error: line N: unterminated activity action; multiline actions must end with ';'": 7,
+    "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4,
+    "parse error: line N: Bad date pattern: X must have one to three letters": 4,
+    "parse error: line N: Substring index out of range": 4,
+    "parse error: line N: Cannot nest sub": 4,
+    "parse error: line N: Illegal call here. Is there a return directive in your function?": 3,
+    "parse error: line N: Bad sub name": 3,
+    "parse error: line N: Unknown built-in function %strlen": 2,
+    "parse error: line N: Unknown built-in function $emit": 2,
+    "parse error: line N: Cannot convert N.N to integer.": 2,
+    "parse error: line N: Bad date pattern: unterminated quote": 2,
+    "parse error: line N: Unknown built-in function %missing_checkerN": 2,
+    "parse error: line N: Data parsing error: missing intermediate member": 2,
+    "parse error: line N: Foreach requires a JSON array or object": 2,
+    "parse error: line N: Expression operand stack underflow": 2,
+    "parse error: line N: Unknown built-in function %fresh_unregistered": 1,
+    "export error: Invalid UTF-N surrogate detected: dNe N ?": 1,
+    "parse error: line N: Cannot convert  true  to boolean.": 1,
+    "export error: An invalid XML character (Unicode: NxdeN) was found in the node's character data content.": 1,
+    "parse error: line N: Division by zero": 1,
+    "parse error: line N: Function not found %strlen": 1,
+    "parse error: line N: Unknown built-in function $join": 1,
+    "parse error: line N: Cannot convert bad to integer.": 1,
+    "parse error: line N: Cannot convert +-N to integer.": 1,
+    "parse error: line N: Cannot convert -N to integer.": 1,
+    "parse error: line N: Cannot convert x to integer.": 1,
+    "parse error: line N: Unknown built-in function $inner": 1,
+    "parse error: line N: Cannot convert bad to boolean.": 1
+   },
+   "d6f63a8aa_to_8dda18b1b": {
+    "gained_match": [
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_outer_note_left_of_image.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_outer_two_notes_on_image.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_root_cluster_note.puml",
+     "test-diagrams/perturbations/comment-state-consumers/checker-claude-round4/no_root_two_clusters_notes.puml",
+     "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_concurrent_nested_labels.puml",
+     "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_root_ellipse_nested_chain.puml",
+     "test-diagrams/perturbations/state-parallel-transition-route-identity/review_compound_endpoint_parallel_order.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round4/pua_b_upper_escape_point.puml"
+    ],
+    "outputs_changed": 298,
+    "stderr_changed": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+    ]
+   },
+   "d6f63a8aa_to_8dda18b1b_counts": {
+    "gained_match": 8,
+    "outputs_changed": 298,
+    "stderr_changed": 4
+   },
+   "d6f63a8aa_to_8dda18b1b_stderr_lines_lost": {
+    "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4
+   },
+   "d6f63a8aa_to_8dda18b1b_stderr_lines_gained": {
+    "thread 'main' (N) panicked at crates/rustuml-parser/src/parse/class.rs:N:N:": 4
+   }
+  },
+  "GET_goldens": {
+   "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+    "fbb2e59ed": {
+     "exit": 0,
+     "strict": "MATCH"
+    },
+    "d6f63a8aa": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "8dda18b1b": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   },
+   "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+    "fbb2e59ed": {
+     "exit": 0,
+     "strict": "MATCH"
+    },
+    "d6f63a8aa": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "8dda18b1b": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   },
+   "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+    "fbb2e59ed": {
+     "exit": 0,
+     "strict": "MATCH"
+    },
+    "d6f63a8aa": {
+     "exit": 0,
+     "strict": "DIFF"
+    },
+    "8dda18b1b": {
+     "exit": 0,
+     "strict": "DIFF"
+    }
+   }
+  }
+ },
+ "batches": {
+  "BH": {
+   "cases": 99,
+   "java_valid": 96,
+   "strict_and_comments": {
+    "base": 3,
+    "merge": 14,
+    "tip": 67,
+    "ev": 67
+   },
+   "strict_only": {
+    "base": 12,
+    "merge": 14,
+    "tip": 67,
+    "ev": 67
+   },
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [
+    "w6_sans_0870",
+    "w6_sans_1c80",
+    "w6_sans_2e5e",
+    "w6_sans_1ab0",
+    "w6_sans_0d80",
+    "w6_sans_a69e",
+    "w6_sans_2065",
+    "w6_sans_fff0",
+    "w6_sans_2065_complex",
+    "w6_sans_fff0_complex",
+    "w6_sans_1e900",
+    "w6_sans_30000",
+    "w6_sans_31350",
+    "w6_sans_e0080",
+    "w6_sans_e01f0",
+    "w6_sans_13430",
+    "w6_sans_combining",
+    "w6_sans_arabic_missing",
+    "w6_sans_thai_missing",
+    "w6_sans_size9_0378",
+    "w6_sans_size23_0378",
+    "w6_sans_bold_0870",
+    "w6_arial_0870",
+    "w6_arial_e0080",
+    "w6_arial_1e900",
+    "w6_verdana_0870",
+    "w6_verdana_e0080",
+    "w6_helvetica_0870",
+    "w6_helvetica_e0080",
+    "w6_helvetica_1e900",
+    "w6_couriernew_e0080",
+    "w6_arial_size11_10fffd",
+    "w6_verdana_bold_10fffd",
+    "w6_seq_0870",
+    "w6_activity_10fffd",
+    "w6_state_e0080",
+    "w6_mindmap_0378",
+    "dc6_yaml_escaped_quote",
+    "dc6_yaml_trailing_backslash",
+    "dc6_yaml_colon_key",
+    "dc6_yaml_listonly",
+    "no6_left_depth2",
+    "no6_left_and_start",
+    "no6_left_right_both",
+    "no6_left_multiline_depth1",
+    "no6_left_leaf_beside_image",
+    "pt6_note_before_nested_link",
+    "pt6_note_before_root_link_image",
+    "pt6_note_outer_anchor_later_inner",
+    "pt6_note_before_concurrent",
+    "rp6_depth3",
+    "rp6_duplicate_text",
+    "rp6_root_and_group"
+   ],
+   "exit_changes_merge_to_tip": [
+    [
+     "dc6_yaml_trailing_backslash",
+     1,
+     0
+    ],
+    [
+     "dc6_yaml_colon_key",
+     1,
+     0
+    ],
+    [
+     "dc6_yaml_listonly",
+     1,
+     0
+    ]
+   ],
+   "tip_panics": []
+  },
+  "BG": {
+   "cases": 53,
+   "java_valid": 52,
+   "strict_and_comments": {
+    "base": 0,
+    "merge": 8,
+    "tip": 41
+   },
+   "strict_only": {
+    "base": 12,
+    "merge": 8,
+    "tip": 41
+   },
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [
+    "no5_left_note_renamed",
+    "no5_left_note_start_top",
+    "no5_left_note_multiline_renamed",
+    "rp5_root_note_depth2",
+    "rp5_two_groups_sides",
+    "w5_sans_0378",
+    "w5_sans_fdd0",
+    "w5_sans_e123",
+    "w5_sans_12000",
+    "w5_sans_2fffd",
+    "w5_sans_1bca0",
+    "w5_sans_e0100",
+    "w5_sans_1d173",
+    "w5_sans_20000",
+    "w5_sans_a500_complex",
+    "w5_sans_bold18_10fffe",
+    "w5_helvetica_10fffd",
+    "w5_helvetica_10f800",
+    "w5_verdana_10fffd",
+    "w5_verdana_10f800",
+    "w5_couriernew_10fffd",
+    "w5_couriernew_10f800",
+    "w5_arial_10fffd",
+    "w5_arial_10f800",
+    "w5_times_10fffd",
+    "w5_times_10f800",
+    "w5_helvetica_bold_10fffd",
+    "w5_arial_10f7ff",
+    "dc5_yaml_key_escape",
+    "dc5_yaml_list_escape",
+    "dc5_json_nested",
+    "dc5_tim_json_member",
+    "dc5_tim_json_array"
+   ],
+   "exit_changes_merge_to_tip": [
+    [
+     "dc5_yaml_key_escape",
+     1,
+     0
+    ],
+    [
+     "dc5_yaml_list_escape",
+     1,
+     0
+    ],
+    [
+     "dc5_yaml_flow_escape",
+     1,
+     0
+    ],
+    [
+     "dc5_json_nested",
+     1,
+     0
+    ],
+    [
+     "dc5_tim_json_member",
+     1,
+     0
+    ],
+    [
+     "dc5_tim_json_array",
+     1,
+     0
+    ]
+   ],
+   "tip_panics": []
+  },
+  "BF": {
+   "cases": 46,
+   "java_valid": 45,
+   "strict_and_comments": {
+    "base": 1,
+    "merge": 17,
+    "tip": 32
+   },
+   "strict_only": {
+    "base": 6,
+    "merge": 17,
+    "tip": 32
+   },
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [
+    "cr_json_u_escape",
+    "cr_yaml_u_escape",
+    "w_arial_pua_b",
+    "w_times_pua_b",
+    "w_arial_nonchar_10ffff",
+    "w_sans_nonchar_10ffff",
+    "w_sans_nonchar_10fffe",
+    "w_sans_unassigned_3fffd",
+    "w_sans_tag_e0041",
+    "w_sans_bmp_pua_f000",
+    "st_np_note_before_target",
+    "st_np_outer_note_left_multiline",
+    "st_np_outer_note_left_on_leaf_with_image",
+    "st_np_root_note_before_states",
+    "st_np_root_three_clusters"
+   ],
+   "exit_changes_merge_to_tip": [
+    [
+     "cr_json_u_escape",
+     1,
+     0
+    ],
+    [
+     "cr_yaml_u_escape",
+     1,
+     0
+    ]
+   ],
+   "tip_panics": []
+  },
+  "BE": {
+   "cases": 34,
+   "java_valid": 30,
+   "strict_and_comments": {
+    "base": 0,
+    "merge": 17,
+    "tip": 22
+   },
+   "strict_only": {
+    "base": 0,
+    "merge": 17,
+    "tip": 22
+   },
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [
+    "no_outer_note_left_of_image",
+    "no_outer_two_notes_on_image",
+    "no_root_cluster_note",
+    "no_root_two_clusters_notes",
+    "pua_b_upper_escape_point"
+   ],
+   "exit_changes_merge_to_tip": [],
+   "tip_panics": []
+  },
+  "BC": {
+   "cases": 19,
+   "java_valid": 19,
+   "strict_and_comments": {
+    "base": 0,
+    "merge": 18,
+    "tip": 18
+   },
+   "strict_only": {
+    "base": 0,
+    "merge": 18,
+    "tip": 18
+   },
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "exit_changes_merge_to_tip": [],
+   "tip_panics": []
+  },
+  "BB": {
+   "cases": 36,
+   "java_valid": 26,
+   "strict_and_comments": {
+    "base": 2,
+    "merge": 25,
+    "tip": 25
+   },
+   "strict_only": {
+    "base": 2,
+    "merge": 25,
+    "tip": 25
+   },
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "exit_changes_merge_to_tip": [],
+   "tip_panics": []
+  },
+  "AW": {
+   "cases": 45,
+   "java_valid": 39,
+   "strict_and_comments": {
+    "base": 6,
+    "merge": 30,
+    "tip": 30
+   },
+   "strict_only": {
+    "base": 6,
+    "merge": 30,
+    "tip": 30
+   },
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "exit_changes_merge_to_tip": [],
+   "tip_panics": []
+  },
+  "AU": {
+   "cases": 32,
+   "java_valid": 29,
+   "strict_and_comments": {
+    "base": 6,
+    "merge": 21,
+    "tip": 21
+   },
+   "strict_only": {
+    "base": 6,
+    "merge": 21,
+    "tip": 21
+   },
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "exit_changes_merge_to_tip": [],
+   "tip_panics": []
+  },
+  "AR": {
+   "cases": 20,
+   "java_valid": 20,
+   "strict_and_comments": {
+    "base": 6,
+    "merge": 17,
+    "tip": 17
+   },
+   "strict_only": {
+    "base": 6,
+    "merge": 17,
+    "tip": 17
+   },
+   "lost_vs_merge": [],
+   "lost_vs_base": [],
+   "gained_vs_merge": [],
+   "exit_changes_merge_to_tip": [],
+   "tip_panics": []
+  }
+ },
+ "gates": {
+  "tip": [
+   "lib exit 0",
+   "pipe_mode exit 0",
+   "golden_no_oracle exit 101",
+   "golden_pairs exit 101",
+   "parity_perturbations exit 101",
+   "harness_guards exit 101",
+   "doc_claims exit 0",
+   ""
+  ],
+  "no_oracle": "11181/11251 at base fbb2e59ed and tip; failure-name diff vs base (code = 9834a7194): lost the 3 GET goldens (activity/act_skinparam2_shadowing_true, activity/act_skinparam_shadowing, edge-cases/edge_whitespace_multiple_blank_lines; lost at merge, not in round 5), gained preprocessing/preproc_complex_theme_override, state/state_history_shallow, state/state_note_composite",
+  "golden_pairs": "12550 total, 10497 passed, 754 failed, 1299 skipped at tip (maker base and before report the same)",
+  "parity_perturbations": "tip 1614 failing vs merge 1622: 0 new failures, 8 fixed; vs base 1365: the 9 failures new in pre-existing dirs are the same 9 recorded in round 4 (gates/added_failing_in_preexisting_dirs.txt)",
+  "harness_guards": "tip categories identical to merge (gates/*.guard_cats.txt); decimal ratchet identical at merge and tip (no new literal); T14.6.7 categories 98+98 escapes / 98 same-stem / 98 .puml-under, unchanged",
+  "lib": "1584 passed 0 failed",
+  "pipe_mode": "17 passed",
+  "doc_claims": "2 passed"
+ }
+}

@@ -1,0 +1,853 @@
+{
+ "cases": [
+  {
+   "name": "w6_sans_0870",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "Arabic Ext-B, simple path, LastResort"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_1c80",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "Cyrillic Ext-C"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_2e5e",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "Supplemental Punctuation, Unicode 14"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_1ab0",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "combining ext, not a complex char"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_0d80",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "Sinhala unassigned"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_a69e",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "Cyrillic Ext-B, Java TNR zero"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_2065",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "BMP default-ignorable unassigned, simple text"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_fff0",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "specials unassigned, simple text"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_2065_complex",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "default-ignorable"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_fff0_complex",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "default-ignorable"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_180f_complex",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "default-ignorable"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_211a",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "substitution",
+    "Helvetica substitutes; Java TNR table says missing"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_22ad",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "substitution",
+    "Apple Symbols substitutes; TNR says missing"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_a8fb",
+   "axes": [
+    "missing-glyph",
+    "simple-path",
+    "substitution",
+    "dot-prefixed .SFDevanagari substitutes; TNR says missing"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_1e900",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "Adlam; CoreText substitutes NotoSansAdlam, cascade?"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_1f600",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "emoji, Apple Color Emoji in cascade"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_30000",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "CJK Ext-G"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_31350",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "CJK Ext-H"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_1fae8",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "emoji 15"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_e0080",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "tags block unassigned, hidden"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_e01f0",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "VS supplement unassigned, hidden"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_1d17b",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "after HarfBuzz hidden run U+1D173..1D17A"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_16fe4",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "Khitan filler"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_13430",
+   "axes": [
+    "missing-glyph",
+    "complex-path",
+    "Egyptian format control"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_zwj_family",
+   "axes": [
+    "missing-glyph",
+    "zwj",
+    "complex"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_tag_flag",
+   "axes": [
+    "missing-glyph",
+    "tag-sequence",
+    "hidden tags"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_combining",
+   "axes": [
+    "missing-glyph",
+    "combining makes complex",
+    "unassigned in complex text"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_hebrew_missing",
+   "axes": [
+    "missing-glyph",
+    "RTL",
+    "U+05EB unassigned inside complex range"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_arabic_missing",
+   "axes": [
+    "missing-glyph",
+    "RTL",
+    "complex text, U+0870 via cascade"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_thai_missing",
+   "axes": [
+    "missing-glyph",
+    "complex",
+    "Thai unassigned U+0E3B"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_size9_0378",
+   "axes": [
+    "missing-glyph",
+    "size 9"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_size9_10fffd",
+   "axes": [
+    "missing-glyph",
+    "size 9",
+    "complex"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_size23_0378",
+   "axes": [
+    "missing-glyph",
+    "size 23"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_size23_10fffd",
+   "axes": [
+    "missing-glyph",
+    "size 23",
+    "complex"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_sans_bold_0870",
+   "axes": [
+    "missing-glyph",
+    "bold creole",
+    "simple"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_arial_0870",
+   "axes": [
+    "missing-glyph",
+    "Arial",
+    "simple"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_arial_e0080",
+   "axes": [
+    "missing-glyph",
+    "Arial",
+    "hidden"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_arial_1e900",
+   "axes": [
+    "missing-glyph",
+    "Arial",
+    "complex cascade"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_verdana_0870",
+   "axes": [
+    "missing-glyph",
+    "Verdana",
+    "simple"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_verdana_e0080",
+   "axes": [
+    "missing-glyph",
+    "Verdana",
+    "hidden"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_verdana_1e900",
+   "axes": [
+    "missing-glyph",
+    "Verdana",
+    "complex cascade"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_helvetica_0870",
+   "axes": [
+    "missing-glyph",
+    "Helvetica",
+    "simple"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_helvetica_e0080",
+   "axes": [
+    "missing-glyph",
+    "Helvetica",
+    "hidden"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_helvetica_1e900",
+   "axes": [
+    "missing-glyph",
+    "Helvetica",
+    "complex cascade"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_couriernew_0870",
+   "axes": [
+    "missing-glyph",
+    "Courier New",
+    "simple"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_couriernew_e0080",
+   "axes": [
+    "missing-glyph",
+    "Courier New",
+    "hidden"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_couriernew_1e900",
+   "axes": [
+    "missing-glyph",
+    "Courier New",
+    "complex cascade"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_mono_0870",
+   "axes": [
+    "missing-glyph",
+    "Monospaced",
+    "simple"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_mono_e0080",
+   "axes": [
+    "missing-glyph",
+    "Monospaced",
+    "hidden"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_mono_1e900",
+   "axes": [
+    "missing-glyph",
+    "Monospaced",
+    "complex cascade"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_times_0870",
+   "axes": [
+    "missing-glyph",
+    "Times New Roman",
+    "simple"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_times_e0080",
+   "axes": [
+    "missing-glyph",
+    "Times New Roman",
+    "hidden"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_times_1e900",
+   "axes": [
+    "missing-glyph",
+    "Times New Roman",
+    "complex cascade"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_arial_size11_10fffd",
+   "axes": [
+    "missing-glyph",
+    "Arial size 11"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_verdana_bold_10fffd",
+   "axes": [
+    "missing-glyph",
+    "Verdana bold"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_seq_0870",
+   "axes": [
+    "missing-glyph",
+    "sequence"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_activity_10fffd",
+   "axes": [
+    "missing-glyph",
+    "activity"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_state_e0080",
+   "axes": [
+    "missing-glyph",
+    "state"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "w6_mindmap_0378",
+   "axes": [
+    "missing-glyph",
+    "mindmap"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "dc6_yaml_escaped_quote",
+   "axes": [
+    "yaml-unquote",
+    "escaped quote inside double quotes"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "dc6_yaml_trailing_backslash",
+   "axes": [
+    "yaml-unquote",
+    "value ends with backslash-quote"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "dc6_yaml_key_newline",
+   "axes": [
+    "yaml-unquote",
+    "quoted key with \\n"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "dc6_yaml_apostrophe",
+   "axes": [
+    "yaml-unquote",
+    "single quote inside double quotes"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "dc6_yaml_comment",
+   "axes": [
+    "yaml-unquote",
+    "comment after quoted value"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "dc6_yaml_hash_in_quotes",
+   "axes": [
+    "yaml-unquote",
+    "hash inside quotes"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "dc6_yaml_nested",
+   "axes": [
+    "yaml-unquote",
+    "nested map and list"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "dc6_yaml_plain",
+   "axes": [
+    "yaml-unquote",
+    "plain scalar control"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "dc6_yaml_single",
+   "axes": [
+    "yaml-unquote",
+    "single-quoted control"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "dc6_yaml_colon_key",
+   "axes": [
+    "yaml-unquote",
+    "colon inside quoted key"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "dc6_yaml_block",
+   "axes": [
+    "yaml-unquote",
+    "block scalar line"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "dc6_yaml_listonly",
+   "axes": [
+    "yaml-unquote",
+    "list item with \\U escape"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "dc6_json_control",
+   "axes": [
+    "json decodes",
+    "control"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cm6_state_code",
+   "axes": [
+    "comment-unit",
+    "state"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cm6_object_code",
+   "axes": [
+    "comment-unit",
+    "object"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cm6_usecase_code",
+   "axes": [
+    "comment-unit",
+    "usecase"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cm6_component_code",
+   "axes": [
+    "comment-unit",
+    "component"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "cm6_class_bare",
+   "axes": [
+    "comment-unit",
+    "class bare code, display has the unit"
+   ],
+   "intended_valid": false
+  },
+  {
+   "name": "cm6_class_low",
+   "axes": [
+    "comment-unit",
+    "low surrogate"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "no6_left_depth2",
+   "axes": [
+    "outer-origin",
+    "note left",
+    "depth 2 image"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "no6_right_long",
+   "axes": [
+    "outer-origin",
+    "note right",
+    "wide note"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "no6_left_and_start",
+   "axes": [
+    "outer-origin",
+    "note left",
+    "start/end on outer"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "no6_left_right_both",
+   "axes": [
+    "outer-origin",
+    "two notes, opposite sides"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "no6_two_left_same",
+   "axes": [
+    "outer-origin",
+    "two notes same side (BG three-notes mechanism)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "no6_note_on_link_image",
+   "axes": [
+    "outer-origin",
+    "note on link"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "no6_floating",
+   "axes": [
+    "outer-origin",
+    "floating note (declared residual)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "no6_left_multiline_depth1",
+   "axes": [
+    "outer-origin",
+    "multiline note left"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "no6_left_leaf_beside_image",
+   "axes": [
+    "outer-origin",
+    "note on outer leaf beside image"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "no6_top_depth2",
+   "axes": [
+    "outer-origin",
+    "note top (declared residual)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "no6_integer_canvas",
+   "axes": [
+    "outer-origin",
+    "canvas rounding (int)(x+1)"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "pt6_note_before_nested_link",
+   "axes": [
+    "pass-three",
+    "note before anchor inside group"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "pt6_note_before_root_link_image",
+   "axes": [
+    "pass-three",
+    "root note before anchor, image path"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "pt6_note_outer_anchor_later_inner",
+   "axes": [
+    "pass-three",
+    "root note, anchor first created inside group"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "pt6_two_notes_before",
+   "axes": [
+    "pass-three",
+    "two notes before both anchors, flat"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "pt6_note_before_concurrent",
+   "axes": [
+    "pass-three",
+    "concurrent region"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "rp6_depth3",
+   "axes": [
+    "root-path-names",
+    "depth 3 non-autarkic"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "rp6_duplicate_text",
+   "axes": [
+    "root-path-names",
+    "duplicate note text"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "rp6_root_and_group",
+   "axes": [
+    "root-path-names",
+    "root note next to group note"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "rp6_group_note_outer_anchor",
+   "axes": [
+    "root-path-names",
+    "group reopened"
+   ],
+   "intended_valid": true
+  },
+  {
+   "name": "rp6_named_floating_in_group",
+   "axes": [
+    "root-path-names",
+    "floating named note in group (declared residual)"
+   ],
+   "intended_valid": true
+  }
+ ]
+}

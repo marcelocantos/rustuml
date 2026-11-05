@@ -1,0 +1,9 @@
+@startuml
+state Granary {
+  Wheat --> Flour
+}
+note left of Granary
+  dusty
+  and dry
+end note
+@enduml
