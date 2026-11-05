@@ -2207,6 +2207,7 @@ impl PreprocessContext {
                 });
         let from = from.map(|value| self.substitute_vars(value));
         let name = self.substitute_vars(name);
+        let bundled_lookup = from.is_none();
         let source = if let Some(from) = from {
             // Local custom themes use the same naming convention as ThemeUtils.
             // Remote fetching remains outside the no-runtime-dependency product.
@@ -2236,6 +2237,17 @@ impl PreprocessContext {
                 source_line,
                 body,
             });
+        } else if bundled_lookup && themes::JAVA_BUNDLED_UNSHIPPED_THEMES.contains(&name.as_str()) {
+            // ThemeUtils.loadBundledOrLocalTheme finds this name in Java's jar,
+            // so Java executes a theme here. Its body is not shipped; keep the
+            // base parser-only marker that renderers emulate (no identity).
+            let source_line = self
+                .source_line_override
+                .unwrap_or_else(|| self.current_diagram_source_line());
+            output.push(EvaluatedEvent::ParserOnly(source_line_marker(
+                source_line,
+                &format!("skinparam __theme {name}"),
+            )));
         } else {
             self.push_directive_placeholder(&mut output);
         }

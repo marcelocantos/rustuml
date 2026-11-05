@@ -21,6 +21,22 @@
 //! `!procedure`s and the embedded `<style>` block work the same way they
 //! would in PlantUML's own pipeline.
 
+/// Themes the pinned Java jar bundles (`src/main/resources/themes`, read by
+/// `ThemeUtils.loadBundledOrLocalTheme`) that this distribution does not ship
+/// for licence reasons (see `get_theme_source`). Java loads them; Rust can
+/// only leave the `skinparam __theme NAME` marker that renderers emulate.
+pub(super) const JAVA_BUNDLED_UNSHIPPED_THEMES: [&str; 9] = [
+    "amiga",
+    "blueprint",
+    "carbon-gray",
+    "crt-amber",
+    "crt-green",
+    "mimeograph",
+    "mono",
+    "plain",
+    "sunlust",
+];
+
 /// Look up the embedded source for a theme by name.
 ///
 /// Returns `None` if the theme name is not bundled.
