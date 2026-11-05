@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "mechanism": "comment-state-consumers",
+  "sub_mechanism": "lossless deployment Quark identity and link reversal for comment/id producers (rejection 7ed71f3e5, finding 2; T14.23 description-model slice)",
+  "status": "maker causal account before draft; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "descdiagram/command/CommandCreateElementFull.java / CommandPackageWithUSymbol.java: with `as ALIAS` the Quark is created from the alias code; without an alias the code is the declared token itself (quoted text, bracket text, or bare id).",
+    "descdiagram/command/CommandLinkElement.java#executeArg: an undeclared endpoint becomes a leaf whose Quark name is the endpoint code as written.",
+    "svek/image/EntityImageDescription.java#drawU (line 289) and svek/Cluster.java#drawU (line 311): comments use Entity.getName(), the Quark local name.",
+    "descdiagram/command/CommandLinkElement.java#getLinkType (lines 132-139): LinkType(decor1 = right head HEAD2, decor2 = left head HEAD1); #executeArg (lines 230-231): LEFT and UP directions replace the link with Link.getInv(), which swaps entities and decorations (LinkType.getInversed).",
+    "decoration/LinkType.java#looksLikeRevertedForSvg (lines 55-60) and #looksLikeNoDecorAtAllSvg (lines 62-70); abel/Link.java#commentForSvg/#idCommentForSvg (lines 105-121): 'reverse link e1 to e2' and 'e1-backto-e2' iff decor1 is NONE and decor2 is not; 'e1-e2' iff both or neither are decorated."
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/deployment.rs#DeploymentNode (new serde-defaulted quark_name)",
+    "crates/rustuml-parser/src/parse/deployment.rs (declaration forms and auto-created link endpoints)",
+    "crates/rustuml-render/src/deployment.rs#own_qname/#qualified_name/#deployment_comment_name",
+    "crates/rustuml-render/src/deployment.rs#render_no_oracle_edges/#deployment_connection_path_base_id"
+  ],
+  "invariant": "Identity text (comments, qualified names, path ids) uses the Java Quark local name recorded by the parser, never one re-inferred from label_to_id(label) == id. Link reversal in comments and path ids is LinkType.looksLikeRevertedForSvg after the LEFT/UP getInv, not the layout direction alone.",
+  "causal_divergence": "DeploymentNode has no record of whether an alias was written, so the renderer guesses 'unaliased' whenever label_to_id(label) == id. An explicit alias that happens to equal that projection (`node \"Copper Bay\" as Copper_Bay`) is mistaken for an unaliased name and Rust writes 'Copper Bay' where Java writes 'Copper_Bay' (deploy_alias_collision, group_identity_collision). Separately, the no-oracle link comment prints 'reverse link' iff the direction is UP/LEFT and the path id ignores reversal of un-inverted `<--`, while Java derives both from the decorations after inversion (deploy_alias_collision: `Copper_Bay <.. Pier` is 'reverse link Copper_Bay to Pier').",
+  "planned_change": "Add `quark_name: Option<String>` to DeploymentNode (serde default, omitted when None), set to the declared code when it differs from id: quoted and bracket declarations without an alias, and auto-created link endpoints. Consumers take quark_name.unwrap_or(id); qualified names keep the existing ':' segment projection. In the no-oracle edge path compute (e1, e2, decor1, decor2) from (from, to, arrow_at_end, arrow_at_start), swap for UP/LEFT, and emit the comment and path id from looksLikeRevertedForSvg / looksLikeNoDecorAtAllSvg. Class and usecase families keep their own heuristics; that stays residual under T14.23.",
+  "perturbation_axes": [
+    "explicit alias equal to, and different from, the label projection",
+    "unaliased quoted, bracket and bare declarations; undeclared quoted link endpoints",
+    "left-head, right-head, both-head and undecorated links with and without UP/LEFT direction"
+  ],
+  "precommitted_measurement": {
+    "oracle": "maker-results/tools/comment_lists.py and output_hashes.py over golden and perturbations, plus golden_no_oracle and parity_perturbations",
+    "expect_fixed": [
+      "perturbations/comment-state-consumers/checker-independent-astra-20261105/deploy_alias_collision (comment list)",
+      "perturbations/comment-state-consumers/checker-independent-astra-20261105/group_identity_collision (comment list)"
+    ],
+    "expect": "zero comment-list losses and zero lost no-oracle or perturbation passes versus the previous draft; every changed output explained"
+  }
+}
