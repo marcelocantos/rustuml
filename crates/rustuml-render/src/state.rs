@@ -1026,9 +1026,16 @@ fn attached_note_specs(
                 .iter()
                 .all(|note| !matching_anchor_side(note));
             let (width, height) = attached_note_size(&note.text);
+            // CommandFactoryNoteOnEntity / CucaDiagram.quarkInContextSafe:
+            // the GMN quark is a child of the group current at declaration,
+            // whichever path later draws it.
+            let id = match note.parent.as_deref() {
+                Some(parent) => format!("{parent}.{}", ids.qualified_name),
+                None => ids.qualified_name.clone(),
+            };
             Some(AttachedNoteSpec {
                 note_index,
-                id: ids.qualified_name.clone(),
+                id,
                 entity_id: ids.entity_id.clone(),
                 link_id: ids.link_id.clone(),
                 anchor: anchor.to_string(),
@@ -3769,8 +3776,7 @@ fn build_state_group_outcome<'a>(
             if !inner_ids.contains(&spec.anchor) {
                 return None;
             }
-            // The note quark lives in its declaring group.
-            spec.id = format!("{}.{}", note.parent.as_deref()?, spec.id);
+            note.parent.as_deref()?;
             region_notes.push(spec);
         }
         let inner_sizes: Vec<(String, f64, f64, StateLayoutShape)> = inner_ids
@@ -4051,10 +4057,6 @@ fn build_autonomous_composite<'a>(
             continue;
         }
         spec.anchor = anchor;
-        if let Some(parent) = note.parent.as_deref() {
-            // The note quark lives in its declaring group.
-            spec.id = format!("{parent}.{}", spec.id);
-        }
         outer_notes.push(spec);
     }
     // Without any image the diagram is the root cluster path's
@@ -11291,6 +11293,25 @@ CobaltDecision --> [*]
         let composite_header = svg.find(">HarborMode</text>").unwrap();
         let outer_start = svg.find(r#"data-qualified-name=".start.""#).unwrap();
         assert!(composite_header < outer_start);
+    }
+
+    #[test]
+    fn notes_inside_groups_are_quarks_of_their_declaring_group_on_every_path() {
+        // CucaDiagram.quarkInContextSafe: GMNn is a child of the current group.
+        // Wing is non-autarkic (a link crosses it), so it is a root cluster.
+        let source = concat!(
+            "@startuml\n",
+            "state Wing {\n",
+            "  Larch --> Cedar\n",
+            "  note left of Cedar : resin\n",
+            "}\n",
+            "Gate --> Larch\n",
+            "note right of Gate : open\n",
+            "@enduml\n",
+        );
+        let svg = crate::render_svg(&rustuml_parser::parse::parse(source).unwrap());
+        assert!(svg.contains(r#"data-qualified-name="Wing.GMN2""#), "{svg}");
+        assert!(svg.contains(r#"data-qualified-name="GMN5""#), "{svg}");
     }
 
     #[test]
