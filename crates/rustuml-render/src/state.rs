@@ -4190,9 +4190,8 @@ fn emit_autonomous_scope_links(
             write!(
                 svg,
                 "<!--{svg_comment}-->",
-                svg_comment = crate::svg::comment_text(&format!(
-                    "link {edge_from_name} to {edge_to_name}"
-                )),
+                svg_comment =
+                    crate::svg::comment_text(&format!("link {edge_from_name} to {edge_to_name}")),
             )
             .unwrap();
         }

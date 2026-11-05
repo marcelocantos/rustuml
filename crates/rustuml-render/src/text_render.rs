@@ -1816,7 +1816,10 @@ fn write_text_element(
 mod tests {
     #[test]
     fn atom_run_measurement_does_not_apply_the_empty_stripe_space() {
-        assert_eq!(measure_atom_run_with_family("", 11.0, false, "sans-serif"), 0.0);
+        assert_eq!(
+            measure_atom_run_with_family("", 11.0, false, "sans-serif"),
+            0.0
+        );
         assert!(measure_with_family("", 11.0, false, "sans-serif") > 0.0);
         for run in [" ", "   ", "\t"] {
             assert_eq!(
