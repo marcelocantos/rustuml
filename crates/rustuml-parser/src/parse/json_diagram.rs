@@ -241,6 +241,10 @@ fn extract_body(lines: &[String]) -> (Vec<Vec<String>>, String) {
 
     for line in lines {
         let trimmed = line.trim();
+        // `StyleExtractor` (59-64) skips every line Java's `trim()` empties.
+        if line.chars().all(|c| c <= ' ') {
+            continue;
+        }
         if let Some(rest) = trimmed.strip_prefix("#highlight") {
             let parts: Vec<String> = rest
                 .split('/')
@@ -347,6 +351,15 @@ fn yaml_value_to_node(key: Option<String>, value: &serde_yml::Value) -> JsonNode
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn style_extractor_drops_blank_lines_before_the_yaml_parser() {
+        let lines = |text: &str| text.lines().map(str::to_string).collect::<Vec<_>>();
+        let diagram =
+            parse_yaml_diagram(&lines("tide: |\n  Kelp one\n\n  Kelp two\nebb: y")).unwrap();
+        let shown = format!("{:?}", diagram.root);
+        assert!(shown.contains(r#"Kelp one\nKelp two\n""#), "{shown}");
+    }
 
     #[test]
     fn yaml_block_values_keep_every_line_break_as_get_block_style_string() {
