@@ -2613,6 +2613,9 @@ struct AutonomousScopeLayout {
     height: f64,
     compound_clusters: bool,
     painted_bounds: Option<AutonomousPaintedBounds>,
+    /// Attached notes laid out in this scope (GroupMakerState image leaves),
+    /// at their solved corners in the same coordinates as `positions`.
+    notes: Vec<AttachedNotePosition>,
 }
 
 #[derive(Clone, Copy)]
@@ -3136,6 +3139,7 @@ fn layout_autonomous_scope(
     node_sizes: &[(String, f64, f64, StateLayoutShape)],
     live_clusters: &[&State],
     spacing: Option<GraphSpacing>,
+    notes: &[AttachedNoteSpec],
 ) -> Option<AutonomousScopeLayout> {
     // ClusterDotString.printInternal: a live group has its own special point
     // (inside `a`/`i`) only when isThereALinkFromOrToGroup.
@@ -3162,6 +3166,11 @@ fn layout_autonomous_scope(
             let state = diagram.states.iter().find(|state| state.id == *id);
             add_state_layout_node(&mut layout, id, *width, *height, *shape, state);
         }
+    }
+    // GraphvizImageBuilder: a note leaf is an SVEK node of EntityImageNote
+    // size, added after the state leaves as on the root cluster path.
+    for note in notes {
+        layout.add_node(&note.id, "", note.width, note.height);
     }
     for cluster in live_clusters {
         let parent = cluster.parent.as_deref().filter(|parent| {
@@ -3252,9 +3261,25 @@ fn layout_autonomous_scope(
         );
         transition_layout_edges.insert(*index, layout_edge_index);
     }
+    for note in notes {
+        if let Some(owner) = diagram.notes[note.note_index].parent.as_deref()
+            && live_clusters.iter().any(|cluster| cluster.id == owner)
+        {
+            layout.add_cluster_node(owner, &note.id);
+        }
+        let (from, to) = if note.right {
+            (note.anchor.as_str(), note.id.as_str())
+        } else {
+            (note.id.as_str(), note.anchor.as_str())
+        };
+        // The note link is a pure inner link of the image (getPureInnerLinks):
+        // a length-one horizontal solitary link, minlen 0, routed as Opale.
+        layout.add_plantuml_svek_line0_edge(from, to);
+        layout.add_edge_with_minlen(from, to, None, 0);
+    }
 
     let mut result = layout.layout_full(std::time::Duration::from_secs(5))?;
-    if result.node_positions.len() < ids.len() {
+    if result.node_positions.len() < ids.len() + notes.len() {
         return None;
     }
     if result.cluster_positions.len() != live_clusters.len() {
@@ -3285,7 +3310,7 @@ fn layout_autonomous_scope(
         }
     }
     result.cluster_positions = painted_cluster_positions;
-    let painted_bounds = autonomous_scope_painted_bounds(
+    let mut painted_bounds = autonomous_scope_painted_bounds(
         diagram,
         &ids,
         node_sizes,
@@ -3293,6 +3318,21 @@ fn layout_autonomous_scope(
         &transition_layout_edges,
         &transition_indices,
     );
+    let note_corners = notes
+        .iter()
+        .enumerate()
+        .map(|(offset, note)| {
+            let position = result.node_positions[ids.len() + offset];
+            let (x, y) = (
+                quantize_svek_coord(position.x),
+                quantize_svek_coord(position.y),
+            );
+            let bounds = painted_bounds.get_or_insert_with(AutonomousPaintedBounds::empty);
+            bounds.include(x, y);
+            bounds.include(x + note.width, y + note.height);
+            (x, y)
+        })
+        .collect::<Vec<_>>();
     let top = result
         .node_positions
         .iter()
@@ -3336,6 +3376,22 @@ fn layout_autonomous_scope(
         max_y = max_y.max(result.height);
     }
 
+    let notes = notes
+        .iter()
+        .zip(note_corners)
+        .map(|(note, (x, y))| AttachedNotePosition {
+            note_index: note.note_index,
+            id: note.id.clone(),
+            entity_id: note.entity_id.clone(),
+            anchor: note.anchor.clone(),
+            right: note.right,
+            opale: note.opale,
+            x: x + origin_x,
+            y: y + origin_y,
+            width: note.width,
+            height: note.height,
+        })
+        .collect();
     Some(AutonomousScopeLayout {
         ids,
         positions,
@@ -3349,6 +3405,7 @@ fn layout_autonomous_scope(
         height: origin_y + max_y + SVEK_TRAILING_PAD,
         compound_clusters: !live_clusters.is_empty(),
         painted_bounds,
+        notes,
     })
 }
 
@@ -3472,6 +3529,10 @@ fn normalize_autonomous_scope(mut scope: AutonomousScopeLayout) -> AutonomousSco
     for (_, center_x, center_y, _, _) in &mut scope.positions {
         *center_x += delta_x;
         *center_y += delta_y;
+    }
+    for note in &mut scope.notes {
+        note.x += delta_x;
+        note.y += delta_y;
     }
     scope.origin_x = origin_x;
     scope.origin_y = origin_y;
@@ -3644,6 +3705,34 @@ fn build_state_group_outcome<'a>(
                         && autonomous_scope_is_inside(diagram, parent, &image.state.id)
                 })
         });
+        // CommandFactoryNoteOnEntity creates the note entity in the group in
+        // effect, so it is a leaf of this region exactly when a state declared
+        // there would be; its anchor must be laid out in the same image.
+        let note_ids = allocate_state_svg_ids(diagram, &[]);
+        let mut region_notes = Vec::new();
+        for mut spec in attached_note_specs(diagram, &note_ids) {
+            let note = &diagram.notes[spec.note_index];
+            let in_region = match note.parent.as_deref() {
+                Some(parent) if live_clusters.is_empty() => parent == scope,
+                Some(parent) => {
+                    autonomous_scope_is_inside(diagram, parent, &scope)
+                        && !region_images.iter().any(|image| {
+                            autonomous_scope_is_inside(diagram, parent, &image.state.id)
+                        })
+                }
+                None => false,
+            };
+            if !in_region {
+                continue;
+            }
+            spec.anchor = note.anchor_id.clone()?;
+            if !inner_ids.contains(&spec.anchor) {
+                return None;
+            }
+            // The note quark lives in its declaring group.
+            spec.id = format!("{}.{}", note.parent.as_deref()?, spec.id);
+            region_notes.push(spec);
+        }
         let inner_sizes: Vec<(String, f64, f64, StateLayoutShape)> = inner_ids
             .iter()
             .map(|id| {
@@ -3664,6 +3753,9 @@ fn build_state_group_outcome<'a>(
                 }
             })
             .collect();
+        if !region_notes.is_empty() && inner_ids.is_empty() {
+            return None;
+        }
         let empty_concurrent_state =
             (scope != composite.id && inner_ids.is_empty() && transition_indices.is_empty())
                 .then_some(scope.clone());
@@ -3695,6 +3787,7 @@ fn build_state_group_outcome<'a>(
                 height: empty_height,
                 compound_clusters: false,
                 painted_bounds: None,
+                notes: Vec::new(),
             }
         } else if inner_ids.is_empty() && transition_indices.is_empty() {
             AutonomousScopeLayout {
@@ -3710,6 +3803,7 @@ fn build_state_group_outcome<'a>(
                 height: SVEK_RESULT_DIMENSION_PAD,
                 compound_clusters: false,
                 painted_bounds: None,
+                notes: Vec::new(),
             }
         } else {
             normalize_autonomous_scope(layout_autonomous_scope(
@@ -3719,6 +3813,7 @@ fn build_state_group_outcome<'a>(
                 &inner_sizes,
                 &live_clusters,
                 None,
+                &region_notes,
             )?)
         };
         children.extend(region_images);
@@ -3797,8 +3892,7 @@ fn build_autonomous_composite<'a>(
     Vec<&'a State>,
     AutonomousScopeLayout,
 )> {
-    if !diagram.notes.is_empty()
-        || diagram.meta.title.is_some()
+    if diagram.meta.title.is_some()
         || !has_only_autonomous_layout_skinparams(diagram)
         || diagram.states.iter().any(|state| {
             !StateEntityPosition::of(state).is_normal()
@@ -3820,6 +3914,19 @@ fn build_autonomous_composite<'a>(
     for composite in root_composites {
         let outcome = build_state_group_outcome(diagram, composite)?;
         collect_state_group_outcome(outcome, &mut composites, &mut live_clusters);
+    }
+    // Only notes laid out inside some GroupMakerState image are drawn here;
+    // any other note keeps the root cluster or flat path.
+    fn image_note_count(image: &AutonomousComposite<'_>) -> usize {
+        image
+            .regions
+            .iter()
+            .map(|region| region.layout.notes.len())
+            .sum::<usize>()
+            + image.children.iter().map(image_note_count).sum::<usize>()
+    }
+    if composites.iter().map(image_note_count).sum::<usize>() != diagram.notes.len() {
+        return None;
     }
     let outer_transition_indices: Vec<usize> = if live_clusters.is_empty() {
         diagram
@@ -3892,6 +3999,7 @@ fn build_autonomous_composite<'a>(
         &outer_sizes,
         &live_clusters,
         Some(autonomous_outer_spacing(diagram)),
+        &[],
     )?;
     let outer = if live_clusters.is_empty() {
         outer
@@ -4051,7 +4159,10 @@ fn emit_autonomous_scope_entities(
         let Some(state) = context.diagram.states.iter().find(|state| state.id == *id) else {
             continue;
         };
-        let cx = quantize_svek_coord(cx + state_position_image_offset_x(state));
+        // SvekResult.drawU paints the node at SvekNode.getMinX, the corner
+        // Graphviz serialized with two decimals; the solved center already
+        // carries that corner, so it is not rounded again here.
+        let cx = cx + state_position_image_offset_x(state);
         // A childless group is GroupMakerState's plain EntityImageState.
         if skip_composites
             && state.composite
@@ -4764,7 +4875,21 @@ fn emit_autonomous_composite(
                 ),
             );
         }
-        for id in &region.layout.ids {
+        // GraphvizImageBuilder.printGroups creates the leaves of each live
+        // cluster (preorder) before the image group's own leaves, and
+        // SvekResult.drawU paints Bibliotekon.allNodes() in that order.
+        let mut paint_ids = region.layout.ids.clone();
+        paint_ids.sort_by_key(|id| {
+            autonomous_id_owner(context.diagram, id)
+                .and_then(|owner| {
+                    region
+                        .live_clusters
+                        .iter()
+                        .position(|cluster| cluster.id == owner)
+                })
+                .unwrap_or(region.live_clusters.len())
+        });
+        for id in &paint_ids {
             if let Some(child) = composite
                 .children
                 .iter()
@@ -4784,6 +4909,21 @@ fn emit_autonomous_composite(
                     .retain(|(position_id, _, _, _, _)| position_id == id);
                 emit_autonomous_scope_entities(svg, context, &entity_scope, offset, true);
             }
+        }
+        for note in &region.layout.notes {
+            let mut position = note.clone();
+            position.x += offset.0;
+            position.y += offset.1;
+            emit_attached_svek_note(
+                svg,
+                &context.diagram.notes[note.note_index],
+                &position,
+                &region.layout.edge_paths,
+                (
+                    offset.0 + region.layout.origin_x,
+                    offset.1 + region.layout.origin_y,
+                ),
+            );
         }
         emit_autonomous_scope_links(svg, context, &region.layout, offset);
         match composite.separator {
@@ -5688,6 +5828,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         height,
         compound_clusters: true,
         painted_bounds: None,
+        notes: Vec::new(),
     };
     let allocated_ids = allocate_state_svg_ids(diagram, &entity_ids);
     let context = AutonomousRenderContext {
