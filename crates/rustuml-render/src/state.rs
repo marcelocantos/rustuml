@@ -396,6 +396,12 @@ fn is_history_marker(id: &str) -> bool {
     id == "[H]" || id == "[H*]"
 }
 
+/// A history pseudo-state endpoint, bare (`[H]`) or scoped to its group
+/// (`[H]Group`, `[H*]Group`) as the parser qualifies them.
+fn is_scoped_history_marker(id: &str) -> bool {
+    id.starts_with("[H]") || id.starts_with("[H*]")
+}
+
 fn history_marker_label(id: &str) -> &'static str {
     if id == "[H*]" { "H*" } else { "H" }
 }
@@ -571,7 +577,7 @@ fn layout_node_size(
             StateLayoutShape::Circle,
         );
     }
-    if is_history_marker(id) {
+    if is_scoped_history_marker(id) {
         // Java `EntityImageStateHistory` uses `ShapeType.CIRCLE` for both
         // anonymous `[H]`/`[H*]` markers and explicitly named history states.
         return (
@@ -2808,7 +2814,24 @@ fn java_state_group_is_autarkic(diagram: &StateDiagram, group: &str) -> bool {
     if is_concurrent_region {
         return true;
     }
+    // CommandFactoryNoteOnEntity links the note entity, created in the
+    // group current at the command, to its anchor; isPureInnerLink3 applies.
+    let scope_inside = |scope: Option<&str>| {
+        scope.is_some_and(|scope| autonomous_scope_is_inside(diagram, scope, group))
+    };
+    let note_links_are_inner = diagram.notes.iter().all(|note| {
+        let Some(anchor) = note.anchor_id.as_deref() else {
+            return true;
+        };
+        let anchor_parent = diagram
+            .states
+            .iter()
+            .find(|state| state.id == anchor)
+            .and_then(|state| state.parent.as_deref());
+        scope_inside(note.parent.as_deref()) == scope_inside(anchor_parent)
+    });
     autonomous_group_is_autarkic(diagram, group)
+        && note_links_are_inner
         && diagram
             .states
             .iter()
@@ -3067,6 +3090,18 @@ fn layout_autonomous_scope(
     live_clusters: &[&State],
     spacing: Option<GraphSpacing>,
 ) -> Option<AutonomousScopeLayout> {
+    // ClusterDotString.printInternal: a live group has its own special point
+    // (inside `a`/`i`) only when isThereALinkFromOrToGroup.
+    let ids = ids
+        .into_iter()
+        .filter(|id| {
+            !live_clusters.iter().any(|cluster| cluster.id == *id)
+                || diagram
+                    .transitions
+                    .iter()
+                    .any(|transition| transition.from == *id || transition.to == *id)
+        })
+        .collect::<Vec<_>>();
     let mut layout = LayoutGraph::new(state_graph_direction(diagram))
         .with_edge_routing(state_edge_routing(diagram));
     if let Some(spacing) = spacing {
@@ -3102,6 +3137,9 @@ fn layout_autonomous_scope(
         } else if let Some(scope) = id
             .strip_prefix("__start__:")
             .or_else(|| id.strip_prefix("__end__:"))
+            .or_else(|| id.strip_prefix("[H*]"))
+            .or_else(|| id.strip_prefix("[H]"))
+            .filter(|scope| !scope.is_empty())
         {
             Some(scope)
         } else {
@@ -3831,6 +3869,37 @@ fn state_comment_endpoint(endpoint: &str, is_source: bool) -> String {
     autonomous_endpoint_svg_name(endpoint, is_source)
 }
 
+/// `EntityImagePseudoState` for a shallow (`H`) or deep (`H*`) history
+/// marker: a 22px ellipse and its centered label, without an entity group.
+fn emit_autonomous_history_marker(
+    svg: &mut String,
+    context: &AutonomousRenderContext<'_>,
+    (cx, cy): (f64, f64),
+    deep: bool,
+    fill: &str,
+) {
+    let label = if deep { "H*" } else { "H" };
+    write!(
+        svg,
+        r#"<ellipse cx="{}" cy="{}" {fill} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{};stroke-width:0.5;"/>"#,
+        fmt_f(cx),
+        fmt_f(cy),
+        crate::svg::escape_attribute(&context.skin.stroke),
+        fill = crate::svg::fill_attributes(fill),
+    )
+    .unwrap();
+    let text_width = text_render::measure(label, STATE_FONT_SIZE, false);
+    write!(
+        svg,
+        r#"<text {} font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
+        crate::svg::fill_attributes(&context.skin.text_color),
+        fmt_f(text_width),
+        fmt_f(cx - text_width / 2.0),
+        fmt_f(cy + HISTORY_LABEL_BASELINE_OFFSET),
+    )
+    .unwrap();
+}
+
 fn emit_autonomous_scope_entities(
     svg: &mut String,
     context: &AutonomousRenderContext<'_>,
@@ -3871,11 +3940,27 @@ fn emit_autonomous_scope_entities(
             continue;
         }
 
+        // `[H]X` / `[H*]X` endpoints are pseudo-state leaves created by
+        // StateDiagram.getHistorical/getDeepHistory, not declared states.
+        if is_scoped_history_marker(id) {
+            emit_autonomous_history_marker(
+                svg,
+                context,
+                (quantize_svek_coord(cx), cy),
+                id.starts_with("[H*]"),
+                &context.skin.state_fill,
+            );
+            continue;
+        }
         let Some(state) = context.diagram.states.iter().find(|state| state.id == *id) else {
             continue;
         };
         let cx = quantize_svek_coord(cx + state_position_image_offset_x(state));
-        if skip_composites && state.composite {
+        // A childless group is GroupMakerState's plain EntityImageState.
+        if skip_composites
+            && state.composite
+            && state_group_has_children(context.diagram, &state.id)
+        {
             continue;
         }
         let entity_position = StateEntityPosition::of(state);
@@ -3966,35 +4051,18 @@ fn emit_autonomous_scope_entities(
                 continue;
             }
             StateKind::History | StateKind::DeepHistory => {
-                let label = if state.kind == StateKind::DeepHistory {
-                    "H*"
-                } else {
-                    "H"
-                };
                 let fill = state
                     .fill
                     .as_deref()
                     .map(resolve_state_fill_color)
                     .unwrap_or_else(|| context.skin.state_fill.clone());
-                write!(
+                emit_autonomous_history_marker(
                     svg,
-                    r#"<ellipse cx="{}" cy="{}" {fill} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{};stroke-width:0.5;"/>"#,
-                    fmt_f(cx),
-                    fmt_f(cy),
-                    crate::svg::escape_attribute(&context.skin.stroke),
-                    fill = crate::svg::fill_attributes(&fill),
-                )
-                .unwrap();
-                let text_width = text_render::measure(label, STATE_FONT_SIZE, false);
-                write!(
-                    svg,
-                    r#"<text {} font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
-                    crate::svg::fill_attributes(&context.skin.text_color),
-                    fmt_f(text_width),
-                    fmt_f(cx - text_width / 2.0),
-                    fmt_f(cy + HISTORY_LABEL_BASELINE_OFFSET),
-                )
-                .unwrap();
+                    context,
+                    (cx, cy),
+                    state.kind == StateKind::DeepHistory,
+                    &fill,
+                );
                 continue;
             }
             StateKind::EntryPoint | StateKind::ExitPoint | StateKind::Normal
@@ -4984,8 +5052,15 @@ fn apply_state_border_frontiers(
 /// endpoint and the `p0`/`p1` protection clusters represented by
 /// `LayoutGraph::add_svek_cluster`.
 fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
-    if !diagram.notes.is_empty()
-        || diagram.meta.title.is_some()
+    // Only `note left|right of X` notes with a resolved anchor take part, as
+    // SVEK nodes with their opale edge; other note forms keep the flat path.
+    if diagram.notes.iter().any(|note| {
+        note.anchor_id.is_none()
+            || !matches!(
+                note.kind,
+                StateNoteKind::LeftOf(_) | StateNoteKind::RightOf(_)
+            )
+    }) || diagram.meta.title.is_some()
         || !has_only_autonomous_layout_skinparams(diagram)
         || diagram.states.iter().any(|state| {
             !matches!(
@@ -5025,7 +5100,21 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     let arrow_font = StateArrowFont::from_diagram(diagram);
     let skin = StateSkin::from_diagram(diagram);
     let transition_indices = plantuml_svek_transition_order(diagram, 0..diagram.transitions.len());
-    let ids = collect_autonomous_scope_ids(diagram, &transition_indices, |_| true);
+    let entity_ids = collect_autonomous_scope_ids(diagram, &transition_indices, |_| true);
+    // ClusterDotString.printInternal emits a group's special point (inside its
+    // `a`/`i` wrappers) only when isThereALinkFromOrToGroup: some link names
+    // the group itself. Other groups have no node of their own.
+    let ids = entity_ids
+        .iter()
+        .filter(|id| {
+            !composites.iter().any(|composite| composite.id == **id)
+                || diagram
+                    .transitions
+                    .iter()
+                    .any(|transition| transition.from == **id || transition.to == **id)
+        })
+        .cloned()
+        .collect::<Vec<_>>();
     let mut layout = LayoutGraph::new(state_graph_direction(diagram))
         .with_edge_routing(state_edge_routing(diagram))
         .with_plantuml_svek_spacing()
@@ -5049,6 +5138,22 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
             }
         })
         .collect::<Vec<_>>();
+    // CommandFactoryNoteOnEntity: each attached note is an SVEK node of
+    // EntityImageNote size, created after the diagram's state leaves.
+    let note_allocation = allocate_state_svg_ids(diagram, &entity_ids);
+    let attached_notes = attached_note_specs(diagram, &note_allocation)
+        .into_iter()
+        .map(|mut spec| {
+            spec.anchor = diagram.notes[spec.note_index].anchor_id.clone()?;
+            Some(spec)
+        })
+        .collect::<Option<Vec<_>>>()?;
+    if attached_notes.len() != diagram.notes.len() {
+        return None;
+    }
+    for note in &attached_notes {
+        layout.add_node(&note.id, "", note.width, note.height);
+    }
 
     for composite in &composites {
         layout.add_svek_cluster(
@@ -5066,6 +5171,9 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         } else if let Some(scope) = id
             .strip_prefix("__start__:")
             .or_else(|| id.strip_prefix("__end__:"))
+            .or_else(|| id.strip_prefix("[H*]"))
+            .or_else(|| id.strip_prefix("[H]"))
+            .filter(|scope| !scope.is_empty())
         {
             Some(scope)
         } else {
@@ -5149,8 +5257,25 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         }
     }
 
+    for note in &attached_notes {
+        if let Some(owner) = diagram.notes[note.note_index].parent.as_deref()
+            && composites.iter().any(|composite| composite.id == owner)
+        {
+            layout.add_cluster_node(owner, &note.id);
+        }
+        let (from, to) = if note.right {
+            (note.anchor.as_str(), note.id.as_str())
+        } else {
+            (note.id.as_str(), note.anchor.as_str())
+        };
+        // The note link is a length-one horizontal solitary link: minlen=0,
+        // routed as Opale and never painted as a link (as on the flat path).
+        layout.add_plantuml_svek_line0_edge(from, to);
+        layout.add_edge_with_minlen(from, to, None, 0);
+    }
+
     let mut result = layout.layout_full(std::time::Duration::from_secs(5))?;
-    if result.node_positions.len() != ids.len()
+    if result.node_positions.len() != ids.len() + attached_notes.len()
         || result.cluster_positions.len() != composites.len()
     {
         return None;
@@ -5328,6 +5453,13 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
             }
         }
     }
+    for (offset, note) in attached_notes.iter().enumerate() {
+        let position = result.node_positions[ids.len() + offset];
+        let x = quantize_svek_coord(position.x);
+        let y = quantize_svek_coord(position.y);
+        include_point(x, y);
+        include_point(x + note.width, y + note.height);
+    }
     for cluster in &result.cluster_positions {
         let x = quantize_svek_coord(cluster.x);
         let y = quantize_svek_coord(cluster.y);
@@ -5342,6 +5474,12 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         include_point(x + width + shadow * 2.0, y + height - 1.0 + shadow * 2.0);
     }
     for edge in &result.edge_paths {
+        if attached_notes
+            .iter()
+            .any(|note| note.id == edge.from || note.id == edge.to)
+        {
+            continue;
+        }
         let compound_endpoint = composites
             .iter()
             .any(|state| state.id == edge.from || state.id == edge.to);
@@ -5446,6 +5584,25 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
             ))
         })
         .collect::<Option<Vec<_>>>()?;
+    let note_positions = attached_notes
+        .iter()
+        .enumerate()
+        .map(|(offset, note)| {
+            let position = result.node_positions[ids.len() + offset];
+            AttachedNotePosition {
+                note_index: note.note_index,
+                id: note.id.clone(),
+                entity_id: note.entity_id.clone(),
+                anchor: note.anchor.clone(),
+                right: note.right,
+                opale: note.opale,
+                x: quantize_svek_coord(position.x) + origin_x,
+                y: quantize_svek_coord(position.y) + origin_y,
+                width: note.width,
+                height: note.height,
+            }
+        })
+        .collect::<Vec<_>>();
     let scope = AutonomousScopeLayout {
         ids: ids.clone(),
         positions,
@@ -5460,7 +5617,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         compound_clusters: true,
         painted_bounds: None,
     };
-    let allocated_ids = allocate_state_svg_ids(diagram, &ids);
+    let allocated_ids = allocate_state_svg_ids(diagram, &entity_ids);
     let context = AutonomousRenderContext {
         diagram,
         entity_ids: &allocated_ids.entity_ids,
@@ -5517,6 +5674,9 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         let owner = id
             .strip_prefix("__start__:")
             .or_else(|| id.strip_prefix("__end__:"))
+            .or_else(|| id.strip_prefix("[H*]"))
+            .or_else(|| id.strip_prefix("[H]"))
+            .filter(|scope| !scope.is_empty())
             .or_else(|| {
                 diagram
                     .states
@@ -5539,6 +5699,15 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         (scope.origin_x, scope.origin_y),
         true,
     );
+    for position in &note_positions {
+        emit_attached_svek_note(
+            &mut svg,
+            &diagram.notes[position.note_index],
+            position,
+            &scope.edge_paths,
+            (scope.origin_x, scope.origin_y),
+        );
+    }
     emit_autonomous_scope_links(&mut svg, &context, &scope, (0.0, 0.0));
     svg.push_str("</g></svg>");
     Some(svg)

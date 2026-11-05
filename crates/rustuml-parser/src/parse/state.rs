@@ -313,6 +313,27 @@ impl StateParser {
         self.qualify(raw)
     }
 
+    /// Record where Java creates the newest note entity and resolve its
+    /// `of <state>` anchor in the same quark context.
+    fn scope_last_note(&mut self) {
+        let parent = self.current_scope().map(String::from);
+        let anchor = self.notes.last().and_then(|note| match &note.kind {
+            StateNoteKind::LeftOf(anchor) | StateNoteKind::RightOf(anchor)
+                if !anchor.is_empty() =>
+            {
+                Some(anchor.clone())
+            }
+            _ => None,
+        });
+        let anchor_id = anchor
+            .map(|anchor| self.resolve_state_id(&anchor))
+            .filter(|id| self.states.iter().any(|state| state.id == *id));
+        if let Some(note) = self.notes.last_mut() {
+            note.parent = parent;
+            note.anchor_id = anchor_id;
+        }
+    }
+
     fn flush_note(&mut self) {
         if let Some(buf) = self.note_buffer.take() {
             let text = buf.text.trim().to_string();
@@ -323,7 +344,10 @@ impl StateParser {
                     source_line: buf.source_line,
                     command_line: buf.command_line,
                     creation_order: buf.creation_order,
+                    parent: None,
+                    anchor_id: None,
                 });
+                self.scope_last_note();
             }
         }
     }
@@ -807,7 +831,10 @@ impl StateParser {
                     source_line,
                     command_line: source_line,
                     creation_order,
+                    parent: None,
+                    anchor_id: None,
                 });
+                self.scope_last_note();
             } else {
                 let (source_line, creation_order) = self.note_metadata();
                 self.note_buffer = Some(NoteBuffer {
@@ -841,7 +868,10 @@ impl StateParser {
                     source_line,
                     command_line: source_line,
                     creation_order,
+                    parent: None,
+                    anchor_id: None,
                 });
+                self.scope_last_note();
                 return true;
             }
         }
@@ -888,7 +918,10 @@ impl StateParser {
                         source_line,
                         command_line: source_line,
                         creation_order,
+                        parent: None,
+                        anchor_id: None,
                     });
+                    self.scope_last_note();
                 } else {
                     let (source_line, creation_order) = self.note_metadata();
                     self.note_buffer = Some(NoteBuffer {
@@ -926,7 +959,10 @@ impl StateParser {
                         source_line,
                         command_line: source_line,
                         creation_order,
+                        parent: None,
+                        anchor_id: None,
                     });
+                    self.scope_last_note();
                 } else {
                     let (source_line, creation_order) = self.note_metadata();
                     self.note_buffer = Some(NoteBuffer {
