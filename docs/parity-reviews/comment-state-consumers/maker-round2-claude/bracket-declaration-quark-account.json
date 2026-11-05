@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "mechanism": "comment-state-consumers",
+  "sub_mechanism": "keywordless bracket declaration Quark code (rejection d539f9a08, deploy_unaliased_forms)",
+  "status": "maker causal account before draft; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "descdiagram/command/CommandCreateElementFull.java#getRegexConcat: SYMBOL is optional, and CODE1 (CODE_WITH_QUOTE) accepts the CODE_CORE bracket form \\[[^\\[\\]]+\\], so a bare '[Grain Store]' line is this command with codeRaw '[Grain Store]' and symbol 'component' (codeChar '[').",
+    "descdiagram/command/CommandCreateElementFull.java#executeArg line 213: quarkInContext(false, diagram.cleanId(codeRaw)).",
+    "descdiagram/DescriptionDiagram.java#cleanId -> net/atmp/CucaDiagram.java#cleanId -> StringUtils.eventuallyRemoveStartingAndEndingDoubleQuote(s, \"\\\"([:\") (lines 63-88): one surrounding [ ] pair is removed, so the Quark code is 'Grain Store' with its space.",
+    "descdiagram/command/CommandLinkElement.java: a quoted or bracketed endpoint 'Grain Store' resolves through the same cleanId to the same Quark, so the declaration and both links name one entity."
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/component.rs#parse_description_bracket_declaration: without 'as ALIAS' the id is label.replace(' ', '_').",
+    "crates/rustuml-parser/src/parse/component.rs (RE_DESCRIPTION_CONN endpoint creation): bracket and quoted endpoints keep the text as the id."
+  ],
+  "causal_divergence": "The declaration path invents the id 'Grain_Store' while the link path uses 'Grain Store', so '[Grain Store]' followed by a link to \"Grain Store\" or [Grain Store] creates two entities (entity Grain_Store and entity Grain Store). Java has one Quark, 'Grain Store'.",
+  "invariant": "A keywordless bracket declaration without an alias records the cleanId Quark code (the bracket text, spaces kept) as its identity, so declarations and link endpoints that name the same code share one entity.",
+  "planned_change": "In parse_description_bracket_declaration, use the bracket text itself as the id when there is no alias. Aliased forms are unchanged.",
+  "perturbation_axes": [
+    "bare bracket declaration with spaces, then quoted and bracketed link endpoints",
+    "bracket declaration without spaces (unchanged)",
+    "bracket declaration with 'as ALIAS' (unchanged)",
+    "bracket declaration inside a node container"
+  ],
+  "precommitted_measurement": {
+    "oracle": "comment lists and strict compare for deploy_unaliased_forms and fresh bracket probes; whole-output CLI on goldens and perturbations versus the merged base",
+    "expect_fixed": [
+      "perturbations/comment-state-consumers/checker-claude-shared-svg/deploy_unaliased_forms: one 'entity Grain Store' comment, as in Java"
+    ],
+    "expect": "only outputs with a spaced, unaliased bracket declaration change; zero lost matches"
+  }
+}
