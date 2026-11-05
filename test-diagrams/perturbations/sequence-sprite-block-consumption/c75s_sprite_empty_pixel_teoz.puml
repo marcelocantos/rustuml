@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant Hazel
+sprite $petal [2x1/16] {
+}
+Hazel -> Elm: catkins
+@enduml

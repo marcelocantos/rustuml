@@ -1,0 +1,9 @@
+@startuml
+participant Hazel
+participant Elm
+box "Copse"
+participant Ash
+participant Elm #InvalidAgain
+end box
+Hazel -> Elm: catkins
+@enduml

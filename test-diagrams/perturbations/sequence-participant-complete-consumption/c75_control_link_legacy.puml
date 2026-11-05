@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+control Cedar [[https://example.org/ring?x=3&y=4{rings} ring]]
+Spruce -> Cedar: pollen
+@enduml

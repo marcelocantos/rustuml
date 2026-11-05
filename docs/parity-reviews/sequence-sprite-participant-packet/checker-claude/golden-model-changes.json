@@ -1,0 +1,176 @@
+{
+ "categories": {
+  "ast|order-only (HashMap iteration)": 6,
+  "yaml|order-only (HashMap iteration)": 6
+ },
+ "rows": [
+  {
+   "source": "test-diagrams/golden/dot/dot_graph_attributes.puml",
+   "mode": "ast",
+   "reason": "order-only (HashMap iteration)",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/golden/dot/dot_graph_attributes.puml",
+   "mode": "yaml",
+   "reason": "order-only (HashMap iteration)",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/golden/dot/dot_multi_edge.puml",
+   "mode": "ast",
+   "reason": "order-only (HashMap iteration)",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/golden/dot/dot_multi_edge.puml",
+   "mode": "yaml",
+   "reason": "order-only (HashMap iteration)",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/golden/dot/dot_node_colors.puml",
+   "mode": "ast",
+   "reason": "order-only (HashMap iteration)",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/golden/dot/dot_node_colors.puml",
+   "mode": "yaml",
+   "reason": "order-only (HashMap iteration)",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/golden/dot/dot_node_url.puml",
+   "mode": "ast",
+   "reason": "order-only (HashMap iteration)",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/golden/dot/dot_node_url.puml",
+   "mode": "yaml",
+   "reason": "order-only (HashMap iteration)",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/golden/dot/dot_record_ports.puml",
+   "mode": "yaml",
+   "reason": "order-only (HashMap iteration)",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/golden/dot/dot_record_simple.puml",
+   "mode": "yaml",
+   "reason": "order-only (HashMap iteration)",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/golden/dot/dot_weighted_edges.puml",
+   "mode": "ast",
+   "reason": "order-only (HashMap iteration)",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/golden/sprites/sprite_multiple.puml",
+   "mode": "ast",
+   "reason": "order-only (HashMap iteration)",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,13 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+!function $spruce()
+sprite $needle [3x2/16] {
+F0F
+0F0
+}
+!endfunction
+$spruce()
+Spruce --> Cedar: packed
+@enduml

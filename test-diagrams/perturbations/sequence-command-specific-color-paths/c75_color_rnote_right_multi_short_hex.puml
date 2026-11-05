@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+rnote right #a3c
+rings
+endrnote
+@enduml

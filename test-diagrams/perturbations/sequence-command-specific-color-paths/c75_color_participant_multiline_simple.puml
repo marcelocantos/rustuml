@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+participant Birch #PaleGreen [
+Silver birch
+]
+@enduml

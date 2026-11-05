@@ -1,0 +1,146 @@
+{
+ "sequence-sprite-block-consumption": {
+  "entries": 74,
+  "java_valid": 60,
+  "java_invalid": 14,
+  "valid_before": {
+   "match": 24,
+   "mismatch": 20,
+   "valid-error": 16
+  },
+  "valid_after": {
+   "match": 35,
+   "mismatch": 17,
+   "valid-error": 8
+  },
+  "gains": 15,
+  "lost_matches": 4,
+  "new_valid_errors": 8,
+  "invalid_rejected_before": 0,
+  "invalid_rejected_after": 4,
+  "lost_rejections": 0,
+  "intention_disagreements": 6,
+  "panics": 0,
+  "timeouts": 0
+ },
+ "sequence-sprite-completion-admission": {
+  "entries": 18,
+  "java_valid": 0,
+  "java_invalid": 18,
+  "valid_before": {
+   "match": 0,
+   "mismatch": 0,
+   "valid-error": 0
+  },
+  "valid_after": {
+   "match": 0,
+   "mismatch": 0,
+   "valid-error": 0
+  },
+  "gains": 0,
+  "lost_matches": 0,
+  "new_valid_errors": 0,
+  "invalid_rejected_before": 2,
+  "invalid_rejected_after": 8,
+  "lost_rejections": 0,
+  "intention_disagreements": 0,
+  "panics": 0,
+  "timeouts": 0
+ },
+ "sequence-sprite-pending-span": {
+  "entries": 12,
+  "java_valid": 12,
+  "java_invalid": 0,
+  "valid_before": {
+   "match": 0,
+   "mismatch": 2,
+   "valid-error": 10
+  },
+  "valid_after": {
+   "match": 6,
+   "mismatch": 0,
+   "valid-error": 6
+  },
+  "gains": 6,
+  "lost_matches": 0,
+  "new_valid_errors": 2,
+  "invalid_rejected_before": 0,
+  "invalid_rejected_after": 0,
+  "lost_rejections": 0,
+  "intention_disagreements": 0,
+  "panics": 0,
+  "timeouts": 0
+ },
+ "sequence-participant-complete-consumption": {
+  "entries": 276,
+  "java_valid": 204,
+  "java_invalid": 72,
+  "valid_before": {
+   "match": 54,
+   "mismatch": 148,
+   "valid-error": 2
+  },
+  "valid_after": {
+   "match": 72,
+   "mismatch": 132,
+   "valid-error": 0
+  },
+  "gains": 18,
+  "lost_matches": 0,
+  "new_valid_errors": 0,
+  "invalid_rejected_before": 72,
+  "invalid_rejected_after": 72,
+  "lost_rejections": 0,
+  "intention_disagreements": 0,
+  "panics": 0,
+  "timeouts": 0
+ },
+ "sequence-participant-residue-preservation": {
+  "entries": 42,
+  "java_valid": 42,
+  "java_invalid": 0,
+  "valid_before": {
+   "match": 0,
+   "mismatch": 42,
+   "valid-error": 0
+  },
+  "valid_after": {
+   "match": 0,
+   "mismatch": 42,
+   "valid-error": 0
+  },
+  "gains": 0,
+  "lost_matches": 0,
+  "new_valid_errors": 0,
+  "invalid_rejected_before": 0,
+  "invalid_rejected_after": 0,
+  "lost_rejections": 0,
+  "intention_disagreements": 0,
+  "panics": 0,
+  "timeouts": 0
+ },
+ "sequence-command-specific-color-paths": {
+  "entries": 396,
+  "java_valid": 217,
+  "java_invalid": 179,
+  "valid_before": {
+   "match": 62,
+   "mismatch": 153,
+   "valid-error": 2
+  },
+  "valid_after": {
+   "match": 63,
+   "mismatch": 154,
+   "valid-error": 0
+  },
+  "gains": 1,
+  "lost_matches": 0,
+  "new_valid_errors": 0,
+  "invalid_rejected_before": 174,
+  "invalid_rejected_after": 179,
+  "lost_rejections": 0,
+  "intention_disagreements": 57,
+  "panics": 0,
+  "timeouts": 0
+ }
+}

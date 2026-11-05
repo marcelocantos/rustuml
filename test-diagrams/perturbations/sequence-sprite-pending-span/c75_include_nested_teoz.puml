@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+!include c75_outer.inc
+</svg>
+Spruce --> Cedar: ring
+@enduml

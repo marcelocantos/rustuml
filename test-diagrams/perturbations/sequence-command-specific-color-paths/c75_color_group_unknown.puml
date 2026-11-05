@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+group#CedarImpossible shade
+Cedar -> Spruce: roots
+end
+@enduml

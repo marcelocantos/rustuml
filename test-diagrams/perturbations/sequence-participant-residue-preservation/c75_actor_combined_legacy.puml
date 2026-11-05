@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+actor "Cedar ring" as @Cedar<<wood>><<tall>> order -9 [[https://example.org/cedar{rings}]] #PaleGreen
+Spruce -> @Cedar: pollen
+@enduml

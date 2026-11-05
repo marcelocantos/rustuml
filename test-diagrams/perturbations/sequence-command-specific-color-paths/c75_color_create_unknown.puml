@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+create Birch #CedarImpossible
+Cedar -> Birch: seeds
+@enduml

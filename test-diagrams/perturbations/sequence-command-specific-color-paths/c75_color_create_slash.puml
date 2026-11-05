@@ -1,0 +1,7 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+create Birch #PaleGreen/Indigo
+Cedar -> Birch: seeds
+@enduml

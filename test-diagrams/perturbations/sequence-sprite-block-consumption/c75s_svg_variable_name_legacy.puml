@@ -1,0 +1,9 @@
+@startuml
+participant Hazel
+!$n="petal"
+sprite $n <svg width="5" height="6">
+<rect width="5" height="6"/>
+</svg>
+note over Hazel: <$petal>
+Hazel -> Elm: catkins
+@enduml

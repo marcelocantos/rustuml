@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+participant Cedar order -7<<illegal>>
+Spruce -> Cedar: pollen
+@enduml

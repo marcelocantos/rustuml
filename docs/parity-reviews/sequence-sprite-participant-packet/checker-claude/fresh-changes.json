@@ -1,0 +1,1521 @@
+{
+ "pairs": {
+  "valid-error->match": 18,
+  "match->match": 136,
+  "mismatch->match": 22,
+  "nonpositive-accepted->nonpositive-accepted": 20,
+  "valid-error->mismatch": 8,
+  "nonpositive-accepted->nonpositive-rejected": 15,
+  "nonpositive-rejected->nonpositive-rejected": 248,
+  "valid-error->valid-error": 4,
+  "mismatch->valid-error": 6,
+  "mismatch->mismatch": 337,
+  "match->valid-error": 4
+ },
+ "changes": [
+  {
+   "source": "c75_sprite_nested_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_nested_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_nested_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_nested_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_attribute_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_attribute_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_attribute_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_attribute_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_back_to_back_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_back_to_back_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_back_to_back_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_back_to_back_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_pixel_end_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_pixel_end_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_pixel_end_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_pixel_end_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_pixel_compact_end_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_pixel_compact_end_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_pixel_compact_end_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_pixel_compact_end_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_procedure_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_procedure_legacy",
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_procedure_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_procedure_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_if_true_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_if_true_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_if_true_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_if_true_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_quoted_end_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_quoted_end_legacy",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_quoted_end_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_quoted_end_teoz",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_last_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_last_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_sprite_last_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_sprite_last_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_incomplete_empty_svg_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_incomplete_empty_svg_legacy",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_incomplete_empty_svg_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_incomplete_empty_svg_teoz",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_incomplete_pixel_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_incomplete_pixel_legacy",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_incomplete_pixel_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_incomplete_pixel_teoz",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_incomplete_empty_pixel_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_incomplete_empty_pixel_legacy",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_incomplete_empty_pixel_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_incomplete_empty_pixel_teoz",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_closed_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_closed_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_closed_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_closed_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_child_to_parent_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_child_to_parent_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_child_to_parent_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_child_to_parent_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_nested_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_nested_legacy",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_nested_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_nested_teoz",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_pixel_into_include_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_pixel_into_include_legacy",
+   "before": "mismatch",
+   "after": "valid-error",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_include_pixel_into_include_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_include_pixel_into_include_teoz",
+   "before": "mismatch",
+   "after": "valid-error",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_unclosed_pixel_component.puml",
+   "cohort": "fresh-main",
+   "name": "c75_unclosed_pixel_component",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-accepted",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_use_svg_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_use_svg_legacy",
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_use_svg_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_use_svg_teoz",
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_dot_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_dot_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_dot_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_dot_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_at_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_at_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_at_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_at_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_alias_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_alias_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_reverse_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_reverse_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_reverse_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_reverse_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_unquoted_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_unquoted_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_unquoted_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_unquoted_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_compact_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_compact_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_compact_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_compact_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_multi_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_multi_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_multi_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_multi_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_combined_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_combined_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_participant_combined_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_participant_combined_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_dot_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_dot_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_dot_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_dot_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_at_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_at_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_at_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_at_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_alias_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_alias_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_reverse_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_reverse_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_reverse_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_reverse_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_unquoted_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_unquoted_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_unquoted_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_unquoted_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_compact_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_compact_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_compact_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_compact_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_multi_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_multi_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_multi_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_multi_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_combined_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_combined_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_actor_combined_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_actor_combined_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_dot_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_dot_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_dot_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_dot_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_at_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_at_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_at_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_at_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_alias_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_alias_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_reverse_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_reverse_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_reverse_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_reverse_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_unquoted_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_unquoted_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_unquoted_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_unquoted_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_compact_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_compact_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_compact_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_compact_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_multi_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_multi_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_boundary_multi_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_boundary_multi_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_dot_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_dot_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_dot_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_dot_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_at_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_at_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_at_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_at_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_alias_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_alias_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_reverse_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_reverse_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_reverse_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_reverse_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_unquoted_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_unquoted_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_unquoted_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_unquoted_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_compact_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_compact_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_compact_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_compact_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_multi_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_multi_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_control_multi_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_control_multi_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_dot_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_dot_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_dot_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_dot_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_at_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_at_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_at_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_at_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_alias_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_alias_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_reverse_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_reverse_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_reverse_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_reverse_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_unquoted_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_unquoted_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_unquoted_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_unquoted_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_compact_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_compact_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_compact_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_compact_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_multi_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_multi_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_entity_multi_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_entity_multi_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_dot_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_dot_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_dot_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_dot_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_at_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_at_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_at_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_at_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_alias_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_alias_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_reverse_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_reverse_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_reverse_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_reverse_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_unquoted_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_unquoted_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_unquoted_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_unquoted_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_compact_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_compact_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_compact_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_compact_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_multi_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_multi_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_database_multi_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_database_multi_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_dot_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_dot_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_dot_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_dot_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_at_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_at_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_at_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_at_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_alias_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_alias_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_reverse_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_reverse_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_reverse_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_reverse_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_unquoted_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_unquoted_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_unquoted_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_unquoted_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_compact_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_compact_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_compact_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_compact_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_multi_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_multi_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_collections_multi_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_collections_multi_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_dot_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_dot_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_dot_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_dot_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_at_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_at_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_at_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_at_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_alias_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_alias_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_reverse_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_reverse_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_reverse_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_reverse_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_unquoted_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_unquoted_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_unquoted_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_unquoted_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_compact_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_compact_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_compact_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_compact_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_multi_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_multi_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_queue_multi_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_queue_multi_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_alias_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_alias_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_alias_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_alias_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_reverse_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_reverse_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_reverse_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_reverse_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_unquoted_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_unquoted_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_unquoted_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_unquoted_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_compact_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_compact_legacy",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_compact_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_compact_teoz",
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_multi_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_multi_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_multi_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_multi_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_link_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_link_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_link_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_link_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_combined_legacy.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_combined_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_create_combined_teoz.puml",
+   "cohort": "fresh-main",
+   "name": "c75_create_combined_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_color_participant_composite.puml",
+   "cohort": "fresh-main",
+   "name": "c75_color_participant_composite",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_color_participant_a2_composite.puml",
+   "cohort": "fresh-main",
+   "name": "c75_color_participant_a2_composite",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_color_participant_a3_composite.puml",
+   "cohort": "fresh-main",
+   "name": "c75_color_participant_a3_composite",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_color_participant_a4_composite.puml",
+   "cohort": "fresh-main",
+   "name": "c75_color_participant_a4_composite",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_color_participant_multiline_unknown.puml",
+   "cohort": "fresh-main",
+   "name": "c75_color_participant_multiline_unknown",
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_color_participant_repeat_unknown.puml",
+   "cohort": "fresh-main",
+   "name": "c75_color_participant_repeat_unknown",
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_color_create_composite.puml",
+   "cohort": "fresh-main",
+   "name": "c75_color_create_composite",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_color_create_dash.puml",
+   "cohort": "fresh-main",
+   "name": "c75_color_create_dash",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_color_create_slash.puml",
+   "cohort": "fresh-main",
+   "name": "c75_color_create_slash",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_color_create_bar.puml",
+   "cohort": "fresh-main",
+   "name": "c75_color_create_bar",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75_color_create_backslash.puml",
+   "cohort": "fresh-main",
+   "name": "c75_color_create_backslash",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_inactive_unclosed_svg_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_inactive_unclosed_svg_legacy",
+   "before": "match",
+   "after": "valid-error",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_inactive_unclosed_pixel_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_inactive_unclosed_pixel_legacy",
+   "before": "mismatch",
+   "after": "valid-error",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_macro_uninvoked_unclosed_svg_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_macro_uninvoked_unclosed_svg_legacy",
+   "before": "match",
+   "after": "valid-error",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_macro_uninvoked_unclosed_pixel_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_macro_uninvoked_unclosed_pixel_legacy",
+   "before": "mismatch",
+   "after": "valid-error",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_svg_variable_name_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_svg_variable_name_legacy",
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_participant_redeclare_box_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_participant_redeclare_box_legacy",
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_participant_link_inside_label_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_participant_link_inside_label_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_participant_case_alias_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_participant_case_alias_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_participant_nbsp_alias_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_participant_nbsp_alias_legacy",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_sprite_body_comment_terminator_legacy.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_sprite_body_comment_terminator_legacy",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_inactive_unclosed_svg_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_inactive_unclosed_svg_teoz",
+   "before": "match",
+   "after": "valid-error",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_inactive_unclosed_pixel_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_inactive_unclosed_pixel_teoz",
+   "before": "mismatch",
+   "after": "valid-error",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_macro_uninvoked_unclosed_svg_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_macro_uninvoked_unclosed_svg_teoz",
+   "before": "match",
+   "after": "valid-error",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_macro_uninvoked_unclosed_pixel_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_macro_uninvoked_unclosed_pixel_teoz",
+   "before": "mismatch",
+   "after": "valid-error",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_svg_variable_name_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_svg_variable_name_teoz",
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_participant_redeclare_box_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_participant_redeclare_box_teoz",
+   "before": "valid-error",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_participant_link_inside_label_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_participant_link_inside_label_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_participant_case_alias_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_participant_case_alias_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_participant_nbsp_alias_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_participant_nbsp_alias_teoz",
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true
+  },
+  {
+   "source": "c75s_sprite_body_comment_terminator_teoz.puml",
+   "cohort": "fresh-supplement",
+   "name": "c75s_sprite_body_comment_terminator_teoz",
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true
+  }
+ ]
+}

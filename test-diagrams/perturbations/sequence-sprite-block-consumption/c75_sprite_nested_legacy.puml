@@ -1,0 +1,9 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+sprite $needle <svg width="3" height="4">
+<svg x="1" y="1">
+<rect width="1" height="1"/></svg>
+Spruce --> Cedar: packed
+@enduml

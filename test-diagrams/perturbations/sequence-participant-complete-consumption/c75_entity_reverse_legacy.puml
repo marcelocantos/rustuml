@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+entity Cedar.ring as "Cedar ring"
+Spruce -> Cedar.ring: pollen
+@enduml

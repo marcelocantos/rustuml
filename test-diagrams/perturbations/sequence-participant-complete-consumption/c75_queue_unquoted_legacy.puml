@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+queue Cedar.ring as @Cedar
+Spruce -> @Cedar: pollen
+@enduml

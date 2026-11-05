@@ -1,0 +1,8 @@
+@startuml
+participant Hazel
+participant Elm
+participant Ash
+participant Hazel
+participant Elm
+Hazel -> Elm: catkins
+@enduml

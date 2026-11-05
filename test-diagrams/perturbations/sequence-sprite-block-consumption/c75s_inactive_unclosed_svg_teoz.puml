@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Hazel
+!if 0
+sprite $absent <svg width="5" height="6">
+<rect width="5" height="6"/>
+!endif
+Hazel -> Elm: catkins
+@enduml

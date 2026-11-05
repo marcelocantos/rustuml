@@ -1,0 +1,9 @@
+@startuml
+sprite $needle [3x2/16] {
+F0F
+0F0
+}
+class "Cedar" as C
+class Spruce
+C --> Spruce
+@enduml

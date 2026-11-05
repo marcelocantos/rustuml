@@ -1,0 +1,8 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+sprite $needle [3x2/16] {
+!include c75_rows.inc
+Spruce --> Cedar: ring
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Hazel
+participant Elm
+participant Ash
+participant Hazel order 0
+Hazel -> Elm: catkins
+@enduml

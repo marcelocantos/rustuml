@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Hazel
+!if 0
+sprite $absent [2x1/16] {
+FF
+!endif
+Hazel -> Elm: catkins
+@enduml

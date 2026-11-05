@@ -1,0 +1,7 @@
+@startuml
+participant Hazel
+sprite $petal [2x1/16] {
+FF
+'}
+Hazel -> Elm: catkins
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+create "Cedar ring"
+Spruce -> "Cedar ring": pollen
+@enduml

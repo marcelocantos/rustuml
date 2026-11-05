@@ -1,0 +1,7 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+sprite $needle F0F0F0
+Spruce --> Cedar: packed
+@enduml

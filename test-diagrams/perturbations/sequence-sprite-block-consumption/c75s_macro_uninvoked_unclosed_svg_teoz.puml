@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Hazel
+!procedure $uninvoked()
+sprite $absent <svg width="5" height="6">
+!endprocedure
+Hazel -> Elm: catkins
+@enduml

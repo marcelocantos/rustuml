@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+collections Cedar order +2
+Spruce -> Cedar: pollen
+@enduml

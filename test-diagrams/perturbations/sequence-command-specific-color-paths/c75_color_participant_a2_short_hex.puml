@@ -1,0 +1,6 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+actor Birch as "Silver birch" #a3c
+@enduml

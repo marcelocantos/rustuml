@@ -1,0 +1,5 @@
+@startuml
+participant Spruce
+collections Cedar<<woody>><<tall>>
+Spruce -> Cedar: pollen
+@enduml

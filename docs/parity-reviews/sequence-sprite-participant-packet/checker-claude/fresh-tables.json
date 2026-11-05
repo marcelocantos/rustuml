@@ -1,0 +1,435 @@
+{
+ "tables": {
+  "sequence-command-specific-color-paths": {
+   "valid|match->match": 62,
+   "java-invalid|nonpositive-accepted->nonpositive-rejected": 5,
+   "valid|mismatch->mismatch": 153,
+   "java-invalid|nonpositive-rejected->nonpositive-rejected": 174,
+   "valid|valid-error->mismatch": 1,
+   "valid|valid-error->match": 1
+  },
+  "sequence-participant-complete-consumption": {
+   "valid|mismatch->mismatch": 126,
+   "valid|match->match": 54,
+   "valid|mismatch->match": 18,
+   "java-invalid|nonpositive-rejected->nonpositive-rejected": 72
+  },
+  "sequence-participant-residue-preservation": {
+   "valid|mismatch->mismatch": 36
+  },
+  "sequence-sprite-block-consumption": {
+   "valid|valid-error->match": 11,
+   "valid|match->match": 20,
+   "valid|mismatch->match": 4,
+   "java-invalid|nonpositive-accepted->nonpositive-accepted": 6,
+   "valid|valid-error->mismatch": 3,
+   "java-invalid|nonpositive-accepted->nonpositive-rejected": 2,
+   "valid|mismatch->mismatch": 12
+  },
+  "sequence-sprite-completion-admission": {
+   "java-invalid|nonpositive-rejected->nonpositive-rejected": 2,
+   "java-invalid|nonpositive-accepted->nonpositive-rejected": 6,
+   "java-invalid|nonpositive-accepted->nonpositive-accepted": 10
+  },
+  "sequence-sprite-pending-span": {
+   "valid|valid-error->match": 6,
+   "valid|valid-error->valid-error": 4,
+   "valid|mismatch->valid-error": 2
+  },
+  "supplement:sequence-participant-complete-consumption": {
+   "valid|mismatch->mismatch": 4,
+   "valid|valid-error->mismatch": 2
+  },
+  "supplement:sequence-participant-residue-preservation": {
+   "valid|mismatch->mismatch": 6
+  },
+  "supplement:sequence-sprite-block-consumption": {
+   "valid|match->valid-error": 4,
+   "valid|mismatch->valid-error": 4,
+   "valid|valid-error->mismatch": 2,
+   "java-invalid|nonpositive-accepted->nonpositive-accepted": 4,
+   "java-invalid|nonpositive-accepted->nonpositive-rejected": 2
+  }
+ },
+ "transitions": {
+  "sequence-sprite-block-consumption": [
+   [
+    "c75_sprite_nested_legacy",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_sprite_nested_teoz",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_sprite_attribute_legacy",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_sprite_attribute_teoz",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_sprite_back_to_back_legacy",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_sprite_back_to_back_teoz",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_sprite_pixel_end_legacy",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_sprite_pixel_end_teoz",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_sprite_pixel_compact_end_legacy",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_sprite_pixel_compact_end_teoz",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_sprite_procedure_legacy",
+    "valid-error",
+    "mismatch"
+   ],
+   [
+    "c75_sprite_procedure_teoz",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_sprite_if_true_legacy",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_sprite_if_true_teoz",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_sprite_quoted_end_legacy",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ],
+   [
+    "c75_sprite_quoted_end_teoz",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ],
+   [
+    "c75_sprite_last_legacy",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_sprite_last_teoz",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_use_svg_legacy",
+    "valid-error",
+    "mismatch"
+   ],
+   [
+    "c75_use_svg_teoz",
+    "valid-error",
+    "mismatch"
+   ]
+  ],
+  "sequence-sprite-completion-admission": [
+   [
+    "c75_incomplete_empty_svg_legacy",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ],
+   [
+    "c75_incomplete_empty_svg_teoz",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ],
+   [
+    "c75_incomplete_pixel_legacy",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ],
+   [
+    "c75_incomplete_pixel_teoz",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ],
+   [
+    "c75_incomplete_empty_pixel_legacy",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ],
+   [
+    "c75_incomplete_empty_pixel_teoz",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  ],
+  "sequence-sprite-pending-span": [
+   [
+    "c75_include_closed_legacy",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_include_closed_teoz",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_include_child_to_parent_legacy",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_include_child_to_parent_teoz",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_include_nested_legacy",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_include_nested_teoz",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_include_pixel_into_include_legacy",
+    "mismatch",
+    "valid-error"
+   ],
+   [
+    "c75_include_pixel_into_include_teoz",
+    "mismatch",
+    "valid-error"
+   ]
+  ],
+  "sequence-participant-complete-consumption": [
+   [
+    "c75_participant_compact_legacy",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_participant_compact_teoz",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_actor_compact_legacy",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_actor_compact_teoz",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_boundary_compact_legacy",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_boundary_compact_teoz",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_control_compact_legacy",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_control_compact_teoz",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_entity_compact_legacy",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_entity_compact_teoz",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_database_compact_legacy",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_database_compact_teoz",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_collections_compact_legacy",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_collections_compact_teoz",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_queue_compact_legacy",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_queue_compact_teoz",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_create_compact_legacy",
+    "mismatch",
+    "match"
+   ],
+   [
+    "c75_create_compact_teoz",
+    "mismatch",
+    "match"
+   ]
+  ],
+  "sequence-command-specific-color-paths": [
+   [
+    "c75_color_participant_composite",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ],
+   [
+    "c75_color_participant_a2_composite",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ],
+   [
+    "c75_color_participant_a3_composite",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ],
+   [
+    "c75_color_participant_a4_composite",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ],
+   [
+    "c75_color_participant_multiline_unknown",
+    "valid-error",
+    "mismatch"
+   ],
+   [
+    "c75_color_participant_repeat_unknown",
+    "valid-error",
+    "match"
+   ],
+   [
+    "c75_color_create_composite",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  ],
+  "supplement:sequence-sprite-block-consumption": [
+   [
+    "c75s_inactive_unclosed_svg_legacy",
+    "match",
+    "valid-error"
+   ],
+   [
+    "c75s_inactive_unclosed_pixel_legacy",
+    "mismatch",
+    "valid-error"
+   ],
+   [
+    "c75s_macro_uninvoked_unclosed_svg_legacy",
+    "match",
+    "valid-error"
+   ],
+   [
+    "c75s_macro_uninvoked_unclosed_pixel_legacy",
+    "mismatch",
+    "valid-error"
+   ],
+   [
+    "c75s_svg_variable_name_legacy",
+    "valid-error",
+    "mismatch"
+   ],
+   [
+    "c75s_sprite_body_comment_terminator_legacy",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ],
+   [
+    "c75s_inactive_unclosed_svg_teoz",
+    "match",
+    "valid-error"
+   ],
+   [
+    "c75s_inactive_unclosed_pixel_teoz",
+    "mismatch",
+    "valid-error"
+   ],
+   [
+    "c75s_macro_uninvoked_unclosed_svg_teoz",
+    "match",
+    "valid-error"
+   ],
+   [
+    "c75s_macro_uninvoked_unclosed_pixel_teoz",
+    "mismatch",
+    "valid-error"
+   ],
+   [
+    "c75s_svg_variable_name_teoz",
+    "valid-error",
+    "mismatch"
+   ],
+   [
+    "c75s_sprite_body_comment_terminator_teoz",
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  ],
+  "supplement:sequence-participant-complete-consumption": [
+   [
+    "c75s_participant_redeclare_box_legacy",
+    "valid-error",
+    "mismatch"
+   ],
+   [
+    "c75s_participant_redeclare_box_teoz",
+    "valid-error",
+    "mismatch"
+   ]
+  ]
+ }
+}

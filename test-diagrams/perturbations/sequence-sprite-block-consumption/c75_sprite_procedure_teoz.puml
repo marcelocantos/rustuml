@@ -1,0 +1,13 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+!procedure $spruce()
+sprite $needle <svg width="3" height="4">
+<rect width="3" height="4"/>
+</svg>
+!endprocedure
+$spruce()
+Spruce --> Cedar: packed
+@enduml

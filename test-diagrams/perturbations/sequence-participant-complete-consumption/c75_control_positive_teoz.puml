@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Spruce
+control Cedar order 7
+Spruce -> Cedar: pollen
+@enduml

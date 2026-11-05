@@ -1,0 +1,44 @@
+[
+ {
+  "mechanism": "sequence-sprite-block-consumption",
+  "review": "docs/parity-reviews/sequence-sprite-block-consumption/review.json",
+  "verdict": "rejected",
+  "perturbation_entries": 74,
+  "failing_entries": 35
+ },
+ {
+  "mechanism": "sequence-sprite-completion-admission",
+  "review": "docs/parity-reviews/sequence-sprite-completion-admission/review.json",
+  "verdict": "rejected",
+  "perturbation_entries": 18,
+  "failing_entries": 10
+ },
+ {
+  "mechanism": "sequence-sprite-pending-span",
+  "review": "docs/parity-reviews/sequence-sprite-pending-span/review.json",
+  "verdict": "rejected",
+  "perturbation_entries": 12,
+  "failing_entries": 6
+ },
+ {
+  "mechanism": "sequence-participant-complete-consumption",
+  "review": "docs/parity-reviews/sequence-participant-complete-consumption/review.json",
+  "verdict": "rejected",
+  "perturbation_entries": 276,
+  "failing_entries": 132
+ },
+ {
+  "mechanism": "sequence-participant-residue-preservation",
+  "review": "docs/parity-reviews/sequence-participant-residue-preservation/review.json",
+  "verdict": "rejected",
+  "perturbation_entries": 42,
+  "failing_entries": 42
+ },
+ {
+  "mechanism": "sequence-command-specific-color-paths",
+  "review": "docs/parity-reviews/sequence-command-specific-color-paths/review.json",
+  "verdict": "rejected",
+  "perturbation_entries": 396,
+  "failing_entries": 154
+ }
+]

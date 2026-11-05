@@ -1,0 +1,6 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+[ -[#back:PaleGreen;line:Indigo]> Cedar: rings
+@enduml

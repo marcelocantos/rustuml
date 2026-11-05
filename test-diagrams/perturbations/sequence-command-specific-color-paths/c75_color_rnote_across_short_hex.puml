@@ -1,0 +1,7 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+rnote across #a3c: rings
+@enduml

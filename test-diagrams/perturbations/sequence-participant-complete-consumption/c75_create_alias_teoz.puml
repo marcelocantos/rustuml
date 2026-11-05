@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Spruce
+create "Cedar ring" as Cedar.ring
+Spruce -> Cedar.ring: pollen
+@enduml

@@ -1,0 +1,1750 @@
+{
+ "categories": {
+  "ast|content change with SVG change": 20,
+  "yaml|content change with SVG change": 20,
+  "ast|content change without SVG change": 13,
+  "yaml|content change without SVG change": 13,
+  "ast|mode exit changed with admission": 14,
+  "ascii|mode exit changed with admission": 14,
+  "yaml|mode exit changed with admission": 14,
+  "ascii|content change with SVG change": 16
+ },
+ "rows": [
+  {
+   "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_multiple_legacy.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_multiple_legacy.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_multiple_teoz.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-queue-complete-stereotype-display/ind5f_queue_multiple_teoz.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_22_unusual.puml",
+   "mode": "ast",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_22_unusual.puml",
+   "mode": "yaml",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_23_unusual.puml",
+   "mode": "ast",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-accepted"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_23_unusual.puml",
+   "mode": "yaml",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-accepted"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_24_unusual.puml",
+   "mode": "ast",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_24_unusual.puml",
+   "mode": "yaml",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_25_unusual.puml",
+   "mode": "ast",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-accepted"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_25_unusual.puml",
+   "mode": "yaml",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-accepted"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_26_unusual.puml",
+   "mode": "ast",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_26_unusual.puml",
+   "mode": "yaml",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_plain.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_plain.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_plain.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_unusual.puml",
+   "mode": "ast",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_27_unusual.puml",
+   "mode": "yaml",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_28_unusual.puml",
+   "mode": "ast",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-accepted"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_28_unusual.puml",
+   "mode": "yaml",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-accepted"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_43_unusual.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_43_unusual.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_43_unusual.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_44_unusual.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_44_unusual.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_44_unusual.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_45_unusual.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_45_unusual.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_45_unusual.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_46_unusual.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_46_unusual.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_reg_46_unusual.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_392.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_392.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_392.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_398.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_398.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_398.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_401.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_401.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_401.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_404.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_404.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_404.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_407.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_407.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-command-color-execution/bd087_gradient_participant_407.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_dot.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_dot.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_dot.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_at.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_at.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_at.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "mismatch"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_compact_stereo.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_compact_stereo.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_compact_colour.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-registered-command-rejection/bd087_s_participant_compact_colour.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_upper_legacy.puml",
+   "mode": "ast",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_upper_legacy.puml",
+   "mode": "yaml",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_upper_teoz.puml",
+   "mode": "ast",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_upper_teoz.puml",
+   "mode": "yaml",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_nbsp_legacy.puml",
+   "mode": "ast",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_nbsp_legacy.puml",
+   "mode": "yaml",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_nbsp_teoz.puml",
+   "mode": "ast",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_nbsp_teoz.puml",
+   "mode": "yaml",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_upper_end_legacy.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_upper_end_legacy.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_upper_end_legacy.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_upper_end_teoz.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_upper_end_teoz.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_upper_end_teoz.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_nbsp_brace_legacy.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_nbsp_brace_legacy.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_nbsp_brace_legacy.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_nbsp_brace_teoz.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_nbsp_brace_teoz.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_nbsp_brace_teoz.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_compact_end_legacy.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_compact_end_legacy.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_compact_end_legacy.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_compact_end_teoz.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_compact_end_teoz.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_compact_end_teoz.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_dotted_legacy.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_dotted_legacy.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_dotted_legacy.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_dotted_teoz.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_dotted_teoz.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_dotted_teoz.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_at_compact_legacy.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_at_compact_legacy.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_at_compact_legacy.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_at_compact_teoz.puml",
+   "mode": "ast",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_at_compact_teoz.puml",
+   "mode": "ascii",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_at_compact_teoz.puml",
+   "mode": "yaml",
+   "reason": "content change with SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "mismatch",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_composite_legacy.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_composite_legacy.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_composite_legacy.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_composite_teoz.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_composite_teoz.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_composite_teoz.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_repeat_color_legacy.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_repeat_color_legacy.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_repeat_color_legacy.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_repeat_color_teoz.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_repeat_color_teoz.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_repeat_color_teoz.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_multiline_color_legacy.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "mismatch"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_multiline_color_legacy.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "mismatch"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_multiline_color_legacy.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "mismatch"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_multiline_color_teoz.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_multiline_color_teoz.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/participant_multiline_color_teoz.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    1,
+    0
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "valid-error",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_class.puml",
+   "mode": "ast",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_class.puml",
+   "mode": "yaml",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_state.puml",
+   "mode": "ast",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/svg_state.puml",
+   "mode": "yaml",
+   "reason": "content change without SVG change",
+   "exits": [
+    0,
+    0
+   ],
+   "svg_changed": false,
+   "svg_outcome": [
+    "match",
+    "match"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_unclosed_legacy.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_unclosed_legacy.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_unclosed_legacy.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_unclosed_teoz.puml",
+   "mode": "ast",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_unclosed_teoz.puml",
+   "mode": "ascii",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  },
+  {
+   "source": "docs/parity-reviews/sequence-sprite-participant-packet/maker-results/inputs/pixel_unclosed_teoz.puml",
+   "mode": "yaml",
+   "reason": "mode exit changed with admission",
+   "exits": [
+    0,
+    1
+   ],
+   "svg_changed": true,
+   "svg_outcome": [
+    "nonpositive-accepted",
+    "nonpositive-rejected"
+   ]
+  }
+ ]
+}
