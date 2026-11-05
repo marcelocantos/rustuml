@@ -1,0 +1,1066 @@
+{
+ "changes": [
+  {
+   "name": "mk2_if_false_pixel_seq_legacy",
+   "cohort": "AS",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk2_else_branch_pixel_seq_legacy",
+   "cohort": "AS",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 8: sprite $gem [2x2/16] {\n"
+  },
+  {
+   "name": "mk2_proc_invoked_closed_pixel_seq_legacy",
+   "cohort": "AS",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 5: sprite $gem [2x2/16] {\n"
+  },
+  {
+   "name": "mk2_include_close_only_seq_legacy",
+   "cohort": "AS",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 4: sprite $gem <svg width=\"2\" height=\"2\">\n"
+  },
+  {
+   "name": "mk2_seq_note_svg_lookalike_legacy",
+   "cohort": "AS",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk2_seq_top_level_text_legacy",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 4: Cannot read: are loaded\n"
+  },
+  {
+   "name": "mk2_tooltip_in_box_legacy",
+   "cohort": "AS",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk2_if_false_pixel_seq_teoz",
+   "cohort": "AS",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk2_else_branch_pixel_seq_teoz",
+   "cohort": "AS",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 9: sprite $gem [2x2/16] {\n"
+  },
+  {
+   "name": "mk2_include_close_only_seq_teoz",
+   "cohort": "AS",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 5: sprite $gem <svg width=\"2\" height=\"2\">\n"
+  },
+  {
+   "name": "mk2_seq_note_svg_lookalike_teoz",
+   "cohort": "AS",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk2_seq_top_level_text_teoz",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 5: Cannot read: are loaded\n"
+  },
+  {
+   "name": "mk2_if_true_unclosed_pixel_state",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 3: Cannot read: [2x2/16] {\n"
+  },
+  {
+   "name": "mk2_include_unclosed_component",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Cannot read: [2x2/16] {\n"
+  },
+  {
+   "name": "mk2_component_legend_upper",
+   "cohort": "AS",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "mk2_class_top_level_text",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Cannot read: are loaded\n"
+  },
+  {
+   "name": "mk2_component_top_level_text",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Cannot read: are loaded\n"
+  },
+  {
+   "name": "mk2_unclosed_pixel_object",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Cannot read: [2x2/16] {\n"
+  },
+  {
+   "name": "mk2_unclosed_svg_object",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Syntax Error? sprite command never completed: sprite $gem <svg width=\"2\" height=\"2\">\n"
+  },
+  {
+   "name": "mk2_unclosed_pixel_deployment",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Cannot read: [2x2/16] {\n"
+  },
+  {
+   "name": "mk2_unclosed_svg_deployment",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Syntax Error? sprite command never completed: sprite $gem <svg width=\"2\" height=\"2\">\n"
+  },
+  {
+   "name": "mk2_unclosed_pixel_activity_legacy",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Cannot read: [2x2/16] {\n"
+  },
+  {
+   "name": "mk2_unclosed_svg_activity_legacy",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Syntax Error? sprite command never completed: sprite $gem <svg width=\"2\" height=\"2\">\n"
+  },
+  {
+   "name": "mk2_empty_pixel_class",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: No sprite defined.\n"
+  },
+  {
+   "name": "mk2_graylevel_component",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Only 4, 8 or 16 graylevel are allowed.\n"
+  },
+  {
+   "name": "mk2_sprite_file_missing_deployment",
+   "cohort": "AS",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Cannot read: missing_gem.png\n"
+  },
+  {
+   "name": "cl_seq_note_upper_legacy",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_note_caps_legacy",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_note_lower_legacy",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_note_brace_legacy",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_note_brace_lower_legacy",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_legend_upper_legacy",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_ref_upper_legacy",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_inline_svg_apostrophe_legacy",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 3: sprite $tag <svg width=\"4\" height=\"4\"><text> 'hi'</text></svg>\n"
+  },
+  {
+   "name": "cl_seq_inline_svg_apostrophe_attr_legacy",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 3: sprite $mark <svg viewBox=\"0 0 4 4\"><title> 'mark'</title><rect width=\"2\" height=\"2\"/></svg>\n"
+  },
+  {
+   "name": "cl_seq_inline_svg_trailing_comment_legacy",
+   "cohort": "AQ",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\"><rect width=\\\"1\\\" height=\\\"1\\\"/></svg> ' trailing\"\n"
+  },
+  {
+   "name": "cl_seq_note_upper_teoz",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_note_caps_teoz",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_note_lower_teoz",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_note_brace_teoz",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_note_brace_lower_teoz",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_legend_upper_teoz",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_ref_upper_teoz",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_seq_inline_svg_apostrophe_teoz",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 4: sprite $tag <svg width=\"4\" height=\"4\"><text> 'hi'</text></svg>\n"
+  },
+  {
+   "name": "cl_seq_inline_svg_apostrophe_attr_teoz",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 4: sprite $mark <svg viewBox=\"0 0 4 4\"><title> 'mark'</title><rect width=\"2\" height=\"2\"/></svg>\n"
+  },
+  {
+   "name": "cl_seq_inline_svg_trailing_comment_teoz",
+   "cohort": "AQ",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\"><rect width=\\\"1\\\" height=\\\"1\\\"/></svg> ' trailing\"\n"
+  },
+  {
+   "name": "cl_class_link_upper",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_class_link_lower",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_object_link_upper",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_object_link_lower",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_class_aggregation_label",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_class_dotted",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_class_member_upper",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_class_member_brace",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_class_note_upper",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_state_note_upper",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_activity_note_upper",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "cl_component_link_upper",
+   "cohort": "AQ",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Cannot read: [Engine]\n"
+  },
+  {
+   "name": "cl_usecase_link_upper",
+   "cohort": "AQ",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Cannot read: (Play)\n"
+  },
+  {
+   "name": "cl_component_note_upper",
+   "cohort": "AQ",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75_sprite_pixel_inline_legacy",
+   "cohort": "F790",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 4: Cannot read: [3x2/16] { F0F 0F0 }\n"
+  },
+  {
+   "name": "c75_sprite_pixel_inline_teoz",
+   "cohort": "F790",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 5: Cannot read: [3x2/16] { F0F 0F0 }\n"
+  },
+  {
+   "name": "c75_sprite_procedure_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 5: sprite $needle <svg width=\"3\" height=\"4\">\n"
+  },
+  {
+   "name": "c75_sprite_function_legacy",
+   "cohort": "F790",
+   "java_valid": false,
+   "intended_valid": true,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-accepted",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 5: sprite $needle [3x2/16] {\n"
+  },
+  {
+   "name": "c75_include_parent_to_child_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 4: sprite $needle <svg width=\"3\" height=\"4\">\n"
+  },
+  {
+   "name": "c75_include_parent_to_child_teoz",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 5: sprite $needle <svg width=\"3\" height=\"4\">\n"
+  },
+  {
+   "name": "c75_include_sibling_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 4: sprite $needle <svg width=\"3\" height=\"4\">\n"
+  },
+  {
+   "name": "c75_include_sibling_teoz",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 5: sprite $needle <svg width=\"3\" height=\"4\">\n"
+  },
+  {
+   "name": "c75_include_pixel_into_include_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 4: sprite $needle [3x2/16] {\n"
+  },
+  {
+   "name": "c75_include_pixel_into_include_teoz",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 5: sprite $needle [3x2/16] {\n"
+  },
+  {
+   "name": "c75_unclosed_svg_class",
+   "cohort": "F790",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 4: Syntax Error? sprite command never completed: sprite $needle <svg width=\"3\" height=\"4\">\n"
+  },
+  {
+   "name": "c75_unclosed_pixel_class",
+   "cohort": "F790",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 4: Cannot read: [3x2/16] {\n"
+  },
+  {
+   "name": "c75_unclosed_svg_state",
+   "cohort": "F790",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 4: Syntax Error? sprite command never completed: sprite $needle <svg width=\"3\" height=\"4\">\n"
+  },
+  {
+   "name": "c75_unclosed_pixel_state",
+   "cohort": "F790",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 4: Cannot read: [3x2/16] {\n"
+  },
+  {
+   "name": "c75_unclosed_svg_activity",
+   "cohort": "F790",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 4: Syntax Error? sprite command never completed: sprite $needle <svg width=\"3\" height=\"4\">\n"
+  },
+  {
+   "name": "c75_unclosed_pixel_activity",
+   "cohort": "F790",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 4: Cannot read: [3x2/16] {\n"
+  },
+  {
+   "name": "c75_unclosed_svg_usecase",
+   "cohort": "F790",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 4: Syntax Error? sprite command never completed: sprite $needle <svg width=\"3\" height=\"4\">\n"
+  },
+  {
+   "name": "c75_unclosed_pixel_usecase",
+   "cohort": "F790",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 4: Cannot read: [3x2/16] {\n"
+  },
+  {
+   "name": "c75_unclosed_svg_component",
+   "cohort": "F790",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 4: Syntax Error? sprite command never completed: sprite $needle <svg width=\"3\" height=\"4\">\n"
+  },
+  {
+   "name": "c75_unclosed_pixel_component",
+   "cohort": "F790",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 4: Cannot read: [3x2/16] {\n"
+  },
+  {
+   "name": "c75_participant_link_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75_participant_combined_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "elds with fallback order at line 2\nwarning: sequence participant has multiple stereotypes (Stereotype#build label list); rendering them as separate labels remains unsupported at line 2\nwarning: sequence command CommandArrow variant is recognized but unimplemented at line 3: Spruce -> @Cedar: pollen\n"
+  },
+  {
+   "name": "c75_actor_link_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75_actor_combined_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "elds with fallback order at line 2\nwarning: sequence participant has multiple stereotypes (Stereotype#build label list); rendering them as separate labels remains unsupported at line 2\nwarning: sequence command CommandArrow variant is recognized but unimplemented at line 3: Spruce -> @Cedar: pollen\n"
+  },
+  {
+   "name": "c75_boundary_link_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75_control_link_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75_entity_link_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75_database_link_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75_collections_link_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75_queue_link_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75_create_link_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75_create_link_teoz",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "warning: teoz participant link anchors ([[url]]) are not emitted; the links are dropped from the SVG\n"
+  },
+  {
+   "name": "c75_create_combined_legacy",
+   "cohort": "F790",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "elds with fallback order at line 2\nwarning: sequence participant has multiple stereotypes (Stereotype#build label list); rendering them as separate labels remains unsupported at line 2\nwarning: sequence command CommandArrow variant is recognized but unimplemented at line 3: Spruce -> @Cedar: pollen\n"
+  },
+  {
+   "name": "c75s_inactive_unclosed_svg_legacy",
+   "cohort": "F28",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75s_inactive_unclosed_pixel_legacy",
+   "cohort": "F28",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75s_macro_uninvoked_unclosed_svg_legacy",
+   "cohort": "F28",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75s_macro_uninvoked_unclosed_pixel_legacy",
+   "cohort": "F28",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75s_participant_link_inside_label_legacy",
+   "cohort": "F28",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "mismatch",
+   "after": "mismatch",
+   "svg_changed": true,
+   "after_stderr": "warning: sequence participant display contains a creole [[link]]; its label and tooltip are not rendered (treated as a participant link) at line 2\nwarning: sequence participant display contains a creole [[link]]; its label and tooltip are not rendered (treated as a participant link) at line 2\n"
+  },
+  {
+   "name": "c75s_sprite_empty_pixel_legacy",
+   "cohort": "F28",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: No sprite defined.\n"
+  },
+  {
+   "name": "c75s_sprite_palette_invalid_legacy",
+   "cohort": "F28",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 2: Only 4, 8 or 16 graylevel are allowed.\n"
+  },
+  {
+   "name": "c75s_inactive_unclosed_svg_teoz",
+   "cohort": "F28",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75s_inactive_unclosed_pixel_teoz",
+   "cohort": "F28",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75s_macro_uninvoked_unclosed_svg_teoz",
+   "cohort": "F28",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75s_macro_uninvoked_unclosed_pixel_teoz",
+   "cohort": "F28",
+   "java_valid": true,
+   "intended_valid": true,
+   "before": "valid-error",
+   "after": "match",
+   "svg_changed": true,
+   "after_stderr": ""
+  },
+  {
+   "name": "c75s_sprite_empty_pixel_teoz",
+   "cohort": "F28",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 3: No sprite defined.\n"
+  },
+  {
+   "name": "c75s_sprite_palette_invalid_teoz",
+   "cohort": "F28",
+   "java_valid": false,
+   "intended_valid": false,
+   "before": "nonpositive-accepted",
+   "after": "nonpositive-rejected",
+   "svg_changed": true,
+   "after_stderr": "parse error: line 3: Only 4, 8 or 16 graylevel are allowed.\n"
+  }
+ ],
+ "losses": [],
+ "disagreements": []
+}

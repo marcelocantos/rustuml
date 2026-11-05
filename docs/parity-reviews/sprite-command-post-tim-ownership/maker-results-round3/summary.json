@@ -1,0 +1,369 @@
+{
+ "schema_version": 1,
+ "mechanism": "sprite-command-post-tim-ownership",
+ "round": 3,
+ "role": "maker (not a review); independent checker required",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+ "commits": {
+  "rejection": "f803c8e333e33e15ccbde218f15df620617eb5bd",
+  "merge_base": "dea00b2951ab66db9cd94a3ec2df3d732ed1dcfe (merge of parity-recovery-2026-11-03 a20ae0f6d)",
+  "account": "9b2e4758f",
+  "body_ownership": "43067aa7c",
+  "comment_exemption": "1dbdd02e8",
+  "startsub_in_place": "f7270990e",
+  "participant_url": "cde7b092c",
+  "participant_order": "b461817d4",
+  "clippy": "cd82c28dd (SVG byte-identical to b461817d4 on every cohort)"
+ },
+ "builds": {
+  "before_primary": "93bf53e18 (pre-packet tree)",
+  "before_secondary": "dea00b29 (round-2 tip + a20ae0f6d)",
+  "after": "cd82c28dd",
+  "method": "git archive exports, CARGO_TARGET_DIR outside the repo, cargo build --release -j 6 -p rustuml; compare_cli from docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs (sha256 d142446956a931cfbea5bc6bb15b844fcb9d276bf5d81399aafe2203c08c6701), unchanged; replay.py/classify.py/fresh_classify.py/rejection_contract.py byte-identical to checker-claude/support (support/ here)"
+ },
+ "cohorts": {
+  "vs_93bf53e18": {
+   "AT_45": {
+    "losses": [],
+    "changes": [
+     [
+      "ck_class_header_body",
+      "mismatch",
+      "match"
+     ],
+     [
+      "ck_class_legend_body",
+      "mismatch",
+      "match"
+     ],
+     [
+      "ck_class_floating_note_body",
+      "mismatch",
+      "match"
+     ],
+     [
+      "ck_svg_body_trailing_after_end_class",
+      "nonpositive-accepted",
+      "nonpositive-rejected"
+     ],
+     [
+      "ck_yaml_block_sprite_text",
+      "mismatch",
+      "mismatch"
+     ],
+     [
+      "ck_ditaa_sprite_text",
+      "compare-101",
+      "compare-101"
+     ],
+     [
+      "ck_tooltip_spaced_legacy",
+      "mismatch",
+      "match"
+     ],
+     [
+      "ck_tooltip_empty_legacy",
+      "mismatch",
+      "match"
+     ],
+     [
+      "ck_tooltip_nested_brace_legacy",
+      "mismatch",
+      "match"
+     ],
+     [
+      "ck_create_tooltip_legacy",
+      "mismatch",
+      "match"
+     ]
+    ]
+   },
+   "fresh_915 (AS 54, AQ 43, 790, 28)": {
+    "losses": [],
+    "changes_by_kind": {
+     "AQ:mismatch->match": 19,
+     "AQ:nonpositive-accepted->nonpositive-rejected": 4,
+     "AQ:valid-error->match": 8,
+     "AS:mismatch->match": 1,
+     "AS:nonpositive-accepted->nonpositive-rejected": 15,
+     "AS:valid-error->match": 8,
+     "F28:nonpositive-accepted->nonpositive-rejected": 4,
+     "F28:valid-error->match": 8,
+     "F790:mismatch->match": 9,
+     "F790:nonpositive-accepted->nonpositive-rejected": 12,
+     "F790:valid-error->match": 6
+    }
+   },
+   "retained_4174": {
+    "mismatch->mismatch": 1057,
+    "match->match": 2645,
+    "nonpositive-accepted->nonpositive-accepted": 66,
+    "valid-error->valid-error": 17,
+    "nonpositive-rejected->nonpositive-rejected": 368,
+    "nonpositive-accepted->nonpositive-rejected": 2,
+    "mismatch->match": 19
+   },
+   "golden_12550": {
+    "nonpositive-rejected->nonpositive-rejected": 201,
+    "match->match": 11181,
+    "nonpositive-accepted->nonpositive-accepted": 997,
+    "mismatch->mismatch": 70,
+    "nonpositive-accepted->nonpositive-rejected": 1,
+    "compare-101->compare-101": 100
+   },
+   "golden_svg_byte_changes": [
+    "test-diagrams/golden/edge-cases/edge_render_sprite.puml",
+    "test-diagrams/golden/preprocessing/preproc_include_startsub.puml"
+   ],
+   "rejection_contract_fresh": {
+    "entries": 313,
+    "before_rejections": 269,
+    "after_rejections": 304,
+    "introduced_losses": [],
+    "after_false_accepts": [
+     "mk2_unclosed_pixel_timing.puml",
+     "mk2_unclosed_svg_timing.puml",
+     "mk2_unclosed_svg_mindmap.puml",
+     "mk2_compressed_bad_class.puml",
+     "cl_class_bare_sprite.puml",
+     "c75_sprite_compressed_legacy.puml",
+     "c75_sprite_compressed_teoz.puml",
+     "c75_sprite_function_legacy.puml",
+     "c75_sprite_function_teoz.puml"
+    ]
+   },
+   "rejection_contract_AT": {
+    "entries": 3,
+    "before_rejections": 2,
+    "after_rejections": 3,
+    "introduced_losses": [],
+    "after_false_accepts": []
+   }
+  },
+  "vs_dea00b29": {
+   "AT_45": {
+    "losses": [],
+    "changes": [
+     [
+      "ck_component_bracket_body",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_component_bracket_lower",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_deployment_node_bracket_body",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_deployment_bracket_upper",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_usecase_rectangle_bracket_body",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_component_header_body",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_component_footer_body",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_deployment_header_body",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_deployment_footer_upper",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_state_header_body",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_state_legend_body",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_state_title_body",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_object_header_body",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_object_legend_body",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_activity_legacy_note_body",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_activity_legacy_note_brace",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_activity_legacy_legend_body",
+      "valid-error",
+      "mismatch"
+     ],
+     [
+      "ck_svg_body_apos_end_legacy",
+      "valid-error",
+      "match"
+     ],
+     [
+      "ck_svg_body_trailing_after_end_legacy",
+      "nonpositive-accepted",
+      "nonpositive-rejected"
+     ],
+     [
+      "ck_svg_body_apos_end_teoz",
+      "valid-error",
+      "match"
+     ],
+     [
+      "ck_svg_body_trailing_after_end_teoz",
+      "nonpositive-accepted",
+      "nonpositive-rejected"
+     ],
+     [
+      "ck_svg_body_apos_end_class",
+      "valid-error",
+      "match"
+     ],
+     [
+      "ck_svg_body_apos_end_component",
+      "valid-error",
+      "match"
+     ],
+     [
+      "ck_svg_body_trailing_after_end_class",
+      "nonpositive-accepted",
+      "nonpositive-rejected"
+     ],
+     [
+      "ck_startsub_sprite_deployment",
+      "mismatch",
+      "match"
+     ],
+     [
+      "ck_tooltip_label_brace_legacy",
+      "mismatch",
+      "match"
+     ],
+     [
+      "ck_tooltip_spaced_legacy",
+      "mismatch",
+      "match"
+     ],
+     [
+      "ck_tooltip_empty_legacy",
+      "mismatch",
+      "match"
+     ],
+     [
+      "ck_tooltip_nested_brace_legacy",
+      "mismatch",
+      "match"
+     ]
+    ]
+   },
+   "fresh_915 (AS 54, AQ 43, 790, 28)": {
+    "losses": [],
+    "changes_by_kind": {}
+   },
+   "retained_4174": {
+    "mismatch->mismatch": 1057,
+    "match->match": 2658,
+    "nonpositive-accepted->nonpositive-accepted": 66,
+    "valid-error->valid-error": 17,
+    "nonpositive-rejected->nonpositive-rejected": 370,
+    "mismatch->match": 6
+   },
+   "golden_12550": {
+    "nonpositive-rejected->nonpositive-rejected": 202,
+    "match->match": 11181,
+    "nonpositive-accepted->nonpositive-accepted": 997,
+    "mismatch->mismatch": 70,
+    "compare-101->compare-101": 100
+   },
+   "golden_svg_byte_changes": [
+    "test-diagrams/golden/preprocessing/preproc_include_startsub.puml"
+   ],
+   "rejection_contract_fresh": {
+    "entries": 313,
+    "before_rejections": 304,
+    "after_rejections": 304,
+    "introduced_losses": [],
+    "after_false_accepts": [
+     "mk2_unclosed_pixel_timing.puml",
+     "mk2_unclosed_svg_timing.puml",
+     "mk2_unclosed_svg_mindmap.puml",
+     "mk2_compressed_bad_class.puml",
+     "cl_class_bare_sprite.puml",
+     "c75_sprite_compressed_legacy.puml",
+     "c75_sprite_compressed_teoz.puml",
+     "c75_sprite_function_legacy.puml",
+     "c75_sprite_function_teoz.puml"
+    ]
+   },
+   "rejection_contract_AT": {
+    "entries": 3,
+    "before_rejections": 0,
+    "after_rejections": 3,
+    "introduced_losses": [],
+    "after_false_accepts": []
+   }
+  },
+  "panics_after": {
+   "svg/ast/ascii": 0,
+   "timeouts": 0,
+   "yaml_panics": "148 golden and 63 retained, the same sources in 93bf53e18, dea00b29 and cd82c28dd"
+  },
+  "remaining_valid_input_errors_after": [
+   "AT ck_usecase_header_body, AS mk2_proc_uninvoked_svg_usecase, AS mk2_usecase_note_upper: usecase sources routed to Sequence (T14.21), errors in both befores as well",
+   "AT ck_ditaa_sprite_text: compare-101 in every build"
+  ]
+ },
+ "gates": {
+  "workspace_lib": "1498 passed, 0 failed (before 1486; +12 new unit tests)",
+  "pipe_mode": "13/13 both",
+  "golden_no_oracle": "70 failure names, byte-identical to checker-claude gates/no_oracle_failure_names-9834a7194.txt and to the dea00b29 run",
+  "golden_pairs": "12550 total, 10497 passed, 754 failed, 1299 skipped; names byte-identical to 9834a7194",
+  "parity_perturbations": "before (dea00b29) 2452 failures, after 2437; 0 new, 15 fixed (6 sequence-local-attribute-serialization, 4 sequence-participant-silent-residue, 5 sprite-command-post-tim-ownership)",
+  "harness_guards": "same 2 failing guards (decimal_literal_ratchet, parity_review_records_are_complete); decimal ratchet lines identical; 2757 review-record violation lines identical before/after (no category changed)"
+ },
+ "frozen": "git diff dea00b29..cd82c28dd touches only crates/rustuml-parser and docs/parity-reviews: comparator, syntax-error markers, park list, error census, guard allow-lists, strict-XML list, baselines and the 15-source new-valid-errors set (sha256 c3076b2c...) unchanged",
+ "pending_relay_request": {
+  "path": "/Users/marcelo/Library/Caches/rustuml-sprite-round3-claude-maker/mk3/",
+  "reference-manifest.json": "fdc4ec7562061a983befb650faf48e2f798c14ade95d0bde021539a911dbdd56",
+  "reference-input-bundle.json.gz": "15439c3385f1cfafcf65f220625a3f3d0778205940297d5818bcb219d5e84819",
+  "cases": 63,
+  "intended_valid": 60,
+  "copy": "pending-request/"
+ }
+}
