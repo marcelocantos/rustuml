@@ -7,6 +7,7 @@ pub mod activity;
 pub mod archimate;
 pub mod board;
 pub mod class;
+mod command_spans;
 pub mod component;
 pub mod deployment;
 pub mod ditaa;

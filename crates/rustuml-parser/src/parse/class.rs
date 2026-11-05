@@ -31,6 +31,9 @@ enum QuarkLookup {
 /// Parse preprocessed lines into a class diagram.
 pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
     let mut parser = ClassParser::new();
+    // PSystemCommandFactory#getCandidate never offers a line of a body that
+    // an earlier-selected multiline command owns.
+    let spans = super::command_spans::walk(lines, super::command_spans::Factory::Class);
 
     let mut i = 0;
     while i < lines.len() {
@@ -55,6 +58,7 @@ pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
         // CommonCommands#addCommonCommands2 (the sprite commands) after every
         // class, link and note command: offer only a line none of them took.
         if parser.unrecognized
+            && !spans.owned_by_other(i)
             && let Some(end) = super::sprite::dispatch(lines, i, &mut parser.meta, "class", true)?
         {
             i = end;

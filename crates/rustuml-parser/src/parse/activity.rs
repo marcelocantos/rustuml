@@ -105,6 +105,9 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
     let mut fork_bars: std::collections::HashMap<String, bool> = std::collections::HashMap::new();
     // Nesting depth of partition/group blocks (for legacy `}` handling).
     let mut partition_depth: usize = 0;
+    // PSystemCommandFactory#getCandidate never offers a line of a body that
+    // an earlier-selected multiline command owns.
+    let spans = super::command_spans::walk(lines, super::command_spans::Factory::LegacyActivity);
 
     let mut index = 0;
     while index < lines.len() {
@@ -118,7 +121,9 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
         // ActivityDiagramFactory#initCommandsList registers
         // CommonCommands#addCommonCommands1 (with the sprite commands) before
         // every legacy activity command.
-        if let Some(end) = super::sprite::dispatch(lines, index - 1, &mut meta, "activity", false)?
+        if !spans.owned_by_other(index - 1)
+            && let Some(end) =
+                super::sprite::dispatch(lines, index - 1, &mut meta, "activity", false)?
         {
             index = end + 1;
             continue;

@@ -283,6 +283,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     static RE_NOTE_INLINE: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)"#).unwrap());
     let mut sprite_end: Option<usize> = None;
+    // PSystemCommandFactory#getCandidate never offers a line of a body that
+    // an earlier-selected multiline command owns.
+    let spans = super::command_spans::walk(lines, super::command_spans::Factory::Description);
     for (line_idx, line) in lines.iter().enumerate() {
         if sprite_end.is_some_and(|end| line_idx <= end) {
             continue;
@@ -367,7 +370,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         // CommonCommands#addCommonCommands1, and with it the sprite commands,
         // before every description command. Lines owned by an open body
         // (handled above) are not command starts.
-        if let Some(end) = super::sprite::dispatch(lines, line_idx, &mut meta, "component", false)?
+        if !spans.owned_by_other(line_idx)
+            && let Some(end) =
+                super::sprite::dispatch(lines, line_idx, &mut meta, "component", false)?
         {
             sprite_end = Some(end);
             continue;

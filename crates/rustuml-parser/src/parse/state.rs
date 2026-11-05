@@ -13,7 +13,10 @@ use crate::diagram::state::*;
 
 pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
     let mut parser = StateParser::new();
-    parser.predeclare_state_structure(lines);
+    // PSystemCommandFactory#getCandidate never offers a line of a body that
+    // an earlier-selected multiline command owns.
+    let spans = super::command_spans::walk(lines, super::command_spans::Factory::State);
+    parser.predeclare_state_structure(lines, &spans);
     parser.reset_after_predeclaration();
     let mut i = 0;
     while i < lines.len() {
@@ -32,6 +35,7 @@ pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
         // StateDiagramFactory#initCommandsList registers addCommonCommands1
         // (the sprite commands) after the state, link and note commands.
         if parser.unrecognized
+            && !spans.owned_by_other(i)
             && let Some(end) = super::sprite::dispatch(lines, i, &mut parser.meta, "state", false)?
         {
             i = end;
@@ -192,7 +196,11 @@ impl StateParser {
     /// source for each `ParserPass`. State declarations, composite scopes,
     /// descriptions, and concurrent separators run in pass one, while
     /// `CommandLinkStateCommon` runs only in pass two.
-    fn predeclare_state_structure(&mut self, lines: &[String]) {
+    fn predeclare_state_structure(
+        &mut self,
+        lines: &[String],
+        spans: &super::command_spans::CommandSpans,
+    ) {
         let mut in_note = false;
         let mut in_skinparam_block = false;
         let mut sprite_end: Option<usize> = None;
@@ -241,7 +249,10 @@ impl StateParser {
                 self.scope_stack.pop();
                 continue;
             }
-            if !self.try_state_decl(trimmed) && !self.try_state_description(trimmed) {
+            if !self.try_state_decl(trimmed)
+                && !self.try_state_description(trimmed)
+                && !spans.owned_by_other(i)
+            {
                 // The main pass offers this line to the sprite commands; skip
                 // the body a complete sprite command owns.
                 sprite_end = super::sprite::complete_span(lines, i);

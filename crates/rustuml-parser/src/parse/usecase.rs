@@ -192,6 +192,9 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     });
 
     let mut sprite_end: Option<usize> = None;
+    // PSystemCommandFactory#getCandidate never offers a line of a body that
+    // an earlier-selected multiline command owns.
+    let spans = super::command_spans::walk(lines, super::command_spans::Factory::Description);
     for (line_idx, line) in lines.iter().enumerate() {
         if sprite_end.is_some_and(|end| line_idx <= end) {
             continue;
@@ -302,7 +305,10 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
         // CommonCommands#addCommonCommands1, and with it the sprite commands,
         // before every description command. Lines owned by an open body
         // (handled above) are not command starts.
-        if let Some(end) = super::sprite::dispatch(lines, line_idx, &mut meta, "usecase", false)? {
+        if !spans.owned_by_other(line_idx)
+            && let Some(end) =
+                super::sprite::dispatch(lines, line_idx, &mut meta, "usecase", false)?
+        {
             sprite_end = Some(end);
             continue;
         }

@@ -14,6 +14,9 @@ use crate::diagram::object::*;
 /// Parse preprocessed lines into an object diagram.
 pub fn parse_object(lines: &[String]) -> Result<ObjectDiagram, ParseError> {
     let mut parser = ObjectParser::new();
+    // PSystemCommandFactory#getCandidate never offers a line of a body that
+    // an earlier-selected multiline command owns.
+    let spans = super::command_spans::walk(lines, super::command_spans::Factory::Class);
 
     let mut i = 0;
     while i < lines.len() {
@@ -24,6 +27,7 @@ pub fn parse_object(lines: &[String]) -> Result<ObjectDiagram, ParseError> {
             // Object diagrams use ClassDiagramFactory: the sprite commands
             // (addCommonCommands2) follow every object, link and note command.
             if parser.unrecognized
+                && !spans.owned_by_other(i)
                 && let Some(end) =
                     super::sprite::dispatch(lines, i, &mut parser.meta, "object", false)?
             {
