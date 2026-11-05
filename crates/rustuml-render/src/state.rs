@@ -3153,8 +3153,12 @@ fn layout_autonomous_scope(
                     .any(|transition| transition.from == *id || transition.to == *id)
         })
         .collect::<Vec<_>>();
+    // DotStringFactory.createDotString -> Cluster.printCluster2: a scope's own
+    // nodes precede its child cluster subgraphs in the DOT text, so Graphviz
+    // creates them first (only observable when the scope has live clusters).
     let mut layout = LayoutGraph::new(state_graph_direction(diagram))
-        .with_edge_routing(state_edge_routing(diagram));
+        .with_edge_routing(state_edge_routing(diagram))
+        .with_plantuml_svek_node_order();
     if let Some(spacing) = spacing {
         layout = layout.with_spacing(spacing);
     }
