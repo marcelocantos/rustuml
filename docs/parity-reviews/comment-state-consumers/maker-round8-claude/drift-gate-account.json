@@ -1,0 +1,25 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker causal account before draft; independent review required",
+ "mechanism": "tim-builtin-value-boundaries",
+ "answers": "docs/parity-reviews/tim-builtin-value-boundaries/review-8.json and comment-state-consumers/review-9.json (98ddcfc9d) bounded_next_obligations",
+ "sub_mechanism": "Drift gate for the shaping tables (round-8 obligation 3)",
+ "sources": [
+  "HarfBuzz tag 15.0.0 (https://github.com/harfbuzz/harfbuzz, commit 35f656a1a2bab548ea7f54a6dd3fba2b09680d14; the library the reference JVM loads, /opt/homebrew/Cellar/harfbuzz/15.0.0_1, T14.6.8), raw files, sha256: hb-ot-layout.cc 3c4e62bc, GDEF.hh ef1a744e, hb-ot-shaper.hh 3eb84b0a, hb-ot-tag.cc 6bcd8c41, hb-ot-shape.cc c50cabe8",
+  "OpenJDK jdk21u tag jdk-21.0.5-ga (https://github.com/openjdk/jdk21u; the reference JVM is Homebrew openjdk@21 21.0.5), raw files, sha256: TextLine.java 4568ae07, TextLayout.java 3a1f3346, Font.java 06e4691d, java/text/Bidi.java e80d3188, jdk/internal/icu/text/BidiBase.java df973a5f, BidiLine.java 15910df5, sun/font/BidiUtils.java 1ebac3a8, TextLabelFactory.java f22871a7, ExtendedTextSourceLabel.java 82e68fbd, GlyphLayout.java cb95ae86, ScriptRun.java ae8c4d2f, HBShaper.c 2fbbde51, hb-jdk-font.cc 8027d83a, AWTFont.m 8f834825, CFont.java 6ab8feb0, UBiDiProps.java 61ba59a6, Trie2.java 1dc311fe, Trie2_16.java a5a4d9bf, scriptMapping.c 0a329fea, icudt72b/ubidi.icu 3d394ff3 (data version 15.0.0.0)",
+  "Unicode 18.0.0 UnicodeData.txt sha256 0736451de439ae7baf1425136617da495e09ee5afbe6e394374db7009ea08950 (https://www.unicode.org/Public/18.0.0/ucd/)",
+  "Monkey Man font-hash record /Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round7-mm-font-hash/output.txt sha256 a5591bab8d3dc44a1dc54b2e9ca7868538eda6733b43a87c7124bdb488c31152"
+ ],
+ "planned_change": [
+  "Store the pinned upstream files under tools/font-chain-reference/ with SHA256SUMS: UnicodeData-18.0.0.txt.gz (the gate checks the decompressed SHA256 against the official one), hb-ot-shaper.hh, hb-ot-layout.cc, hb-common.h (15.0.0), scriptMapping.c and ubidi.icu (jdk-21.0.5-ga), and the Monkey Man record (byte-identical copy).",
+  "Gate (font_chain tests): re-derive NONSPACING_MARKS and UNICODE_MARKS from the stored UCD 18; re-derive SCRIPT_SHAPERS from the stored hb-ot-shaper.hh, scriptMapping.c and hb-common.h; re-derive GDEF_BLOCKLIST from the stored hb-ot-layout.cc; re-decode BIDI_CLASSES and BRACKETS from the stored ubidi.icu; assert each face's blocklist decision from its stored table lengths; every face whose plan can zero a mark has the same font file hash on Monkey Man (either record) as on colossus; PENDING_REFERENCE_HASH becomes empty (Verdana Bold 480f66b6... in the MM record equals colossus).",
+  "Mutation drill: the checker's D14 (Unicode 18 run removed), D15 (hangul -> indic), a blocklist triple changed, a face's table length changed, a bidi class run changed, a pending entry re-added; each must fail the gate."
+ ],
+ "precommitted_measurement": {
+  "expect": [
+   "Every drill mutation fails coverage_table_is_the_stored_reference_host_extraction or the new pinned-table tests; the unmodified tree passes."
+  ]
+ }
+}
