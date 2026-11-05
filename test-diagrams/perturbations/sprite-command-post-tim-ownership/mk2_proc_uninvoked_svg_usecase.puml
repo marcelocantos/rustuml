@@ -1,0 +1,8 @@
+@startuml
+actor Hero
+!procedure $gem()
+sprite $gem <svg width="2" height="2">
+<rect width="2" height="2"/>
+!endprocedure
+Hero --> (Play)
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+robust "Web" as WB
+@0
+WB is Idle
+sprite $gem <svg width="2" height="2">
+<rect width="2" height="2"/>
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class Player
+legend
+Sprite sheets are loaded
+endlegend
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Alder
+participant Birch
+sprite $tag <svg width="4" height="4">
+<rect width="1" height="1"/>
+</svg> ' done
+Alder -> Birch : go
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+start
+:load;
+note right
+Sprite batch ready now
+end note
+stop
+@enduml

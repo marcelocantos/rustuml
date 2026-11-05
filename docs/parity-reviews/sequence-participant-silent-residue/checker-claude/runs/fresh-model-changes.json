@@ -1,0 +1,1925 @@
+{
+ "label": "fresh",
+ "categories": {
+  "ast: url_tooltip-additive (svg same)": 440,
+  "ast: exit 0->1 (svg changed)": 35,
+  "yaml: exit 0->1 (svg changed)": 35,
+  "ascii: exit 0->1 (svg changed)": 35,
+  "ast: exit 1->0 (svg changed)": 30,
+  "yaml: exit 1->0 (svg changed)": 30,
+  "ascii: exit 1->0 (svg changed)": 30,
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | sprite $needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": 20,
+  "yaml: add[FNF | NFN | sprite $needle [NxN/N] { | }] rem[] (svg same)": 14,
+  "ast: add[\"rings\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg changed)": 13,
+  "yaml: add[url_tooltip: rings] rem[] (svg changed)": 13,
+  "ast: add[\"rings\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg same)": 11,
+  "yaml: add[url_tooltip: rings] rem[] (svg same)": 11,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: ] (svg same)": 5,
+  "ascii: add[ | \u2502 Sprite \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518] rem[] (svg changed)": 3,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: ring\\n@enduml\\n\",] (svg same)": 3,
+  "yaml: add[FN | NF | sprite $gem [NxN/N] { | }] rem[] (svg same)": 2,
+  "ast: add[sprites: {},] rem[\"frame\": SpriteData { | height: N, | rows: [], | sprites: { | width: N, | },] (svg same)": 2,
+  "yaml: add[] rem[frame: | height: N | rows: [] | sprites: | width: N] (svg same)": 2,
+  "yaml: add[Sprite sheets are loaded | text: Sprite sheets are loaded] rem[ | text: ''] (svg changed)": 2,
+  "ascii: add[\u2502 Sprite sheets are loaded \u2502 | \u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2518] rem[\u2502   \u2502  \u2502                \u2502 | \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2510                \u2502 | \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2518                \u2502] (svg changed)": 2,
+  "yaml: add[SPRITE RENDERER QUEUE DEPTH | text: SPRITE RENDERER QUEUE DEPTH] rem[ | text: ''] (svg changed)": 2,
+  "ascii: add[\u2502   \u2502 SPRITE RENDERER QUEUE DEPTH \u2502 | \u2502   \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2502   \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518] rem[\u2502              \u2502   \u2502  \u2502 | \u2502              \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2510 | \u2502              \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2518] (svg changed)": 2,
+  "yaml: add[sprite sheets are loaded | text: sprite sheets are loaded] rem[ | text: ''] (svg changed)": 2,
+  "ascii: add[\u2502 sprite sheets are loaded \u2502 | \u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2518] rem[\u2502   \u2502  \u2502                \u2502 | \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2510                \u2502 | \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2518                \u2502] (svg changed)": 2,
+  "yaml: add[Sprite atlas version two | legend: Sprite atlas version two] rem[ | legend: ''] (svg changed)": 2,
+  "yaml: add[Sprite cache warm | text: Sprite cache warm] rem[ | text: ''] (svg changed)": 2,
+  "ascii: add[\u2502 ref: Sprite cache warm \u2502 | \u250c\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2510 | \u2514\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2518] rem[\u2502 ref:  \u2502             \u2502 | \u250c\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2510             \u2502 | \u2514\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2518             \u2502] (svg changed)": 2,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": 2,
+  "yaml: add[<rect width=\"N\" height=\"N\"/></svg> | <svg x=\"N\" y=\"N\"> | sprite $needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": 2,
+  "yaml: add[</svg> | <rect data-probe=\"</svg>\" width=\"N\" height=\"N\"/> | sprite $needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": 2,
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | FNF | NFN | sprite $bark <svg width=\"N\" height=\"N\"> | sprite $cone [NxN/N] { | sprite $needle <svg width=\"N\" height=\"N\"> | }] rem[] (svg same)": 2,
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | SPRITE $needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": 2,
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | SpRiTe\u00a0$needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": 2,
+  "yaml: add[FNF | NFN | end\u00a0sprite | sprite $needle [NxN/N] {] rem[] (svg same)": 2,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] { | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar] (svg same)": 2,
+  "yaml: add[FNF | NFN | endsprite | sprite $needle [NxN/N] {] rem[] (svg same)": 2,
+  "yaml: add[sprite $needle [NxN/Nz] N] rem[] (svg same)": 2,
+  "yaml: add[sprite $needle FNFNFN] rem[] (svg same)": 2,
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | sprite $needle <svg width=\"N\" height=\"N\">] rem[ | - 'NFN' | - FNF | height: N | needle: | rows: | sprites: | width: N] (svg same)": 2,
+  "yaml: add[FNF | height: N | sprite $needle [NxN/N] { | }] rem[ | - 'NFN' | height: N] (svg same)": 2,
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | sprite petal <svg width=\"N\" height=\"N\">] rem[] (svg same)": 2,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $gem [NxN/N] {\\nFN\\nNF\\n}\\nSpruce -> | source_line: N, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce -> Cedar: back\\n@enduml\\n\", | source_line: N,] (svg changed)": 1,
+  "yaml: add[FN | NF | source_line: N | sprite $gem [NxN/N] { | }] rem[ | source_line: N] (svg changed)": 1,
+  "ast: add[\"bark\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg changed)": 1,
+  "yaml: add[url_tooltip: bark] rem[] (svg changed)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $gem [NxN/N] {\\nF | source_line: N, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce -> Cedar: | source_line: N,] (svg same)": 1,
+  "yaml: add[FN | NF | source_line: N | sprite $gem [NxN/N] { | }] rem[ | source_line: N] (svg same)": 1,
+  "ast: add[\"bark\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg same)": 1,
+  "yaml: add[url_tooltip: bark] rem[] (svg same)": 1,
+  "ast: add[\"@startuml\\nclass Player\\nclass Level\\nPlayer -- Level\\n@enduml\\n\",] rem[\"@startuml\\nclass Player\\nsprite $gem <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n!endif\\nclass Le] (svg same)": 1,
+  "yaml: add[] rem[!endif | <rect width=\"N\" height=\"N\"/> | sprite $gem <svg width=\"N\" height=\"N\">] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $gem [NxN/N] {\\nFN\\nNF\\n}\\n[Engine]\\n[Wheel]\\n[Engine] --> [Wheel]\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\n[Engine]\\n[Wheel]\\n[Engine] --> [Wheel]\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nclass Player\\nsprite $gem [NxN/N] {\\nFN\\nNF\\n}\\nclass Level\\nPlayer -- Level\\n@enduml\\n\",] rem[\"@startuml\\nclass Player\\n\\n\\n\\n\\nclass Level\\nPlayer -- Level\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\n[Engine]\\nlegend\\nSprite legend line\\nendlegend\\n@enduml\\n\", | \"Sprite legend line\",] rem[\"\", | \"@startuml\\n[Engine]\\nlegend\\n\\nendlegend\\n@enduml\\n\",] (svg changed)": 1,
+  "yaml: add[Sprite legend line | legend: Sprite legend line] rem[ | legend: ''] (svg changed)": 1,
+  "ast: add[sprites: {},] rem[\"FN\", | \"NF\", | \"gem\": SpriteData { | ], | height: N, | rows: [ | sprites: { | width: N, | },] (svg same)": 1,
+  "yaml: add[] rem[- 'NF' | - FN | gem: | height: N | rows: | sprites: | width: N] (svg same)": 1,
+  "ast: add[\"@startuml\\nclass Player\\nsprite $gem [NxN/Nz] N\\n@enduml\\n\",] rem[\"@startuml\\nclass Player\\n\\n@enduml\\n\",] (svg same)": 1,
+  "yaml: add[sprite $gem [NxN/Nz] N] rem[] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\nSprite sheets are loaded\\nend note\\nCedar -> Spruce: | text: \"Sprite sheets are loaded\", | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\n\\nend note\\nCedar -> Spruce: go\\n@enduml\\n\", | text: \"\",] (svg changed)": 1,
+  "ast: add[\"@startuml\\nparticipant Maple\\nparticipant Birch\\nnote over Birch\\nSPRITE RENDERER QUEUE DEPTH\\nend note\\nBirch -> Maple | text: \"SPRITE RENDERER QUEUE DEPTH\", | url_tooltip: None,] rem[\"@startuml\\nparticipant Maple\\nparticipant Birch\\nnote over Birch\\n\\nend note\\nBirch -> Maple: ack\\n@enduml\\n\", | text: \"\",] (svg changed)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\nsprite sheets are loaded\\nend note\\nCedar -> Spruce: | text: \"sprite sheets are loaded\", | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\n\\nend note\\nCedar -> Spruce: go\\n@enduml\\n\", | text: \"\",] (svg changed)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: go\\nlegend\\nSprite atlas version two\\nendlegend\\n@en | \"Sprite atlas version two\", | url_tooltip: None,] rem[\"\", | \"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: go\\nlegend\\n\\nendlegend\\n@enduml\\n\",] (svg changed)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nref over Cedar, Spruce\\nSprite cache warm\\nend ref\\n@enduml\\n\", | text: \"Sprite cache warm\", | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nref over Cedar, Spruce\\n\\nend ref\\n@enduml\\n\", | text: \"\",] (svg changed)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\nSprite sheets are loaded\\nend not | text: \"Sprite sheets are loaded\", | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\n\\nend note\\nCedar -> Spruce: go\\n | text: \"\",] (svg changed)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Maple\\nparticipant Birch\\nnote over Birch\\nSPRITE RENDERER QUEUE DEPTH\\nend n | text: \"SPRITE RENDERER QUEUE DEPTH\", | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Maple\\nparticipant Birch\\nnote over Birch\\n\\nend note\\nBirch -> Maple: ack\\n@ | text: \"\",] (svg changed)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\nsprite sheets are loaded\\nend not | text: \"sprite sheets are loaded\", | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\n\\nend note\\nCedar -> Spruce: go\\n | text: \"\",] (svg changed)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: go\\nlegend\\nSprite atlas version  | \"Sprite atlas version two\", | url_tooltip: None,] rem[\"\", | \"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: go\\nlegend\\n\\nendlegend\\n@enduml\\] (svg changed)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nref over Cedar, Spruce\\nSprite cache warm\\nend ref | text: \"Sprite cache warm\", | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nref over Cedar, Spruce\\n\\nend ref\\n@enduml\\n\", | text: \"\",] (svg changed)": 1,
+  "ast: add[\"@startuml\\nclass Player\\nSprite -- Player\\n@enduml\\n\", | \"Sprite\", | ), | ClassEntity { | Entity( | N, | Relationship { | Relationship( | ], | arrowhead: Arrow, | color: None, | dashed: false, | declaration: false, | decorated_end: None, |] rem[\"@startuml\\nclass Player\\n\\n@enduml\\n\", | relationships: [],] (svg changed)": 1,
+  "yaml: add[- !Entity Sprite | - !Relationship N | - from: Sprite | - id: Sprite | Sprite -- Player | dashed: false | decorated_end: None | explicit_alias: false | from_multiplicity: null | kind: Association | kind: Class | label: Sprite | label: null ] rem[ | relationships: []] (svg changed)": 1,
+  "ast: add[\"@startuml\\nclass Player\\nsprite -- Player\\n@enduml\\n\", | \"sprite\", | ), | ClassEntity { | Entity( | N, | Relationship { | Relationship( | ], | arrowhead: Arrow, | color: None, | dashed: false, | declaration: false, | decorated_end: None, |] rem[\"@startuml\\nclass Player\\n\\n@enduml\\n\", | relationships: [],] (svg changed)": 1,
+  "yaml: add[- !Entity sprite | - !Relationship N | - from: sprite | - id: sprite | dashed: false | decorated_end: None | explicit_alias: false | from_multiplicity: null | kind: Association | kind: Class | label: null | label: sprite | label_arrow: None] rem[ | relationships: []] (svg changed)": 1,
+  "ascii: add[ | \u2502 sprite \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518] rem[] (svg changed)": 1,
+  "ast: add[\"@startuml\\nobject Player\\nSprite -- Player\\n@enduml\\n\", | ObjectInstance { | ObjectLink { | ], | arrow_at_from: false, | arrow_at_to: false, | color: None, | dashed: false, | diamond_at_from: false, | fields: [], | from: \"Sprite\", | from_m] rem[\"@startuml\\nobject Player\\n\\n@enduml\\n\", | links: [],] (svg changed)": 1,
+  "yaml: add[- from: Sprite | - id: Sprite | Sprite -- Player | arrow_at_from: false | arrow_at_to: false | dashed: false | diamond_at_from: false | fields: [] | kind: Association | kind: Object | label: Sprite | links: | source_line: N | to: Player] rem[ | links: []] (svg changed)": 1,
+  "ast: add[\"@startuml\\nobject Player\\nsprite -- Player\\n@enduml\\n\", | ObjectInstance { | ObjectLink { | ], | arrow_at_from: false, | arrow_at_to: false, | color: None, | dashed: false, | diamond_at_from: false, | fields: [], | from: \"sprite\", | from_m] rem[\"@startuml\\nobject Player\\n\\n@enduml\\n\", | links: [],] (svg changed)": 1,
+  "yaml: add[- from: sprite | - id: sprite | arrow_at_from: false | arrow_at_to: false | dashed: false | diamond_at_from: false | fields: [] | kind: Association | kind: Object | label: sprite | links: | source_line: N | sprite -- Player | to: Player] rem[ | links: []] (svg changed)": 1,
+  "ast: add[\"@startuml\\nclass Player\\nSprite o-- Player : owns\\n@enduml\\n\", | \"Sprite\", | \"owns\", | ), | ClassEntity { | Entity( | N, | Relationship { | Relationship( | ], | arrowhead: Arrow, | color: None, | dashed: false, | declaration: false, | deco] rem[\"@startuml\\nclass Player\\n\\n@enduml\\n\", | relationships: [],] (svg changed)": 1,
+  "yaml: add[- !Entity Sprite | - !Relationship N | - from: Sprite | - id: Sprite | Sprite o-- Player : owns | dashed: false | decorated_end: From | explicit_alias: false | from_multiplicity: null | kind: Aggregation | kind: Class | label: Sprite | labe] rem[ | relationships: []] (svg changed)": 1,
+  "ast: add[\"@startuml\\nclass Player\\nclass Level\\nSprite .. Player\\nLevel -- Player\\n@enduml\\n\", | \"Sprite\", | ), | ClassEntity { | Entity( | N, | Relationship { | Relationship( | arrowhead: Arrow, | color: None, | dashed: true, | declaration: false, ] rem[\"@startuml\\nclass Player\\nclass Level\\n\\nLevel -- Player\\n@enduml\\n\",] (svg changed)": 1,
+  "yaml: add[- !Entity Sprite | - !Relationship N | - from: Sprite | - id: Sprite | Sprite .. Player | dashed: true | decorated_end: None | explicit_alias: false | from_multiplicity: null | kind: Association | kind: Class | label: Sprite | label: null |] rem[] (svg changed)": 1,
+  "ast: add[\"@startuml\\nclass Player {\\n  Sprite sheet field\\n}\\n@enduml\\n\", | Member { | ], | display_text: \"Sprite sheet field\", | is_abstract: false, | is_static: false, | kind: Field, | members: [ | name: \"Sprite sheet field\", | return_type: None, ] rem[\"@startuml\\nclass Player {\\n\\n}\\n@enduml\\n\", | members: [],] (svg changed)": 1,
+  "yaml: add[- name: Sprite sheet field | Sprite sheet field | display_text: Sprite sheet field | is_abstract: false | is_static: false | kind: Field | members: | return_type: null | visibility: Default] rem[ | members: []] (svg changed)": 1,
+  "ascii: add[\u2502        Player        \u2502 | \u2502   Sprite sheet field \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 | \u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524] rem[\u2502 Player \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518] (svg changed)": 1,
+  "ast: add[\"@startuml\\nclass Player {\\n  Sprite frame {\\n}\\nclass Level\\n@enduml\\n\", | \"Level\", | ), | ClassEntity { | Entity( | color: None, | display_text: \"Sprite frame {\", | explicit_alias: false, | generic: None, | id: \"Level\", | kind: Class, | l] rem[\"@startuml\\nclass Player {\\n\\n\\nclass Level\\n@enduml\\n\", | \"frame\": SpriteData { | display_text: \"class Level\", | height: N, | name: \"class Level\", | rows: [], | sprites: { | width: N, | },] (svg changed)": 1,
+  "yaml: add[- !Entity Level | - id: Level | - name: Sprite frame { | Sprite frame { | display_text: Sprite frame { | explicit_alias: false | kind: Class | label: Level | members: [] | source_line: N | stereotypes: [] | }] rem[ | - name: class Level | display_text: class Level | frame: | height: N | rows: [] | sprites: | width: N] (svg changed)": 1,
+  "ascii: add[ | \u2502      Player      \u2502 | \u2502   Sprite frame { \u2502 | \u2502 Level \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 | \u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524] rem[\u2502    Player     \u2502 | \u2502   class Level \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 | \u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524] (svg changed)": 1,
+  "ast: add[\"@startuml\\nclass Player\\nnote right of Player\\nSprite pool size\\nend note\\n@enduml\\n\", | \"Sprite pool size\",] rem[\"\", | \"@startuml\\nclass Player\\nnote right of Player\\n\\nend note\\n@enduml\\n\",] (svg changed)": 1,
+  "yaml: add[- Sprite pool size | Sprite pool size] rem[ | - ''] (svg changed)": 1,
+  "ast: add[\"@startuml\\nstate Idle\\nnote right of Idle\\nSprite idle loop\\nend note\\n@enduml\\n\", | \"Idle\", | ), | StateNote { | ], | command_line: N, | creation_order: N, | kind: RightOf( | notes: [ | source_line: N, | text: \"Sprite idle loop\", | },] rem[\"@startuml\\nstate Idle\\nnote right of Idle\\n\\nend note\\n@enduml\\n\", | notes: [],] (svg changed)": 1,
+  "yaml: add[- text: Sprite idle loop | Sprite idle loop | command_line: N | creation_order: N | kind: !RightOf Idle | notes: | source_line: N] rem[ | notes: []] (svg changed)": 1,
+  "ast: add[\"@startuml\\nstart\\n:load;\\nnote right\\nSprite batch ready now\\nend note\\nstop\\n@enduml\\n\", | ), | Note( | NoteBlock { | color: None, | position: Right, | text: \"Sprite batch ready now\", | },] rem[\"@startuml\\nstart\\n:load;\\nnote right\\n\\nend note\\nstop\\n@enduml\\n\",] (svg changed)": 1,
+  "yaml: add[- !Note | Sprite batch ready now | color: null | position: Right | text: Sprite batch ready now] rem[] (svg changed)": 1,
+  "ascii: add[\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2518[right: Sprite b] rem[\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2518] (svg changed)": 1,
+  "ast: add[\"@startuml\\n[Engine]\\nnote right of [Engine]\\nSprite cache budget\\nend note\\n@enduml\\n\", | \"Engine\", | ), | ComponentNote { | ], | connection: None, | notes: [ | position: Right, | source_line: N, | target: Some( | text: \"Sprite cache budge] rem[\"@startuml\\n[Engine]\\nnote right of [Engine]\\n\\nend note\\n@enduml\\n\", | notes: [],] (svg changed)": 1,
+  "yaml: add[- text: Sprite cache budget | Sprite cache budget | notes: | position: Right | source_line: N | target: Engine] rem[ | notes: []] (svg changed)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> Cedar: packe] (svg same)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nSpru] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nSPRITE $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nSPRITE $needle <svg widt | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: ] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nSpRiTe\\u{aN}$needle <svg width=\\\"N\\\" height | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nSpRiTe\\u{aN}$needle <svg | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: ] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\nend\\u{a | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\nendspri | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/Nz] N\\nSpruce --> Cedar | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/Nz]  | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\nSpruce --> Cedar: pack] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle FNFNFN\\nSpruce --> Cedar: pa | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle FNFNFN\\nS | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\nSpruce --> Cedar: pack] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | source_line: N, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\", | source_line: N,] (svg changed)": 1,
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | source_line: N | sprite $needle <svg width=\"N\" height=\"N\">] rem[ | source_line: N] (svg changed)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | source_line: N, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar:  | source_line: N,] (svg same)": 1,
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | source_line: N | sprite $needle <svg width=\"N\" height=\"N\">] rem[ | source_line: N] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nSpru | source_line: N, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n | source_line: N,] (svg changed)": 1,
+  "yaml: add[FNF | NFN | source_line: N | sprite $needle [NxN/N] { | }] rem[ | source_line: N] (svg changed)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] { | source_line: N, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar | source_line: N,] (svg same)": 1,
+  "yaml: add[FNF | NFN | source_line: N | sprite $needle [NxN/N] { | }] rem[ | source_line: N] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | sprites: {}, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@en | \"FNF\", | \"NFN\", | \"needle\": SpriteData { | ], | height: N, | rows: [ | sprites: { | width: N, | },] (svg same)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | sprites: {}, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> | \"FNF\", | \"NFN\", | \"needle\": SpriteData { | ], | height: N, | rows: [ | sprites: { | width: N, | },] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nSpru | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@en] (svg same)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] { | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce -->] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\n}\\nSpruce -- | height: N, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@en | \"NFN\", | height: N,] (svg same)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] { | height: N, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> | \"NFN\", | height: N,] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nclass \\\"Cedar <$nee] rem[\"@startuml\\n\\n\\n\\nclass \\\"Cedar <$needle>\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nclass \\\"Cedar\\\" as ] rem[\"@startuml\\n\\n\\n\\nclass \\\"Cedar\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nclass \\\"Cedar <$needle>\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n] rem[\"@startuml\\n\\n\\n\\n\\nclass \\\"Cedar <$needle>\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nclass \\\"Cedar\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nclass \\\"Cedar\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nstate \\\"Cedar <$nee] rem[\"@startuml\\n\\n\\n\\nstate \\\"Cedar <$needle>\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nstate \\\"Cedar\\\" as ] rem[\"@startuml\\n\\n\\n\\nstate \\\"Cedar\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nstate \\\"Cedar <$needle>\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nstate \\\"Cedar <$needle>\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nstate \\\"Cedar\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nstate \\\"Cedar\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nstart\\n:weave <$nee] rem[\"@startuml\\n\\n\\n\\nstart\\n:weave <$needle>;\\nstop\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nstart\\n:weave;\\nsto] rem[\"@startuml\\n\\n\\n\\nstart\\n:weave;\\nstop\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nstart\\n:weave <$needle>;\\nstop\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nstart\\n:weave <$needle>;\\nstop\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nstart\\n:weave;\\nstop\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nstart\\n:weave;\\nstop\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nusecase \\\"weave <$n] rem[\"@startuml\\n\\n\\n\\nusecase \\\"weave <$needle>\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nusecase \\\"weave\\\" a] rem[\"@startuml\\n\\n\\n\\nusecase \\\"weave\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nusecase \\\"weave <$needle>\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml] rem[\"@startuml\\n\\n\\n\\n\\nusecase \\\"weave <$needle>\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nusecase \\\"weave\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nusecase \\\"weave\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\ncomponent \\\"weave <] rem[\"@startuml\\n\\n\\n\\ncomponent \\\"weave <$needle>\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\ncomponent \\\"weave\\\"] rem[\"@startuml\\n\\n\\n\\ncomponent \\\"weave\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\ncomponent \\\"weave <$needle>\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@] rem[\"@startuml\\n\\n\\n\\n\\ncomponent \\\"weave <$needle>\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\ncomponent \\\"weave\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\ncomponent \\\"weave\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nparticipant Cedar\\n | url_tooltip: None,] rem[\"@startuml\\n\\n\\n\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote over Cedar: weave <$needle>\\n@en] (svg same)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\n | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\n\\n\\n\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote over Cedar: w] (svg same)": 1,
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote | url_tooltip: None,] rem[\"@startuml\\n\\n\\n\\n\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote over Cedar: weave <$needle>\\n@] (svg same)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Sp | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\n\\n\\n\\n\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote over Cedar:] (svg same)": 1,
+  "ast: add[\"@startuml\\nparticipant Hazel\\nsprite petal <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nno | url_tooltip: None,] rem[\"@startuml\\nparticipant Hazel\\n\\n\\n\\nnote over Hazel: <$petal>\\nHazel -> Elm: catkins\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"sap\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg changed)": 1,
+  "yaml: add[url_tooltip: sap] rem[] (svg changed)": 1,
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Hazel\\nsprite petal <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height= | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Hazel\\n\\n\\n\\nnote over Hazel: <$petal>\\nHazel -> Elm: catkins\\n@enduml\\n\",] (svg same)": 1,
+  "ast: add[\"sap\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg same)": 1,
+  "yaml: add[url_tooltip: sap] rem[] (svg same)": 1
+ },
+ "examples": {
+  "ast: exit 1->0 (svg changed)": [
+   "mk2_if_false_pixel_seq_legacy.puml",
+   "mk2_else_branch_pixel_seq_legacy.puml",
+   "mk2_include_close_only_seq_legacy.puml",
+   "mk2_seq_note_svg_lookalike_legacy.puml",
+   "mk2_if_false_pixel_seq_teoz.puml"
+  ],
+  "yaml: exit 1->0 (svg changed)": [
+   "mk2_if_false_pixel_seq_legacy.puml",
+   "mk2_else_branch_pixel_seq_legacy.puml",
+   "mk2_include_close_only_seq_legacy.puml",
+   "mk2_seq_note_svg_lookalike_legacy.puml",
+   "mk2_if_false_pixel_seq_teoz.puml"
+  ],
+  "ascii: exit 1->0 (svg changed)": [
+   "mk2_if_false_pixel_seq_legacy.puml",
+   "mk2_else_branch_pixel_seq_legacy.puml",
+   "mk2_include_close_only_seq_legacy.puml",
+   "mk2_seq_note_svg_lookalike_legacy.puml",
+   "mk2_if_false_pixel_seq_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $gem [NxN/N] {\\nFN\\nNF\\n}\\nSpruce -> | source_line: N, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce -> Cedar: back\\n@enduml\\n\", | source_line: N,] (svg changed)": [
+   "mk2_proc_invoked_closed_pixel_seq_legacy.puml"
+  ],
+  "yaml: add[FN | NF | source_line: N | sprite $gem [NxN/N] { | }] rem[ | source_line: N] (svg changed)": [
+   "mk2_proc_invoked_closed_pixel_seq_legacy.puml"
+  ],
+  "ast: exit 0->1 (svg changed)": [
+   "mk2_seq_top_level_text_legacy.puml",
+   "mk2_seq_top_level_text_teoz.puml",
+   "mk2_if_true_unclosed_pixel_state.puml",
+   "mk2_include_unclosed_component.puml",
+   "mk2_class_top_level_text.puml"
+  ],
+  "yaml: exit 0->1 (svg changed)": [
+   "mk2_seq_top_level_text_legacy.puml",
+   "mk2_seq_top_level_text_teoz.puml",
+   "mk2_if_true_unclosed_pixel_state.puml",
+   "mk2_include_unclosed_component.puml",
+   "mk2_class_top_level_text.puml"
+  ],
+  "ascii: exit 0->1 (svg changed)": [
+   "mk2_seq_top_level_text_legacy.puml",
+   "mk2_seq_top_level_text_teoz.puml",
+   "mk2_if_true_unclosed_pixel_state.puml",
+   "mk2_include_unclosed_component.puml",
+   "mk2_class_top_level_text.puml"
+  ],
+  "ast: url_tooltip-additive (svg same)": [
+   "mk2_redeclare_into_box_legacy.puml",
+   "mk2_multi_stereo_three_legacy.puml",
+   "mk2_redeclare_into_box_teoz.puml",
+   "mk2_multi_stereo_three_teoz.puml",
+   "mk2_note_across_plain_legacy.puml"
+  ],
+  "ast: add[\"bark\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg changed)": [
+   "mk2_tooltip_in_box_legacy.puml"
+  ],
+  "yaml: add[url_tooltip: bark] rem[] (svg changed)": [
+   "mk2_tooltip_in_box_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $gem [NxN/N] {\\nF | source_line: N, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce -> Cedar: | source_line: N,] (svg same)": [
+   "mk2_proc_invoked_closed_pixel_seq_teoz.puml"
+  ],
+  "yaml: add[FN | NF | source_line: N | sprite $gem [NxN/N] { | }] rem[ | source_line: N] (svg same)": [
+   "mk2_proc_invoked_closed_pixel_seq_teoz.puml"
+  ],
+  "ast: add[\"bark\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg same)": [
+   "mk2_tooltip_in_box_teoz.puml"
+  ],
+  "yaml: add[url_tooltip: bark] rem[] (svg same)": [
+   "mk2_tooltip_in_box_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nclass Level\\nPlayer -- Level\\n@enduml\\n\",] rem[\"@startuml\\nclass Player\\nsprite $gem <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n!endif\\nclass Le] (svg same)": [
+   "mk2_if_false_svg_class.puml"
+  ],
+  "yaml: add[] rem[!endif | <rect width=\"N\" height=\"N\"/> | sprite $gem <svg width=\"N\" height=\"N\">] (svg same)": [
+   "mk2_if_false_svg_class.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $gem [NxN/N] {\\nFN\\nNF\\n}\\n[Engine]\\n[Wheel]\\n[Engine] --> [Wheel]\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\n[Engine]\\n[Wheel]\\n[Engine] --> [Wheel]\\n@enduml\\n\",] (svg same)": [
+   "mk2_if_true_closed_pixel_component.puml"
+  ],
+  "yaml: add[FN | NF | sprite $gem [NxN/N] { | }] rem[] (svg same)": [
+   "mk2_if_true_closed_pixel_component.puml",
+   "mk2_include_header_only_class.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nsprite $gem [NxN/N] {\\nFN\\nNF\\n}\\nclass Level\\nPlayer -- Level\\n@enduml\\n\",] rem[\"@startuml\\nclass Player\\n\\n\\n\\n\\nclass Level\\nPlayer -- Level\\n@enduml\\n\",] (svg same)": [
+   "mk2_include_header_only_class.puml"
+  ],
+  "ast: add[sprites: {},] rem[\"frame\": SpriteData { | height: N, | rows: [], | sprites: { | width: N, | },] (svg same)": [
+   "mk2_state_note_brace.puml",
+   "mk2_deployment_note_brace.puml"
+  ],
+  "yaml: add[] rem[frame: | height: N | rows: [] | sprites: | width: N] (svg same)": [
+   "mk2_state_note_brace.puml",
+   "mk2_deployment_note_brace.puml"
+  ],
+  "ast: add[\"@startuml\\n[Engine]\\nlegend\\nSprite legend line\\nendlegend\\n@enduml\\n\", | \"Sprite legend line\",] rem[\"\", | \"@startuml\\n[Engine]\\nlegend\\n\\nendlegend\\n@enduml\\n\",] (svg changed)": [
+   "mk2_component_legend_upper.puml"
+  ],
+  "yaml: add[Sprite legend line | legend: Sprite legend line] rem[ | legend: ''] (svg changed)": [
+   "mk2_component_legend_upper.puml"
+  ],
+  "ast: add[sprites: {},] rem[\"FN\", | \"NF\", | \"gem\": SpriteData { | ], | height: N, | rows: [ | sprites: { | width: N, | },] (svg same)": [
+   "mk2_unclosed_pixel_timing.puml"
+  ],
+  "yaml: add[] rem[- 'NF' | - FN | gem: | height: N | rows: | sprites: | width: N] (svg same)": [
+   "mk2_unclosed_pixel_timing.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nsprite $gem [NxN/Nz] N\\n@enduml\\n\",] rem[\"@startuml\\nclass Player\\n\\n@enduml\\n\",] (svg same)": [
+   "mk2_compressed_bad_class.puml"
+  ],
+  "yaml: add[sprite $gem [NxN/Nz] N] rem[] (svg same)": [
+   "mk2_compressed_bad_class.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\nSprite sheets are loaded\\nend note\\nCedar -> Spruce: | text: \"Sprite sheets are loaded\", | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\n\\nend note\\nCedar -> Spruce: go\\n@enduml\\n\", | text: \"\",] (svg changed)": [
+   "cl_seq_note_upper_legacy.puml"
+  ],
+  "yaml: add[Sprite sheets are loaded | text: Sprite sheets are loaded] rem[ | text: ''] (svg changed)": [
+   "cl_seq_note_upper_legacy.puml",
+   "cl_seq_note_upper_teoz.puml"
+  ],
+  "ascii: add[\u2502 Sprite sheets are loaded \u2502 | \u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2518] rem[\u2502   \u2502  \u2502                \u2502 | \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2510                \u2502 | \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2518                \u2502] (svg changed)": [
+   "cl_seq_note_upper_legacy.puml",
+   "cl_seq_note_upper_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Maple\\nparticipant Birch\\nnote over Birch\\nSPRITE RENDERER QUEUE DEPTH\\nend note\\nBirch -> Maple | text: \"SPRITE RENDERER QUEUE DEPTH\", | url_tooltip: None,] rem[\"@startuml\\nparticipant Maple\\nparticipant Birch\\nnote over Birch\\n\\nend note\\nBirch -> Maple: ack\\n@enduml\\n\", | text: \"\",] (svg changed)": [
+   "cl_seq_note_caps_legacy.puml"
+  ],
+  "yaml: add[SPRITE RENDERER QUEUE DEPTH | text: SPRITE RENDERER QUEUE DEPTH] rem[ | text: ''] (svg changed)": [
+   "cl_seq_note_caps_legacy.puml",
+   "cl_seq_note_caps_teoz.puml"
+  ],
+  "ascii: add[\u2502   \u2502 SPRITE RENDERER QUEUE DEPTH \u2502 | \u2502   \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2502   \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518] rem[\u2502              \u2502   \u2502  \u2502 | \u2502              \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2510 | \u2502              \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2518] (svg changed)": [
+   "cl_seq_note_caps_legacy.puml",
+   "cl_seq_note_caps_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\nsprite sheets are loaded\\nend note\\nCedar -> Spruce: | text: \"sprite sheets are loaded\", | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\n\\nend note\\nCedar -> Spruce: go\\n@enduml\\n\", | text: \"\",] (svg changed)": [
+   "cl_seq_note_lower_legacy.puml"
+  ],
+  "yaml: add[sprite sheets are loaded | text: sprite sheets are loaded] rem[ | text: ''] (svg changed)": [
+   "cl_seq_note_lower_legacy.puml",
+   "cl_seq_note_lower_teoz.puml"
+  ],
+  "ascii: add[\u2502 sprite sheets are loaded \u2502 | \u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2518] rem[\u2502   \u2502  \u2502                \u2502 | \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2510                \u2502 | \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2518                \u2502] (svg changed)": [
+   "cl_seq_note_lower_legacy.puml",
+   "cl_seq_note_lower_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: go\\nlegend\\nSprite atlas version two\\nendlegend\\n@en | \"Sprite atlas version two\", | url_tooltip: None,] rem[\"\", | \"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: go\\nlegend\\n\\nendlegend\\n@enduml\\n\",] (svg changed)": [
+   "cl_seq_legend_upper_legacy.puml"
+  ],
+  "yaml: add[Sprite atlas version two | legend: Sprite atlas version two] rem[ | legend: ''] (svg changed)": [
+   "cl_seq_legend_upper_legacy.puml",
+   "cl_seq_legend_upper_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nref over Cedar, Spruce\\nSprite cache warm\\nend ref\\n@enduml\\n\", | text: \"Sprite cache warm\", | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nref over Cedar, Spruce\\n\\nend ref\\n@enduml\\n\", | text: \"\",] (svg changed)": [
+   "cl_seq_ref_upper_legacy.puml"
+  ],
+  "yaml: add[Sprite cache warm | text: Sprite cache warm] rem[ | text: ''] (svg changed)": [
+   "cl_seq_ref_upper_legacy.puml",
+   "cl_seq_ref_upper_teoz.puml"
+  ],
+  "ascii: add[\u2502 ref: Sprite cache warm \u2502 | \u250c\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2510 | \u2514\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2518] rem[\u2502 ref:  \u2502             \u2502 | \u250c\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2510             \u2502 | \u2514\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2518             \u2502] (svg changed)": [
+   "cl_seq_ref_upper_legacy.puml",
+   "cl_seq_ref_upper_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\nSprite sheets are loaded\\nend not | text: \"Sprite sheets are loaded\", | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\n\\nend note\\nCedar -> Spruce: go\\n | text: \"\",] (svg changed)": [
+   "cl_seq_note_upper_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Maple\\nparticipant Birch\\nnote over Birch\\nSPRITE RENDERER QUEUE DEPTH\\nend n | text: \"SPRITE RENDERER QUEUE DEPTH\", | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Maple\\nparticipant Birch\\nnote over Birch\\n\\nend note\\nBirch -> Maple: ack\\n@ | text: \"\",] (svg changed)": [
+   "cl_seq_note_caps_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\nsprite sheets are loaded\\nend not | text: \"sprite sheets are loaded\", | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\n\\nend note\\nCedar -> Spruce: go\\n | text: \"\",] (svg changed)": [
+   "cl_seq_note_lower_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: go\\nlegend\\nSprite atlas version  | \"Sprite atlas version two\", | url_tooltip: None,] rem[\"\", | \"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: go\\nlegend\\n\\nendlegend\\n@enduml\\] (svg changed)": [
+   "cl_seq_legend_upper_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nref over Cedar, Spruce\\nSprite cache warm\\nend ref | text: \"Sprite cache warm\", | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nref over Cedar, Spruce\\n\\nend ref\\n@enduml\\n\", | text: \"\",] (svg changed)": [
+   "cl_seq_ref_upper_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nSprite -- Player\\n@enduml\\n\", | \"Sprite\", | ), | ClassEntity { | Entity( | N, | Relationship { | Relationship( | ], | arrowhead: Arrow, | color: None, | dashed: false, | declaration: false, | decorated_end: None, |] rem[\"@startuml\\nclass Player\\n\\n@enduml\\n\", | relationships: [],] (svg changed)": [
+   "cl_class_link_upper.puml"
+  ],
+  "yaml: add[- !Entity Sprite | - !Relationship N | - from: Sprite | - id: Sprite | Sprite -- Player | dashed: false | decorated_end: None | explicit_alias: false | from_multiplicity: null | kind: Association | kind: Class | label: Sprite | label: null ] rem[ | relationships: []] (svg changed)": [
+   "cl_class_link_upper.puml"
+  ],
+  "ascii: add[ | \u2502 Sprite \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518] rem[] (svg changed)": [
+   "cl_class_link_upper.puml",
+   "cl_class_aggregation_label.puml",
+   "cl_class_dotted.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nsprite -- Player\\n@enduml\\n\", | \"sprite\", | ), | ClassEntity { | Entity( | N, | Relationship { | Relationship( | ], | arrowhead: Arrow, | color: None, | dashed: false, | declaration: false, | decorated_end: None, |] rem[\"@startuml\\nclass Player\\n\\n@enduml\\n\", | relationships: [],] (svg changed)": [
+   "cl_class_link_lower.puml"
+  ],
+  "yaml: add[- !Entity sprite | - !Relationship N | - from: sprite | - id: sprite | dashed: false | decorated_end: None | explicit_alias: false | from_multiplicity: null | kind: Association | kind: Class | label: null | label: sprite | label_arrow: None] rem[ | relationships: []] (svg changed)": [
+   "cl_class_link_lower.puml"
+  ],
+  "ascii: add[ | \u2502 sprite \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518] rem[] (svg changed)": [
+   "cl_class_link_lower.puml"
+  ],
+  "ast: add[\"@startuml\\nobject Player\\nSprite -- Player\\n@enduml\\n\", | ObjectInstance { | ObjectLink { | ], | arrow_at_from: false, | arrow_at_to: false, | color: None, | dashed: false, | diamond_at_from: false, | fields: [], | from: \"Sprite\", | from_m] rem[\"@startuml\\nobject Player\\n\\n@enduml\\n\", | links: [],] (svg changed)": [
+   "cl_object_link_upper.puml"
+  ],
+  "yaml: add[- from: Sprite | - id: Sprite | Sprite -- Player | arrow_at_from: false | arrow_at_to: false | dashed: false | diamond_at_from: false | fields: [] | kind: Association | kind: Object | label: Sprite | links: | source_line: N | to: Player] rem[ | links: []] (svg changed)": [
+   "cl_object_link_upper.puml"
+  ],
+  "ast: add[\"@startuml\\nobject Player\\nsprite -- Player\\n@enduml\\n\", | ObjectInstance { | ObjectLink { | ], | arrow_at_from: false, | arrow_at_to: false, | color: None, | dashed: false, | diamond_at_from: false, | fields: [], | from: \"sprite\", | from_m] rem[\"@startuml\\nobject Player\\n\\n@enduml\\n\", | links: [],] (svg changed)": [
+   "cl_object_link_lower.puml"
+  ],
+  "yaml: add[- from: sprite | - id: sprite | arrow_at_from: false | arrow_at_to: false | dashed: false | diamond_at_from: false | fields: [] | kind: Association | kind: Object | label: sprite | links: | source_line: N | sprite -- Player | to: Player] rem[ | links: []] (svg changed)": [
+   "cl_object_link_lower.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nSprite o-- Player : owns\\n@enduml\\n\", | \"Sprite\", | \"owns\", | ), | ClassEntity { | Entity( | N, | Relationship { | Relationship( | ], | arrowhead: Arrow, | color: None, | dashed: false, | declaration: false, | deco] rem[\"@startuml\\nclass Player\\n\\n@enduml\\n\", | relationships: [],] (svg changed)": [
+   "cl_class_aggregation_label.puml"
+  ],
+  "yaml: add[- !Entity Sprite | - !Relationship N | - from: Sprite | - id: Sprite | Sprite o-- Player : owns | dashed: false | decorated_end: From | explicit_alias: false | from_multiplicity: null | kind: Aggregation | kind: Class | label: Sprite | labe] rem[ | relationships: []] (svg changed)": [
+   "cl_class_aggregation_label.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nclass Level\\nSprite .. Player\\nLevel -- Player\\n@enduml\\n\", | \"Sprite\", | ), | ClassEntity { | Entity( | N, | Relationship { | Relationship( | arrowhead: Arrow, | color: None, | dashed: true, | declaration: false, ] rem[\"@startuml\\nclass Player\\nclass Level\\n\\nLevel -- Player\\n@enduml\\n\",] (svg changed)": [
+   "cl_class_dotted.puml"
+  ],
+  "yaml: add[- !Entity Sprite | - !Relationship N | - from: Sprite | - id: Sprite | Sprite .. Player | dashed: true | decorated_end: None | explicit_alias: false | from_multiplicity: null | kind: Association | kind: Class | label: Sprite | label: null |] rem[] (svg changed)": [
+   "cl_class_dotted.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player {\\n  Sprite sheet field\\n}\\n@enduml\\n\", | Member { | ], | display_text: \"Sprite sheet field\", | is_abstract: false, | is_static: false, | kind: Field, | members: [ | name: \"Sprite sheet field\", | return_type: None, ] rem[\"@startuml\\nclass Player {\\n\\n}\\n@enduml\\n\", | members: [],] (svg changed)": [
+   "cl_class_member_upper.puml"
+  ],
+  "yaml: add[- name: Sprite sheet field | Sprite sheet field | display_text: Sprite sheet field | is_abstract: false | is_static: false | kind: Field | members: | return_type: null | visibility: Default] rem[ | members: []] (svg changed)": [
+   "cl_class_member_upper.puml"
+  ],
+  "ascii: add[\u2502        Player        \u2502 | \u2502   Sprite sheet field \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 | \u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524] rem[\u2502 Player \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518] (svg changed)": [
+   "cl_class_member_upper.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player {\\n  Sprite frame {\\n}\\nclass Level\\n@enduml\\n\", | \"Level\", | ), | ClassEntity { | Entity( | color: None, | display_text: \"Sprite frame {\", | explicit_alias: false, | generic: None, | id: \"Level\", | kind: Class, | l] rem[\"@startuml\\nclass Player {\\n\\n\\nclass Level\\n@enduml\\n\", | \"frame\": SpriteData { | display_text: \"class Level\", | height: N, | name: \"class Level\", | rows: [], | sprites: { | width: N, | },] (svg changed)": [
+   "cl_class_member_brace.puml"
+  ],
+  "yaml: add[- !Entity Level | - id: Level | - name: Sprite frame { | Sprite frame { | display_text: Sprite frame { | explicit_alias: false | kind: Class | label: Level | members: [] | source_line: N | stereotypes: [] | }] rem[ | - name: class Level | display_text: class Level | frame: | height: N | rows: [] | sprites: | width: N] (svg changed)": [
+   "cl_class_member_brace.puml"
+  ],
+  "ascii: add[ | \u2502      Player      \u2502 | \u2502   Sprite frame { \u2502 | \u2502 Level \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 | \u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524] rem[\u2502    Player     \u2502 | \u2502   class Level \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 | \u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524] (svg changed)": [
+   "cl_class_member_brace.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nnote right of Player\\nSprite pool size\\nend note\\n@enduml\\n\", | \"Sprite pool size\",] rem[\"\", | \"@startuml\\nclass Player\\nnote right of Player\\n\\nend note\\n@enduml\\n\",] (svg changed)": [
+   "cl_class_note_upper.puml"
+  ],
+  "yaml: add[- Sprite pool size | Sprite pool size] rem[ | - ''] (svg changed)": [
+   "cl_class_note_upper.puml"
+  ],
+  "ast: add[\"@startuml\\nstate Idle\\nnote right of Idle\\nSprite idle loop\\nend note\\n@enduml\\n\", | \"Idle\", | ), | StateNote { | ], | command_line: N, | creation_order: N, | kind: RightOf( | notes: [ | source_line: N, | text: \"Sprite idle loop\", | },] rem[\"@startuml\\nstate Idle\\nnote right of Idle\\n\\nend note\\n@enduml\\n\", | notes: [],] (svg changed)": [
+   "cl_state_note_upper.puml"
+  ],
+  "yaml: add[- text: Sprite idle loop | Sprite idle loop | command_line: N | creation_order: N | kind: !RightOf Idle | notes: | source_line: N] rem[ | notes: []] (svg changed)": [
+   "cl_state_note_upper.puml"
+  ],
+  "ast: add[\"@startuml\\nstart\\n:load;\\nnote right\\nSprite batch ready now\\nend note\\nstop\\n@enduml\\n\", | ), | Note( | NoteBlock { | color: None, | position: Right, | text: \"Sprite batch ready now\", | },] rem[\"@startuml\\nstart\\n:load;\\nnote right\\n\\nend note\\nstop\\n@enduml\\n\",] (svg changed)": [
+   "cl_activity_note_upper.puml"
+  ],
+  "yaml: add[- !Note | Sprite batch ready now | color: null | position: Right | text: Sprite batch ready now] rem[] (svg changed)": [
+   "cl_activity_note_upper.puml"
+  ],
+  "ascii: add[\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2518[right: Sprite b] rem[\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2518] (svg changed)": [
+   "cl_activity_note_upper.puml"
+  ],
+  "ast: add[\"@startuml\\n[Engine]\\nnote right of [Engine]\\nSprite cache budget\\nend note\\n@enduml\\n\", | \"Engine\", | ), | ComponentNote { | ], | connection: None, | notes: [ | position: Right, | source_line: N, | target: Some( | text: \"Sprite cache budge] rem[\"@startuml\\n[Engine]\\nnote right of [Engine]\\n\\nend note\\n@enduml\\n\", | notes: [],] (svg changed)": [
+   "cl_component_note_upper.puml"
+  ],
+  "yaml: add[- text: Sprite cache budget | Sprite cache budget | notes: | position: Right | source_line: N | target: Engine] rem[ | notes: []] (svg changed)": [
+   "cl_component_note_upper.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_nested_legacy.puml",
+   "c75_sprite_attribute_legacy.puml"
+  ],
+  "yaml: add[<rect width=\"N\" height=\"N\"/></svg> | <svg x=\"N\" y=\"N\"> | sprite $needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": [
+   "c75_sprite_nested_legacy.puml",
+   "c75_sprite_nested_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: ] (svg same)": [
+   "c75_sprite_nested_teoz.puml",
+   "c75_sprite_attribute_teoz.puml",
+   "c75_include_closed_teoz.puml",
+   "c75_include_child_to_parent_teoz.puml",
+   "c75_include_nested_teoz.puml"
+  ],
+  "yaml: add[</svg> | <rect data-probe=\"</svg>\" width=\"N\" height=\"N\"/> | sprite $needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": [
+   "c75_sprite_attribute_legacy.puml",
+   "c75_sprite_attribute_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> Cedar: packe] (svg same)": [
+   "c75_sprite_back_to_back_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | FNF | NFN | sprite $bark <svg width=\"N\" height=\"N\"> | sprite $cone [NxN/N] { | sprite $needle <svg width=\"N\" height=\"N\"> | }] rem[] (svg same)": [
+   "c75_sprite_back_to_back_legacy.puml",
+   "c75_sprite_back_to_back_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nSpru] (svg same)": [
+   "c75_sprite_back_to_back_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nSPRITE $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_uppercase_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | SPRITE $needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": [
+   "c75_sprite_uppercase_legacy.puml",
+   "c75_sprite_uppercase_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nSPRITE $needle <svg widt | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: ] (svg same)": [
+   "c75_sprite_uppercase_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nSpRiTe\\u{aN}$needle <svg width=\\\"N\\\" height | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_mixed_nbsp_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | SpRiTe\u00a0$needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": [
+   "c75_sprite_mixed_nbsp_legacy.puml",
+   "c75_sprite_mixed_nbsp_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nSpRiTe\\u{aN}$needle <svg | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: ] (svg same)": [
+   "c75_sprite_mixed_nbsp_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\nend\\u{a | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n] (svg same)": [
+   "c75_sprite_pixel_end_legacy.puml"
+  ],
+  "yaml: add[FNF | NFN | end\u00a0sprite | sprite $needle [NxN/N] {] rem[] (svg same)": [
+   "c75_sprite_pixel_end_legacy.puml",
+   "c75_sprite_pixel_end_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] { | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar] (svg same)": [
+   "c75_sprite_pixel_end_teoz.puml",
+   "c75_sprite_pixel_compact_end_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\nendspri | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n] (svg same)": [
+   "c75_sprite_pixel_compact_end_legacy.puml"
+  ],
+  "yaml: add[FNF | NFN | endsprite | sprite $needle [NxN/N] {] rem[] (svg same)": [
+   "c75_sprite_pixel_compact_end_legacy.puml",
+   "c75_sprite_pixel_compact_end_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/Nz] N\\nSpruce --> Cedar | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_compressed_legacy.puml"
+  ],
+  "yaml: add[sprite $needle [NxN/Nz] N] rem[] (svg same)": [
+   "c75_sprite_compressed_legacy.puml",
+   "c75_sprite_compressed_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/Nz]  | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\nSpruce --> Cedar: pack] (svg same)": [
+   "c75_sprite_compressed_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle FNFNFN\\nSpruce --> Cedar: pa | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_one_line_legacy.puml"
+  ],
+  "yaml: add[sprite $needle FNFNFN] rem[] (svg same)": [
+   "c75_sprite_one_line_legacy.puml",
+   "c75_sprite_one_line_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle FNFNFN\\nS | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\nSpruce --> Cedar: pack] (svg same)": [
+   "c75_sprite_one_line_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | source_line: N, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\", | source_line: N,] (svg changed)": [
+   "c75_sprite_procedure_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | source_line: N | sprite $needle <svg width=\"N\" height=\"N\">] rem[ | source_line: N] (svg changed)": [
+   "c75_sprite_procedure_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | source_line: N, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar:  | source_line: N,] (svg same)": [
+   "c75_sprite_procedure_teoz.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | source_line: N | sprite $needle <svg width=\"N\" height=\"N\">] rem[ | source_line: N] (svg same)": [
+   "c75_sprite_procedure_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nSpru | source_line: N, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n | source_line: N,] (svg changed)": [
+   "c75_sprite_function_legacy.puml"
+  ],
+  "yaml: add[FNF | NFN | source_line: N | sprite $needle [NxN/N] { | }] rem[ | source_line: N] (svg changed)": [
+   "c75_sprite_function_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] { | source_line: N, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar | source_line: N,] (svg same)": [
+   "c75_sprite_function_teoz.puml"
+  ],
+  "yaml: add[FNF | NFN | source_line: N | sprite $needle [NxN/N] { | }] rem[ | source_line: N] (svg same)": [
+   "c75_sprite_function_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | sprites: {}, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@en | \"FNF\", | \"NFN\", | \"needle\": SpriteData { | ], | height: N, | rows: [ | sprites: { | width: N, | },] (svg same)": [
+   "c75_sprite_if_true_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | sprite $needle <svg width=\"N\" height=\"N\">] rem[ | - 'NFN' | - FNF | height: N | needle: | rows: | sprites: | width: N] (svg same)": [
+   "c75_sprite_if_true_legacy.puml",
+   "c75_sprite_if_true_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | sprites: {}, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> | \"FNF\", | \"NFN\", | \"needle\": SpriteData { | ], | height: N, | rows: [ | sprites: { | width: N, | },] (svg same)": [
+   "c75_sprite_if_true_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nSpru | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@en] (svg same)": [
+   "c75_sprite_if_false_legacy.puml"
+  ],
+  "yaml: add[FNF | NFN | sprite $needle [NxN/N] { | }] rem[] (svg same)": [
+   "c75_sprite_if_false_legacy.puml",
+   "c75_sprite_if_false_teoz.puml",
+   "c75_use_pixel_class.puml",
+   "c75_unused_pixel_class.puml",
+   "c75_use_pixel_state.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] { | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce -->] (svg same)": [
+   "c75_sprite_if_false_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\n}\\nSpruce -- | height: N, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@en | \"NFN\", | height: N,] (svg same)": [
+   "c75_sprite_body_if_legacy.puml"
+  ],
+  "yaml: add[FNF | height: N | sprite $needle [NxN/N] { | }] rem[ | - 'NFN' | height: N] (svg same)": [
+   "c75_sprite_body_if_legacy.puml",
+   "c75_sprite_body_if_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] { | height: N, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> | \"NFN\", | height: N,] (svg same)": [
+   "c75_sprite_body_if_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_last_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | sprite $needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": [
+   "c75_sprite_last_legacy.puml",
+   "c75_sprite_last_teoz.puml",
+   "c75_include_closed_legacy.puml",
+   "c75_include_closed_teoz.puml",
+   "c75_include_child_to_parent_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_last_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: ring\\n@enduml\\n\",] (svg same)": [
+   "c75_include_closed_legacy.puml",
+   "c75_include_child_to_parent_legacy.puml",
+   "c75_include_nested_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nclass \\\"Cedar <$nee] rem[\"@startuml\\n\\n\\n\\nclass \\\"Cedar <$needle>\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_use_svg_class.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nclass \\\"Cedar\\\" as ] rem[\"@startuml\\n\\n\\n\\nclass \\\"Cedar\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_svg_class.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nclass \\\"Cedar <$needle>\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n] rem[\"@startuml\\n\\n\\n\\n\\nclass \\\"Cedar <$needle>\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_use_pixel_class.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nclass \\\"Cedar\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nclass \\\"Cedar\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_pixel_class.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nstate \\\"Cedar <$nee] rem[\"@startuml\\n\\n\\n\\nstate \\\"Cedar <$needle>\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_use_svg_state.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nstate \\\"Cedar\\\" as ] rem[\"@startuml\\n\\n\\n\\nstate \\\"Cedar\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_svg_state.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nstate \\\"Cedar <$needle>\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nstate \\\"Cedar <$needle>\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_use_pixel_state.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nstate \\\"Cedar\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nstate \\\"Cedar\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_pixel_state.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nstart\\n:weave <$nee] rem[\"@startuml\\n\\n\\n\\nstart\\n:weave <$needle>;\\nstop\\n@enduml\\n\",] (svg same)": [
+   "c75_use_svg_activity.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nstart\\n:weave;\\nsto] rem[\"@startuml\\n\\n\\n\\nstart\\n:weave;\\nstop\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_svg_activity.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nstart\\n:weave <$needle>;\\nstop\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nstart\\n:weave <$needle>;\\nstop\\n@enduml\\n\",] (svg same)": [
+   "c75_use_pixel_activity.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nstart\\n:weave;\\nstop\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nstart\\n:weave;\\nstop\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_pixel_activity.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nusecase \\\"weave <$n] rem[\"@startuml\\n\\n\\n\\nusecase \\\"weave <$needle>\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] (svg same)": [
+   "c75_use_svg_usecase.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nusecase \\\"weave\\\" a] rem[\"@startuml\\n\\n\\n\\nusecase \\\"weave\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_svg_usecase.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nusecase \\\"weave <$needle>\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml] rem[\"@startuml\\n\\n\\n\\n\\nusecase \\\"weave <$needle>\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] (svg same)": [
+   "c75_use_pixel_usecase.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nusecase \\\"weave\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nusecase \\\"weave\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_pixel_usecase.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\ncomponent \\\"weave <] rem[\"@startuml\\n\\n\\n\\ncomponent \\\"weave <$needle>\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_use_svg_component.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\ncomponent \\\"weave\\\"] rem[\"@startuml\\n\\n\\n\\ncomponent \\\"weave\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_svg_component.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\ncomponent \\\"weave <$needle>\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@] rem[\"@startuml\\n\\n\\n\\n\\ncomponent \\\"weave <$needle>\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_use_pixel_component.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\ncomponent \\\"weave\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\ncomponent \\\"weave\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_pixel_component.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nparticipant Cedar\\n | url_tooltip: None,] rem[\"@startuml\\n\\n\\n\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote over Cedar: weave <$needle>\\n@en] (svg same)": [
+   "c75_use_svg_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\n | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\n\\n\\n\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote over Cedar: w] (svg same)": [
+   "c75_use_svg_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote | url_tooltip: None,] rem[\"@startuml\\n\\n\\n\\n\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote over Cedar: weave <$needle>\\n@] (svg same)": [
+   "c75_use_pixel_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Sp | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\n\\n\\n\\n\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote over Cedar:] (svg same)": [
+   "c75_use_pixel_teoz.puml"
+  ],
+  "ast: add[\"rings\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg changed)": [
+   "c75_participant_link_legacy.puml",
+   "c75_participant_combined_legacy.puml",
+   "c75_actor_link_legacy.puml",
+   "c75_actor_combined_legacy.puml",
+   "c75_boundary_link_legacy.puml"
+  ],
+  "yaml: add[url_tooltip: rings] rem[] (svg changed)": [
+   "c75_participant_link_legacy.puml",
+   "c75_participant_combined_legacy.puml",
+   "c75_actor_link_legacy.puml",
+   "c75_actor_combined_legacy.puml",
+   "c75_boundary_link_legacy.puml"
+  ],
+  "ast: add[\"rings\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg same)": [
+   "c75_participant_link_teoz.puml",
+   "c75_participant_combined_teoz.puml",
+   "c75_actor_link_teoz.puml",
+   "c75_actor_combined_teoz.puml",
+   "c75_boundary_link_teoz.puml"
+  ],
+  "yaml: add[url_tooltip: rings] rem[] (svg same)": [
+   "c75_participant_link_teoz.puml",
+   "c75_participant_combined_teoz.puml",
+   "c75_actor_link_teoz.puml",
+   "c75_actor_combined_teoz.puml",
+   "c75_boundary_link_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Hazel\\nsprite petal <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nno | url_tooltip: None,] rem[\"@startuml\\nparticipant Hazel\\n\\n\\n\\nnote over Hazel: <$petal>\\nHazel -> Elm: catkins\\n@enduml\\n\",] (svg same)": [
+   "c75s_svg_variable_name_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | sprite petal <svg width=\"N\" height=\"N\">] rem[] (svg same)": [
+   "c75s_svg_variable_name_legacy.puml",
+   "c75s_svg_variable_name_teoz.puml"
+  ],
+  "ast: add[\"sap\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg changed)": [
+   "c75s_participant_link_inside_label_legacy.puml"
+  ],
+  "yaml: add[url_tooltip: sap] rem[] (svg changed)": [
+   "c75s_participant_link_inside_label_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Hazel\\nsprite petal <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height= | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Hazel\\n\\n\\n\\nnote over Hazel: <$petal>\\nHazel -> Elm: catkins\\n@enduml\\n\",] (svg same)": [
+   "c75s_svg_variable_name_teoz.puml"
+  ],
+  "ast: add[\"sap\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg same)": [
+   "c75s_participant_link_inside_label_teoz.puml"
+  ],
+  "yaml: add[url_tooltip: sap] rem[] (svg same)": [
+   "c75s_participant_link_inside_label_teoz.puml"
+  ]
+ },
+ "all": {
+  "ast: exit 1->0 (svg changed)": [
+   "mk2_if_false_pixel_seq_legacy.puml",
+   "mk2_else_branch_pixel_seq_legacy.puml",
+   "mk2_include_close_only_seq_legacy.puml",
+   "mk2_seq_note_svg_lookalike_legacy.puml",
+   "mk2_if_false_pixel_seq_teoz.puml",
+   "mk2_else_branch_pixel_seq_teoz.puml",
+   "mk2_include_close_only_seq_teoz.puml",
+   "mk2_seq_note_svg_lookalike_teoz.puml",
+   "cl_seq_note_brace_legacy.puml",
+   "cl_seq_note_brace_lower_legacy.puml",
+   "cl_seq_inline_svg_apostrophe_legacy.puml",
+   "cl_seq_inline_svg_apostrophe_attr_legacy.puml",
+   "cl_seq_note_brace_teoz.puml",
+   "cl_seq_note_brace_lower_teoz.puml",
+   "cl_seq_inline_svg_apostrophe_teoz.puml",
+   "cl_seq_inline_svg_apostrophe_attr_teoz.puml",
+   "c75_include_parent_to_child_legacy.puml",
+   "c75_include_parent_to_child_teoz.puml",
+   "c75_include_sibling_legacy.puml",
+   "c75_include_sibling_teoz.puml",
+   "c75_include_pixel_into_include_legacy.puml",
+   "c75_include_pixel_into_include_teoz.puml",
+   "c75s_inactive_unclosed_svg_legacy.puml",
+   "c75s_inactive_unclosed_pixel_legacy.puml",
+   "c75s_macro_uninvoked_unclosed_svg_legacy.puml",
+   "c75s_macro_uninvoked_unclosed_pixel_legacy.puml",
+   "c75s_inactive_unclosed_svg_teoz.puml",
+   "c75s_inactive_unclosed_pixel_teoz.puml",
+   "c75s_macro_uninvoked_unclosed_svg_teoz.puml",
+   "c75s_macro_uninvoked_unclosed_pixel_teoz.puml"
+  ],
+  "yaml: exit 1->0 (svg changed)": [
+   "mk2_if_false_pixel_seq_legacy.puml",
+   "mk2_else_branch_pixel_seq_legacy.puml",
+   "mk2_include_close_only_seq_legacy.puml",
+   "mk2_seq_note_svg_lookalike_legacy.puml",
+   "mk2_if_false_pixel_seq_teoz.puml",
+   "mk2_else_branch_pixel_seq_teoz.puml",
+   "mk2_include_close_only_seq_teoz.puml",
+   "mk2_seq_note_svg_lookalike_teoz.puml",
+   "cl_seq_note_brace_legacy.puml",
+   "cl_seq_note_brace_lower_legacy.puml",
+   "cl_seq_inline_svg_apostrophe_legacy.puml",
+   "cl_seq_inline_svg_apostrophe_attr_legacy.puml",
+   "cl_seq_note_brace_teoz.puml",
+   "cl_seq_note_brace_lower_teoz.puml",
+   "cl_seq_inline_svg_apostrophe_teoz.puml",
+   "cl_seq_inline_svg_apostrophe_attr_teoz.puml",
+   "c75_include_parent_to_child_legacy.puml",
+   "c75_include_parent_to_child_teoz.puml",
+   "c75_include_sibling_legacy.puml",
+   "c75_include_sibling_teoz.puml",
+   "c75_include_pixel_into_include_legacy.puml",
+   "c75_include_pixel_into_include_teoz.puml",
+   "c75s_inactive_unclosed_svg_legacy.puml",
+   "c75s_inactive_unclosed_pixel_legacy.puml",
+   "c75s_macro_uninvoked_unclosed_svg_legacy.puml",
+   "c75s_macro_uninvoked_unclosed_pixel_legacy.puml",
+   "c75s_inactive_unclosed_svg_teoz.puml",
+   "c75s_inactive_unclosed_pixel_teoz.puml",
+   "c75s_macro_uninvoked_unclosed_svg_teoz.puml",
+   "c75s_macro_uninvoked_unclosed_pixel_teoz.puml"
+  ],
+  "ascii: exit 1->0 (svg changed)": [
+   "mk2_if_false_pixel_seq_legacy.puml",
+   "mk2_else_branch_pixel_seq_legacy.puml",
+   "mk2_include_close_only_seq_legacy.puml",
+   "mk2_seq_note_svg_lookalike_legacy.puml",
+   "mk2_if_false_pixel_seq_teoz.puml",
+   "mk2_else_branch_pixel_seq_teoz.puml",
+   "mk2_include_close_only_seq_teoz.puml",
+   "mk2_seq_note_svg_lookalike_teoz.puml",
+   "cl_seq_note_brace_legacy.puml",
+   "cl_seq_note_brace_lower_legacy.puml",
+   "cl_seq_inline_svg_apostrophe_legacy.puml",
+   "cl_seq_inline_svg_apostrophe_attr_legacy.puml",
+   "cl_seq_note_brace_teoz.puml",
+   "cl_seq_note_brace_lower_teoz.puml",
+   "cl_seq_inline_svg_apostrophe_teoz.puml",
+   "cl_seq_inline_svg_apostrophe_attr_teoz.puml",
+   "c75_include_parent_to_child_legacy.puml",
+   "c75_include_parent_to_child_teoz.puml",
+   "c75_include_sibling_legacy.puml",
+   "c75_include_sibling_teoz.puml",
+   "c75_include_pixel_into_include_legacy.puml",
+   "c75_include_pixel_into_include_teoz.puml",
+   "c75s_inactive_unclosed_svg_legacy.puml",
+   "c75s_inactive_unclosed_pixel_legacy.puml",
+   "c75s_macro_uninvoked_unclosed_svg_legacy.puml",
+   "c75s_macro_uninvoked_unclosed_pixel_legacy.puml",
+   "c75s_inactive_unclosed_svg_teoz.puml",
+   "c75s_inactive_unclosed_pixel_teoz.puml",
+   "c75s_macro_uninvoked_unclosed_svg_teoz.puml",
+   "c75s_macro_uninvoked_unclosed_pixel_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $gem [NxN/N] {\\nFN\\nNF\\n}\\nSpruce -> | source_line: N, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce -> Cedar: back\\n@enduml\\n\", | source_line: N,] (svg changed)": [
+   "mk2_proc_invoked_closed_pixel_seq_legacy.puml"
+  ],
+  "yaml: add[FN | NF | source_line: N | sprite $gem [NxN/N] { | }] rem[ | source_line: N] (svg changed)": [
+   "mk2_proc_invoked_closed_pixel_seq_legacy.puml"
+  ],
+  "ast: exit 0->1 (svg changed)": [
+   "mk2_seq_top_level_text_legacy.puml",
+   "mk2_seq_top_level_text_teoz.puml",
+   "mk2_if_true_unclosed_pixel_state.puml",
+   "mk2_include_unclosed_component.puml",
+   "mk2_class_top_level_text.puml",
+   "mk2_component_top_level_text.puml",
+   "mk2_unclosed_pixel_object.puml",
+   "mk2_unclosed_svg_object.puml",
+   "mk2_unclosed_pixel_deployment.puml",
+   "mk2_unclosed_svg_deployment.puml",
+   "mk2_unclosed_pixel_activity_legacy.puml",
+   "mk2_unclosed_svg_activity_legacy.puml",
+   "mk2_empty_pixel_class.puml",
+   "mk2_graylevel_component.puml",
+   "mk2_sprite_file_missing_deployment.puml",
+   "cl_seq_inline_svg_trailing_comment_legacy.puml",
+   "cl_seq_inline_svg_trailing_comment_teoz.puml",
+   "cl_component_link_upper.puml",
+   "cl_usecase_link_upper.puml",
+   "c75_sprite_pixel_inline_legacy.puml",
+   "c75_sprite_pixel_inline_teoz.puml",
+   "c75_unclosed_svg_class.puml",
+   "c75_unclosed_pixel_class.puml",
+   "c75_unclosed_svg_state.puml",
+   "c75_unclosed_pixel_state.puml",
+   "c75_unclosed_svg_activity.puml",
+   "c75_unclosed_pixel_activity.puml",
+   "c75_unclosed_svg_usecase.puml",
+   "c75_unclosed_pixel_usecase.puml",
+   "c75_unclosed_svg_component.puml",
+   "c75_unclosed_pixel_component.puml",
+   "c75s_sprite_empty_pixel_legacy.puml",
+   "c75s_sprite_palette_invalid_legacy.puml",
+   "c75s_sprite_empty_pixel_teoz.puml",
+   "c75s_sprite_palette_invalid_teoz.puml"
+  ],
+  "yaml: exit 0->1 (svg changed)": [
+   "mk2_seq_top_level_text_legacy.puml",
+   "mk2_seq_top_level_text_teoz.puml",
+   "mk2_if_true_unclosed_pixel_state.puml",
+   "mk2_include_unclosed_component.puml",
+   "mk2_class_top_level_text.puml",
+   "mk2_component_top_level_text.puml",
+   "mk2_unclosed_pixel_object.puml",
+   "mk2_unclosed_svg_object.puml",
+   "mk2_unclosed_pixel_deployment.puml",
+   "mk2_unclosed_svg_deployment.puml",
+   "mk2_unclosed_pixel_activity_legacy.puml",
+   "mk2_unclosed_svg_activity_legacy.puml",
+   "mk2_empty_pixel_class.puml",
+   "mk2_graylevel_component.puml",
+   "mk2_sprite_file_missing_deployment.puml",
+   "cl_seq_inline_svg_trailing_comment_legacy.puml",
+   "cl_seq_inline_svg_trailing_comment_teoz.puml",
+   "cl_component_link_upper.puml",
+   "cl_usecase_link_upper.puml",
+   "c75_sprite_pixel_inline_legacy.puml",
+   "c75_sprite_pixel_inline_teoz.puml",
+   "c75_unclosed_svg_class.puml",
+   "c75_unclosed_pixel_class.puml",
+   "c75_unclosed_svg_state.puml",
+   "c75_unclosed_pixel_state.puml",
+   "c75_unclosed_svg_activity.puml",
+   "c75_unclosed_pixel_activity.puml",
+   "c75_unclosed_svg_usecase.puml",
+   "c75_unclosed_pixel_usecase.puml",
+   "c75_unclosed_svg_component.puml",
+   "c75_unclosed_pixel_component.puml",
+   "c75s_sprite_empty_pixel_legacy.puml",
+   "c75s_sprite_palette_invalid_legacy.puml",
+   "c75s_sprite_empty_pixel_teoz.puml",
+   "c75s_sprite_palette_invalid_teoz.puml"
+  ],
+  "ascii: exit 0->1 (svg changed)": [
+   "mk2_seq_top_level_text_legacy.puml",
+   "mk2_seq_top_level_text_teoz.puml",
+   "mk2_if_true_unclosed_pixel_state.puml",
+   "mk2_include_unclosed_component.puml",
+   "mk2_class_top_level_text.puml",
+   "mk2_component_top_level_text.puml",
+   "mk2_unclosed_pixel_object.puml",
+   "mk2_unclosed_svg_object.puml",
+   "mk2_unclosed_pixel_deployment.puml",
+   "mk2_unclosed_svg_deployment.puml",
+   "mk2_unclosed_pixel_activity_legacy.puml",
+   "mk2_unclosed_svg_activity_legacy.puml",
+   "mk2_empty_pixel_class.puml",
+   "mk2_graylevel_component.puml",
+   "mk2_sprite_file_missing_deployment.puml",
+   "cl_seq_inline_svg_trailing_comment_legacy.puml",
+   "cl_seq_inline_svg_trailing_comment_teoz.puml",
+   "cl_component_link_upper.puml",
+   "cl_usecase_link_upper.puml",
+   "c75_sprite_pixel_inline_legacy.puml",
+   "c75_sprite_pixel_inline_teoz.puml",
+   "c75_unclosed_svg_class.puml",
+   "c75_unclosed_pixel_class.puml",
+   "c75_unclosed_svg_state.puml",
+   "c75_unclosed_pixel_state.puml",
+   "c75_unclosed_svg_activity.puml",
+   "c75_unclosed_pixel_activity.puml",
+   "c75_unclosed_svg_usecase.puml",
+   "c75_unclosed_pixel_usecase.puml",
+   "c75_unclosed_svg_component.puml",
+   "c75_unclosed_pixel_component.puml",
+   "c75s_sprite_empty_pixel_legacy.puml",
+   "c75s_sprite_palette_invalid_legacy.puml",
+   "c75s_sprite_empty_pixel_teoz.puml",
+   "c75s_sprite_palette_invalid_teoz.puml"
+  ],
+  "ast: url_tooltip-additive (svg same)": [
+   "mk2_redeclare_into_box_legacy.puml",
+   "mk2_multi_stereo_three_legacy.puml",
+   "mk2_redeclare_into_box_teoz.puml",
+   "mk2_multi_stereo_three_teoz.puml",
+   "mk2_note_across_plain_legacy.puml",
+   "mk2_hnote_over_plain_legacy.puml",
+   "mk2_rnote_across_multi_plain_legacy.puml",
+   "mk2_hnote_right_plain_teoz.puml",
+   "mk2_box_plain_teoz.puml",
+   "mk2_group_space_colour_teoz.puml",
+   "mk2_return_hash_label_legacy.puml",
+   "cl_seq_lower_participant_msg_legacy.puml",
+   "cl_seq_lower_participant_dashed_legacy.puml",
+   "cl_seq_lower_participant_msg_teoz.puml",
+   "cl_seq_lower_participant_dashed_teoz.puml",
+   "c75_participant_dot_legacy.puml",
+   "c75_participant_dot_teoz.puml",
+   "c75_participant_at_legacy.puml",
+   "c75_participant_at_teoz.puml",
+   "c75_participant_alias_legacy.puml",
+   "c75_participant_alias_teoz.puml",
+   "c75_participant_reverse_legacy.puml",
+   "c75_participant_reverse_teoz.puml",
+   "c75_participant_unquoted_legacy.puml",
+   "c75_participant_unquoted_teoz.puml",
+   "c75_participant_quoted_legacy.puml",
+   "c75_participant_quoted_teoz.puml",
+   "c75_participant_compact_legacy.puml",
+   "c75_participant_compact_teoz.puml",
+   "c75_participant_multi_legacy.puml",
+   "c75_participant_multi_teoz.puml",
+   "c75_participant_positive_legacy.puml",
+   "c75_participant_positive_teoz.puml",
+   "c75_participant_signed_legacy.puml",
+   "c75_participant_signed_teoz.puml",
+   "c75_participant_large_legacy.puml",
+   "c75_participant_large_teoz.puml",
+   "c75_actor_dot_legacy.puml",
+   "c75_actor_dot_teoz.puml",
+   "c75_actor_at_legacy.puml",
+   "c75_actor_at_teoz.puml",
+   "c75_actor_alias_legacy.puml",
+   "c75_actor_alias_teoz.puml",
+   "c75_actor_reverse_legacy.puml",
+   "c75_actor_reverse_teoz.puml",
+   "c75_actor_unquoted_legacy.puml",
+   "c75_actor_unquoted_teoz.puml",
+   "c75_actor_quoted_legacy.puml",
+   "c75_actor_quoted_teoz.puml",
+   "c75_actor_compact_legacy.puml",
+   "c75_actor_compact_teoz.puml",
+   "c75_actor_multi_legacy.puml",
+   "c75_actor_multi_teoz.puml",
+   "c75_actor_positive_legacy.puml",
+   "c75_actor_positive_teoz.puml",
+   "c75_actor_signed_legacy.puml",
+   "c75_actor_signed_teoz.puml",
+   "c75_actor_large_legacy.puml",
+   "c75_actor_large_teoz.puml",
+   "c75_boundary_dot_legacy.puml",
+   "c75_boundary_dot_teoz.puml",
+   "c75_boundary_at_legacy.puml",
+   "c75_boundary_at_teoz.puml",
+   "c75_boundary_alias_legacy.puml",
+   "c75_boundary_alias_teoz.puml",
+   "c75_boundary_reverse_legacy.puml",
+   "c75_boundary_reverse_teoz.puml",
+   "c75_boundary_unquoted_legacy.puml",
+   "c75_boundary_unquoted_teoz.puml",
+   "c75_boundary_quoted_legacy.puml",
+   "c75_boundary_quoted_teoz.puml",
+   "c75_boundary_compact_legacy.puml",
+   "c75_boundary_compact_teoz.puml",
+   "c75_boundary_multi_legacy.puml",
+   "c75_boundary_multi_teoz.puml",
+   "c75_boundary_positive_legacy.puml",
+   "c75_boundary_positive_teoz.puml",
+   "c75_boundary_signed_legacy.puml",
+   "c75_boundary_signed_teoz.puml",
+   "c75_boundary_large_legacy.puml",
+   "c75_boundary_large_teoz.puml",
+   "c75_control_dot_legacy.puml",
+   "c75_control_dot_teoz.puml",
+   "c75_control_at_legacy.puml",
+   "c75_control_at_teoz.puml",
+   "c75_control_alias_legacy.puml",
+   "c75_control_alias_teoz.puml",
+   "c75_control_reverse_legacy.puml",
+   "c75_control_reverse_teoz.puml",
+   "c75_control_unquoted_legacy.puml",
+   "c75_control_unquoted_teoz.puml",
+   "c75_control_quoted_legacy.puml",
+   "c75_control_quoted_teoz.puml",
+   "c75_control_compact_legacy.puml",
+   "c75_control_compact_teoz.puml",
+   "c75_control_multi_legacy.puml",
+   "c75_control_multi_teoz.puml",
+   "c75_control_positive_legacy.puml",
+   "c75_control_positive_teoz.puml",
+   "c75_control_signed_legacy.puml",
+   "c75_control_signed_teoz.puml",
+   "c75_control_large_legacy.puml",
+   "c75_control_large_teoz.puml",
+   "c75_entity_dot_legacy.puml",
+   "c75_entity_dot_teoz.puml",
+   "c75_entity_at_legacy.puml",
+   "c75_entity_at_teoz.puml",
+   "c75_entity_alias_legacy.puml",
+   "c75_entity_alias_teoz.puml",
+   "c75_entity_reverse_legacy.puml",
+   "c75_entity_reverse_teoz.puml",
+   "c75_entity_unquoted_legacy.puml",
+   "c75_entity_unquoted_teoz.puml",
+   "c75_entity_quoted_legacy.puml",
+   "c75_entity_quoted_teoz.puml",
+   "c75_entity_compact_legacy.puml",
+   "c75_entity_compact_teoz.puml",
+   "c75_entity_multi_legacy.puml",
+   "c75_entity_multi_teoz.puml",
+   "c75_entity_positive_legacy.puml",
+   "c75_entity_positive_teoz.puml",
+   "c75_entity_signed_legacy.puml",
+   "c75_entity_signed_teoz.puml",
+   "c75_entity_large_legacy.puml",
+   "c75_entity_large_teoz.puml",
+   "c75_database_dot_legacy.puml",
+   "c75_database_dot_teoz.puml",
+   "c75_database_at_legacy.puml",
+   "c75_database_at_teoz.puml",
+   "c75_database_alias_legacy.puml",
+   "c75_database_alias_teoz.puml",
+   "c75_database_reverse_legacy.puml",
+   "c75_database_reverse_teoz.puml",
+   "c75_database_unquoted_legacy.puml",
+   "c75_database_unquoted_teoz.puml",
+   "c75_database_quoted_legacy.puml",
+   "c75_database_quoted_teoz.puml",
+   "c75_database_compact_legacy.puml",
+   "c75_database_compact_teoz.puml",
+   "c75_database_multi_legacy.puml",
+   "c75_database_multi_teoz.puml",
+   "c75_database_positive_legacy.puml",
+   "c75_database_positive_teoz.puml",
+   "c75_database_signed_legacy.puml",
+   "c75_database_signed_teoz.puml",
+   "c75_database_large_legacy.puml",
+   "c75_database_large_teoz.puml",
+   "c75_collections_dot_legacy.puml",
+   "c75_collections_dot_teoz.puml",
+   "c75_collections_at_legacy.puml",
+   "c75_collections_at_teoz.puml",
+   "c75_collections_alias_legacy.puml",
+   "c75_collections_alias_teoz.puml",
+   "c75_collections_reverse_legacy.puml",
+   "c75_collections_reverse_teoz.puml",
+   "c75_collections_unquoted_legacy.puml",
+   "c75_collections_unquoted_teoz.puml",
+   "c75_collections_quoted_legacy.puml",
+   "c75_collections_quoted_teoz.puml",
+   "c75_collections_compact_legacy.puml",
+   "c75_collections_compact_teoz.puml",
+   "c75_collections_multi_legacy.puml",
+   "c75_collections_multi_teoz.puml",
+   "c75_collections_positive_legacy.puml",
+   "c75_collections_positive_teoz.puml",
+   "c75_collections_signed_legacy.puml",
+   "c75_collections_signed_teoz.puml",
+   "c75_collections_large_legacy.puml",
+   "c75_collections_large_teoz.puml",
+   "c75_queue_dot_legacy.puml",
+   "c75_queue_dot_teoz.puml",
+   "c75_queue_at_legacy.puml",
+   "c75_queue_at_teoz.puml",
+   "c75_queue_alias_legacy.puml",
+   "c75_queue_alias_teoz.puml",
+   "c75_queue_reverse_legacy.puml",
+   "c75_queue_reverse_teoz.puml",
+   "c75_queue_unquoted_legacy.puml",
+   "c75_queue_unquoted_teoz.puml",
+   "c75_queue_quoted_legacy.puml",
+   "c75_queue_quoted_teoz.puml",
+   "c75_queue_compact_legacy.puml",
+   "c75_queue_compact_teoz.puml",
+   "c75_queue_multi_legacy.puml",
+   "c75_queue_multi_teoz.puml",
+   "c75_queue_positive_legacy.puml",
+   "c75_queue_positive_teoz.puml",
+   "c75_queue_signed_legacy.puml",
+   "c75_queue_signed_teoz.puml",
+   "c75_queue_large_legacy.puml",
+   "c75_queue_large_teoz.puml",
+   "c75_create_dot_legacy.puml",
+   "c75_create_dot_teoz.puml",
+   "c75_create_at_legacy.puml",
+   "c75_create_at_teoz.puml",
+   "c75_create_alias_legacy.puml",
+   "c75_create_alias_teoz.puml",
+   "c75_create_reverse_legacy.puml",
+   "c75_create_reverse_teoz.puml",
+   "c75_create_unquoted_legacy.puml",
+   "c75_create_unquoted_teoz.puml",
+   "c75_create_quoted_legacy.puml",
+   "c75_create_quoted_teoz.puml",
+   "c75_create_compact_legacy.puml",
+   "c75_create_compact_teoz.puml",
+   "c75_create_multi_legacy.puml",
+   "c75_create_multi_teoz.puml",
+   "c75_create_positive_legacy.puml",
+   "c75_create_positive_teoz.puml",
+   "c75_create_signed_legacy.puml",
+   "c75_create_signed_teoz.puml",
+   "c75_create_large_legacy.puml",
+   "c75_create_large_teoz.puml",
+   "c75_color_participant_simple.puml",
+   "c75_color_participant_short_hex.puml",
+   "c75_color_participant_dash.puml",
+   "c75_color_participant_slash.puml",
+   "c75_color_participant_bar.puml",
+   "c75_color_participant_backslash.puml",
+   "c75_color_participant_a2_simple.puml",
+   "c75_color_participant_a2_short_hex.puml",
+   "c75_color_participant_a2_dash.puml",
+   "c75_color_participant_a2_slash.puml",
+   "c75_color_participant_a2_bar.puml",
+   "c75_color_participant_a2_backslash.puml",
+   "c75_color_participant_a3_simple.puml",
+   "c75_color_participant_a3_short_hex.puml",
+   "c75_color_participant_a3_dash.puml",
+   "c75_color_participant_a3_slash.puml",
+   "c75_color_participant_a3_bar.puml",
+   "c75_color_participant_a3_backslash.puml",
+   "c75_color_participant_a4_simple.puml",
+   "c75_color_participant_a4_short_hex.puml",
+   "c75_color_participant_a4_dash.puml",
+   "c75_color_participant_a4_slash.puml",
+   "c75_color_participant_a4_bar.puml",
+   "c75_color_participant_a4_backslash.puml",
+   "c75_color_participant_multiline_simple.puml",
+   "c75_color_participant_multiline_short_hex.puml",
+   "c75_color_participant_multiline_composite.puml",
+   "c75_color_participant_multiline_dash.puml",
+   "c75_color_participant_multiline_slash.puml",
+   "c75_color_participant_multiline_bar.puml",
+   "c75_color_participant_multiline_backslash.puml",
+   "c75_color_participant_multiline_unknown.puml",
+   "c75_color_participant_repeat_simple.puml",
+   "c75_color_participant_repeat_short_hex.puml",
+   "c75_color_participant_repeat_composite.puml",
+   "c75_color_participant_repeat_dash.puml",
+   "c75_color_participant_repeat_slash.puml",
+   "c75_color_participant_repeat_bar.puml",
+   "c75_color_participant_repeat_backslash.puml",
+   "c75_color_participant_repeat_unknown.puml",
+   "c75_color_box_simple.puml",
+   "c75_color_box_short_hex.puml",
+   "c75_color_box_composite.puml",
+   "c75_color_box_dash.puml",
+   "c75_color_box_slash.puml",
+   "c75_color_box_bar.puml",
+   "c75_color_box_backslash.puml",
+   "c75_color_activate_simple.puml",
+   "c75_color_activate_short_hex.puml",
+   "c75_color_activate_duplicate.puml",
+   "c75_color_deactivate_simple.puml",
+   "c75_color_deactivate_short_hex.puml",
+   "c75_color_deactivate_duplicate.puml",
+   "c75_color_destroy_simple.puml",
+   "c75_color_destroy_short_hex.puml",
+   "c75_color_destroy_duplicate.puml",
+   "c75_color_create_simple.puml",
+   "c75_color_create_short_hex.puml",
+   "c75_color_create_dash.puml",
+   "c75_color_create_slash.puml",
+   "c75_color_create_bar.puml",
+   "c75_color_create_backslash.puml",
+   "c75_color_create_duplicate.puml",
+   "c75_color_life_simple.puml",
+   "c75_color_life_short_hex.puml",
+   "c75_color_return_simple.puml",
+   "c75_color_return_short_hex.puml",
+   "c75_color_return_composite.puml",
+   "c75_color_return_dash.puml",
+   "c75_color_return_slash.puml",
+   "c75_color_return_bar.puml",
+   "c75_color_return_backslash.puml",
+   "c75_color_return_duplicate.puml",
+   "c75_color_group_simple.puml",
+   "c75_color_group_short_hex.puml",
+   "c75_color_group_duplicate.puml",
+   "c75_color_ref_simple.puml",
+   "c75_color_ref_short_hex.puml",
+   "c75_color_refmulti_simple.puml",
+   "c75_color_refmulti_short_hex.puml",
+   "c75_color_refmulti_tail_simple.puml",
+   "c75_color_refmulti_tail_short_hex.puml",
+   "c75_color_refmulti_tail_unknown.puml",
+   "c75_color_arrow_simple.puml",
+   "c75_color_arrow_short_hex.puml",
+   "c75_color_note_over_Cedar_simple.puml",
+   "c75_color_note_over_Cedar_short_hex.puml",
+   "c75_color_note_over_Cedar_dash.puml",
+   "c75_color_note_over_Cedar_slash.puml",
+   "c75_color_note_over_Cedar_bar.puml",
+   "c75_color_note_over_Cedar_backslash.puml",
+   "c75_color_note_over_Cedar_multi_simple.puml",
+   "c75_color_note_over_Cedar_multi_short_hex.puml",
+   "c75_color_note_over_Cedar_multi_dash.puml",
+   "c75_color_note_over_Cedar_multi_slash.puml",
+   "c75_color_note_over_Cedar_multi_bar.puml",
+   "c75_color_note_over_Cedar_multi_backslash.puml",
+   "c75_color_note_over_Cedar_Spruce_simple.puml",
+   "c75_color_note_over_Cedar_Spruce_short_hex.puml",
+   "c75_color_note_over_Cedar_Spruce_dash.puml",
+   "c75_color_note_over_Cedar_Spruce_slash.puml",
+   "c75_color_note_over_Cedar_Spruce_bar.puml",
+   "c75_color_note_over_Cedar_Spruce_backslash.puml",
+   "c75_color_note_over_Cedar_Spruce_multi_simple.puml",
+   "c75_color_note_over_Cedar_Spruce_multi_short_hex.puml",
+   "c75_color_note_over_Cedar_Spruce_multi_dash.puml",
+   "c75_color_note_over_Cedar_Spruce_multi_slash.puml",
+   "c75_color_note_over_Cedar_Spruce_multi_bar.puml",
+   "c75_color_note_over_Cedar_Spruce_multi_backslash.puml",
+   "c75_color_note_across_simple.puml",
+   "c75_color_note_across_short_hex.puml",
+   "c75_color_note_across_dash.puml",
+   "c75_color_note_across_slash.puml",
+   "c75_color_note_across_bar.puml",
+   "c75_color_note_across_backslash.puml",
+   "c75_color_note_across_multi_simple.puml",
+   "c75_color_note_across_multi_short_hex.puml",
+   "c75_color_note_across_multi_dash.puml",
+   "c75_color_note_across_multi_slash.puml",
+   "c75_color_note_across_multi_bar.puml",
+   "c75_color_note_across_multi_backslash.puml",
+   "c75_color_note_right_simple.puml",
+   "c75_color_note_right_short_hex.puml",
+   "c75_color_note_right_dash.puml",
+   "c75_color_note_right_slash.puml",
+   "c75_color_note_right_bar.puml",
+   "c75_color_note_right_backslash.puml",
+   "c75_color_note_right_multi_simple.puml",
+   "c75_color_note_right_multi_short_hex.puml",
+   "c75_color_note_right_multi_dash.puml",
+   "c75_color_note_right_multi_slash.puml",
+   "c75_color_note_right_multi_bar.puml",
+   "c75_color_note_right_multi_backslash.puml",
+   "c75_color_hnote_over_Cedar_simple.puml",
+   "c75_color_hnote_over_Cedar_short_hex.puml",
+   "c75_color_hnote_over_Cedar_dash.puml",
+   "c75_color_hnote_over_Cedar_slash.puml",
+   "c75_color_hnote_over_Cedar_bar.puml",
+   "c75_color_hnote_over_Cedar_backslash.puml",
+   "c75_color_hnote_over_Cedar_multi_simple.puml",
+   "c75_color_hnote_over_Cedar_multi_short_hex.puml",
+   "c75_color_hnote_over_Cedar_multi_dash.puml",
+   "c75_color_hnote_over_Cedar_multi_slash.puml",
+   "c75_color_hnote_over_Cedar_multi_bar.puml",
+   "c75_color_hnote_over_Cedar_multi_backslash.puml",
+   "c75_color_hnote_over_Cedar_Spruce_simple.puml",
+   "c75_color_hnote_over_Cedar_Spruce_short_hex.puml",
+   "c75_color_hnote_over_Cedar_Spruce_dash.puml",
+   "c75_color_hnote_over_Cedar_Spruce_slash.puml",
+   "c75_color_hnote_over_Cedar_Spruce_bar.puml",
+   "c75_color_hnote_over_Cedar_Spruce_backslash.puml",
+   "c75_color_hnote_over_Cedar_Spruce_multi_simple.puml",
+   "c75_color_hnote_over_Cedar_Spruce_multi_short_hex.puml",
+   "c75_color_hnote_over_Cedar_Spruce_multi_dash.puml",
+   "c75_color_hnote_over_Cedar_Spruce_multi_slash.puml",
+   "c75_color_hnote_over_Cedar_Spruce_multi_bar.puml",
+   "c75_color_hnote_over_Cedar_Spruce_multi_backslash.puml",
+   "c75_color_hnote_across_simple.puml",
+   "c75_color_hnote_across_short_hex.puml",
+   "c75_color_hnote_across_dash.puml",
+   "c75_color_hnote_across_slash.puml",
+   "c75_color_hnote_across_bar.puml",
+   "c75_color_hnote_across_backslash.puml",
+   "c75_color_hnote_across_multi_simple.puml",
+   "c75_color_hnote_across_multi_short_hex.puml",
+   "c75_color_hnote_across_multi_dash.puml",
+   "c75_color_hnote_across_multi_slash.puml",
+   "c75_color_hnote_across_multi_bar.puml",
+   "c75_color_hnote_across_multi_backslash.puml",
+   "c75_color_hnote_right_simple.puml",
+   "c75_color_hnote_right_short_hex.puml",
+   "c75_color_hnote_right_dash.puml",
+   "c75_color_hnote_right_slash.puml",
+   "c75_color_hnote_right_bar.puml",
+   "c75_color_hnote_right_backslash.puml",
+   "c75_color_rnote_over_Cedar_simple.puml",
+   "c75_color_rnote_over_Cedar_short_hex.puml",
+   "c75_color_rnote_over_Cedar_dash.puml",
+   "c75_color_rnote_over_Cedar_slash.puml",
+   "c75_color_rnote_over_Cedar_bar.puml",
+   "c75_color_rnote_over_Cedar_backslash.puml",
+   "c75_color_rnote_over_Cedar_multi_simple.puml",
+   "c75_color_rnote_over_Cedar_multi_short_hex.puml",
+   "c75_color_rnote_over_Cedar_multi_dash.puml",
+   "c75_color_rnote_over_Cedar_multi_slash.puml",
+   "c75_color_rnote_over_Cedar_multi_bar.puml",
+   "c75_color_rnote_over_Cedar_multi_backslash.puml",
+   "c75_color_rnote_over_Cedar_Spruce_simple.puml",
+   "c75_color_rnote_over_Cedar_Spruce_short_hex.puml",
+   "c75_color_rnote_over_Cedar_Spruce_dash.puml",
+   "c75_color_rnote_over_Cedar_Spruce_slash.puml",
+   "c75_color_rnote_over_Cedar_Spruce_bar.puml",
+   "c75_color_rnote_over_Cedar_Spruce_backslash.puml",
+   "c75_color_rnote_over_Cedar_Spruce_multi_simple.puml",
+   "c75_color_rnote_over_Cedar_Spruce_multi_short_hex.puml",
+   "c75_color_rnote_over_Cedar_Spruce_multi_dash.puml",
+   "c75_color_rnote_over_Cedar_Spruce_multi_slash.puml",
+   "c75_color_rnote_over_Cedar_Spruce_multi_bar.puml",
+   "c75_color_rnote_over_Cedar_Spruce_multi_backslash.puml",
+   "c75_color_rnote_across_simple.puml",
+   "c75_color_rnote_across_short_hex.puml",
+   "c75_color_rnote_across_dash.puml",
+   "c75_color_rnote_across_slash.puml",
+   "c75_color_rnote_across_bar.puml",
+   "c75_color_rnote_across_backslash.puml",
+   "c75_color_rnote_across_multi_simple.puml",
+   "c75_color_rnote_across_multi_short_hex.puml",
+   "c75_color_rnote_across_multi_dash.puml",
+   "c75_color_rnote_across_multi_slash.puml",
+   "c75_color_rnote_across_multi_bar.puml",
+   "c75_color_rnote_across_multi_backslash.puml",
+   "c75_color_rnote_right_simple.puml",
+   "c75_color_rnote_right_short_hex.puml",
+   "c75_color_rnote_right_dash.puml",
+   "c75_color_rnote_right_slash.puml",
+   "c75_color_rnote_right_bar.puml",
+   "c75_color_rnote_right_backslash.puml",
+   "c75s_participant_zero_order_legacy.puml",
+   "c75s_participant_redeclare_legacy.puml",
+   "c75s_participant_redeclare_box_legacy.puml",
+   "c75s_participant_case_alias_legacy.puml",
+   "c75s_participant_nbsp_alias_legacy.puml",
+   "c75s_participant_zero_order_teoz.puml",
+   "c75s_participant_redeclare_teoz.puml",
+   "c75s_participant_redeclare_box_teoz.puml",
+   "c75s_participant_case_alias_teoz.puml",
+   "c75s_participant_nbsp_alias_teoz.puml"
+  ],
+  "ast: add[\"bark\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg changed)": [
+   "mk2_tooltip_in_box_legacy.puml"
+  ],
+  "yaml: add[url_tooltip: bark] rem[] (svg changed)": [
+   "mk2_tooltip_in_box_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $gem [NxN/N] {\\nF | source_line: N, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce -> Cedar: | source_line: N,] (svg same)": [
+   "mk2_proc_invoked_closed_pixel_seq_teoz.puml"
+  ],
+  "yaml: add[FN | NF | source_line: N | sprite $gem [NxN/N] { | }] rem[ | source_line: N] (svg same)": [
+   "mk2_proc_invoked_closed_pixel_seq_teoz.puml"
+  ],
+  "ast: add[\"bark\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg same)": [
+   "mk2_tooltip_in_box_teoz.puml"
+  ],
+  "yaml: add[url_tooltip: bark] rem[] (svg same)": [
+   "mk2_tooltip_in_box_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nclass Level\\nPlayer -- Level\\n@enduml\\n\",] rem[\"@startuml\\nclass Player\\nsprite $gem <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n!endif\\nclass Le] (svg same)": [
+   "mk2_if_false_svg_class.puml"
+  ],
+  "yaml: add[] rem[!endif | <rect width=\"N\" height=\"N\"/> | sprite $gem <svg width=\"N\" height=\"N\">] (svg same)": [
+   "mk2_if_false_svg_class.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $gem [NxN/N] {\\nFN\\nNF\\n}\\n[Engine]\\n[Wheel]\\n[Engine] --> [Wheel]\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\n[Engine]\\n[Wheel]\\n[Engine] --> [Wheel]\\n@enduml\\n\",] (svg same)": [
+   "mk2_if_true_closed_pixel_component.puml"
+  ],
+  "yaml: add[FN | NF | sprite $gem [NxN/N] { | }] rem[] (svg same)": [
+   "mk2_if_true_closed_pixel_component.puml",
+   "mk2_include_header_only_class.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nsprite $gem [NxN/N] {\\nFN\\nNF\\n}\\nclass Level\\nPlayer -- Level\\n@enduml\\n\",] rem[\"@startuml\\nclass Player\\n\\n\\n\\n\\nclass Level\\nPlayer -- Level\\n@enduml\\n\",] (svg same)": [
+   "mk2_include_header_only_class.puml"
+  ],
+  "ast: add[sprites: {},] rem[\"frame\": SpriteData { | height: N, | rows: [], | sprites: { | width: N, | },] (svg same)": [
+   "mk2_state_note_brace.puml",
+   "mk2_deployment_note_brace.puml"
+  ],
+  "yaml: add[] rem[frame: | height: N | rows: [] | sprites: | width: N] (svg same)": [
+   "mk2_state_note_brace.puml",
+   "mk2_deployment_note_brace.puml"
+  ],
+  "ast: add[\"@startuml\\n[Engine]\\nlegend\\nSprite legend line\\nendlegend\\n@enduml\\n\", | \"Sprite legend line\",] rem[\"\", | \"@startuml\\n[Engine]\\nlegend\\n\\nendlegend\\n@enduml\\n\",] (svg changed)": [
+   "mk2_component_legend_upper.puml"
+  ],
+  "yaml: add[Sprite legend line | legend: Sprite legend line] rem[ | legend: ''] (svg changed)": [
+   "mk2_component_legend_upper.puml"
+  ],
+  "ast: add[sprites: {},] rem[\"FN\", | \"NF\", | \"gem\": SpriteData { | ], | height: N, | rows: [ | sprites: { | width: N, | },] (svg same)": [
+   "mk2_unclosed_pixel_timing.puml"
+  ],
+  "yaml: add[] rem[- 'NF' | - FN | gem: | height: N | rows: | sprites: | width: N] (svg same)": [
+   "mk2_unclosed_pixel_timing.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nsprite $gem [NxN/Nz] N\\n@enduml\\n\",] rem[\"@startuml\\nclass Player\\n\\n@enduml\\n\",] (svg same)": [
+   "mk2_compressed_bad_class.puml"
+  ],
+  "yaml: add[sprite $gem [NxN/Nz] N] rem[] (svg same)": [
+   "mk2_compressed_bad_class.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\nSprite sheets are loaded\\nend note\\nCedar -> Spruce: | text: \"Sprite sheets are loaded\", | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\n\\nend note\\nCedar -> Spruce: go\\n@enduml\\n\", | text: \"\",] (svg changed)": [
+   "cl_seq_note_upper_legacy.puml"
+  ],
+  "yaml: add[Sprite sheets are loaded | text: Sprite sheets are loaded] rem[ | text: ''] (svg changed)": [
+   "cl_seq_note_upper_legacy.puml",
+   "cl_seq_note_upper_teoz.puml"
+  ],
+  "ascii: add[\u2502 Sprite sheets are loaded \u2502 | \u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2518] rem[\u2502   \u2502  \u2502                \u2502 | \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2510                \u2502 | \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2518                \u2502] (svg changed)": [
+   "cl_seq_note_upper_legacy.puml",
+   "cl_seq_note_upper_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Maple\\nparticipant Birch\\nnote over Birch\\nSPRITE RENDERER QUEUE DEPTH\\nend note\\nBirch -> Maple | text: \"SPRITE RENDERER QUEUE DEPTH\", | url_tooltip: None,] rem[\"@startuml\\nparticipant Maple\\nparticipant Birch\\nnote over Birch\\n\\nend note\\nBirch -> Maple: ack\\n@enduml\\n\", | text: \"\",] (svg changed)": [
+   "cl_seq_note_caps_legacy.puml"
+  ],
+  "yaml: add[SPRITE RENDERER QUEUE DEPTH | text: SPRITE RENDERER QUEUE DEPTH] rem[ | text: ''] (svg changed)": [
+   "cl_seq_note_caps_legacy.puml",
+   "cl_seq_note_caps_teoz.puml"
+  ],
+  "ascii: add[\u2502   \u2502 SPRITE RENDERER QUEUE DEPTH \u2502 | \u2502   \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2502   \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518] rem[\u2502              \u2502   \u2502  \u2502 | \u2502              \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2510 | \u2502              \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2518] (svg changed)": [
+   "cl_seq_note_caps_legacy.puml",
+   "cl_seq_note_caps_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\nsprite sheets are loaded\\nend note\\nCedar -> Spruce: | text: \"sprite sheets are loaded\", | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\n\\nend note\\nCedar -> Spruce: go\\n@enduml\\n\", | text: \"\",] (svg changed)": [
+   "cl_seq_note_lower_legacy.puml"
+  ],
+  "yaml: add[sprite sheets are loaded | text: sprite sheets are loaded] rem[ | text: ''] (svg changed)": [
+   "cl_seq_note_lower_legacy.puml",
+   "cl_seq_note_lower_teoz.puml"
+  ],
+  "ascii: add[\u2502 sprite sheets are loaded \u2502 | \u250c\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2518] rem[\u2502   \u2502  \u2502                \u2502 | \u250c\u2500\u2500\u2500\u2502\u2500\u2500\u2510                \u2502 | \u2514\u2500\u2500\u2500\u2502\u2500\u2500\u2518                \u2502] (svg changed)": [
+   "cl_seq_note_lower_legacy.puml",
+   "cl_seq_note_lower_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: go\\nlegend\\nSprite atlas version two\\nendlegend\\n@en | \"Sprite atlas version two\", | url_tooltip: None,] rem[\"\", | \"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: go\\nlegend\\n\\nendlegend\\n@enduml\\n\",] (svg changed)": [
+   "cl_seq_legend_upper_legacy.puml"
+  ],
+  "yaml: add[Sprite atlas version two | legend: Sprite atlas version two] rem[ | legend: ''] (svg changed)": [
+   "cl_seq_legend_upper_legacy.puml",
+   "cl_seq_legend_upper_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nref over Cedar, Spruce\\nSprite cache warm\\nend ref\\n@enduml\\n\", | text: \"Sprite cache warm\", | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nref over Cedar, Spruce\\n\\nend ref\\n@enduml\\n\", | text: \"\",] (svg changed)": [
+   "cl_seq_ref_upper_legacy.puml"
+  ],
+  "yaml: add[Sprite cache warm | text: Sprite cache warm] rem[ | text: ''] (svg changed)": [
+   "cl_seq_ref_upper_legacy.puml",
+   "cl_seq_ref_upper_teoz.puml"
+  ],
+  "ascii: add[\u2502 ref: Sprite cache warm \u2502 | \u250c\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2510 | \u2514\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2502\u2500\u2500\u2518] rem[\u2502 ref:  \u2502             \u2502 | \u250c\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2510             \u2502 | \u2514\u2500\u2502\u2500\u2500\u2500\u2500\u2500\u2518             \u2502] (svg changed)": [
+   "cl_seq_ref_upper_legacy.puml",
+   "cl_seq_ref_upper_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\nSprite sheets are loaded\\nend not | text: \"Sprite sheets are loaded\", | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\n\\nend note\\nCedar -> Spruce: go\\n | text: \"\",] (svg changed)": [
+   "cl_seq_note_upper_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Maple\\nparticipant Birch\\nnote over Birch\\nSPRITE RENDERER QUEUE DEPTH\\nend n | text: \"SPRITE RENDERER QUEUE DEPTH\", | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Maple\\nparticipant Birch\\nnote over Birch\\n\\nend note\\nBirch -> Maple: ack\\n@ | text: \"\",] (svg changed)": [
+   "cl_seq_note_caps_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\nsprite sheets are loaded\\nend not | text: \"sprite sheets are loaded\", | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nnote over Cedar\\n\\nend note\\nCedar -> Spruce: go\\n | text: \"\",] (svg changed)": [
+   "cl_seq_note_lower_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: go\\nlegend\\nSprite atlas version  | \"Sprite atlas version two\", | url_tooltip: None,] rem[\"\", | \"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: go\\nlegend\\n\\nendlegend\\n@enduml\\] (svg changed)": [
+   "cl_seq_legend_upper_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nref over Cedar, Spruce\\nSprite cache warm\\nend ref | text: \"Sprite cache warm\", | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nref over Cedar, Spruce\\n\\nend ref\\n@enduml\\n\", | text: \"\",] (svg changed)": [
+   "cl_seq_ref_upper_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nSprite -- Player\\n@enduml\\n\", | \"Sprite\", | ), | ClassEntity { | Entity( | N, | Relationship { | Relationship( | ], | arrowhead: Arrow, | color: None, | dashed: false, | declaration: false, | decorated_end: None, |] rem[\"@startuml\\nclass Player\\n\\n@enduml\\n\", | relationships: [],] (svg changed)": [
+   "cl_class_link_upper.puml"
+  ],
+  "yaml: add[- !Entity Sprite | - !Relationship N | - from: Sprite | - id: Sprite | Sprite -- Player | dashed: false | decorated_end: None | explicit_alias: false | from_multiplicity: null | kind: Association | kind: Class | label: Sprite | label: null ] rem[ | relationships: []] (svg changed)": [
+   "cl_class_link_upper.puml"
+  ],
+  "ascii: add[ | \u2502 Sprite \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518] rem[] (svg changed)": [
+   "cl_class_link_upper.puml",
+   "cl_class_aggregation_label.puml",
+   "cl_class_dotted.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nsprite -- Player\\n@enduml\\n\", | \"sprite\", | ), | ClassEntity { | Entity( | N, | Relationship { | Relationship( | ], | arrowhead: Arrow, | color: None, | dashed: false, | declaration: false, | decorated_end: None, |] rem[\"@startuml\\nclass Player\\n\\n@enduml\\n\", | relationships: [],] (svg changed)": [
+   "cl_class_link_lower.puml"
+  ],
+  "yaml: add[- !Entity sprite | - !Relationship N | - from: sprite | - id: sprite | dashed: false | decorated_end: None | explicit_alias: false | from_multiplicity: null | kind: Association | kind: Class | label: null | label: sprite | label_arrow: None] rem[ | relationships: []] (svg changed)": [
+   "cl_class_link_lower.puml"
+  ],
+  "ascii: add[ | \u2502 sprite \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518] rem[] (svg changed)": [
+   "cl_class_link_lower.puml"
+  ],
+  "ast: add[\"@startuml\\nobject Player\\nSprite -- Player\\n@enduml\\n\", | ObjectInstance { | ObjectLink { | ], | arrow_at_from: false, | arrow_at_to: false, | color: None, | dashed: false, | diamond_at_from: false, | fields: [], | from: \"Sprite\", | from_m] rem[\"@startuml\\nobject Player\\n\\n@enduml\\n\", | links: [],] (svg changed)": [
+   "cl_object_link_upper.puml"
+  ],
+  "yaml: add[- from: Sprite | - id: Sprite | Sprite -- Player | arrow_at_from: false | arrow_at_to: false | dashed: false | diamond_at_from: false | fields: [] | kind: Association | kind: Object | label: Sprite | links: | source_line: N | to: Player] rem[ | links: []] (svg changed)": [
+   "cl_object_link_upper.puml"
+  ],
+  "ast: add[\"@startuml\\nobject Player\\nsprite -- Player\\n@enduml\\n\", | ObjectInstance { | ObjectLink { | ], | arrow_at_from: false, | arrow_at_to: false, | color: None, | dashed: false, | diamond_at_from: false, | fields: [], | from: \"sprite\", | from_m] rem[\"@startuml\\nobject Player\\n\\n@enduml\\n\", | links: [],] (svg changed)": [
+   "cl_object_link_lower.puml"
+  ],
+  "yaml: add[- from: sprite | - id: sprite | arrow_at_from: false | arrow_at_to: false | dashed: false | diamond_at_from: false | fields: [] | kind: Association | kind: Object | label: sprite | links: | source_line: N | sprite -- Player | to: Player] rem[ | links: []] (svg changed)": [
+   "cl_object_link_lower.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nSprite o-- Player : owns\\n@enduml\\n\", | \"Sprite\", | \"owns\", | ), | ClassEntity { | Entity( | N, | Relationship { | Relationship( | ], | arrowhead: Arrow, | color: None, | dashed: false, | declaration: false, | deco] rem[\"@startuml\\nclass Player\\n\\n@enduml\\n\", | relationships: [],] (svg changed)": [
+   "cl_class_aggregation_label.puml"
+  ],
+  "yaml: add[- !Entity Sprite | - !Relationship N | - from: Sprite | - id: Sprite | Sprite o-- Player : owns | dashed: false | decorated_end: From | explicit_alias: false | from_multiplicity: null | kind: Aggregation | kind: Class | label: Sprite | labe] rem[ | relationships: []] (svg changed)": [
+   "cl_class_aggregation_label.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nclass Level\\nSprite .. Player\\nLevel -- Player\\n@enduml\\n\", | \"Sprite\", | ), | ClassEntity { | Entity( | N, | Relationship { | Relationship( | arrowhead: Arrow, | color: None, | dashed: true, | declaration: false, ] rem[\"@startuml\\nclass Player\\nclass Level\\n\\nLevel -- Player\\n@enduml\\n\",] (svg changed)": [
+   "cl_class_dotted.puml"
+  ],
+  "yaml: add[- !Entity Sprite | - !Relationship N | - from: Sprite | - id: Sprite | Sprite .. Player | dashed: true | decorated_end: None | explicit_alias: false | from_multiplicity: null | kind: Association | kind: Class | label: Sprite | label: null |] rem[] (svg changed)": [
+   "cl_class_dotted.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player {\\n  Sprite sheet field\\n}\\n@enduml\\n\", | Member { | ], | display_text: \"Sprite sheet field\", | is_abstract: false, | is_static: false, | kind: Field, | members: [ | name: \"Sprite sheet field\", | return_type: None, ] rem[\"@startuml\\nclass Player {\\n\\n}\\n@enduml\\n\", | members: [],] (svg changed)": [
+   "cl_class_member_upper.puml"
+  ],
+  "yaml: add[- name: Sprite sheet field | Sprite sheet field | display_text: Sprite sheet field | is_abstract: false | is_static: false | kind: Field | members: | return_type: null | visibility: Default] rem[ | members: []] (svg changed)": [
+   "cl_class_member_upper.puml"
+  ],
+  "ascii: add[\u2502        Player        \u2502 | \u2502   Sprite sheet field \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 | \u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524] rem[\u2502 Player \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518] (svg changed)": [
+   "cl_class_member_upper.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player {\\n  Sprite frame {\\n}\\nclass Level\\n@enduml\\n\", | \"Level\", | ), | ClassEntity { | Entity( | color: None, | display_text: \"Sprite frame {\", | explicit_alias: false, | generic: None, | id: \"Level\", | kind: Class, | l] rem[\"@startuml\\nclass Player {\\n\\n\\nclass Level\\n@enduml\\n\", | \"frame\": SpriteData { | display_text: \"class Level\", | height: N, | name: \"class Level\", | rows: [], | sprites: { | width: N, | },] (svg changed)": [
+   "cl_class_member_brace.puml"
+  ],
+  "yaml: add[- !Entity Level | - id: Level | - name: Sprite frame { | Sprite frame { | display_text: Sprite frame { | explicit_alias: false | kind: Class | label: Level | members: [] | source_line: N | stereotypes: [] | }] rem[ | - name: class Level | display_text: class Level | frame: | height: N | rows: [] | sprites: | width: N] (svg changed)": [
+   "cl_class_member_brace.puml"
+  ],
+  "ascii: add[ | \u2502      Player      \u2502 | \u2502   Sprite frame { \u2502 | \u2502 Level \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 | \u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524] rem[\u2502    Player     \u2502 | \u2502   class Level \u2502 | \u250c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2510 | \u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2518 | \u251c\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2524] (svg changed)": [
+   "cl_class_member_brace.puml"
+  ],
+  "ast: add[\"@startuml\\nclass Player\\nnote right of Player\\nSprite pool size\\nend note\\n@enduml\\n\", | \"Sprite pool size\",] rem[\"\", | \"@startuml\\nclass Player\\nnote right of Player\\n\\nend note\\n@enduml\\n\",] (svg changed)": [
+   "cl_class_note_upper.puml"
+  ],
+  "yaml: add[- Sprite pool size | Sprite pool size] rem[ | - ''] (svg changed)": [
+   "cl_class_note_upper.puml"
+  ],
+  "ast: add[\"@startuml\\nstate Idle\\nnote right of Idle\\nSprite idle loop\\nend note\\n@enduml\\n\", | \"Idle\", | ), | StateNote { | ], | command_line: N, | creation_order: N, | kind: RightOf( | notes: [ | source_line: N, | text: \"Sprite idle loop\", | },] rem[\"@startuml\\nstate Idle\\nnote right of Idle\\n\\nend note\\n@enduml\\n\", | notes: [],] (svg changed)": [
+   "cl_state_note_upper.puml"
+  ],
+  "yaml: add[- text: Sprite idle loop | Sprite idle loop | command_line: N | creation_order: N | kind: !RightOf Idle | notes: | source_line: N] rem[ | notes: []] (svg changed)": [
+   "cl_state_note_upper.puml"
+  ],
+  "ast: add[\"@startuml\\nstart\\n:load;\\nnote right\\nSprite batch ready now\\nend note\\nstop\\n@enduml\\n\", | ), | Note( | NoteBlock { | color: None, | position: Right, | text: \"Sprite batch ready now\", | },] rem[\"@startuml\\nstart\\n:load;\\nnote right\\n\\nend note\\nstop\\n@enduml\\n\",] (svg changed)": [
+   "cl_activity_note_upper.puml"
+  ],
+  "yaml: add[- !Note | Sprite batch ready now | color: null | position: Right | text: Sprite batch ready now] rem[] (svg changed)": [
+   "cl_activity_note_upper.puml"
+  ],
+  "ascii: add[\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2518[right: Sprite b] rem[\u2514\u2500\u2500\u2500\u2500\u2500\u2500\u2518] (svg changed)": [
+   "cl_activity_note_upper.puml"
+  ],
+  "ast: add[\"@startuml\\n[Engine]\\nnote right of [Engine]\\nSprite cache budget\\nend note\\n@enduml\\n\", | \"Engine\", | ), | ComponentNote { | ], | connection: None, | notes: [ | position: Right, | source_line: N, | target: Some( | text: \"Sprite cache budge] rem[\"@startuml\\n[Engine]\\nnote right of [Engine]\\n\\nend note\\n@enduml\\n\", | notes: [],] (svg changed)": [
+   "cl_component_note_upper.puml"
+  ],
+  "yaml: add[- text: Sprite cache budget | Sprite cache budget | notes: | position: Right | source_line: N | target: Engine] rem[ | notes: []] (svg changed)": [
+   "cl_component_note_upper.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_nested_legacy.puml",
+   "c75_sprite_attribute_legacy.puml"
+  ],
+  "yaml: add[<rect width=\"N\" height=\"N\"/></svg> | <svg x=\"N\" y=\"N\"> | sprite $needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": [
+   "c75_sprite_nested_legacy.puml",
+   "c75_sprite_nested_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: ] (svg same)": [
+   "c75_sprite_nested_teoz.puml",
+   "c75_sprite_attribute_teoz.puml",
+   "c75_include_closed_teoz.puml",
+   "c75_include_child_to_parent_teoz.puml",
+   "c75_include_nested_teoz.puml"
+  ],
+  "yaml: add[</svg> | <rect data-probe=\"</svg>\" width=\"N\" height=\"N\"/> | sprite $needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": [
+   "c75_sprite_attribute_legacy.puml",
+   "c75_sprite_attribute_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> Cedar: packe] (svg same)": [
+   "c75_sprite_back_to_back_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | FNF | NFN | sprite $bark <svg width=\"N\" height=\"N\"> | sprite $cone [NxN/N] { | sprite $needle <svg width=\"N\" height=\"N\"> | }] rem[] (svg same)": [
+   "c75_sprite_back_to_back_legacy.puml",
+   "c75_sprite_back_to_back_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\nSpru] (svg same)": [
+   "c75_sprite_back_to_back_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nSPRITE $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_uppercase_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | SPRITE $needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": [
+   "c75_sprite_uppercase_legacy.puml",
+   "c75_sprite_uppercase_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nSPRITE $needle <svg widt | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: ] (svg same)": [
+   "c75_sprite_uppercase_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nSpRiTe\\u{aN}$needle <svg width=\\\"N\\\" height | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_mixed_nbsp_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | SpRiTe\u00a0$needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": [
+   "c75_sprite_mixed_nbsp_legacy.puml",
+   "c75_sprite_mixed_nbsp_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nSpRiTe\\u{aN}$needle <svg | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: ] (svg same)": [
+   "c75_sprite_mixed_nbsp_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\nend\\u{a | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n] (svg same)": [
+   "c75_sprite_pixel_end_legacy.puml"
+  ],
+  "yaml: add[FNF | NFN | end\u00a0sprite | sprite $needle [NxN/N] {] rem[] (svg same)": [
+   "c75_sprite_pixel_end_legacy.puml",
+   "c75_sprite_pixel_end_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] { | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar] (svg same)": [
+   "c75_sprite_pixel_end_teoz.puml",
+   "c75_sprite_pixel_compact_end_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\nendspri | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n] (svg same)": [
+   "c75_sprite_pixel_compact_end_legacy.puml"
+  ],
+  "yaml: add[FNF | NFN | endsprite | sprite $needle [NxN/N] {] rem[] (svg same)": [
+   "c75_sprite_pixel_compact_end_legacy.puml",
+   "c75_sprite_pixel_compact_end_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/Nz] N\\nSpruce --> Cedar | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_compressed_legacy.puml"
+  ],
+  "yaml: add[sprite $needle [NxN/Nz] N] rem[] (svg same)": [
+   "c75_sprite_compressed_legacy.puml",
+   "c75_sprite_compressed_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/Nz]  | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\nSpruce --> Cedar: pack] (svg same)": [
+   "c75_sprite_compressed_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle FNFNFN\\nSpruce --> Cedar: pa | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_one_line_legacy.puml"
+  ],
+  "yaml: add[sprite $needle FNFNFN] rem[] (svg same)": [
+   "c75_sprite_one_line_legacy.puml",
+   "c75_sprite_one_line_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle FNFNFN\\nS | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\nSpruce --> Cedar: pack] (svg same)": [
+   "c75_sprite_one_line_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | source_line: N, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n\", | source_line: N,] (svg changed)": [
+   "c75_sprite_procedure_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | source_line: N | sprite $needle <svg width=\"N\" height=\"N\">] rem[ | source_line: N] (svg changed)": [
+   "c75_sprite_procedure_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | source_line: N, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar:  | source_line: N,] (svg same)": [
+   "c75_sprite_procedure_teoz.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | source_line: N | sprite $needle <svg width=\"N\" height=\"N\">] rem[ | source_line: N] (svg same)": [
+   "c75_sprite_procedure_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nSpru | source_line: N, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@enduml\\n | source_line: N,] (svg changed)": [
+   "c75_sprite_function_legacy.puml"
+  ],
+  "yaml: add[FNF | NFN | source_line: N | sprite $needle [NxN/N] { | }] rem[ | source_line: N] (svg changed)": [
+   "c75_sprite_function_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] { | source_line: N, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\nSpruce --> Cedar | source_line: N,] (svg same)": [
+   "c75_sprite_function_teoz.puml"
+  ],
+  "yaml: add[FNF | NFN | source_line: N | sprite $needle [NxN/N] { | }] rem[ | source_line: N] (svg same)": [
+   "c75_sprite_function_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | sprites: {}, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@en | \"FNF\", | \"NFN\", | \"needle\": SpriteData { | ], | height: N, | rows: [ | sprites: { | width: N, | },] (svg same)": [
+   "c75_sprite_if_true_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | sprite $needle <svg width=\"N\" height=\"N\">] rem[ | - 'NFN' | - FNF | height: N | needle: | rows: | sprites: | width: N] (svg same)": [
+   "c75_sprite_if_true_legacy.puml",
+   "c75_sprite_if_true_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | sprites: {}, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> | \"FNF\", | \"NFN\", | \"needle\": SpriteData { | ], | height: N, | rows: [ | sprites: { | width: N, | },] (svg same)": [
+   "c75_sprite_if_true_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nSpru | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@en] (svg same)": [
+   "c75_sprite_if_false_legacy.puml"
+  ],
+  "yaml: add[FNF | NFN | sprite $needle [NxN/N] { | }] rem[] (svg same)": [
+   "c75_sprite_if_false_legacy.puml",
+   "c75_sprite_if_false_teoz.puml",
+   "c75_use_pixel_class.puml",
+   "c75_unused_pixel_class.puml",
+   "c75_use_pixel_state.puml",
+   "c75_unused_pixel_state.puml",
+   "c75_use_pixel_activity.puml",
+   "c75_unused_pixel_activity.puml",
+   "c75_use_pixel_usecase.puml",
+   "c75_unused_pixel_usecase.puml",
+   "c75_use_pixel_component.puml",
+   "c75_unused_pixel_component.puml",
+   "c75_use_pixel_legacy.puml",
+   "c75_use_pixel_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] { | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce -->] (svg same)": [
+   "c75_sprite_if_false_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] {\\nFNF\\n}\\nSpruce -- | height: N, | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> Cedar: packed\\n@en | \"NFN\", | height: N,] (svg same)": [
+   "c75_sprite_body_if_legacy.puml"
+  ],
+  "yaml: add[FNF | height: N | sprite $needle [NxN/N] { | }] rem[ | - 'NFN' | height: N] (svg same)": [
+   "c75_sprite_body_if_legacy.puml",
+   "c75_sprite_body_if_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle [NxN/N] { | height: N, | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n\\n\\n\\n\\nSpruce --> | \"NFN\", | height: N,] (svg same)": [
+   "c75_sprite_body_if_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_last_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | sprite $needle <svg width=\"N\" height=\"N\">] rem[] (svg same)": [
+   "c75_sprite_last_legacy.puml",
+   "c75_sprite_last_teoz.puml",
+   "c75_include_closed_legacy.puml",
+   "c75_include_closed_teoz.puml",
+   "c75_include_child_to_parent_legacy.puml",
+   "c75_include_child_to_parent_teoz.puml",
+   "c75_include_nested_legacy.puml",
+   "c75_include_nested_teoz.puml",
+   "c75_use_svg_class.puml",
+   "c75_unused_svg_class.puml",
+   "c75_use_svg_state.puml",
+   "c75_unused_svg_state.puml",
+   "c75_use_svg_activity.puml",
+   "c75_unused_svg_activity.puml",
+   "c75_use_svg_usecase.puml",
+   "c75_unused_svg_usecase.puml",
+   "c75_use_svg_component.puml",
+   "c75_unused_svg_component.puml",
+   "c75_use_svg_legacy.puml",
+   "c75_use_svg_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg widt | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\n@enduml\\n\",] (svg same)": [
+   "c75_sprite_last_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\ | url_tooltip: None,] rem[\"@startuml\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\n\\n\\n\\nSpruce --> Cedar: ring\\n@enduml\\n\",] (svg same)": [
+   "c75_include_closed_legacy.puml",
+   "c75_include_child_to_parent_legacy.puml",
+   "c75_include_nested_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nclass \\\"Cedar <$nee] rem[\"@startuml\\n\\n\\n\\nclass \\\"Cedar <$needle>\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_use_svg_class.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nclass \\\"Cedar\\\" as ] rem[\"@startuml\\n\\n\\n\\nclass \\\"Cedar\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_svg_class.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nclass \\\"Cedar <$needle>\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n] rem[\"@startuml\\n\\n\\n\\n\\nclass \\\"Cedar <$needle>\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_use_pixel_class.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nclass \\\"Cedar\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nclass \\\"Cedar\\\" as C\\nclass Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_pixel_class.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nstate \\\"Cedar <$nee] rem[\"@startuml\\n\\n\\n\\nstate \\\"Cedar <$needle>\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_use_svg_state.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nstate \\\"Cedar\\\" as ] rem[\"@startuml\\n\\n\\n\\nstate \\\"Cedar\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_svg_state.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nstate \\\"Cedar <$needle>\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nstate \\\"Cedar <$needle>\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_use_pixel_state.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nstate \\\"Cedar\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nstate \\\"Cedar\\\" as C\\n[*] --> C\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_pixel_state.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nstart\\n:weave <$nee] rem[\"@startuml\\n\\n\\n\\nstart\\n:weave <$needle>;\\nstop\\n@enduml\\n\",] (svg same)": [
+   "c75_use_svg_activity.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nstart\\n:weave;\\nsto] rem[\"@startuml\\n\\n\\n\\nstart\\n:weave;\\nstop\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_svg_activity.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nstart\\n:weave <$needle>;\\nstop\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nstart\\n:weave <$needle>;\\nstop\\n@enduml\\n\",] (svg same)": [
+   "c75_use_pixel_activity.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nstart\\n:weave;\\nstop\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nstart\\n:weave;\\nstop\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_pixel_activity.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nusecase \\\"weave <$n] rem[\"@startuml\\n\\n\\n\\nusecase \\\"weave <$needle>\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] (svg same)": [
+   "c75_use_svg_usecase.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nusecase \\\"weave\\\" a] rem[\"@startuml\\n\\n\\n\\nusecase \\\"weave\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_svg_usecase.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nusecase \\\"weave <$needle>\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml] rem[\"@startuml\\n\\n\\n\\n\\nusecase \\\"weave <$needle>\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] (svg same)": [
+   "c75_use_pixel_usecase.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nusecase \\\"weave\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\nusecase \\\"weave\\\" as C\\nactor Spruce\\nSpruce --> C\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_pixel_usecase.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\ncomponent \\\"weave <] rem[\"@startuml\\n\\n\\n\\ncomponent \\\"weave <$needle>\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_use_svg_component.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\ncomponent \\\"weave\\\"] rem[\"@startuml\\n\\n\\n\\ncomponent \\\"weave\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_svg_component.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\ncomponent \\\"weave <$needle>\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@] rem[\"@startuml\\n\\n\\n\\n\\ncomponent \\\"weave <$needle>\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_use_pixel_component.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\ncomponent \\\"weave\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] rem[\"@startuml\\n\\n\\n\\n\\ncomponent \\\"weave\\\" as C\\ncomponent Spruce\\nC --> Spruce\\n@enduml\\n\",] (svg same)": [
+   "c75_unused_pixel_component.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nparticipant Cedar\\n | url_tooltip: None,] rem[\"@startuml\\n\\n\\n\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote over Cedar: weave <$needle>\\n@en] (svg same)": [
+   "c75_use_svg_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nsprite $needle <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\n | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\n\\n\\n\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote over Cedar: w] (svg same)": [
+   "c75_use_svg_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote | url_tooltip: None,] rem[\"@startuml\\n\\n\\n\\n\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote over Cedar: weave <$needle>\\n@] (svg same)": [
+   "c75_use_pixel_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nsprite $needle [NxN/N] {\\nFNF\\nNFN\\n}\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Sp | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\n\\n\\n\\n\\nparticipant Cedar\\nparticipant Spruce\\nCedar -> Spruce: compass\\nnote over Cedar:] (svg same)": [
+   "c75_use_pixel_teoz.puml"
+  ],
+  "ast: add[\"rings\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg changed)": [
+   "c75_participant_link_legacy.puml",
+   "c75_participant_combined_legacy.puml",
+   "c75_actor_link_legacy.puml",
+   "c75_actor_combined_legacy.puml",
+   "c75_boundary_link_legacy.puml",
+   "c75_control_link_legacy.puml",
+   "c75_entity_link_legacy.puml",
+   "c75_database_link_legacy.puml",
+   "c75_collections_link_legacy.puml",
+   "c75_queue_link_legacy.puml",
+   "c75_create_link_legacy.puml",
+   "c75_create_link_teoz.puml",
+   "c75_create_combined_legacy.puml"
+  ],
+  "yaml: add[url_tooltip: rings] rem[] (svg changed)": [
+   "c75_participant_link_legacy.puml",
+   "c75_participant_combined_legacy.puml",
+   "c75_actor_link_legacy.puml",
+   "c75_actor_combined_legacy.puml",
+   "c75_boundary_link_legacy.puml",
+   "c75_control_link_legacy.puml",
+   "c75_entity_link_legacy.puml",
+   "c75_database_link_legacy.puml",
+   "c75_collections_link_legacy.puml",
+   "c75_queue_link_legacy.puml",
+   "c75_create_link_legacy.puml",
+   "c75_create_link_teoz.puml",
+   "c75_create_combined_legacy.puml"
+  ],
+  "ast: add[\"rings\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg same)": [
+   "c75_participant_link_teoz.puml",
+   "c75_participant_combined_teoz.puml",
+   "c75_actor_link_teoz.puml",
+   "c75_actor_combined_teoz.puml",
+   "c75_boundary_link_teoz.puml",
+   "c75_control_link_teoz.puml",
+   "c75_entity_link_teoz.puml",
+   "c75_database_link_teoz.puml",
+   "c75_collections_link_teoz.puml",
+   "c75_queue_link_teoz.puml",
+   "c75_create_combined_teoz.puml"
+  ],
+  "yaml: add[url_tooltip: rings] rem[] (svg same)": [
+   "c75_participant_link_teoz.puml",
+   "c75_participant_combined_teoz.puml",
+   "c75_actor_link_teoz.puml",
+   "c75_actor_combined_teoz.puml",
+   "c75_boundary_link_teoz.puml",
+   "c75_control_link_teoz.puml",
+   "c75_entity_link_teoz.puml",
+   "c75_database_link_teoz.puml",
+   "c75_collections_link_teoz.puml",
+   "c75_queue_link_teoz.puml",
+   "c75_create_combined_teoz.puml"
+  ],
+  "ast: add[\"@startuml\\nparticipant Hazel\\nsprite petal <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height=\\\"N\\\"/>\\n</svg>\\nno | url_tooltip: None,] rem[\"@startuml\\nparticipant Hazel\\n\\n\\n\\nnote over Hazel: <$petal>\\nHazel -> Elm: catkins\\n@enduml\\n\",] (svg same)": [
+   "c75s_svg_variable_name_legacy.puml"
+  ],
+  "yaml: add[</svg> | <rect width=\"N\" height=\"N\"/> | sprite petal <svg width=\"N\" height=\"N\">] rem[] (svg same)": [
+   "c75s_svg_variable_name_legacy.puml",
+   "c75s_svg_variable_name_teoz.puml"
+  ],
+  "ast: add[\"sap\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg changed)": [
+   "c75s_participant_link_inside_label_legacy.puml"
+  ],
+  "yaml: add[url_tooltip: sap] rem[] (svg changed)": [
+   "c75s_participant_link_inside_label_legacy.puml"
+  ],
+  "ast: add[\"@startuml\\n!pragma teoz true\\nparticipant Hazel\\nsprite petal <svg width=\\\"N\\\" height=\\\"N\\\">\\n<rect width=\\\"N\\\" height= | url_tooltip: None,] rem[\"@startuml\\n!pragma teoz true\\nparticipant Hazel\\n\\n\\n\\nnote over Hazel: <$petal>\\nHazel -> Elm: catkins\\n@enduml\\n\",] (svg same)": [
+   "c75s_svg_variable_name_teoz.puml"
+  ],
+  "ast: add[\"sap\", | ), | url_tooltip: None, | url_tooltip: Some(] rem[] (svg same)": [
+   "c75s_participant_link_inside_label_teoz.puml"
+  ],
+  "yaml: add[url_tooltip: sap] rem[] (svg same)": [
+   "c75s_participant_link_inside_label_teoz.puml"
+  ]
+ }
+}

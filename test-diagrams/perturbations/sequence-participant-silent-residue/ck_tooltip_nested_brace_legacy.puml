@@ -1,0 +1,5 @@
+@startuml
+participant Cedar [[https://example.org/ring{a{b}c}]]
+participant Moss
+Cedar -> Moss : go
+@enduml

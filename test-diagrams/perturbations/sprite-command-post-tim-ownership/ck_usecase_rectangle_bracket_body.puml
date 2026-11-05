@@ -1,0 +1,8 @@
+@startuml
+actor Hero
+rectangle Stage [
+first line
+Sprite sheets are loaded
+]
+Hero -- Stage
+@enduml

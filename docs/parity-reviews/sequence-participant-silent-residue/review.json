@@ -1,0 +1,244 @@
+{
+ "schema_version": 1,
+ "mechanism": "sequence-participant-silent-residue",
+ "account_commit": "65b5a16338935699a8828665720373ec9bee9d35",
+ "implementation_commit": "87bdb0feb0cd1557070d12fcd3890417e884662d",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "reviewer": {
+  "task_id": "T3 thread t3-991a0cd7, branch review/sprite-ownership-claude",
+  "model": "claude-opus-5-5"
+ },
+ "commands": [
+  "git archive 93bf53e18 / 5cf1eac12 into private dirs; CARGO_TARGET_DIR=<private>/target-{before,after} cargo build --release -j 6 -p rustuml",
+  "rustc --edition=2024 -O docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs (sha256 d1424469...) --extern rustuml_oracle=<private>/target-before/release/deps/librustuml_oracle-*.rlib",
+  "python3 -I support/prepare.py fresh AS=<relay>/sprite-claude-maker-batch2 AQ=<relay>/sprite-claude-batch1 F790=<cache 75ed0e64> F28=<cache 75ed0e64>/supplement; prepare.py fresh-at AT=<relay>/sprite-ownership-checker-batch1",
+  "python3 -I support/replay.py LABEL MANIFEST rustuml-{before,after} compare_cli OUT CWD (svg/ast/ascii/yaml with -pipe; RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100; PLANTUML_STDLIB pinned; 6 workers) for fresh 915, AT 45, retained 4174, golden 12550",
+  "python3 -I support/{classify,fresh_classify,model_changes}.py on each before/after pair",
+  "python3 -I support/rejection_contract.py <fresh> fresh-manifest.json rustuml-before rustuml-after rejection-contract.json (unchanged, sha256 09cd998b...)",
+  "CARGO_TARGET_DIR=<private>/target-gates cargo test --release -j 6 --workspace --lib; cargo test --release -j 6 -p rustuml --test pipe_mode; cargo test --release -j 6 --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture (on 5cf1eac12 before checker files; same oracle tests on the 93bf53e18 export; golden_no_oracle + golden_pairs on the 9834a7194 export)"
+ ],
+ "findings": [
+  "Gains: ck_create_tooltip_legacy matches (created head without its link, ArrowAndParticipant#drawInternalU, plus the {tooltip} title). The maker's tooltip and created-head gains in 790 and 28 reproduce exactly (790: 9 mismatches to match, among others).",
+  "LOSS (1 lost match: ck_tooltip_label_brace_legacy): for '[[https://example.org/ring ring{x}]]', Java's UrlBuilder#getUrl alternative S_LINK_WITH_OPTIONAL_TOOLTIP_WITH_OPTIONAL_LABEL reads 'ring{x}' as the label and leaves the tooltip null, so Url#getTooltip is the URL. Java's title is 'https://example.org/ring'; before the change Rust matched. extract_link_tooltip (parse/mod.rs) takes the first '{…}' anywhere in the link, so after the change the title is 'x'.",
+  "Divergent (mismatch both before and after, so not a loss): '{ rings }' gives Java title ' rings ' (the [^{}]* group is untrimmed), Rust 'rings'. '{}' gives Java '' (an empty tooltip, not null), Rust the URL. '{a{b}c}' gives Java 'a{b}c' (S_LINK_TOOLTIP_NOLABEL greedy \\{(.+)\\}), Rust 'a{b'. The tooltip needs the five UrlBuilder alternatives in order, not a substring scan.",
+  "False warning: ck_redeclare_order_stable_{legacy,teoz} and ck_redeclare_order_lower_legacy are whole-output matches in Java and Rust, yet report_put_participant_in_last warns 'moves ... to last'. SequenceDiagram#putParticipantInLast re-inserts with addWithOrder, before the first participant of strictly greater order, so an explicit order keeps its position. The Rust check compares (order.unwrap_or(index), index) keys, which is right only when every order is the default. The no-order control ck_redeclare_last_legacy is silent and matches, which is correct.",
+  "The other new warnings (multiple stereotypes, creole [[link]] in a quoted display, teoz anchors, group COLORS[1]) fire only on AS and 790/28 inputs that mismatch. A single stereotype or a spot stereotype does not warn (checked locally). The AS colour-free controls (note-across, hnote, rnote, teoz box) mismatch silently both before and after, which confirms the maker's claim that the residue is geometry, not colour.",
+  "The model change is explained: url_tooltip is additive (2,309 golden, 2,922 retained and 440 fresh AST records add 'url_tooltip: None'); SVG changes only where a {tooltip} exists."
+ ],
+ "verdict": "rejected",
+ "record": "checker-claude/review.json (full record; sha256 fbf7fe1dae561794774553eccb0ab80ea5c2b622fcaf1fc567a458866949aae5)",
+ "perturbations": [
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_redeclare_into_box_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_redeclare_into_box_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "putParticipantInLast",
+    "box englober",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_multi_stereo_three_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_multi_stereo_three_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "three stereotypes",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_tooltip_in_box_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_tooltip_in_box_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "participant url tooltip",
+    "inside box",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_redeclare_into_box_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_redeclare_into_box_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "putParticipantInLast",
+    "box englober",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_multi_stereo_three_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_multi_stereo_three_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "three stereotypes",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_tooltip_in_box_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_tooltip_in_box_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "participant url tooltip",
+    "inside box",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_note_across_plain_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_note_across_plain_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "note across",
+    "no colour control"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_hnote_over_plain_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_hnote_over_plain_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "hnote over several",
+    "no colour control"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_rnote_across_multi_plain_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_rnote_across_multi_plain_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "rnote across multiline",
+    "no colour control"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_hnote_right_plain_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_hnote_right_plain_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "hnote right",
+    "no colour control",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_box_plain_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_box_plain_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "box",
+    "no colour control",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_group_space_colour_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_group_space_colour_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "group COLORS[1] only",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_return_hash_label_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_return_hash_label_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "return label starting with #",
+    "creole list"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_label_brace_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_label_brace_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "url label containing braces",
+    "no tooltip",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_label_brace_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_label_brace_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "url label containing braces",
+    "no tooltip",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_spaced_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_spaced_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "tooltip with surrounding spaces"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_empty_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_empty_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "empty tooltip"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_nested_brace_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_nested_brace_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "nested braces in tooltip"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_create_tooltip_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_create_tooltip_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "created participant",
+    "tooltip"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_stable_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_stable_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "re-declaration",
+    "explicit order keeps position"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_stable_teoz.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_stable_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "re-declaration",
+    "explicit order keeps position"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_lower_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_lower_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "re-declaration",
+    "lower explicit order keeps position"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_last_legacy.puml",
+   "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_last_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "re-declaration of last participant",
+    "control"
+   ]
+  }
+ ]
+}

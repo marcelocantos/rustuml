@@ -1,0 +1,8 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Spruce
+ref over Cedar, Spruce
+Sprite cache warm
+end ref
+@enduml

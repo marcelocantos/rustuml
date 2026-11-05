@@ -1,0 +1,3141 @@
+{
+ "commits": {
+  "before": "93bf53e18d892f60e66b5fdfb4237f681afd5860",
+  "sprite_account": "ff761cd0a60a7208a970bca7cc88fe08245bb1e3",
+  "sprite_impl": "95cf8525297d551cd7da954e9892cb25325d5191",
+  "part_account": "65b5a16338935699a8828665720373ec9bee9d35",
+  "part_impl1": "ecbd75ec87dbbabac18a88904c2bad4d4f2e4416",
+  "part_impl2": "87bdb0feb0cd1557070d12fcd3890417e884662d",
+  "maker_tip": "5cf1eac12183db62938fe199009b7410538b3822",
+  "base": "9834a719455308120c3289b59a260567f141b724",
+  "rejection": "dc1dfbb4ac8343fde59e041c651d288ffa318a52"
+ },
+ "tables": {
+  "sprite-command-post-tim-ownership": {
+   "AS": {
+    "after:match": 15,
+    "after:mismatch": 3,
+    "after:nonpositive-accepted": 4,
+    "after:nonpositive-rejected": 17,
+    "after:valid-error": 2,
+    "before:match": 7,
+    "before:mismatch": 3,
+    "before:nonpositive-accepted": 19,
+    "before:nonpositive-rejected": 2,
+    "before:valid-error": 10,
+    "gain": 8,
+    "newly-rejected": 15
+   },
+   "AQ": {
+    "after:match": 31,
+    "after:mismatch": 3,
+    "after:nonpositive-accepted": 1,
+    "after:nonpositive-rejected": 8,
+    "before:match": 4,
+    "before:mismatch": 22,
+    "before:nonpositive-accepted": 5,
+    "before:nonpositive-rejected": 4,
+    "before:valid-error": 8,
+    "gain": 27,
+    "newly-rejected": 4
+   },
+   "AT": {
+    "after:compare-101": 1,
+    "after:match": 5,
+    "after:mismatch": 4,
+    "after:nonpositive-accepted": 3,
+    "after:valid-error": 22,
+    "before:compare-101": 1,
+    "before:match": 7,
+    "before:mismatch": 23,
+    "before:nonpositive-accepted": 1,
+    "before:nonpositive-rejected": 2,
+    "before:valid-error": 1,
+    "gain": 3,
+    "lost-match": 5,
+    "lost-rejection": 2,
+    "new-valid-error": 17
+   }
+  },
+  "sequence-participant-silent-residue": {
+   "AS": {
+    "after:match": 2,
+    "after:mismatch": 11,
+    "before:match": 1,
+    "before:mismatch": 12,
+    "gain": 1
+   },
+   "AT": {
+    "after:match": 5,
+    "after:mismatch": 5,
+    "before:match": 5,
+    "before:mismatch": 5,
+    "gain": 1,
+    "lost-match": 1
+   }
+  }
+ },
+ "changes": {
+  "sprite-command-post-tim-ownership": [
+   {
+    "name": "mk2_if_false_pixel_seq_legacy",
+    "cohort": "AS",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "mk2_else_branch_pixel_seq_legacy",
+    "cohort": "AS",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 8: sprite $gem [2x2/16] {\n"
+   },
+   {
+    "name": "mk2_include_close_only_seq_legacy",
+    "cohort": "AS",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 4: sprite $gem <svg width=\"2\" height=\"2\">\n"
+   },
+   {
+    "name": "mk2_seq_note_svg_lookalike_legacy",
+    "cohort": "AS",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "mk2_seq_top_level_text_legacy",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 4: Cannot read: are loaded\n"
+   },
+   {
+    "name": "mk2_if_false_pixel_seq_teoz",
+    "cohort": "AS",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "mk2_else_branch_pixel_seq_teoz",
+    "cohort": "AS",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 9: sprite $gem [2x2/16] {\n"
+   },
+   {
+    "name": "mk2_include_close_only_seq_teoz",
+    "cohort": "AS",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 5: sprite $gem <svg width=\"2\" height=\"2\">\n"
+   },
+   {
+    "name": "mk2_seq_note_svg_lookalike_teoz",
+    "cohort": "AS",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "mk2_seq_top_level_text_teoz",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 5: Cannot read: are loaded\n"
+   },
+   {
+    "name": "mk2_if_true_unclosed_pixel_state",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 3: Cannot read: [2x2/16] {\n"
+   },
+   {
+    "name": "mk2_include_unclosed_component",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Cannot read: [2x2/16] {\n"
+   },
+   {
+    "name": "mk2_class_top_level_text",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   {
+    "name": "mk2_component_top_level_text",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   {
+    "name": "mk2_unclosed_pixel_object",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Cannot read: [2x2/16] {\n"
+   },
+   {
+    "name": "mk2_unclosed_svg_object",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Syntax Error? sprite command never completed: sprite $gem <svg width=\"2\" height=\"2\">\n"
+   },
+   {
+    "name": "mk2_unclosed_pixel_deployment",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Cannot read: [2x2/16] {\n"
+   },
+   {
+    "name": "mk2_unclosed_svg_deployment",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Syntax Error? sprite command never completed: sprite $gem <svg width=\"2\" height=\"2\">\n"
+   },
+   {
+    "name": "mk2_unclosed_pixel_activity_legacy",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Cannot read: [2x2/16] {\n"
+   },
+   {
+    "name": "mk2_unclosed_svg_activity_legacy",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Syntax Error? sprite command never completed: sprite $gem <svg width=\"2\" height=\"2\">\n"
+   },
+   {
+    "name": "mk2_empty_pixel_class",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: No sprite defined.\n"
+   },
+   {
+    "name": "mk2_graylevel_component",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Only 4, 8 or 16 graylevel are allowed.\n"
+   },
+   {
+    "name": "mk2_sprite_file_missing_deployment",
+    "cohort": "AS",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Cannot read: missing_gem.png\n"
+   },
+   {
+    "name": "cl_seq_note_upper_legacy",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_seq_note_lower_legacy",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_seq_note_brace_legacy",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_seq_note_brace_lower_legacy",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_seq_legend_upper_legacy",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_seq_ref_upper_legacy",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_seq_inline_svg_apostrophe_legacy",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 3: sprite $tag <svg width=\"4\" height=\"4\"><text> 'hi'</text></svg>\n"
+   },
+   {
+    "name": "cl_seq_inline_svg_apostrophe_attr_legacy",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 3: sprite $mark <svg viewBox=\"0 0 4 4\"><title> 'mark'</title><rect width=\"2\" height=\"2\"/></svg>\n"
+   },
+   {
+    "name": "cl_seq_inline_svg_trailing_comment_legacy",
+    "cohort": "AQ",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\"><rect width=\\\"1\\\" height=\\\"1\\\"/></svg> ' trailing\"\n"
+   },
+   {
+    "name": "cl_seq_note_upper_teoz",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_seq_note_caps_teoz",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_seq_note_lower_teoz",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_seq_note_brace_teoz",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_seq_note_brace_lower_teoz",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_seq_legend_upper_teoz",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_seq_ref_upper_teoz",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_seq_inline_svg_apostrophe_teoz",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 4: sprite $tag <svg width=\"4\" height=\"4\"><text> 'hi'</text></svg>\n"
+   },
+   {
+    "name": "cl_seq_inline_svg_apostrophe_attr_teoz",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandSpriteSvg is recognized but unimplemented at line 4: sprite $mark <svg viewBox=\"0 0 4 4\"><title> 'mark'</title><rect width=\"2\" height=\"2\"/></svg>\n"
+   },
+   {
+    "name": "cl_seq_inline_svg_trailing_comment_teoz",
+    "cohort": "AQ",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\"><rect width=\\\"1\\\" height=\\\"1\\\"/></svg> ' trailing\"\n"
+   },
+   {
+    "name": "cl_class_link_upper",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_class_link_lower",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_class_aggregation_label",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_class_dotted",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_class_member_upper",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_class_member_brace",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_class_note_upper",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_state_note_upper",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_activity_note_upper",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "cl_component_link_upper",
+    "cohort": "AQ",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Cannot read: [Engine]\n"
+   },
+   {
+    "name": "cl_usecase_link_upper",
+    "cohort": "AQ",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Cannot read: (Play)\n"
+   },
+   {
+    "name": "cl_component_note_upper",
+    "cohort": "AQ",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "ck_component_bracket_body",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 3: Cannot read: are loaded\n"
+   },
+   {
+    "name": "ck_component_bracket_lower",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 3: Cannot read: holds frames\n"
+   },
+   {
+    "name": "ck_deployment_node_bracket_body",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 3: Cannot read: are loaded\n"
+   },
+   {
+    "name": "ck_deployment_bracket_upper",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 3: Cannot read: FLUSHED NOW\n"
+   },
+   {
+    "name": "ck_usecase_rectangle_bracket_body",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 4: Cannot read: are loaded\n"
+   },
+   {
+    "name": "ck_component_header_body",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   {
+    "name": "ck_component_footer_body",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   {
+    "name": "ck_deployment_header_body",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   {
+    "name": "ck_deployment_footer_upper",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 3: Cannot read: FLUSHED NOW\n"
+   },
+   {
+    "name": "ck_state_header_body",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   {
+    "name": "ck_state_legend_body",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 3: Cannot read: are loaded\n"
+   },
+   {
+    "name": "ck_state_title_body",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   {
+    "name": "ck_object_header_body",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   {
+    "name": "ck_object_legend_body",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 3: Cannot read: are loaded\n"
+   },
+   {
+    "name": "ck_activity_legacy_note_body",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 3: Cannot read: are loaded\n"
+   },
+   {
+    "name": "ck_activity_legacy_note_brace",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 3: Cannot read: {\n"
+   },
+   {
+    "name": "ck_activity_legacy_legend_body",
+    "cohort": "AT",
+    "change": "new-valid-error",
+    "before": "mismatch",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 4: Cannot read: are loaded\n"
+   },
+   {
+    "name": "ck_class_header_body",
+    "cohort": "AT",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "ck_class_legend_body",
+    "cohort": "AT",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "ck_class_floating_note_body",
+    "cohort": "AT",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "ck_svg_body_apos_end_legacy",
+    "cohort": "AT",
+    "change": "lost-match",
+    "before": "match",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\">\"\n"
+   },
+   {
+    "name": "ck_svg_body_trailing_after_end_legacy",
+    "cohort": "AT",
+    "change": "lost-rejection",
+    "before": "nonpositive-rejected",
+    "after": "nonpositive-accepted",
+    "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 3: sprite $tag <svg width=\"4\" height=\"4\">\n"
+   },
+   {
+    "name": "ck_svg_body_apos_end_teoz",
+    "cohort": "AT",
+    "change": "lost-match",
+    "before": "match",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\">\"\n"
+   },
+   {
+    "name": "ck_svg_body_trailing_after_end_teoz",
+    "cohort": "AT",
+    "change": "lost-rejection",
+    "before": "nonpositive-rejected",
+    "after": "nonpositive-accepted",
+    "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 4: sprite $tag <svg width=\"4\" height=\"4\">\n"
+   },
+   {
+    "name": "ck_svg_body_apos_end_class",
+    "cohort": "AT",
+    "change": "lost-match",
+    "before": "match",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 1: Syntax Error? sprite command never completed: sprite $tag <svg width=\"4\" height=\"4\">\n"
+   },
+   {
+    "name": "ck_svg_body_apos_end_component",
+    "cohort": "AT",
+    "change": "lost-match",
+    "before": "match",
+    "after": "valid-error",
+    "after_stderr": "parse error: line 1: Syntax Error? sprite command never completed: sprite $tag <svg width=\"4\" height=\"4\">\n"
+   },
+   {
+    "name": "ck_startsub_sprite_deployment",
+    "cohort": "AT",
+    "change": "lost-match",
+    "before": "match",
+    "after": "mismatch",
+    "after_stderr": ""
+   }
+  ],
+  "sequence-participant-silent-residue": [
+   {
+    "name": "mk2_tooltip_in_box_legacy",
+    "cohort": "AS",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "ck_tooltip_label_brace_legacy",
+    "cohort": "AT",
+    "change": "lost-match",
+    "before": "match",
+    "after": "mismatch",
+    "after_stderr": ""
+   },
+   {
+    "name": "ck_create_tooltip_legacy",
+    "cohort": "AT",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   }
+  ],
+  "null": [
+   {
+    "name": "c75_sprite_pixel_inline_legacy",
+    "cohort": "F790",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 4: Cannot read: [3x2/16] { F0F 0F0 }\n"
+   },
+   {
+    "name": "c75_sprite_pixel_inline_teoz",
+    "cohort": "F790",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 5: Cannot read: [3x2/16] { F0F 0F0 }\n"
+   },
+   {
+    "name": "c75_include_parent_to_child_legacy",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 4: sprite $needle <svg width=\"3\" height=\"4\">\n"
+   },
+   {
+    "name": "c75_include_parent_to_child_teoz",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 5: sprite $needle <svg width=\"3\" height=\"4\">\n"
+   },
+   {
+    "name": "c75_include_sibling_legacy",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 4: sprite $needle <svg width=\"3\" height=\"4\">\n"
+   },
+   {
+    "name": "c75_include_sibling_teoz",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 5: sprite $needle <svg width=\"3\" height=\"4\">\n"
+   },
+   {
+    "name": "c75_include_pixel_into_include_legacy",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 4: sprite $needle [3x2/16] {\n"
+   },
+   {
+    "name": "c75_include_pixel_into_include_teoz",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": "warning: sequence command CommandFactorySprite$1 is recognized but unimplemented at line 5: sprite $needle [3x2/16] {\n"
+   },
+   {
+    "name": "c75_unclosed_svg_class",
+    "cohort": "F790",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 4: Syntax Error? sprite command never completed: sprite $needle <svg width=\"3\" height=\"4\">\n"
+   },
+   {
+    "name": "c75_unclosed_pixel_class",
+    "cohort": "F790",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 4: Cannot read: [3x2/16] {\n"
+   },
+   {
+    "name": "c75_unclosed_svg_state",
+    "cohort": "F790",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 4: Syntax Error? sprite command never completed: sprite $needle <svg width=\"3\" height=\"4\">\n"
+   },
+   {
+    "name": "c75_unclosed_pixel_state",
+    "cohort": "F790",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 4: Cannot read: [3x2/16] {\n"
+   },
+   {
+    "name": "c75_unclosed_svg_activity",
+    "cohort": "F790",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 4: Syntax Error? sprite command never completed: sprite $needle <svg width=\"3\" height=\"4\">\n"
+   },
+   {
+    "name": "c75_unclosed_pixel_activity",
+    "cohort": "F790",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 4: Cannot read: [3x2/16] {\n"
+   },
+   {
+    "name": "c75_unclosed_svg_usecase",
+    "cohort": "F790",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 4: Syntax Error? sprite command never completed: sprite $needle <svg width=\"3\" height=\"4\">\n"
+   },
+   {
+    "name": "c75_unclosed_pixel_usecase",
+    "cohort": "F790",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 4: Cannot read: [3x2/16] {\n"
+   },
+   {
+    "name": "c75_unclosed_svg_component",
+    "cohort": "F790",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 4: Syntax Error? sprite command never completed: sprite $needle <svg width=\"3\" height=\"4\">\n"
+   },
+   {
+    "name": "c75_unclosed_pixel_component",
+    "cohort": "F790",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 4: Cannot read: [3x2/16] {\n"
+   },
+   {
+    "name": "c75_participant_link_legacy",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75_actor_link_legacy",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75_boundary_link_legacy",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75_control_link_legacy",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75_entity_link_legacy",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75_database_link_legacy",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75_collections_link_legacy",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75_queue_link_legacy",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75_create_link_legacy",
+    "cohort": "F790",
+    "change": "gain",
+    "before": "mismatch",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75s_inactive_unclosed_svg_legacy",
+    "cohort": "F28",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75s_inactive_unclosed_pixel_legacy",
+    "cohort": "F28",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75s_macro_uninvoked_unclosed_svg_legacy",
+    "cohort": "F28",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75s_macro_uninvoked_unclosed_pixel_legacy",
+    "cohort": "F28",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75s_sprite_empty_pixel_legacy",
+    "cohort": "F28",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: No sprite defined.\n"
+   },
+   {
+    "name": "c75s_sprite_palette_invalid_legacy",
+    "cohort": "F28",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 2: Only 4, 8 or 16 graylevel are allowed.\n"
+   },
+   {
+    "name": "c75s_inactive_unclosed_svg_teoz",
+    "cohort": "F28",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75s_inactive_unclosed_pixel_teoz",
+    "cohort": "F28",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75s_macro_uninvoked_unclosed_svg_teoz",
+    "cohort": "F28",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75s_macro_uninvoked_unclosed_pixel_teoz",
+    "cohort": "F28",
+    "change": "gain",
+    "before": "valid-error",
+    "after": "match",
+    "after_stderr": ""
+   },
+   {
+    "name": "c75s_sprite_empty_pixel_teoz",
+    "cohort": "F28",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 3: No sprite defined.\n"
+   },
+   {
+    "name": "c75s_sprite_palette_invalid_teoz",
+    "cohort": "F28",
+    "change": "newly-rejected",
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "after_stderr": "parse error: line 3: Only 4, 8 or 16 graylevel are allowed.\n"
+   }
+  ]
+ },
+ "perturbations": {
+  "sprite-command-post-tim-ownership": [
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_pixel_seq_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_pixel_seq_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "!if false",
+     "unclosed pixel",
+     "legacy"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_else_branch_pixel_seq_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_else_branch_pixel_seq_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "!if false then !else",
+     "closed pixel",
+     "legacy"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_closed_pixel_seq_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_closed_pixel_seq_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "invoked procedure",
+     "closed pixel",
+     "legacy"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_unclosed_svg_seq_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_unclosed_svg_seq_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "invoked procedure",
+     "unclosed svg",
+     "legacy"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-rejected",
+    "after": "nonpositive-rejected",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_close_only_seq_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_close_only_seq_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "!include supplies body and END",
+     "svg",
+     "legacy"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_note_svg_lookalike_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_note_svg_lookalike_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "note body",
+     "svg header lookalike",
+     "legacy"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_top_level_text_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_top_level_text_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "top-level Sprite text",
+     "CommandSpriteFile",
+     "legacy"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_pixel_seq_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_pixel_seq_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "!if false",
+     "unclosed pixel",
+     "teoz"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_else_branch_pixel_seq_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_else_branch_pixel_seq_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "!if false then !else",
+     "closed pixel",
+     "teoz"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_closed_pixel_seq_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_closed_pixel_seq_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "invoked procedure",
+     "closed pixel",
+     "teoz"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_unclosed_svg_seq_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_unclosed_svg_seq_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "invoked procedure",
+     "unclosed svg",
+     "teoz"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-rejected",
+    "after": "nonpositive-rejected",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_close_only_seq_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_close_only_seq_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "!include supplies body and END",
+     "svg",
+     "teoz"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_note_svg_lookalike_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_note_svg_lookalike_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "note body",
+     "svg header lookalike",
+     "teoz"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_top_level_text_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_top_level_text_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "top-level Sprite text",
+     "CommandSpriteFile",
+     "teoz"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_svg_class.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_svg_class.svg",
+    "result": "pass",
+    "axes": [
+     "!if false",
+     "unclosed svg",
+     "class"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_true_closed_pixel_component.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_true_closed_pixel_component.svg",
+    "result": "pass",
+    "axes": [
+     "!if true",
+     "closed pixel",
+     "component"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_true_unclosed_pixel_state.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_true_unclosed_pixel_state.svg",
+    "result": "pass",
+    "axes": [
+     "!if true",
+     "unclosed pixel",
+     "state"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_uninvoked_svg_usecase.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_uninvoked_svg_usecase.svg",
+    "result": "fail",
+    "axes": [
+     "uninvoked procedure",
+     "unclosed svg",
+     "usecase"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "valid-error",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_header_only_class.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_header_only_class.svg",
+    "result": "pass",
+    "axes": [
+     "!include supplies header and rows",
+     "pixel",
+     "class"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_unclosed_component.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_unclosed_component.svg",
+    "result": "pass",
+    "axes": [
+     "!include opens pixel never closed",
+     "component"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_state_note_brace.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_state_note_brace.svg",
+    "result": "pass",
+    "axes": [
+     "state note body",
+     "pixel header lookalike"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_activity_note_svg.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_activity_note_svg.svg",
+    "result": "pass",
+    "axes": [
+     "activity note body",
+     "svg header lookalike"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_usecase_note_upper.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_usecase_note_upper.svg",
+    "result": "fail",
+    "axes": [
+     "usecase note body",
+     "Sprite capitalised"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "valid-error",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_deployment_note_brace.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_deployment_note_brace.svg",
+    "result": "fail",
+    "axes": [
+     "deployment note body",
+     "pixel header lookalike"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_component_legend_upper.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_component_legend_upper.svg",
+    "result": "fail",
+    "axes": [
+     "legend body",
+     "component"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_class_member_svg.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_class_member_svg.svg",
+    "result": "pass",
+    "axes": [
+     "class body",
+     "svg header lookalike"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_class_top_level_text.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_class_top_level_text.svg",
+    "result": "pass",
+    "axes": [
+     "top-level Sprite text",
+     "class",
+     "CommandSpriteFile"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_component_top_level_text.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_component_top_level_text.svg",
+    "result": "pass",
+    "axes": [
+     "top-level Sprite text",
+     "component",
+     "CommandSpriteFile"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_object.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_object.svg",
+    "result": "pass",
+    "axes": [
+     "unclosed pixel",
+     "object"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_object.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_object.svg",
+    "result": "pass",
+    "axes": [
+     "unclosed svg",
+     "object"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_deployment.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_deployment.svg",
+    "result": "pass",
+    "axes": [
+     "unclosed pixel",
+     "deployment"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_deployment.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_deployment.svg",
+    "result": "pass",
+    "axes": [
+     "unclosed svg",
+     "deployment"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_activity_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_activity_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "unclosed pixel",
+     "activity_legacy"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_activity_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_activity_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "unclosed svg",
+     "activity_legacy"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_timing.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_timing.svg",
+    "result": "fail",
+    "axes": [
+     "unclosed pixel",
+     "timing"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-accepted",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_timing.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_timing.svg",
+    "result": "fail",
+    "axes": [
+     "unclosed svg",
+     "timing"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-accepted",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_mindmap.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_mindmap.svg",
+    "result": "fail",
+    "axes": [
+     "unclosed svg",
+     "mindmap"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-accepted",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_empty_pixel_class.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_empty_pixel_class.svg",
+    "result": "pass",
+    "axes": [
+     "empty pixel body",
+     "No sprite defined.",
+     "class"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_graylevel_component.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_graylevel_component.svg",
+    "result": "pass",
+    "axes": [
+     "graylevel 7",
+     "component"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_sprite_file_missing_deployment.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_sprite_file_missing_deployment.svg",
+    "result": "pass",
+    "axes": [
+     "CommandSpriteFile",
+     "missing file",
+     "deployment"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_compressed_bad_class.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_compressed_bad_class.svg",
+    "result": "fail",
+    "axes": [
+     "z-compressed",
+     "Cannot decode sprite.",
+     "class"
+    ],
+    "cohort": "AS",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-accepted",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_upper_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_upper_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "multiline note text",
+     "Sprite capitalised",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_caps_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_caps_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "multiline note text",
+     "SPRITE uppercase",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_lower_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_lower_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "multiline note text",
+     "sprite lowercase control",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "multiline note text",
+     "pixel header lookalike",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_lower_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_lower_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "multiline note text",
+     "pixel header lookalike lowercase",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_legend_upper_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_legend_upper_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "legend text",
+     "Sprite capitalised",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_ref_upper_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_ref_upper_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "ref text",
+     "Sprite capitalised",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_msg_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_msg_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "participant named sprite",
+     "lowercase message",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_dashed_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_dashed_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "participant named sprite",
+     "dashed message",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "inline svg",
+     "space-apostrophe inside svg",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_attr_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_attr_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "inline svg",
+     "space-apostrophe inside title",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_trailing_comment_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_trailing_comment_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "inline svg",
+     "text after closing svg",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_sprite_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_sprite_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "sprite without value",
+     "word name",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": false,
+    "before": "nonpositive-rejected",
+    "after": "nonpositive-rejected",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_dollar_sprite_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_dollar_sprite_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "sprite without value",
+     "dollar name",
+     "legacy"
+    ],
+    "cohort": "AQ",
+    "java_valid": false,
+    "before": "nonpositive-rejected",
+    "after": "nonpositive-rejected",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_upper_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_upper_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "multiline note text",
+     "Sprite capitalised",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_caps_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_caps_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "multiline note text",
+     "SPRITE uppercase",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_lower_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_lower_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "multiline note text",
+     "sprite lowercase control",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "multiline note text",
+     "pixel header lookalike",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_lower_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_lower_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "multiline note text",
+     "pixel header lookalike lowercase",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_legend_upper_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_legend_upper_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "legend text",
+     "Sprite capitalised",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_ref_upper_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_ref_upper_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "ref text",
+     "Sprite capitalised",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_msg_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_msg_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "participant named sprite",
+     "lowercase message",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_dashed_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_dashed_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "participant named sprite",
+     "dashed message",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "inline svg",
+     "space-apostrophe inside svg",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_attr_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_attr_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "inline svg",
+     "space-apostrophe inside title",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_trailing_comment_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_trailing_comment_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "inline svg",
+     "text after closing svg",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_sprite_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_sprite_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "sprite without value",
+     "word name",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": false,
+    "before": "nonpositive-rejected",
+    "after": "nonpositive-rejected",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_dollar_sprite_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_dollar_sprite_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "sprite without value",
+     "dollar name",
+     "teoz"
+    ],
+    "cohort": "AQ",
+    "java_valid": false,
+    "before": "nonpositive-rejected",
+    "after": "nonpositive-rejected",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_link_upper.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_link_upper.svg",
+    "result": "pass",
+    "axes": [
+     "class link",
+     "Sprite capitalised",
+     "class"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_link_lower.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_link_lower.svg",
+    "result": "pass",
+    "axes": [
+     "class link",
+     "sprite lowercase control",
+     "class"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_object_link_upper.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_object_link_upper.svg",
+    "result": "fail",
+    "axes": [
+     "class link",
+     "Sprite capitalised",
+     "object"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_object_link_lower.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_object_link_lower.svg",
+    "result": "fail",
+    "axes": [
+     "class link",
+     "sprite lowercase control",
+     "object"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_aggregation_label.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_aggregation_label.svg",
+    "result": "pass",
+    "axes": [
+     "class link",
+     "aggregation with label"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_dotted.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_dotted.svg",
+    "result": "pass",
+    "axes": [
+     "class link",
+     "dotted"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_member_upper.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_member_upper.svg",
+    "result": "pass",
+    "axes": [
+     "class body",
+     "Sprite capitalised"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_member_brace.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_member_brace.svg",
+    "result": "pass",
+    "axes": [
+     "class body",
+     "pixel header lookalike"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_note_upper.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_note_upper.svg",
+    "result": "pass",
+    "axes": [
+     "class note text",
+     "Sprite capitalised"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_bare_sprite.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_bare_sprite.svg",
+    "result": "fail",
+    "axes": [
+     "sprite without value",
+     "class"
+    ],
+    "cohort": "AQ",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-accepted",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_state_note_upper.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_state_note_upper.svg",
+    "result": "pass",
+    "axes": [
+     "state note text",
+     "Sprite capitalised"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_activity_note_upper.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_activity_note_upper.svg",
+    "result": "pass",
+    "axes": [
+     "activity note text",
+     "Sprite capitalised"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_component_link_upper.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_component_link_upper.svg",
+    "result": "pass",
+    "axes": [
+     "description link",
+     "sprite file command precedes link"
+    ],
+    "cohort": "AQ",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_usecase_link_upper.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_usecase_link_upper.svg",
+    "result": "pass",
+    "axes": [
+     "description link",
+     "sprite file command precedes link"
+    ],
+    "cohort": "AQ",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-rejected",
+    "change": "newly-rejected"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_component_note_upper.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_component_note_upper.svg",
+    "result": "pass",
+    "axes": [
+     "component note text",
+     "Sprite capitalised"
+    ],
+    "cohort": "AQ",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_bracket_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_bracket_body.svg",
+    "result": "fail",
+    "axes": [
+     "description bracket body",
+     "file-form text",
+     "component"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_bracket_lower.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_bracket_lower.svg",
+    "result": "fail",
+    "axes": [
+     "description bracket body",
+     "lowercase file-form",
+     "component"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_node_bracket_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_node_bracket_body.svg",
+    "result": "fail",
+    "axes": [
+     "description bracket body",
+     "file-form text",
+     "deployment"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_bracket_upper.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_bracket_upper.svg",
+    "result": "fail",
+    "axes": [
+     "description bracket body",
+     "uppercase file-form",
+     "deployment"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_usecase_rectangle_bracket_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_usecase_rectangle_bracket_body.svg",
+    "result": "fail",
+    "axes": [
+     "description bracket body",
+     "file-form text",
+     "usecase"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_header_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_header_body.svg",
+    "result": "fail",
+    "axes": [
+     "multiline header body",
+     "component"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_footer_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_footer_body.svg",
+    "result": "fail",
+    "axes": [
+     "multiline footer body",
+     "component"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_header_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_header_body.svg",
+    "result": "fail",
+    "axes": [
+     "multiline header body",
+     "deployment"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_footer_upper.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_footer_upper.svg",
+    "result": "fail",
+    "axes": [
+     "multiline footer body",
+     "uppercase",
+     "deployment"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_usecase_header_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_usecase_header_body.svg",
+    "result": "fail",
+    "axes": [
+     "multiline header body",
+     "usecase"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "valid-error",
+    "after": "valid-error",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_header_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_header_body.svg",
+    "result": "fail",
+    "axes": [
+     "multiline header body",
+     "state"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_legend_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_legend_body.svg",
+    "result": "fail",
+    "axes": [
+     "legend body",
+     "state"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_title_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_title_body.svg",
+    "result": "fail",
+    "axes": [
+     "multiline title body",
+     "state"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_object_header_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_object_header_body.svg",
+    "result": "fail",
+    "axes": [
+     "multiline header body",
+     "object"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_object_legend_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_object_legend_body.svg",
+    "result": "fail",
+    "axes": [
+     "legend body",
+     "object"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_note_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_note_body.svg",
+    "result": "fail",
+    "axes": [
+     "legacy activity note body",
+     "file-form"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_note_brace.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_note_brace.svg",
+    "result": "fail",
+    "axes": [
+     "legacy activity note body",
+     "pixel header lookalike"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_legend_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_legend_body.svg",
+    "result": "fail",
+    "axes": [
+     "legacy activity legend body"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "valid-error",
+    "change": "new-valid-error"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_header_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_header_body.svg",
+    "result": "pass",
+    "axes": [
+     "multiline header body",
+     "class"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_legend_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_legend_body.svg",
+    "result": "pass",
+    "axes": [
+     "legend body",
+     "class"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_floating_note_body.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_floating_note_body.svg",
+    "result": "pass",
+    "axes": [
+     "floating note body",
+     "class"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_seq_header_body_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_seq_header_body_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "multiline header body",
+     "sequence legacy"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "multiline svg body",
+     "space-apostrophe on END line",
+     "legacy"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "match",
+    "after": "valid-error",
+    "change": "lost-match"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "multiline svg body",
+     "text after </svg> on END line",
+     "legacy"
+    ],
+    "cohort": "AT",
+    "java_valid": false,
+    "before": "nonpositive-rejected",
+    "after": "nonpositive-accepted",
+    "change": "lost-rejection"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_teoz.svg",
+    "result": "fail",
+    "axes": [
+     "multiline svg body",
+     "space-apostrophe on END line",
+     "teoz"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "match",
+    "after": "valid-error",
+    "change": "lost-match"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_teoz.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_teoz.svg",
+    "result": "fail",
+    "axes": [
+     "multiline svg body",
+     "text after </svg> on END line",
+     "teoz"
+    ],
+    "cohort": "AT",
+    "java_valid": false,
+    "before": "nonpositive-rejected",
+    "after": "nonpositive-accepted",
+    "change": "lost-rejection"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_class.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_class.svg",
+    "result": "fail",
+    "axes": [
+     "multiline svg body",
+     "space-apostrophe on END line",
+     "class"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "match",
+    "after": "valid-error",
+    "change": "lost-match"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_component.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_component.svg",
+    "result": "fail",
+    "axes": [
+     "multiline svg body",
+     "space-apostrophe on END line",
+     "component"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "match",
+    "after": "valid-error",
+    "change": "lost-match"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_mid_legacy.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_mid_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "multiline svg body",
+     "space-apostrophe mid body",
+     "control"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_class.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_class.svg",
+    "result": "fail",
+    "axes": [
+     "multiline svg body",
+     "text after </svg> on END line",
+     "class"
+    ],
+    "cohort": "AT",
+    "java_valid": false,
+    "before": "nonpositive-accepted",
+    "after": "nonpositive-accepted",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_startsub_sprite_deployment.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_startsub_sprite_deployment.svg",
+    "result": "fail",
+    "axes": [
+     "!startsub body",
+     "pixel sprite drawn",
+     "deployment"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "match",
+    "after": "mismatch",
+    "change": "lost-match"
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_nosub_sprite_deployment.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_nosub_sprite_deployment.svg",
+    "result": "pass",
+    "axes": [
+     "control without startsub",
+     "pixel sprite drawn",
+     "deployment"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_startsub_sprite_class.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_startsub_sprite_class.svg",
+    "result": "fail",
+    "axes": [
+     "!startsub body",
+     "pixel sprite",
+     "class"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_yaml_block_sprite_text.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_yaml_block_sprite_text.svg",
+    "result": "fail",
+    "axes": [
+     "yaml block scalar",
+     "single-line sprite shape"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_ditaa_sprite_text.puml",
+    "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_ditaa_sprite_text.svg",
+    "result": "fail",
+    "axes": [
+     "ditaa text",
+     "single-line sprite shape"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "compare-101",
+    "after": "compare-101",
+    "change": null
+   }
+  ],
+  "sequence-participant-silent-residue": [
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_redeclare_into_box_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_redeclare_into_box_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "putParticipantInLast",
+     "box englober",
+     "legacy"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_multi_stereo_three_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_multi_stereo_three_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "three stereotypes",
+     "legacy"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_tooltip_in_box_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_tooltip_in_box_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "participant url tooltip",
+     "inside box",
+     "legacy"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_redeclare_into_box_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_redeclare_into_box_teoz.svg",
+    "result": "fail",
+    "axes": [
+     "putParticipantInLast",
+     "box englober",
+     "teoz"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_multi_stereo_three_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_multi_stereo_three_teoz.svg",
+    "result": "fail",
+    "axes": [
+     "three stereotypes",
+     "teoz"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_tooltip_in_box_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_tooltip_in_box_teoz.svg",
+    "result": "fail",
+    "axes": [
+     "participant url tooltip",
+     "inside box",
+     "teoz"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_note_across_plain_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_note_across_plain_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "note across",
+     "no colour control"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_hnote_over_plain_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_hnote_over_plain_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "hnote over several",
+     "no colour control"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_rnote_across_multi_plain_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_rnote_across_multi_plain_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "rnote across multiline",
+     "no colour control"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_hnote_right_plain_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_hnote_right_plain_teoz.svg",
+    "result": "fail",
+    "axes": [
+     "hnote right",
+     "no colour control",
+     "teoz"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_box_plain_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_box_plain_teoz.svg",
+    "result": "fail",
+    "axes": [
+     "box",
+     "no colour control",
+     "teoz"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_group_space_colour_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_group_space_colour_teoz.svg",
+    "result": "fail",
+    "axes": [
+     "group COLORS[1] only",
+     "teoz"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_return_hash_label_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/mk2_return_hash_label_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "return label starting with #",
+     "creole list"
+    ],
+    "cohort": "AS",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_label_brace_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_label_brace_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "url label containing braces",
+     "no tooltip",
+     "legacy"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "match",
+    "after": "mismatch",
+    "change": "lost-match"
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_label_brace_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_label_brace_teoz.svg",
+    "result": "fail",
+    "axes": [
+     "url label containing braces",
+     "no tooltip",
+     "teoz"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_spaced_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_spaced_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "tooltip with surrounding spaces"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_empty_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_empty_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "empty tooltip"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_nested_brace_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_tooltip_nested_brace_legacy.svg",
+    "result": "fail",
+    "axes": [
+     "nested braces in tooltip"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "mismatch",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_create_tooltip_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_create_tooltip_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "created participant",
+     "tooltip"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "mismatch",
+    "after": "match",
+    "change": "gain"
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_stable_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_stable_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "re-declaration",
+     "explicit order keeps position"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_stable_teoz.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_stable_teoz.svg",
+    "result": "pass",
+    "axes": [
+     "re-declaration",
+     "explicit order keeps position"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_lower_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_order_lower_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "re-declaration",
+     "lower explicit order keeps position"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   },
+   {
+    "source": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_last_legacy.puml",
+    "golden": "test-diagrams/perturbations/sequence-participant-silent-residue/ck_redeclare_last_legacy.svg",
+    "result": "pass",
+    "axes": [
+     "re-declaration of last participant",
+     "control"
+    ],
+    "cohort": "AT",
+    "java_valid": true,
+    "before": "match",
+    "after": "match",
+    "change": null
+   }
+  ]
+ }
+}

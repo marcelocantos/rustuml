@@ -1,0 +1,8 @@
+@startuml
+participant Maple
+participant Birch
+note over Birch
+SPRITE RENDERER QUEUE DEPTH
+end note
+Birch -> Maple: ack
+@enduml

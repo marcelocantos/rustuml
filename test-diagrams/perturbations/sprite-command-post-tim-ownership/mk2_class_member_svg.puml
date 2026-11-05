@@ -1,0 +1,7 @@
+@startuml
+class Player {
+  sprite $gem <svg width="2" height="2">
+}
+class Level
+Player -- Level
+@enduml

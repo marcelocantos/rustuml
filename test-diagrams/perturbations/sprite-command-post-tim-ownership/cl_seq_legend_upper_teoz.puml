@@ -1,0 +1,9 @@
+@startuml
+!pragma teoz true
+participant Cedar
+participant Spruce
+Cedar -> Spruce: go
+legend
+Sprite atlas version two
+endlegend
+@enduml

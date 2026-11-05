@@ -1,0 +1,4 @@
+@startuml
+[Engine]
+Sprite sheets are loaded
+@enduml

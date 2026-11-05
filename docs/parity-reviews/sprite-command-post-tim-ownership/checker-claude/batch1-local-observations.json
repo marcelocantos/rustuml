@@ -1,0 +1,680 @@
+{
+ "note": "local CLI observations only; no Java verdict",
+ "rows": [
+  {
+   "name": "ck_component_bracket_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "f802ecbf190d491f71d17848c7e151a9cbe054ba514f7421170f24f03528c806",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Cannot read: are loaded\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_component_bracket_lower",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "dbc849105f7da45e0b275c502e79c17996c07102f723358bba9e12e1f5fe4bf9",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Cannot read: holds frames\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_deployment_node_bracket_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "a35a3832d17eef58c5e7a4dfbd33e1f860a595079c12d663eaf3f17e4d792984",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Cannot read: are loaded\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_deployment_bracket_upper",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "afd9408d02a9ee52f932e415c0d21a29909ebf8f19ea8257e288e84d46261926",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Cannot read: FLUSHED NOW\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_usecase_rectangle_bracket_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "67280274f2871e19b3444383b6f75ef6c8950450937e6ea99bfb229d96b59aea",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 4: Cannot read: are loaded\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_component_header_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "7785c1ebdac6a509506581424ef36fe07238da8ace5b56a39c1a4c74ccb9cee4",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_component_footer_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "77cc1a579c07424fb83365415c0428f73e500fe19acafad9d67a456f10f925c2",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_deployment_header_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "c5ec60d77bccc744a6a3963e8a3dbd558638d72be145e76c297ab3ba3ec7e59b",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_deployment_footer_upper",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "a35a3832d17eef58c5e7a4dfbd33e1f860a595079c12d663eaf3f17e4d792984",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Cannot read: FLUSHED NOW\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_usecase_header_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "rite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: sequence command CommandMultilinesHeader is recognized but unimplemented at line 1: header\nparse error: line 5: Syntax error: no registered sequence command accepts \"Hero -- (Play)\"\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "warning: sequence command CommandMultilinesHeader is recognized but unimplemented at line 1: header\nparse error: line 5: Syntax error: no registered sequence command accepts \"Hero -- (Play)\"\n"
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "ck_state_header_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "32bfec5982f590ada0ac814850b632e8f3ee9e9153a4a0611f26816279ed7371",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_state_legend_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "32bfec5982f590ada0ac814850b632e8f3ee9e9153a4a0611f26816279ed7371",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Cannot read: are loaded\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_state_title_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "32bfec5982f590ada0ac814850b632e8f3ee9e9153a4a0611f26816279ed7371",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_object_header_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "015e5d8e7e9c6984f43ca44d977fde9a864532d1e52e7cb0e2e5a4e634c8d796",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 2: Cannot read: are loaded\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_object_legend_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "40576b28221e5599dcd9e6f6b854c4052d4777c9a809b2d4b1741e286ca903cf",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Cannot read: are loaded\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_activity_legacy_note_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "55be871983a93d470aba06429d2fe2d08b308323f45ede0544d7f099b5efa1ce",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Cannot read: are loaded\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_activity_legacy_note_brace",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "55be871983a93d470aba06429d2fe2d08b308323f45ede0544d7f099b5efa1ce",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Cannot read: {\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_activity_legacy_legend_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "55be871983a93d470aba06429d2fe2d08b308323f45ede0544d7f099b5efa1ce",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 4: Cannot read: are loaded\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_class_header_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "4f0fd0c91bbe44005b04ecb8112b470afb6ba17a32ba8872359db000dc98bf93",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "d8d25ca54a4b2e96fb8ff179b26c948393122a2afe2b438a0e08e0a70d8b5062",
+    "stderr": ""
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_class_legend_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "57df50018a1a8e4e9098c4546df4dab97d57a1891ae3fde5d93d481b5f052d79",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "d451086feff5a9b49ac2f51bdd5c43c3ebe46c39146e4c2f169e2ca5fb5c08d4",
+    "stderr": ""
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_class_floating_note_body",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "1f9cce0e2db81849d232bce33e2bbb76de42b5873c3f85f5eee6d256affd354b",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "0587a9590111dc0d08f74a69199eac6c1866ea3eb802b5b1e81b3f6853903e65",
+    "stderr": ""
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_seq_header_body_legacy",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "d56c8cccdf6a78368fd0365b22a343cb7f69ea42441ffabaa3a500140fd17584",
+    "stderr": "; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: sequence command CommandMultilinesHeader is recognized but unimplemented at line 1: header\n"
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "d56c8cccdf6a78368fd0365b22a343cb7f69ea42441ffabaa3a500140fd17584",
+    "stderr": "warning: sequence command CommandMultilinesHeader is recognized but unimplemented at line 1: header\n"
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "ck_svg_body_apos_end_legacy",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "1a5df0933791964d503ecc0374bfca7382d0a93cc8889cc1c9c6d6995ff3f6ea",
+    "stderr": "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\">\"\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_svg_body_trailing_after_end_legacy",
+   "intended_valid": false,
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "pported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nparse error: line 3: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\">\"\n"
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "d28401477d1593fd9d5646b2a483a01b3d2dea61012004f27ccd1849935891dc",
+    "stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 3: sprite $tag <svg width=\"4\" height=\"4\">\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_svg_body_apos_end_teoz",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "9c9563a982e3335b36287ce724bc5b8604f8e9f394b0146394384b0f706205b8",
+    "stderr": "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\">\"\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_svg_body_trailing_after_end_teoz",
+   "intended_valid": false,
+   "before": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "pported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nparse error: line 4: Syntax error: no registered sequence command accepts \"sprite $tag <svg width=\\\"4\\\" height=\\\"4\\\">\"\n"
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "9c9563a982e3335b36287ce724bc5b8604f8e9f394b0146394384b0f706205b8",
+    "stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 4: sprite $tag <svg width=\"4\" height=\"4\">\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_svg_body_apos_end_class",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "33e5248df8bbe7baa3c9416c1d684019e30b6d42c31382cef691dbf4e6a3b288",
+    "stderr": "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax Error? sprite command never completed: sprite $tag <svg width=\"4\" height=\"4\">\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_svg_body_apos_end_component",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "c36a2df85c551a569c100cb9e2fdd3d7246fd76c3d0783130bef0cb907354d45",
+    "stderr": "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\n"
+   },
+   "after": {
+    "exit": 1,
+    "svg_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "parse error: line 1: Syntax Error? sprite command never completed: sprite $tag <svg width=\"4\" height=\"4\">\n"
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_svg_body_apos_mid_legacy",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "d28401477d1593fd9d5646b2a483a01b3d2dea61012004f27ccd1849935891dc",
+    "stderr": "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\n"
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "d28401477d1593fd9d5646b2a483a01b3d2dea61012004f27ccd1849935891dc",
+    "stderr": "warning: sequence command CommandSpriteSvgMultiline is recognized but unimplemented at line 3: sprite $tag <svg width=\"4\" height=\"4\">\n"
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "ck_svg_body_trailing_after_end_class",
+   "intended_valid": false,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "4f0fd0c91bbe44005b04ecb8112b470afb6ba17a32ba8872359db000dc98bf93",
+    "stderr": "warning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\nwarning: SVG sprite declaration recognized; SVG sprite materialization remains unsupported\n"
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "4f0fd0c91bbe44005b04ecb8112b470afb6ba17a32ba8872359db000dc98bf93",
+    "stderr": "warning: class sprite command CommandSpriteSvgMultiline is recognized; sprite materialization remains unsupported at line 1: sprite $tag <svg width=\"4\" height=\"4\">\n"
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "ck_startsub_sprite_deployment",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "4f7bda2953fc407f9e5463a5a552aac27e847aa73c2b5197573f8c0caf9ceee4",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "3b247f19ce5d37764566f2092dfd7447dd86293d5f570d9e9459467482bcfdb7",
+    "stderr": ""
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_nosub_sprite_deployment",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "990d619d7f29da63c002810a8e11fadf80f7c6bc3831f62ca66cbb3fe9477924",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "990d619d7f29da63c002810a8e11fadf80f7c6bc3831f62ca66cbb3fe9477924",
+    "stderr": ""
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "ck_startsub_sprite_class",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "a93ed62dcc0f464e156cda813cb70dd6281449b506bfffcafe007efb05d6ffa3",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "a93ed62dcc0f464e156cda813cb70dd6281449b506bfffcafe007efb05d6ffa3",
+    "stderr": ""
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "ck_yaml_block_sprite_text",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "68c6197e79bacd5df587c89eacae725730021494c7b7ef3d645eee3b7b7debdd",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "290d2823152148bbac691dd485f5a9b4b2122d1cb0d8334a50e986a806e2f8cf",
+    "stderr": ""
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_ditaa_sprite_text",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "175c8fde090a7b6b245e60bcaec1fdfc3d56e81b08b0406bde660a0fd0514c7e",
+    "stderr": "warning: single-line sprite declaration consumed; sprite execution remains unsupported\nwarning: single-line sprite declaration consumed; sprite execution remains unsupported\n"
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "f15a4ef5d99f3403f9ed5f1f070bf231c2a461452dfe4fc962989f5291048d3a",
+    "stderr": ""
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_tooltip_label_brace_legacy",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "06bc0bfaa738e981dc6556099dbd29d1937ceb82cd2f028860ea7c8689ff6dd3",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "a002e65b97c319ae127fcb4c5a141b20eb99f0bfe89622a60a3baa5d21aeb0da",
+    "stderr": ""
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_tooltip_label_brace_teoz",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "f6157c3e76567ad05c7a5ca5a67a87fcfdfa59174530f2a304997b36fcbeb38c",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "f6157c3e76567ad05c7a5ca5a67a87fcfdfa59174530f2a304997b36fcbeb38c",
+    "stderr": "warning: teoz participant link anchors ([[url]]) are not emitted; the links are dropped from the SVG\n"
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "ck_tooltip_spaced_legacy",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "06bc0bfaa738e981dc6556099dbd29d1937ceb82cd2f028860ea7c8689ff6dd3",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "525291a3baceafb1ee0874fee9a3462abf093daeb402870e514c487ac1344214",
+    "stderr": ""
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_tooltip_empty_legacy",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "06bc0bfaa738e981dc6556099dbd29d1937ceb82cd2f028860ea7c8689ff6dd3",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "06bc0bfaa738e981dc6556099dbd29d1937ceb82cd2f028860ea7c8689ff6dd3",
+    "stderr": ""
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "ck_tooltip_nested_brace_legacy",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "06bc0bfaa738e981dc6556099dbd29d1937ceb82cd2f028860ea7c8689ff6dd3",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "66bbab9afe8558277c51b935dad2bbb9cd59946cbd76d8b88336c66c3c33a57d",
+    "stderr": ""
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_create_tooltip_legacy",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "1e20437ec5cfc9808fb185706d1ea574003d78abdb3cc83389a75862ee624a27",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "c86efb78c8f03d92615ed3c327cfa598863c034c8a05d80fdc404541a96756e7",
+    "stderr": ""
+   },
+   "svg_changed": true
+  },
+  {
+   "name": "ck_redeclare_order_stable_legacy",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "911d0147b5bbe9e174b2eeafc533f97468c576cefc88ff823bdd79428fa66204",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "911d0147b5bbe9e174b2eeafc533f97468c576cefc88ff823bdd79428fa66204",
+    "stderr": "warning: sequence participant re-declaration moves \"Alder\" to last and into the current box in Java (SequenceDiagram#putParticipantInLast); this reorder is not modelled at line 3\n"
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "ck_redeclare_order_stable_teoz",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "9c9563a982e3335b36287ce724bc5b8604f8e9f394b0146394384b0f706205b8",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "9c9563a982e3335b36287ce724bc5b8604f8e9f394b0146394384b0f706205b8",
+    "stderr": "warning: sequence participant re-declaration moves \"Alder\" to last and into the current box in Java (SequenceDiagram#putParticipantInLast); this reorder is not modelled at line 4\n"
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "ck_redeclare_order_lower_legacy",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "be243bcde75cc13a90e52aef2e5717190329532f5b7efa547e5954c975ba06df",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "be243bcde75cc13a90e52aef2e5717190329532f5b7efa547e5954c975ba06df",
+    "stderr": "warning: sequence participant re-declaration moves \"Birch\" to last and into the current box in Java (SequenceDiagram#putParticipantInLast); this reorder is not modelled at line 3\n"
+   },
+   "svg_changed": false
+  },
+  {
+   "name": "ck_redeclare_last_legacy",
+   "intended_valid": true,
+   "before": {
+    "exit": 0,
+    "svg_sha256": "911d0147b5bbe9e174b2eeafc533f97468c576cefc88ff823bdd79428fa66204",
+    "stderr": ""
+   },
+   "after": {
+    "exit": 0,
+    "svg_sha256": "911d0147b5bbe9e174b2eeafc533f97468c576cefc88ff823bdd79428fa66204",
+    "stderr": ""
+   },
+   "svg_changed": false
+  }
+ ]
+}

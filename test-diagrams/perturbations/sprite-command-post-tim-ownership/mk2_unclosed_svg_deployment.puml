@@ -1,0 +1,5 @@
+@startuml
+node Server
+sprite $gem <svg width="2" height="2">
+<rect width="2" height="2"/>
+@enduml

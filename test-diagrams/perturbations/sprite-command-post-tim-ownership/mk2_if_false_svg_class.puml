@@ -1,0 +1,9 @@
+@startuml
+class Player
+!if %false()
+sprite $gem <svg width="2" height="2">
+<rect width="2" height="2"/>
+!endif
+class Level
+Player -- Level
+@enduml

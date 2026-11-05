@@ -1,0 +1,11 @@
+@startuml
+participant Cedar
+participant Spruce
+Cedar -> Spruce: compass
+!if %false()
+sprite $gem [2x2/16] {
+F0
+0F
+!endif
+Spruce -> Cedar: back
+@enduml

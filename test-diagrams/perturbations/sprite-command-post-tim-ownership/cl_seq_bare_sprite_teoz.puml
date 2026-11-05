@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+participant Cedar
+sprite foo
+Cedar -> Cedar: go
+@enduml

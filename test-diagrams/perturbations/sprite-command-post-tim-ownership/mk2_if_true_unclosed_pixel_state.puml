@@ -1,0 +1,9 @@
+@startuml
+state Idle
+!if %true()
+sprite $gem [2x2/16] {
+F0
+0F
+!endif
+Idle --> Busy
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+participant Alder order 10
+participant Birch order 20
+participant Alder order 10
+Alder -> Birch : go
+@enduml

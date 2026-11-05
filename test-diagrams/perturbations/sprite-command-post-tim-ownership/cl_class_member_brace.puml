@@ -1,0 +1,6 @@
+@startuml
+class Player {
+  Sprite frame {
+}
+class Level
+@enduml

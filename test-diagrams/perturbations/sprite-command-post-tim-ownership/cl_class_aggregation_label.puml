@@ -1,0 +1,4 @@
+@startuml
+class Player
+Sprite o-- Player : owns
+@enduml

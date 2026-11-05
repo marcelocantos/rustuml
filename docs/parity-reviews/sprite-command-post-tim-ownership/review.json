@@ -1,0 +1,1180 @@
+{
+ "schema_version": 1,
+ "mechanism": "sprite-command-post-tim-ownership",
+ "account_commit": "ff761cd0a60a7208a970bca7cc88fe08245bb1e3",
+ "implementation_commit": "95cf8525297d551cd7da954e9892cb25325d5191",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "reviewer": {
+  "task_id": "T3 thread t3-991a0cd7, branch review/sprite-ownership-claude",
+  "model": "claude-opus-5-5"
+ },
+ "commands": [
+  "git archive 93bf53e18 / 5cf1eac12 into private dirs; CARGO_TARGET_DIR=<private>/target-{before,after} cargo build --release -j 6 -p rustuml",
+  "rustc --edition=2024 -O docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs (sha256 d1424469...) --extern rustuml_oracle=<private>/target-before/release/deps/librustuml_oracle-*.rlib",
+  "python3 -I support/prepare.py fresh AS=<relay>/sprite-claude-maker-batch2 AQ=<relay>/sprite-claude-batch1 F790=<cache 75ed0e64> F28=<cache 75ed0e64>/supplement; prepare.py fresh-at AT=<relay>/sprite-ownership-checker-batch1",
+  "python3 -I support/replay.py LABEL MANIFEST rustuml-{before,after} compare_cli OUT CWD (svg/ast/ascii/yaml with -pipe; RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100; PLANTUML_STDLIB pinned; 6 workers) for fresh 915, AT 45, retained 4174, golden 12550",
+  "python3 -I support/{classify,fresh_classify,model_changes}.py on each before/after pair",
+  "python3 -I support/rejection_contract.py <fresh> fresh-manifest.json rustuml-before rustuml-after rejection-contract.json (unchanged, sha256 09cd998b...)",
+  "CARGO_TARGET_DIR=<private>/target-gates cargo test --release -j 6 --workspace --lib; cargo test --release -j 6 -p rustuml --test pipe_mode; cargo test --release -j 6 --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards -- --nocapture (on 5cf1eac12 before checker files; same oracle tests on the 93bf53e18 export; golden_no_oracle + golden_pairs on the 9834a7194 export)"
+ ],
+ "findings": [
+  "TIM ordering (obligation 1) is fixed: inactive, uninvoked and included sprite headers now behave as in Java. All 10 valid-input errors from the rejection now match, and AS (held out from the maker) has no loss.",
+  "LOSS (new valid-input errors, 17 Java-valid AT cases from mismatch to exit 1): the body of a multiline command that Rust handles after the sprite dispatch, or not at all, is offered to the sprite group. Java's CommonCommands#addCommonCommands1 calls addTitleCommands (CommandMultilinesTitle, CommandMultilinesLegend, CommandMultilinesHeader, CommandMultilinesFooter) before addCommonCommands2. The description CommandCreateElementMultilines and the legacy activity CommandMultilinesNoteActivity also own their bodies through END, so Java never offers a body line to getCandidate. Rust's component.rs, deployment.rs, usecase.rs and state.rs model only title, legend, note and skinparam bodies before dispatch; object.rs, and state legend/title bodies, reach the 'unrecognized' fallback; parse_legacy_activity dispatches every non-empty line. 'Sprite sheets are loaded' then becomes CommandSpriteFile and fails with 'Cannot read: are loaded', and 'Sprite frame {' fails with 'Cannot read: {'. Cases: ck_component_bracket_body, ck_component_bracket_lower, ck_deployment_node_bracket_body, ck_deployment_bracket_upper, ck_usecase_rectangle_bracket_body, ck_component_header_body, ck_component_footer_body, ck_deployment_header_body, ck_deployment_footer_upper, ck_state_header_body, ck_state_legend_body, ck_state_title_body, ck_object_header_body, ck_object_legend_body, ck_activity_legacy_note_body, ck_activity_legacy_note_brace, ck_activity_legacy_legend_body. This violates the account invariant ('bodies of multiline commands are never sprite commands') and 🎯T14.17's 'no valid case newly becomes an error'.",
+  "LOSS (4 lost matches that are now valid-input errors: ck_svg_body_apos_end_{legacy,teoz,class,component}): the old preprocessor handled sprite body lines before strip_inline_comment. Now the Rust-only trailing-apostrophe stripping (preprocess/mod.rs strip_inline_comment) reaches SVG body lines. Only the start line is exempt (SPRITE_SVG_START). '<text> 'hi'</text></svg>' is cut to '<text> ', so the CommandSpriteSvgMultiline END (.*</svg>)$ never matches and the command never completes. Java (StringLocated#removeInnerComment) strips only /' ... '/.",
+  "LOSS (2 lost rejections: ck_svg_body_trailing_after_end_{legacy,teoz}): by the same mechanism, '</svg> ' done' is stripped to '</svg> ', so END matches and an input Java rejects as a syntax error (END requires </svg> at end of line) is now accepted.",
+  "LOSS (1 lost match: ck_startsub_sprite_deployment; the control without !startsub, ck_nosub_sprite_deployment, still matches): a pixel sprite declared inside '!startsub … !endsub' in the same file. Java executes the startsub body in place, so the sprite is drawn. The old in-TIM collector registered it; Rust's TIM (preprocess/mod.rs, '!startsub' collecting_sub) does not emit the body to the diagram, so after the move the sprite is undefined and the node shrinks. The underlying cause is a TIM residue that the old collector masked; the packet exposes it as a lost match. The retained checker_dynamic_sub_sprite shows the same cause (sprite map lost; mismatch before and after).",
+  "Gains on AT: 3 class body cases (header, legend, floating note now keep 'Sprite…' text; mismatch to match). AQ: 27 gains (19 mismatches and 8 valid-input errors to match) and 4 newly rejected. AS: 9 gains and 15 newly rejected. The yaml and ditaa pass-through cases still mismatch for other reasons (yaml width 210 vs 207; ditaa is compare-101 in both builds).",
+  "Unclosed contracts: the AS cases confirm 'Cannot read: [2x2/16] {' for unclosed pixel headers and a syntax error for unclosed SVG headers in object, deployment, legacy activity, state and component. rejection_contract.py (unchanged) on 313 Java-invalid fresh inputs: 269 rejected before, 304 after, 0 lost; it exits 1 on 9 remaining false accepts (timing and mindmap fallback, compressed sprites, !function, cl_class_bare_sprite). The AT lost rejections are counted above; that script's manifest predates AT.",
+  "Cross-family: no golden changed except edge_render_sprite (a Java error page, now rejected): 1 of 12,550 SVG byte changes. Retained: 13 gains and 2 newly rejected, with no loss. Model changes are explained: the post-TIM source keeps sprite lines as Java's UmlSource does (about 50 golden and 30 retained), the sprite map loses inactive and body-owned entries, there are 7 HashMap-ordering changes, and the additive url_tooltip field is present.",
+  "Gates (each run once): golden_no_oracle failure names are byte-identical to 9834a7194 (70; 11,181/11,251). golden_pairs names are identical (754). parity_perturbations: 2,396 failures before, 2,366 after, 0 new. harness_guards: the same 2 failing guards; the decimal ratchet is byte-identical; review-record violations differ only by 2 'account has no independent checker review'. Workspace lib 1,486/1,486; pipe_mode 13/13. --yaml panics 148 golden and 63 retained in both builds; there are no SVG panics or timeouts.",
+  "Process: the account of record (ff761cd0a) planned to offer description/activity sprites last (as a known deviation); 95cf85252 offers them first, which is the Java order, without amending the account. The guard-schema account.json was added only in the evidence commit 5cf1eac12. Two earlier account files were edited for citation package names only.",
+  "Frozen items are unchanged: the rustuml-oracle crate (GEOM_EPS, syntax-error markers, census, allow-lists, strict-XML list), test-diagrams (golden pointer, baselines, ulp_parked) and the approved 15-entry new-valid-errors set. No production logic is keyed to fixture text, and there are no new decimal literals."
+ ],
+ "verdict": "rejected",
+ "record": "checker-claude/review.json (full record; sha256 9ccb94d117129be3cf003835374e062a459a5453138de2637e8732a205d1189a)",
+ "perturbations": [
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_pixel_seq_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_pixel_seq_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "!if false",
+    "unclosed pixel",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_else_branch_pixel_seq_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_else_branch_pixel_seq_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "!if false then !else",
+    "closed pixel",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_closed_pixel_seq_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_closed_pixel_seq_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "invoked procedure",
+    "closed pixel",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_unclosed_svg_seq_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_unclosed_svg_seq_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "invoked procedure",
+    "unclosed svg",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_close_only_seq_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_close_only_seq_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "!include supplies body and END",
+    "svg",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_note_svg_lookalike_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_note_svg_lookalike_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "note body",
+    "svg header lookalike",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_top_level_text_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_top_level_text_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "top-level Sprite text",
+    "CommandSpriteFile",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_pixel_seq_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_pixel_seq_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "!if false",
+    "unclosed pixel",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_else_branch_pixel_seq_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_else_branch_pixel_seq_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "!if false then !else",
+    "closed pixel",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_closed_pixel_seq_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_closed_pixel_seq_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "invoked procedure",
+    "closed pixel",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_unclosed_svg_seq_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_unclosed_svg_seq_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "invoked procedure",
+    "unclosed svg",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_close_only_seq_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_close_only_seq_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "!include supplies body and END",
+    "svg",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_note_svg_lookalike_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_note_svg_lookalike_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "note body",
+    "svg header lookalike",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_top_level_text_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_top_level_text_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "top-level Sprite text",
+    "CommandSpriteFile",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_svg_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_svg_class.svg",
+   "result": "pass",
+   "axes": [
+    "!if false",
+    "unclosed svg",
+    "class"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_true_closed_pixel_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_true_closed_pixel_component.svg",
+   "result": "pass",
+   "axes": [
+    "!if true",
+    "closed pixel",
+    "component"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_true_unclosed_pixel_state.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_true_unclosed_pixel_state.svg",
+   "result": "pass",
+   "axes": [
+    "!if true",
+    "unclosed pixel",
+    "state"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_uninvoked_svg_usecase.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_uninvoked_svg_usecase.svg",
+   "result": "fail",
+   "axes": [
+    "uninvoked procedure",
+    "unclosed svg",
+    "usecase"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_header_only_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_header_only_class.svg",
+   "result": "pass",
+   "axes": [
+    "!include supplies header and rows",
+    "pixel",
+    "class"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_unclosed_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_unclosed_component.svg",
+   "result": "pass",
+   "axes": [
+    "!include opens pixel never closed",
+    "component"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_state_note_brace.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_state_note_brace.svg",
+   "result": "pass",
+   "axes": [
+    "state note body",
+    "pixel header lookalike"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_activity_note_svg.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_activity_note_svg.svg",
+   "result": "pass",
+   "axes": [
+    "activity note body",
+    "svg header lookalike"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_usecase_note_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_usecase_note_upper.svg",
+   "result": "fail",
+   "axes": [
+    "usecase note body",
+    "Sprite capitalised"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_deployment_note_brace.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_deployment_note_brace.svg",
+   "result": "fail",
+   "axes": [
+    "deployment note body",
+    "pixel header lookalike"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_component_legend_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_component_legend_upper.svg",
+   "result": "fail",
+   "axes": [
+    "legend body",
+    "component"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_class_member_svg.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_class_member_svg.svg",
+   "result": "pass",
+   "axes": [
+    "class body",
+    "svg header lookalike"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_class_top_level_text.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_class_top_level_text.svg",
+   "result": "pass",
+   "axes": [
+    "top-level Sprite text",
+    "class",
+    "CommandSpriteFile"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_component_top_level_text.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_component_top_level_text.svg",
+   "result": "pass",
+   "axes": [
+    "top-level Sprite text",
+    "component",
+    "CommandSpriteFile"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_object.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_object.svg",
+   "result": "pass",
+   "axes": [
+    "unclosed pixel",
+    "object"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_object.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_object.svg",
+   "result": "pass",
+   "axes": [
+    "unclosed svg",
+    "object"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_deployment.svg",
+   "result": "pass",
+   "axes": [
+    "unclosed pixel",
+    "deployment"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_deployment.svg",
+   "result": "pass",
+   "axes": [
+    "unclosed svg",
+    "deployment"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_activity_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_activity_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "unclosed pixel",
+    "activity_legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_activity_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_activity_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "unclosed svg",
+    "activity_legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_timing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_timing.svg",
+   "result": "fail",
+   "axes": [
+    "unclosed pixel",
+    "timing"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_timing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_timing.svg",
+   "result": "fail",
+   "axes": [
+    "unclosed svg",
+    "timing"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_mindmap.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_mindmap.svg",
+   "result": "fail",
+   "axes": [
+    "unclosed svg",
+    "mindmap"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_empty_pixel_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_empty_pixel_class.svg",
+   "result": "pass",
+   "axes": [
+    "empty pixel body",
+    "No sprite defined.",
+    "class"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_graylevel_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_graylevel_component.svg",
+   "result": "pass",
+   "axes": [
+    "graylevel 7",
+    "component"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_sprite_file_missing_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_sprite_file_missing_deployment.svg",
+   "result": "pass",
+   "axes": [
+    "CommandSpriteFile",
+    "missing file",
+    "deployment"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_compressed_bad_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_compressed_bad_class.svg",
+   "result": "fail",
+   "axes": [
+    "z-compressed",
+    "Cannot decode sprite.",
+    "class"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_upper_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_upper_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "multiline note text",
+    "Sprite capitalised",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_caps_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_caps_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "multiline note text",
+    "SPRITE uppercase",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_lower_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_lower_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "multiline note text",
+    "sprite lowercase control",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "multiline note text",
+    "pixel header lookalike",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_lower_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_lower_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "multiline note text",
+    "pixel header lookalike lowercase",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_legend_upper_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_legend_upper_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "legend text",
+    "Sprite capitalised",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_ref_upper_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_ref_upper_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "ref text",
+    "Sprite capitalised",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_msg_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_msg_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "participant named sprite",
+    "lowercase message",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_dashed_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_dashed_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "participant named sprite",
+    "dashed message",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "inline svg",
+    "space-apostrophe inside svg",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_attr_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_attr_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "inline svg",
+    "space-apostrophe inside title",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_trailing_comment_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_trailing_comment_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "inline svg",
+    "text after closing svg",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_sprite_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_sprite_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "sprite without value",
+    "word name",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_dollar_sprite_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_dollar_sprite_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "sprite without value",
+    "dollar name",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_upper_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_upper_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "multiline note text",
+    "Sprite capitalised",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_caps_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_caps_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "multiline note text",
+    "SPRITE uppercase",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_lower_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_lower_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "multiline note text",
+    "sprite lowercase control",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "multiline note text",
+    "pixel header lookalike",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_lower_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_lower_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "multiline note text",
+    "pixel header lookalike lowercase",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_legend_upper_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_legend_upper_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "legend text",
+    "Sprite capitalised",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_ref_upper_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_ref_upper_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "ref text",
+    "Sprite capitalised",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_msg_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_msg_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "participant named sprite",
+    "lowercase message",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_dashed_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_dashed_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "participant named sprite",
+    "dashed message",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "inline svg",
+    "space-apostrophe inside svg",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_attr_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_attr_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "inline svg",
+    "space-apostrophe inside title",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_trailing_comment_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_trailing_comment_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "inline svg",
+    "text after closing svg",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_sprite_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_sprite_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "sprite without value",
+    "word name",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_dollar_sprite_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_dollar_sprite_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "sprite without value",
+    "dollar name",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_link_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_link_upper.svg",
+   "result": "pass",
+   "axes": [
+    "class link",
+    "Sprite capitalised",
+    "class"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_link_lower.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_link_lower.svg",
+   "result": "pass",
+   "axes": [
+    "class link",
+    "sprite lowercase control",
+    "class"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_object_link_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_object_link_upper.svg",
+   "result": "fail",
+   "axes": [
+    "class link",
+    "Sprite capitalised",
+    "object"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_object_link_lower.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_object_link_lower.svg",
+   "result": "fail",
+   "axes": [
+    "class link",
+    "sprite lowercase control",
+    "object"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_aggregation_label.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_aggregation_label.svg",
+   "result": "pass",
+   "axes": [
+    "class link",
+    "aggregation with label"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_dotted.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_dotted.svg",
+   "result": "pass",
+   "axes": [
+    "class link",
+    "dotted"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_member_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_member_upper.svg",
+   "result": "pass",
+   "axes": [
+    "class body",
+    "Sprite capitalised"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_member_brace.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_member_brace.svg",
+   "result": "pass",
+   "axes": [
+    "class body",
+    "pixel header lookalike"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_note_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_note_upper.svg",
+   "result": "pass",
+   "axes": [
+    "class note text",
+    "Sprite capitalised"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_bare_sprite.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_bare_sprite.svg",
+   "result": "fail",
+   "axes": [
+    "sprite without value",
+    "class"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_state_note_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_state_note_upper.svg",
+   "result": "pass",
+   "axes": [
+    "state note text",
+    "Sprite capitalised"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_activity_note_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_activity_note_upper.svg",
+   "result": "pass",
+   "axes": [
+    "activity note text",
+    "Sprite capitalised"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_component_link_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_component_link_upper.svg",
+   "result": "pass",
+   "axes": [
+    "description link",
+    "sprite file command precedes link"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_usecase_link_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_usecase_link_upper.svg",
+   "result": "pass",
+   "axes": [
+    "description link",
+    "sprite file command precedes link"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_component_note_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_component_note_upper.svg",
+   "result": "pass",
+   "axes": [
+    "component note text",
+    "Sprite capitalised"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_bracket_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_bracket_body.svg",
+   "result": "fail",
+   "axes": [
+    "description bracket body",
+    "file-form text",
+    "component"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_bracket_lower.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_bracket_lower.svg",
+   "result": "fail",
+   "axes": [
+    "description bracket body",
+    "lowercase file-form",
+    "component"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_node_bracket_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_node_bracket_body.svg",
+   "result": "fail",
+   "axes": [
+    "description bracket body",
+    "file-form text",
+    "deployment"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_bracket_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_bracket_upper.svg",
+   "result": "fail",
+   "axes": [
+    "description bracket body",
+    "uppercase file-form",
+    "deployment"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_usecase_rectangle_bracket_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_usecase_rectangle_bracket_body.svg",
+   "result": "fail",
+   "axes": [
+    "description bracket body",
+    "file-form text",
+    "usecase"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "multiline header body",
+    "component"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_footer_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_footer_body.svg",
+   "result": "fail",
+   "axes": [
+    "multiline footer body",
+    "component"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "multiline header body",
+    "deployment"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_footer_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_footer_upper.svg",
+   "result": "fail",
+   "axes": [
+    "multiline footer body",
+    "uppercase",
+    "deployment"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_usecase_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_usecase_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "multiline header body",
+    "usecase"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "multiline header body",
+    "state"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_legend_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_legend_body.svg",
+   "result": "fail",
+   "axes": [
+    "legend body",
+    "state"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_title_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_title_body.svg",
+   "result": "fail",
+   "axes": [
+    "multiline title body",
+    "state"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_object_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_object_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "multiline header body",
+    "object"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_object_legend_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_object_legend_body.svg",
+   "result": "fail",
+   "axes": [
+    "legend body",
+    "object"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_note_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_note_body.svg",
+   "result": "fail",
+   "axes": [
+    "legacy activity note body",
+    "file-form"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_note_brace.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_note_brace.svg",
+   "result": "fail",
+   "axes": [
+    "legacy activity note body",
+    "pixel header lookalike"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_legend_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_legend_body.svg",
+   "result": "fail",
+   "axes": [
+    "legacy activity legend body"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_header_body.svg",
+   "result": "pass",
+   "axes": [
+    "multiline header body",
+    "class"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_legend_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_legend_body.svg",
+   "result": "pass",
+   "axes": [
+    "legend body",
+    "class"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_floating_note_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_floating_note_body.svg",
+   "result": "pass",
+   "axes": [
+    "floating note body",
+    "class"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_seq_header_body_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_seq_header_body_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "multiline header body",
+    "sequence legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "multiline svg body",
+    "space-apostrophe on END line",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "multiline svg body",
+    "text after </svg> on END line",
+    "legacy"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "multiline svg body",
+    "space-apostrophe on END line",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "multiline svg body",
+    "text after </svg> on END line",
+    "teoz"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_class.svg",
+   "result": "fail",
+   "axes": [
+    "multiline svg body",
+    "space-apostrophe on END line",
+    "class"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_component.svg",
+   "result": "fail",
+   "axes": [
+    "multiline svg body",
+    "space-apostrophe on END line",
+    "component"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_mid_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_mid_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "multiline svg body",
+    "space-apostrophe mid body",
+    "control"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_class.svg",
+   "result": "fail",
+   "axes": [
+    "multiline svg body",
+    "text after </svg> on END line",
+    "class"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_startsub_sprite_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_startsub_sprite_deployment.svg",
+   "result": "fail",
+   "axes": [
+    "!startsub body",
+    "pixel sprite drawn",
+    "deployment"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_nosub_sprite_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_nosub_sprite_deployment.svg",
+   "result": "pass",
+   "axes": [
+    "control without startsub",
+    "pixel sprite drawn",
+    "deployment"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_startsub_sprite_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_startsub_sprite_class.svg",
+   "result": "fail",
+   "axes": [
+    "!startsub body",
+    "pixel sprite",
+    "class"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_yaml_block_sprite_text.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_yaml_block_sprite_text.svg",
+   "result": "fail",
+   "axes": [
+    "yaml block scalar",
+    "single-line sprite shape"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_ditaa_sprite_text.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_ditaa_sprite_text.svg",
+   "result": "fail",
+   "axes": [
+    "ditaa text",
+    "single-line sprite shape"
+   ]
+  }
+ ]
+}

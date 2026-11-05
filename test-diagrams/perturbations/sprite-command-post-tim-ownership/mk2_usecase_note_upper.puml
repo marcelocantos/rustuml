@@ -1,0 +1,7 @@
+@startuml
+actor Hero
+note right of Hero
+Sprite pool size
+end note
+Hero --> (Play)
+@enduml
