@@ -386,11 +386,10 @@ mod tests {
     fn a_high_unit_ending_a_text_node_is_dropped() {
         // AW surrogate_high_class: Java writes 'x' and exits 0.
         let high = carried("🚀", 0);
-        let document =
-            format!("<svg><text textLength=\"22.5859\">x{high}</text><line x1=\"1\"/></svg>");
+        let document = format!("<svg><text textLength=\"7\">x{high}</text><line x1=\"1\"/></svg>");
         assert_eq!(
             serialize(document).unwrap(),
-            "<svg><text textLength=\"22.5859\">x</text><line x1=\"1\"/></svg>"
+            "<svg><text textLength=\"7\">x</text><line x1=\"1\"/></svg>"
         );
     }
 

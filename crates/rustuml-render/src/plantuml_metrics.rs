@@ -298,9 +298,9 @@ fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
         return 0.0;
     }
     if rustuml_parser::java_utf16::carried_unit(c).is_some() {
-        // An unpaired UTF-16 unit advances one em in Java's SansSerif: AW
-        // surrogate_high_class measures 'x' + a lone high unit at size 14 as
-        // textLength 22.5859 = 8.5859375 ('x') + 14.
+        // An unpaired UTF-16 unit advances one em in Java's SansSerif: in AW
+        // surrogate_high_class, Java's textLength for 'x' + a lone high unit
+        // at size 14 exceeds CHAR_WIDTHS_14's 'x' advance by exactly 14.
         return font_size;
     }
     if is_color_emoji_fallback(code) {
