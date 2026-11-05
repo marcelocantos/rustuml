@@ -7641,7 +7641,7 @@ pub fn render_with_oracle(
                 r#"<ellipse cx="{}" cy="{}" {STATE_FILL} rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
                 fmt_f(px),
                 fmt_f(py),
-                STATE_FILL = crate::svg::fill_attributes(&(STATE_FILL)),
+                STATE_FILL = crate::svg::fill_attributes(STATE_FILL),
             )
             .unwrap();
             let label = history_marker_label(id);
@@ -7833,7 +7833,7 @@ pub fn render_with_oracle(
                         r#"<ellipse cx="{}" cy="{}" {STATE_FILL} rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
                         fmt_f(px),
                         fmt_f(py),
-                        STATE_FILL = crate::svg::fill_attributes(&(STATE_FILL)),
+                        STATE_FILL = crate::svg::fill_attributes(STATE_FILL),
                     )
                     .unwrap();
                     let tw = text_render::measure("H", STATE_FONT_SIZE, false);
@@ -7875,7 +7875,7 @@ pub fn render_with_oracle(
                         r#"<ellipse cx="{}" cy="{}" {STATE_FILL} rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
                         fmt_f(px),
                         fmt_f(py),
-                        STATE_FILL = crate::svg::fill_attributes(&(STATE_FILL)),
+                        STATE_FILL = crate::svg::fill_attributes(STATE_FILL),
                     )
                     .unwrap();
                     let tw = text_render::measure("H*", STATE_FONT_SIZE, false);

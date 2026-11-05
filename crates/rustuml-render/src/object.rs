@@ -1099,7 +1099,7 @@ fn emit_object_cluster(
     write!(
         svg,
         "<!--{svg_comment}-->",
-        svg_comment = crate::svg::comment_text(&format!("cluster {}", &cluster.qname)),
+        svg_comment = crate::svg::comment_text(&format!("cluster {}", cluster.qname)),
     )
     .unwrap();
     if cluster.source_line > 0 {

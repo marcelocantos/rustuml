@@ -27399,7 +27399,7 @@ legacy_graph_edge_path(&shortened),
 crate::svg::escape_attribute(&from_label),
 crate::svg::escape_attribute(&to_label),
 legacy_graph_arrow_points(control, contact),
-svg_comment = crate::svg::comment_text(&format!("link {} to {}" , &from_label, &to_label)),
+svg_comment = crate::svg::comment_text(&format!("link {} to {}" , from_label, to_label)),
 )
     .unwrap();
     emit_legacy_graph_edge_label(body, edge.center_label.as_deref(), path.label, 1.0);
@@ -28759,7 +28759,7 @@ fn emit_legacy_v1_up_end_edge(
     write!(
         out,
         "<!--{}-->",
-        crate::svg::comment_text(&format!("link {} to end", &from.label))
+        crate::svg::comment_text(&format!("link {} to end", from.label))
     )
     .unwrap();
     // Metrics from Java PlantUML 1.2026.3beta6 act_legacy_arrow_up.svg.
@@ -28812,7 +28812,7 @@ fn emit_legacy_v1_end_edge(
     write!(
         out,
         "<!--{}-->",
-        crate::svg::comment_text(&format!("link {} to end", &from.label))
+        crate::svg::comment_text(&format!("link {} to end", from.label))
     )
     .unwrap();
     let from_ent = format!("ent{:04}", 3 + idx * 2);
@@ -28866,7 +28866,7 @@ fn emit_legacy_v1_end_edge_numbered(
     write!(
         out,
         "<!--{}-->",
-        crate::svg::comment_text(&format!("link {} to end", &from.label))
+        crate::svg::comment_text(&format!("link {} to end", from.label))
     )
     .unwrap();
     let bottom = from.y + action_h;

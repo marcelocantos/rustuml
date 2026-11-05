@@ -139,6 +139,7 @@ enum ZeroWidthMarks {
 }
 
 impl Shaper {
+    #[cfg(test)]
     pub(crate) const ALL: [Shaper; 10] = [
         Shaper::Default,
         Shaper::Dumber,
@@ -266,8 +267,8 @@ fn fallback_zeroed(codes: &[u32]) -> Vec<bool> {
         }
     };
     let mut start = 0;
-    for index in 1..codes.len() {
-        if !mark(codes[index]) && !is_default_ignorable(codes[index]) {
+    for (index, &code) in codes.iter().enumerate().skip(1) {
+        if !mark(code) && !is_default_ignorable(code) {
             position_cluster(start, index);
             start = index;
         }

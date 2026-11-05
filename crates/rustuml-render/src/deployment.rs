@@ -443,13 +443,15 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             .unwrap_or_else(|| format!("lnk{}", i));
         render_connection(
             &mut svg,
-            diagram,
+            ConnectionLookups {
+                diagram,
+                oracle,
+                id_for_node: &id_for_node,
+                own_qname_for_id: &own_qname_for_id,
+                handwritten: ctx.handwritten,
+            },
             conn,
-            oracle,
-            &id_for_node,
-            &own_qname_for_id,
             &link_id,
-            ctx.handwritten,
         );
     }
 
@@ -3307,16 +3309,29 @@ fn find_oracle_connection_edge<'a>(
     fallback
 }
 
+/// The per-diagram lookups every connection reads.
+#[derive(Clone, Copy)]
+struct ConnectionLookups<'a> {
+    diagram: &'a DeploymentDiagram,
+    oracle: &'a OracleLayout,
+    id_for_node: &'a HashMap<String, String>,
+    own_qname_for_id: &'a HashMap<String, String>,
+    handwritten: bool,
+}
+
 fn render_connection(
     svg: &mut SvgBuilder,
-    diagram: &DeploymentDiagram,
+    lookups: ConnectionLookups<'_>,
     conn: &DeploymentConnection,
-    oracle: &OracleLayout,
-    id_for_node: &HashMap<String, String>,
-    own_qname_for_id: &HashMap<String, String>,
     link_id: &str,
-    handwritten: bool,
 ) {
+    let ConnectionLookups {
+        diagram,
+        oracle,
+        id_for_node,
+        own_qname_for_id,
+        handwritten,
+    } = lookups;
     // Edge IDs in goldens use the OWN name of each endpoint. own_qname may
     // itself contain '.' (label-derived), so we can't recover it by splitting
     // the full qualified path on '.'.

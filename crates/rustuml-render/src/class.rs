@@ -13913,7 +13913,7 @@ note_start + 2,
 path,
 crate::svg::escape_attribute(&from_name),
 crate::svg::escape_attribute(&to_name),
-svg_comment = crate::svg::comment_text(&format!("link {} to {}" , &from_name, &to_name)),
+svg_comment = crate::svg::comment_text(&format!("link {} to {}" , from_name, to_name)),
 )
     .unwrap();
 }

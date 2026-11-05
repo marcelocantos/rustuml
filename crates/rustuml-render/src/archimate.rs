@@ -626,7 +626,7 @@ fn emit_no_oracle_clusters(
         let entity_id = &uids.group_ids[index];
         svg.raw(&format!(
             "<!--{svg_comment}-->",
-            svg_comment = crate::svg::comment_text(&format!("cluster {}", &group.label)),
+            svg_comment = crate::svg::comment_text(&format!("cluster {}", group.label)),
         ));
         svg.raw(&format!(
             r#"<g class="cluster" data-qualified-name="{}"{source_attr} id="{entity_id}">"#,
