@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Verdana
+class A
+class B
+A --> B : Pier quay
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+skinparam ArrowFontName Arial
+class A
+class B
+A --> B : <b>Pier</b> quay
+@enduml

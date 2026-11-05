@@ -1,0 +1,6 @@
+@startuml
+skinparam classArrowFontSize 20
+class A
+class B
+A --> B : Pier quay
+@enduml

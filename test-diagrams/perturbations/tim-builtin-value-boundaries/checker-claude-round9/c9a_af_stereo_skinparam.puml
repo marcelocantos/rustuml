@@ -1,0 +1,6 @@
+@startuml
+skinparam ArrowFontSize<<use>> 20
+class A
+class B
+A --> B <<use>> : Pier quay
+@enduml

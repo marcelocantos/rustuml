@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Menlo
+class Quay
+Quay : <b><i>Wharf qr</i></b>
+@enduml

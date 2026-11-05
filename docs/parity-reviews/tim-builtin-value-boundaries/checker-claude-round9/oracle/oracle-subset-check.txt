@@ -1,0 +1,7 @@
+# Checker round 9: java-bidi-oracle subset soundness
+python3 -I tools/font-chain-reference/java-bidi-oracle/select_oracle.py <r8 checker>/bidi-diff/request/bidi-input.txt (fb7cd937...) <relay>/shared-svg-round8-bidi-probe/bidi-java-levels.txt (e09425f4...) regen.txt.gz
+-> 93786 {'part_c': 801, 'multi_paragraph': 34487, 'an_only': 6263, 'trailing_ws': 30990, 'every_8th': 21245}
+decompressed content: identical to the committed java-bidi-levels.txt.gz (gz bytes differ: 9076fa67... vs committed b1d43651...; zlib build, not content)
+every one of the 93,786 committed lines is an exact '<input>|<Java output>' line of the relay files (93786/93786)
+selection is a fixed, result-blind rule over input classes (Python unicodedata) and index; it contains 69,688 DEFAULT_LTR lines (56,011 that TextLine uses) and 379 lines whose run levels differ from getLevelAt (the round-8 352 among them)
+independent full check (all 242,508 inputs, tip java_bidi via a scratch test): 0 differences in requiresBidi, isLeftToRight, base level, getLevelAt, run levels (all directions); text_line_levels 0 differences on 120,295 DEFAULT_LTR inputs (93,203 used by TextLine)

@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Monospaced
+start
+:<b><i>Wharf qr</i></b>;
+stop
+@enduml

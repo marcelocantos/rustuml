@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam defaultFontStyle italic
+participant Ann
+Ann -> Ann : Wharf q𝅧r
+@enduml

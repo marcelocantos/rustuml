@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Courier New
+note as N1
+quay
+אב12𝅧
+end note
+@enduml

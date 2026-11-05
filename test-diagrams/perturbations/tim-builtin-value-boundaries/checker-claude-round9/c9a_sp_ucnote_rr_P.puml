@@ -1,0 +1,8 @@
+@startuml
+skinparam defaultFontName Verdana
+usecase U1
+note right of U1
+quay
+אב גד𝅧
+end note
+@enduml

@@ -1,0 +1,44 @@
+{
+ "java_header": "# OpenJDK 64-Bit Server VM 21.0.5 /opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home",
+ "parts": {
+  "A_conformance": {
+   "lines": 91707,
+   "java_exc": 0,
+   "requiresBidi": 0,
+   "isLTR": 0,
+   "paraLevel": 0,
+   "levelAt": 0,
+   "run_levels_all_dirs": 0,
+   "D_lines": 28,
+   "D_textline_used": 28,
+   "D_textline_diff": 0,
+   "examples": []
+  },
+  "B_random": {
+   "lines": 150000,
+   "java_exc": 0,
+   "requiresBidi": 0,
+   "isLTR": 0,
+   "paraLevel": 0,
+   "levelAt": 0,
+   "run_levels_all_dirs": 0,
+   "D_lines": 120000,
+   "D_textline_used": 92920,
+   "D_textline_diff": 0,
+   "examples": []
+  },
+  "C_stack": {
+   "lines": 801,
+   "java_exc": 0,
+   "requiresBidi": 0,
+   "isLTR": 0,
+   "paraLevel": 0,
+   "levelAt": 0,
+   "run_levels_all_dirs": 0,
+   "D_lines": 267,
+   "D_textline_used": 255,
+   "D_textline_diff": 0,
+   "examples": []
+  }
+ }
+}

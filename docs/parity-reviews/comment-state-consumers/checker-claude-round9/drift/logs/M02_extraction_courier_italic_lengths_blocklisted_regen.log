@@ -1,0 +1,122 @@
+ crates/rustuml-render/src/font_chain_coverage.rs               | 10 +++++-----
+ .../monkeyman-round9/CourierNewPS-ItalicMT.italic.own.tsv      |  2 +-
+ tools/font-chain-reference/monkeyman-round9/SHA256SUMS         |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
+
+recursively ... ok
+test class::tests::renamed_notes_share_the_effective_background_gradient ... ok
+test class::tests::renamed_notes_share_the_resolved_note_shadow_filter ... ok
+test class::tests::renamed_four_node_chain_obeys_left_to_right_rank_direction ... ok
+test class::tests::renamed_hide_and_remove_lifecycles_preserve_layout_and_source_uids ... ok
+test class::tests::standalone_named_note_uses_opale_entity_geometry_for_fresh_markup ... ok
+test class::tests::standalone_note_code_uses_monospace_atoms_and_preserves_indent ... ok
+test class::tests::no_oracle_legend_wraps_and_aligns_a_renamed_wide_body ... ok
+test class::tests::renamed_global_package_style_resolves_nested_packages_and_explicit_symbols ... ok
+test class::tests::renamed_labelled_separator_uses_dynamic_title_block_height ... ok
+test class::tests::renamed_nine_node_ring_includes_painted_dotpath_envelope ... ok
+test class::tests::standalone_note_table_sizes_columns_and_cell_backgrounds ... ok
+test class::tests::standalone_note_tree_uses_one_structural_trunk_for_deeper_rows ... ok
+test class::tests::standalone_numbered_note_tracks_each_nesting_level ... ok
+test class::tests::renamed_parallel_extremity_polygons_use_limit_finder_overscan ... ok
+test creole::tests::segments_skip_underline_for_class_labels ... ok
+test creole::tests::underline_skipped_in_class_label ... ok
+test class::tests::renamed_right_endpoint_role_owns_the_painted_canvas_envelope ... ok
+test font_chain::tests::complexity_follows_java_units ... ok
+test font_chain::tests::fallback_port_follows_position_cluster ... ok
+test font_chain::tests::gsub_chosen_script_categorizes_the_shaper ... ok
+test font_chain::tests::harfbuzz_buffers_split_at_bidi_level_changes ... ok
+test font_chain::tests::harfbuzz_hides_unmapped_default_ignorables ... ok
+test font_chain::tests::planner_ports_harfbuzz_15 ... ok
+test font_chain::tests::script_runs_follow_jdk_script_run ... ok
+test font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer ... ok
+test font_chain::tests::unmapped_scalars_take_the_primary_notdef_on_both_paths ... ok
+test class::tests::renamed_sprite_replaces_class_badge_and_bottom_aligns_in_note ... ok
+test java_bidi::tests::conformance_bidi_character_test ... ignored
+test font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef ... FAILED
+test class::tests::reversed_relationship_owns_and_renders_a_multiline_note ... ok
+test class::tests::renamed_together_margin_affects_layout_but_not_painted_canvas ... ok
+test class::tests::short_svek_links_create_endpoints_before_wide_disconnected_entities ... ok
+test class::tests::singly_linked_named_note_consumes_its_svek_edge_as_an_opale_pointer ... ok
+test plantuml_metrics::tests::fallback_metrics_generalize_to_unseen_codepoints_and_recombinations ... ok
+test plantuml_metrics::tests::carrier_range_text_measures_as_java ... ok
+test class::tests::renamed_seven_node_complete_graph_uses_rectangle_limitfinder_inset ... ok
+test plantuml_metrics::tests::exact_golden_text_widths ... ok
+test plantuml_metrics::tests::fmt_coord_examples ... ok
+test plantuml_metrics::tests::matches_plantuml_golden_formatted ... ok
+test plantuml_metrics::tests::mono_height_constant ... ok
+test plantuml_metrics::tests::mono_widths_match_goldens ... ok
+test plantuml_metrics::tests::text_height_matches ... ok
+test plantuml_metrics::tests::text_baseline_offset ... ok
+test plantuml_metrics::tests::shaped_widths_recombine_out_of_corpus_words ... ok
+test skinparam::tests::class_skinparams ... ok
+test class::tests::strictuml_uses_the_iconless_header_measurement_model ... ok
+test skinparam::tests::object_skinparams_map_to_class ... ok
+test skinparam::tests::class_stereotype_pascal_case_aliases ... ok
+test text_render::tests::atom_run_measurement_does_not_apply_the_empty_stripe_space ... ok
+test class::tests::stereotype_qualified_class_colors_apply_per_entity_and_leave_plain_defaults ... ok
+test plantuml_metrics::tests::times_new_roman_fractional_unicode_advances_accumulate_like_awt ... ok
+test text_render::tests::courier_base_uses_monospace_metrics ... ok
+test class::tests::renamed_target_and_wildcard_selectors_apply_without_fixture_names ... ok
+test text_render::tests::awt_named_font_metrics_match_goldens ... ok
+test text_render::tests::creole_link_normalizes_title_without_decoding_href ... ok
+test text_render::tests::emitted_baseline_count_tracks_mixed_font_sizes ... ok
+test text_render::tests::first_baseline_ascent_follows_first_mixed_family_run ... ok
+test text_render::tests::inline_colors_use_the_legacy_plantuml_palette ... ok
+test text_render::tests::explicit_font_monospace_inherits_surrounding_metrics ... ok
+test text_render::tests::mixed_styles_split_into_multiple_elements ... ok
+test java_bidi::tests::conformance_sample ... ok
+test text_render::tests::plain_text_emits_one_element ... ok
+test class::tests::svek_node_stream_interleaves_empty_packages_after_cluster_paint ... ok
+test component::tests::note_text_rendered ... ok
+test text_render::tests::positioned_first_run_uses_sea_aligned_baseline_for_renamed_notes ... ok
+test text_render::tests::no_tspans_anywhere ... ok
+test text_render::tests::quoted_monospace_still_uses_monospace_metrics ... ok
+test text_render::tests::every_family_measures_java_characters_not_the_escape_prefix ... ok
+test text_render::tests::tabs_split_text_at_eight_space_stops ... ok
+test text_render::tests::uniform_bold_lifts_to_text_element ... ok
+test text_render::tests::transparent_text_advances_without_painting ... ok
+test text_render::tests::present_empty_lines_share_the_restored_space_atom ... ok
+test text_render::tests::unmapped_supplementary_format_characters_are_hidden_in_every_family ... ok
+test text_render::tests::unresolved_sprite_commands_share_emission_and_measurement ... ok
+test font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15 ... ok
+test layout_oracle::tests::class_object_component_do_not_replay_note_or_cluster_inner_xml ... ok
+test java_bidi::tests::bidi_tables_are_jdk_ubidi_icu ... ok
+test font_chain::tests::coverage_table_is_the_stored_reference_host_extraction ... FAILED
+test font_chain::tests::unicode_mark_tables_are_ucd_18 ... ok
+test java_bidi::tests::java_bidi_oracle ... ok
+
+failures:
+
+---- font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef stdout ----
+
+thread 'font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef' (59667778) panicked at crates/rustuml-render/src/font_chain.rs:947:13:
+CourierNewItalic
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- font_chain::tests::coverage_table_is_the_stored_reference_host_extraction stdout ----
+
+thread 'font_chain::tests::coverage_table_is_the_stored_reference_host_extraction' (59667776) panicked at crates/rustuml-render/src/font_chain.rs:1492:13:
+assertion `left == right` failed: CourierNewPS-ItalicMT: GDEF blocklist decision
+  left: true
+ right: false
+
+
+failures:
+    font_chain::tests::coverage_table_is_the_stored_reference_host_extraction
+    font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef
+
+test result: FAILED. 180 passed; 2 failed; 1 ignored; 0 measured; 676 filtered out; finished in 0.29s
+
+warning: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:74:15
+   |
+74 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rustuml-parser` (lib) generated 1 warning
+   Compiling rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-checker/drill-tree/crates/rustuml-render)
+    Finished `release` profile [optimized] target(s) in 21.04s
+     Running unittests src/lib.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-checker/target-drill/release/deps/rustuml_render-64ddbe2e1fa0ea9b)
+error: test failed, to rerun pass `-p rustuml-render --lib`

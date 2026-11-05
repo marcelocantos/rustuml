@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Verdana
+class Quay
+Quay : <i>Wharf q𝅧r</i>
+@enduml

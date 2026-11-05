@@ -1,0 +1,5 @@
+@startuml
+skinparam ArrowFontSize 17
+class A
+A --> A : self quay
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+skinparam defaultFontName Verdana
+start
+:Wharf q𝅧r;
+stop
+@enduml
