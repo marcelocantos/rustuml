@@ -1,0 +1,545 @@
+[
+ {
+  "name": "cr2_seq_named_start_col0_endother_swallow",
+  "intended_valid": false,
+  "axes": [
+   "pipe-end",
+   "named start -> expectedEnd @end",
+   "col-0 @endmindmap ends Pipe text"
+  ],
+  "java_prediction": "Pipe completes at @endmindmap (startsWith '@end'); the merge swallows it; no block -> 'No valid @start/@end'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_exact_start_col0_endother_merged",
+  "intended_valid": true,
+  "axes": [
+   "pipe-end",
+   "exact @startuml -> expectedEnd @enduml",
+   "@endmindmap merged into message"
+  ],
+  "java_prediction": "messages 'one @endmindmap' and 'two'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_trailing_space_start_endother_swallow",
+  "intended_valid": false,
+  "axes": [
+   "pipe-end",
+   "start line with trailing space fails matches() -> @end"
+  ],
+  "java_prediction": "as named start: no block",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_crlf_exact_start_endother_merged",
+  "intended_valid": true,
+  "axes": [
+   "pipe-end",
+   "CRLF",
+   "readLine strips CR so start matches exactly"
+  ],
+  "java_prediction": "same as the LF exact-start case",
+  "crlf": true
+ },
+ {
+  "name": "cr2_seq_endumlx_col0_swallow",
+  "intended_valid": false,
+  "axes": [
+   "pipe-end",
+   "startsWith(expectedEnd) prefix match"
+  ],
+  "java_prediction": "Pipe completes at @endumlx; merged; no block",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_startUML_case_end_merged",
+  "intended_valid": true,
+  "axes": [
+   "pipe-end",
+   "expectedEnd keeps start case (@endUML)",
+   "case-insensitive start type"
+  ],
+  "java_prediction": "Pipe appends @endUML; message 'late @enduml'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_tab_end_plain_control",
+  "intended_valid": true,
+  "axes": [
+   "control",
+   "tab-indented end, no continuation"
+  ],
+  "java_prediction": "renders 'one'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_after_end_continued_tail",
+  "intended_valid": true,
+  "axes": [
+   "pipe-end",
+   "content after column-0 end"
+  ],
+  "java_prediction": "first diagram only ('one'); the rest has no start",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_two_blocks_first_swallowed",
+  "intended_valid": false,
+  "axes": [
+   "pipe-end",
+   "multi-block",
+   "first end swallowed"
+  ],
+  "java_prediction": "chunk 1 no block (error page), chunk 2 renders 'two' (T14.26 multi-block)",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_nested_start_in_continued_line",
+  "intended_valid": true,
+  "axes": [
+   "split-blocks",
+   "start merged into continued line"
+  ],
+  "java_prediction": "messages 'one @startuml' and 'two'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_nested_start_plain_control",
+  "intended_valid": true,
+  "axes": [
+   "control",
+   "split-blocks",
+   "BlockUmlBuilder resets at a nested start"
+  ],
+  "java_prediction": "renders 'two' only",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_start_line_continued",
+  "intended_valid": true,
+  "axes": [
+   "pipe-end",
+   "start line ends with backslash"
+  ],
+  "java_prediction": "start line '@startuml Wren -> Finch : one'; renders 'two'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_end_line_continued_then_text",
+  "intended_valid": true,
+  "axes": [
+   "pipe-end",
+   "end line ends with backslash"
+  ],
+  "java_prediction": "Pipe stops at the end line; renders 'one'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_chained_continuation_indented_end",
+  "intended_valid": true,
+  "axes": [
+   "pipe-end",
+   "chained continuation into indented end"
+  ],
+  "java_prediction": "message 'one' + merged blanks + '@enduml', then 'two'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_pre_start_backslash_text",
+  "intended_valid": true,
+  "axes": [
+   "pipe-start",
+   "text before start ends with backslash (Pipe discards it)"
+  ],
+  "java_prediction": "renders 'one'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_pre_start_blank_then_continued",
+  "intended_valid": true,
+  "axes": [
+   "pipe-start",
+   "blank lines before start"
+  ],
+  "java_prediction": "message 'one   @enduml', lines counted from @startuml",
+  "crlf": false
+ },
+ {
+  "name": "cr2_empty_zero_bytes",
+  "intended_valid": false,
+  "axes": [
+   "empty"
+  ],
+  "java_prediction": "Pipe NO_CONTENT: no diagram, no output",
+  "crlf": false
+ },
+ {
+  "name": "cr2_newlines_only",
+  "intended_valid": false,
+  "axes": [
+   "empty",
+   "newlines"
+  ],
+  "java_prediction": "NO_CONTENT",
+  "crlf": false
+ },
+ {
+  "name": "cr2_whitespace_only",
+  "intended_valid": false,
+  "axes": [
+   "empty",
+   "spaces and tab"
+  ],
+  "java_prediction": "NO_CONTENT",
+  "crlf": false
+ },
+ {
+  "name": "cr2_crlf_blank_only",
+  "intended_valid": false,
+  "axes": [
+   "empty",
+   "CRLF"
+  ],
+  "java_prediction": "NO_CONTENT",
+  "crlf": true
+ },
+ {
+  "name": "cr2_vt_ff_only",
+  "intended_valid": false,
+  "axes": [
+   "empty",
+   "VT/FF are <= U+0020 for String#trim"
+  ],
+  "java_prediction": "NO_CONTENT",
+  "crlf": false
+ },
+ {
+  "name": "cr2_nbsp_only",
+  "intended_valid": false,
+  "axes": [
+   "whitespace",
+   "NBSP is not trimmed by String#trim"
+  ],
+  "java_prediction": "content: wrapped in @startuml/@enduml; empty/welcome diagram",
+  "crlf": false
+ },
+ {
+  "name": "cr2_no_start_plain",
+  "intended_valid": true,
+  "axes": [
+   "pipe-start",
+   "no start: Pipe wraps"
+  ],
+  "java_prediction": "renders 'one'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_no_start_continued",
+  "intended_valid": true,
+  "axes": [
+   "pipe-start",
+   "no start: Pipe wraps",
+   "continuation"
+  ],
+  "java_prediction": "renders 'one two'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_wrapped_include_tail_then_end",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "included file has its own @startuml/@enduml",
+   "tail joins main end"
+  ],
+  "java_prediction": "message 'wrapped @enduml'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_wrapped_include_tail_then_msg",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "wrapped include"
+  ],
+  "java_prediction": "message 'wrapped Tui -> Kea : two'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_depth2_tail_then_msg",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "depth 2"
+  ],
+  "java_prediction": "message 'deep Tui -> Kea : two'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_depth2_tail_then_end",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "depth 2",
+   "tail joins end"
+  ],
+  "java_prediction": "message 'deep @enduml'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_depth2_tail_then_depth1_line",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "depth 2 tail then depth-1 line"
+  ],
+  "java_prediction": "'deep Tui -> Kea : mid', 'two'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_depth2_tail_no_end",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "depth 2",
+   "Pipe-appended end"
+  ],
+  "java_prediction": "'one', 'deep @enduml'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_tail_then_backslash_end",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "\\enduml end line"
+  ],
+  "java_prediction": "message 'tail \\enduml' (Pipe appends @enduml after it)",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_tail_then_indented_end",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "indented end line (not Pipe's end)"
+  ],
+  "java_prediction": "message 'tail   @enduml'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_tail_then_theme",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "theme",
+   "maker residue 2"
+  ],
+  "java_prediction": "tail joins the theme's first TIM line",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_tail_then_procedure",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "procedure output"
+  ],
+  "java_prediction": "'tail Tui -> Kea : p1', 'p2'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_tail_then_comment_include",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "comment-only include"
+  ],
+  "java_prediction": "'tail Tui -> Kea : two'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_tail_then_block_comment",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "multi-line block comment"
+  ],
+  "java_prediction": "'tail Tui -> Kea : two'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_tail_crlf_include",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "CRLF include file"
+  ],
+  "java_prediction": "'tail Tui -> Kea : two'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_mindmap_include_tail_not_joined",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "mindmap: no checkEndingBackslash"
+  ],
+  "java_prediction": "no post-TIM join: 'Branch \\' and 'Leaf' nodes",
+  "crlf": false
+ },
+ {
+  "name": "cr2_component_include_tail_link",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "component"
+  ],
+  "java_prediction": "one link Alder --> Rowan",
+  "crlf": false
+ },
+ {
+  "name": "cr2_activity_include_tail",
+  "intended_valid": true,
+  "axes": [
+   "include-tail",
+   "activity"
+  ],
+  "java_prediction": "action 'first second'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_chr92_tail_then_directive",
+  "intended_valid": true,
+  "axes": [
+   "post-TIM join",
+   "no include",
+   "directive passed over"
+  ],
+  "java_prediction": "'tail Tui -> Kea : two 1'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_chr92_tail_then_end",
+  "intended_valid": true,
+  "axes": [
+   "post-TIM join",
+   "tail joins end"
+  ],
+  "java_prediction": "'tail @enduml'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_procedure_emits_tail",
+  "intended_valid": true,
+  "axes": [
+   "post-TIM join",
+   "procedure output ends with backslash"
+  ],
+  "java_prediction": "'p1', 'p2 Tui -> Kea : two'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_chr30_rsp_line",
+  "intended_valid": false,
+  "axes": [
+   "placeholder collision",
+   "%chr(30)"
+  ],
+  "java_prediction": "syntax error: no command accepts the line",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_raw_rs_rsp_line",
+  "intended_valid": false,
+  "axes": [
+   "placeholder collision",
+   "raw U+001E"
+  ],
+  "java_prediction": "syntax error",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_note_chr30_rsp",
+  "intended_valid": true,
+  "axes": [
+   "placeholder collision",
+   "note body"
+  ],
+  "java_prediction": "note with text",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_note_plain_rsp_control",
+  "intended_valid": true,
+  "axes": [
+   "control",
+   "note body"
+  ],
+  "java_prediction": "note 'RSP'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_theme_then_continued",
+  "intended_valid": true,
+  "axes": [
+   "theme",
+   "continuation"
+  ],
+  "java_prediction": "'one two'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_procedure_body_continued",
+  "intended_valid": true,
+  "axes": [
+   "procedure",
+   "continuation in body"
+  ],
+  "java_prediction": "'hi more'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_seq_procedure_call_continued",
+  "intended_valid": true,
+  "axes": [
+   "procedure",
+   "continued call line"
+  ],
+  "java_prediction": "'hi there'",
+  "crlf": false
+ },
+ {
+  "name": "cr2_ditaa_indented_end_continued_row",
+  "intended_valid": true,
+  "axes": [
+   "ditaa",
+   "indented end",
+   "equivalence with cr2_ditaa_continued_row_ref"
+  ],
+  "java_prediction": "same PNG as the reference",
+  "crlf": false
+ },
+ {
+  "name": "cr2_ditaa_case_start_continued_row",
+  "intended_valid": true,
+  "axes": [
+   "ditaa",
+   "start case",
+   "Pipe expects @endDitaa and appends it"
+  ],
+  "java_prediction": "same PNG as the reference",
+  "crlf": false
+ },
+ {
+  "name": "cr2_ditaa_continued_row_ref",
+  "intended_valid": true,
+  "axes": [
+   "ditaa",
+   "reference for equivalence"
+  ],
+  "java_prediction": "PNG, row not joined",
+  "crlf": false
+ }
+]

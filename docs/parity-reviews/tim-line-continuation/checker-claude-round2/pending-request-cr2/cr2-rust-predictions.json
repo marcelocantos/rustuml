@@ -1,0 +1,3800 @@
+{
+ "batch_manifest_sha256": "eadfd605b47bf8f1eb556f117654d983a9752b90264fa74864c643923df97b77",
+ "binaries": {
+  "f2d12d0ef": "7592ae04c61804424c2c1c5584da75b0037fc293a660eee8e78dee1fa9fff859",
+  "b0fb43c3e": "ce70cb9ba77e363b679ed99c0975eb2a898b55483ff85c896858b0fd6010ffcb",
+  "93bf53e18": "d3378b291433a67f6d063e9ee42bef48b875c7840106f7cac6e94f1579c013fb",
+  "9834a7194": "0440ee9830ef2ca9e05a9210807c8e665524f515fd2a36efd794fb798d713edb"
+ },
+ "rows": [
+  {
+   "name": "cr2_seq_named_start_col0_endother_swallow",
+   "intended_valid": false,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_exact_start_col0_endother_merged",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "c9d8717287e253716660b3fc9eb32ce80304d1409cb6450252cd02d5ccecc955",
+     "stdout_bytes": 3661,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one @endmindmap",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_seq_trailing_space_start_endother_swallow",
+   "intended_valid": false,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_crlf_exact_start_endother_merged",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "c9d8717287e253716660b3fc9eb32ce80304d1409cb6450252cd02d5ccecc955",
+     "stdout_bytes": 3661,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one @endmindmap",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_seq_endumlx_col0_swallow",
+   "intended_valid": false,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_startUML_case_end_merged",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: unsupported diagram type: @startUML\n"
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: unsupported diagram type: @startUML\n"
+    },
+    "9834a7194": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: unsupported diagram type: @startUML\n"
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_tab_end_plain_control",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_after_end_continued_tail",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_two_blocks_first_swallowed",
+   "intended_valid": false,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_nested_start_in_continued_line",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "ed2138628cbf46a158cce848a2841fbead3826e10b41d191f8b937cb59b8f785",
+     "stdout_bytes": 3670,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one @startuml",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "ed2138628cbf46a158cce848a2841fbead3826e10b41d191f8b937cb59b8f785",
+     "stdout_bytes": 3670,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one @startuml",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "b9e376afbdfca92f4acdd6663c83085e67b320abc783ab71471d6c44101609dd",
+     "stdout_bytes": 3649,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "b9e376afbdfca92f4acdd6663c83085e67b320abc783ab71471d6c44101609dd",
+     "stdout_bytes": 3649,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_nested_start_plain_control",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "61e257d0cb54dc5290365ef931e4ea936e8c0f16ca7cc8a1d098d64c3a6b86e5",
+     "stdout_bytes": 3647,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "61e257d0cb54dc5290365ef931e4ea936e8c0f16ca7cc8a1d098d64c3a6b86e5",
+     "stdout_bytes": 3647,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "61e257d0cb54dc5290365ef931e4ea936e8c0f16ca7cc8a1d098d64c3a6b86e5",
+     "stdout_bytes": 3647,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "61e257d0cb54dc5290365ef931e4ea936e8c0f16ca7cc8a1d098d64c3a6b86e5",
+     "stdout_bytes": 3647,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_start_line_continued",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "ea2724954b8c292916d38fbbabf6faa4d84db576dc42d15e5681962f0d5dfeae",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Finch",
+      "Finch",
+      "Wren",
+      "Wren",
+      "two"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "ea2724954b8c292916d38fbbabf6faa4d84db576dc42d15e5681962f0d5dfeae",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Finch",
+      "Finch",
+      "Wren",
+      "Wren",
+      "two"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "61e257d0cb54dc5290365ef931e4ea936e8c0f16ca7cc8a1d098d64c3a6b86e5",
+     "stdout_bytes": 3647,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "61e257d0cb54dc5290365ef931e4ea936e8c0f16ca7cc8a1d098d64c3a6b86e5",
+     "stdout_bytes": 3647,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_end_line_continued_then_text",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_chained_continuation_indented_end",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "a1ea7ebed599c01d146876b63f197eb9b77d1af9809f6bf9db659c4f68ba0bf1",
+     "stdout_bytes": 3674,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one      @enduml",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      4
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_seq_pre_start_backslash_text",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: Syntax error: no registered sequence command accepts \"see C:@startuml\"\n"
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"see C:@startuml\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"see C:\\\\\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "37755f14c8fa9d2f145e5aeaff9fa31db4a38edf1c8df748a6afef7370291cc3",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      3
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_pre_start_blank_then_continued",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "369414c42d1e47a81d3b91870ff594dfe1eaa9e7611a226effb7017e3bfd4594",
+     "stdout_bytes": 3188,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one   @enduml"
+     ],
+     "source_lines": [
+      5
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "ec248ae5dd4e670f0c02cfccd9df6893c66ff7ff20185a0e79ca41b0607d37dd",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      5
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "ec248ae5dd4e670f0c02cfccd9df6893c66ff7ff20185a0e79ca41b0607d37dd",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      5
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_empty_zero_bytes",
+   "intended_valid": false,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_newlines_only",
+   "intended_valid": false,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_whitespace_only",
+   "intended_valid": false,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_crlf_blank_only",
+   "intended_valid": false,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_vt_ff_only",
+   "intended_valid": false,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: No valid @start/@end found, please check the version\n"
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_nbsp_only",
+   "intended_valid": false,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_no_start_plain",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_no_start_continued",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "cdbe2c6a662dafd6e8d4f5a6389f7d841b964c8702e9d0aa8c395ac2e371ef4e",
+     "stdout_bytes": 3175,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one two"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "cdbe2c6a662dafd6e8d4f5a6389f7d841b964c8702e9d0aa8c395ac2e371ef4e",
+     "stdout_bytes": 3175,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one two"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"two\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "d7e9a2e3b5a9b3c29f67b94880e285fd85df7ed4a45d2ac40c23982be5386d24",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_wrapped_include_tail_then_end",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "08f6404ccece55aa411e54807df1f2678fd4948992133a686d3836636e0b7294",
+     "stdout_bytes": 3175,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "wrapped @enduml"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "1388bf69ef51062e7280df575e2ea70cde67784e206a68bac2ca535b1f6a7977",
+     "stdout_bytes": 3166,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "wrapped \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "1388bf69ef51062e7280df575e2ea70cde67784e206a68bac2ca535b1f6a7977",
+     "stdout_bytes": 3166,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "wrapped \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_seq_wrapped_include_tail_then_msg",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "c462327b53afe4533e279e6a684defbf658a6562e1e299f61fb4f98d2cf3f248",
+     "stdout_bytes": 3187,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "wrapped Tui -&gt; Kea : two"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "c462327b53afe4533e279e6a684defbf658a6562e1e299f61fb4f98d2cf3f248",
+     "stdout_bytes": 3187,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "wrapped Tui -&gt; Kea : two"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "975ca552aa0fc31e4737d2a5b4bed0f033e8fca88637bf1dd378cc2c5f7f6623",
+     "stdout_bytes": 3646,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "wrapped \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "975ca552aa0fc31e4737d2a5b4bed0f033e8fca88637bf1dd378cc2c5f7f6623",
+     "stdout_bytes": 3646,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "wrapped \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_depth2_tail_then_msg",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "ac2db52e3d6e7e88f0865298543d702255b47a3fb2ddde8a07b8bebdf06b4db7",
+     "stdout_bytes": 3184,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "deep Tui -&gt; Kea : two"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "ac2db52e3d6e7e88f0865298543d702255b47a3fb2ddde8a07b8bebdf06b4db7",
+     "stdout_bytes": 3184,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "deep Tui -&gt; Kea : two"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "12e2129b010d2a87dae1cf3361cc22f88380bae29be6a271cb4016ec7f958a2e",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "deep \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "12e2129b010d2a87dae1cf3361cc22f88380bae29be6a271cb4016ec7f958a2e",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "deep \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_depth2_tail_then_end",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "c51b42fcfa383dfbaac0f4667f2e7b4751815ceb8087ab29ec97efa9dd972982",
+     "stdout_bytes": 3171,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "deep @enduml"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "981be202a1f6fdc53853e704edf0837d35927b7e476d62ed353b5043dfe8ac66",
+     "stdout_bytes": 3153,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "deep \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "981be202a1f6fdc53853e704edf0837d35927b7e476d62ed353b5043dfe8ac66",
+     "stdout_bytes": 3153,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "deep \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_seq_depth2_tail_then_depth1_line",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "e17fd89bce15fb3ae8a8721f5bd579bd6835988ffe11a519da2481f66e9efff6",
+     "stdout_bytes": 3651,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "deep Tui -&gt; Kea : mid",
+      "two"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e17fd89bce15fb3ae8a8721f5bd579bd6835988ffe11a519da2481f66e9efff6",
+     "stdout_bytes": 3651,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "deep Tui -&gt; Kea : mid",
+      "two"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "71fa2f670e40c2b725cfc868e5d25a9531d3867dd7a3bc967546d6121c73b14d",
+     "stdout_bytes": 4113,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "deep \\",
+      "mid",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "71fa2f670e40c2b725cfc868e5d25a9531d3867dd7a3bc967546d6121c73b14d",
+     "stdout_bytes": 4113,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "deep \\",
+      "mid",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_depth2_tail_no_end",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "44ff8466c2ee0e01f44c213447b51802a1fcd08fcc29f2a697730cc41a6b2a50",
+     "stdout_bytes": 3651,
+     "texts": [
+      "Tui",
+      "Tui",
+      "Kea",
+      "Kea",
+      "one",
+      "deep @enduml"
+     ],
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "06650f2e0cfebb9788f3e51288e869619c3dee8483c0c98c7d6f1df5dd4c9691",
+     "stdout_bytes": 3150,
+     "texts": [
+      "Tui",
+      "Tui",
+      "Kea",
+      "Kea",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "13920f06d4ecc23d5fb7ea533b0086359c6adb72465ecc251099209f5195777c",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Tui",
+      "Tui",
+      "Kea",
+      "Kea",
+      "one",
+      "deep \\"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "13920f06d4ecc23d5fb7ea533b0086359c6adb72465ecc251099209f5195777c",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Tui",
+      "Tui",
+      "Kea",
+      "Kea",
+      "one",
+      "deep \\"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_seq_tail_then_backslash_end",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "0d33ed32934b692f98f0139dd0275a2cca24e02853c22c5b804b4376765ee8c6",
+     "stdout_bytes": 3171,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\enduml"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "0d33ed32934b692f98f0139dd0275a2cca24e02853c22c5b804b4376765ee8c6",
+     "stdout_bytes": 3171,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\enduml"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\\\enduml\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "ddc3f7d66c630a480edd6baa321538b26fa8ed5e86e89e8fc1317cedcd92f8c0",
+     "stdout_bytes": 3153,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_tail_then_indented_end",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "e3f8f2ecaba255748ca6b0ab2543a7badb24bf65e92a61063e4efe82bc205067",
+     "stdout_bytes": 3173,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail   @enduml"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "ddc3f7d66c630a480edd6baa321538b26fa8ed5e86e89e8fc1317cedcd92f8c0",
+     "stdout_bytes": 3153,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "ddc3f7d66c630a480edd6baa321538b26fa8ed5e86e89e8fc1317cedcd92f8c0",
+     "stdout_bytes": 3153,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_seq_tail_then_theme",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "ef8ed53fa3fba8368b8f3fa027ac9c77fa3ee9e2fa8392b42e59aa552f488219",
+     "stdout_bytes": 3668,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail skinparam __theme plain",
+      "two"
+     ],
+     "source_lines": [
+      2,
+      3
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "ef8ed53fa3fba8368b8f3fa027ac9c77fa3ee9e2fa8392b42e59aa552f488219",
+     "stdout_bytes": 3668,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail skinparam __theme plain",
+      "two"
+     ],
+     "source_lines": [
+      2,
+      3
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "70693d6750ef6918b87f405c6b3e82f7ded242752ab0bafb2841a9323fb30466",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "70693d6750ef6918b87f405c6b3e82f7ded242752ab0bafb2841a9323fb30466",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_tail_then_procedure",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "3ef8fbc40411b6bef026018c37ecf433fdb90383cd3c72af80a757dbcb69b017",
+     "stdout_bytes": 3662,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail Tui -&gt; Kea : p1",
+      "p2"
+     ],
+     "source_lines": [
+      2,
+      3
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "3ef8fbc40411b6bef026018c37ecf433fdb90383cd3c72af80a757dbcb69b017",
+     "stdout_bytes": 3662,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail Tui -&gt; Kea : p1",
+      "p2"
+     ],
+     "source_lines": [
+      2,
+      3
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "eece128f732936b8c02c3ef1e78efd01e13f199fa13a67cf326fd6920c53aca0",
+     "stdout_bytes": 4111,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "p1",
+      "p2"
+     ],
+     "source_lines": [
+      2,
+      3,
+      5
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "eece128f732936b8c02c3ef1e78efd01e13f199fa13a67cf326fd6920c53aca0",
+     "stdout_bytes": 4111,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "p1",
+      "p2"
+     ],
+     "source_lines": [
+      2,
+      3,
+      5
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_tail_then_comment_include",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "f8708d436740d631680b9aac925a6ec6e359e8507dea034c8dcdce0e1401fce4",
+     "stdout_bytes": 3184,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail Tui -&gt; Kea : two"
+     ],
+     "source_lines": [
+      3
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "f8708d436740d631680b9aac925a6ec6e359e8507dea034c8dcdce0e1401fce4",
+     "stdout_bytes": 3184,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail Tui -&gt; Kea : two"
+     ],
+     "source_lines": [
+      3
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "70693d6750ef6918b87f405c6b3e82f7ded242752ab0bafb2841a9323fb30466",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "70693d6750ef6918b87f405c6b3e82f7ded242752ab0bafb2841a9323fb30466",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_tail_then_block_comment",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "cddf40c96f0dd5043713b729c8afca9b85ad44584994ee2db7ef0c2c830adbd8",
+     "stdout_bytes": 3184,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail Tui -&gt; Kea : two"
+     ],
+     "source_lines": [
+      4
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "2f39ec381b48f45dc8fe2684f1bd4173f3d23d7aab6028c31b1a8c8dab63275e",
+     "stdout_bytes": 3630,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail",
+      "two"
+     ],
+     "source_lines": [
+      2,
+      4
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "9510377216a8a6872084e323d8b2173c227cf785eab70bfbf5d5d0222789e3e0",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      4
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "9510377216a8a6872084e323d8b2173c227cf785eab70bfbf5d5d0222789e3e0",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      4
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_seq_tail_crlf_include",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "f82afe856db989bc6a7c6a6f8f5838966fe16efbff4a2b7b913ff082de858acd",
+     "stdout_bytes": 3184,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail Tui -&gt; Kea : two"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "f82afe856db989bc6a7c6a6f8f5838966fe16efbff4a2b7b913ff082de858acd",
+     "stdout_bytes": 3184,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail Tui -&gt; Kea : two"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "f51873dd4aa0b6499f00194ae22d683186760ea02f3ce1f5b24ce79b9a495c55",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "f51873dd4aa0b6499f00194ae22d683186760ea02f3ce1f5b24ce79b9a495c55",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "two"
+     ],
+     "source_lines": [
+      1,
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_mindmap_include_tail_not_joined",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "6e548b957e82a40230ce9a5d7780acece03abfc220cd5de5941650ec8360ca39",
+     "stdout_bytes": 1498,
+     "texts": [
+      "Root",
+      "Branch \\",
+      "Leaf"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "6e548b957e82a40230ce9a5d7780acece03abfc220cd5de5941650ec8360ca39",
+     "stdout_bytes": 1498,
+     "texts": [
+      "Root",
+      "Branch \\",
+      "Leaf"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "6e548b957e82a40230ce9a5d7780acece03abfc220cd5de5941650ec8360ca39",
+     "stdout_bytes": 1498,
+     "texts": [
+      "Root",
+      "Branch \\",
+      "Leaf"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "6e548b957e82a40230ce9a5d7780acece03abfc220cd5de5941650ec8360ca39",
+     "stdout_bytes": 1498,
+     "texts": [
+      "Root",
+      "Branch \\",
+      "Leaf"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_component_include_tail_link",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "959bd5b80ba100281db501525d4fd55572948da89700c5409ba6bbc3b4a81bb6",
+     "stdout_bytes": 2176,
+     "texts": [
+      "Alder",
+      "Rowan"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "959bd5b80ba100281db501525d4fd55572948da89700c5409ba6bbc3b4a81bb6",
+     "stdout_bytes": 2176,
+     "texts": [
+      "Alder",
+      "Rowan"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "9e623b8aa0d99717d0738e9ca4b5d4ff8722f6c3cc01028e9f7ac41a06bf9eb9",
+     "stdout_bytes": 1023,
+     "texts": [
+      "Rowan"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "9e623b8aa0d99717d0738e9ca4b5d4ff8722f6c3cc01028e9f7ac41a06bf9eb9",
+     "stdout_bytes": 1023,
+     "texts": [
+      "Rowan"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_activity_include_tail",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "ded37738b76bf9be582f0ac176c0336f9d68d7ab5308a6a8ca591ca53658a280",
+     "stdout_bytes": 1352,
+     "texts": [
+      "first second"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "ded37738b76bf9be582f0ac176c0336f9d68d7ab5308a6a8ca591ca53658a280",
+     "stdout_bytes": 1352,
+     "texts": [
+      "first second"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "ded37738b76bf9be582f0ac176c0336f9d68d7ab5308a6a8ca591ca53658a280",
+     "stdout_bytes": 1352,
+     "texts": [
+      "first second"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "ded37738b76bf9be582f0ac176c0336f9d68d7ab5308a6a8ca591ca53658a280",
+     "stdout_bytes": 1352,
+     "texts": [
+      "first second"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_chr92_tail_then_directive",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "19af36eebd604dc4c76d72b758006f50b14ff7e8011ff4cb7d8867cb5c817689",
+     "stdout_bytes": 3186,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail Tui -&gt; Kea : two 1"
+     ],
+     "source_lines": [
+      3
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "cb1cbe3a0f870480affbbfbf70e42965c4c9a188f959776bcf96a370ae7142cb",
+     "stdout_bytes": 3632,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail",
+      "two 1"
+     ],
+     "source_lines": [
+      2,
+      3
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "2f2c937a156122903f9c89877e38573a0fa5f0a514d2383fc574b3f2e669ef1e",
+     "stdout_bytes": 3634,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "two 1"
+     ],
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "2f2c937a156122903f9c89877e38573a0fa5f0a514d2383fc574b3f2e669ef1e",
+     "stdout_bytes": 3634,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\",
+      "two 1"
+     ],
+     "source_lines": [
+      1,
+      3
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_seq_chr92_tail_then_end",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "12844934b4e753bd97abe9c2c2ef00c1bc3a9c7c26cbfacf91be5f37fe04b9c8",
+     "stdout_bytes": 3171,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail @enduml"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "ddc3f7d66c630a480edd6baa321538b26fa8ed5e86e89e8fc1317cedcd92f8c0",
+     "stdout_bytes": 3153,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "ddc3f7d66c630a480edd6baa321538b26fa8ed5e86e89e8fc1317cedcd92f8c0",
+     "stdout_bytes": 3153,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "tail \\"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_seq_procedure_emits_tail",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "e2de5eda91d334c789d692c180b92f9bcbbba4cb7a1a6c0154480a4ba10beea0",
+     "stdout_bytes": 3665,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "p1",
+      "p2 Tui -&gt; Kea : two"
+     ],
+     "source_lines": [
+      2,
+      7
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e2de5eda91d334c789d692c180b92f9bcbbba4cb7a1a6c0154480a4ba10beea0",
+     "stdout_bytes": 3665,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "p1",
+      "p2 Tui -&gt; Kea : two"
+     ],
+     "source_lines": [
+      2,
+      7
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "12f768be985bde27e4c580a16fef63ba7d278979dfa639bed65262568b576239",
+     "stdout_bytes": 4109,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "p1",
+      "p2 \\",
+      "two"
+     ],
+     "source_lines": [
+      2,
+      3,
+      7
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "12f768be985bde27e4c580a16fef63ba7d278979dfa639bed65262568b576239",
+     "stdout_bytes": 4109,
+     "texts": [
+      "Kea",
+      "Kea",
+      "Tui",
+      "Tui",
+      "p1",
+      "p2 \\",
+      "two"
+     ],
+     "source_lines": [
+      2,
+      3,
+      7
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_chr30_rsp_line",
+   "intended_valid": false,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_seq_raw_rs_rsp_line",
+   "intended_valid": false,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 2: Syntax error: no registered sequence command accepts \"\\u{1e}RSP\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "71d8418da7923f139a93d5dfbe3772686d34984f1c1d60f2ca72de07066d87c9",
+     "stdout_bytes": 3168,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_seq_note_chr30_rsp",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "2d645b7bd5a23026e5d35846897d7b16ac6fa0287f43678d8669b7cffd49534f",
+     "stdout_bytes": 3426,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "e9c0da0d86556039c6ccf76612c09ec5b0d7f1dd273545d5120723ca8b04c5f3",
+     "stdout_bytes": 3562,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one",
+      "\u001eRSP"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "e9c0da0d86556039c6ccf76612c09ec5b0d7f1dd273545d5120723ca8b04c5f3",
+     "stdout_bytes": 3562,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one",
+      "\u001eRSP"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e9c0da0d86556039c6ccf76612c09ec5b0d7f1dd273545d5120723ca8b04c5f3",
+     "stdout_bytes": 3562,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one",
+      "\u001eRSP"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "differs"
+  },
+  {
+   "name": "cr2_seq_note_plain_rsp_control",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "7003123d2f2c7e084daa30b4fd3fa207857ee667b4f76e4642c0e7533fdf6660",
+     "stdout_bytes": 3561,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one",
+      "RSP"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "7003123d2f2c7e084daa30b4fd3fa207857ee667b4f76e4642c0e7533fdf6660",
+     "stdout_bytes": 3561,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one",
+      "RSP"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "7003123d2f2c7e084daa30b4fd3fa207857ee667b4f76e4642c0e7533fdf6660",
+     "stdout_bytes": 3561,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one",
+      "RSP"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "7003123d2f2c7e084daa30b4fd3fa207857ee667b4f76e4642c0e7533fdf6660",
+     "stdout_bytes": 3561,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one",
+      "RSP"
+     ],
+     "source_lines": [
+      1
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_theme_then_continued",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "78890f382e19ed08bba65ff0237ddc4252c89cb37902985bb4d2693d2b6416e2",
+     "stdout_bytes": 3175,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one two"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "78890f382e19ed08bba65ff0237ddc4252c89cb37902985bb4d2693d2b6416e2",
+     "stdout_bytes": 3175,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one two"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"two\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "65daaefc5660a6e0becbc4ddee53144d30e33c154535defda95cbf5fafba13fb",
+     "stdout_bytes": 3170,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "one \\"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_procedure_body_continued",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "acb419beeeb9ca4b5b56ab640f115ad23acb608bb294c81152ee71227c6e1ddf",
+     "stdout_bytes": 3173,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "hi more"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "acb419beeeb9ca4b5b56ab640f115ad23acb608bb294c81152ee71227c6e1ddf",
+     "stdout_bytes": 3173,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "hi more"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 3: Syntax error: no registered sequence command accepts \"more\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "7e34f66d41fe3746574d8f6f1b5883d5a97b319165232aa48c9e53906ac7e791",
+     "stdout_bytes": 6076,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "m",
+      "m",
+      "re",
+      "re",
+      "hi \\"
+     ],
+     "source_lines": [
+      2,
+      3
+     ],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_seq_procedure_call_continued",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "09e93e104509239dc040c5ec205a1aae3aacd55b70a43faf7dd1a836b856d682",
+     "stdout_bytes": 3175,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "hi there"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "09e93e104509239dc040c5ec205a1aae3aacd55b70a43faf7dd1a836b856d682",
+     "stdout_bytes": 3175,
+     "texts": [
+      "Wren",
+      "Wren",
+      "Finch",
+      "Finch",
+      "hi there"
+     ],
+     "source_lines": [
+      2
+     ],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 4: Syntax error: no registered sequence command accepts \"$p(\\\"hi\\\", \\\\\"\n"
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "e8be825846cf44fc0f6947f951a5c0dd337977bf15cd68e98ecb484188a4d3ed",
+     "stdout_bytes": 4554,
+     "texts": [
+      "Welcome to RustUML!",
+      "&#160;",
+      "You can start with a simple UML Diagram like:",
+      "&#160;",
+      "Bob-&gt;Alice:&#160;Hello",
+      "&#160;",
+      "Or",
+      "&#160;",
+      "class&#160;Example",
+      "&#160;",
+      "You will find more information about RustUML syntax on",
+      "https://github.com/marcelocantos/rustuml",
+      "&#160;",
+      "(Details by typing",
+      "license",
+      "keyword)",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;",
+      "&#160;"
+     ],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_ditaa_indented_end_continued_row",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "034128c2ffafe3ad495341b1be50602622e116920f074c976f4cd3373daf3955",
+     "stdout_bytes": 454,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "034128c2ffafe3ad495341b1be50602622e116920f074c976f4cd3373daf3955",
+     "stdout_bytes": 454,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "034128c2ffafe3ad495341b1be50602622e116920f074c976f4cd3373daf3955",
+     "stdout_bytes": 454,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "034128c2ffafe3ad495341b1be50602622e116920f074c976f4cd3373daf3955",
+     "stdout_bytes": 454,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_ditaa_case_start_continued_row",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: unsupported diagram type: @startDitaa\n"
+    },
+    "b0fb43c3e": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: unsupported diagram type: @startDitaa\n"
+    },
+    "93bf53e18": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: unsupported diagram type: @startDitaa\n"
+    },
+    "9834a7194": {
+     "exit": 1,
+     "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+     "stdout_bytes": 0,
+     "texts": [],
+     "source_lines": [],
+     "stderr": "parse error: line 1: unsupported diagram type: @startDitaa\n"
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  },
+  {
+   "name": "cr2_ditaa_continued_row_ref",
+   "intended_valid": true,
+   "builds": {
+    "f2d12d0ef": {
+     "exit": 0,
+     "stdout_sha256": "034128c2ffafe3ad495341b1be50602622e116920f074c976f4cd3373daf3955",
+     "stdout_bytes": 454,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "b0fb43c3e": {
+     "exit": 0,
+     "stdout_sha256": "034128c2ffafe3ad495341b1be50602622e116920f074c976f4cd3373daf3955",
+     "stdout_bytes": 454,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "93bf53e18": {
+     "exit": 0,
+     "stdout_sha256": "034128c2ffafe3ad495341b1be50602622e116920f074c976f4cd3373daf3955",
+     "stdout_bytes": 454,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    },
+    "9834a7194": {
+     "exit": 0,
+     "stdout_sha256": "034128c2ffafe3ad495341b1be50602622e116920f074c976f4cd3373daf3955",
+     "stdout_bytes": 454,
+     "texts": [],
+     "source_lines": [],
+     "stderr": ""
+    }
+   },
+   "tip_vs_merged_base": "identical"
+  }
+ ]
+}
