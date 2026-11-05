@@ -1,0 +1,4 @@
+@startuml
+A -> B : x
+note over A : hello /' c '/
+@enduml

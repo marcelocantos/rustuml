@@ -1,0 +1,4 @@
+@startuml
+/' c '/ \
+[*] --> S1
+@enduml

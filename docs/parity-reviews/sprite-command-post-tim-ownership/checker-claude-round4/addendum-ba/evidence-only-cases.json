@@ -1,0 +1,211 @@
+[
+ {
+  "name": "ck4_seq_span_in_quotes_trailing",
+  "cohort": "BA",
+  "outcomes": {
+   "93bf53e18": "nonpositive-accepted",
+   "044f73657": "nonpositive-accepted",
+   "c9e11493c": "nonpositive-rejected"
+  },
+  "axes": [
+   "sequence",
+   "trailing",
+   "quotes-unbalanced"
+  ],
+  "intended_valid": true,
+  "java_valid": false,
+  "java_markers": [
+   "Syntax Error",
+   "Welcome to PlantUML",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck4_seq_double_leading_top",
+  "cohort": "BA",
+  "outcomes": {
+   "93bf53e18": "nonpositive-accepted",
+   "044f73657": "nonpositive-accepted",
+   "c9e11493c": "nonpositive-rejected"
+  },
+  "axes": [
+   "sequence",
+   "leading-twice",
+   "top-level-single-pass"
+  ],
+  "intended_valid": false,
+  "java_valid": false,
+  "java_markers": [
+   "Syntax Error",
+   "Welcome to PlantUML",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck4_nwdiag_trailing",
+  "cohort": "BA",
+  "outcomes": {
+   "93bf53e18": "nonpositive-accepted",
+   "044f73657": "nonpositive-accepted",
+   "c9e11493c": "nonpositive-accepted"
+  },
+  "axes": [
+   "nwdiag",
+   "trailing"
+  ],
+  "intended_valid": true,
+  "java_valid": false,
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck4_salt_trailing",
+  "cohort": "BA",
+  "outcomes": {
+   "93bf53e18": "nonpositive-accepted",
+   "044f73657": "nonpositive-accepted",
+   "c9e11493c": "nonpositive-accepted"
+  },
+  "axes": [
+   "salt",
+   "trailing"
+  ],
+  "intended_valid": true,
+  "java_valid": false,
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck4_tim_include_trailing",
+  "cohort": "BA",
+  "outcomes": {
+   "93bf53e18": "valid-error",
+   "044f73657": "valid-error",
+   "c9e11493c": "mismatch"
+  },
+  "axes": [
+   "tim",
+   "include",
+   "trailing"
+  ],
+  "intended_valid": true,
+  "java_valid": true,
+  "java_markers": [],
+  "reason": "needs a sibling resource file"
+ },
+ {
+  "name": "ck4_tim_include_body_comments",
+  "cohort": "BA",
+  "outcomes": {
+   "93bf53e18": "mismatch",
+   "044f73657": "mismatch",
+   "c9e11493c": "mismatch"
+  },
+  "axes": [
+   "tim",
+   "include-body",
+   "leading",
+   "trailing"
+  ],
+  "intended_valid": true,
+  "java_valid": true,
+  "java_markers": [],
+  "reason": "needs a sibling resource file"
+ },
+ {
+  "name": "ck4_tim_includesub_double",
+  "cohort": "BA",
+  "outcomes": {
+   "93bf53e18": "mismatch",
+   "044f73657": "mismatch",
+   "c9e11493c": "mismatch"
+  },
+  "axes": [
+   "tim",
+   "includesub",
+   "double-pass"
+  ],
+  "intended_valid": true,
+  "java_valid": true,
+  "java_markers": [],
+  "reason": "needs a sibling resource file"
+ },
+ {
+  "name": "ck4_inv_nbsp_leading_comment_seq",
+  "cohort": "BA",
+  "outcomes": {
+   "93bf53e18": "nonpositive-accepted",
+   "044f73657": "nonpositive-accepted",
+   "c9e11493c": "nonpositive-rejected"
+  },
+  "axes": [
+   "sequence",
+   "nbsp",
+   "java-trim"
+  ],
+  "intended_valid": false,
+  "java_valid": false,
+  "java_markers": [
+   "Syntax Error",
+   "Welcome to PlantUML",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck4_inv_include_missing_after_comment",
+  "cohort": "BA",
+  "outcomes": {
+   "93bf53e18": "nonpositive-accepted",
+   "044f73657": "nonpositive-accepted",
+   "c9e11493c": "nonpositive-accepted"
+  },
+  "axes": [
+   "tim",
+   "include",
+   "leading"
+  ],
+  "intended_valid": false,
+  "java_valid": false,
+  "java_markers": [
+   "Welcome to PlantUML",
+   "[From string"
+  ],
+  "reason": "Java-invalid reference"
+ },
+ {
+  "name": "ck4_inv_class_after_leading_two",
+  "cohort": "BA",
+  "outcomes": {
+   "93bf53e18": "nonpositive-accepted",
+   "044f73657": "nonpositive-accepted",
+   "c9e11493c": "nonpositive-rejected"
+  },
+  "axes": [
+   "class",
+   "leading-twice"
+  ],
+  "intended_valid": false,
+  "java_valid": false,
+  "java_markers": [
+   "Syntax Error",
+   "Welcome to PlantUML",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "reason": "Java-invalid reference"
+ }
+]

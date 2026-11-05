@@ -1,0 +1,11 @@
+@startuml
+!procedure $mk()
+sprite $dot [2x2/16] {
+F0
+0F
+} /' e '/
+!endprocedure
+$mk()
+class Elm
+class Oak
+@enduml

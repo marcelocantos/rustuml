@@ -1,0 +1,7 @@
+@startuml
+robust "Web" as W /' c '/
+@0
+W is Idle
+@10
+W is Busy
+@enduml

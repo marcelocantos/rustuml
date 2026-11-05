@@ -1,0 +1,5 @@
+@startuml
+A -> B : x
+== Part /' c '/ ==
+B -> A : y
+@enduml

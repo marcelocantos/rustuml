@@ -1,0 +1,4 @@
+@startuml
+/' c '/ \
+class A
+@enduml

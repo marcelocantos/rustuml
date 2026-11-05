@@ -1,0 +1,5 @@
+@startuml
+!startsub S
+A -> B : s /' a '/ /' b '/
+!endsub
+@enduml

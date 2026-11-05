@@ -1,0 +1,8 @@
+@startuml
+!$x = 1
+!if $x == 2
+A -> B : no
+!else /' c '/
+A -> B : yes
+!endif
+@enduml

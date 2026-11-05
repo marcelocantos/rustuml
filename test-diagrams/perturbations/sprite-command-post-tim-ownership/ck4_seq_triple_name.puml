@@ -1,0 +1,3 @@
+@startuml
+Al/'''n'''/ice -> Bob : hi
+@enduml

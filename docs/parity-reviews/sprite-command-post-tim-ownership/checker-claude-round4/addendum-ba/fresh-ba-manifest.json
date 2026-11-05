@@ -1,0 +1,1171 @@
+[
+ {
+  "source": "ck4_seq_apostrophe_word_trailing.puml",
+  "golden": "ck4_seq_apostrophe_word_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_apostrophe_word_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing",
+   "apostrophe"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "4ff9fd7d3d35e43690b24330a111d8cf5cb07f88439f7112896d613b8a001cb1",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_url_trailing.puml",
+  "golden": "ck4_seq_url_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_url_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing",
+   "url"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "40bd07081b11030bb0062b852b020da94e697fb4f16cce80f8d0568b1e07b76d",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_creole_trailing.puml",
+  "golden": "ck4_seq_creole_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_creole_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing",
+   "creole"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "735c8f54e75c4d3cbb626fcab7889c49dc6427b3c63843361818c6c8364e6d3f",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_quoted_then_trailing.puml",
+  "golden": "ck4_seq_quoted_then_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_quoted_then_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing",
+   "quotes"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "479e48d624b42127fa53e8a5d8e4f09da5ba7d286fee672920be409456e097d1",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_span_in_quotes_trailing.puml",
+  "golden": "ck4_seq_span_in_quotes_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_span_in_quotes_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing",
+   "quotes-unbalanced"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "5ba4980f64dd040c605f4d51fba60f578ec0790692a0bca07dbbe1b4ae571f1c",
+  "java_markers": [
+   "Syntax Error",
+   "Welcome to PlantUML",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck4_seq_triple_in_quotes.puml",
+  "golden": "ck4_seq_triple_in_quotes.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_triple_in_quotes",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "special",
+   "quotes"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "fb3ecde9582ed01d00ac2e492a2c37c235db918fd9e472f59334a38164a72099",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_triple_name.puml",
+  "golden": "ck4_seq_triple_name.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_triple_name",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "special",
+   "identifier"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "354c0cf35344721432772a0d0f91c2a2c45822c3093fd23c767808288ad7b225",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_double_trailing_top.puml",
+  "golden": "ck4_seq_double_trailing_top.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_double_trailing_top",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing-twice",
+   "top-level-single-pass"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "9c47c6f8bb71a446bc0b193da64d7531c4f71551539b241751decf7f245714e2",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_double_leading_top.puml",
+  "golden": "ck4_seq_double_leading_top.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_double_leading_top",
+  "intended_valid": false,
+  "axes": [
+   "sequence",
+   "leading-twice",
+   "top-level-single-pass"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "dcf9412eac691bccafcadb699a3ee28444d9074b290e8b2f576f1c4a86c29da3",
+  "java_markers": [
+   "Syntax Error",
+   "Welcome to PlantUML",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck4_seq_note_multiline_body.puml",
+  "golden": "ck4_seq_note_multiline_body.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_note_multiline_body",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "note",
+   "leading",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "2ddf734851bb73ec245510f45b60a1c96ca5ab493bf8e292390794f6f99e0719",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_note_inline_trailing.puml",
+  "golden": "ck4_seq_note_inline_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_note_inline_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "note",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "21b014677db86f63f0f1baabeed061d2a8e35427125c8cdb8c9a5abaf667646d",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_continuation_next_leading.puml",
+  "golden": "ck4_seq_continuation_next_leading.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_continuation_next_leading",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "continuation",
+   "leading"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "46d9852024855d6d798dfee0e5d7635eacecdd3452e6abbd1dd1fa10cf6f8ff9",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_continuation_comment_only_then_msg.puml",
+  "golden": "ck4_seq_continuation_comment_only_then_msg.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_continuation_comment_only_then_msg",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "continuation",
+   "comment-then-backslash"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "5d6f9a1a00c3c26ff85e89a79765370e4170bff6edd0f6ac741e6a72018dae64",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_crlf_trailing.puml",
+  "golden": "ck4_seq_crlf_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_crlf_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "crlf",
+   "trailing",
+   "leading",
+   "line-endings:CRLF"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "cbddf9f7ef002450fb1d7397039f10b745436977f193f6beb5f6b2126d930f4f",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_quote_slash_no_comment.puml",
+  "golden": "ck4_seq_quote_slash_no_comment.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_quote_slash_no_comment",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "no-comment",
+   "quote-slash"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "46f63b45593b74415858d44595e2e598149d14b3734619509b089229d99d8b00",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_trailing_slash_quote_only.puml",
+  "golden": "ck4_seq_trailing_slash_quote_only.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_trailing_slash_quote_only",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "no-open",
+   "trailing-close-only"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "72a9fe1e08cce4bd1e342c059f0d104e186d7368f849ba1ef9a4b3a477eb474c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_leading_space_trailing_spaces.puml",
+  "golden": "ck4_seq_leading_space_trailing_spaces.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_leading_space_trailing_spaces",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "leading",
+   "whitespace"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "62dd8ceccadcd5be683b3cae809252152c27996b9f9be8c414a3188bc752697b",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_divider_trailing.puml",
+  "golden": "ck4_seq_divider_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_divider_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "middle-not-removed"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e3a7f100e2f8c1fa148c2d293e2f97e67b5c9576ef90a6246b50cef876f836e8",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_divider_end_trailing.puml",
+  "golden": "ck4_seq_divider_end_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_divider_end_trailing",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b5fa8a2730591cd5564298a4662aa64f08a38a1751773962e5eefabf19bde6b1",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_title_leading.puml",
+  "golden": "ck4_seq_title_leading.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_title_leading",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "leading",
+   "title"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "6d09a51718cc514c64afd5ba118860c0e618bf2528360eb9249bd920f286ac0c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_seq_skinparam_block.puml",
+  "golden": "ck4_seq_skinparam_block.svg",
+  "cohort": "BA",
+  "name": "ck4_seq_skinparam_block",
+  "intended_valid": true,
+  "axes": [
+   "sequence",
+   "skinparam-block"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "5ae056bd22fb3130fee50b2697104e60f317b84f7d79392c279edc85695f2378",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_class_body_member_leading.puml",
+  "golden": "ck4_class_body_member_leading.svg",
+  "cohort": "BA",
+  "name": "ck4_class_body_member_leading",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "body",
+   "leading",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "637b1600e4a5b8863e9ad57fcafab740a325b7e83920b215ad1f88430af043b1",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_class_comment_then_backslash.puml",
+  "golden": "ck4_class_comment_then_backslash.svg",
+  "cohort": "BA",
+  "name": "ck4_class_comment_then_backslash",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "continuation",
+   "comment-then-backslash"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "0c8d47618808e0b62f9041a6838588454bda06c69b3b7c071ebca19e9d39b380",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_class_note_multiline.puml",
+  "golden": "ck4_class_note_multiline.svg",
+  "cohort": "BA",
+  "name": "ck4_class_note_multiline",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "note"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "06a44076dc7dc019e39787a27e4217505885e2da281af0b3c13d5feabdaa4b95",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_class_relation_label.puml",
+  "golden": "ck4_class_relation_label.svg",
+  "cohort": "BA",
+  "name": "ck4_class_relation_label",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "relation",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "5c0f7798fc41c073d64b77a02be57264517bc1492b2065ddda08f0ce7638f858",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_class_special_in_name.puml",
+  "golden": "ck4_class_special_in_name.svg",
+  "cohort": "BA",
+  "name": "ck4_class_special_in_name",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "special"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "1b751de3ce92d0d0744aa969b11589bf2696f7c56a300ccf5b9bf7c9a413d832",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_usecase_leading_actor_line.puml",
+  "golden": "ck4_usecase_leading_actor_line.svg",
+  "cohort": "BA",
+  "name": "ck4_usecase_leading_actor_line",
+  "intended_valid": true,
+  "axes": [
+   "usecase",
+   "leading"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "ae8c443ecbcf359d217ef32f1f1ad0397f5bc2b45d09a2ca8d8b6bcb24b91262",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_component_bracket_trailing.puml",
+  "golden": "ck4_component_bracket_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_component_bracket_trailing",
+  "intended_valid": true,
+  "axes": [
+   "component",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "1f77ee0aa666020f9f9663917ce8897421f12201c4d043b178273c6a9ae182f7",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_state_body_leading.puml",
+  "golden": "ck4_state_body_leading.svg",
+  "cohort": "BA",
+  "name": "ck4_state_body_leading",
+  "intended_valid": true,
+  "axes": [
+   "state",
+   "body",
+   "leading"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "621a5e7100f7f5e2f521838ff213bf1b20e12795cf69b1f945b2a2f6fd1d4ec0",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_activity3_if_trailing.puml",
+  "golden": "ck4_activity3_if_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_activity3_if_trailing",
+  "intended_valid": true,
+  "axes": [
+   "activity3",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b0ee5c6c18eb0569827c6e9d4d714f23fbcf7a3ed3b0f70066f24559397d3bbd",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_activity_legacy_trailing.puml",
+  "golden": "ck4_activity_legacy_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_activity_legacy_trailing",
+  "intended_valid": true,
+  "axes": [
+   "activity-legacy",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "afeb349b3bb9805bd8cce398ad52f7e7af3732e05e7c448b8f6ca156efaf41f5",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_object_field_trailing.puml",
+  "golden": "ck4_object_field_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_object_field_trailing",
+  "intended_valid": true,
+  "axes": [
+   "object",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "22e008e4622474c51aa4e2c3d7314f85c5a7b10dbc62afa9d995dc4deb735ed5",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_yaml_trailing.puml",
+  "golden": "ck4_yaml_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_yaml_trailing",
+  "intended_valid": true,
+  "axes": [
+   "yaml",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "67270d54618191f0c41c99639cd717691a5d09a162786463dbea6fc18e03ebe1",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_json_leading_member.puml",
+  "golden": "ck4_json_leading_member.svg",
+  "cohort": "BA",
+  "name": "ck4_json_leading_member",
+  "intended_valid": true,
+  "axes": [
+   "json",
+   "leading"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "793c77e5a06e6da7c1c0d82e80275e85029ed21ee5cb3d00ba5fcb757e47dcec",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_mindmap_leading.puml",
+  "golden": "ck4_mindmap_leading.svg",
+  "cohort": "BA",
+  "name": "ck4_mindmap_leading",
+  "intended_valid": true,
+  "axes": [
+   "mindmap",
+   "leading"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "69a57d82d49dec7b14a1c1a353760431290701b2ecd001b1e84dd90ab3aebe73",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_wbs_trailing.puml",
+  "golden": "ck4_wbs_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_wbs_trailing",
+  "intended_valid": true,
+  "axes": [
+   "wbs",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "d73df954116ccb8a0048de04dffc09accffa218153a3a7765c0b1e8a0c8f03a5",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_timing_trailing.puml",
+  "golden": "ck4_timing_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_timing_trailing",
+  "intended_valid": true,
+  "axes": [
+   "timing",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "706672af91949afc6b0319742f426188ec9092dc34dd5530b019b0f5550503d5",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_nwdiag_trailing.puml",
+  "golden": "ck4_nwdiag_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_nwdiag_trailing",
+  "intended_valid": true,
+  "axes": [
+   "nwdiag",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "e226fd70f7e45ecdaa47d18be5ef9c46c21cc78494fe5bb928279867e00bb5b5",
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck4_ebnf_trailing.puml",
+  "golden": "ck4_ebnf_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_ebnf_trailing",
+  "intended_valid": true,
+  "axes": [
+   "ebnf",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "c9f30648fc9865a0e5b0521c3c7aef22f86af802b03917716134fa1050708a74",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_gantt_leading.puml",
+  "golden": "ck4_gantt_leading.svg",
+  "cohort": "BA",
+  "name": "ck4_gantt_leading",
+  "intended_valid": true,
+  "axes": [
+   "gantt",
+   "leading"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e43124c66e5d3f8f69c91338670eb2c476fbbf2794166552fe6df94a110f385c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_salt_trailing.puml",
+  "golden": "ck4_salt_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_salt_trailing",
+  "intended_valid": true,
+  "axes": [
+   "salt",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "2c6447994a57da86ceb6e877b715be7841c317526ed897f708f0cbb8e5a095a8",
+  "java_markers": [
+   "Syntax Error",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck4_tim_procedure_double_trailing.puml",
+  "golden": "ck4_tim_procedure_double_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_tim_procedure_double_trailing",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "procedure",
+   "double-pass"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "3cf5b1ab13ed83de4c8a5e8bc1e00b978dab1d25faa7cb2c91a818b982c34108",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_tim_procedure_double_leading.puml",
+  "golden": "ck4_tim_procedure_double_leading.svg",
+  "cohort": "BA",
+  "name": "ck4_tim_procedure_double_leading",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "procedure",
+   "double-pass"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "226f7686681f9c4b9568bb738f3b9b054331990c02e8f87ac0123ea698704744",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_tim_function_return_trailing.puml",
+  "golden": "ck4_tim_function_return_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_tim_function_return_trailing",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "function",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "c446f3ef8b67388d8a41f02460b6dfb6902d50b7bdf10cc08dff9cb8a37abd1e",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_tim_define_value_trailing.puml",
+  "golden": "ck4_tim_define_value_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_tim_define_value_trailing",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "define",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "dff92568f07570898ae4b47b4aacc90caaea922a4f1a8497cec2ac11f1cdc85f",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_tim_definelong_body.puml",
+  "golden": "ck4_tim_definelong_body.svg",
+  "cohort": "BA",
+  "name": "ck4_tim_definelong_body",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "definelong",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "bfdf9e8431f17e586b19620b7a6bbd2f98f56b9a42ccebc99ed9e7ef2ff4e263",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_tim_while_body.puml",
+  "golden": "ck4_tim_while_body.svg",
+  "cohort": "BA",
+  "name": "ck4_tim_while_body",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "while",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "4dc92b71cea36222a5234166040d44c539762bf829f0f5ad86ed2ceb3a775bb9",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_tim_foreach_body.puml",
+  "golden": "ck4_tim_foreach_body.svg",
+  "cohort": "BA",
+  "name": "ck4_tim_foreach_body",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "foreach",
+   "leading"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "377ee9f645e875017deedd774479cf85afb86294428630bd60e171511ac4190b",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_tim_include_trailing.puml",
+  "golden": "ck4_tim_include_trailing.svg",
+  "cohort": "BA",
+  "name": "ck4_tim_include_trailing",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "include",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b27e7e8fb2b04f6734a42dc38c26c1a461be02876f18cd91d333bb51824a78ae",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_tim_include_body_comments.puml",
+  "golden": "ck4_tim_include_body_comments.svg",
+  "cohort": "BA",
+  "name": "ck4_tim_include_body_comments",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "include-body",
+   "leading",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "bc2b1006f2c83b3b0c01deac84c62ffd753784c4e815eaf9de0800c5b70e9054",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_tim_var_string_comment.puml",
+  "golden": "ck4_tim_var_string_comment.svg",
+  "cohort": "BA",
+  "name": "ck4_tim_var_string_comment",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "string-middle"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b60b6115c66b674a4ed3f826f91ad7bb974ac2ca4f002b95c1e002daac175572",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_tim_if_else_comment.puml",
+  "golden": "ck4_tim_if_else_comment.svg",
+  "cohort": "BA",
+  "name": "ck4_tim_if_else_comment",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "if",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "f4421b02c46714a6c3baaf8584efe7c1cb74ed5e07fe7eab4f44908ac8808f6d",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_tim_startsub_inplace_double.puml",
+  "golden": "ck4_tim_startsub_inplace_double.svg",
+  "cohort": "BA",
+  "name": "ck4_tim_startsub_inplace_double",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "startsub-in-place",
+   "single-pass"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "375a7c704bf952928dbd58d625db12e800fa84aed79928e9e41465580743c371",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_tim_includesub_double.puml",
+  "golden": "ck4_tim_includesub_double.svg",
+  "cohort": "BA",
+  "name": "ck4_tim_includesub_double",
+  "intended_valid": true,
+  "axes": [
+   "tim",
+   "includesub",
+   "double-pass"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "4f6970faa71f4a125ac098cda1d5e505c0928db1e3d5ac690166312835a298ba",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_activity3_comment_then_backslash.puml",
+  "golden": "ck4_activity3_comment_then_backslash.svg",
+  "cohort": "BA",
+  "name": "ck4_activity3_comment_then_backslash",
+  "intended_valid": true,
+  "axes": [
+   "activity3",
+   "continuation",
+   "comment-then-backslash"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "6ad18a02f181a065b7d520c5e09aac34f428a787c3205e67ab1a179e168bdd9a",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_component_comment_then_backslash.puml",
+  "golden": "ck4_component_comment_then_backslash.svg",
+  "cohort": "BA",
+  "name": "ck4_component_comment_then_backslash",
+  "intended_valid": true,
+  "axes": [
+   "component",
+   "continuation",
+   "comment-then-backslash"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "e401d384a6535e89045f7dd4601d6ddda2564d751b82d2d5b5fe3572c8d78809",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_state_comment_then_backslash.puml",
+  "golden": "ck4_state_comment_then_backslash.svg",
+  "cohort": "BA",
+  "name": "ck4_state_comment_then_backslash",
+  "intended_valid": true,
+  "axes": [
+   "state",
+   "continuation",
+   "comment-then-backslash"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "014f61d8ff57f04328fd59d5c1651fbf64e0cf5f818706685f4ef630bd2dfaf6",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_class_continuation_next_leading.puml",
+  "golden": "ck4_class_continuation_next_leading.svg",
+  "cohort": "BA",
+  "name": "ck4_class_continuation_next_leading",
+  "intended_valid": true,
+  "axes": [
+   "class",
+   "continuation",
+   "leading"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "fc0504b8a1174719893befcf55f8bb4f0ad516efca62fe4bcb6ddb612ff5d0b2",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_ctl_procedure_four_classes.puml",
+  "golden": "ck4_ctl_procedure_four_classes.svg",
+  "cohort": "BA",
+  "name": "ck4_ctl_procedure_four_classes",
+  "intended_valid": true,
+  "axes": [
+   "control",
+   "procedure",
+   "source-line"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "b09af5b3da729965493e3ba6e399500aad1f6b3c0412a5a8393a0347d63a7c3c",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_ctl_procedure_sprite_nocomment.puml",
+  "golden": "ck4_ctl_procedure_sprite_nocomment.svg",
+  "cohort": "BA",
+  "name": "ck4_ctl_procedure_sprite_nocomment",
+  "intended_valid": true,
+  "axes": [
+   "control",
+   "procedure",
+   "sprite",
+   "source-line"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "c7ea564eba2ca8d307d32ab5ee508b7939f216c38b5ec3108b4bbd360080c44d",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_procedure_sprite_end_comment_two.puml",
+  "golden": "ck4_procedure_sprite_end_comment_two.svg",
+  "cohort": "BA",
+  "name": "ck4_procedure_sprite_end_comment_two",
+  "intended_valid": true,
+  "axes": [
+   "procedure",
+   "sprite",
+   "source-line",
+   "trailing"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 0,
+  "java_stderr": "",
+  "java_svg_sha256": "21136c922f9f6d6218a554f6dc2bab6e79cfb62b0d6e8c78cd63f65d53069c3e",
+  "java_markers": [],
+  "observed_valid": true
+ },
+ {
+  "source": "ck4_inv_nbsp_leading_comment_seq.puml",
+  "golden": "ck4_inv_nbsp_leading_comment_seq.svg",
+  "cohort": "BA",
+  "name": "ck4_inv_nbsp_leading_comment_seq",
+  "intended_valid": false,
+  "axes": [
+   "sequence",
+   "nbsp",
+   "java-trim"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "efca75780aab1e3c1c94af2d10571f4955f06239e501a93dd6a3a6cf242e10da",
+  "java_markers": [
+   "Syntax Error",
+   "Welcome to PlantUML",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck4_inv_include_missing_after_comment.puml",
+  "golden": "ck4_inv_include_missing_after_comment.svg",
+  "cohort": "BA",
+  "name": "ck4_inv_include_missing_after_comment",
+  "intended_valid": false,
+  "axes": [
+   "tim",
+   "include",
+   "leading"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\ncannot include ck4-missing.iuml\n",
+  "java_svg_sha256": "83a862c41acc2c47f0e5d330acded6de74400e48da8235314a74a8225e018677",
+  "java_markers": [
+   "Welcome to PlantUML",
+   "[From string"
+  ],
+  "observed_valid": false
+ },
+ {
+  "source": "ck4_inv_class_after_leading_two.puml",
+  "golden": "ck4_inv_class_after_leading_two.svg",
+  "cohort": "BA",
+  "name": "ck4_inv_class_after_leading_two",
+  "intended_valid": false,
+  "axes": [
+   "class",
+   "leading-twice"
+  ],
+  "mechanism": "sprite-command-post-tim-ownership",
+  "java_exit": 200,
+  "java_stderr": "ERROR\n1\nSyntax Error? (Assumed diagram type: sequence)\n",
+  "java_svg_sha256": "d54055ff083c46110d7eb9abfacfe8d892a01c07446809655e9e5715f013c191",
+  "java_markers": [
+   "Syntax Error",
+   "Welcome to PlantUML",
+   "[From string",
+   "(Assumed diagram type:"
+  ],
+  "observed_valid": false
+ }
+]

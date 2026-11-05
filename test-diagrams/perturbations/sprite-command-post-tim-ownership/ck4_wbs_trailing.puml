@@ -1,0 +1,5 @@
+@startwbs
+* root
+** child /' c '/
+** other
+@endwbs

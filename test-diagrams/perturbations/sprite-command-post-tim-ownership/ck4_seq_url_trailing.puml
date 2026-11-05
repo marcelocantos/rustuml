@@ -1,0 +1,3 @@
+@startuml
+A -> B : [[http://example.com/a]] go /' c '/
+@enduml

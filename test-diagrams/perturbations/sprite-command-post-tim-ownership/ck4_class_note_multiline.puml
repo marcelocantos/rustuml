@@ -1,0 +1,7 @@
+@startuml
+class A
+note right of A
+/' c '/ first
+second /' d '/
+end note
+@enduml

@@ -1,0 +1,3 @@
+@startuml
+A -> B : m /' a '/ /' b '/
+@enduml

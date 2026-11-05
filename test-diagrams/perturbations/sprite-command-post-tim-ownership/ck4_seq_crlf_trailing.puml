@@ -1,0 +1,4 @@
+@startuml
+A -> B : hi /' c '/
+/' d '/ B -> A : back
+@enduml

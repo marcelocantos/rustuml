@@ -1,0 +1,6 @@
+@startuml
+class A {
+/' c '/ +name : String
++id : int /' d '/
+}
+@enduml

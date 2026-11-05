@@ -1,0 +1,6 @@
+@startuml
+!definelong DL()
+A -> B : dl /' c '/
+!enddefinelong
+DL()
+@enduml

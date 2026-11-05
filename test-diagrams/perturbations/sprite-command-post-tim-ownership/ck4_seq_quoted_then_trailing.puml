@@ -1,0 +1,4 @@
+@startuml
+participant "Long Name" as L /' c '/
+L -> L : self
+@enduml

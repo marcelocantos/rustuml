@@ -1,0 +1,7 @@
+@startuml
+skinparam sequence {
+ArrowColor red /' c '/
+/' d '/ LifeLineBorderColor blue
+}
+A -> B : x
+@enduml
