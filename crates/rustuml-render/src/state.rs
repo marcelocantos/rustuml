@@ -4889,9 +4889,12 @@ fn emit_autonomous_composite(
         // GraphvizImageBuilder.printGroups creates the leaves of each live
         // cluster (preorder) before the image group's own leaves, and
         // SvekResult.drawU paints Bibliotekon.allNodes() in that order.
-        let mut paint_ids = region.layout.ids.clone();
-        paint_ids.sort_by_key(|id| {
-            autonomous_id_owner(context.diagram, id)
+        // State notes are created in ParserPass.THREE
+        // (StateDiagramFactory), so their quarks follow every pass-ONE
+        // quark of their declaring group in `Entity.leafs()`: a note is the
+        // last leaf of its declaring group's bucket.
+        let bucket_of = |owner: Option<&str>| {
+            owner
                 .and_then(|owner| {
                     region
                         .live_clusters
@@ -4899,8 +4902,40 @@ fn emit_autonomous_composite(
                         .position(|cluster| cluster.id == owner)
                 })
                 .unwrap_or(region.live_clusters.len())
-        });
-        for id in &paint_ids {
+        };
+        let mut paint: Vec<(usize, Result<&String, &AttachedNotePosition>)> = region
+            .layout
+            .ids
+            .iter()
+            .map(|id| (bucket_of(autonomous_id_owner(context.diagram, id)), Ok(id)))
+            .chain(region.layout.notes.iter().map(|note| {
+                (
+                    bucket_of(context.diagram.notes[note.note_index].parent.as_deref()),
+                    Err(note),
+                )
+            }))
+            .collect();
+        paint.sort_by_key(|(bucket, item)| (*bucket, item.is_err()));
+        for (_, item) in paint {
+            let id = match item {
+                Ok(id) => id,
+                Err(note) => {
+                    let mut position = note.clone();
+                    position.x += offset.0;
+                    position.y += offset.1;
+                    emit_attached_svek_note(
+                        svg,
+                        &context.diagram.notes[note.note_index],
+                        &position,
+                        &region.layout.edge_paths,
+                        (
+                            offset.0 + region.layout.origin_x,
+                            offset.1 + region.layout.origin_y,
+                        ),
+                    );
+                    continue;
+                }
+            };
             if let Some(child) = composite
                 .children
                 .iter()
@@ -4920,21 +4955,6 @@ fn emit_autonomous_composite(
                     .retain(|(position_id, _, _, _, _)| position_id == id);
                 emit_autonomous_scope_entities(svg, context, &entity_scope, offset, true);
             }
-        }
-        for note in &region.layout.notes {
-            let mut position = note.clone();
-            position.x += offset.0;
-            position.y += offset.1;
-            emit_attached_svek_note(
-                svg,
-                &context.diagram.notes[note.note_index],
-                &position,
-                &region.layout.edge_paths,
-                (
-                    offset.0 + region.layout.origin_x,
-                    offset.1 + region.layout.origin_y,
-                ),
-            );
         }
         emit_autonomous_scope_links(svg, context, &region.layout, offset);
         match composite.separator {
@@ -5893,9 +5913,9 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     // paints `Bibliotekon.allNodes()` in that insertion order. Keep the
     // solved order within each owner, but paint grouped leaves before the
     // unpackaged root leaves created by `getUnpackagedEntities`.
-    let mut paint_scope = scope.clone();
-    paint_scope.positions.sort_by_key(|(id, ..)| {
-        let owner = autonomous_id_owner(diagram, id);
+    // State notes are created in ParserPass.THREE (StateDiagramFactory), so
+    // each note is the last leaf of its declaring group's bucket.
+    let bucket_of = |owner: Option<&str>| {
         owner
             .and_then(|owner| {
                 composites
@@ -5903,22 +5923,30 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
                     .position(|composite| composite.id == owner)
             })
             .unwrap_or(composites.len())
-    });
-    emit_autonomous_scope_entities(
-        &mut svg,
-        &context,
-        &paint_scope,
-        (scope.origin_x, scope.origin_y),
-        true,
-    );
-    for position in &note_positions {
-        emit_attached_svek_note(
+    };
+    for bucket in 0..=composites.len() {
+        let mut paint_scope = scope.clone();
+        paint_scope
+            .positions
+            .retain(|(id, ..)| bucket_of(autonomous_id_owner(diagram, id)) == bucket);
+        emit_autonomous_scope_entities(
             &mut svg,
-            &diagram.notes[position.note_index],
-            position,
-            &scope.edge_paths,
+            &context,
+            &paint_scope,
             (scope.origin_x, scope.origin_y),
+            true,
         );
+        for position in note_positions.iter().filter(|position| {
+            bucket_of(diagram.notes[position.note_index].parent.as_deref()) == bucket
+        }) {
+            emit_attached_svek_note(
+                &mut svg,
+                &diagram.notes[position.note_index],
+                position,
+                &scope.edge_paths,
+                (scope.origin_x, scope.origin_y),
+            );
+        }
     }
     emit_autonomous_scope_links(&mut svg, &context, &scope, (0.0, 0.0));
     svg.push_str("</g></svg>");
