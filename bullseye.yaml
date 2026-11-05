@@ -217,6 +217,12 @@ targets:
     - T14.37
     - T14.38
     - T14.39
+    - T14.40
+    - T14.41
+    - T14.42
+    - T14.43
+    - T14.44
+    - T14.45
     tags:
     - parity
     - no-oracle
@@ -805,6 +811,72 @@ targets:
     - de-oracle
     origin: manual
     discovered: 2026-07-03
+  T14.40:
+    name: Creole `<U+XXXX>` and `&#N;` character references convert as Java's AtomText does
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - Rust ports `AtomText`'s `<U+XXXX>` and `&#N;` conversion, traced to source, in every text consumer that uses it.
+    - Fresh pinned probes match, including separators and marks introduced this way, and no pass is lost.
+    context: Shared-SVG maker round 9 (2a4117b70). RustUML draws `<U+XXXX>` and `&#N;` literally. Java converts them in AtomText, which is also the only way to get U+2029 into a single-line label.
+    origin: manual
+    discovered: 2026-11-06
+  T14.41:
+    name: Derived (fake) italic faces measure unmapped marks as Java does
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - 'Rust reproduces the extra advance Java''s derived italic adds for an unmapped mark (Lucida Grande derived italic: +2.70703125 at 14 pt; plain width unchanged). The rule is traced through `CFont`/`Font2D` derived-style handling, not fitted.'
+    - Fresh pinned probes at several sizes and in both derived italic styles match, and no pass is lost.
+    context: Shared-SVG maker round 9 (2a4117b70), from the face probe in `shared-svg-round9-face-probe` (stdout `86795360…`). Lucida Grande's derived italics use the upright face file, so the extra advance is not a per-face fact. Rust adds 0.
+    origin: manual
+    discovered: 2026-11-06
+  T14.42:
+    name: Single-line commands containing U+0085, U+2028 or U+2029 are rejected as Java rejects them
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - Rust's command matching treats U+0085, U+2028 and U+2029 as `java.util.regex` `.` does (no match), so those single-line commands are syntax errors as in Java. Multi-line bodies keep carrying them.
+    - The ten BP bidi probes are rejected, and no valid case regresses.
+    context: 'Shared-SVG maker round 9 (2a4117b70), batch BP: all ten U+2029/U+0085 single-line probes and their controls are rejected by Java (exit 200, syntax error at the class line). PlantUML''s command regexes use `.`, which Java''s regex does not match against those characters. Rust accepts them at every tree.'
+    origin: manual
+    discovered: 2026-11-06
+  T14.43:
+    name: U+2029 and U+0085 inside multi-line bodies stay in the measured line as in Java
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - In multi-line note, legend, activity and other bodies, U+2029 and U+0085 are kept in the line and measured as Java measures them, not dropped or turned into spaces. This makes the bidi PDF/mark widths equal Java's (4.5703 vs 4.1133).
+    - The BR and BQ separator controls match, plus fresh held-out probes, and no pass is lost.
+    context: 'Shared-SVG round-9 review d8242a8dc (2026-11-06): every separator control fails at every tree. Rust drops U+2029 and U+0085 or turns them into whitespace in multi-line bodies (class, float, activity, state and use-case notes, and legends).'
+    origin: manual
+    discovered: 2026-11-06
+  T14.44:
+    name: Class link labels honour newlines, arrow font style, stereotyped links and role/ortho placement as Java does
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - 'Class link labels follow Java at every point traced: `\n` breaks the line instead of drawing literally; `ArrowFontStyle` is applied; `A --> B <<use>> : x` keeps the link; role labels are placed correctly under `ArrowFontSize`; the label height at size 9 is right; ortho labels are not 2 px low. Each is traced to Java''s link-label TextBlock and Svek placement.'
+    - The failing BR arrow-font cases named in review d8242a8dc match, plus renamed held-out variants, and no pass is lost.
+    context: 'Shared-SVG round-9 review d8242a8dc (2026-11-06): class link-label residues that fail at every tree. They lie outside the round-9 link-label font fix, which was confirmed.'
+    origin: manual
+    discovered: 2026-11-06
+  T14.45:
+    name: The font name "Menlo" resolves to the Menlo face, as in Java
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`skinparam defaultFontName Menlo` (and every other font-name setting) measures and draws with Menlo, following JDK 21''s macOS font lookup. For "Wharf qr" at 14 pt, Java''s 67.4297 is reproduced.'
+    - BR `c9a_ns_menlo_*` controls match, plus renamed held-out probes, and no pass is lost.
+    context: 'Shared-SVG round-9 review d8242a8dc (2026-11-06): Rust maps only Courier and Monospaced to Menlo, so the font name "Menlo" is measured as Lucida Grande at every tree (Rust 58.2422 vs Java 67.4297). The round-9 face probe confirms Java resolves it to Menlo.'
+    origin: manual
+    discovered: 2026-11-06
   T14.5:
     name: Docs and release claims are driven by the no-oracle metric
     status: achieved
