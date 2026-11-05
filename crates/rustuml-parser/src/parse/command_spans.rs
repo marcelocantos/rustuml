@@ -383,16 +383,17 @@ fn description_registry() -> Vec<Entry> {
 /// `StateDiagramFactory#initCommandsList`.
 fn state_registry() -> Vec<Entry> {
     const CODE: &str = r"(?:[%pLN_.]+|[%g][^%g]+[%g])";
-    let mut registry = Vec::new();
     // CommandCreateState ... CommandConcurrentState: single-line commands
     // whose grammars start with `state`, a code followed by an arrow, ':' or
     // '{', '}' or a separator run; none accepts a modelled multiline start.
-    registry.push(note_on_entity_multi(CODE, true));
-    registry.push(note_on_entity_multi(CODE, false));
-    registry.push(note_on_link_multi());
-    registry.push(note_multi());
-    registry.push(create_map());
-    registry.push(create_json());
+    let mut registry = vec![
+        note_on_entity_multi(CODE, true),
+        note_on_entity_multi(CODE, false),
+        note_on_link_multi(),
+        note_multi(),
+        create_map(),
+        create_json(),
+    ];
     title_commands(&mut registry);
     common_commands2(&mut registry);
     registry

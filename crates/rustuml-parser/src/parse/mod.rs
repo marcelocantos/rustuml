@@ -254,7 +254,7 @@ pub(crate) fn url_builder_url(link: &str) -> Option<BuiltUrl> {
     ALTERNATIVES.iter().find_map(|(pattern, url, tooltip)| {
         let caps = pattern.captures(&folded)?;
         let group = |index: usize| caps.get(index).map(|m| link[m.range()].to_string());
-        let url = url.and_then(|index| group(index)).unwrap_or_default();
+        let url = url.and_then(group).unwrap_or_default();
         // Url#<init>: eventuallyRemoveStartingAndEndingDoubleQuote(url, "\"").
         let is_quote = |c: char| matches!(c, '"' | '\u{201c}' | '\u{201d}' | '\u{ab}' | '\u{bb}');
         let mut chars = url.chars();
