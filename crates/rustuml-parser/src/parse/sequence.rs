@@ -1494,6 +1494,12 @@ struct SeqParser {
     events: Vec<Event>,
     autonumber: Option<AutoNumber>,
     participant_ids: Vec<String>,
+    /// SequenceDiagram#participantsList in Java's order: indices into
+    /// `participants`, maintained by [`SeqParser::java_add_with_order`].
+    java_list: Vec<usize>,
+    /// Participant#getOrder per participant: the explicit `order N`, else 0
+    /// (SequenceDiagram#getOrCreateParticipant, CommandParticipant#executeArg).
+    java_order: Vec<i64>,
     /// Multiline note accumulator.
     note_buffer: Option<NoteBuffer>,
     /// Multiline ref accumulator.
@@ -1545,6 +1551,8 @@ impl SeqParser {
             events: Vec::new(),
             autonumber: None,
             participant_ids: Vec::new(),
+            java_list: Vec::new(),
+            java_order: Vec::new(),
             note_buffer: None,
             ref_buffer: None,
             last_message: None,
@@ -1564,16 +1572,37 @@ impl SeqParser {
     /// CommandParticipant#executeArg returns early for an existing CODE but
     /// first calls SequenceDiagram#putParticipantInLast: the participant is
     /// re-added with addWithOrder and takes the current box (englober).
-    fn report_put_participant_in_last(&self, code: &str, source_line: usize) {
+    /// SequenceDiagram#addWithOrder: insert before the first participant whose
+    /// order is strictly greater, else append.
+    fn java_add_with_order(&mut self, index: usize) {
+        let order = self.java_order[index];
+        let at = self
+            .java_list
+            .iter()
+            .position(|&other| order < self.java_order[other])
+            .unwrap_or(self.java_list.len());
+        self.java_list.insert(at, index);
+    }
+
+    fn java_create_participant(&mut self, order: i64) {
+        self.java_order.push(order);
+        self.java_add_with_order(self.java_order.len() - 1);
+    }
+
+    /// SequenceDiagram#putParticipantInLast removes the participant and
+    /// re-adds it with #addWithOrder into the current box. Warn only when
+    /// that changes its list position or its box.
+    fn report_put_participant_in_last(&mut self, code: &str, source_line: usize) {
         let Some(index) = self.participants.iter().position(|p| p.id == code) else {
             return;
         };
-        let key = |i: usize| (self.participants[i].order.unwrap_or(i), i);
-        let reorders = (0..self.participants.len()).any(|i| i != index && key(i) > key(index));
+        let before = self.java_list.clone();
+        self.java_list.retain(|&other| other != index);
+        self.java_add_with_order(index);
         let recorded_box = self.boxes.iter().position(|b| b.members.contains(&index));
-        if reorders || recorded_box != self.current_box {
+        if self.java_list != before || recorded_box != self.current_box {
             eprintln!(
-                "warning: sequence participant re-declaration moves {code:?} to last and into the current box in Java (SequenceDiagram#putParticipantInLast); this reorder is not modelled at line {source_line}"
+                "warning: sequence participant re-declaration moves {code:?} within Java's participant order or into the current box (SequenceDiagram#putParticipantInLast, #addWithOrder); this reorder is not modelled at line {source_line}"
             );
         }
     }
@@ -1604,6 +1633,7 @@ impl SeqParser {
         let id = id.trim().to_string();
         if !self.participant_ids.contains(&id) {
             self.participant_ids.push(id.clone());
+            self.java_create_participant(0);
             self.participants.push(Participant {
                 id: id.clone(),
                 label: inline_sequence_display(&id),
@@ -2025,6 +2055,11 @@ impl SeqParser {
                     );
                 }
                 self.participant_ids.push(id.clone());
+                self.java_create_participant(
+                    caps.name("order")
+                        .and_then(|m| m.as_str().parse::<i64>().ok())
+                        .unwrap_or(0),
+                );
                 let idx = self.participants.len();
                 self.participants.push(Participant {
                     id: id.clone(),
@@ -3195,6 +3230,34 @@ mod tests {
             None,
         );
         assert!(parse_sequence(&pre.lines).is_err());
+    }
+
+    // SequenceDiagram#addWithOrder / #putParticipantInLast list positions.
+    #[test]
+    fn redeclaration_follows_java_add_with_order() {
+        let mut parser = SeqParser::new();
+        for order in [10, 20] {
+            parser.java_create_participant(order);
+        }
+        // An explicit order keeps its place: no strictly greater order before it.
+        let before = parser.java_list.clone();
+        parser.java_list.retain(|&p| p != 0);
+        parser.java_add_with_order(0);
+        assert_eq!(parser.java_list, before);
+        // Default order 0 everywhere: the re-added participant moves last.
+        let mut parser = SeqParser::new();
+        for _ in 0..2 {
+            parser.java_create_participant(0);
+        }
+        parser.java_list.retain(|&p| p != 0);
+        parser.java_add_with_order(0);
+        assert_eq!(parser.java_list, [1, 0]);
+        // A lower explicit order is inserted before every greater one.
+        let mut parser = SeqParser::new();
+        for order in [30, 20, -5] {
+            parser.java_create_participant(order);
+        }
+        assert_eq!(parser.java_list, [2, 1, 0]);
     }
 
     // Url#getTooltip: the {tooltip} of [[url{tooltip} label]] is the anchor
