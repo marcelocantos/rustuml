@@ -28,6 +28,9 @@ pub struct PreprocessOutput {
     /// SVG resources hash this expanded source, rather than the raw input,
     /// when deriving deterministic filter and gradient identifiers.
     pub uml_source: String,
+    /// A backslash continuation swallowed the block's end directive, so
+    /// Java's `BlockUmlBuilder` builds no diagram from this input.
+    pub swallowed_end_directive: bool,
 }
 
 const SOURCE_LINE_PREFIX: &str = "\x1ERSL:";
@@ -44,7 +47,7 @@ pub(crate) fn split_source_line_marker(line: &str) -> Option<(usize, &str)> {
     Some((source_line, line))
 }
 
-fn strip_source_line_markers(lines: Vec<String>) -> Vec<String> {
+pub(crate) fn strip_source_line_markers(lines: Vec<String>) -> Vec<String> {
     lines
         .into_iter()
         .map(|line| {
@@ -95,8 +98,18 @@ fn preprocess_full_inner(
     let mut ctx = PreprocessContext::new(base_dir, mark_function_body_source_lines);
     ctx.preserve_teoz_pragma = preserve_teoz_pragma;
     let input_lines = source_identity_input_lines(input);
-    let mut lines = ctx.process_lines(&input_lines);
-    let expanded_theme_source = expanded_theme_seed_source(input, &ctx.theme_seed_expansions);
+    // BlockUmlBuilder reads the block through ReadFilterMergeLines before TIM
+    // (and so before every TIM comment stage) runs.
+    let merged = merge_ending_backslash_lines(&input_lines);
+    let mut lines = ctx.process_merged_lines(&merged.lines);
+    if ctx.start_checks_ending_backslash {
+        lines = collapse_post_tim_ending_backslashes(lines);
+    }
+    let expanded_theme_source = expanded_theme_seed_source(
+        input,
+        &ctx.theme_seed_expansions,
+        ctx.start_checks_ending_backslash,
+    );
     if let Some(seed_source) = &expanded_theme_source {
         ctx.theme_tail.push(format!(
             "skinparam __svgIdSeed {}",
@@ -121,14 +134,22 @@ fn preprocess_full_inner(
         let mut identity_ctx = PreprocessContext::new(identity_base_dir, false);
         identity_ctx.source_identity_mode = true;
         identity_ctx.preserve_teoz_pragma = preserve_teoz_pragma;
-        let input_lines = source_identity_input_lines(input);
-        let identity_lines = strip_source_line_markers(identity_ctx.process_lines(&input_lines));
-        uml_source_string(&identity_lines, preserve_teoz_pragma)
+        let identity_lines =
+            strip_source_line_markers(identity_ctx.process_merged_lines(&merged.lines));
+        uml_source_string(&identity_lines, identity_ctx.start_checks_ending_backslash)
     });
-    PreprocessOutput { lines, uml_source }
+    PreprocessOutput {
+        lines,
+        uml_source,
+        swallowed_end_directive: merged.swallowed_end,
+    }
 }
 
-fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) -> Option<String> {
+fn expanded_theme_seed_source(
+    input: &str,
+    expansions: &[ThemeSeedExpansion],
+    collapse_ending_backslashes: bool,
+) -> Option<String> {
     if expansions.is_empty() {
         return None;
     }
@@ -138,12 +159,17 @@ fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) ->
     // `getPlainString("\n")`. Theme includes occupy the original `!theme`
     // position in that source; parser-oriented flattening and `theme_tail`
     // relocation happen only after this representation is captured.
-    let mut source = String::new();
+    // The TIM input is BlockUmlBuilder's ReadFilterMergeLines output; the
+    // post-TIM list is then UmlSource#loadInternal's (see uml_source_string).
+    let raw_lines: Vec<&str> = input.lines().collect();
+    let merged = merge_ending_backslash_lines(&raw_lines);
+    let mut source_lines: Vec<String> = Vec::new();
     let mut in_block = false;
     let mut skip_initial_empty_lines = false;
     let mut in_long_comment = false;
-    for (index, line) in input.lines().enumerate() {
-        let source_line = index + 1;
+    for merged_line in &merged.lines {
+        let source_line = merged_line.source_line;
+        let line: &str = &merged_line.text;
         let trimmed = line.trim_start();
         if !in_block {
             if !trimmed.starts_with("@start") {
@@ -164,8 +190,7 @@ fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) ->
             for expanded in &expansion.lines {
                 let expanded =
                     split_source_line_marker(expanded).map_or(expanded.as_str(), |(_, text)| text);
-                source.push_str(expanded);
-                source.push('\n');
+                source_lines.push(expanded.to_string());
             }
         } else {
             // The TIM result list (BlockUml#data) carries
@@ -188,18 +213,20 @@ fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) ->
                 !trimmed.starts_with('\'')
             };
             if plain {
-                source.push_str(&remove_inner_comment(line));
+                source_lines.push(remove_inner_comment(line).into_owned());
             } else {
-                source.push_str(line);
+                source_lines.push(line.to_string());
             }
-            source.push('\n');
         }
 
         if trimmed.starts_with("@end") {
             break;
         }
     }
-    Some(source)
+    Some(uml_source_string(
+        &source_lines,
+        collapse_ending_backslashes,
+    ))
 }
 
 /// Mirror the source reader that runs before Java's TIM expansion.
@@ -583,6 +610,10 @@ struct PreprocessContext {
     /// Emit Java's post-TIM `UmlSource` stream instead of parser line-number
     /// placeholders. Used only by the deterministic SVG identity pass.
     source_identity_mode: bool,
+    /// The block starts with `@startuml`: `DiagramType#findStartTypes`
+    /// contains SEQUENCE, so `PSystemBuilder#createPSystem` builds the
+    /// `UmlSource` with `checkEndingBackslash` (post-TIM join).
+    start_checks_ending_backslash: bool,
 }
 
 struct ThemeSeedExpansion {
@@ -676,6 +707,7 @@ impl PreprocessContext {
             mark_function_body_source_lines,
             preserve_teoz_pragma: false,
             source_identity_mode: false,
+            start_checks_ending_backslash: false,
         }
     }
 
@@ -788,6 +820,26 @@ impl PreprocessContext {
         self.process_lines(&lines)
     }
 
+    /// Process the top-level block input after ReadFilterMergeLines. Each
+    /// line keeps the number of its first piece; once a merge absorbs later
+    /// lines, the output index no longer equals the source line, so following
+    /// lines carry explicit origins (as after an include).
+    fn process_merged_lines(&mut self, lines: &[MergedInputLine<'_>]) -> Vec<String> {
+        let mut output = Vec::new();
+
+        let saved_source_line = self.current_source_line;
+        for line in lines {
+            self.current_source_line = line.source_line;
+            self.process_one_line(&line.text, &mut output);
+            if line.consumed > 0 {
+                self.mark_source_lines = true;
+            }
+        }
+        self.current_source_line = saved_source_line;
+
+        output
+    }
+
     fn process_lines(&mut self, lines: &[&str]) -> Vec<String> {
         let mut output = Vec::new();
 
@@ -889,6 +941,8 @@ impl PreprocessContext {
                     self.seen_start_tag = true;
                     self.in_diagram_block = true;
                     self.in_ebnf_block = trimmed.starts_with("@startebnf");
+                    self.start_checks_ending_backslash = start_directive_type(trimmed)
+                        .is_some_and(|kind| start_type_is(kind, "uml"));
                     if self.source_identity_mode {
                         output.push(line_no_comment);
                     }
@@ -3519,6 +3573,201 @@ fn remove_inner_comment(line: &str) -> Cow<'_, str> {
     Cow::Borrowed(line)
 }
 
+/// `StringUtils#endsWithBackslash`: a final `\` continues the line, an
+/// escaped final `\\` does not.
+fn ends_with_backslash(s: &str) -> bool {
+    s.ends_with('\\') && !s.ends_with("\\\\")
+}
+
+/// `Character#isWhitespace`, which excludes the no-break spaces Rust's
+/// `char::is_whitespace` includes.
+fn java_is_whitespace(c: char) -> bool {
+    c.is_whitespace() && !matches!(c, '\u{00A0}' | '\u{2007}' | '\u{202F}')
+}
+
+/// The text after a start or end directive's `@`/`\` marker: Java's
+/// `StartUtils#startsWithDirectiveKeyword` and `DiagramType#findStartTypes`
+/// skip leading `Character#isWhitespace` and then require `@` or `\`.
+fn directive_tail(line: &str) -> Option<&str> {
+    let rest = line.trim_start_matches(java_is_whitespace);
+    rest.strip_prefix('@').or_else(|| rest.strip_prefix('\\'))
+}
+
+/// `StartUtils#isEndDirective`: case-sensitive `end` after the marker.
+fn is_end_directive(line: &str) -> bool {
+    directive_tail(line).is_some_and(|tail| tail.starts_with("end"))
+}
+
+/// The diagram type text after `start` (`DiagramType#findStartTypes` matches
+/// `start` and the type name with `regionMatches(true, ...)`).
+fn start_directive_type(line: &str) -> Option<&str> {
+    let tail = directive_tail(line)?;
+    let keyword = tail.get(..5)?;
+    keyword
+        .eq_ignore_ascii_case("start")
+        .then(|| &tail[5..])
+        .filter(|kind| !kind.is_empty())
+}
+
+fn start_type_is(kind: &str, name: &str) -> bool {
+    kind.get(..name.len())
+        .is_some_and(|prefix| prefix.eq_ignore_ascii_case(name))
+}
+
+/// One line of the block input after `preproc2.ReadFilterMergeLines`.
+struct MergedInputLine<'a> {
+    /// 1-based input position of the first piece:
+    /// `StringLocated#mergeEndBackslash` keeps the continued line's location.
+    source_line: usize,
+    text: Cow<'a, str>,
+    /// How many later input lines (continuations and the comment lines
+    /// `ReadFilterQuoteComment` skipped) this line absorbed.
+    consumed: usize,
+}
+
+struct MergedInput<'a> {
+    lines: Vec<MergedInputLine<'a>>,
+    /// The merge swallowed the block's end directive (the input's own, or
+    /// the one `Pipe#readSingleDiagram` appends when the input has none), so
+    /// `BlockUmlBuilder` creates no block for it.
+    swallowed_end: bool,
+}
+
+/// Port of `preproc2.ReadFilterMergeLines`, which `BlockUmlBuilder` applies
+/// (through `preproc2.Preprocessor`) to the raw input before any block
+/// splitting or TIM stage.
+///
+/// While a line `endsWithBackslash` and the active block is not ditaa, the
+/// next line is read through `ReadFilterQuoteComment` (comment lines skipped,
+/// `removeInnerComment` applied) and appended after dropping the backslash.
+/// The line that is continued is never comment-filtered here; TIM's own
+/// comment stages see the merged text later. Start and end directives are
+/// recognised only on lines read as a new result, never on merged-in text.
+fn merge_ending_backslash_lines<'a>(input: &[&'a str]) -> MergedInput<'a> {
+    // Pipe#readSingleDiagram (the -pipe reader that feeds BlockUmlBuilder)
+    // appends `@end<type>` when the input has no end line; a continued last
+    // line swallows that one as well.
+    const APPENDED_END: &str = "@enduml";
+    let appended_end = !input.iter().any(|line| is_end_directive(line));
+    let mut raw: Vec<&'a str> = input.to_vec();
+    if appended_end {
+        raw.push(APPENDED_END);
+    }
+
+    let mut lines = Vec::with_capacity(raw.len());
+    let mut manage_ending_backslash = true;
+    let mut next_index = 0;
+    while next_index < raw.len() {
+        let first_index = next_index;
+        let result = raw[first_index];
+        next_index += 1;
+        if let Some(kind) = start_directive_type(java_trim(result))
+            && start_type_is(kind, "ditaa")
+        {
+            manage_ending_backslash = false;
+        }
+        if is_end_directive(result) {
+            manage_ending_backslash = true;
+        }
+
+        let mut text = Cow::Borrowed(result);
+        while manage_ending_backslash && ends_with_backslash(&text) {
+            // ReadFilterQuoteComment#readLine; `longComment` is local to
+            // each call.
+            let mut long_comment = false;
+            let mut next = None;
+            while next_index < raw.len() {
+                let line = raw[next_index];
+                next_index += 1;
+                // `replace('\t', ' ').trim()`: a tab is <= U+0020.
+                let trim = java_trim(line);
+                if long_comment {
+                    if trim.ends_with("'/") {
+                        long_comment = false;
+                    }
+                    continue;
+                }
+                if trim.starts_with('\'') {
+                    continue;
+                }
+                if trim.starts_with("/'") && trim.ends_with("'/") {
+                    continue;
+                }
+                if trim.starts_with("/'") && !trim.contains("'/") {
+                    long_comment = true;
+                    continue;
+                }
+                next = Some(remove_inner_comment(line));
+                break;
+            }
+            let Some(next) = next else {
+                break;
+            };
+            let mut merged = text.into_owned();
+            merged.pop();
+            merged.push_str(&next);
+            text = Cow::Owned(merged);
+        }
+
+        lines.push(MergedInputLine {
+            source_line: first_index + 1,
+            text,
+            consumed: next_index - first_index - 1,
+        });
+    }
+
+    let swallowed_end = !lines.iter().any(|line| is_end_directive(&line.text));
+    if appended_end
+        && lines
+            .last()
+            .is_some_and(|line| line.consumed == 0 && line.source_line == raw.len())
+    {
+        lines.pop();
+    }
+    MergedInput {
+        lines,
+        swallowed_end,
+    }
+}
+
+/// `UmlSource#loadInternal` with `checkEndingBackslash` (true for
+/// `@startuml`, whose `DiagramType#findStartTypes` contains SEQUENCE) on the
+/// parser stream: after TIM, a line that `endsWithBackslash` is joined with
+/// the following ones, and the joined line takes the last piece's location.
+/// A pending tail at the end of the list is dropped.
+fn collapse_post_tim_ending_backslashes(lines: Vec<String>) -> Vec<String> {
+    if !lines
+        .iter()
+        .any(|line| ends_with_backslash(split_source_line_marker(line).map_or(line, |(_, t)| t)))
+    {
+        return lines;
+    }
+    let mut result = Vec::with_capacity(lines.len());
+    let mut pending: Option<String> = None;
+    // Once an entry is folded into a later one, output positions no longer
+    // equal source lines; later content lines carry explicit markers.
+    let mut shifted = false;
+    for (index, line) in lines.into_iter().enumerate() {
+        let (source_line, text) = split_source_line_marker(&line).unwrap_or((index + 1, &line));
+        if ends_with_backslash(text) {
+            pending
+                .get_or_insert_with(String::new)
+                .push_str(&text[..text.len() - 1]);
+            shifted = true;
+            continue;
+        }
+        if let Some(mut joined) = pending.take() {
+            joined.push_str(text);
+            result.push(source_line_marker(source_line, &joined));
+        } else if shifted && !text.is_empty() && split_source_line_marker(&line).is_none() {
+            result.push(source_line_marker(source_line, text));
+        } else {
+            result.push(line);
+        }
+    }
+    result
+}
+
 const SPECIAL_COMMENT_OPEN: &str = "/'''";
 const SPECIAL_COMMENT_CLOSE: &str = "'''/";
 
@@ -4439,6 +4688,125 @@ $record(SaffronArchive)\n\
             pp(&format!("@startuml\n{inactive}\n@enduml")),
             vec!["A -> B "]
         );
+    }
+
+    fn merged(input: &str) -> (Vec<(usize, String, usize)>, bool) {
+        let raw: Vec<&str> = input.lines().collect();
+        let merged = merge_ending_backslash_lines(&raw);
+        (
+            merged
+                .lines
+                .into_iter()
+                .map(|line| (line.source_line, line.text.into_owned(), line.consumed))
+                .collect(),
+            merged.swallowed_end,
+        )
+    }
+
+    #[test]
+    fn read_filter_merge_lines_joins_at_the_first_line() {
+        // ReadFilterMergeLines: drop the final backslash, append the next
+        // line, keep the first line's location; several continuations chain.
+        let (lines, swallowed) = merged("@startuml\nA -> B : a \\\nb\\\n  c\nB -> A\n@enduml");
+        assert!(!swallowed);
+        assert_eq!(
+            lines,
+            vec![
+                (1, "@startuml".to_string(), 0),
+                (2, "A -> B : a b  c".to_string(), 2),
+                (5, "B -> A".to_string(), 0),
+                (6, "@enduml".to_string(), 0),
+            ]
+        );
+    }
+
+    #[test]
+    fn continued_lines_pass_read_filter_quote_comment() {
+        // The continuation is read through ReadFilterQuoteComment: comment
+        // lines are skipped and removeInnerComment applies; the continued
+        // line itself is not filtered.
+        let (lines, _) = merged(
+            "@startuml\n/' c '/ \\\nA -> B : hi\nA -> B : one \\\n/' c '/ two\nA -> B : x \\\n' skipped\n/' long\nstill '/\n  /' w '/ y\n@enduml",
+        );
+        let texts: Vec<_> = lines.iter().map(|(n, t, _)| (*n, t.as_str())).collect();
+        assert_eq!(
+            texts,
+            vec![
+                (1, "@startuml"),
+                (2, "/' c '/ A -> B : hi"),
+                (4, "A -> B : one  two"),
+                (6, "A -> B : x  y"),
+                (11, "@enduml"),
+            ]
+        );
+    }
+
+    #[test]
+    fn escaped_backslash_and_ditaa_blocks_are_not_continued() {
+        let (lines, _) = merged("@startuml\nA -> B : a\\\\\nB -> A\n@enduml");
+        assert_eq!(lines[1].1, "A -> B : a\\\\");
+        let (lines, _) = merged("@startditaa\n/--\\\n|  |\n@endditaa\nx \\\ny");
+        let texts: Vec<_> = lines.iter().map(|(_, t, _)| t.as_str()).collect();
+        assert_eq!(
+            texts,
+            vec!["@startditaa", "/--\\", "|  |", "@endditaa", "x y"]
+        );
+    }
+
+    #[test]
+    fn a_continued_last_line_swallows_the_end_directive() {
+        // BlockUmlBuilder then finds no end; Pipe#readSingleDiagram appends
+        // `@end…` to input without one, and that is swallowed too.
+        assert!(merged("@startuml\nA -> B : x \\\n@enduml").1);
+        assert!(merged("@startuml\nA -> B : x \\").1);
+        let (lines, swallowed) = merged("@startuml\nA -> B : x");
+        assert!(!swallowed);
+        assert_eq!(lines.len(), 2);
+    }
+
+    #[test]
+    fn continuation_joins_before_tim_in_macro_and_procedure_bodies() {
+        let input = "@startuml\n!procedure $p($a)\nA -> B : $a \\\nend\n!endprocedure\n!define D(x) B -> A : x \\\nback\n$p(go)\nD(z)\nA -> C : after\n@enduml";
+        let lines = pp(input);
+        assert_eq!(
+            lines
+                .iter()
+                .map(|l| split_source_line_marker(l).map_or(l.as_str(), |(_, t)| t))
+                .collect::<Vec<_>>(),
+            vec!["A -> B : go end", "B -> A : z back", "A -> C : after"]
+        );
+        let parse_lines = preprocess_full_for_parse(input, None).lines;
+        let after = parse_lines
+            .iter()
+            .find_map(|l| split_source_line_marker(l).filter(|(_, t)| *t == "A -> C : after"))
+            .expect("following line keeps its source line");
+        assert_eq!(after.0, 9);
+    }
+
+    #[test]
+    fn post_tim_join_follows_uml_source_for_startuml_only() {
+        let dir = std::env::temp_dir().join("rustuml_test_post_tim_continuation");
+        let _ = std::fs::create_dir_all(&dir);
+        std::fs::write(dir.join("inc.iuml"), "A -> B : one \\\ntwo\n").unwrap();
+        let out = preprocess_full_for_parse(
+            "@startuml\n!include inc.iuml\nB -> A : back\n@enduml",
+            Some(dir.clone()),
+        );
+        let texts: Vec<_> = out
+            .lines
+            .iter()
+            .map(|l| split_source_line_marker(l).map_or(l.as_str(), |(_, t)| t))
+            .filter(|t| !t.is_empty())
+            .collect();
+        assert_eq!(texts, vec!["A -> B : one two", "B -> A : back"]);
+        assert!(out.uml_source.contains("A -> B : one two\n"));
+
+        let out = preprocess_full_for_parse(
+            "@startmindmap\n!include inc.iuml\n@endmindmap",
+            Some(dir.clone()),
+        );
+        assert!(out.lines.iter().any(|l| l.ends_with("one \\")));
+        let _ = std::fs::remove_dir_all(&dir);
     }
 
     #[test]

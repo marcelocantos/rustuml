@@ -1236,6 +1236,15 @@ pub fn parse_with_base(
         };
         style_program = style::extract_style_program(&mut preprocess_out.lines);
     }
+    // BlockUmlBuilder recognises start and end directives on the merged
+    // lines: when a continued line swallows the end, Java builds no block and
+    // SourceStringReader#noValidStartFound reports that instead of a diagram.
+    if preprocess_out.swallowed_end_directive {
+        return Err(ParseError {
+            line: 1,
+            message: "No valid @start/@end found, please check the version".to_string(),
+        });
+    }
     let lines = preprocess_out.lines;
     let uml_source = preprocess_out.uml_source;
 
@@ -1263,6 +1272,28 @@ pub fn parse_with_base(
         sprite::consume_complete_commands(&lines)
     } else {
         (lines, HashMap::new())
+    };
+    // These parsers read plain text and never source-line markers, which TIM
+    // adds once a continuation, include or loop moves later lines away from
+    // their output position.
+    let lines = if matches!(
+        typ,
+        "json"
+            | "yaml"
+            | "salt"
+            | "nwdiag"
+            | "regex"
+            | "ditaa"
+            | "dot"
+            | "board"
+            | "ebnf"
+            | "git"
+            | "math"
+            | "latex"
+    ) {
+        preprocess::strip_source_line_markers(lines)
+    } else {
+        lines
     };
 
     let mut diagram = match typ {
