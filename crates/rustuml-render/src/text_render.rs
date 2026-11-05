@@ -2370,4 +2370,110 @@ mod tests {
             );
         }
     }
+
+    /// The face routing of every width consumer for each italic and
+    /// bold-italic slot of the families whose faces differ by style (Arial,
+    /// Helvetica, Verdana, Menlo, Courier New). Through the public consumer
+    /// path (`measure_with_family_and_face`, as layout and emission call it)
+    /// a string measures as it does in `ChainFace::for_style`'s face (JDK
+    /// `FontFamily.getFont`), by the per-glyph rule of `chain_text_width`
+    /// (own table, else the chain: mapped, `.notdef` or hidden) or the
+    /// monospaced cell rule. The strings that tell the italic face from the
+    /// face a dropped italic would pick are searched in the stored coverage
+    /// (each scalar from U+00A0 alone, after `a` and after a Hebrew base, so
+    /// both JDK paths are reached), not listed by hand. A slot with no such
+    /// string fails unless it is in `EQUIVALENT`: a pair whose faces give
+    /// every candidate the same width, so no output can tell the routes
+    /// apart; the list fails when stale in either direction.
+    #[test]
+    fn every_italic_slot_measures_in_its_own_face() {
+        use crate::font_chain::{ChainFace, ChainFamily, ChainGlyph};
+        const SIZE: f64 = 14.0;
+        const MAX_PROBES: usize = 8;
+        const HEBREW_ALEF: char = '\u{05D0}';
+        // Menlo Bold Italic and Menlo Bold hide the same scalars in every
+        // context (monospaced width counts cells only).
+        const EQUIVALENT: [(&str, bool); 1] = [("Monospaced", true)];
+        // (family name as consumers pass it, chain family, own advance table)
+        let families: [(&str, ChainFamily, Option<fn(char) -> bool>); 5] = [
+            (
+                "Arial",
+                ChainFamily::Arial,
+                Some(|c| (' '..='~').contains(&c)),
+            ),
+            (
+                "Helvetica",
+                ChainFamily::Helvetica,
+                Some(|c| helvetica_char_units(c).is_some()),
+            ),
+            (
+                "Verdana",
+                ChainFamily::Verdana,
+                Some(|c| (' '..='~').contains(&c)),
+            ),
+            ("Monospaced", ChainFamily::Menlo, None),
+            ("Courier New", ChainFamily::CourierNew, None),
+        ];
+        let candidates: Vec<String> = (0xA0_u32..=0x2_FFFF)
+            .filter_map(char::from_u32)
+            .flat_map(|c| [format!("{c}"), format!("a{c}"), format!("{HEBREW_ALEF}{c}")])
+            .collect();
+        for (name, family, own) in &families {
+            for bold in [false, true] {
+                let public =
+                    |text: &str| measure_with_family_and_face(text, SIZE, bold, true, name);
+                let cell = public("a");
+                // Width of `text` in `face`, per Java token of the string.
+                let in_face = |face: ChainFace, text: &str| -> f64 {
+                    let complexity = face.complexity_per_token(text);
+                    text.chars()
+                        .zip(complexity)
+                        .map(|(c, complexity)| {
+                            let glyph = face.resolve(c, complexity);
+                            match own {
+                                None => f64::from(u8::from(glyph != ChainGlyph::Hidden)) * cell,
+                                Some(own) if own(c) => public(c.encode_utf8(&mut [0_u8; 4])),
+                                Some(_) => match glyph {
+                                    ChainGlyph::Missing => face.notdef_per_em() * SIZE,
+                                    ChainGlyph::Hidden => 0.0,
+                                    ChainGlyph::Mapped => sans_text_width(
+                                        &java_utf16::escape(c.encode_utf8(&mut [0_u8; 4])),
+                                        SIZE,
+                                        bold,
+                                    ),
+                                },
+                            }
+                        })
+                        .sum()
+                };
+                let face = ChainFace::for_style(*family, bold, true);
+                let dropped = ChainFace::for_style(*family, bold, false);
+                let probes: Vec<&String> = candidates
+                    .iter()
+                    .filter(|text| (in_face(face, text) - in_face(dropped, text)).abs() > 1e-9)
+                    .take(MAX_PROBES)
+                    .collect();
+                assert_eq!(
+                    probes.is_empty(),
+                    EQUIVALENT.contains(&(*name, bold)),
+                    "{name} bold={bold}: {face:?} vs {dropped:?} probes {probes:?}; update EQUIVALENT only if the faces' widths agree on every candidate"
+                );
+                if probes.is_empty() {
+                    assert!(
+                        face != dropped,
+                        "{name} bold={bold}: for_style ignores italic"
+                    );
+                }
+                for text in probes {
+                    assert!(
+                        (public(text) - in_face(face, text)).abs() < 1e-9,
+                        "{name} bold={bold} italic {text:?}: measured {}, {face:?} gives {}, {dropped:?} gives {}",
+                        public(text),
+                        in_face(face, text),
+                        in_face(dropped, text),
+                    );
+                }
+            }
+        }
+    }
 }

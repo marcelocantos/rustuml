@@ -15,6 +15,9 @@ output (stored with its own SHA256SUMS): per face file "<own.tsv>" (default: the
 ".own.tsv") gives the runs the face's own cmap maps (JDK slot 0), the cross_kern, trak and STAT facts, the
 GSUB ScriptList tags and the GDEF/GSUB/GPOS table lengths (CTFontCopyTable, the JDK path) that
 OT::GDEF::is_blocklisted keys on.
+
+The exact command that regenerates the committed table from the current reference-host extraction is in
+tools/font-chain-reference/monkeyman-round9/README.md ("Regenerating font_chain_coverage.rs").
 """
 import hashlib, os, sys
 
