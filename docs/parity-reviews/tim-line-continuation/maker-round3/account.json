@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "mechanism": "tim-line-continuation",
+  "target": "T14.22",
+  "round": 3,
+  "packet_context": "Round 3 of the TIM line-continuation packet, which carries the whole sprite/participant line. Branch maker/tim-continuation-round3-claude from the round-2 review c07cad778 (maker tip e3aa1c6b4, code f2d12d0ef), merged with parity-recovery-2026-11-03 adf56ce53 (merge a5720e095; bullseye.yaml merged cleanly; code unchanged, so the merged base's code is f2d12d0ef). This account is committed before any code change.",
+  "status": "preimplementation account of record for round 3; independent review required",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "obligations": {
+    "1_out_of_band_placeholder": "Blocking. f2d12d0ef marks TIM-consumed top-level lines with the in-band string \"\\x1ERSP\" (DIRECTIVE_PLACEHOLDER), so a user line equal to it (%chr(30)RSP, raw U+001E RSP) is silently deleted. BY cr2_seq_chr30_rsp_line and cr2_seq_raw_rs_rsp_line must be rejected again (Java exit 200, as at b0fb43c3e); a note body containing that text keeps it; no pass is lost.",
+    "2_two_line_rule": "Blocking. When the post-TIM join absorbs the end line and only two lines remain, Java shows the Welcome page. BY cr2_seq_depth2_tail_then_end, cr2_seq_tail_then_indented_end, cr2_seq_chr92_tail_then_end (Java Welcome, b0fb43c3e Welcome, f2d12d0ef message) must give Welcome again, and cr2_seq_tail_then_backslash_end must match Java (Welcome).",
+    "3_wrapped_include": "Merge continuations inside a wrapped include file (one with its own start/end) before TIM, as DiagramDetector does, if bounded; otherwise record it as residual."
+  },
+  "java_trace": {
+    "tim_result_list": "Unchanged from round 2: BlockUml hands the block (start and end lines included) to TIM; the TIM result list holds the start line, every PLAIN line (blank lines included), included lines and the end line. Comment and directive lines produce no entry. Rust keeps a stand-in entry for each such consumed line only to keep its parser stream aligned with source lines; that stand-in is not a Java line and carries no text.",
+    "uml_source_load_internal": "UmlSource#loadInternal (core/UmlSource.java:118-134) with checkEndingBackslash (PSystemBuilder.java:210-212, findStartTypes(first line).contains(SEQUENCE)): a line that endsWithBackslash appends its text minus the backslash to pending; the next line that does not appends its whole text and is added with that line's location. A pending tail with no following line is never added. getTotalLineCount() (UmlSource.java:198-200) is source.size() of that joined list.",
+    "welcome_factory": "PSystemBuilder#createPSystem (PSystemBuilder.java:226-242) tries each factory whose getDiagramType is in the source's diagram types; PSystemWelcomeFactory is registered first (PSystemBuilder.java:129) and its getDiagramType is SEQUENCE ('a hack for @startuml'). PSystemWelcomeFactory#createSystem returns PSystemWelcome when source.getTotalLineCount() == 2, before any diagram command runs, so the Welcome page wins even when the remaining line would be a syntax error. PSystemCommandFactory#finalizeDiagram's own getTotalLineCount() == 2 -> buildEmptyError (PSystemCommandFactory.java:123) is the same rule reached later. Two-line sources arise from the join in two ways: a pending tail absorbs the end line ('tail @enduml'), or the end line itself ends with a backslash and, being the last line, stays pending and is dropped.",
+    "end_directive": "StartUtils#isEndDirective (StartUtils.java: startsWithDirectiveKeyword(s, 0, \"end\")): Character#isWhitespace is skipped, then '@' or '\\\\' and a case-sensitive 'end'. BlockUmlBuilder#<init> (BlockUmlBuilder.java:121-128) closes the block at the first merged line for which it holds, so a '\\\\enduml' line ends the block and is the last line of BlockUml's data; Pipe's appended '@enduml' after it is outside the block.",
+    "wrapped_include": "TContext#executeInclude (tim/TContext.java:794-870), local file branch: reader = DiagramDetector.extractFromFile(f2) (preproc/DiagramDetector.java:71-79). That reads the file through uncommentAndMerge (lines 96-99: ReadFilterMergeLines, then UncommentReadLine) and, when containsStartDiagram finds a line for which StartUtils#isStartDirective holds (lines 101-113), returns a DiagramExtractor (preproc/DiagramExtractor.java) over a fresh merged+uncommented reader: lines up to and including the first start directive are skipped (bloc 0, uid null for file includes), and reading stops before the first end directive. Only when the file has no start directive is it read raw with ReadLineReader (no merge). UncommentReadLine#readLine: headerToRemove is set from StartUtils#beforeStartUml on each line (the text before a [@\\\\]start that is preceded only by non-word characters outside <...>); a line that is a prefix of headerToRemove becomes empty, and a line starting with it loses it. The stdlib branch (PreprocessorUtils#getReaderStdlibInclude -> DiagramDetector#extractFromBytes) and the URL branch use the same extractor."
+  },
+  "java_locations": [
+    "net.sourceforge.plantuml.core.UmlSource#loadInternal, #getTotalLineCount (UmlSource.java:118-134, 198-200)",
+    "net.sourceforge.plantuml.PSystemBuilder#createPSystem (PSystemBuilder.java:203-255)",
+    "net.sourceforge.plantuml.eggs.PSystemWelcomeFactory#createSystem, #getDiagramType (registered first, PSystemBuilder.java:129)",
+    "net.sourceforge.plantuml.command.PSystemCommandFactory#finalizeDiagram (PSystemCommandFactory.java:113-132)",
+    "net.sourceforge.plantuml.utils.StartUtils#isEndDirective, #isStartDirective, #beforeStartUml, #startsWithDirectiveKeyword",
+    "net.sourceforge.plantuml.BlockUmlBuilder#<init> (BlockUmlBuilder.java:88-135)",
+    "net.sourceforge.plantuml.tim.TContext#executeInclude (TContext.java:794-870)",
+    "net.sourceforge.plantuml.preproc.DiagramDetector#extractFromFile, #uncommentAndMerge, #containsStartDiagram (DiagramDetector.java:71-113)",
+    "net.sourceforge.plantuml.preproc.DiagramExtractor#<init>, #readLine",
+    "net.sourceforge.plantuml.preproc.UncommentReadLine#readLine",
+    "net.sourceforge.plantuml.preproc2.ReadFilterMergeLines#readLine"
+  ],
+  "causal_divergence": [
+    "The TIM output stream is Vec<String>, so the round-2 stand-in for a consumed line had to be a reachable string value; every output line equal to it is treated as a stand-in (cleared, passed over by the join).",
+    "collapse_post_tim_ending_backslashes knows when a pending tail absorbs the end line but nothing counts the joined list, so a two-line source still renders its one remaining line. The end line itself is never part of the joined list, so an end line ending with a backslash is not dropped as Java drops it.",
+    "process_one_line ends the top-level block only on a trimmed '@end' prefix, so a '\\\\enduml' line is diagram text and Pipe's appended '@enduml' becomes the block's end.",
+    "try_include processes a local file's raw lines in every case: start/end lines are skipped one by one at include depth, lines before the start and after the end are kept, and no continuation is merged."
+  ],
+  "planned_change": [
+    "1: Give the TIM output stream a typed element, TimLine { Text(String), Consumed }. push_directive_placeholder and the post-procedure padding push Consumed; every other push is Text. Nested outputs (includes, !includesub, themes) carry the type through. collapse_post_tim_ending_backslashes passes over Consumed and is the only place the stream becomes Vec<String> again (Consumed -> empty line, the b0fb43c3e representation). No string value is special.",
+    "2: Run the join over the whole Java list (stand-ins excluded, the block's end line included as the last entry) and count it with the start line. When the count is 2 and the join changed the list (a tail absorbed a line or the end line was left pending), PreprocessOutput reports Java's two-line source, and parse_with_base returns the empty @startuml diagram (the WelcomeFactory result) before any family parser runs, after the existing no-block check. The end line is recognised with StartUtils#isEndDirective at the top level in addition to the existing '@end' test.",
+    "3: In try_include's local-file branch, port DiagramDetector#extractFromFile: merge the file with read_filter_merge_lines, apply UncommentReadLine's header removal, and if a merged line is a start directive, process only the lines after the first start and before the first end, each with its first piece's file line. Otherwise the file is processed raw as now. Stdlib and URL includes are not changed in this round (declared residual)."
+  ],
+  "out_of_scope": "T14.21 (r2_component_include_tail_then_variable misdispatch, for owner sign-off), T14.26 (cr2_seq_pre_start_backslash_text, prepend, pre-start discard, @@@format), T14.58 (nested @start), T14.59 (char-boundary panic at preprocess/mod.rs:2672, not touched by this change), T14.60 (@startUML/@startDitaa, NBSP-only), T14.53 (included-line locations), the tail-before-!theme residue. Two-line sources that arise without a join are left to the existing empty-diagram path: Rust's stream carries Rust-only text lines (the '!theme' metadata line, the teoz pragma) that would miscount them.",
+  "perturbation_axes": [
+    "stand-in collision: %chr(30)RSP and raw U+001E RSP as a top-level line, inside a note, emitted by a procedure, inside an included file, after an included tail",
+    "two-line rule: tail absorbs the end (include, %chr(92), depth 2, indented end, \\\\enduml), end line ending with a backslash after one line, joined line that would be a syntax error (Welcome still wins), class link tail absorbing the end, three-line controls",
+    "wrapped include: tail inside the wrapped file before its own end, then the end or a message; content before the start and after the end of the wrapped file; indented start; a comment-prefixed start; an unwrapped control"
+  ],
+  "precommitted_measurement": {
+    "builds": "private release builds, one CARGO_TARGET_DIR each under ~/Library/Caches/rustuml-tim-continuation-round3-claude-maker (maker-round3/support/build.sh): merged base a5720e095 (code == f2d12d0ef), tip, 93bf53e18, 9834a7194, plus b0fb43c3e (the round-2 merged base) for obligation 1 and 2's restored outcomes",
+    "comparator": "unchanged compare_cli (docs/parity-reviews/sequence-dependency-closure/checker-support/compare_cli.rs) linked against 93bf53e18's rustuml_oracle; 4 modes; each case from its recorded cwd",
+    "scripts": "unchanged prepare.py, replay.py, classify.py, fresh_classify.py, rejection_contract.py (hashes in checker-claude-round2/support/unchanged-checker-scripts.sha256); checker round-2 strict_validity.py and no_diagram_validity.py; prepared cohorts re-verified against the relay reference results with verify_fresh.py; a Welcome classifier (Java 'Welcome to PlantUML', Rust 'Welcome to RustUML') reported alongside the unchanged outcome",
+    "cohorts": "BY 53, BW 23, BU 40, BD 33, BA 64, AY 48, AZ 8, AX 77, AV 63, AT 45, AS/AQ/790/28 = 915, retained 4,174, golden 12,550 (SVG bytes), round-3 probes",
+    "bar": "zero lost matches, lost rejections, new valid-input errors and panics vs the merged base in every cohort, each reported separately; gains; Welcome changes; no-oracle failure-name diff vs 9834a7194; golden_pairs; parity_perturbations; harness_guards by category; pipe_mode; workspace lib; rejection_contract.py",
+    "predictions": {
+      "cr2_seq_chr30_rsp_line, cr2_seq_raw_rs_rsp_line": "rejected (exit 1), as at b0fb43c3e",
+      "cr2_seq_note_chr30_rsp": "note text drawn as at b0fb43c3e (Java crash page, invalid at every build)",
+      "cr2_seq_depth2_tail_then_end, cr2_seq_tail_then_indented_end, cr2_seq_chr92_tail_then_end": "Rust Welcome page",
+      "cr2_seq_tail_then_backslash_end": "Rust Welcome page",
+      "cr2_seq_end_line_continued_then_text": "Rust Welcome page (Java Welcome; every earlier build renders 'one')",
+      "cr2_seq_wrapped_include_tail_then_end, cr2_seq_wrapped_include_tail_then_msg": "message 'wrapped @enduml' (then 'two'); match unless included-line locations differ (T14.53)",
+      "other BY/BW/BU/BD cases": "unchanged from the merged base",
+      "BA, AY, AZ, AX, AV, AT, AS/AQ/790/28, retained": "no outcome change vs the merged base",
+      "golden 12,550": "no outcome change and 0 SVG byte changes vs the merged base"
+    }
+  },
+  "cross_family_scope": "The stand-in type is family-independent. The two-line rule applies to @startuml blocks only (WelcomeFactory's diagram type is SEQUENCE, the same condition that enables the join). The wrapped-include extraction applies to every family's local includes.",
+  "frozen": "comparator slack, syntax markers, park list, error census, guard allow-lists, strict-XML malformed list and the 15-source approved valid-error set stay unchanged."
+}
