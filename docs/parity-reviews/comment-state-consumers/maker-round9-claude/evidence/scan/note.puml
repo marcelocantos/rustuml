@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Courier New
+class K
+note "<i>Float f𝅧</i>" as N1
+note left of K : <i>Reef z𝅧</i>
+K .. N1
+@enduml

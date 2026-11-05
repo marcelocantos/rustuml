@@ -1,0 +1,1658 @@
+{
+ "schema_version": 1,
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+ "status": "maker results; not a verdict (independent review required)",
+ "mechanism": "tim-builtin-value-boundaries",
+ "answers": "review-9.json (tim-builtin-value-boundaries) and comment-state-consumers/review-10.json (8089ef150)",
+ "revisions": {
+  "start (round-8 final review)": "8089ef15030e92f96609a46498d577cdd61c1dcf",
+  "merge of parity-recovery-2026-11-03 dcf6d9076 (code = c3116f0b0)": "9d6af0a0e088546d470d0011e4af4c3049411c01",
+  "base (dcf6d9076, code = 9834a7194)": "dcf6d90766b04c13b2fcc961736f7d90880caf46",
+  "measured code tip": "59c10105cd6ef114cedd12ac2c02a7d476d55ad1"
+ },
+ "commit_roles": {
+  "c518a95d5224ed5819b3791235ddeaca35cdad5c": "accounts (docs only), before any draft: per-face facts, TextLine runs, link-label font, bidi oracle gate",
+  "2d031e595b487ad449389cb8b6ee2c63a71f2731": "code: obligation 2 (text_line_levels = BidiUtils.getLevels run levels) and obligation 4 (java-bidi-oracle test data + test)",
+  "ac3b44fbc8bc31f921635483326741cfc58456b3": "code: obligation 3 (class center labels laid out in the arrow-style font)",
+  "6413e26b441564bf6837909324a5ee7df78d6893": "addendum (docs only) after a dev-build BO measurement, before the italic-measurement change was committed",
+  "59c10105cd6ef114cedd12ac2c02a7d476d55ad1": "code + data: obligation 1 (per-physical-face facts; italic measured in the drawn face)",
+  "next commit": "evidence + results + target T14.39 (bullseye.yaml)"
+ },
+ "binaries": [
+  "68820764a1b7b0eae431d8782349590237bcc8ee41a9fa5e3c30b9be5b9f6d59  rustuml-base",
+  "099e5cde52a44553bb2ec62f2ff752f9e1a842654e808d125ed95dd6661ca8ea  rustuml-merge",
+  "c73c86e537185e9aae0b9fb03518e0ae5d4ee50d11ff090552de93886569457f  rustuml-o3",
+  "cf9fd40970167ee3998e0e35afea5c3b2b6216bb727fed28216421443aa22e0b  rustuml-tip"
+ ],
+ "obligations": {
+  "1 per-face facts (BLOCKING)": {
+   "status": "implemented; BO acceptance met locally; fresh relayed probes pending (M9A); chain runs of the ten italic faces provisional (colossus) pending the requested Monkey Man extraction",
+   "source_trace": "CFontManager.loadFonts 209-235 / registerItalicDerived 174-203, Font2D.setStyle 151-175, FontFamily.getFont 320-360, CFont.createItalicVariant 177-185 / getNativeFontPtr 187-191 / getTableBytes 81-85, AWTFont.m awtFontForName 71-111 / getTableBytesNative 368-410, hb-jdk-font.cc reference_table, hb-ot-layout.cc 152-266 OT::GDEF::is_blocklisted (HarfBuzz 15.0.0)",
+   "evidence": {
+    "BO gained vs merge": [
+     "c8a_ci_abstract_hebrew",
+     "c8a_ci_abstract_latin",
+     "c8a_ci_abstract_leading",
+     "c8a_ci_abstract_size11",
+     "c8a_ci_creole_bolditalic",
+     "c8a_ci_creole_italic",
+     "c8a_ci_usecase_italic",
+     "c8a_lt_verdana_deva_link",
+     "c8a_tn_abstract_italic",
+     "c8a_tn_abstract_italic_ctrl"
+    ],
+    "stereotype widths": "c8a_ci_stereo_latin 64.8105 = Java (control 57.6094 + 7.2011); c8a_lt_cnew_thai_stereo 28.8047 (mark kept, +7.2011 over merge 21.6035; Java 28.7349, the 0.0698 Thai control residue remains)",
+    "drift gate": "22 faces x 24 Java slots; Courier New Italic (162, 914, 8502) and Bold Italic (114, 928, 8322) not blocklisted, glyph 0 GDEF class 1; plain and bold blocklisted; colossus primary-face facts equal Monkey Man round-6 hb_plan and .notdef on all 12 shared faces"
+   }
+  },
+  "2 text_line_levels (BLOCKING)": {
+   "status": "implemented; Java differential met; relayed U+2029/U+0085 probe pending (M9A)",
+   "source_trace": "TextLine.fastCreateTextLine 933-948, BidiUtils.getLevels 54-82, BidiBase.getRunLevel 4443-4456, BidiLine.getRuns 475-575 (getSingleRun at paraLevel when not MIXED), BidiBase.setPara 3593",
+   "evidence": {
+    "DEFAULT_LTR inputs": 120295,
+    "inputs where TextLine uses the runs": 93203,
+    "run-level differences tip": 0,
+    "run-level differences round-8 tip c3116f0b0": 352,
+    "other fields (requiresBidi, isLeftToRight, base level, getLevelAt) over 242,508": {
+     "A_conformance": {
+      "requiresBidi_diff": 0,
+      "isLTR_diff": 0,
+      "paraLevel_diff": 0,
+      "levelAt_diff": 0
+     },
+     "B_random": {
+      "requiresBidi_diff": 0,
+      "isLTR_diff": 0,
+      "paraLevel_diff": 0,
+      "levelAt_diff": 0
+     },
+     "C_stack": {
+      "requiresBidi_diff": 0,
+      "isLTR_diff": 0,
+      "paraLevel_diff": 0,
+      "levelAt_diff": 0
+     }
+    }
+   }
+  },
+  "3 round-7 loss c8a_lt_verdana_deva_link (BLOCKING)": {
+   "status": "implemented; matches (viewBox 0 0 80 195); renamed held-out variants pending (M9A)",
+   "source_trace": "GraphvizImageBuilder 233-241 (arrow style font configuration) -> SvekEdge 279-319 (label TextBlock measured for dot and drawn)",
+   "mechanism": "the layout measured the label in sans-serif 13 (Lucida Grande, whose synthesized MARK zeroes U+1D167 since 9f33bc3b1) while emission draws it in the arrow-style font (Verdana 35.2737 = Java)"
+  },
+  "4 gate": {
+   "status": "implemented",
+   "evidence": {
+    "M00_unmodified": false,
+    "M01_bidi_class_nsm_run_to_on": true,
+    "M02_bracket_pair_changed": true,
+    "M03_mongolian_use_to_arabic": true,
+    "M04_tahoma_blocklist_triple_changed": true,
+    "M05_generated_courier_gsub_arab_dropped": true,
+    "M06_extraction_courier_gdef_length_sums_untouched": true,
+    "M07_pinned_hb_layout_appended_sums_untouched": true,
+    "M08_pinned_hb_layout_tahoma_case_removed_sums_and_constant_forged": true,
+    "M09_ucd18_u1d167_removed_sums_and_constant_forged": true,
+    "M10_ubidi_icu_byte_flipped_sums_and_constant_forged": true,
+    "M11_monkeyman_record_courier_hash_changed": true,
+    "M12_code_requires_bidi_without_AN": true,
+    "M13_code_no_bracket_pairing": true,
+    "M14_code_adjust_ws_levels_noop": true,
+    "M15_code_component_split_disabled": true,
+    "M16_code_max_explicit_level_61": true,
+    "M17_test_const_bold_courier_unlisted": true,
+    "M18_code_no_latn_fallback": true,
+    "M19_code_blocklist_ignored": true,
+    "M20_generated_courier_italic_lengths_blocklisted": true,
+    "M21_code_courier_italic_measured_as_plain": true,
+    "M22_test_const_provisional_list_stale": true,
+    "M23_code_text_line_levels_per_paragraph": true,
+    "M24_extraction_italic_own_facts_sums_untouched": true,
+    "M25_code_lucida_italic_not_derived": true
+   },
+   "caught": "25/25; unmodified exit 0",
+   "oracle": "tools/font-chain-reference/java-bidi-oracle: 93,786 lines of the checker's Java differential (e09425f4...), selection rule fixed in the account"
+  }
+ },
+ "counts": {
+  "goldens (12,550, recorded cwd, byte-level)": {
+   "merge_to_tip": {},
+   "base_to_tip": {
+    "comments_gained": 218,
+    "gained_match": 3,
+    "lost_match_GET_provenance": 3,
+    "outputs_changed": 396,
+    "stderr_changed": 25
+   },
+   "valid_strict_match_base_merge_tip": [
+    11181,
+    11181,
+    11181
+   ],
+   "comments_exact_base_merge_tip": [
+    11563,
+    11781,
+    11781
+   ],
+   "panics_tip": 0,
+   "GET_goldens": {
+    "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml": {
+     "base": {
+      "exit": 0,
+      "strict": "MATCH"
+     },
+     "merge": {
+      "exit": 0,
+      "strict": "DIFF"
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "DIFF"
+     }
+    },
+    "test-diagrams/golden/activity/act_skinparam_shadowing.puml": {
+     "base": {
+      "exit": 0,
+      "strict": "MATCH"
+     },
+     "merge": {
+      "exit": 0,
+      "strict": "DIFF"
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "DIFF"
+     }
+    },
+    "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml": {
+     "base": {
+      "exit": 0,
+      "strict": "MATCH"
+     },
+     "merge": {
+      "exit": 0,
+      "strict": "DIFF"
+     },
+     "tip": {
+      "exit": 0,
+      "strict": "DIFF"
+     }
+    }
+   }
+  },
+  "perturbations (4,666 incl. registered pairs)": {
+   "merge_to_tip": {
+    "gained_match": 10,
+    "outputs_changed": 13,
+    "stderr_changed": 4
+   },
+   "merge_to_tip_lists": {
+    "gained_match": [
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_hebrew.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_latin.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_leading.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_size11.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_creole_bolditalic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_creole_italic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_usecase_italic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_verdana_deva_link.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_tn_abstract_italic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_tn_abstract_italic_ctrl.puml"
+    ],
+    "outputs_changed": [
+     "test-diagrams/perturbations/theme-style-cascade/review3_class_header_final_body_snapshot.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_hebrew.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_latin.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_leading.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_abstract_size11.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_creole_bolditalic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_creole_italic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_stereo_latin.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_ci_usecase_italic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_cnew_thai_stereo.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_lt_verdana_deva_link.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_tn_abstract_italic.puml",
+     "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round8/c8a_tn_abstract_italic_ctrl.puml"
+    ],
+    "stderr_changed": [
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+     "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+    ]
+   },
+   "valid_strict_match_base_merge_tip": [
+    1856,
+    2825,
+    2835
+   ],
+   "panics_base_merge_tip": [
+    10,
+    4,
+    4
+   ],
+   "stderr note": "the 4 stderr changes are thread ids in the same pre-existing parse/class.rs:285 panics (dash_01/03/06/07)"
+  },
+  "batches": {
+   "AR": {
+    "cases": 20,
+    "java_valid": 20,
+    "strict_base_merge_tip": [
+     6,
+     17,
+     17
+    ],
+    "strict_and_comments_base_merge_tip": [
+     6,
+     17,
+     17
+    ],
+    "exact_viewbox_base_merge_tip": [
+     13,
+     18,
+     18
+    ],
+    "comment_list_exact_base_merge_tip": [
+     13,
+     19,
+     19
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "blank1_activity_shadow",
+     "blank1_class_shadow",
+     "blank3_activity_shadow",
+     "blank3_class_shadow",
+     "cluster_entry_point",
+     "deploy_unaliased_forms",
+     "history_depth1_autarkic",
+     "history_depth2_crossing",
+     "quark_reuse_crossing",
+     "stroke_skinparam_css4",
+     "stroke_state_style_transparent"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "AU": {
+    "cases": 32,
+    "java_valid": 29,
+    "strict_base_merge_tip": [
+     6,
+     21,
+     21
+    ],
+    "strict_and_comments_base_merge_tip": [
+     6,
+     21,
+     21
+    ],
+    "exact_viewbox_base_merge_tip": [
+     19,
+     23,
+     23
+    ],
+    "comment_list_exact_base_merge_tip": [
+     22,
+     29,
+     29
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "cluster_entry_inside_autarkic",
+     "cluster_inputpin_mixed_case",
+     "cluster_root_note_on_inner",
+     "deploy_alias_direction_matrix",
+     "deploy_nested_alias_reverse",
+     "history_external_suffix_form",
+     "raw_crlf_one_blank",
+     "raw_include_leading_blanks",
+     "raw_unit_test_input",
+     "raw_whitespace_only_lines",
+     "stroke_arrow_skinparam_transparent",
+     "stroke_per_arrow_css4",
+     "stroke_stereo_skinparam_css4",
+     "stroke_stereo_style_css4",
+     "stroke_zero_alpha_nonblack"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "AW": {
+    "cases": 45,
+    "java_valid": 39,
+    "strict_base_merge_tip": [
+     6,
+     30,
+     30
+    ],
+    "strict_and_comments_base_merge_tip": [
+     6,
+     30,
+     30
+    ],
+    "exact_viewbox_base_merge_tip": [
+     13,
+     30,
+     30
+    ],
+    "comment_list_exact_base_merge_tip": [
+     22,
+     39,
+     39
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "dep_bracket_in_node",
+     "dep_bracket_spaces_links",
+     "intval_arabic_indic_signed",
+     "intval_extended_arabic_bengali",
+     "intval_fullwidth_bounds",
+     "intval_myanmar_tai_laing",
+     "rc_entry_inside_autarkic_depth3",
+     "rc_exitpoint_depth1",
+     "rc_inner_note_autarkic",
+     "rc_outputpin_lowercase",
+     "rc_quark_reuse_renamed",
+     "rc_root_note_depth2",
+     "rc_two_entry_points",
+     "rh_deep_depth3",
+     "rh_suffix_nested",
+     "stroke_arrow_alpha",
+     "stroke_arrow_css4_dashed",
+     "stroke_arrow_transparent_label",
+     "stroke_skinparam_zero_alpha_bold",
+     "stroke_stereo_style_renamed",
+     "stroke_style_arrow_transparent",
+     "surrogate_high_class",
+     "surrogate_rejoined_pair",
+     "theme_mono_inactive"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "BB": {
+    "cases": 36,
+    "java_valid": 26,
+    "strict_base_merge_tip": [
+     2,
+     25,
+     25
+    ],
+    "strict_and_comments_base_merge_tip": [
+     2,
+     25,
+     25
+    ],
+    "exact_viewbox_base_merge_tip": [
+     2,
+     25,
+     25
+    ],
+    "comment_list_exact_base_merge_tip": [
+     11,
+     35,
+     35
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "dot_root_before_groups",
+     "dot_root_both_sides",
+     "dot_root_depth4",
+     "img_cluster_depth2",
+     "img_cluster_depth3",
+     "img_cluster_depth4",
+     "img_cluster_exit_wide",
+     "img_note_before_later_state",
+     "img_note_depth2",
+     "img_note_depth3",
+     "img_note_first_left",
+     "img_note_in_cluster",
+     "img_two_notes",
+     "note_link_only_to_group",
+     "sur_activity_high_end",
+     "sur_class_high_bold18",
+     "sur_class_high_end",
+     "sur_class_high_then_ascii_only",
+     "sur_class_high_then_low_node",
+     "sur_sequence_high_end",
+     "sur_state_high_end",
+     "sur_title_high_end",
+     "sur_usecase_high_end"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "BC": {
+    "cases": 19,
+    "java_valid": 19,
+    "strict_base_merge_tip": [
+     0,
+     18,
+     18
+    ],
+    "strict_and_comments_base_merge_tip": [
+     0,
+     18,
+     18
+    ],
+    "exact_viewbox_base_merge_tip": [
+     0,
+     18,
+     18
+    ],
+    "comment_list_exact_base_merge_tip": [
+     4,
+     18,
+     18
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "en_wide_d2_image",
+     "ex_d2_renamed",
+     "ex_d2_widelabel",
+     "ex_d3",
+     "ex_wide_d1_image",
+     "ex_wide_noimage",
+     "nc_note_in_cluster_depth2",
+     "nc_note_in_cluster_renamed",
+     "nc_two_clusters_notes",
+     "pua_a_control",
+     "pua_b_activity",
+     "pua_b_class_first_carrier",
+     "pua_b_class_last",
+     "pua_b_pair_lookalike",
+     "pua_b_sequence",
+     "pua_b_state",
+     "pua_b_strlen",
+     "pua_b_title"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "BE": {
+    "cases": 34,
+    "java_valid": 30,
+    "strict_base_merge_tip": [
+     0,
+     22,
+     22
+    ],
+    "strict_and_comments_base_merge_tip": [
+     0,
+     22,
+     22
+    ],
+    "exact_viewbox_base_merge_tip": [
+     0,
+     22,
+     22
+    ],
+    "comment_list_exact_base_merge_tip": [
+     2,
+     24,
+     24
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "bp_short_entry_d2",
+     "bp_short_exit_d1",
+     "bp_short_exit_d3",
+     "bp_threshold_labels",
+     "bp_wide_entry_d1",
+     "bp_wide_entry_d3",
+     "bp_wide_exit_d2",
+     "no_d1_left_renamed",
+     "no_d2_mid_leaves",
+     "no_d3_deep",
+     "no_outer_note_left_of_image",
+     "no_outer_note_on_leaf_beside_image",
+     "no_outer_two_notes_on_image",
+     "no_root_cluster_note",
+     "no_root_two_clusters_notes",
+     "no_two_clusters_three_notes",
+     "pua_b_sequence_message",
+     "pua_b_size12",
+     "pua_b_size18_bold",
+     "pua_b_state_note",
+     "pua_b_strlen_substr",
+     "pua_b_upper_escape_point"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "BF": {
+    "cases": 46,
+    "java_valid": 45,
+    "strict_base_merge_tip": [
+     6,
+     32,
+     32
+    ],
+    "strict_and_comments_base_merge_tip": [
+     1,
+     32,
+     32
+    ],
+    "exact_viewbox_base_merge_tip": [
+     8,
+     34,
+     34
+    ],
+    "comment_list_exact_base_merge_tip": [
+     6,
+     42,
+     42
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "cr_chr_10fffd",
+     "cr_creole_bold_pua",
+     "cr_json_u_escape",
+     "cr_json_var_pua",
+     "cr_tilde_10fffd",
+     "cr_yaml_u_escape",
+     "st_bp_d4_short_entry",
+     "st_bp_d4_wide_exit",
+     "st_bp_entry_exit_same_cluster_short",
+     "st_bp_entry_exit_same_cluster_wide",
+     "st_bp_wide_entry_with_note",
+     "st_np_note_before_target",
+     "st_np_note_declared_outer_anchor_inner",
+     "st_np_outer_note_left_multiline",
+     "st_np_outer_note_left_on_leaf_with_image",
+     "st_np_outer_note_right_renamed",
+     "st_np_root_note_before_states",
+     "st_np_root_three_clusters",
+     "w_arial_nonchar_10ffff",
+     "w_arial_pua_b",
+     "w_sans_bmp_pua_f000",
+     "w_sans_escape_10f7ff",
+     "w_sans_nonchar_10fffe",
+     "w_sans_nonchar_10ffff",
+     "w_sans_tag_e0041",
+     "w_sans_unassigned_3fffd"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "BG": {
+    "cases": 53,
+    "java_valid": 52,
+    "strict_base_merge_tip": [
+     12,
+     42,
+     42
+    ],
+    "strict_and_comments_base_merge_tip": [
+     0,
+     42,
+     42
+    ],
+    "exact_viewbox_base_merge_tip": [
+     16,
+     47,
+     47
+    ],
+    "comment_list_exact_base_merge_tip": [
+     6,
+     49,
+     49
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "dc5_json_nested",
+     "dc5_tim_json_array",
+     "dc5_tim_json_member",
+     "dc5_yaml_flow_escape",
+     "dc5_yaml_key_escape",
+     "dc5_yaml_list_escape",
+     "no5_left_note_depth2_region",
+     "no5_left_note_multiline_renamed",
+     "no5_left_note_renamed",
+     "no5_left_note_start_top",
+     "no5_right_note_nested_image",
+     "rp5_root_note_depth2",
+     "rp5_two_groups_sides",
+     "w5_arial_10f7ff",
+     "w5_arial_10f800",
+     "w5_arial_10fffd",
+     "w5_helvetica_10f800",
+     "w5_helvetica_10fffd",
+     "w5_helvetica_bold_10fffd",
+     "w5_sans_0378",
+     "w5_sans_12000",
+     "w5_sans_1bca0",
+     "w5_sans_1d173",
+     "w5_sans_20000",
+     "w5_sans_2fffd",
+     "w5_sans_a500_complex",
+     "w5_sans_bold18_10fffe",
+     "w5_sans_e0100",
+     "w5_sans_e123",
+     "w5_sans_fdd0"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "BH": {
+    "cases": 99,
+    "java_valid": 96,
+    "strict_base_merge_tip": [
+     12,
+     78,
+     78
+    ],
+    "strict_and_comments_base_merge_tip": [
+     3,
+     78,
+     78
+    ],
+    "exact_viewbox_base_merge_tip": [
+     14,
+     82,
+     82
+    ],
+    "comment_list_exact_base_merge_tip": [
+     21,
+     92,
+     92
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "dc6_yaml_apostrophe",
+     "dc6_yaml_block",
+     "dc6_yaml_colon_key",
+     "dc6_yaml_comment",
+     "dc6_yaml_escaped_quote",
+     "dc6_yaml_hash_in_quotes",
+     "dc6_yaml_key_newline",
+     "dc6_yaml_listonly",
+     "dc6_yaml_nested",
+     "dc6_yaml_plain",
+     "dc6_yaml_single",
+     "dc6_yaml_trailing_backslash",
+     "no6_left_and_start",
+     "no6_left_depth2",
+     "no6_left_leaf_beside_image",
+     "no6_left_multiline_depth1",
+     "no6_left_right_both",
+     "no6_right_long",
+     "pt6_note_before_concurrent",
+     "pt6_note_before_nested_link",
+     "pt6_note_before_root_link_image",
+     "pt6_note_outer_anchor_later_inner",
+     "rp6_depth3",
+     "rp6_duplicate_text",
+     "rp6_root_and_group",
+     "w6_activity_10fffd",
+     "w6_arial_0870",
+     "w6_arial_1e900",
+     "w6_arial_e0080",
+     "w6_arial_size11_10fffd",
+     "w6_couriernew_e0080",
+     "w6_helvetica_0870",
+     "w6_helvetica_1e900",
+     "w6_helvetica_e0080",
+     "w6_mindmap_0378",
+     "w6_sans_0870",
+     "w6_sans_0d80",
+     "w6_sans_13430",
+     "w6_sans_16fe4",
+     "w6_sans_180f_complex",
+     "w6_sans_1ab0",
+     "w6_sans_1c80",
+     "w6_sans_1d17b",
+     "w6_sans_1e900",
+     "w6_sans_2065",
+     "w6_sans_2065_complex",
+     "w6_sans_2e5e",
+     "w6_sans_30000",
+     "w6_sans_31350",
+     "w6_sans_a69e",
+     "w6_sans_arabic_missing",
+     "w6_sans_bold_0870",
+     "w6_sans_combining",
+     "w6_sans_e0080",
+     "w6_sans_e01f0",
+     "w6_sans_fff0",
+     "w6_sans_fff0_complex",
+     "w6_sans_size23_0378",
+     "w6_sans_size23_10fffd",
+     "w6_sans_size9_0378",
+     "w6_sans_size9_10fffd",
+     "w6_sans_thai_missing",
+     "w6_seq_0870",
+     "w6_state_e0080",
+     "w6_verdana_0870",
+     "w6_verdana_e0080"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "BI": {
+    "cases": 48,
+    "java_valid": 48,
+    "strict_base_merge_tip": [
+     5,
+     39,
+     39
+    ],
+    "strict_and_comments_base_merge_tip": [
+     1,
+     39,
+     39
+    ],
+    "exact_viewbox_base_merge_tip": [
+     7,
+     42,
+     42
+    ],
+    "comment_list_exact_base_merge_tip": [
+     15,
+     48,
+     48
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "cv7_root_group_note",
+     "cv7_root_note_later_inner",
+     "fe7_20b7_complex",
+     "fe7_31bc_complex",
+     "fe7_31d0_complex",
+     "fe7_f817_complex",
+     "fe7_f880_complex",
+     "fe7_f8b7_complex",
+     "jd7_array_multiline_nested",
+     "jd7_decoded_newline",
+     "jd7_highlight_multiline",
+     "jd7_nested_encoded_newline",
+     "mk7_0897_u16",
+     "mk7_10efd",
+     "mk7_11f00",
+     "mk7_1ace_complex",
+     "mk7_1df6_complex",
+     "mk7_1dfa_complex",
+     "mk7_1e08f",
+     "mk7_1e4ec",
+     "mk7_1e5ee_u16",
+     "mk7_arial",
+     "mk7_bold",
+     "mk7_helvetica",
+     "mk7_lead_mark",
+     "mk7_seq",
+     "yd7_block_mid_document",
+     "yd7_left_align",
+     "yd7_list_newline",
+     "yd7_nested_key_value",
+     "yd7_padded_value",
+     "yd7_right_align",
+     "yd7_two_tabs",
+     "yd7_unknown_pair_escaped_tab"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "BJ": {
+    "cases": 120,
+    "java_valid": 117,
+    "strict_base_merge_tip": [
+     25,
+     96,
+     96
+    ],
+    "strict_and_comments_base_merge_tip": [
+     15,
+     96,
+     96
+    ],
+    "exact_viewbox_base_merge_tip": [
+     24,
+     99,
+     99
+    ],
+    "comment_list_exact_base_merge_tip": [
+     53,
+     116,
+     116
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "cv8_root_pier_jetty_mm",
+     "cv8_root_quay_dock_harbour",
+     "cv8_root_wharf_anchorage_pier",
+     "cv8_rootlate_mooring_pier_ko",
+     "cv8_rootlate_quay_mooring_wharf",
+     "fe8_1f105_complex",
+     "fe8_218a_complex",
+     "fe8_31b8_complex",
+     "fe8_324a_complex",
+     "fe8_327e_complex",
+     "fe8_f830_complex",
+     "fe8_f851_complex",
+     "fe8_f881_complex",
+     "fe8_f8c0_complex",
+     "fe8_f8fe_complex",
+     "fe8_fa2e_complex",
+     "j8_array_escapes",
+     "j8_crlf",
+     "j8_decoded_backslash",
+     "j8_decoded_cr",
+     "j8_decoded_crlf_tail",
+     "j8_decoded_tab",
+     "j8_empty_space",
+     "j8_highlight_tab_key",
+     "j8_nested_uneven",
+     "j8_tab_bold_key",
+     "j8_tabsize4",
+     "j8_unicode_lf",
+     "mk8_arial_23",
+     "mk8_arial_9",
+     "mk8_cjk_base",
+     "mk8_couriernew_23",
+     "mk8_couriernew_9",
+     "mk8_helv_23",
+     "mk8_helv_9",
+     "mk8_helv_hebrew_pres",
+     "mk8_lucida_arabic",
+     "mk8_lucida_devanagari",
+     "mk8_lucida_syriac",
+     "mk8_mc_11f03",
+     "mk8_me_1abe",
+     "mk8_sans_23",
+     "mk8_sans_9",
+     "mk8_sans_bold_23",
+     "mk8_seq_arabic",
+     "mk8_u16_10d69",
+     "mk8_u16_113bb",
+     "mk8_u16_1612d",
+     "mk8_u17_1ad0",
+     "mk8_u17_1e6e3",
+     "mk8_u18_05c8",
+     "y8_align_mixed",
+     "y8_block_comment_pipe",
+     "y8_block_dash_body",
+     "y8_block_inner_pipe",
+     "y8_block_inner_pipe_end",
+     "y8_block_inner_pipe_nested",
+     "y8_block_nested_key",
+     "y8_block_relative_indent",
+     "y8_block_spaced_pipe",
+     "y8_block_two_blocks_end",
+     "y8_block_whitespace_lines",
+     "y8_crlf",
+     "y8_deep_nested_escape",
+     "y8_escape_backslash_pairs",
+     "y8_escape_key_tab",
+     "y8_escape_n_then_t",
+     "y8_flow_seq_escapes",
+     "y8_real_tab_value",
+     "y8_tabsize4",
+     "y8_whitespace_values"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "BK": {
+    "cases": 49,
+    "java_valid": 49,
+    "strict_base_merge_tip": [
+     4,
+     32,
+     32
+    ],
+    "strict_and_comments_base_merge_tip": [
+     0,
+     32,
+     32
+    ],
+    "exact_viewbox_base_merge_tip": [
+     6,
+     36,
+     36
+    ],
+    "comment_list_exact_base_merge_tip": [
+     16,
+     49,
+     49
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "j9_cr_key",
+     "j9_skinparam_block",
+     "mk9_180f_thai",
+     "mk9_couriernew_hebrew_space",
+     "mk9_hangul_base",
+     "mk9_hangul_space",
+     "mk9_hangul_space_ctrl",
+     "mk9_helv_syriac",
+     "mk9_lucida_arabic_space",
+     "mk9_lucida_deva_base",
+     "mk9_lucida_thai_base",
+     "mk9_u17_10efa",
+     "mk9_u17_11b60",
+     "mk9_u17_1ad5",
+     "mk9_u18_10ecb",
+     "mk9_u18_1d127",
+     "mk9_u18_b53",
+     "y9_block_depth3",
+     "y9_block_hash_lines",
+     "y9_block_quoted_key",
+     "y9_block_tab_inside",
+     "y9_block_text_dedent",
+     "y9_flow_seq_empty",
+     "y9_flow_seq_number",
+     "y9_flow_seq_quotes",
+     "y9_hide_then_data",
+     "y9_tab_indent",
+     "y9_tab_key"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "BL": {
+    "cases": 142,
+    "java_valid": 142,
+    "strict_base_merge_tip": [
+     14,
+     65,
+     65
+    ],
+    "strict_and_comments_base_merge_tip": [
+     7,
+     65,
+     65
+    ],
+    "exact_viewbox_base_merge_tip": [
+     21,
+     77,
+     77
+    ],
+    "comment_list_exact_base_merge_tip": [
+     71,
+     141,
+     141
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "c7j_cr_array",
+     "c7j_cr_nested_key",
+     "c7j_crlf_file",
+     "c7j_hide_pragma",
+     "c7j_skinparam_ws_block",
+     "c7m_180e_deva_ctrl",
+     "c7m_180f_deva",
+     "c7m_180f_verdana",
+     "c7m_deva_1d167",
+     "c7m_hangul_comma_1d167",
+     "c7m_hangul_helv",
+     "c7m_hangul_seq",
+     "c7m_hangul_verdana_ctrl",
+     "c7m_heb_cnew_digit",
+     "c7m_heb_cnew_letter",
+     "c7m_syriac_space_helvbold",
+     "c7m_thai_1d167",
+     "c7m_u17_10efb_note",
+     "c7m_u17_11b66_activity",
+     "c7m_u17_1acf",
+     "c7m_u17_1acf_simple",
+     "c7m_u17_1ae5_seq",
+     "c7m_u17_1e6f5",
+     "c7m_u17_mc_11b61",
+     "c7m_u18_0b54_latin",
+     "c7m_u18_10ef9_state",
+     "c7m_u18_11df0_component",
+     "c7m_u18_1ade_verdana",
+     "c7m_u18_1d25b_helv",
+     "c7m_u18_mc_1d250",
+     "c7y_block_crlf",
+     "c7y_block_depths",
+     "c7y_block_in_list_map",
+     "c7y_block_key_tab",
+     "c7y_block_listlike_body",
+     "c7y_block_tab_body",
+     "c7y_block_text_col0",
+     "c7y_cr_block",
+     "c7y_flow_colon_inside",
+     "c7y_flow_escapes2",
+     "c7y_flow_list_item_key",
+     "c7y_flow_nested_brackets",
+     "c7y_flow_quote_trailing",
+     "c7y_key_hide_space",
+     "c7y_pre_mix",
+     "c7y_pre_skinparam_indented",
+     "c7y_skinparam_brace_inline",
+     "c7y_tab_flow",
+     "c7y_tab_nested_key",
+     "c7y_tab_quoted",
+     "c7y_tab_value_multi"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "BM": {
+    "cases": 26,
+    "java_valid": 26,
+    "strict_base_merge_tip": [
+     5,
+     8,
+     8
+    ],
+    "strict_and_comments_base_merge_tip": [
+     0,
+     8,
+     8
+    ],
+    "exact_viewbox_base_merge_tip": [
+     7,
+     12,
+     12
+    ],
+    "comment_list_exact_base_merge_tip": [
+     0,
+     26,
+     26
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "c7b_cnew_latin_mark",
+     "c7b_cnew_leading_mark",
+     "c7b_cnewbold_latin_mark"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "BN": {
+    "cases": 63,
+    "java_valid": 63,
+    "strict_base_merge_tip": [
+     17,
+     32,
+     32
+    ],
+    "strict_and_comments_base_merge_tip": [
+     0,
+     32,
+     32
+    ],
+    "exact_viewbox_base_merge_tip": [
+     18,
+     33,
+     33
+    ],
+    "comment_list_exact_base_merge_tip": [
+     1,
+     63,
+     63
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "m8b_helv_arabic_digit",
+     "m8b_lucida_arabic_digit",
+     "m8b_lucida_fsi_hebrew",
+     "m8b_lucida_fsi_hebrew_ctrl",
+     "m8b_lucida_rli_alone",
+     "m8b_lucida_rli_alone_ctrl",
+     "m8b_lucida_rli_with_hebrew",
+     "m8b_lucida_rli_with_hebrew_ctrl",
+     "m8b_lucida_thai_arabic_digit",
+     "m8g_arial_deva",
+     "m8g_cnew_arabic",
+     "m8g_cnew_mc_after_mark",
+     "m8g_cnew_sequence",
+     "m8g_cnew_size13",
+     "m8g_cnew_syriac"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   },
+   "BO": {
+    "cases": 81,
+    "java_valid": 81,
+    "strict_base_merge_tip": [
+     26,
+     26,
+     36
+    ],
+    "strict_and_comments_base_merge_tip": [
+     12,
+     26,
+     36
+    ],
+    "exact_viewbox_base_merge_tip": [
+     27,
+     31,
+     39
+    ],
+    "comment_list_exact_base_merge_tip": [
+     25,
+     81,
+     81
+    ],
+    "lost_vs_merge": [],
+    "gained_vs_merge": [
+     "c8a_ci_abstract_hebrew",
+     "c8a_ci_abstract_latin",
+     "c8a_ci_abstract_leading",
+     "c8a_ci_abstract_size11",
+     "c8a_ci_creole_bolditalic",
+     "c8a_ci_creole_italic",
+     "c8a_ci_usecase_italic",
+     "c8a_lt_verdana_deva_link",
+     "c8a_tn_abstract_italic",
+     "c8a_tn_abstract_italic_ctrl"
+    ],
+    "lost_vs_base": [],
+    "gained_vs_base": [
+     "c8a_bl_cnew_khmer_split",
+     "c8a_bl_lucida_al_en_thai",
+     "c8a_bl_lucida_al_then_thai_en",
+     "c8a_bl_lucida_an_cs_an",
+     "c8a_cr_member_bold",
+     "c8a_cr_member_plain",
+     "c8a_cr_usecase_plain",
+     "c8a_lt_thai_note",
+     "c8a_tn_abstract_italic",
+     "c8a_tn_abstract_italic_ctrl"
+    ],
+    "viewbox_lost_vs_merge": [],
+    "viewbox_lost_vs_base": [
+     "c8a_bl_lucida_thai_digit_after_r"
+    ],
+    "comments_lost_vs_merge": [],
+    "lost_rejection_vs_merge": [],
+    "new_valid_input_error_vs_merge": [],
+    "new_panic_vs_merge": [],
+    "stderr_changed_vs_merge": [],
+    "tip_panics": []
+   }
+  },
+  "gates": {
+   "golden_pairs base and tip": "12550 total, 10497 passed, 754 failed, 1299 skipped (identical)",
+   "golden_no_oracle": "tip 11181 = merge; failure names vs 9834a7194: +3 GET-provenance goldens (activity/act_skinparam2_shadowing_true, activity/act_skinparam_shadowing, edge-cases/edge_whitespace_multiple_blank_lines; lost at merge, raw-reader contract), -3 (preprocessing/preproc_complex_theme_override, state/state_history_shallow, state/state_note_composite)",
+   "parity_perturbations failing": "base 1365, merge 1871, tip 1861; tip failures are a subset of merge's (0 new failures in any directory); 10 fewer",
+   "harness_guards categories": "identical merge -> tip (gates/*.guard_cats.txt)",
+   "pipe_mode": "tip 17/17 ok",
+   "workspace lib": "tip ok (41, 10, 31, 665, 858 passed; 1 ignored)",
+   "clippy per crate (error-level, -D warnings)": {
+    "base": [
+     19,
+     1,
+     0,
+     1,
+     0,
+     0
+    ],
+    "merge": [
+     19,
+     1,
+     0,
+     1,
+     0,
+     0
+    ],
+    "tip": [
+     19,
+     1,
+     0,
+     1,
+     0,
+     0
+    ],
+    "order": "render, parser, layout, oracle, rustuml, math"
+   }
+  },
+  "frozen": "crates/rustuml-oracle unchanged (comparator slack, syntax markers, park list, error census, guard allow-lists, 14-entry strict-XML list); test-diagrams/no_oracle_baseline.txt unchanged; no new 3+-decimal literal"
+ },
+ "residues": [
+  "Ten italic faces' chain runs (simple path, composite cascade) are a colossus extraction (tools/font-chain-reference/colossus-styled-chain), listed in PROVISIONAL_CHAIN; Monkey Man extraction requested.",
+  "Verdana Italic / Bold Italic have no reference-host file hash (PENDING_REFERENCE_HASH); requested.",
+  "Activity notes ignore noteFontName (drawn sans-serif), and activity if-diamond conditions, component edge labels, state box widths and the sequence title are laid out in sans-serif while drawn in the defaultFontName: pre-existing, filed as T14.39.",
+  "Arial/Verdana/Helvetica italic advance tables are the upright tables (not touched).",
+  "c8a_bl_lucida_thai_digit_after_r exact viewBox lost base -> merge (round-8 code), unchanged at tip; strict status DIFF at all trees."
+ ],
+ "pending_relay": {
+  "M9A (Java reference batch, 60 cases)": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/relay/m9a",
+   "reference_manifest_sha256": "000baef48680f333d05c958fafdaff1b5f74729deb1c3580cb9e7246ef96a019",
+   "reference_input_bundle_sha256": "b369bbee1b4561ac5c2b57bbe239766cd1d00bd28325311cf4df81946ecfc00a",
+   "rust_predictions_sha256": "6c071ea94a3b6a158b5eddca32b37fbb8a8a549017a7e095e46bbbd43a0dbb58",
+   "cases_json_sha256": "4a9b4ad9835d2f0152785ea374b85a7acae5c4222d23df4c2ccb660ff68508f3",
+   "predictions_summary": {
+    "m9a_ci_seq_message": {
+     "tip_viewBox": "0 0 137 121",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "27dd2d54c97a1212b5f0e10b56d44977690d1ac09816983b8b2e1c2899978ecb"
+    },
+    "m9a_ci_seq_message_ctrl": {
+     "tip_viewBox": "0 0 129 121",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "3e72dbf3ea2d068d5dd70604915392dec07644a95e3b356ae9f785c74c8749a8"
+    },
+    "m9a_ci_seq_participant": {
+     "tip_viewBox": "0 0 101 134",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "884ec24275cd14f6acba07f774f254b04c50068902e904b00e0cc9a45fbdbd86"
+    },
+    "m9a_ci_seq_participant_ctrl": {
+     "tip_viewBox": "0 0 97 134",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "f47b091092e1bb51cd25bd0a4859dde5a157017a81063cd0520ddd7f7a9b821d"
+    },
+    "m9a_ci_seq_note": {
+     "tip_viewBox": "0 0 91 127",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "4486f6481da6fa5b699feeb8a1d0ca7c305d0a1b96f6a782a90515666d6e3b6d"
+    },
+    "m9a_ci_seq_note_ctrl": {
+     "tip_viewBox": "0 0 83 127",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "c43ebd787ec9503e699c5f071b8bef62da8e381a26c7f0877039202354a54d5b"
+    },
+    "m9a_ci_seq_bolditalic": {
+     "tip_viewBox": "0 0 153 121",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "703fa785a6008bffceac3d326d278bcc2a203912c517cc410b4815e95094ebae"
+    },
+    "m9a_ci_seq_bolditalic_ctrl": {
+     "tip_viewBox": "0 0 145 121",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "d18584b71732acbec56df6f9e4cbd587aab9dbb6d38ba98dd1de1d24df277c69"
+    },
+    "m9a_ci_act_action": {
+     "tip_viewBox": "0 0 128 150",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "385015f3553e031ff163a6f4e8da81d740c4d4b66f5571697a63b7c3b0255121"
+    },
+    "m9a_ci_act_action_ctrl": {
+     "tip_viewBox": "0 0 120 150",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "dac7eeb6a4d1db89ce0c19a4b3d5b2333e1240ec56bd2995000336410571de5d"
+    },
+    "m9a_ci_act_note": {
+     "tip_viewBox": "0 0 166 150",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "879bf57dbe3c16b75ade873437e14e450c8f154352fc7b5ffe3c2d785cfbe0a0"
+    },
+    "m9a_ci_act_note_ctrl": {
+     "tip_viewBox": "0 0 166 150",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "7cbc6c8c5a03a0ccd4f1a96204e966056cef980a1144fb559d141c2f2b0d214a"
+    },
+    "m9a_ci_act_bolditalic": {
+     "tip_viewBox": "0 0 128 150",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "b0363a7eb97f78d4a1fd84d4f8e72eea764eb1aeb132d4067a506f0cbc66c02a"
+    },
+    "m9a_ci_act_bolditalic_ctrl": {
+     "tip_viewBox": "0 0 120 150",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "141099cd030a9e8a51ed172e1cdb4b1ccd1e629a898d4f73f09e22a1826727ca"
+    },
+    "m9a_ci_class_note": {
+     "tip_viewBox": "0 0 87 155",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "f783360f8a1e9034392c03decf27f719aa3ffcf6db78f66644b6fa6df1bac880"
+    },
+    "m9a_ci_class_note_ctrl": {
+     "tip_viewBox": "0 0 87 155",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "ffecb260cb2e39bf6af226d8cc789a249bd5198dff5af9c7b2a8e77f5eee7eda"
+    },
+    "m9a_ci_note_left": {
+     "tip_viewBox": "0 0 172 70",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "96660a96fcbd3aecc2d4237bb0c150b22a31810e463e72dddaf89ab11bbd215a"
+    },
+    "m9a_ci_note_left_ctrl": {
+     "tip_viewBox": "0 0 172 70",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "32eb552aee7606d6dbe2f5ed46b6657e838b9bb2cee8780a1486de35fd501c7f"
+    },
+    "m9a_ci_interface": {
+     "tip_viewBox": "0 0 127 68",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "b8f5820925ee2a62deb17cef17251df7736379889386a97f26b0030fb8fe4579"
+    },
+    "m9a_ci_interface_ctrl": {
+     "tip_viewBox": "0 0 119 68",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "12b09b67b02fb4ab267257ee1b3d7980e9ae96228fe9232b5a9c68da634f5fdd"
+    },
+    "m9a_ci_abstract_member": {
+     "tip_viewBox": "0 0 102 83",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "28a132387cc799f4127a59d489d677258d5d347aafb8ed7a481c73b6e71c4617"
+    },
+    "m9a_ci_abstract_member_ctrl": {
+     "tip_viewBox": "0 0 102 83",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "fc62a15ff576bee91a9d3c3ba1c40dbe6f5e7cad3bc87e792547217b6fc5cb54"
+    },
+    "m9a_ci_abstract_bold": {
+     "tip_viewBox": "0 0 102 68",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "fcb90e50e96df40880789f3795a28d2c7291c599a76f22d8e2b955477b68f6a6"
+    },
+    "m9a_ci_abstract_bold_ctrl": {
+     "tip_viewBox": "0 0 94 68",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "c61e02c82d03bfc2ac1b820782dbfa0d44a1ebf9850845d6a013be6bb7757880"
+    },
+    "m9a_cb_bold_class": {
+     "tip_viewBox": "0 0 110 68",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "48a45f8887d8327429907665bd8bc8db8e6c6b4c9925ee0f8bac420e2105e489"
+    },
+    "m9a_cb_bold_class_ctrl": {
+     "tip_viewBox": "0 0 110 68",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "22e7e839772a50ea06a8d7f249bfc21a9067b8a1687db9751c5ee608c0ccab01"
+    },
+    "m9a_ci_usecase_actor": {
+     "tip_viewBox": "0 0 89 182",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "553cbae785e17c97179cd7a05854929cb6115237e4563ac9ade04738d1945651"
+    },
+    "m9a_ci_usecase_actor_ctrl": {
+     "tip_viewBox": "0 0 80 182",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "29ae60d8d46daf41871657ecb46c3b5f721a48816ba83560aca76c872e392875"
+    },
+    "m9a_ci_state_desc": {
+     "tip_viewBox": "0 0 99 71",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "e53b4dc8eaadc380368c3f51df5992169a52108f43b7e551e013db2603aa3e55"
+    },
+    "m9a_ci_state_desc_ctrl": {
+     "tip_viewBox": "0 0 92 71",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "be953d82fdd65ce6116ed94a22273a0ffb012716b74765b4fc2499e9a71fe209"
+    },
+    "m9a_ci_act_note_font": {
+     "tip_viewBox": "0 0 163 150",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "48067a31595b6bf878ddb5ce5264f2c63085c822676431ef9bcdb3d2be203cb3"
+    },
+    "m9a_ci_act_note_font_ctrl": {
+     "tip_viewBox": "0 0 163 150",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "e0b0a7048828efbffaf5ac337affae00a105631a45c5f2424fc2ac6bbcf08074"
+    },
+    "m9a_ci_class_note_font": {
+     "tip_viewBox": "0 0 96 154",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "e7c67400655862d86b645000f739521a5858f502b5584f57c70c1d55bb9879c0"
+    },
+    "m9a_ci_class_note_font_ctrl": {
+     "tip_viewBox": "0 0 88 154",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "a8bda10fdf0647fa302e498b0c78dc037916a25dd263c8b6cca51ac9155f4d0c"
+    },
+    "m9a_vi_hebrew_italic": {
+     "tip_viewBox": "0 0 94 85",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "41b3a9c36155054daa7f7b04ee832421704114a77f72fa243fbad5c7b1c35a97"
+    },
+    "m9a_vi_hebrew_italic_ctrl": {
+     "tip_viewBox": "0 0 94 85",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "73cb4565f9c0c8e5fc7f2ff5b29045809220a10dce1204fb06a3f0146a8aa522"
+    },
+    "m9a_mi_menlo_italic": {
+     "tip_viewBox": "0 0 79 84",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "bd54883bb02ce44c3e6c3c869fb155db7effbce28807175756e5909ef35c28b4"
+    },
+    "m9a_mi_menlo_italic_ctrl": {
+     "tip_viewBox": "0 0 79 84",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "c8c9d8dd0030ea1170c9ca3f9da020380d00efa3c3bae89878c13bede2010c90"
+    },
+    "m9a_ai_arial_italic": {
+     "tip_viewBox": "0 0 92 84",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "585c446b4398664c153d995b925781a283dc1ab8233b4c39632d8ebbf4047ca3"
+    },
+    "m9a_ai_arial_italic_ctrl": {
+     "tip_viewBox": "0 0 82 84",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "d16c7b7a16750993eb6823704018a906442e5c8a1dda5312acefdeb056fc59bc"
+    },
+    "m9a_bidi_p2029_pdf_verdana": {
+     "tip_viewBox": "0 0 97 68",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "2512deb3c3c0ec7f9d7a48e06b5b5e83a145d352f2c05156b27a2d756952b3f5"
+    },
+    "m9a_bidi_p2029_pdf_verdana_ctrl": {
+     "tip_viewBox": "0 0 83 68",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "47f022862d9be54958ce5109647c9e2d81aa9d0eb7c30fe75b390c02a70fd60c"
+    },
+    "m9a_bidi_p2029_pdf_space_verdana": {
+     "tip_viewBox": "0 0 87 68",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "805b4d58687c24258307e0d085586ed31b8b32eb0a26412e20382786ad0f4c04"
+    },
+    "m9a_bidi_p2029_pdf_space_verdana_ctrl": {
+     "tip_viewBox": "0 0 87 68",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "4c97d9dfee482fe31e697b5d89567ac65e60850ff3a69613df6581ce93f43877"
+    },
+    "m9a_bidi_nel_pdf_verdana": {
+     "tip_viewBox": "0 0 103 68",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "dc27033042f4ec9717480b8708c6a011a9d2f3c287fdde3d33af557f73426efe"
+    },
+    "m9a_bidi_nel_pdf_verdana_ctrl": {
+     "tip_viewBox": "0 0 89 68",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "a32c3549dbc6e1b47172306c1657467f8545881b4b47f20e4a5620f1b581a3a3"
+    },
+    "m9a_bidi_nel_pdf_space_verdana": {
+     "tip_viewBox": "0 0 93 68",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "ccfaa439c6266e07791a5c18106c02426b1dc0476ffc9fa02fc616a3c7fd75c0"
+    },
+    "m9a_bidi_nel_pdf_space_verdana_ctrl": {
+     "tip_viewBox": "0 0 93 68",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "73bacd0447e6adcb1ee464ef40a1c5e55ac320f466a70118411161df3e992dc1"
+    },
+    "m9a_bidi_p2029_mixed_verdana": {
+     "tip_viewBox": "0 0 74 68",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "408112296e604f0ece13e519af16f1caa61e2e7f7e6b9bebb0ac1b715792990c"
+    },
+    "m9a_bidi_p2029_mixed_verdana_ctrl": {
+     "tip_viewBox": "0 0 74 68",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "d304ba40b3ccdad597fbc945711f64b29f624e5b17b3c31768aba1f0fae4499b"
+    },
+    "m9a_lt_verdana_beng_link": {
+     "tip_viewBox": "0 0 89 195",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "554effae57056f5c072c22054c203b50a7809f94c5bfe6031730ca4e1c2a8396"
+    },
+    "m9a_lt_verdana_beng_link_ctrl": {
+     "tip_viewBox": "0 0 88 195",
+     "tip_equals_merge": true,
+     "tip_stdout_sha256": "df95bbdad5d399e94939f6f838e73d114437604c8c9f1af02b01118e9aabe901"
+    },
+    "m9a_lt_arial_guru_link": {
+     "tip_viewBox": "0 0 87 194",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "2f90bf40bc0afad76cf306ac49124f285ccadf5008ba6388c2e962a7c32e6858"
+    },
+    "m9a_lt_arial_guru_link_ctrl": {
+     "tip_viewBox": "0 0 87 194",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "51ac7c14db507cce89d7d162dd1d5d5cd937c515db108b702eeb4e3b5420528e"
+    },
+    "m9a_lt_verdana_size_link": {
+     "tip_viewBox": "0 0 99 200",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "0b95cf6625f1ef8b5a96167f29f973b1f7d851571e4ca06ac51492a026daa81a"
+    },
+    "m9a_lt_verdana_size_link_ctrl": {
+     "tip_viewBox": "0 0 90 200",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "545664ea62de1a5dafdf6c570d61cdcf8b1a15eead17da049064a3a9d63382c2"
+    },
+    "m9a_lt_courier_telu_link": {
+     "tip_viewBox": "0 0 87 194",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "d295ba93ae313277a7adf8ca236b3883e8c18d08413b7ec8772ce7921364ff13"
+    },
+    "m9a_lt_courier_telu_link_ctrl": {
+     "tip_viewBox": "0 0 87 194",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "50a475df56923150c43587e02ee28c67153554abd98fe56a6a93bec34afa8de4"
+    },
+    "m9a_lt_arrowfont_link": {
+     "tip_viewBox": "0 0 176 194",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "2294a1261599c7bc59c7d9888ac248a08f9f315a7cb113c2e81da0eefa928d6c"
+    },
+    "m9a_lt_arrowsize_link": {
+     "tip_viewBox": "0 0 202 202",
+     "tip_equals_merge": false,
+     "tip_stdout_sha256": "456a15f69e9990f6d3fb9cd84326bc1e11c1b2ead40d2989cc2eb788c5e7d1cf"
+    }
+   }
+  },
+  "Monkey Man per-style font extraction": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/relay/mm-styles",
+   "run.sh": "6a63a29ba0106e7725d6b3ce9ba617ea776d27c2f544b4c2f28957269c33065e",
+   "README.md": "0659a9bae4112c5e5ddd793aab6ba72d56bcf4724dc352c735a28c95fcec5c81",
+   "SHA256SUMS": "5dd90d4ce1859b4a88e24fa7c69942b495a4297a9760522538844a134fa2bf55",
+   "colossus dry run": "exit 0; 22 chain + 24 own files identical (except #host) to the committed colossus extraction"
+  },
+  "Java face-resolution probe": {
+   "path": "/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/relay/face-probe",
+   "FaceProbe.java": "a337b8bc9fcea78fc28c6d8240e8d3f933f087c4404f59f8cd617bffe3a917ff",
+   "README.md (predictions inside)": "e5365ccca63d15e7899df2efc2963d7f9cdab6273ec3f2e8207b893ecc05ef6b"
+  }
+ }
+}

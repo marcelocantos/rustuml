@@ -1,0 +1,82 @@
+ crates/rustuml-render/src/java_bidi_data.rs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+
+running 17 tests
+test font_chain::tests::fallback_port_follows_position_cluster ... ok
+test font_chain::tests::planner_ports_harfbuzz_15 ... ok
+test font_chain::tests::complexity_follows_java_units ... ok
+test font_chain::tests::unmapped_scalars_take_the_primary_notdef_on_both_paths ... ok
+test java_bidi::tests::conformance_bidi_character_test ... ignored
+test font_chain::tests::script_runs_follow_jdk_script_run ... ok
+test font_chain::tests::harfbuzz_hides_unmapped_default_ignorables ... ok
+test font_chain::tests::gsub_chosen_script_categorizes_the_shaper ... ok
+test font_chain::tests::harfbuzz_buffers_split_at_bidi_level_changes ... ok
+test font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer ... ok
+test font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef ... ok
+test java_bidi::tests::bidi_tables_are_jdk_ubidi_icu ... FAILED
+test font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15 ... ok
+test java_bidi::tests::conformance_sample ... ok
+test font_chain::tests::coverage_table_is_the_stored_reference_host_extraction ... ok
+test font_chain::tests::unicode_mark_tables_are_ucd_18 ... ok
+test java_bidi::tests::java_bidi_oracle ... FAILED
+
+failures:
+
+---- java_bidi::tests::bidi_tables_are_jdk_ubidi_icu stdout ----
+
+thread 'java_bidi::tests::bidi_tables_are_jdk_ubidi_icu' (58435301) panicked at crates/rustuml-render/src/java_bidi.rs:1432:13:
+assertion `left == right` failed: U+0591
+  left: 10
+ right: 17
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- java_bidi::tests::java_bidi_oracle stdout ----
+
+thread 'java_bidi::tests::java_bidi_oracle' (58435303) panicked at crates/rustuml-render/src/java_bidi.rs:1567:9:
+914 of 93786 differ from Java:
+1;D83B DC71 005A 05B4 007D 00AD 05FF 005D 05D1 0915 D803 DE60 005D 202C 002B FEFF 0061 0021 0025 0061 05D0 2069
+  java 1;0;1;1 1 2 2 1 1 1 1 1 2 2 2 1 1 1 2 2 2 2 2 1 1;1 1 2 2 1 1 1 1 1 2 2 2 1 1 1 2 2 2 2 2 1 1
+  rust 1;0;1;1 1 2 1 1 1 1 1 1 2 2 2 1 1 1 2 2 2 2 2 1 1;1 1 2 1 1 1 1 1 1 2 2 2 1 1 1 2 2 2 2 2 1 1
+D;202B D834 DD67 06F1 0031 05B4 2329 200E 0627 D835 DC00 002C 0024 000A 202A 200D 0028 0661
+  java 1;0;0;1 1 1 2 2 2 1 2 1 2 2 1 1 0 2 2 2 4;1 1 1 2 2 2 1 2 1 2 2 1 1 0 2 2 2 4
+  rust 1;0;0;1 1 1 2 2 1 1 2 1 2 2 1 1 0 2 2 2 4;1 1 1 2 2 1 1 2 1 2 2 1 1 0 2 2 2 4
+D;2029 0661 FB1D 0029 2003 001F 0022 FEFF D83B DC71 2046 FF09 D83A DD00 2067 0061 05B4 064B
+  java 1;0;0;0 2 1 1 1 1 1 1 1 1 1 1 1 1 1 4 4 4;0 2 1 1 1 1 1 1 1 1 1 1 1 1 1 4 4 4
+  rust 1;0;0;0 2 1 1 1 1 1 1 1 1 1 1 1 1 1 4 3 3;0 2 1 1 1 1 1 1 1 1 1 1 1 1 1 4 3 3
+D;05D0 2018 2329 202C 232A 0031 005B 05D0 0915 05B4 202C 00AD 0F3A 005B 200B 202B 0061 005D 05D0 FF09 3009 07FB 05B4 06F1 005B D834 DD67 202E 202C
+  java 1;0;1;1 1 1 1 1 2 1 1 2 2 1 1 1 1 4 4 4 3 3 3 3 3 3 4 3 3 3 1 1;1 1 1 1 1 2 1 1 2 2 1 1 1 1 4 4 4 3 3 3 3 3 3 4 3 3 3 1 1
+  rust 1;0;1;1 1 1 1 1 2 1 1 2 1 1 1 1 1 4 4 4 3 3 3 3 3 3 4 3 3 3 1 1;1 1 1 1 1 2 1 1 2 1 1 1 1 1 4 4 4 3 3 3 3 3 3 4 3 3 3 1 1
+1;005B 202E 0661 00B2 002F 202E 0028 05D1 007B 2029 FE70 0029 0021 D802 DC00 202B FF09 D83B DC71 0020 0661 05B4 05D0 05D0 D803 DD00 0627 0661 0020 202A 07FB
+  java 1;0;1;1 3 3 3 3 5 5 5 5 1 1 1 1 1 1 3 3 3 3 3 4 4 3 3 3 3 3 4 3 5 5;1 3 3 3 3 5 5 5 5 1 1 1 1 1 1 3 3 3 3 3 4 4 3 3 3 3 3 4 3 5 5
+  rust 1;0;1;1 3 3 3 3 5 5 5 5 1 1 1 1 1 1 3 3 3 3 3 4 3 3 3 3 3 3 4 3 5 5;1 3 3 3 3 5 5 5 5 1 1 1 1 1 1 3 3 3 3 3 4 3 3 3 3 3 3 4 3 5 5
+D;2029 0661 2066 00A0 002E 0F3B 08A0 3000 FF08 0661 05B4 2069 200E 2069 0028 05D0
+  java 1;0;0;0 2 0 2 2 2 3 3 3 4 4 0 0 0 0 1;0 2 0 2 2 2 3 3 3 4 4 0 0 0 0 1
+  rust 1;0;0;0 2 0 2 2 2 3 3 3 4 2 0 0 0 0 1;0 2 0 2 2 2 3 3 3 4 2 0 0 0 0 1
+D;000A 2018 2068 2067 005B 005B 2069 DB40 DC01 0021 0301 05D0 DC00 0029 0661 05B4 00B0 2067 0022 D834 DD67 002D
+  java 1;0;0;0 0 0 1 3 3 1 1 1 1 1 1 2 1 2 2 1 1 3 3 3 3;0 0 0 1 3 3 1 1 1 1 1 1 2 1 2 2 1 1 3 3 3 3
+  rust 1;0;0;0 0 0 1 3 3 1 1 1 1 1 1 2 1 2 1 1 1 3 3 3 3;0 0 0 1 3 3 1 1 1 1 1 1 2 1 2 1 1 1 3 3 3 3
+D;002F 00A0 202C D803 DD00 000A 005B 002F 2069 05D1 0028 0061 0061 005A 3008 0600 002D 0028 FF08 002B DB40 DC01 0031 001F 0031 05B4 005B 0020 005B 002B 05D0 2067 3008 232A 2066 AC00 00A0 05D0 005D 3000 FEFF 2069
+  java 1;0;1;1 1 1 1 1 1 1 1 1 1 1 2 2 2 1 2 1 1 1 1 2 2 2 1 2 2 1 1 1 1 1 1 3 3 3 4 4 5 4 1 1 1;1 1 1 1 1 1 1 1 1 1 1 2 2 2 1 2 1 1 1 1 2 2 2 1 2 2 1 1 1 1 1 1 3 3 3 4 4 5 4 1 1 1
+  rust 1;0;1;1 1 1 1 1 1 1 1 1 1 1 2 2 2 1 2 1 1 1 1 2 2 2 1 2 1 1 1 1 1 1 1 3 3 3 4 4 5 4 1 1 1;1 1 1 1 1 1 1 1 1 1 1 2 2 2 1 2 1 1 1 1 2 2 2 1 2 1 1 1 1 1 1 1 3 3 3 4 4 5 4 1 1 1
+
+
+failures:
+    java_bidi::tests::bidi_tables_are_jdk_ubidi_icu
+    java_bidi::tests::java_bidi_oracle
+
+test result: FAILED. 14 passed; 2 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.26s
+
+warning: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:74:15
+   |
+74 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rustuml-parser` (lib) generated 1 warning
+   Compiling rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/src/drill/crates/rustuml-render)
+    Finished `release` profile [optimized] target(s) in 19.11s
+     Running unittests src/lib.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/target/release/deps/rustuml_render-64ddbe2e1fa0ea9b)
+error: test failed, to rerun pass `-p rustuml-render --lib`

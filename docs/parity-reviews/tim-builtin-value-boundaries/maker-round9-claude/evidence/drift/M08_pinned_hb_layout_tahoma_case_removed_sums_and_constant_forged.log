@@ -1,0 +1,54 @@
+ crates/rustuml-render/src/font_chain.rs                                 | 2 +-
+ tools/font-chain-reference/shaping-sources/SHA256SUMS                   | 2 +-
+ .../shaping-sources/harfbuzz-15.0.0/hb-ot-layout.cc                     | 1 -
+ 3 files changed, 2 insertions(+), 3 deletions(-)
+
+
+running 17 tests
+test font_chain::tests::fallback_port_follows_position_cluster ... ok
+test font_chain::tests::complexity_follows_java_units ... ok
+test font_chain::tests::planner_ports_harfbuzz_15 ... ok
+test font_chain::tests::unmapped_scalars_take_the_primary_notdef_on_both_paths ... ok
+test java_bidi::tests::conformance_bidi_character_test ... ignored
+test font_chain::tests::script_runs_follow_jdk_script_run ... ok
+test font_chain::tests::harfbuzz_hides_unmapped_default_ignorables ... ok
+test font_chain::tests::gsub_chosen_script_categorizes_the_shaper ... ok
+test font_chain::tests::harfbuzz_buffers_split_at_bidi_level_changes ... ok
+test font_chain::tests::fallback_positioning_needs_a_base_in_the_same_buffer ... ok
+test font_chain::tests::default_shaped_runs_zero_unmapped_marks_by_gdef ... ok
+test java_bidi::tests::conformance_sample ... ok
+test font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15 ... FAILED
+test java_bidi::tests::bidi_tables_are_jdk_ubidi_icu ... ok
+test font_chain::tests::coverage_table_is_the_stored_reference_host_extraction ... ok
+test font_chain::tests::unicode_mark_tables_are_ucd_18 ... ok
+test java_bidi::tests::java_bidi_oracle ... ok
+
+failures:
+
+---- font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15 stdout ----
+
+thread 'font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15' (58469718) panicked at crates/rustuml-render/src/font_chain.rs:1862:9:
+assertion `left == right` failed
+  left: [(442, 2874, 42038), (430, 2874, 40662), (442, 2874, 39116), (430, 2874, 39374), (490, 3046, 41638), (478, 3046, 41902), (898, 12554, 46470), (910, 12566, 47732), (928, 23298, 59332), (940, 23310, 60732), (964, 23836, 60072), (976, 23832, 61456), (994, 24474, 60336), (1006, 24470, 61740), (1006, 24576, 61346), (1018, 24572, 62828), (1006, 24576, 61352), (1018, 24572, 62834), (844, 7302, 45474), (180, 13054, 7254), (192, 12638, 7254), (192, 12690, 7254), (188, 248, 3852), (188, 264, 3426), (1058, 47032, 11818), (1046, 47030, 12600), (1058, 71796, 16770), (1046, 71790, 17862), (1046, 71788, 17112), (1058, 71794, 17514), (1330, 109904, 57938), (1330, 109904, 58972), (1004, 59092, 14836), (588, 5078, 14418), (588, 5078, 14238), (894, 17162, 33960), (894, 17154, 34472), (816, 7868, 17052), (816, 7868, 17138)]
+ right: [(442, 2874, 42038), (430, 2874, 40662), (442, 2874, 39116), (430, 2874, 39374), (490, 3046, 41638), (478, 3046, 41902), (898, 12554, 46470), (910, 12566, 47732), (928, 23298, 59332), (940, 23310, 60732), (964, 23836, 60072), (976, 23832, 61456), (994, 24474, 60336), (1006, 24470, 61740), (1006, 24576, 61346), (1018, 24572, 62828), (1006, 24576, 61352), (1018, 24572, 62834), (832, 7324, 47162), (844, 7302, 45474), (180, 13054, 7254), (192, 12638, 7254), (192, 12690, 7254), (188, 248, 3852), (188, 264, 3426), (1058, 47032, 11818), (1046, 47030, 12600), (1058, 71796, 16770), (1046, 71790, 17862), (1046, 71788, 17112), (1058, 71794, 17514), (1330, 109904, 57938), (1330, 109904, 58972), (1004, 59092, 14836), (588, 5078, 14418), (588, 5078, 14238), (894, 17162, 33960), (894, 17154, 34472), (816, 7868, 17052), (816, 7868, 17138)]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    font_chain::tests::shaper_groups_and_gdef_blocklist_are_harfbuzz_15
+
+test result: FAILED. 15 passed; 1 failed; 1 ignored; 0 measured; 842 filtered out; finished in 0.29s
+
+warning: function `looks_like_description_bracket_command` is never used
+  --> crates/rustuml-parser/src/parse/component.rs:74:15
+   |
+74 | pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `rustuml-parser` (lib) generated 1 warning
+   Compiling rustuml-render v0.7.0 (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/src/drill/crates/rustuml-render)
+    Finished `release` profile [optimized] target(s) in 19.49s
+     Running unittests src/lib.rs (/Users/marcelo/Library/Caches/rustuml-shared-svg-round9-claude-maker/target/release/deps/rustuml_render-64ddbe2e1fa0ea9b)
+error: test failed, to rerun pass `-p rustuml-render --lib`

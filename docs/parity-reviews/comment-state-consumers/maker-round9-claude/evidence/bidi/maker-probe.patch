@@ -1,0 +1,33 @@
+diff --git a/crates/rustuml-render/src/java_bidi.rs b/crates/rustuml-render/src/java_bidi.rs
+index 8196879..afaf4c3 100644
+--- a/crates/rustuml-render/src/java_bidi.rs
++++ b/crates/rustuml-render/src/java_bidi.rs
+@@ -1572,3 +1572,28 @@ mod tests {
+         );
+     }
+ }
++/// MAKER PROBE (private copy only): the checker round-8 dump format.
++#[cfg(test)]
++mod maker_dump_probe {
++    use super::*;
++    #[test]
++    #[ignore]
++    fn maker_dump_levels() {
++        let input = std::env::var("MAKER_BIDI_IN").unwrap();
++        let output = std::env::var("MAKER_BIDI_OUT").unwrap();
++        let text = std::fs::read_to_string(input).unwrap();
++        let mut out = String::new();
++        for line in text.lines() {
++            let (dir, hex) = line.split_once(';').unwrap();
++            let units: Vec<u16> = hex.split_whitespace().map(|h| u16::from_str_radix(h, 16).unwrap()).collect();
++            let para = match dir { "0" => 0, "1" => 1, _ => LEVEL_DEFAULT_LTR };
++            let p = set_para(&units, para);
++            let rb = requires_bidi(&units);
++            let tl = text_line_levels(&units);
++            let lv: Vec<String> = p.levels.iter().map(|l| l.to_string()).collect();
++            out.push_str(&format!("{};{};{};{};{}\n", rb as u8, p.is_left_to_right() as u8, p.para_level, lv.join(" "),
++                tl.map(|v| v.iter().map(|l| l.to_string()).collect::<Vec<_>>().join(" ")).unwrap_or_else(|| "-".into())));
++        }
++        std::fs::write(output, out).unwrap();
++    }
++}
