@@ -2943,6 +2943,35 @@ fn autonomous_scope_painted_bounds(
                     x + width - LIMIT_FINDER_PIXEL_ADJUST,
                     y + height - LIMIT_FINDER_PIXEL_ADJUST,
                 );
+                // EntityImageStateBorder also paints its label outside the
+                // owning cluster's frontier (as on the root cluster path).
+                if *shape == StateLayoutShape::Port
+                    && let Some(state) = diagram.states.iter().find(|state| state.id == *id)
+                    && let Some(cluster) = state.parent.as_deref().and_then(|parent| {
+                        result
+                            .cluster_positions
+                            .iter()
+                            .find(|cluster| cluster.id == parent)
+                    })
+                {
+                    let skin = StateSkin::from_diagram(diagram);
+                    let style = autonomous_state_style(diagram, &skin, Some(state));
+                    let label_width = style.title.width(&state.label);
+                    let label_height = style.title.height(&state.label);
+                    let center_y = y + height / 2.0;
+                    let label_top = if center_y <= cluster.y + cluster.height / 2.0 {
+                        y - STATE_BORDER_RADIUS * 2.0 - label_height
+                    } else {
+                        y + STATE_BORDER_RADIUS * 2.0
+                    };
+                    let limit_offset = style.title.ascent(&state.label) - label_height + 1.5;
+                    let label_center_x = x + STATE_BORDER_RADIUS;
+                    bounds.include(label_center_x - label_width / 2.0, label_top + limit_offset);
+                    bounds.include(
+                        label_center_x + label_width / 2.0,
+                        label_top + label_height + limit_offset,
+                    );
+                }
             }
             StateLayoutShape::Diamond => {
                 bounds.include(x - POLYGON_LIMIT_FINDER_OVERSCAN_X, y);
@@ -3082,6 +3111,24 @@ fn autonomous_scope_painted_bounds(
     bounds.is_finite().then_some(bounds)
 }
 
+/// The group that owns a scope layout id: a scoped pseudo-state
+/// (`__start__:G`, `__end__:G`, `[H]G`, `[H*]G`) belongs to `G`; a state to
+/// its parent. Java creates these leaves inside that group's quark.
+fn autonomous_id_owner<'a>(diagram: &'a StateDiagram, id: &'a str) -> Option<&'a str> {
+    id.strip_prefix("__start__:")
+        .or_else(|| id.strip_prefix("__end__:"))
+        .or_else(|| id.strip_prefix("[H*]"))
+        .or_else(|| id.strip_prefix("[H]"))
+        .filter(|scope| !scope.is_empty())
+        .or_else(|| {
+            diagram
+                .states
+                .iter()
+                .find(|state| state.id == id)
+                .and_then(|state| state.parent.as_deref())
+        })
+}
+
 fn layout_autonomous_scope(
     diagram: &StateDiagram,
     ids: Vec<String>,
@@ -3134,27 +3181,34 @@ fn layout_autonomous_scope(
     for id in &ids {
         let owner = if live_clusters.iter().any(|cluster| cluster.id == *id) {
             Some(id.as_str())
-        } else if let Some(scope) = id
-            .strip_prefix("__start__:")
-            .or_else(|| id.strip_prefix("__end__:"))
-            .or_else(|| id.strip_prefix("[H*]"))
-            .or_else(|| id.strip_prefix("[H]"))
-            .filter(|scope| !scope.is_empty())
-        {
-            Some(scope)
         } else {
-            diagram
-                .states
-                .iter()
-                .find(|state| state.id == *id)
-                .and_then(|state| state.parent.as_deref())
+            autonomous_id_owner(diagram, id)
         };
         if let Some(owner) = owner
             && live_clusters.iter().any(|cluster| cluster.id == owner)
         {
-            layout.add_cluster_node(owner, id);
+            // ClusterDotString.printRanks: input/output positions sit on the
+            // cluster's source/sink rank, as on the root cluster path.
+            match diagram
+                .states
+                .iter()
+                .find(|state| state.id == *id)
+                .map(StateEntityPosition::of)
+            {
+                Some(position) if position.is_input() => layout.add_cluster_source_node(owner, id),
+                Some(position) if position.is_output() => layout.add_cluster_sink_node(owner, id),
+                _ => layout.add_cluster_node(owner, id),
+            }
         }
     }
+    let border_port = |endpoint: &str| {
+        diagram
+            .states
+            .iter()
+            .find(|state| state.id == endpoint)
+            .is_some_and(|state| StateEntityPosition::of(state).uses_port_p())
+            .then_some("P")
+    };
     let mut transition_layout_edges = std::collections::HashMap::new();
     for index in &transition_indices {
         let transition = &diagram.transitions[*index];
@@ -3184,9 +3238,13 @@ fn layout_autonomous_scope(
             size.height = size.height.floor();
             size
         });
-        let layout_edge_index = layout.add_edge_with_label_sizes_and_minlen(
+        let layout_edge_index = layout.add_edge_with_ports_and_label_sizes_and_minlen(
             layout_from,
             layout_to,
+            EdgePorts {
+                tail: border_port(layout_from),
+                head: border_port(layout_to),
+            },
             label_size,
             None,
             None,
@@ -3202,6 +3260,15 @@ fn layout_autonomous_scope(
     if result.cluster_positions.len() != live_clusters.len() {
         return None;
     }
+    // Cluster.drawU moves a frontier onto its border points; edges are
+    // clipped against the solved (live) rectangle first, as on the root path.
+    let mut painted_cluster_positions = result.cluster_positions.clone();
+    apply_state_border_frontiers(
+        diagram,
+        &ids,
+        &mut painted_cluster_positions,
+        &result.node_positions,
+    );
     if !live_clusters.is_empty() {
         for edge in &mut result.edge_paths {
             let tail = result
@@ -3217,6 +3284,7 @@ fn layout_autonomous_scope(
             }
         }
     }
+    result.cluster_positions = painted_cluster_positions;
     let painted_bounds = autonomous_scope_painted_bounds(
         diagram,
         &ids,
@@ -3435,6 +3503,33 @@ fn collect_state_group_outcome<'a>(
     }
 }
 
+/// A non-NORMAL leaf whose (necessarily non-autarkic) group is drawn by
+/// Cluster.drawU inside some ancestor's GroupMakerState image, as `gate` in
+/// `Works { Shed { gate <<entryPoint>> } }`. Root clusters with border points
+/// stay on render_non_autarkic_root_clusters.
+fn border_point_inside_image(diagram: &StateDiagram, state: &State) -> bool {
+    let position = StateEntityPosition::of(state);
+    if position.is_normal() || !(position.is_input() || position.is_output()) {
+        return false;
+    }
+    let mut current = state
+        .parent
+        .as_deref()
+        .and_then(|group| autonomous_scope_parent(diagram, group));
+    let mut remaining = diagram.states.len() + 1;
+    while let Some(group) = current {
+        if remaining == 0 {
+            return false;
+        }
+        remaining -= 1;
+        if java_state_group_is_autarkic(diagram, group) {
+            return true;
+        }
+        current = autonomous_scope_parent(diagram, group);
+    }
+    false
+}
+
 fn build_state_group_outcome<'a>(
     diagram: &'a StateDiagram,
     composite: &'a State,
@@ -3455,9 +3550,10 @@ fn build_state_group_outcome<'a>(
         })
         .collect();
     if direct_children.is_empty()
-        || direct_children
-            .iter()
-            .any(|state| !supports_autonomous_state_image(state) || state.url.is_some())
+        || direct_children.iter().any(|state| {
+            !(supports_autonomous_state_image(state) || border_point_inside_image(diagram, state))
+                || state.url.is_some()
+        })
     {
         return None;
     }
@@ -3704,10 +3800,10 @@ fn build_autonomous_composite<'a>(
     if !diagram.notes.is_empty()
         || diagram.meta.title.is_some()
         || !has_only_autonomous_layout_skinparams(diagram)
-        || diagram
-            .states
-            .iter()
-            .any(|state| !StateEntityPosition::of(state).is_normal())
+        || diagram.states.iter().any(|state| {
+            !StateEntityPosition::of(state).is_normal()
+                && !border_point_inside_image(diagram, state)
+        })
     {
         return None;
     }
@@ -4465,7 +4561,10 @@ fn emit_autonomous_scope_links(
 
 fn collect_autonomous_composite_ids(composite: &AutonomousComposite<'_>, ids: &mut Vec<String>) {
     for region in &composite.regions {
-        for id in &region.layout.ids {
+        // A live cluster without a group link has no layout node, but its
+        // entity still takes a UID (allocate_state_svg_ids).
+        let cluster_ids = region.live_clusters.iter().map(|cluster| &cluster.id);
+        for id in region.layout.ids.iter().chain(cluster_ids) {
             if !ids.contains(id) {
                 ids.push(id.clone());
             }
@@ -4732,6 +4831,11 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     let skin = StateSkin::from_diagram(diagram);
     let (composites, live_clusters, outer) = build_autonomous_composite(diagram)?;
     let mut all_ids = outer.ids.clone();
+    for cluster in &live_clusters {
+        if !all_ids.contains(&cluster.id) {
+            all_ids.push(cluster.id.clone());
+        }
+    }
     for composite in &composites {
         collect_autonomous_composite_ids(composite, &mut all_ids);
     }
@@ -4780,16 +4884,7 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     }
     let mut paint_ids = outer.ids.clone();
     paint_ids.sort_by_key(|id| {
-        let owner = id
-            .strip_prefix("__start__:")
-            .or_else(|| id.strip_prefix("__end__:"))
-            .or_else(|| {
-                diagram
-                    .states
-                    .iter()
-                    .find(|state| state.id == *id)
-                    .and_then(|state| state.parent.as_deref())
-            });
+        let owner = autonomous_id_owner(diagram, id);
         owner
             .and_then(|owner| live_clusters.iter().position(|cluster| cluster.id == owner))
             .unwrap_or(live_clusters.len())
@@ -4897,18 +4992,7 @@ fn apply_state_border_frontiers(
             if id == &cluster.id {
                 continue;
             }
-            let owner = if let Some(scope) = id
-                .strip_prefix("__start__:")
-                .or_else(|| id.strip_prefix("__end__:"))
-            {
-                Some(scope)
-            } else {
-                diagram
-                    .states
-                    .iter()
-                    .find(|state| state.id == *id)
-                    .and_then(|state| state.parent.as_deref())
-            };
+            let owner = autonomous_id_owner(diagram, id);
             if owner != Some(cluster.id.as_str()) {
                 continue;
             }
@@ -5168,20 +5252,8 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     for id in &ids {
         let owner = if composites.iter().any(|composite| composite.id == *id) {
             Some(id.as_str())
-        } else if let Some(scope) = id
-            .strip_prefix("__start__:")
-            .or_else(|| id.strip_prefix("__end__:"))
-            .or_else(|| id.strip_prefix("[H*]"))
-            .or_else(|| id.strip_prefix("[H]"))
-            .filter(|scope| !scope.is_empty())
-        {
-            Some(scope)
         } else {
-            diagram
-                .states
-                .iter()
-                .find(|state| state.id == *id)
-                .and_then(|state| state.parent.as_deref())
+            autonomous_id_owner(diagram, id)
         };
         if let Some(owner) = owner
             && composites.iter().any(|composite| composite.id == owner)
@@ -5671,19 +5743,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     // unpackaged root leaves created by `getUnpackagedEntities`.
     let mut paint_scope = scope.clone();
     paint_scope.positions.sort_by_key(|(id, ..)| {
-        let owner = id
-            .strip_prefix("__start__:")
-            .or_else(|| id.strip_prefix("__end__:"))
-            .or_else(|| id.strip_prefix("[H*]"))
-            .or_else(|| id.strip_prefix("[H]"))
-            .filter(|scope| !scope.is_empty())
-            .or_else(|| {
-                diagram
-                    .states
-                    .iter()
-                    .find(|state| state.id == *id)
-                    .and_then(|state| state.parent.as_deref())
-            });
+        let owner = autonomous_id_owner(diagram, id);
         owner
             .and_then(|owner| {
                 composites
