@@ -19562,7 +19562,12 @@ mod tests {
         assert!(!name.contains("font-weight"), "{name}");
         assert!(!member.contains("font-style"), "{member}");
         assert!(!member.contains("font-weight"), "{member}");
-        assert!(member.contains("textLength=\"8.4287\""), "{member}");
+        // One Menlo cell: 1233/2048 of the 14 pt size, formatted like the SVG.
+        let cell = super::fmt_tl(14.0 * 1233.0 / 2048.0);
+        assert!(
+            member.contains(&format!("textLength=\"{cell}\"")),
+            "{member}"
+        );
     }
 
     #[test]
