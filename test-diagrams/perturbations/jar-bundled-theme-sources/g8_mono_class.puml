@@ -1,0 +1,6 @@
+@startuml
+!theme mono
+class G8MonoGranary
+class G8MonoMill
+G8MonoGranary --> G8MonoMill
+@enduml

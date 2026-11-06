@@ -1,0 +1,6 @@
+@startuml
+!theme carbon-gray
+class G8CarbonGrayGranary
+class G8CarbonGrayMill
+G8CarbonGrayGranary --> G8CarbonGrayMill
+@enduml

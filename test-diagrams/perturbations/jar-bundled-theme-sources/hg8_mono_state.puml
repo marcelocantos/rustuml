@@ -1,0 +1,6 @@
+@startuml
+!theme mono
+[*] --> Hg8MonoIdle
+Hg8MonoIdle --> Hg8MonoBusy : heat
+Hg8MonoBusy --> [*]
+@enduml

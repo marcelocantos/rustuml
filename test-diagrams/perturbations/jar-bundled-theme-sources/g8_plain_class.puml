@@ -1,0 +1,6 @@
+@startuml
+!theme plain
+class G8PlainGranary
+class G8PlainMill
+G8PlainGranary --> G8PlainMill
+@enduml

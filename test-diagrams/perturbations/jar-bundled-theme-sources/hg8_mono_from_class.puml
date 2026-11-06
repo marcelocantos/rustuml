@@ -1,0 +1,6 @@
+@startuml
+!theme mono from hg8from
+class Hg8FromMonoLoft
+class Hg8FromMonoCellar
+Hg8FromMonoLoft --> Hg8FromMonoCellar : drops
+@enduml

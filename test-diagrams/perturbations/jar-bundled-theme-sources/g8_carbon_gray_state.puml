@@ -1,0 +1,6 @@
+@startuml
+!theme carbon-gray
+[*] --> G8CarbonGrayCold
+G8CarbonGrayCold --> G8CarbonGrayHot : heat
+G8CarbonGrayHot --> [*]
+@enduml

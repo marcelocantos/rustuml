@@ -1,0 +1,6 @@
+@startuml
+!theme plain from hg8from-altered
+actor Hg8FromAltPlainMiller
+participant Hg8FromAltPlainMill
+Hg8FromAltPlainMiller -> Hg8FromAltPlainMill : grind
+@enduml

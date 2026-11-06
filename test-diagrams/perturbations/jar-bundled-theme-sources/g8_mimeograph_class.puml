@@ -1,0 +1,6 @@
+@startuml
+!theme mimeograph
+class G8MimeographGranary
+class G8MimeographMill
+G8MimeographGranary --> G8MimeographMill
+@enduml

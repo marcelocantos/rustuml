@@ -1,0 +1,5 @@
+@startuml
+!theme mimeograph
+G8MimeographMiller -> G8MimeographBaker : flour sack
+G8MimeographBaker --> G8MimeographMiller : warm loaf
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+!theme mimeograph
+component Hg8MimeographHopper
+component Hg8MimeographKiln
+Hg8MimeographHopper --> Hg8MimeographKiln : feed
+@enduml

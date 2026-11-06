@@ -1,0 +1,9 @@
+@startuml
+!theme blueprint
+left to right direction
+actor Hg8BlueprintClerk
+usecase Hg8BlueprintFile as "File receipt"
+usecase Hg8BlueprintAudit as "Audit ledger"
+Hg8BlueprintClerk --> Hg8BlueprintFile
+Hg8BlueprintClerk --> Hg8BlueprintAudit
+@enduml

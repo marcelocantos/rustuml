@@ -1,0 +1,9 @@
+@startuml
+!theme mono
+left to right direction
+actor Hg8MonoClerk
+usecase Hg8MonoFile as "File receipt"
+usecase Hg8MonoAudit as "Audit ledger"
+Hg8MonoClerk --> Hg8MonoFile
+Hg8MonoClerk --> Hg8MonoAudit
+@enduml

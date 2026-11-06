@@ -1,0 +1,7 @@
+@startuml
+!theme amiga
+actor Hg8AmigaMiller
+participant Hg8AmigaMill
+Hg8AmigaMiller -> Hg8AmigaMill : grind
+Hg8AmigaMill --> Hg8AmigaMiller : flour
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+!theme mimeograph
+[*] --> Hg8MimeographIdle
+Hg8MimeographIdle --> Hg8MimeographBusy : heat
+Hg8MimeographBusy --> [*]
+@enduml

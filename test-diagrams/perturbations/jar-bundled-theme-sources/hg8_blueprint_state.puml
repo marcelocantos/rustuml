@@ -1,0 +1,6 @@
+@startuml
+!theme blueprint
+[*] --> Hg8BlueprintIdle
+Hg8BlueprintIdle --> Hg8BlueprintBusy : heat
+Hg8BlueprintBusy --> [*]
+@enduml

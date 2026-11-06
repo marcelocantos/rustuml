@@ -1,0 +1,5 @@
+@startuml
+!theme carbon-gray
+G8CarbonGrayMiller -> G8CarbonGrayBaker : flour sack
+G8CarbonGrayBaker --> G8CarbonGrayMiller : warm loaf
+@enduml

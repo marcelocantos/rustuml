@@ -1,0 +1,9 @@
+@startuml
+!theme mimeograph
+start
+:G8Mimeograph knead dough;
+if (G8Mimeograph risen?) then (yes)
+  :G8Mimeograph bake loaf;
+endif
+stop
+@enduml

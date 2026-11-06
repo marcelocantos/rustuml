@@ -1,0 +1,9 @@
+@startuml
+!theme mono
+start
+:G8Mono knead dough;
+if (G8Mono risen?) then (yes)
+  :G8Mono bake loaf;
+endif
+stop
+@enduml

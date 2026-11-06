@@ -1,0 +1,9 @@
+@startuml
+!theme carbon-gray
+start
+:G8CarbonGray knead dough;
+if (G8CarbonGray risen?) then (yes)
+  :G8CarbonGray bake loaf;
+endif
+stop
+@enduml

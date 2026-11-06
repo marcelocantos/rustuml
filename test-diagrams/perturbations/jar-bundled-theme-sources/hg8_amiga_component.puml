@@ -1,0 +1,6 @@
+@startuml
+!theme amiga
+component Hg8AmigaHopper
+component Hg8AmigaKiln
+Hg8AmigaHopper --> Hg8AmigaKiln : feed
+@enduml

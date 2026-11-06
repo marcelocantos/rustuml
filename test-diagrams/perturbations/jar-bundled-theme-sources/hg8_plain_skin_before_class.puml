@@ -1,0 +1,6 @@
+@startuml
+skinparam BackgroundColor #C4A574
+skinparam DefaultFontName Courier
+!theme plain
+class Hg8BeforePlainCask
+@enduml

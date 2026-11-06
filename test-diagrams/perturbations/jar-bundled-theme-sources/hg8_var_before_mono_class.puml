@@ -1,0 +1,6 @@
+@startuml
+!$CLR_BG = "#C4A574"
+!$CLR_FG = "#102030"
+!theme mono
+class Hg8VarMonoLoft
+@enduml

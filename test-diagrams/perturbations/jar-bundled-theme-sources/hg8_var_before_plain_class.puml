@@ -1,0 +1,6 @@
+@startuml
+!$BGCOLOR = "#C4A574"
+!$FONT_NAME = "Courier"
+!theme plain
+class Hg8VarPlainLoft
+@enduml

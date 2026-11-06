@@ -1,0 +1,6 @@
+@startuml
+!theme amiga from hg8from
+class Hg8FromAmigaLoft
+class Hg8FromAmigaCellar
+Hg8FromAmigaLoft --> Hg8FromAmigaCellar : drops
+@enduml

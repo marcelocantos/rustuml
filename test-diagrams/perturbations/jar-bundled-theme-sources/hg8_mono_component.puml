@@ -1,0 +1,6 @@
+@startuml
+!theme mono
+component Hg8MonoHopper
+component Hg8MonoKiln
+Hg8MonoHopper --> Hg8MonoKiln : feed
+@enduml

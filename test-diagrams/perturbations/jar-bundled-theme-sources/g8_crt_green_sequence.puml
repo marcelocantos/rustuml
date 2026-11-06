@@ -1,0 +1,5 @@
+@startuml
+!theme crt-green
+G8CrtGreenMiller -> G8CrtGreenBaker : flour sack
+G8CrtGreenBaker --> G8CrtGreenMiller : warm loaf
+@enduml

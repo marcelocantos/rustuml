@@ -1,0 +1,6 @@
+@startuml
+!theme mimeograph from hg8from
+class Hg8FromMimeographLoft
+class Hg8FromMimeographCellar
+Hg8FromMimeographLoft --> Hg8FromMimeographCellar : drops
+@enduml

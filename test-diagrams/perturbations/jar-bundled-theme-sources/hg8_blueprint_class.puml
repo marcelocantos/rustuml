@@ -1,0 +1,6 @@
+@startuml
+!theme blueprint
+class Hg8BlueprintBarn
+class Hg8BlueprintSilo
+Hg8BlueprintBarn --> Hg8BlueprintSilo : stores
+@enduml

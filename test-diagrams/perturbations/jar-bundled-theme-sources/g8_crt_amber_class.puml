@@ -1,0 +1,6 @@
+@startuml
+!theme crt-amber
+class G8CrtAmberGranary
+class G8CrtAmberMill
+G8CrtAmberGranary --> G8CrtAmberMill
+@enduml

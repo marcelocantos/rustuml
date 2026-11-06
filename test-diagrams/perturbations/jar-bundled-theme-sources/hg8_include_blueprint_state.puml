@@ -1,0 +1,6 @@
+@startuml
+!include hg8inc/apply-blueprint.puml
+[*] --> Hg8IncBlueprintCold
+Hg8IncBlueprintCold --> Hg8IncBlueprintHot : fire
+Hg8IncBlueprintHot --> [*]
+@enduml

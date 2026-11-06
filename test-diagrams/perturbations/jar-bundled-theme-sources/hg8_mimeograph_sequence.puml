@@ -1,0 +1,7 @@
+@startuml
+!theme mimeograph
+actor Hg8MimeographMiller
+participant Hg8MimeographMill
+Hg8MimeographMiller -> Hg8MimeographMill : grind
+Hg8MimeographMill --> Hg8MimeographMiller : flour
+@enduml

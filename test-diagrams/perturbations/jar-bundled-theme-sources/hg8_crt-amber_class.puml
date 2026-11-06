@@ -1,0 +1,6 @@
+@startuml
+!theme crt-amber
+class Hg8CrtAmberBarn
+class Hg8CrtAmberSilo
+Hg8CrtAmberBarn --> Hg8CrtAmberSilo : stores
+@enduml

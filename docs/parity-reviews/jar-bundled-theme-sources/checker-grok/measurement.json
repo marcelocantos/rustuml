@@ -1,0 +1,299 @@
+{
+  "whole_output": {
+    "cohorts": {
+      "grok-g8-checker-heldout": {
+        "n": 89,
+        "base_stdout_match": 0,
+        "tip_stdout_match": 0,
+        "lost_matches": [],
+        "gains": [],
+        "lost_rejections": [],
+        "new_valid_input_errors": [],
+        "panics": [],
+        "timeouts": [],
+        "preexisting_accept_of_java_invalid": [
+          "hg8_from_missing_plain_class"
+        ],
+        "changed_mismatches": 76
+      },
+      "grok-g8-themes": {
+        "n": 36,
+        "base_stdout_match": 0,
+        "tip_stdout_match": 0,
+        "lost_matches": [],
+        "gains": [],
+        "lost_rejections": [],
+        "new_valid_input_errors": [],
+        "panics": [],
+        "timeouts": [],
+        "preexisting_accept_of_java_invalid": [],
+        "changed_mismatches": 32
+      },
+      "shared-svg-round2-r2a": {
+        "n": 45,
+        "base_stdout_match": 0,
+        "tip_stdout_match": 0,
+        "lost_matches": [],
+        "gains": [],
+        "lost_rejections": [],
+        "new_valid_input_errors": [],
+        "panics": [],
+        "timeouts": [],
+        "preexisting_accept_of_java_invalid": [],
+        "changed_mismatches": 8
+      },
+      "shared-svg-checker-c1": {
+        "n": 32,
+        "base_stdout_match": 0,
+        "tip_stdout_match": 0,
+        "lost_matches": [],
+        "gains": [],
+        "lost_rejections": [],
+        "new_valid_input_errors": [],
+        "panics": [],
+        "timeouts": [],
+        "preexisting_accept_of_java_invalid": [
+          "cluster_concurrent_crossing",
+          "raw_multi_blank_first_block",
+          "stroke_per_state_css4"
+        ],
+        "changed_mismatches": 3
+      },
+      "tim-continuation-cr2": {
+        "n": 53,
+        "base_stdout_match": 0,
+        "tip_stdout_match": 0,
+        "lost_matches": [],
+        "gains": [],
+        "lost_rejections": [],
+        "new_valid_input_errors": [],
+        "panics": [],
+        "timeouts": [],
+        "preexisting_accept_of_java_invalid": [
+          "cr2_seq_named_start_col0_endother_swallow",
+          "cr2_seq_trailing_space_start_endother_swallow",
+          "cr2_seq_endumlx_col0_swallow",
+          "cr2_seq_end_line_continued_then_text",
+          "cr2_empty_zero_bytes",
+          "cr2_newlines_only",
+          "cr2_whitespace_only",
+          "cr2_crlf_blank_only",
+          "cr2_vt_ff_only",
+          "cr2_seq_depth2_tail_then_end",
+          "cr2_seq_tail_then_backslash_end",
+          "cr2_seq_tail_then_indented_end",
+          "cr2_seq_chr92_tail_then_end",
+          "cr2_seq_chr30_rsp_line",
+          "cr2_seq_raw_rs_rsp_line",
+          "cr2_seq_note_chr30_rsp"
+        ],
+        "changed_mismatches": 2
+      },
+      "tim-continuation-mc1": {
+        "n": 33,
+        "base_stdout_match": 0,
+        "tip_stdout_match": 0,
+        "lost_matches": [],
+        "gains": [],
+        "lost_rejections": [],
+        "new_valid_input_errors": [],
+        "panics": [],
+        "timeouts": [],
+        "preexisting_accept_of_java_invalid": [
+          "mc1_class_definelong",
+          "mc1_seq_before_enduml",
+          "mc1_seq_at_eof",
+          "mc1_seq_foreach_body"
+        ],
+        "changed_mismatches": 1
+      }
+    },
+    "files": {
+      "goldens": {
+        "n": 12550,
+        "with_reference": 12550,
+        "missing_reference": 0,
+        "base_stdout_match": 0,
+        "tip_stdout_match": 0,
+        "lost_matches": [],
+        "gains": [],
+        "new_valid_input_errors": [],
+        "timeouts": [],
+        "changed_len_or_exit": [
+          "test-diagrams/golden/edge-cases/edge_theme_plain.puml"
+        ],
+        "panics": []
+      },
+      "perturbations": {
+        "n": 6328,
+        "with_reference": 6328,
+        "missing_reference": 0,
+        "base_stdout_match": 19,
+        "tip_stdout_match": 19,
+        "lost_matches": [],
+        "gains": [],
+        "new_valid_input_errors": [],
+        "timeouts": [],
+        "changed_len_or_exit": [
+          "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-round2/theme_amiga_class.puml",
+          "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-round2/theme_amiga_component.puml",
+          "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-round2/theme_mono_sequence.puml",
+          "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-round2/theme_mono_usecase.puml",
+          "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-round2/theme_plain_activity.puml",
+          "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-round2/theme_plain_state.puml",
+          "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-round2/theme_plain_then_cerulean.puml",
+          "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-round2/theme_plain_variable.puml",
+          "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-shared-svg/theme_mono_class.puml",
+          "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-shared-svg/theme_plain_class_note.puml",
+          "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-shared-svg/theme_plain_sequence.puml"
+        ],
+        "panics": [
+          "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+          "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+          "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+          "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+        ]
+      },
+      "retained": {
+        "n": 88,
+        "with_reference": 88,
+        "missing_reference": 0,
+        "base_stdout_match": 2,
+        "tip_stdout_match": 2,
+        "lost_matches": [],
+        "gains": [],
+        "new_valid_input_errors": [],
+        "timeouts": [],
+        "changed_len_or_exit": [],
+        "panics": []
+      }
+    },
+    "themes": {
+      "themes": [
+        {
+          "name": "amiga",
+          "java_sha256": "ddbd558c3329ae4cbac44220a00fe3f7e19d55bbfbdf1bb8ae4342d94e89abde",
+          "java_bytes": 3317,
+          "rust_present": true,
+          "byte_identical": true,
+          "license_line": "license: "
+        },
+        {
+          "name": "blueprint",
+          "java_sha256": "d4f05851ad253a12b5e141426d5d5553cf1c43b079e9f2ce115c1cbd59233ee6",
+          "java_bytes": 2934,
+          "rust_present": true,
+          "byte_identical": true,
+          "license_line": "license: "
+        },
+        {
+          "name": "carbon-gray",
+          "java_sha256": "0b2c3c4212ab0dda435f25a50720fe846f338255ce54aed9c3ff4b142c21f7e0",
+          "java_bytes": 13959,
+          "rust_present": true,
+          "byte_identical": true,
+          "license_line": "license: "
+        },
+        {
+          "name": "crt-amber",
+          "java_sha256": "aa10a84e7aa7bb5a54e80dc4bcda1c27c21cf5cd5add7e0af6f5da08644064e2",
+          "java_bytes": 3325,
+          "rust_present": true,
+          "byte_identical": true,
+          "license_line": "license: "
+        },
+        {
+          "name": "crt-green",
+          "java_sha256": "d9eb2ca835e49b490ec7722f35aea0915bcbfdac04753794ee5c2eae29a2d989",
+          "java_bytes": 3260,
+          "rust_present": true,
+          "byte_identical": true,
+          "license_line": "license: "
+        },
+        {
+          "name": "mimeograph",
+          "java_sha256": "2d25d03699f7a74e212dbfc34eea97c7f631e4bd4a5150f0f9e2838aa034d208",
+          "java_bytes": 2940,
+          "rust_present": true,
+          "byte_identical": true,
+          "license_line": "license: "
+        },
+        {
+          "name": "mono",
+          "java_sha256": "bed0c1cb2e57ad4d1b6f56345b93db478a0ff7dd4d32a01cb5c6e3a73d60356f",
+          "java_bytes": 4686,
+          "rust_present": true,
+          "byte_identical": true,
+          "license_line": "license: "
+        },
+        {
+          "name": "plain",
+          "java_sha256": "87537f57edac21ea8e5f696ff65fa3a89d5d1d539262747fb59f112db5c8492c",
+          "java_bytes": 3064,
+          "rust_present": true,
+          "byte_identical": true,
+          "license_line": "license: "
+        },
+        {
+          "name": "sunlust",
+          "java_sha256": "f49aad377544c1f8dc0932c1380fb49593e37da53777cb334cfe5e4b6b451bf5",
+          "java_bytes": 3748,
+          "rust_present": false,
+          "byte_identical": false,
+          "license_line": "license: GPL 3+"
+        }
+      ]
+    },
+    "edge_theme_plain": {
+      "base": {
+        "cohort": "goldens",
+        "name": "test-diagrams/golden/edge-cases/edge_theme_plain.puml",
+        "label": "base",
+        "exit": 0,
+        "timeout": false,
+        "panic": false,
+        "stdout_len": 3227,
+        "stdout_sha256": "74ed698474cd698807d16d50ed80abbac61e4923807de279d534ba4ca81b3584",
+        "stdout_eq": false,
+        "invalid": false,
+        "stderr_nonempty": false
+      },
+      "tip": {
+        "cohort": "goldens",
+        "name": "test-diagrams/golden/edge-cases/edge_theme_plain.puml",
+        "label": "tip",
+        "exit": 0,
+        "timeout": false,
+        "panic": false,
+        "stdout_len": 3222,
+        "stdout_sha256": "ecffc9497d434c045b55ae63900d1190069d69e935c036495df723653c5c3578",
+        "stdout_eq": false,
+        "invalid": false,
+        "stderr_nonempty": false
+      }
+    }
+  },
+  "strict_on_registered_pairs": {
+    "n": 124,
+    "pass": 38,
+    "fail": 86,
+    "note": "compare_svg_strict via the tip parity_perturbations binary, cwd crates/rustuml-oracle, after the pre-add gate. Resource .puml files are not in this directory because the walker treats every .puml as a case. They are in checker-grok/resources. from/include pairs resolve against process cwd."
+  },
+  "body_compare": {
+    "heldout_valid_n": 88,
+    "heldout_tip_body_equal": 23,
+    "heldout_body_gain": 22,
+    "heldout_body_loss": [],
+    "ce_valid_n": 36,
+    "ce_tip_body_equal": 6,
+    "ce_body_gain": [
+      "g8_amiga_state",
+      "g8_blueprint_state",
+      "g8_crt_amber_state",
+      "g8_crt_green_state",
+      "g8_mimeograph_state",
+      "g8_plain_state"
+    ],
+    "ce_body_loss": []
+  }
+}

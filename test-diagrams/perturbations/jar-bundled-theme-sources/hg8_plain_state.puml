@@ -1,0 +1,6 @@
+@startuml
+!theme plain
+[*] --> Hg8PlainIdle
+Hg8PlainIdle --> Hg8PlainBusy : heat
+Hg8PlainBusy --> [*]
+@enduml

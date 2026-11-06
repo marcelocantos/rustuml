@@ -1,0 +1,6 @@
+@startuml
+!theme sunlust
+[*] --> G8SunlustCold
+G8SunlustCold --> G8SunlustHot : heat
+G8SunlustHot --> [*]
+@enduml

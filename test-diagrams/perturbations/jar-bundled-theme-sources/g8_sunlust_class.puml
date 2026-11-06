@@ -1,0 +1,6 @@
+@startuml
+!theme sunlust
+class G8SunlustGranary
+class G8SunlustMill
+G8SunlustGranary --> G8SunlustMill
+@enduml

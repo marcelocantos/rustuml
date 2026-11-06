@@ -1,0 +1,7 @@
+@startuml
+!theme mimeograph
+start
+:Hg8Mimeograph proof loaf;
+:Hg8Mimeograph score crust;
+stop
+@enduml

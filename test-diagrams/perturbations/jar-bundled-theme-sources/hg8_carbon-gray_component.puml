@@ -1,0 +1,6 @@
+@startuml
+!theme carbon-gray
+component Hg8CarbonGrayHopper
+component Hg8CarbonGrayKiln
+Hg8CarbonGrayHopper --> Hg8CarbonGrayKiln : feed
+@enduml

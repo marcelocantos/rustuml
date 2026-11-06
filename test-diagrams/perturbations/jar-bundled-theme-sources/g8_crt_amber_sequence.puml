@@ -1,0 +1,5 @@
+@startuml
+!theme crt-amber
+G8CrtAmberMiller -> G8CrtAmberBaker : flour sack
+G8CrtAmberBaker --> G8CrtAmberMiller : warm loaf
+@enduml

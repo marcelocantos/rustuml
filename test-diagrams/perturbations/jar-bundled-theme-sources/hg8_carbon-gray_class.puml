@@ -1,0 +1,6 @@
+@startuml
+!theme carbon-gray
+class Hg8CarbonGrayBarn
+class Hg8CarbonGraySilo
+Hg8CarbonGrayBarn --> Hg8CarbonGraySilo : stores
+@enduml

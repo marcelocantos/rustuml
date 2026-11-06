@@ -1,0 +1,9 @@
+@startuml
+!theme crt-amber
+start
+:G8CrtAmber knead dough;
+if (G8CrtAmber risen?) then (yes)
+  :G8CrtAmber bake loaf;
+endif
+stop
+@enduml

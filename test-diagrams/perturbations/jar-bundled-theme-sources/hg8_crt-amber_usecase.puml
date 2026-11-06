@@ -1,0 +1,9 @@
+@startuml
+!theme crt-amber
+left to right direction
+actor Hg8CrtAmberClerk
+usecase Hg8CrtAmberFile as "File receipt"
+usecase Hg8CrtAmberAudit as "Audit ledger"
+Hg8CrtAmberClerk --> Hg8CrtAmberFile
+Hg8CrtAmberClerk --> Hg8CrtAmberAudit
+@enduml

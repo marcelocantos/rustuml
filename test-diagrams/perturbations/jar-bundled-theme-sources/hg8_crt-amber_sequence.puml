@@ -1,0 +1,7 @@
+@startuml
+!theme crt-amber
+actor Hg8CrtAmberMiller
+participant Hg8CrtAmberMill
+Hg8CrtAmberMiller -> Hg8CrtAmberMill : grind
+Hg8CrtAmberMill --> Hg8CrtAmberMiller : flour
+@enduml

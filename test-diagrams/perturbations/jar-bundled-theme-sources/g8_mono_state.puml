@@ -1,0 +1,6 @@
+@startuml
+!theme mono
+[*] --> G8MonoCold
+G8MonoCold --> G8MonoHot : heat
+G8MonoHot --> [*]
+@enduml

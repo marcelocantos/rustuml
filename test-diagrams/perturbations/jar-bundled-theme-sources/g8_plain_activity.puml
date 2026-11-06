@@ -1,0 +1,9 @@
+@startuml
+!theme plain
+start
+:G8Plain knead dough;
+if (G8Plain risen?) then (yes)
+  :G8Plain bake loaf;
+endif
+stop
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+!theme amiga
+G8AmigaMiller -> G8AmigaBaker : flour sack
+G8AmigaBaker --> G8AmigaMiller : warm loaf
+@enduml

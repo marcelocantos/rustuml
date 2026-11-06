@@ -1,0 +1,6 @@
+@startuml
+!theme crt-green
+component Hg8CrtGreenHopper
+component Hg8CrtGreenKiln
+Hg8CrtGreenHopper --> Hg8CrtGreenKiln : feed
+@enduml

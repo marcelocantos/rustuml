@@ -1,0 +1,7 @@
+@startuml
+!theme blueprint
+start
+:Hg8Blueprint proof loaf;
+:Hg8Blueprint score crust;
+stop
+@enduml

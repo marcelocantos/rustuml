@@ -1,0 +1,6 @@
+@startuml
+!theme plain
+[*] --> G8PlainCold
+G8PlainCold --> G8PlainHot : heat
+G8PlainHot --> [*]
+@enduml

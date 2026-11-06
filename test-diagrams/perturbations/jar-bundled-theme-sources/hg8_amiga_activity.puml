@@ -1,0 +1,7 @@
+@startuml
+!theme amiga
+start
+:Hg8Amiga proof loaf;
+:Hg8Amiga score crust;
+stop
+@enduml

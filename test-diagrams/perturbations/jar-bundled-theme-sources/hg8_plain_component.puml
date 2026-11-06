@@ -1,0 +1,6 @@
+@startuml
+!theme plain
+component Hg8PlainHopper
+component Hg8PlainKiln
+Hg8PlainHopper --> Hg8PlainKiln : feed
+@enduml

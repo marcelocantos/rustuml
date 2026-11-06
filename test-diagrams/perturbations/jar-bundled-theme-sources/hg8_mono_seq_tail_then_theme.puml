@@ -1,0 +1,7 @@
+@startuml
+actor Hg8TailClerk
+participant Hg8TailDesk
+Hg8TailClerk -> Hg8TailDesk : early chit
+!theme mono
+Hg8TailClerk -> Hg8TailDesk : late chit
+@enduml

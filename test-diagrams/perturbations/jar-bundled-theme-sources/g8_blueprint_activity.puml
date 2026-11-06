@@ -1,0 +1,9 @@
+@startuml
+!theme blueprint
+start
+:G8Blueprint knead dough;
+if (G8Blueprint risen?) then (yes)
+  :G8Blueprint bake loaf;
+endif
+stop
+@enduml

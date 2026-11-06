@@ -1,0 +1,9 @@
+@startuml
+!theme carbon-gray
+left to right direction
+actor Hg8CarbonGrayClerk
+usecase Hg8CarbonGrayFile as "File receipt"
+usecase Hg8CarbonGrayAudit as "Audit ledger"
+Hg8CarbonGrayClerk --> Hg8CarbonGrayFile
+Hg8CarbonGrayClerk --> Hg8CarbonGrayAudit
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+!theme amiga
+class Hg8AmigaBarn
+class Hg8AmigaSilo
+Hg8AmigaBarn --> Hg8AmigaSilo : stores
+@enduml

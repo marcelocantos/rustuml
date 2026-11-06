@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "base": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "tip": "cc02a0f14aaa6f6fc83d60f3164630099f423edb",
+  "gates_run_before_adding_pairs": true,
+  "no_oracle": {
+    "base_exit": 0,
+    "tip_exit": 0,
+    "base_names": 70,
+    "tip_names": 69,
+    "gained_passes": [
+      "edge-cases/edge_theme_plain"
+    ],
+    "new_failures": [],
+    "tip_locked_baseline": "11182/11251",
+    "base_locked_baseline": "11181/11251",
+    "edge_cases_tip": "760/777",
+    "edge_cases_base": "759/777"
+  },
+  "golden_pairs": {
+    "base_and_tip": "12550 total, 10497 passed, 754 failed, 1299 skipped, panics 0, xml diff 754",
+    "exit": 101,
+    "lost_matches": 0,
+    "gains": 0
+  },
+  "parity_perturbations": {
+    "crate_cwd": {
+      "base": 2727,
+      "tip": 2725
+    },
+    "repo_root_cwd": {
+      "base": 2717,
+      "tip": 2715
+    },
+    "gains": [
+      "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-round2/theme_plain_state.puml",
+      "test-diagrams/perturbations/tim-evaluated-event-stream/checker-claude-round2/theme_plain_variable.puml"
+    ],
+    "losses": [],
+    "cwd_only_names_both_commits": 10,
+    "panics_both": [
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+    ]
+  },
+  "harness_guards": {
+    "base": "4 passed, 2 failed",
+    "tip": "4 passed, 2 failed",
+    "failed_tests": [
+      "decimal_literal_ratchet",
+      "parity_review_records_are_complete"
+    ],
+    "decimal_literal_ratchet": "identical: class.rs 383 -> 578, deployment.rs 43 -> 44, plantuml_metrics.rs 1053 -> 1055, state.rs 53 -> 62",
+    "account_json_lines": {
+      "base": 24,
+      "tip": 25
+    },
+    "lines_added_by_packet": [
+      "docs/parity-reviews/jar-bundled-theme-sources/account.json: No such file or directory (os error 2)"
+    ]
+  },
+  "pipe_mode": {
+    "base": "17 passed, 0 failed, exit 0",
+    "tip": "17 passed, 0 failed, exit 0"
+  },
+  "doc_claims": {
+    "base": "2 passed, exit 0",
+    "tip": "2 passed, exit 0"
+  },
+  "workspace_lib": {
+    "exit": 0,
+    "results": "41, 10, 31, 665, 862 passed and 1 ignored, both commits"
+  },
+  "clippy_D_warnings": {
+    "rustuml-math": {
+      "base": 0,
+      "tip": 0
+    },
+    "rustuml-layout": {
+      "base": 101,
+      "tip": 101,
+      "finding": "clippy::items_after_test_module graph.rs:2430"
+    },
+    "rustuml-parser": {
+      "base": 101,
+      "tip": 101,
+      "finding": "dead_code looks_like_description_bracket_command component.rs:74"
+    },
+    "rustuml-render": {
+      "base": 101,
+      "tip": 101,
+      "finding": "parser dependency dead_code"
+    },
+    "rustuml-oracle": {
+      "base": 101,
+      "tip": 101,
+      "finding": "parser dependency dead_code"
+    },
+    "rustuml": {
+      "base": 101,
+      "tip": 101,
+      "finding": "parser dependency dead_code"
+    }
+  },
+  "java_results": {
+    "heldout_sha256": "38b3a8adaf70fb0c796e7dca916bce8835e22ef7eaef347c05db7ac99c0a7c55",
+    "worker": "worker.BYrTd1WB",
+    "predictions_sha256": "d9d8e6c8dd86127fde12a9fa907dbb05b8919d4e3fd823faf9fa2923d862b7fc"
+  }
+}

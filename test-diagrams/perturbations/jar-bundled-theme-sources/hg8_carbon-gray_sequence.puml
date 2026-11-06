@@ -1,0 +1,7 @@
+@startuml
+!theme carbon-gray
+actor Hg8CarbonGrayMiller
+participant Hg8CarbonGrayMill
+Hg8CarbonGrayMiller -> Hg8CarbonGrayMill : grind
+Hg8CarbonGrayMill --> Hg8CarbonGrayMiller : flour
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+!include hg8inc/apply-mono.puml
+actor Hg8IncMonoClerk
+usecase Hg8IncMonoFile as "File receipt"
+Hg8IncMonoClerk --> Hg8IncMonoFile
+@enduml

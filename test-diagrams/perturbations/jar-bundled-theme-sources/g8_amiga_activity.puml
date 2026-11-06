@@ -1,0 +1,9 @@
+@startuml
+!theme amiga
+start
+:G8Amiga knead dough;
+if (G8Amiga risen?) then (yes)
+  :G8Amiga bake loaf;
+endif
+stop
+@enduml

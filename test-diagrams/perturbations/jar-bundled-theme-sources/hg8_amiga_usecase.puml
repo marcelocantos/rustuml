@@ -1,0 +1,9 @@
+@startuml
+!theme amiga
+left to right direction
+actor Hg8AmigaClerk
+usecase Hg8AmigaFile as "File receipt"
+usecase Hg8AmigaAudit as "Audit ledger"
+Hg8AmigaClerk --> Hg8AmigaFile
+Hg8AmigaClerk --> Hg8AmigaAudit
+@enduml

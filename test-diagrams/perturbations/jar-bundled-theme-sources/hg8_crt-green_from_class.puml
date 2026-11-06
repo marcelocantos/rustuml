@@ -1,0 +1,6 @@
+@startuml
+!theme crt-green from hg8from
+class Hg8FromCrtGreenLoft
+class Hg8FromCrtGreenCellar
+Hg8FromCrtGreenLoft --> Hg8FromCrtGreenCellar : drops
+@enduml

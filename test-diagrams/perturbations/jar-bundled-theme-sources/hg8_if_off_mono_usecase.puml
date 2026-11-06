@@ -1,0 +1,8 @@
+@startuml
+!if %false()
+!theme mono
+!endif
+actor Hg8IfOffMonoClerk
+usecase Hg8IfOffMonoFile as "Skip chit"
+Hg8IfOffMonoClerk --> Hg8IfOffMonoFile
+@enduml

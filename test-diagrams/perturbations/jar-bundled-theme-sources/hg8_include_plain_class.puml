@@ -1,0 +1,6 @@
+@startuml
+!include hg8inc/apply-plain.puml
+class Hg8IncPlainLoft
+class Hg8IncPlainMill
+Hg8IncPlainLoft --> Hg8IncPlainMill : feeds
+@enduml

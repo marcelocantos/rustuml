@@ -1,0 +1,7 @@
+@startuml
+!theme plain
+start
+:Hg8Plain proof loaf;
+:Hg8Plain score crust;
+stop
+@enduml

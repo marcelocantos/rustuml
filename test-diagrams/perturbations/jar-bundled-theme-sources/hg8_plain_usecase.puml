@@ -1,0 +1,9 @@
+@startuml
+!theme plain
+left to right direction
+actor Hg8PlainClerk
+usecase Hg8PlainFile as "File receipt"
+usecase Hg8PlainAudit as "Audit ledger"
+Hg8PlainClerk --> Hg8PlainFile
+Hg8PlainClerk --> Hg8PlainAudit
+@enduml

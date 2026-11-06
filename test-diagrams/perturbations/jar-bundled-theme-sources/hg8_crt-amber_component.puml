@@ -1,0 +1,6 @@
+@startuml
+!theme crt-amber
+component Hg8CrtAmberHopper
+component Hg8CrtAmberKiln
+Hg8CrtAmberHopper --> Hg8CrtAmberKiln : feed
+@enduml

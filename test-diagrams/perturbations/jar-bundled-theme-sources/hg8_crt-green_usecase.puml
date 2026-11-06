@@ -1,0 +1,9 @@
+@startuml
+!theme crt-green
+left to right direction
+actor Hg8CrtGreenClerk
+usecase Hg8CrtGreenFile as "File receipt"
+usecase Hg8CrtGreenAudit as "Audit ledger"
+Hg8CrtGreenClerk --> Hg8CrtGreenFile
+Hg8CrtGreenClerk --> Hg8CrtGreenAudit
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+!theme plain
+class Hg8PlainBarn
+class Hg8PlainSilo
+Hg8PlainBarn --> Hg8PlainSilo : stores
+@enduml

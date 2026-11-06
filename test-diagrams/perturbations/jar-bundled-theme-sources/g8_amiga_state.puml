@@ -1,0 +1,6 @@
+@startuml
+!theme amiga
+[*] --> G8AmigaCold
+G8AmigaCold --> G8AmigaHot : heat
+G8AmigaHot --> [*]
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+!if %false()
+!theme plain
+!endif
+class Hg8IfOffPlainLoft
+@enduml

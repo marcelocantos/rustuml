@@ -1,0 +1,6 @@
+@startuml
+!theme mimeograph
+skinparam BackgroundColor #C4A574
+skinparam DefaultFontName Courier
+class Hg8AfterMimeographCask
+@enduml

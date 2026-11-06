@@ -1,0 +1,7 @@
+@startuml
+!theme mono
+start
+:Hg8Mono proof loaf;
+:Hg8Mono score crust;
+stop
+@enduml

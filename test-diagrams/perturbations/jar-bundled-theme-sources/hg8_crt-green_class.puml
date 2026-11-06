@@ -1,0 +1,6 @@
+@startuml
+!theme crt-green
+class Hg8CrtGreenBarn
+class Hg8CrtGreenSilo
+Hg8CrtGreenBarn --> Hg8CrtGreenSilo : stores
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+!theme crt-green
+actor Hg8CrtGreenMiller
+participant Hg8CrtGreenMill
+Hg8CrtGreenMiller -> Hg8CrtGreenMill : grind
+Hg8CrtGreenMill --> Hg8CrtGreenMiller : flour
+@enduml

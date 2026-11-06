@@ -1,0 +1,9 @@
+@startuml
+!$hg8gate = "on"
+!if $hg8gate == "on"
+!theme mono
+!endif
+actor Hg8IfOnMonoClerk
+usecase Hg8IfOnMonoFile as "File chit"
+Hg8IfOnMonoClerk --> Hg8IfOnMonoFile
+@enduml

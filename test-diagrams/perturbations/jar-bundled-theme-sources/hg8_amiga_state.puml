@@ -1,0 +1,6 @@
+@startuml
+!theme amiga
+[*] --> Hg8AmigaIdle
+Hg8AmigaIdle --> Hg8AmigaBusy : heat
+Hg8AmigaBusy --> [*]
+@enduml

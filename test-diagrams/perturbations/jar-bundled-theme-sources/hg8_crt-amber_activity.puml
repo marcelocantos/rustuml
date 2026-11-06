@@ -1,0 +1,7 @@
+@startuml
+!theme crt-amber
+start
+:Hg8CrtAmber proof loaf;
+:Hg8CrtAmber score crust;
+stop
+@enduml

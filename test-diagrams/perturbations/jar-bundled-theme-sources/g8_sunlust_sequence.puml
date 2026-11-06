@@ -1,0 +1,5 @@
+@startuml
+!theme sunlust
+G8SunlustMiller -> G8SunlustBaker : flour sack
+G8SunlustBaker --> G8SunlustMiller : warm loaf
+@enduml

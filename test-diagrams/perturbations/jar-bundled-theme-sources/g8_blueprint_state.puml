@@ -1,0 +1,6 @@
+@startuml
+!theme blueprint
+[*] --> G8BlueprintCold
+G8BlueprintCold --> G8BlueprintHot : heat
+G8BlueprintHot --> [*]
+@enduml

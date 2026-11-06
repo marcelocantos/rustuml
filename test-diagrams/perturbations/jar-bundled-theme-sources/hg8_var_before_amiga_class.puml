@@ -1,0 +1,5 @@
+@startuml
+!$FONT_NAME = "Courier"
+!theme amiga
+class Hg8VarAmigaLoft
+@enduml

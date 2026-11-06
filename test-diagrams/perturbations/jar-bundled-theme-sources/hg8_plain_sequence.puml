@@ -1,0 +1,7 @@
+@startuml
+!theme plain
+actor Hg8PlainMiller
+participant Hg8PlainMill
+Hg8PlainMiller -> Hg8PlainMill : grind
+Hg8PlainMill --> Hg8PlainMiller : flour
+@enduml

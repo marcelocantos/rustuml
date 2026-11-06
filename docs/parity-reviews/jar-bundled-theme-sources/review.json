@@ -1,0 +1,2390 @@
+{
+  "schema_version": 1,
+  "mechanism": "jar-bundled-theme-sources",
+  "reviewer": {
+    "task_id": "01a1b029-b833-7fd1-9228-859593a5f30a",
+    "model": "grok-4.7",
+    "independence": "Independent checker. No production edits, no children, no other worktrees."
+  },
+  "account_commit": "f36e64e8fdb743c5d65406927905f71452746031",
+  "implementation_commit": "cc02a0f14aaa6f6fc83d60f3164630099f423edb",
+  "base_revision": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "commands": [
+    "cargo test --release --locked -p rustuml-oracle --test golden_no_oracle --test harness_guards --test doc_claims --test golden_pairs --test parity_perturbations",
+    "cargo test --release --locked -p rustuml --test pipe_mode",
+    "cargo test --release --locked --workspace --lib",
+    "cargo clippy --release --locked -p <crate> --all-targets -- -D warnings",
+    "CLI -pipe -tsvg for base cb550c0d67cc729ce764895005b7e86310c9f313 and tip cc02a0f14aaa6f6fc83d60f3164630099f423edb, TZ=GMT+11:00, against parent-relayed Java stdout"
+  ],
+  "findings": [
+    "The eight shipped files are byte-identical to the pinned jar resources. Each YAML front matter has an empty license field. The 31 themes already in the tree declare MIT and 3 declare Apache-2.0. PlantUML itself is GPL-3.0-or-later. An empty license field does not grant Apache-2.0, and the packet does not change LICENSE or NOTICE. sunlust declares GPL 3+ and stays unshipped. Vendoring the eight blank-license files is not satisfied.",
+    "Fresh held-out whole CLI output matches Java on 0/88 valid cases for both binaries. The packet changes 76 of those 88 and all 76 remain unequal. 54 of the 76 also fail element-tree equality after processing instructions are stripped, so the miss is not only the pre-existing version-only processing instruction. The clearest new wrong mode is hg8_plain_seq_tail_then_theme and hg8_mono_seq_tail_then_theme: Java keeps the default font on messages before !theme and applies the theme font after it; base leaves every message in sans-serif; tip paints every message in the theme font. preprocess/mod.rs is unchanged. Executing the newly vendored body exposes the order bug.",
+    "hg8_from_missing_plain_class is a pre-existing lost rejection. Java exits 200 with a NullPointerException from ThemeUtils.loadFileTheme because the from-directory file is null. Base and tip both exit 0 with empty stderr, and their stdout is identical. The packet does not touch the missing-from path.",
+    "No golden, retained, or perturbation pass was lost. No-oracle failure names drop only edge-cases/edge_theme_plain (70 names on base, 69 on tip). The locked baseline 11,182/11,251 matches that one strict gain, and README, STABILITY, help, and doc_claims agree. Raw stdout for that golden still differs (base sha 74ed698474cd698807d16d50ed80abbac61e4923807de279d534ba4ca81b3584 length 3227, tip sha ecffc9497d434c045b55ae63900d1190069d69e935c036495df723653c5c3578 length 3222); compare_svg_strict passes it. Strict perturbation divergences at repo-root cwd are 2717 on base and 2715 on tip, gaining theme_plain_state.puml and theme_plain_variable.puml only. The same test from crates/rustuml-oracle is 2727 and 2725. The extra 10 names are identical on both commits and are the maker's cwd claim, reproduced exactly.",
+    "theme_plain_activity grows from Java 131x288 to base 139x297 to tip 141x298. Fonts are Java Verdana x4, base sans-serif x4, tip Verdana x3 plus one leftover sans-serif. The growth versus base is the packet applying plain. The remaining size and the leftover face are renderer residue. theme_mono_usecase is SEQUENCE on both binaries and DESCRIPTION in Java; the fresh held-out mono usecase with an explicit usecase stays DESCRIPTION on Java, base, and tip. The SEQUENCE dispatch is pre-existing on the older actor/arrow/(usecase) shape, not caused by executing mono.",
+    "project_events still emits skinparam __theme NAME when a shipped theme body runs, so the render special cases for that marker are not orphaned. Marker removal was not a silent delete.",
+    "harness_guards::parity_review_records_are_complete gains one line versus base: docs/parity-reviews/jar-bundled-theme-sources/account.json is missing (15 missing-account lines on base, 16 on tip). The maker account is under maker-grok/ because that is where the parent told makers to put it. This packet defect does not decide the verdict. No root account.json was added by this review. decimal_literal_ratchet is identical on both commits and is pre-existing."
+  ],
+  "verdict": "rejected",
+  "accept_ready": false,
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_activity.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "72743b9a768699446e981e79e1665d8b3973eb5bb3da5d8168c6301ee13fb090",
+      "golden_sha256": "ffe9646dbc6f2870b090394513d6eb6c84cab22ed988c1bdd6352ea5e397f009",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_class.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:class",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "d101f92c982ffa28d66bba0d296876ae908cf75d2a3753da83a5c1b15250bc18",
+      "golden_sha256": "9c8f80499e0f09c1a24e0f21a60c82593bb0d68fe1c6aa25a4e77b5f8f862fb9",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_component.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_component.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:component",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "12142216cdf15a4b6affcc070c16ab84ce0ee51fec0f70fed2de926904b4c3b4",
+      "golden_sha256": "743d9b56ee7842347c2d7357f8fb51ec5e415bfd0f1794ee67301670383d3f35",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_from_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_from_class.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:class",
+        "load:from-directory",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "0f14a460fa66e925ec1439a909f1b623b279dae03319d94bed0b32a021e1db8e",
+      "golden_sha256": "0e54e9d169db01e8d614d27b5cf920c689bccf0f46eea00594aabcfb4e80ed17",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_sequence.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "a5feca932669206428d714eb0d8c6b0a68e22878357149d374a1cf04316920a7",
+      "golden_sha256": "2892662293404fccfea012c0681da50c27970bc0c672857b231682bc99894ba9",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_skin_after_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_skin_after_class.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:class",
+        "load:skinparam-after-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "3e6e44f67f5cf0b5a96fc51adffcdaf1036b2ffa11ec3c1b8be21e92acbd7d21",
+      "golden_sha256": "3b4ad8c8fd2defc7b60b89c4b05b9dd253e02662823f96704f6f2d98526dcad6",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_skin_before_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_skin_before_class.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:class",
+        "load:skinparam-before-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "49d5a905e4ea2c4869a57ac48534567627d1aca71d7a2bde664cccf05c65b80b",
+      "golden_sha256": "b0f858b91b591ac14cf434f8639e70670369108bbabe38eb5a70653ec449f6a6",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_state.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:state",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "35b318e54e75dbc46fdcd2fa76c248e6a5e94bb7e07596184823f3a12142bcb0",
+      "golden_sha256": "362155e7ab41cebffb11f475e80e08ee1ccc7444ed2f2fae784c5dbe627b434e",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_usecase.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_amiga_usecase.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:usecase",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "7828cb926420ec5d609ab75ea3d88516d87dd8a0c83882310ddc8e02ca850998",
+      "golden_sha256": "bbca10412579e340b48b3769c70221c70c288156ddc16b4a8558ef6c8727c457",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_activity.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "01df8eeebc6431875926dc93feb952b5ca5cb0cf01ce355177ec16b37f8d16a9",
+      "golden_sha256": "19030e94b7732c57f50b426b5181e0130989e09c6dfaf28f75c4487439365654",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_class.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:class",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "9dda633f86ffcb6a3207e7618c9aa56ffb4f710ca6ca0867b4b8b098193c02c7",
+      "golden_sha256": "387e38b0113d81dc49932265156cda44612c364b87c186bc9451240365568125",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_component.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_component.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:component",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "f0a0f3afd2192f01be1b8e24fe736faa0df1c860d8ffe989c718809e49676abc",
+      "golden_sha256": "6a2cdfbe49e804ed0d7233c7daa3786e6e873d8cad896b2c3b1cae66e6fc57cf",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_from_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_from_class.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:class",
+        "load:from-directory",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "1e48a62f60db7837dbffd8dc7ea560a8a2e006a1e0bae08a99940959b5088db1",
+      "golden_sha256": "7cc9c94d7d9707a40a712981f169ea4f8d17857147d5b8cabfa0e3d758aed418",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_sequence.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "06b0b3e0b518bcc2cb949e78d1a05413de79dacdc167482ad99b0e54d9493f1e",
+      "golden_sha256": "91ac3e53407c082c97609d9707da183f09c5de07cd1c3b66b0a4fa35ef41dd45",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_skin_after_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_skin_after_class.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:class",
+        "load:skinparam-after-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "f131d00352a4f9b9047b4148a06eb787a3fcfefc9b695adeea58e4a87d3ed669",
+      "golden_sha256": "034c505488e58622ca1adbe88cf5b6907ae2db9b6b80a1e7c7ada146210183fa",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_skin_before_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_skin_before_class.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:class",
+        "load:skinparam-before-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "13921c8bfeca4c895de1c8151cdc8e9d54c62da69ab39e571952bf091488e2f9",
+      "golden_sha256": "0ebc6ceadb2dd7f9ddcf098358dcd9081273bf5fce20e18f23186d0705f39b1f",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_state.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:state",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "595ba0e2518f16cebf86720f4285e6fd1a6bed89fbc0a4a8951ce87873e8b95f",
+      "golden_sha256": "84d20e2b6344462827551b48798b880e19a68bd212fda47a0b11dd752642fbf5",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_usecase.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_blueprint_usecase.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:usecase",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "ac89d03e62bacb1352d82b9ccd43532652ce2dedb10bca8b6422e06de5aa124f",
+      "golden_sha256": "69f56a6edeced9b1a9533f093ede5c8f84bca6b01555308f1dc8f2d63ab6fda8",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_activity.svg",
+      "axes": [
+        "theme:carbon-gray",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "2057d7a276c69079cbe069c298623e0af0c1e38bffaeab495f42863151b36a65",
+      "golden_sha256": "797c6fc3da2413245985baa0619c568fda684939cca5a99c5c433eff3cc04154",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_class.svg",
+      "axes": [
+        "theme:carbon-gray",
+        "diagram:class",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "f225b5014955849f4967c5e64734889952e7f8300d618677dfae6791f9c0398c",
+      "golden_sha256": "cf76a8068d914690534bf85f76c4ecfaa2d43145eed5f258037cc8a2d1d8c0cb",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_component.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_component.svg",
+      "axes": [
+        "theme:carbon-gray",
+        "diagram:component",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "a663e974c826ba844110f7e9c5c70b7c7702610658080543a2bcbe8229a55455",
+      "golden_sha256": "520db8120998007a27f590e5d09240d084476c8c2ff107783dabe593b436a5f1",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_from_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_from_class.svg",
+      "axes": [
+        "theme:carbon-gray",
+        "diagram:class",
+        "load:from-directory",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "1995d8871b8ec651a0a013e57f03df44c5e99fda06177c8b146601f61971e700",
+      "golden_sha256": "c0e68b7597f08669b129aa66e3dab283836279b16dae8d8f15b47158f57abfed",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_sequence.svg",
+      "axes": [
+        "theme:carbon-gray",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "080d7b66431a95a66f645a26eb6856326f35474696b2d8e8b1c86dd0b9a4c2e5",
+      "golden_sha256": "2cbc11a24de1633e765af938f38720135800171706371d671fa8121cb879a176",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_skin_after_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_skin_after_class.svg",
+      "axes": [
+        "theme:carbon-gray",
+        "diagram:class",
+        "load:skinparam-after-theme",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "83ae8c0e7c88bc5d2b0d9f40dd3da95e21472fcb2242ff7fd55674be53badb8f",
+      "golden_sha256": "daa7def2aca8c31933b93ecca71642b9aee5d216c285909fc89e15d2df773cbe",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_skin_before_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_skin_before_class.svg",
+      "axes": [
+        "theme:carbon-gray",
+        "diagram:class",
+        "load:skinparam-before-theme",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "c8315fff78bf8a471a9413c6a80552e0d39fec947c69a066c8b20f510ddb3f9d",
+      "golden_sha256": "ad6a2b99630d04b42c4815be77b9e605427df15aad8454193304fde60e0048eb",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_state.svg",
+      "axes": [
+        "theme:carbon-gray",
+        "diagram:state",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "11f1394e1dbb6205a626e3f9921c99d1eba3c0b3b62e973cde73e1d4ce493303",
+      "golden_sha256": "aaafe9aec848fd98cf4b1c242b9473b6c65a8c7eb88c77a513e4512d5f7708b2",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_usecase.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_carbon-gray_usecase.svg",
+      "axes": [
+        "theme:carbon-gray",
+        "diagram:usecase",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "0a24638f3447cf2c36b706e0d682836514b8a45d217e91512b3bb11596537c1d",
+      "golden_sha256": "5e3e9e993b0743feeb5daef1e2dde40a4edb3e353478a97a566cbd46726f30cc",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_activity.svg",
+      "axes": [
+        "theme:crt-amber",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "d992f01785b31233f29a7eb5727a4367ba9315918b943bae80f889aad144664e",
+      "golden_sha256": "f069e96411054008eb87c5b81eb5903e8cdf6a9a2329605ce005d39af728c71b",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_class.svg",
+      "axes": [
+        "theme:crt-amber",
+        "diagram:class",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "555291af032b8d0d03ae7004a8828b4c8b8a47f2c01d002143034caff4d97e7e",
+      "golden_sha256": "a91daa25f6d60d35713087fbc51c823925953074f21936d73d80416d9eb29573",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_component.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_component.svg",
+      "axes": [
+        "theme:crt-amber",
+        "diagram:component",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "6395c526f44a57c4dc79381d616c3be61f2c46b24ddbb36c5b3c0b86320872a0",
+      "golden_sha256": "9deb6f3c99cbb9a1adc5f3471f307474adfeb188587b65efa78d48685085cf6e",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_from_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_from_class.svg",
+      "axes": [
+        "theme:crt-amber",
+        "diagram:class",
+        "load:from-directory",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "0e26a5ee0ecb7a16bcd41da23d5c0b74927265f2fcc9b37a4a80d1f6c96ecf1c",
+      "golden_sha256": "80581fae62c5f1fca5d3cde20e10f2ff009951ef98428a7c0416d0685fa5639b",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_sequence.svg",
+      "axes": [
+        "theme:crt-amber",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "ec4cb96b83fbbda7d76539906c56e3376b1fb65a34bc6c0fc5936f85a7d3061f",
+      "golden_sha256": "888185a9e26401cdf49bb833405bbc559dc2e77cf005139623f8a38338913443",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_skin_after_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_skin_after_class.svg",
+      "axes": [
+        "theme:crt-amber",
+        "diagram:class",
+        "load:skinparam-after-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "7ced45b67fd775157f63c9140b91153e225eb571246a56e4d214b1948c8750f2",
+      "golden_sha256": "984573a54d89dd201863faf2a00d8367b9fb8526dc653d250f8f736b4abb3ea2",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_skin_before_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_skin_before_class.svg",
+      "axes": [
+        "theme:crt-amber",
+        "diagram:class",
+        "load:skinparam-before-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "25e419bb6ec5c64750094cf63a76c56040391f788658c20ecceeeb1f0325d212",
+      "golden_sha256": "878d9e7e43f5a5c4fa9540a55b2eafa362f9aeeb4f26e1761c69bbcfc7b6b9e7",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_state.svg",
+      "axes": [
+        "theme:crt-amber",
+        "diagram:state",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "0e70918181d521c3b7e16f6ed62cf510615a19fedf4a71324b739b23856315ba",
+      "golden_sha256": "3ed7c4bc736795772adb17b5231688c8b9dac3bef3f43c6ad131b0a83e7697ee",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_usecase.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-amber_usecase.svg",
+      "axes": [
+        "theme:crt-amber",
+        "diagram:usecase",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "ed804bbd875b4a03978888c6d30610ad089ebec33ed331b839afe792222b360e",
+      "golden_sha256": "5c8e063cb31ffd3059d0ed017db41a10bf8b4602615b230cfb77d3aaaad2d976",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_activity.svg",
+      "axes": [
+        "theme:crt-green",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "e36b4b88e558b43a62d32c9cc9a15b41ffcfe76d60697499a279250fd5e8b1f1",
+      "golden_sha256": "24265975c6f14cf62b1596077e240044e83ef852d63560e0d78a7ba61cfb0535",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_class.svg",
+      "axes": [
+        "theme:crt-green",
+        "diagram:class",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "4bfc5585315ffb8950df7c0880d03e8deb3a055ceb727617ea28f4474f9122ec",
+      "golden_sha256": "1cf84decb2393c2cd7decce64da38c5b98778da388b65527721496a4c4052522",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_component.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_component.svg",
+      "axes": [
+        "theme:crt-green",
+        "diagram:component",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "2810a4223cf124035915cafe49e98cb391601ecec6536d670192c8e577439a00",
+      "golden_sha256": "1cdb0b9dd44b170a51182c3e35aec2d26c1fc7742df002181ad1a8564cfb7a8a",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_from_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_from_class.svg",
+      "axes": [
+        "theme:crt-green",
+        "diagram:class",
+        "load:from-directory",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "4cfa8cdd7047d4a1962411ff13f7786f5a293804e01f209a28f990d151ae5026",
+      "golden_sha256": "03d21b897c4379ed83d084de8de22b07f39185fdebda3b2560ee3f088bdb1297",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_sequence.svg",
+      "axes": [
+        "theme:crt-green",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "0b2b65dedeabc31b76b127e69479c59c4dcd76b8685ac2a29e22c1e02c3e57e2",
+      "golden_sha256": "77d74d2e4d5cd1e3d2d163c77e9a63331c5b81458f437f2c54b893b15504f5c7",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_skin_after_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_skin_after_class.svg",
+      "axes": [
+        "theme:crt-green",
+        "diagram:class",
+        "load:skinparam-after-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "6ce1e08836c6e320fb525c3fb620782b950e0bd0c3a6938e9bb0104fc08c751d",
+      "golden_sha256": "1b182b6c9a6b454de87f508b4073424bf499745a6ea42ea30f8cfd8dfba7fa9a",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_skin_before_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_skin_before_class.svg",
+      "axes": [
+        "theme:crt-green",
+        "diagram:class",
+        "load:skinparam-before-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "2efc38c4437538a20bb4902bb3352de59fbd39b6bd7fc0d76324639b169dd77e",
+      "golden_sha256": "91c1d4c37b500949d55f572d795361b213651600f0906c75308154c556641596",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_state.svg",
+      "axes": [
+        "theme:crt-green",
+        "diagram:state",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "5501a4d859b99269ccacfcd53d97f2847bef0712cd64ed1f0cf23cca70096552",
+      "golden_sha256": "5371d3591b4bfd66fbd01d78ca7ce8c42b3570024f370e23e6c7e3bb8ce15fe9",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_usecase.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_crt-green_usecase.svg",
+      "axes": [
+        "theme:crt-green",
+        "diagram:usecase",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "b3395db14706ec1f3e18b89ce46e224c2e30bf09777c0264ee4a2ab6b0f7a8a0",
+      "golden_sha256": "a0db0b1254f87cbb2ed8e91ec6edc28cf09295b31b669b5b81685b94ee1ae798",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_from_altered_plain_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_from_altered_plain_class.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:class",
+        "load:altered-from",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "f6a58aa163eb8d0be4585a01b6edcdc7401b9ea499cc1f7419321f1bc55929b7",
+      "golden_sha256": "7e3ac4c9272227ade358a1580e6903c0f6ec8f61df2df43a4ec9d848f6294470",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_from_altered_plain_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_from_altered_plain_sequence.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:sequence",
+        "load:altered-from",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "eaaf421d9cf645e029637d6a3c4dee5154880bbef405758d051015ba731dc949",
+      "golden_sha256": "1e1cb0b36ae6fa241804d84973ea87ed9fc34383cda25699881a7ec34d9ed4e2",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_if_off_mono_usecase.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_if_off_mono_usecase.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:usecase",
+        "load:if-disabled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "5d5dd06eecb980da2fe0f0e47a2bfd312db250be103ab588f09e81933ee3ea33",
+      "golden_sha256": "34301907d94b0022260028dc6c97ef4c8b37509df2c0953819c95347e47191e9",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_if_off_plain_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_if_off_plain_class.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:class",
+        "load:if-disabled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "1737d4952832830b52ecef9c2acd4372f2bc6bb7df866ce3678440174b428246",
+      "golden_sha256": "dcbf28c389671da64fd71d187b291dd4883cd012bd924b4ace890f47fa29a9fb",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_if_on_mono_usecase.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_if_on_mono_usecase.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:usecase",
+        "load:if-enabled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "8cc2dc977dbe379f980bbcf9ede67931906667a42b938fac80c00667332652e8",
+      "golden_sha256": "520ebfb83c403ba2b71ab84ddaaae7b215073b70bbed38c530b1d3d9646b0744",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_if_on_plain_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_if_on_plain_class.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:class",
+        "load:if-enabled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "edfc0c916543ec083b9a982850cc56ebfa6a45e1304eb82f64e593040a78ae5c",
+      "golden_sha256": "ede8b809d6cb53928c60457b264657129a564480f1f6af3ba659e0ffcac26581",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_include_amiga_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_include_amiga_class.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:class",
+        "load:include",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "40c4e01acbc959881932a6ae4a7c211d51f634ec3109b915322f2f590efacf71",
+      "golden_sha256": "15ee2d15fab24b96e70d21ca97db256047efcd49b3410df80a89e6e4e05adcc8",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_include_blueprint_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_include_blueprint_state.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:state",
+        "load:include",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "2d91e2a4325db81d3832a355be57ae036af4339f6242f2a2f5db8fd12df4fba0",
+      "golden_sha256": "520b8067d4b7743107c6e7317629b69fb857ce379c0b82204b78f74d6648be69",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_include_mono_usecase.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_include_mono_usecase.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:usecase",
+        "load:include",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "5385474c3aae44f11f61985c78121ee0912dbbea99b63f3ef78065b81a0ebd46",
+      "golden_sha256": "04bfa3e1615b645dd181fd73c8e8fb4207607f519f483dcfdd360a021cb96d9e",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_include_plain_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_include_plain_class.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:class",
+        "load:include",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "39bd5185e9d2261096c01b442a196d593ea3d39f0f1f43203dbd9399a0df88bc",
+      "golden_sha256": "2e432801af484eb3221f3550697846e833d7a0c8749fee9e7f045575ae0838cc",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_activity.svg",
+      "axes": [
+        "theme:mimeograph",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "ba1d8fbb583e8b75cc816d0f0d9d920b3ca87cd695b19afc6fc982044194acaf",
+      "golden_sha256": "5137cbf16651eab05f2279f6570bc315792aec21cf347c2704acab80d74acc92",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_class.svg",
+      "axes": [
+        "theme:mimeograph",
+        "diagram:class",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "ceebd50989178632ad210bf50ff4229a4d091a8a0b4b80f82a4a100eda6afa83",
+      "golden_sha256": "542d953bb8b7f6c82d9799e99bf03fb88e6a6107ed022de1297c2e5a0f768217",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_component.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_component.svg",
+      "axes": [
+        "theme:mimeograph",
+        "diagram:component",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "b571f1183b00d89e878fc2cedec2d54e7481140a88e2c0f4801793e2d3f1f1c0",
+      "golden_sha256": "976864228566a4cbc6ca42e1ab4c198f1e525ace3b06435730f64675de3a5872",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_from_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_from_class.svg",
+      "axes": [
+        "theme:mimeograph",
+        "diagram:class",
+        "load:from-directory",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "b503cd9f0e74877f179da3142344142c14bbabed1a2dcb3ae9dd69fc3018e00e",
+      "golden_sha256": "587c7adfc9988dbcdb6cd62370a93e7d1b2b77608c80efca9b52a3f73fe7bece",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_sequence.svg",
+      "axes": [
+        "theme:mimeograph",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "8094196dbc5e5f4037fbbde6dddfc1ab871a4be9c3dc0c3bd5499d1090428c5a",
+      "golden_sha256": "6ac0653dfe7d03141ddda5bc066202aa991f605a08bcfadbd2c03d1f9de2d75b",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_skin_after_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_skin_after_class.svg",
+      "axes": [
+        "theme:mimeograph",
+        "diagram:class",
+        "load:skinparam-after-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "d7538063fdeb11e22b5da0d9997ae3a6b2065c0ecd76bccfebf2abd818e71420",
+      "golden_sha256": "890a7883f93dfbf8cb0b72ae8d7a62d8c5f22d5e04fdc732af9f4c79e532b9d8",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_skin_before_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_skin_before_class.svg",
+      "axes": [
+        "theme:mimeograph",
+        "diagram:class",
+        "load:skinparam-before-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "28568d11f54487f5495cf48ba76403751322ff61f2f88cf041e40bce64257930",
+      "golden_sha256": "acac38e2f4cb77bf61cafde1e4cd71e6894ee9f173b3ccc5e4b2b4d7a9e11400",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_state.svg",
+      "axes": [
+        "theme:mimeograph",
+        "diagram:state",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "1c2f6e2f1c8e1adfd0a16bc6fe792757d6fd878395cece0a3af8ed7688732224",
+      "golden_sha256": "168be2c5db38acbf27f181a63e38d948131af85c880225ba2ad4f09ac61a2175",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_usecase.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mimeograph_usecase.svg",
+      "axes": [
+        "theme:mimeograph",
+        "diagram:usecase",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "13b64a5ddfff669fa541f74ecf9d2a5e890e0c34cf69bb931ded49eea5ee2a7f",
+      "golden_sha256": "3b2fff341093a2a10d08497e990f46f78b728c1f5b10e9f2e53e7025918d7c48",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_activity.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "716e402beb9e5eb5a96dd1593e494bfad2510a230af6ee089faf6d7087ea2bdb",
+      "golden_sha256": "77c18ae59d683ddf22292bb4f826930f2cd59265efda6461c3c0b22c09fe97e2",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_class.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:class",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "4c70bf7a2c9913f24bee5b4b9c63c85cf4d1b801c95ad29fadccc26781486840",
+      "golden_sha256": "dff76c7027b6dea42ca7377095abe1f9e49032aa09e3b0179ef0ba748218b79e",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_component.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_component.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:component",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "847f97ad0be6260abbaf87e50820192e1d53bb3784826670b00fb4854eea6152",
+      "golden_sha256": "9a65f84922d5df818b04528849fff57bfd1670a43d67220aa5dcd3f7b9fbfe5f",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_from_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_from_class.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:class",
+        "load:from-directory",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "a5576aa0bc1b61651688f9e9d886f90213f9392a9efd32512a4d7d5ccf37f049",
+      "golden_sha256": "393442a35fe1a1328adff2b8e6f973d00002a8af69535fd2a07c05d67df421e6",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_seq_tail_then_theme.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_seq_tail_then_theme.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:sequence",
+        "load:messages-before-directive",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "08f6285c696d5f029f6ea4ac216c8153d47a2621dae55c385d720d7d8b5b6ebe",
+      "golden_sha256": "cf69a2b65c156c183d9ca8a5249c73cecef6e05198c70d0f1bd9b29660e1fa72",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_sequence.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "cb6dac3e7ed23f82122c5338041f80889da542b800c3a59fe211730f0a4ac760",
+      "golden_sha256": "7c02657cdaffeddd98402afd42a1b20b884b1583be5a3091747b0c4750ee0033",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_skin_after_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_skin_after_class.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:class",
+        "load:skinparam-after-theme",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "865d1e70102efd5fc758f12a1843e524e503bc5ec86a1face0d5fef93b034e95",
+      "golden_sha256": "34ac0ff66b743b00eccabe81cd9a16d52c9d6b355075386b9bc62a9dfabd5b59",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_skin_before_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_skin_before_class.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:class",
+        "load:skinparam-before-theme",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "6300d97ebde6f7a9db2c8debabd81189ce0739fd37924029aa8cbb21fcc28f63",
+      "golden_sha256": "aefb86636fd768aaaf19d5d1cf0869672f6c612db9c293f1d726b1901202e6cb",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_state.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:state",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "417de071a4da64e212553576af8e365eeac9bbe86d4a83b0919fcb78fca49451",
+      "golden_sha256": "ed2c99f80110c38bb60f425beff1cd8e977c739c54601674326e5d93f2bb5cc5",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_usecase.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_mono_usecase.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:usecase",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "d592ff82b4b2a53c2372c0788d7fc816543ca22863659a2714453622903d87a4",
+      "golden_sha256": "50058b8cbf4e57bd3d5fc00855c48bc9d6a7db43e9144c9b8024f670565aadca",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_activity.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "10154212ce6a98672290865ede5d5cf9af44d6b8b088f601e77f503ec3c23309",
+      "golden_sha256": "be189f2ee357310dd31de507009c5a702cc30f59744281ca3a38d743b8c45c79",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_activity_branch.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_activity_branch.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:activity",
+        "load:activity-branch",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "8e1bc72323ed4874fb3190ffcbbcf682ea8f84b3acedaeb898b6481effafe34a",
+      "golden_sha256": "bbf7850fe61df1492351ffe75e26ee8665c104e11f9f72c19167be373ddf073e",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_class.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:class",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "7655e35b6108cc783ca50d2835cb5576e6974cf258a1ccfa72996eb8c8b7c904",
+      "golden_sha256": "c36ec4ba7df2268db7f2b69716d348eca7a298dfc1d264dd7206305b41ddf03a",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_component.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_component.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:component",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "a5833a6e3951e27c87542d5925c396adc598292c84f44a7860b822d5ca453b17",
+      "golden_sha256": "e74b4f8f425d68f05b7746366a6b91b1faa6c50adb58f53e076be13d9f93a0fb",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_from_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_from_class.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:class",
+        "load:from-directory",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "4501502d1c9bb7ce3f034f88afc31cc4db315730b48f854a98d32396a6c25439",
+      "golden_sha256": "167954fff1003102e5f1866d75e2826b21a0e0982038cb5b17bed634cf13e9ce",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_seq_tail_then_theme.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_seq_tail_then_theme.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:sequence",
+        "load:messages-before-directive",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "bbc10770c5d4f6a77d52a7a268f92392c8851cfca9502d9f9c2a49992f66b86b",
+      "golden_sha256": "518b8375c34644e825e77135e87bd24ddcd38f755b56a3f20ec6b181d6f49afa",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_sequence.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "69758dd09d5bd3ad4fb4a95cc09fff00877e69e0d6514edaf38da28fc690ea61",
+      "golden_sha256": "623131d6df5e473cba8ab2181afa02daa668ec97e7ce5f21422a1d4fbfd0f86f",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_skin_after_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_skin_after_class.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:class",
+        "load:skinparam-after-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "dd66102dde27111156089d21fd1e2e6b1a92f2bd6e5c71e92cc0d1846e127adf",
+      "golden_sha256": "93125240d761d38346a2076e88dc6215f2f2e29e44205571dbb7a3615270a2b2",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_skin_before_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_skin_before_class.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:class",
+        "load:skinparam-before-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "62f8f1d0c52df0bf90bed264dc4d77c0748b8e29375801d0614f0eabba713a72",
+      "golden_sha256": "fdfb6ee561920daaff0c945e4377b86047a9df1f584268d04369519d35f959f9",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_state.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:state",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "ed618d955cc0e6631153a6546e6d276b213d81c8970dd6ec53a111144498650a",
+      "golden_sha256": "27faca21e5c9438db81bd4d49f3fae8c5f5860d80c459ffa7d2d677ae6d7d6e9",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_usecase.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_plain_usecase.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:usecase",
+        "load:bundled",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "eb4e167b958500a897d47df1a27b596f31675857a2453ebe1bae6ae7d06c8f02",
+      "golden_sha256": "b06bdca6afd628302af1137ce6a3a8715f144fa8d2264fee0e059ff322f2e381",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_var_before_amiga_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_var_before_amiga_class.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:class",
+        "load:variable-before-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "91178e316f08c15e21c546f07b267b22ab74a4a0aca762743f90ee3d5e011b06",
+      "golden_sha256": "f939b19b3df00e1b8b67ccb8c6e85e1999f2317bf1614cde0eb4e5c8a3610c0d",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_var_before_mono_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_var_before_mono_class.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:class",
+        "load:variable-before-theme",
+        "cohort:heldout"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "a8ecda132b4ff93f4e6389add0a294a532e2b537e92e0c314be1ad5d8b6c6b67",
+      "golden_sha256": "776cdc92ac95dd608b42302c0456016ad4e7cb0b93b3c4aefbe00bd0dd620987",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_var_before_plain_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/hg8_var_before_plain_class.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:class",
+        "load:variable-before-theme",
+        "cohort:heldout"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "1113ad54003a2d098abb87e95d842524c26a2968ee5ffbaf4ed9decb15c8d49a",
+      "golden_sha256": "8d7628e056931ce0e3e199055bb651bd4d7000abb45369772ddd06d71f6b1dfc",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_amiga_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_amiga_activity.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "f1ea0ee50155f5346228a02cd04a72ec37ed9414d1652f5b9968381ef3524767",
+      "golden_sha256": "2f333f566cf463c5bd4c68f4ba484c4975a3eccc48dd6e4fd53a714201d23610",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_amiga_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_amiga_class.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:class",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "36eb21962418d30c3b3c10aa09137f5ed3cb279d7e0171d7852791cb6a896273",
+      "golden_sha256": "b924ff83a49f03fd6a212932c72b5ed87519c64df688d12b7863d28c8bdd718b",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_amiga_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_amiga_sequence.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "590cf5437d42def4174b252ae2e81cb958fc96e34919ea0c939ebeef5d69c109",
+      "golden_sha256": "e92f46c61ec77604b958640d0e687c0961e6ac90f7421a8d63a023c80ebdd0e4",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_amiga_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_amiga_state.svg",
+      "axes": [
+        "theme:amiga",
+        "diagram:state",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "a84c1610461e43d8fbb5c7ee4e7f8bb58eafd816f09758911abc07f2b6a7c792",
+      "golden_sha256": "2ad8c3ed61304f6fdcc94d779a66615502760ac3d579d68b5ae4d16ad659a104",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_blueprint_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_blueprint_activity.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "b4746c0d1ac3de3d18e0693f43899b1a29d2dd717b9e8398e8343c6a5d5c892f",
+      "golden_sha256": "82563a4cfe6708d6f4a6d261cebda59bd26df4766e6c37da0e86b571cc453383",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_blueprint_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_blueprint_class.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:class",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "5d741ac14b6da18b6f8ff335f18f628174c473afc3c6918fa0d2eb83d62e149a",
+      "golden_sha256": "4ce1f93be89a7e69af62417b300eda9fa5861f451a9d14d56755fff88d9e3dc9",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_blueprint_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_blueprint_sequence.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "93b9de5e9d2446dffe8e13bff2f05ee4221826828907bdab7ab9340b97c55caa",
+      "golden_sha256": "84d7b9eb1e3e11a9062f4e2996b11181023273953e48c48b73837f18a93976f4",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_blueprint_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_blueprint_state.svg",
+      "axes": [
+        "theme:blueprint",
+        "diagram:state",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "293e0cfbaab602fbc81582c800917f1f7cf1926784279b763feddf1aa99efca5",
+      "golden_sha256": "d39be713c4c50aa2983e9eea7c5567afcf8e7d7f96e3d5a9828daa75ee4c942b",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_carbon_gray_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_carbon_gray_activity.svg",
+      "axes": [
+        "theme:carbon-gray",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "7aa196eb6accd8ba2dbeea303785976331ac2c58f5d8b461e72601c75f0b0793",
+      "golden_sha256": "85464a5efa7731b047d39993512be08aeb77fa6f78009290ea72cc728efc47fb",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_carbon_gray_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_carbon_gray_class.svg",
+      "axes": [
+        "theme:carbon-gray",
+        "diagram:class",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "0dbd6b6ffc65c2aa9b8a9044286dd34b241178ad25f2e955a213d8ed0ffeaf08",
+      "golden_sha256": "844eb0e48c1b170d3b8ab32f40c8f6cb62c7b87f36cf0bb43408ede184c7d20b",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_carbon_gray_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_carbon_gray_sequence.svg",
+      "axes": [
+        "theme:carbon-gray",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "75a9fe89699702dd97a7a58b554337b14e38e66b8e7b423a25add8bcff01eb60",
+      "golden_sha256": "ac5be613c96b479f49156db9e9458b7b3bdc034f960cb0a9eadf749c06387bc7",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_carbon_gray_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_carbon_gray_state.svg",
+      "axes": [
+        "theme:carbon-gray",
+        "diagram:state",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "e9c3bb00b8e17e830a8f3034ca9fd0e998959ee1f91a660ebf325cf30bf26c49",
+      "golden_sha256": "d70b7bef544f9d4935261c343fc4f5355bb0ffdbb0be17b2fcce25036e499732",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_amber_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_amber_activity.svg",
+      "axes": [
+        "theme:crt-amber",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "62938ba90284b800bc9139eb5fa7487d7800a732617965a414984f0a9a18a56a",
+      "golden_sha256": "0a3a7617ecffbfd22d18cc4ba742f429737a1929ddfd56135a3fe4ef89b39784",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_amber_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_amber_class.svg",
+      "axes": [
+        "theme:crt-amber",
+        "diagram:class",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "ae55b3f1b89fa0cfe03da4ca55206af71c7fa1cbda2b42f6b646e56ae1813117",
+      "golden_sha256": "e7307819e49519f84b60969a46a9d42cd602aa47877125432c030818e1ed93a3",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_amber_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_amber_sequence.svg",
+      "axes": [
+        "theme:crt-amber",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "b58f595c158ebd3bb8db9270bc7a001df4f42335ccd028581694ec1b36f33ee9",
+      "golden_sha256": "e940db98b92741807910a00c757a45dced86bc92d9a94f54d1d69224be2c95d8",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_amber_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_amber_state.svg",
+      "axes": [
+        "theme:crt-amber",
+        "diagram:state",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "f09ebf56afc00c34578de59eb426fbace4c17e82ff36245bec9e67faa432d365",
+      "golden_sha256": "ef7cc22e687e5428af07685a757fbd6a35b40e2c7d63a95dd762721ea0fa1a29",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_green_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_green_activity.svg",
+      "axes": [
+        "theme:crt-green",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "1bd0136bc63376524b2a3beadffa08b1de3aad0bf05adb35944b00315f37a4df",
+      "golden_sha256": "aa0bdb5411a6859d13e30ded0c3a0593c1ae647b1e50b8584ccdbbd0b328fcdd",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_green_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_green_class.svg",
+      "axes": [
+        "theme:crt-green",
+        "diagram:class",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "f0431715f09f4d8104f6c7ee82e2c3cc8858d664e2171d0ad1900dc43d095b8f",
+      "golden_sha256": "3fddd6121e6bbb23c89e29eed8a77fd0fe0475fbdc30819c610b035a8e9d417d",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_green_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_green_sequence.svg",
+      "axes": [
+        "theme:crt-green",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "cfae2f53f16c6052d8f27dca30bf79ac67826c468d096f74ced32693ccc0504e",
+      "golden_sha256": "a1be3fc6ffc4ea4bb001173a28debbd68e7d07a13942539d40b187a232c8aff1",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_green_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_crt_green_state.svg",
+      "axes": [
+        "theme:crt-green",
+        "diagram:state",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "f4988d389d6364c724a12361e6d0666c7f9c411fd83f3140aa40c0a43486e3a1",
+      "golden_sha256": "c7a2d03ccbdba5fa1567a773a8423c6964b9cd9b7218349f50926e94671512b0",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mimeograph_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mimeograph_activity.svg",
+      "axes": [
+        "theme:mimeograph",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "7a705355d7e88348890ba9d09385680860a6580bf387f3ef4ebb9cf6f2a99159",
+      "golden_sha256": "cfb11792fc6476463f98aa2081e1e6f7e1e3fa0f6766f5d386142d8f16e8a80b",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mimeograph_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mimeograph_class.svg",
+      "axes": [
+        "theme:mimeograph",
+        "diagram:class",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "41c6cb8b028013567746ebea63f3c1c6783ad4a61cc76165a9179d4cb6cfa0b5",
+      "golden_sha256": "0222a9c03d566b7540483c6755d5b92aa2b684462a8051871dc4da4bf2a9c66a",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mimeograph_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mimeograph_sequence.svg",
+      "axes": [
+        "theme:mimeograph",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "8ac5de39e320182d0b923a1bd81139ba8601f111c5a8d75609dcf238b5bcd89c",
+      "golden_sha256": "05ac96e6fe61a5a141d42be4d314ea0189e60cf8d6da13878c6c53d4b1a317f3",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mimeograph_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mimeograph_state.svg",
+      "axes": [
+        "theme:mimeograph",
+        "diagram:state",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "a9986a4849bba0cc203016230745ef2d7114b57441753aab9b7eca482c45fc04",
+      "golden_sha256": "c3f955f346dc60d3294fd7604b8df76c4c58ee09d7546cfe715a8d0b43f069ab",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mono_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mono_activity.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "a67c7d8be8154679f1b3844f33fd6d2c81770e0a2df476be7e4e86e5b4516ce4",
+      "golden_sha256": "43856d6f97bae7e59258d899aa8c9ea29f216c534e7f31df28f673264a2d8cd8",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mono_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mono_class.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:class",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "8d37d266c72665119c9b4cb2d6be212fd3e449b680df9a4bec7025c40187f395",
+      "golden_sha256": "9ff128d75c3fe5405272f91cd358eb6e81c3f7a31d291f0ae9c0a9784241b6fb",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mono_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mono_sequence.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "442adfeba136ef1b4ffdcb9e6da985cb21311a887c66b68948d815cc7b065c9e",
+      "golden_sha256": "09c2de3af16d95a42b17048ea6c29a6ff479dc3cc70d23f8becaa84593183889",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mono_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_mono_state.svg",
+      "axes": [
+        "theme:mono",
+        "diagram:state",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "31daadea77627d23c312e177e102b92e12a513c2ed3a379303d011906367ebd7",
+      "golden_sha256": "2b54558609ea6b23acec159b2dcd0d73be357bad8478eb5d2f19a16ff1bd359e",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_plain_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_plain_activity.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "be19b12b612e7a8b08a741d14e150f5ba6e6ab5df862d2c34e96773bd88764bd",
+      "golden_sha256": "e03d8134fd3bf86383715842065dcad06b8a151b8942af7be823c30a65b01efd",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_plain_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_plain_class.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:class",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "745b4254eb4aa3dcbd5a4365a4d3879d40b67a847261511a6b7b2bc3807ed279",
+      "golden_sha256": "758dff78b6da30f2564749918deda0654e719e9d3b1b905ae9422a0cda05df1f",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_plain_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_plain_sequence.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "b8125bc1520804096cfa82cdd4de34a3a9ffb833e0ad11db5924da6bdc97bcf2",
+      "golden_sha256": "aa869e40d01ac2691e9ce9a404dc890272ce3e9956926cc79a6209d8badb9abe",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_plain_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_plain_state.svg",
+      "axes": [
+        "theme:plain",
+        "diagram:state",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "pass",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": true,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "088b518ea56ea4c9d90ebab60de3fb05fc7328436ddcdf891b9505d6d5973981",
+      "golden_sha256": "4a805b2a6230ccea7777c8d1d9642e871652ec551986db601be0d799c8ed8ed2",
+      "element_tree_equal_tip": true
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_sunlust_activity.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_sunlust_activity.svg",
+      "axes": [
+        "theme:sunlust",
+        "diagram:activity",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "8fbef7bce80fa38abe1ad522667524ff48b60ae25735a82cb8ed17aca1fc022b",
+      "golden_sha256": "5c0f34a261659bf5d2ec661d8f361474d47468a765b857b24e24e94e6b7ac45f",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_sunlust_class.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_sunlust_class.svg",
+      "axes": [
+        "theme:sunlust",
+        "diagram:class",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "d70819f47376851b781a6dfd09d8cc5e3c50467efd9110db2b7b9d8d75b7fa67",
+      "golden_sha256": "21e4aa6158d92a77444fb1d6d5c791a271a8df6db9321f126727abf70bd2448f",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_sunlust_sequence.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_sunlust_sequence.svg",
+      "axes": [
+        "theme:sunlust",
+        "diagram:sequence",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "a56884ae2809cae87cef6c7ca728bb9e4f0656014d979a0865d5f6be323528e6",
+      "golden_sha256": "716a3533cd6234a71b79a392b685452d165a7ad7f709673e7ff65a598993cd1d",
+      "element_tree_equal_tip": false
+    },
+    {
+      "source": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_sunlust_state.puml",
+      "golden": "test-diagrams/perturbations/jar-bundled-theme-sources/g8_sunlust_state.svg",
+      "axes": [
+        "theme:sunlust",
+        "diagram:state",
+        "load:bundled",
+        "cohort:ce"
+      ],
+      "result": "fail",
+      "whole_output": "mismatch",
+      "stdout_changed_vs_base": false,
+      "java_exit": 0,
+      "base_exit": 0,
+      "tip_exit": 0,
+      "source_sha256": "84980052e73c3f7925dacd2ab808a23be011496a0951dd296ef90f9d6f4a2949",
+      "golden_sha256": "e29e114a97d27108f4fd9ea90fb324bc03e93465eef9affbcbb1fa257dfb9564",
+      "element_tree_equal_tip": false
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+@startuml
+!theme crt-amber from hg8from
+class Hg8FromCrtAmberLoft
+class Hg8FromCrtAmberCellar
+Hg8FromCrtAmberLoft --> Hg8FromCrtAmberCellar : drops
+@enduml

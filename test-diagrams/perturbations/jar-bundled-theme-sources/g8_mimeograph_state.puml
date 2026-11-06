@@ -1,0 +1,6 @@
+@startuml
+!theme mimeograph
+[*] --> G8MimeographCold
+G8MimeographCold --> G8MimeographHot : heat
+G8MimeographHot --> [*]
+@enduml

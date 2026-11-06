@@ -1,0 +1,6 @@
+@startuml
+!theme crt-green
+[*] --> G8CrtGreenCold
+G8CrtGreenCold --> G8CrtGreenHot : heat
+G8CrtGreenHot --> [*]
+@enduml

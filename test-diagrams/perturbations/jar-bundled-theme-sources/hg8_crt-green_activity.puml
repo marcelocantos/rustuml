@@ -1,0 +1,7 @@
+@startuml
+!theme crt-green
+start
+:Hg8CrtGreen proof loaf;
+:Hg8CrtGreen score crust;
+stop
+@enduml

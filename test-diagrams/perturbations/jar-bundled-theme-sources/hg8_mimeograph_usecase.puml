@@ -1,0 +1,9 @@
+@startuml
+!theme mimeograph
+left to right direction
+actor Hg8MimeographClerk
+usecase Hg8MimeographFile as "File receipt"
+usecase Hg8MimeographAudit as "Audit ledger"
+Hg8MimeographClerk --> Hg8MimeographFile
+Hg8MimeographClerk --> Hg8MimeographAudit
+@enduml

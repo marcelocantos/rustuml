@@ -1,0 +1,6 @@
+@startuml
+!theme amiga
+class G8AmigaGranary
+class G8AmigaMill
+G8AmigaGranary --> G8AmigaMill
+@enduml

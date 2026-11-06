@@ -1,0 +1,5 @@
+@startuml
+!theme plain
+G8PlainMiller -> G8PlainBaker : flour sack
+G8PlainBaker --> G8PlainMiller : warm loaf
+@enduml

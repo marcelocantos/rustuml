@@ -1,0 +1,6 @@
+@startuml
+!theme blueprint from hg8from
+class Hg8FromBlueprintLoft
+class Hg8FromBlueprintCellar
+Hg8FromBlueprintLoft --> Hg8FromBlueprintCellar : drops
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+actor Hg8TailMiller
+participant Hg8TailMill
+Hg8TailMiller -> Hg8TailMill : early sack
+!theme plain
+Hg8TailMiller -> Hg8TailMill : late sack
+@enduml

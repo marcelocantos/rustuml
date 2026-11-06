@@ -1,0 +1,6 @@
+@startuml
+!theme mono
+class Hg8MonoBarn
+class Hg8MonoSilo
+Hg8MonoBarn --> Hg8MonoSilo : stores
+@enduml

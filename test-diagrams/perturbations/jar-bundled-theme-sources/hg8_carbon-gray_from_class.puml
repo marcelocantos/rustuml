@@ -1,0 +1,6 @@
+@startuml
+!theme carbon-gray from hg8from
+class Hg8FromCarbonGrayLoft
+class Hg8FromCarbonGrayCellar
+Hg8FromCarbonGrayLoft --> Hg8FromCarbonGrayCellar : drops
+@enduml

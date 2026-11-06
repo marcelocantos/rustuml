@@ -1,0 +1,5 @@
+@startuml
+!theme blueprint
+G8BlueprintMiller -> G8BlueprintBaker : flour sack
+G8BlueprintBaker --> G8BlueprintMiller : warm loaf
+@enduml

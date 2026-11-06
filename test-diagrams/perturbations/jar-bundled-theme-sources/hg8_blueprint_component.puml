@@ -1,0 +1,6 @@
+@startuml
+!theme blueprint
+component Hg8BlueprintHopper
+component Hg8BlueprintKiln
+Hg8BlueprintHopper --> Hg8BlueprintKiln : feed
+@enduml

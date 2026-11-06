@@ -1,0 +1,6 @@
+@startuml
+!theme blueprint
+class G8BlueprintGranary
+class G8BlueprintMill
+G8BlueprintGranary --> G8BlueprintMill
+@enduml

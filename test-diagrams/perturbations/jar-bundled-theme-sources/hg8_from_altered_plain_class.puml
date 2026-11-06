@@ -1,0 +1,6 @@
+@startuml
+!theme plain from hg8from-altered
+class Hg8FromAltPlainLoft
+class Hg8FromAltPlainCellar
+Hg8FromAltPlainLoft --> Hg8FromAltPlainCellar : drops
+@enduml

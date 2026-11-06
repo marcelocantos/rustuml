@@ -1,0 +1,7 @@
+@startuml
+!theme mono
+actor Hg8MonoMiller
+participant Hg8MonoMill
+Hg8MonoMiller -> Hg8MonoMill : grind
+Hg8MonoMill --> Hg8MonoMiller : flour
+@enduml

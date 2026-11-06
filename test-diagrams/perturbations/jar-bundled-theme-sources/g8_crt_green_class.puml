@@ -1,0 +1,6 @@
+@startuml
+!theme crt-green
+class G8CrtGreenGranary
+class G8CrtGreenMill
+G8CrtGreenGranary --> G8CrtGreenMill
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+!theme mimeograph
+class Hg8MimeographBarn
+class Hg8MimeographSilo
+Hg8MimeographBarn --> Hg8MimeographSilo : stores
+@enduml

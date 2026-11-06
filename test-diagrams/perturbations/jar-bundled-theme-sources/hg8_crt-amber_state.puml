@@ -1,0 +1,6 @@
+@startuml
+!theme crt-amber
+[*] --> Hg8CrtAmberIdle
+Hg8CrtAmberIdle --> Hg8CrtAmberBusy : heat
+Hg8CrtAmberBusy --> [*]
+@enduml

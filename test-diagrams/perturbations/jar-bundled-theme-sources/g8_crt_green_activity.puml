@@ -1,0 +1,9 @@
+@startuml
+!theme crt-green
+start
+:G8CrtGreen knead dough;
+if (G8CrtGreen risen?) then (yes)
+  :G8CrtGreen bake loaf;
+endif
+stop
+@enduml

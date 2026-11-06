@@ -1,0 +1,11 @@
+@startuml
+!theme plain
+start
+:Hg8Plain measure flour;
+if (Hg8Plain enough?) then (yes)
+  :Hg8Plain mix;
+else (no)
+  :Hg8Plain add more;
+endif
+stop
+@enduml

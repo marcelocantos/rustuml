@@ -1,0 +1,5 @@
+@startuml
+!theme mono
+G8MonoMiller -> G8MonoBaker : flour sack
+G8MonoBaker --> G8MonoMiller : warm loaf
+@enduml

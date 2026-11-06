@@ -1,0 +1,7 @@
+@startuml
+!theme blueprint
+actor Hg8BlueprintMiller
+participant Hg8BlueprintMill
+Hg8BlueprintMiller -> Hg8BlueprintMill : grind
+Hg8BlueprintMill --> Hg8BlueprintMiller : flour
+@enduml

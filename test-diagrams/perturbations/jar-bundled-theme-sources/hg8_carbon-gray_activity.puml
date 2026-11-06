@@ -1,0 +1,7 @@
+@startuml
+!theme carbon-gray
+start
+:Hg8CarbonGray proof loaf;
+:Hg8CarbonGray score crust;
+stop
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+!theme sunlust
+start
+:G8Sunlust knead dough;
+if (G8Sunlust risen?) then (yes)
+  :G8Sunlust bake loaf;
+endif
+stop
+@enduml
