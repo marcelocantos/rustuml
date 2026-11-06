@@ -876,8 +876,8 @@ fn sans_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
 /// from `tools/font-chain-reference/ascii-advances-round11`
 /// (`tools/AsciiAdvanceExtract.swift`; gate `ascii_tables_are_the_extracted_faces`).
 /// Verdana-Italic and Verdana-BoldItalic have advances of their own
-/// (CFontManager registers them as the family's italic faces); Arial's
-/// italics happen to share the upright advances.
+/// (CFontManager registers them as the family's italic faces). Arial's
+/// italics, and Helvetica's obliques, share the upright advances.
 const ASCII_UNITS_PER_EM: f64 = 2048.0;
 
 /// `ArialMT.plain.ascii.tsv`.
@@ -995,6 +995,58 @@ const VERDANA_FACES: AsciiFaces = AsciiFaces {
     bold_italic: &VERDANA_BOLD_ITALIC_ASCII,
 };
 
+/// `Helvetica.plain.ascii.tsv`.
+const HELVETICA_ASCII: [u16; 95] = [
+    569, 569, 727, 1139, 1139, 1821, 1366, 391, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,
+    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 569, 569, 1196, 1196, 1196, 1139, 2079,
+    1366, 1366, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1024, 1366, 1139, 1706, 1479, 1593, 1366,
+    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 569, 569, 569, 961, 1139, 682,
+    1139, 1139, 1024, 1139, 1139, 569, 1139, 1139, 455, 455, 1024, 455, 1706, 1139, 1139, 1139,
+    1139, 682, 1024, 569, 1139, 1024, 1479, 1024, 1024, 1024, 684, 532, 684, 1196,
+];
+
+/// `Helvetica-Bold.bold.ascii.tsv`.
+const HELVETICA_BOLD_ASCII: [u16; 95] = [
+    569, 682, 971, 1139, 1139, 1821, 1479, 487, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,
+    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 682, 682, 1196, 1196, 1196, 1251, 1997,
+    1479, 1479, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1139, 1479, 1251, 1706, 1479, 1593, 1366,
+    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 682, 569, 682, 1196, 1139, 682,
+    1139, 1251, 1139, 1251, 1139, 682, 1251, 1251, 569, 569, 1139, 569, 1821, 1251, 1251, 1251,
+    1251, 797, 1139, 682, 1251, 1139, 1593, 1139, 1139, 1024, 797, 573, 797, 1196,
+];
+
+/// `Helvetica-Oblique.italic.ascii.tsv`.
+const HELVETICA_ITALIC_ASCII: [u16; 95] = [
+    569, 569, 727, 1139, 1139, 1821, 1366, 391, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,
+    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 569, 569, 1196, 1196, 1196, 1139, 2079,
+    1366, 1366, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1024, 1366, 1139, 1706, 1479, 1593, 1366,
+    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 569, 569, 569, 961, 1139, 682,
+    1139, 1139, 1024, 1139, 1139, 569, 1139, 1139, 455, 455, 1024, 455, 1706, 1139, 1139, 1139,
+    1139, 682, 1024, 569, 1139, 1024, 1479, 1024, 1024, 1024, 684, 532, 684, 1196,
+];
+
+/// `Helvetica-BoldOblique.bolditalic.ascii.tsv`.
+const HELVETICA_BOLD_ITALIC_ASCII: [u16; 95] = [
+    569, 682, 971, 1139, 1139, 1821, 1479, 487, 682, 682, 797, 1196, 569, 682, 569, 569, 1139,
+    1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 1139, 682, 682, 1196, 1196, 1196, 1251, 1997,
+    1479, 1479, 1479, 1479, 1366, 1251, 1593, 1479, 569, 1139, 1479, 1251, 1706, 1479, 1593, 1366,
+    1593, 1479, 1366, 1251, 1479, 1366, 1933, 1366, 1366, 1251, 682, 569, 682, 1196, 1139, 682,
+    1139, 1251, 1139, 1251, 1139, 682, 1251, 1251, 569, 569, 1139, 569, 1821, 1251, 1251, 1251,
+    1251, 797, 1139, 682, 1251, 1139, 1593, 1139, 1139, 1024, 797, 573, 797, 1196,
+];
+
+const HELVETICA_FACES: AsciiFaces = AsciiFaces {
+    plain: &HELVETICA_ASCII,
+    bold: &HELVETICA_BOLD_ASCII,
+    italic: &HELVETICA_ITALIC_ASCII,
+    bold_italic: &HELVETICA_BOLD_ITALIC_ASCII,
+};
+
+/// U+00AB and U+00BB were the only non-ASCII arms of the previous Helvetica
+/// tables (1139 font units, both weights). Kept until `face-cmap-advances`
+/// supplies the extracted advance of the face. Not a new measurement.
+const HELVETICA_RETAINED_GUILLEMET_UNITS: u16 = 1139;
+
 fn family_table_text_width(
     text: &str,
     font_size: f64,
@@ -1009,121 +1061,32 @@ fn family_table_text_width(
         font_size,
         bold,
         ChainFace::for_style(family, bold, italic),
-        |c| {
-            let code = c as usize;
-            (32..=126)
-                .contains(&code)
-                .then(|| f64::from(table[code - 32]) / ASCII_UNITS_PER_EM * font_size)
-        },
+        |c| ascii_advance(table, c, font_size),
     )
 }
 
-const HELVETICA_UPM: f64 = 2048.0;
-
-fn helvetica_char_units(c: char) -> Option<f64> {
-    let units = match c {
-        ' ' => 569.0,
-        '!' => 569.0,
-        '"' => 727.0,
-        '#' => 1139.0,
-        '$' => 1139.0,
-        '%' => 1820.0,
-        '&' => 1366.0,
-        '\'' => 455.0,
-        '(' => 682.0,
-        ')' => 682.0,
-        '*' => 797.0,
-        '+' => 1196.0,
-        ',' => 569.0,
-        '-' => 682.0,
-        '.' => 569.0,
-        '/' => 569.0,
-        '0'..='9' => 1139.0,
-        ':' => 569.0,
-        ';' => 569.0,
-        '<' => 1196.0,
-        '=' => 1196.0,
-        '>' => 1196.0,
-        '?' => 1139.0,
-        '@' => 2079.0,
-        'A' | 'B' => 1366.0,
-        'C' | 'D' | 'H' | 'N' | 'R' | 'U' => 1479.0,
-        'E' => 1366.0,
-        'F' | 'T' | 'Z' => 1251.0,
-        'G' | 'O' | 'Q' => 1593.0,
-        'I' => 569.0,
-        'J' => 1024.0,
-        'S' => 1366.0,
-        'K' | 'X' => 1366.0,
-        'L' => 1139.0,
-        'M' => 1706.0,
-        'P' | 'V' => 1366.0,
-        'W' => 1934.0,
-        'Y' => 1366.0,
-        '[' => 569.0,
-        '\\' => 569.0,
-        ']' => 569.0,
-        '^' => 961.0,
-        '_' => 1139.0,
-        '`' => 682.0,
-        'a' | 'b' | 'd' | 'e' | 'g' | 'h' | 'n' | 'o' | 'p' | 'q' | 'u' => 1139.0,
-        'c' | 'k' | 's' | 'v' | 'x' | 'y' | 'z' => 1024.0,
-        'f' | 't' => 569.0,
-        'i' | 'j' | 'l' => 455.0,
-        'm' => 1706.0,
-        'r' => 682.0,
-        'w' => 1479.0,
-        '{' => 684.0,
-        '|' => 532.0,
-        '}' => 684.0,
-        '~' => 1196.0,
-        '«' | '»' => 1139.0,
-        _ => return None,
-    };
-    Some(units)
-}
-
-fn helvetica_bold_char_units(c: char) -> Option<f64> {
-    let units = match c {
-        ' ' | ',' | '.' => 569.0,
-        '!' | '(' | ')' | '-' | '[' | ']' | '`' => 682.0,
-        '"' => 971.0,
-        '#' | '$' | '0'..='9' | 'J' | 'a' | 'c' | 'e' | 's' | 'v' | 'x' | 'y' | '«' | '»' => {
-            1139.0
-        }
-        '%' => 1821.0,
-        '&' | 'A' | 'B' | 'C' | 'D' | 'H' | 'K' | 'N' | 'R' | 'U' => 1479.0,
-        '\'' => 487.0,
-        '*' | 'r' | '{' | '}' => 797.0,
-        '+' | '<' | '=' | '>' | '^' | '~' => 1196.0,
-        '/' | 'I' | '\\' | 'i' | 'j' | 'l' => 569.0,
-        ':' | ';' => 682.0,
-        '?' | 'F' | 'L' | 'T' | 'Z' | 'z' => 1251.0,
-        '@' => 1997.0,
-        'E' | 'P' | 'S' | 'V' | 'X' | 'Y' => 1366.0,
-        'G' | 'O' | 'Q' | 'w' => 1593.0,
-        'M' => 1706.0,
-        'W' => 1933.0,
-        '_' => 1139.0,
-        'b' | 'd' | 'g' | 'h' | 'k' | 'n' | 'o' | 'p' | 'q' | 'u' => 1251.0,
-        'f' | 't' => 682.0,
-        'm' => 1821.0,
-        '|' => 573.0,
-        _ => return None,
-    };
-    Some(units)
+fn ascii_advance(table: &[u16; 95], c: char, font_size: f64) -> Option<f64> {
+    let code = c as usize;
+    (32..=126)
+        .contains(&code)
+        .then(|| f64::from(table[code - 32]) / ASCII_UNITS_PER_EM * font_size)
 }
 
 fn helvetica_text_width(text: &str, font_size: f64, bold: bool, italic: bool) -> f64 {
-    let face = ChainFace::for_style(ChainFamily::Helvetica, bold, italic);
-    chain_text_width(text, font_size, bold, face, |c| {
-        if bold {
-            helvetica_bold_char_units(c)
-        } else {
-            helvetica_char_units(c)
-        }
-        .map(|units| units / HELVETICA_UPM * font_size)
-    })
+    let table = HELVETICA_FACES.slot(bold, italic);
+    chain_text_width(
+        text,
+        font_size,
+        bold,
+        ChainFace::for_style(ChainFamily::Helvetica, bold, italic),
+        |c| {
+            ascii_advance(table, c, font_size).or_else(|| {
+                (c == '\u{00AB}' || c == '\u{00BB}').then(|| {
+                    f64::from(HELVETICA_RETAINED_GUILLEMET_UNITS) / ASCII_UNITS_PER_EM * font_size
+                })
+            })
+        },
+    )
 }
 
 /// Width of carried text in a physical face whose own table covers some
@@ -1924,6 +1887,39 @@ mod tests {
         }
     }
 
+    /// Java's widths for the four alphabet runs at 14 pt in each Helvetica
+    /// face (BT `c10a_ft_hv_{plain,italic,bold,bolditalic}` textLength).
+    /// Oblique shares the upright face's advances.
+    #[test]
+    fn helvetica_faces_measure_java_widths() {
+        let runs = [
+            "ABCDEFGHIJKLM",
+            "NOPQRSTUVWXYZ",
+            "abcdefghijklm",
+            "nopqrstuvwxyz",
+        ];
+        for (bold, italic, java) in [
+            (false, false, ["117.4619", "129.1172", "85.5996", "92.5928"]),
+            (false, true, ["117.4619", "129.1172", "85.5996", "92.5928"]),
+            (true, false, ["121.3311", "129.1172", "94.1309", "101.9033"]),
+            (true, true, ["121.3311", "129.1172", "94.1309", "101.9033"]),
+        ] {
+            for (run, java) in runs.iter().zip(java) {
+                assert_eq!(
+                    pm::fmt_coord(measure_with_family_and_face(
+                        run,
+                        14.0,
+                        bold,
+                        italic,
+                        "Helvetica"
+                    )),
+                    java,
+                    "{run} bold={bold} italic={italic}"
+                );
+            }
+        }
+    }
+
     /// Every ASCII table is its face's stored extraction
     /// (tools/font-chain-reference/ascii-advances-round11, whose font files
     /// hash as the reference host's), and each (bold, italic) slot reads its
@@ -1986,6 +1982,16 @@ mod tests {
                     "Verdana-BoldItalic.bolditalic",
                 ],
             ),
+            (
+                &HELVETICA_FACES,
+                "Helvetica",
+                [
+                    "Helvetica.plain",
+                    "Helvetica-Bold.bold",
+                    "Helvetica-Oblique.italic",
+                    "Helvetica-BoldOblique.bolditalic",
+                ],
+            ),
         ] {
             let styles = [(false, false), (true, false), (false, true), (true, true)];
             for ((bold, italic), file) in styles.into_iter().zip(files) {
@@ -2033,7 +2039,7 @@ mod tests {
                 slots.push(file);
             }
         }
-        assert_eq!(slots.len(), 8);
+        assert_eq!(slots.len(), 12);
     }
 
     #[test]
@@ -2282,10 +2288,7 @@ mod tests {
         const EQUIVALENT: [(&str, bool); 1] = [("Monospaced", true)];
         // The face's own ASCII table, chosen by the face's own (bold, italic).
         fn ascii(table: &[u16; 95], c: char) -> Option<f64> {
-            let code = c as usize;
-            (32..=126)
-                .contains(&code)
-                .then(|| f64::from(table[code - 32]) / ASCII_UNITS_PER_EM * SIZE)
+            ascii_advance(table, c, SIZE)
         }
         type OwnWidth = fn(char, bool, bool) -> Option<f64>;
         // (family name as consumers pass it, chain family, own advance table)
@@ -2301,18 +2304,18 @@ mod tests {
                 }),
             ),
             (
-                // Helvetica-Oblique and -BoldOblique share the upright
-                // advances (ascii-advances-round11); the upright tables
-                // themselves are T14.49.
+                // Helvetica-Oblique and Helvetica-BoldOblique share the
+                // upright advances (ascii-advances-round11).
                 "Helvetica",
                 ChainFamily::Helvetica,
-                Some(|c, bold, _| {
-                    if bold {
-                        helvetica_bold_char_units(c)
-                    } else {
-                        helvetica_char_units(c)
-                    }
-                    .map(|units| units / HELVETICA_UPM * SIZE)
+                Some(|c, bold, italic| {
+                    let table = HELVETICA_FACES.slot(bold, italic);
+                    ascii_advance(table, c, SIZE).or_else(|| {
+                        (c == '\u{00AB}' || c == '\u{00BB}').then(|| {
+                            f64::from(HELVETICA_RETAINED_GUILLEMET_UNITS) / ASCII_UNITS_PER_EM
+                                * SIZE
+                        })
+                    })
                 }),
             ),
             (
