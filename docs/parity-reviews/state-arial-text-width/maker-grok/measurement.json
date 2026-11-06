@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-arial-text-width",
+  "base": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "binaries": {
+    "base_sha256": "e3ff92ddb908d2eb64946f1288ad3c9ac9316c0e445c0a3ce1211f1b4157d35f",
+    "bold_forced_false_sha256": "5e17d3b47d7f9e9c443d0aa302127c0bd6092979fbf47e08e978657a6242a74a",
+    "tip_sha256": "a4f102ca85ee36497a8ba1a009b5eec55f75af7069a77935f7e7a9ce74b36d16"
+  },
+  "cli": {
+    "invocation": ["-pipe", "-tsvg"],
+    "env": "RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100",
+    "cwd": "source parent",
+    "bold_false_vs_tip": {
+      "sources": 18878,
+      "identical": 18878,
+      "stdout_changed": 0,
+      "status_changed": 0,
+      "panic_changed": 0,
+      "panics_each": 4
+    },
+    "base_vs_tip": {
+      "sources": 18878,
+      "golden_puml": 12550,
+      "perturbation_puml": 6328,
+      "identical": 18857,
+      "stdout_changed": 21,
+      "status_changed": 0,
+      "panic_changed": 0,
+      "panics_each": 4,
+      "panic_paths": [
+        "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+        "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+        "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+        "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+      ]
+    }
+  },
+  "golden_no_oracle": {
+    "base": "11181/11251",
+    "tip": "11181/11251",
+    "failure_names": "70/70 identical",
+    "state_family": "897/901 both"
+  },
+  "golden_pairs": {
+    "total": 12550,
+    "passed": 10497,
+    "failed": 754,
+    "skipped": 1299,
+    "panics": 0,
+    "xml_diff": 754,
+    "other": 0,
+    "failure_names": "754/754 identical"
+  },
+  "parity_perturbations": {
+    "base_failures": 2727,
+    "tip_failures": 2713,
+    "gains": 14,
+    "losses": 0,
+    "gain_paths": [
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_composite_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_concurrent_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_longname_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_statename_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round11/c11a_fc_sdsc_ar_b.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round11/c11a_fc_sdsc_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round11/c11a_fc_sdsc_ar_p.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round11/c11a_fc_stat_ar_b.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round11/c11a_fc_stat_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round11/c11a_fc_stat_ar_p.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round11/c11a_sz23_stat_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round11/c11a_sz9_stat_ar_i.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_p_state_ctrl.puml"
+    ],
+    "changed_and_still_failing": [
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round10/c10a_sx_descs_ar_i.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round11/c11a_fc_sdsc_ar_bi.puml",
+      "test-diagrams/perturbations/comment-state-consumers/checker-claude-round11/c11a_fc_stat_ar_bi.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_bi_state.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_fs_ar_bi_state_ctrl.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_sp_statenote_mx_N.puml",
+      "test-diagrams/perturbations/tim-builtin-value-boundaries/checker-claude-round9/c9a_sp_statenote_mx_N_ctrl.puml"
+    ]
+  },
+  "harness_guards": {
+    "tip": "5 passed, 2 failed, of 7",
+    "base": "4 passed, 2 failed, of 6",
+    "no_label_keyed_width_constants": "pass, no allow-list",
+    "decimal_literal_ratchet": "fail on both. state.rs 53 -> 62 on the base, 53 -> 61 on the tip. class.rs 383 -> 578, deployment.rs 43 -> 44, plantuml_metrics.rs 1053 -> 1055 unchanged. Baseline file not edited.",
+    "parity_review_records_are_complete": "fail on both. Tip adds one line: state-arial-text-width/account.json is absent at the mechanism root (the account is under maker-grok/)."
+  },
+  "pipe_mode": "17/17 passed",
+  "doc_claims": "2/2 passed",
+  "workspace_lib": {
+    "rustuml-layout": "41 passed",
+    "rustuml-math": "10 passed",
+    "rustuml-oracle": "31 passed",
+    "rustuml-parser": "665 passed",
+    "rustuml-render": "862 passed, 1 ignored",
+    "total": "1609 passed, 0 failed, 1 ignored"
+  },
+  "clippy": {
+    "command": "cargo clippy --workspace --message-format=short -- -W warnings",
+    "same_warning_set": true,
+    "parser": 1,
+    "render": 19,
+    "oracle": 1,
+    "note": "state.rs chunks_exact warning moved from line 6203 to 6191 because lines were deleted. The warning text is unchanged."
+  },
+  "baselines_edited": false,
+  "relay_requested": false
+}
