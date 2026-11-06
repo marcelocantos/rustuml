@@ -193,11 +193,18 @@ listed catalog `.xml` and `Info.plist` files as asset fonts and left 59
 MobileAsset font-file hashes as `-`. An asset font is a `.ttf`, `.otf`,
 `.ttc` or `.dfont`. `record` and `check` share that rule, and this census
 hashes every asset font file, every user font, and the FreeType dylib.
-`scripts/reference_env_census.py check` is the drift gate a relay runs
-before trusting a new Java reference. Exit 0 means the pinned facts match.
-Exit 1 means a pinned fact moved. Exit 2 means they match and a hash is
-still open. The font-chain tests fail when this census and the stored
-per-face extractions disagree. The round-6, round-8, round-9 and round-11
+`scripts/reference_env_census.py check` is the drift gate. Only exit 0
+passes. Exit 1 means a pinned fact moved. Exit 2 means a hash is still
+blank or `-`, and that is a failed gate. A user-font symlink row pins
+the target file's size, the target file's SHA256, the link path and the
+resolved target path. `FONT_FILES` stays the modelled faces opened by
+absolute path. Other faces reached through a user-font symlink are pinned
+on that symlink row, not copied into `FONT_FILES`. The current census
+still has the old `link` marker for Arial Unicode; the next record
+replaces it. `scripts/reference_env_gate.py` is what `seq_capture.py`
+calls immediately before `new-worker`. The parent installs it. This
+checkout does not edit the relay tools. The font-chain tests fail when
+this census and the stored per-face extractions disagree. The round-6, round-8, round-9 and round-11
 captures remain the stored extractions (font-chain SHA256SUMS
 `1c345cc384f0edb939dac3b87cf135db67ed7b6f8ffb76b586a8f9fd8480a6ed`,
 styles `ad8e6566043819726c0146b76261b2aea3710eb83372d59547b46c3132f3ed55`,

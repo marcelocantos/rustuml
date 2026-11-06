@@ -11,10 +11,12 @@ taken on 2026-11-06. The file in this directory is that record, unchanged.
 `methodA.loaded.txt` is the round-6 `DYLD_PRINT_LIBRARIES` extract
 (sha256 `794020d8d86bae63a9f573bb2a0806de1c6e2cc9d7e787b04e4cbd80eed0ad38`).
 
-FreeType 2.15.0, every modelled face, every user font and every
+FreeType 2.15.0, every modelled face, every regular user font and every
 MobileAsset font file (`.ttf`, `.otf`, `.ttc`, `.dfont`) are content-hashed.
-One user-font row is a symlink and is marked `link`. Catalog `.xml` and
-`Info.plist` files are not asset fonts.
+`/Library/Fonts/Arial Unicode.ttf` is still the old `link` marker in this
+file. The next live record replaces that row with the target size, the
+target SHA256, the link path and the resolved target path. Catalog `.xml`
+and `Info.plist` files are not asset fonts. Only `check` exit 0 passes.
 
 `assemble` rebuilds the earlier artifact census from the stored captures.
 It is not how this baseline is refreshed.

@@ -15,10 +15,12 @@ record OUTDIR
     Run on Monkey Man. Writes only under OUTDIR.
 check LIVE_DIR --committed CENSUS
     Compare a census written by ``record`` to the committed census.
+    Only exit 0 passes.
     Exit 0: every pinned fact matches.
-    Exit 2: pinned facts match, but a hash the baseline has not pinned yet
-    is present only on the live side (or still ``-``).
-    Exit 1: a pinned fact differs, or a font/user-font/asset path or size moved.
+    Exit 1: a pinned fact differs, or a font, user-font or asset path,
+    size, hash or symlink target moved.
+    Exit 2: a committed hash is still blank or ``-``. This is a failed
+    gate, not a soft success.
 assemble OUTFILE
     Rebuild the committed census from the stored reference artifacts in
     this checkout. Used to regenerate ``census.txt``; not run on Monkey Man.
@@ -45,9 +47,12 @@ PROBE = b"@startuml\nAlice -> Bob: census\n@enduml\n"
 REFERENCE = "/Users/marcelo/rustuml-reference/bin/reference"
 JDK_HOME = "/opt/homebrew/Cellar/openjdk@21/21.0.5/libexec/openjdk.jdk/Contents/Home"
 
-# Faces the renderer models, plus the extra font files the stored Monkey Man
-# extractions already hash (Times, Tahoma, Geeza Pro). ``record`` hashes these
-# paths; ``assemble`` copies their hashes out of the stored records.
+# Faces the Rust font chain opens by absolute path (see font_chain_coverage.rs),
+# plus Times, Tahoma and Geeza Pro, which the stored extractions already hash.
+# This is not every face Core Text can open. A user-font symlink is pinned on
+# its own row (resolved target path and target-file hash) and is not copied
+# into this list. ``record`` hashes these paths; ``assemble`` copies their
+# hashes out of the stored records.
 FONT_FILES = (
     "/System/Library/Fonts/GeezaPro.ttc",
     "/System/Library/Fonts/Helvetica.ttc",
@@ -172,8 +177,13 @@ def parse_census(text: str) -> tuple[dict[str, str], list[tuple[str, ...]]]:
             fields = tuple(line.split("\t"))
             if fields[0] == "font" and len(fields) != 3:
                 raise SystemExit(f"census:{line_no}: font row needs sha256 and path")
-            if fields[0] != "font" and len(fields) != 4:
-                raise SystemExit(f"census:{line_no}: {fields[0]} row needs size, sha256 and path")
+            if fields[0] == "user-font" and len(fields) not in (4, 5):
+                raise SystemExit(
+                    f"census:{line_no}: user-font row needs size, sha256, path"
+                    " and, for a symlink, the resolved target"
+                )
+            if fields[0] == "asset-font" and len(fields) != 4:
+                raise SystemExit(f"census:{line_no}: asset-font row needs size, sha256 and path")
             rows.append(fields)
             continue
         if "=" not in line:
@@ -354,6 +364,47 @@ def otool_dependency_versions(path: str, token: str) -> tuple[str, str]:
     raise SystemExit(f"otool -L {path} has no {token} dependency")
 
 
+def gate_accepts(code: int) -> bool:
+    """Only exit 0 passes. Drift (1) and an unpinned hash (2) both fail."""
+    return code == 0
+
+
+def prepare_record_dir(outdir: Path) -> None:
+    """Create OUT only. The parent must already exist. OUT is absent or empty."""
+    parent = outdir.parent
+    if not parent.is_dir():
+        raise SystemExit(
+            f"{parent} does not exist; record does not create ancestor directories"
+        )
+    if not outdir.exists():
+        outdir.mkdir(parents=False)
+        return
+    if not outdir.is_dir() or any(outdir.iterdir()):
+        raise SystemExit(f"{outdir} is not an empty directory")
+
+
+def user_font_row(full: Path) -> tuple[str, ...] | None:
+    """One user-font row. A symlink pins the target path and the target bytes."""
+    if full.is_symlink():
+        link = str(full)
+        try:
+            target = full.resolve(strict=True)
+        except OSError:
+            return ("user-font", "0", "dangling", link, "")
+        if not target.is_file():
+            return ("user-font", "0", "dangling", link, str(target))
+        return (
+            "user-font",
+            str(target.stat().st_size),
+            sha256_file(target),
+            link,
+            str(target),
+        )
+    if not full.is_file():
+        return None
+    return ("user-font", str(full.stat().st_size), sha256_file(full), str(full))
+
+
 def run_checked(command: list[str], env: dict[str, str] | None = None) -> str:
     completed = subprocess.run(command, check=False, capture_output=True, env=env, text=True)
     if completed.returncode != 0:
@@ -364,9 +415,7 @@ def run_checked(command: list[str], env: dict[str, str] | None = None) -> str:
 
 
 def record(outdir: Path) -> None:
-    if outdir.exists() and any(outdir.iterdir()):
-        raise SystemExit(f"{outdir} is not empty; record writes only into an empty directory")
-    outdir.mkdir(parents=True, exist_ok=True)
+    prepare_record_dir(outdir)
     # Every path below is under outdir. Reads elsewhere are explicit.
     sw = run_checked(["sw_vers"])
     (outdir / "sw_vers.txt").write_text(sw, encoding="utf-8")
@@ -465,14 +514,9 @@ def record(outdir: Path) -> None:
         if not directory.is_dir():
             continue
         for name in sorted(os.listdir(directory)):
-            full = directory / name
-            if not full.is_symlink() and not full.is_file():
-                continue
-            listed = full.lstat().st_size
-            if full.is_symlink():
-                rows.append(("user-font", str(listed), "link", str(full)))
-            else:
-                rows.append(("user-font", str(listed), sha256_file(full), str(full)))
+            row = user_font_row(directory / name)
+            if row is not None:
+                rows.append(row)
     for directory in ASSET_FONT_DIRS:
         if not directory.is_dir():
             continue
@@ -499,11 +543,18 @@ def record(outdir: Path) -> None:
     print(f"recorded {outdir / 'census.txt'}")
 
 
+def row_path(row: tuple[str, ...]) -> str:
+    """Directory entry. A symlink's resolved target is a later field, not the key."""
+    if row[0] == "font":
+        return row[2]
+    return row[3]
+
+
 def index_rows(rows: list[tuple[str, ...]]) -> dict[str, dict[str, tuple[str, ...]]]:
     grouped: dict[str, dict[str, tuple[str, ...]]] = {"font": {}, "user-font": {}, "asset-font": {}}
     for row in rows:
         kind = row[0]
-        path = row[-1]
+        path = row_path(row)
         if path in grouped[kind]:
             raise SystemExit(f"duplicate {kind} path {path}")
         grouped[kind][path] = row
@@ -555,6 +606,10 @@ def check(live_dir: Path, committed_path: Path) -> int:
                     unpinned.append(f"{kind} {path} live={new_hash}")
             elif old_hash != new_hash:
                 drift.append(f"{kind} sha256 {path}: committed {old_hash} live {new_hash}")
+            if old[4:] != new[4:]:
+                drift.append(
+                    f"{kind} target {path}: committed {' '.join(old[4:])} live {' '.join(new[4:])}"
+                )
     if "shaping.freetype.sha256" not in committed_scalars or committed_scalars["shaping.freetype.sha256"] == "":
         live_hash = live_scalars.get("shaping.freetype.sha256", "")
         if live_hash and not any(item.startswith("shaping.freetype.sha256") for item in unpinned):
@@ -567,49 +622,218 @@ def check(live_dir: Path, committed_path: Path) -> int:
         print(f"{len(drift)} pinned facts differ")
         return 1
     if unpinned:
-        print(f"pinned facts match; {len(unpinned)} hashes are not in the baseline yet")
+        print(f"unpinned facts fail the gate; {len(unpinned)} hashes are not pinned")
         return 2
     print("pinned facts match")
     return 0
+
+
+def check_texts(live_text: str, committed_text: str, directory: Path) -> int:
+    directory.mkdir(parents=True)
+    live = directory / "live"
+    live.mkdir()
+    (live / "census.txt").write_text(live_text, encoding="utf-8")
+    committed_path = directory / "committed.txt"
+    committed_path.write_text(committed_text, encoding="utf-8")
+    return check(live, committed_path)
+
+
+def replace_once(text: str, old: str, new: str) -> str:
+    count = text.count(old)
+    if count != 1:
+        raise SystemExit(f"mutation anchor occurs {count} times: {old[:80]}")
+    return text.replace(old, new, 1)
 
 
 def self_test() -> None:
     committed = default_committed()
     if not committed.is_file():
         raise SystemExit(f"no committed census at {committed}")
+    if not gate_accepts(0) or gate_accepts(1) or gate_accepts(2):
+        raise SystemExit("only exit 0 passes")
     text = committed.read_text(encoding="utf-8")
     with tempfile.TemporaryDirectory() as tmp:
-        live = Path(tmp)
-        (live / "census.txt").write_text(text, encoding="utf-8")
-        same = check(live, committed)
+        root = Path(tmp)
+        same = check_texts(text, text, root / "same")
         if same != 0:
             raise SystemExit(f"self-check of the committed census exited {same}, expected 0")
-        drifted = text.replace(
+        drifted = replace_once(
+            text,
             "658718d77497145281cb0ec45ff2fe7c6e18062b2a38f837d0d792d9be3a9ba3",
             "0000000000000000000000000000000000000000000000000000000000000000",
-            1,
         )
-        (live / "census.txt").write_text(drifted, encoding="utf-8")
-        changed = check(live, committed)
+        changed = check_texts(drifted, text, root / "drift")
         if changed != 1:
             raise SystemExit(f"drift self-check exited {changed}, expected 1")
         # Catalog files share the MobileAsset tree. They are not faces, and
         # a record that lists them must not look like environment drift.
         catalog = text.rstrip("\n") + (
-            "\nasset-font\t1138692\t-\t"
+            "\nasset-font\t1138692\tabc\t"
             "/System/Library/AssetsV2/com_apple_MobileAsset_Font6/"
             "com_apple_MobileAsset_Font6.xml\n"
-            "asset-font\t1011\t-\t"
+            "asset-font\t1011\tabc\t"
             "/System/Library/AssetsV2/com_apple_MobileAsset_Font8/"
             "00bfc46ccb002b730e29def5116e0a571fb617d8.asset/Info.plist\n"
         )
-        (live / "census.txt").write_text(catalog, encoding="utf-8")
-        catalog_check = check(live, committed)
+        catalog_check = check_texts(catalog, text, root / "catalog")
         if catalog_check != same:
             raise SystemExit(
                 f"catalog files changed the check from {same} to {catalog_check}"
             )
+        mutation_matrix(text, root / "matrix")
+        symlink_mutations(root / "symlink")
+        outdir_guards(root / "outdir")
     print("self-test ok")
+
+
+def mutation_matrix(text: str, root: Path) -> None:
+    """The checker's listed-fact matrix, against the committed census text."""
+    root.mkdir()
+    user = next(
+        line
+        for line in text.splitlines()
+        if line.startswith("user-font\t") and line.split("\t")[2] not in {"link", "-", "dangling"}
+    )
+    asset = next(line for line in text.splitlines() if line.startswith("asset-font\t"))
+    user_hash = user.split("\t")[2]
+    asset_hash = asset.split("\t")[2]
+    user_zero = user.replace(user_hash, "0" * 64, 1)
+    asset_zero = asset.replace(asset_hash, "ab" * 32, 1)
+    asset_dash = "\t".join(asset.split("\t")[:2] + ["-"] + asset.split("\t")[3:])
+    added_user = "user-font\t3\t" + ("cd" * 32) + "\t/Library/Fonts/not-a-real-face.ttf"
+    added_asset = (
+        "asset-font\t4\t"
+        + ("ef" * 32)
+        + "\t/System/Library/AssetsV2/com_apple_MobileAsset_Font8/added.asset/AssetData/Added.ttf"
+    )
+    freetype = next(line for line in text.splitlines() if line.startswith("shaping.freetype.sha256="))
+    cases = [
+        ("harfbuzz-keg", replace_once(text, "10.1.0,13.2.1,15.0.0_1", "10.1.0,13.2.1,99.0.0"), text, 1),
+        ("harfbuzz-dylib-hash", replace_once(text, "b04ab259a343ba51a50db8d1df637160f31d342a66c4192e18dba63ea42ed04a", "0" * 64), text, 1),
+        ("harfbuzz-opt-target", replace_once(text, "../Cellar/harfbuzz/15.0.0_1", "../Cellar/harfbuzz/99.0.0"), text, 1),
+        ("freetype-hash", replace_once(text, "1bf70387c4ef59accba8116c847cb87d2018ded2672db551686b95dce4c5d931", "11" * 32), text, 1),
+        ("jdk-hash", replace_once(text, "ddbdbe280c4d939de81f27f9c135613d0a250738ab2d15e8dec52fd7345354d9", "22" * 32), text, 1),
+        ("jdk-home", replace_once(text, "jdk.home=/opt/homebrew/Cellar/openjdk@21/21.0.5/", "jdk.home=/opt/homebrew/Cellar/openjdk@21/21.0.6/"), text, 1),
+        ("os-build", replace_once(text, "host.build_version=26B123", "host.build_version=26B999"), text, 1),
+        ("os-product", replace_once(text, "host.product_version=27.2", "host.product_version=27.3"), text, 1),
+        ("user-font-hash", replace_once(text, user, user_zero), text, 1),
+        ("user-font-removed", text.replace(user + "\n", "", 1), text, 1),
+        ("user-font-added", text.rstrip("\n") + "\n" + added_user + "\n", text, 1),
+        ("asset-font-hash", replace_once(text, asset, asset_zero), text, 1),
+        ("asset-font-removed", text.replace(asset + "\n", "", 1), text, 1),
+        ("asset-font-added", text.rstrip("\n") + "\n" + added_asset + "\n", text, 1),
+        ("reordered-rows", reorder_rows(text), text, 0),
+        ("comment-only", "# comment only\n" + text, text, 0),
+        ("extra-live-scalar", text.rstrip("\n") + "\nextra.note=1\n", text, 0),
+        ("symlink-size-changed", replace_once(text, "user-font\t52\tlink\t/Library/Fonts/Arial Unicode.ttf", "user-font\t53\tlink\t/Library/Fonts/Arial Unicode.ttf"), text, 1),
+        ("uuid-hash", replace_once(text, "c02979894bd1113a75b668101ed8751d9885066289e70a12aedbd2e1c1576adb", "33" * 32), text, 1),
+        ("reordered-scalars", reorder_scalars(text), text, 0),
+        ("live-missing-freetype-key", text.replace(freetype + "\n", "", 1), text, 1),
+        ("exit2-blank-freetype-committed", text, replace_once(text, freetype, "shaping.freetype.sha256="), 2),
+        ("exit2-asset-hash-dash-committed", text, replace_once(text, asset, asset_dash), 2),
+    ]
+    for name, live_text, committed_text, expected in cases:
+        code = check_texts(live_text, committed_text, root / name)
+        if code != expected or (expected != 0 and gate_accepts(code)):
+            raise SystemExit(f"{name} exited {code}, expected {expected}")
+
+
+def reorder_rows(text: str) -> str:
+    head = [line for line in text.splitlines() if not line.startswith(("font\t", "user-font\t", "asset-font\t"))]
+    rows = [line for line in text.splitlines() if line.startswith(("font\t", "user-font\t", "asset-font\t"))]
+    return "\n".join(head + list(reversed(rows))) + "\n"
+
+
+def reorder_scalars(text: str) -> str:
+    comments, scalars, rows = [], [], []
+    for line in text.splitlines():
+        if line.startswith("#") or not line:
+            comments.append(line)
+        elif line.startswith(("font\t", "user-font\t", "asset-font\t")):
+            rows.append(line)
+        else:
+            scalars.append(line)
+    return "\n".join(comments + list(reversed(scalars)) + rows) + "\n"
+
+
+def symlink_mutations(root: Path) -> None:
+    """Each symlink mutation is real drift. Equal lstat size is not a pass."""
+    root.mkdir()
+    fonts = root / "fonts"
+    fonts.mkdir()
+    first = fonts / "target-aaaa"
+    second = fonts / "target-bbbb"
+    first.write_bytes(b"one")
+    second.write_bytes(b"two")
+    link = fonts / "Face.ttf"
+    link.symlink_to(first.name)
+    pinned = user_font_row(link)
+    if pinned is None or len(pinned) != 5 or pinned[4] != str(first.resolve()):
+        raise SystemExit(f"symlink row did not pin the target: {pinned}")
+
+    def expect(name: str, live: tuple[str, ...] | None, code: int) -> None:
+        if live is None:
+            raise SystemExit(f"{name} produced no row")
+        got = check_texts(
+            format_census({}, [live], ["# mutation"]),
+            format_census({}, [pinned], ["# mutation"]),
+            root / name,
+        )
+        if got != code:
+            raise SystemExit(f"{name} exited {got}, expected {code}")
+
+    link.unlink()
+    link.symlink_to(second.name)
+    retarget = user_font_row(link)
+    if retarget is None or len(first.name) != len(second.name) or retarget[1] != pinned[1]:
+        raise SystemExit(f"same-length retarget fixture changed size: {retarget}")
+    expect("same-length-retarget", retarget, 1)
+
+    link.unlink()
+    link.symlink_to(first.name)
+    first.write_bytes(b"ONE")
+    expect("target-content-edit", user_font_row(link), 1)
+
+    link.unlink()
+    link.write_bytes(b"one")
+    expect("link-replaced-by-regular-file", user_font_row(link), 1)
+
+    link.unlink()
+    link.symlink_to(first.name)
+    first.unlink()
+    dangling = user_font_row(link)
+    if dangling is None or dangling[2] != "dangling":
+        raise SystemExit(f"dangling link was not recorded: {dangling}")
+    expect("dangling-link", dangling, 1)
+
+
+def outdir_guards(root: Path) -> None:
+    root.mkdir()
+    missing = root / "no-such-parent" / "out"
+    try:
+        prepare_record_dir(missing)
+    except SystemExit:
+        pass
+    else:
+        raise SystemExit("record created a missing ancestor")
+    if (root / "no-such-parent").exists():
+        raise SystemExit("record created a missing ancestor on disk")
+    present = root / "parent"
+    present.mkdir()
+    occupied = present / "occupied"
+    occupied.mkdir()
+    (occupied / "keep").write_text("x", encoding="utf-8")
+    try:
+        prepare_record_dir(occupied)
+    except SystemExit:
+        pass
+    else:
+        raise SystemExit("record accepted a non-empty directory")
+    fresh = present / "fresh"
+    prepare_record_dir(fresh)
+    if not fresh.is_dir() or any(fresh.iterdir()):
+        raise SystemExit("record did not create an empty OUT under an existing parent")
+    prepare_record_dir(fresh)
 
 
 def main(argv: list[str]) -> int:
