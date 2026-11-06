@@ -1,0 +1,89 @@
+{
+  "base_commit": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "renderer_commit": "794a50dac",
+  "tip_binary_sha256": "f48c4a607dab6b31c193ed231c86189224d8c661524e77157620112e88db7abf",
+  "base_binary_sha256": "fdec459c22ab0beafe7fee3303be856f4e2d348690424a520fb8f8dcc0393c48",
+  "comparator": "rustuml_oracle::compare::compare_svg_strict from this worktree (crates/rustuml-oracle unchanged versus cb550c0d6). Private binary sha256 e6e7d956350be7a085c10c56862c6c9edae2525846791af54bab87950557b9bc.",
+  "cli_env": "binary -pipe -tsvg, cwd = source parent, RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100, TZ=GMT+11:00",
+  "cli_sweep": {
+    "sources": 18878,
+    "golden": 12550,
+    "perturbations": 6328,
+    "timeouts": 0,
+    "status_changes": 0,
+    "stdout_changes": 20,
+    "stderr_only_changes": 4,
+    "golden_stdout_changes": 0,
+    "panics_base_and_tip": [
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+    ],
+    "panic_site": "crates/rustuml-parser/src/parse/class.rs:285 index 0 of an empty slice. Stderr differs only by the thread id. Not edited.",
+    "stdout_changed": [
+      "c10a_ft_hv_plain",
+      "c10a_ft_hv_italic",
+      "c10a_ft_hv_bold",
+      "c10a_ft_hv_bolditalic",
+      "c11a_of_comp_hv_b",
+      "c11a_of_part_hv_b",
+      "c7b_helv_rtl_space",
+      "c7b_helv_rtl_space_ctrl",
+      "c9a_af_hv_size15_mark",
+      "c9a_af_hv_size15_mark_ctrl",
+      "c9a_fs_hv_i_state",
+      "c9a_fs_hv_i_state_ctrl",
+      "c9a_fs_hv_p_seq",
+      "c9a_fs_hv_p_seq_ctrl",
+      "c9a_fs_hv_p_uc",
+      "c9a_fs_hv_p_uc_ctrl",
+      "c9a_ns_hv_absmember",
+      "c9a_ns_hv_absmember_ctrl",
+      "c9a_ns_hv_abstract",
+      "c9a_ns_hv_abstract_ctrl"
+    ]
+  },
+  "relay_strict": {
+    "shared-svg-round10-c10a": {"valid": 379, "base_match": 159, "tip_match": 159, "lost": 0, "gained": 0, "new_valid_input_error": 0, "lost_rejection": 0, "panic": 0, "bytes_changed": ["c10a_ft_hv_plain", "c10a_ft_hv_italic", "c10a_ft_hv_bold", "c10a_ft_hv_bolditalic"]},
+    "shared-svg-round10-m10a": {"valid": 374, "base_match": 221, "tip_match": 221, "lost": 0, "gained": 0, "new_valid_input_error": 0, "lost_rejection": 0, "panic": 0, "bytes_changed": []},
+    "shared-svg-round11-c11a": {"valid": 515, "base_match": 237, "tip_match": 239, "lost": 0, "gained": ["c11a_of_comp_hv_b", "c11a_of_part_hv_b"], "new_valid_input_error": 0, "lost_rejection": 0, "panic": 0},
+    "shared-svg-round11-m11a": {"valid": 100, "base_match": 79, "tip_match": 79, "lost": 0, "gained": 0, "new_valid_input_error": 0, "lost_rejection": 0, "panic": 0, "bytes_changed": []},
+    "shared-svg-round9-c9a": {"valid": 288, "base_match": 98, "tip_match": 98, "lost": 0, "gained": 0, "new_valid_input_error": 0, "lost_rejection": 0, "panic": 0, "bytes_changed_still_match": 10, "bytes_changed_still_diff": ["c9a_fs_hv_i_state", "c9a_fs_hv_i_state_ctrl"]}
+  },
+  "ft_hv_text_lengths_14pt": {
+    "plain_and_italic_java": ["117.4619", "129.1172", "85.5996", "92.5928", "240.0166"],
+    "plain_and_italic_tip": ["117.4619", "129.1172", "85.5996", "92.5928"],
+    "plain_and_italic_base_NZ": "129.124",
+    "bold_java": ["121.3311", "129.1172", "94.1309", "101.9033", "248.2881"],
+    "bold_tip_alphabets": ["121.3311", "129.1172", "94.1309", "101.9033"],
+    "bold_base_lower": ["94.8965", "103.4551"],
+    "bolditalic_tip_alphabets": ["117.4619", "129.1172", "85.5996", "92.5928"],
+    "note": "Tip plain, italic and bold alphabet textLengths equal Java. The punctuation label is still two text nodes (256.6758 and 25.2861) against Java's one node, on base and tip, so the four whole SVGs stay DIFF at 33 differences. Bold-italic still measures the italic face (T14.46); only NOPQRSTUVWXYZ agrees with Java's bold-italic run, and it agreed in the face tables because bold and plain N-Z are both 129.1172 after the W correction."
+  },
+  "gates_tip": {
+    "workspace_lib": {"layout": "41/0", "math": "10/0", "oracle": "31/0", "parser": "665/0", "render": "863/0/1 ignored", "sum_passed": 1610},
+    "pipe_mode": "17 passed, 0 failed",
+    "doc_claims": "2 passed, 0 failed",
+    "golden_pairs": "12550 total, 10497 passed, 754 failed, 1299 skipped, panics 0. Suite exits 101 because it asserts every pair matches.",
+    "golden_no_oracle": "11181/11251. Every family equals test-diagrams/no_oracle_baseline.txt. Suite exits 0 in the worktree. Failure names: 70. The cb550c0d6 archive run also scored 11181/11251 and the same 70 names after removing the extra golden/ prefix that the archive path inserted; that prefix made the archive process exit 101 by collapsing every family into one bucket, which is not a renderer regression.",
+    "parity_perturbations": "2725 failure lines: 2385 structural, 291 Java error pages, 42 parse, 4 panics (the class.rs:285 dashes), 3 compare-failed empty documents. Suite exits 101.",
+    "harness_guards": {
+      "parity_review_paths_reject_traversal": "ok",
+      "comparator_constants_frozen": "ok",
+      "no_golden_data_embedded_in_shipping_crates": "ok",
+      "error_golden_census_is_frozen": "ok",
+      "decimal_literal_ratchet": "FAILED. At cb550c0d6 already: class.rs 578>383, deployment.rs 44>43, plantuml_metrics.rs 1055>1053, state.rs 62>53. This change adds text_render.rs 51->67, the 16 Java textLength strings in helvetica_faces_measure_java_widths. Baseline not rewritten.",
+      "parity_review_records_are_complete": "FAILED at the base tree as well (latest checker reviews not accepted, across existing mechanisms). After the root account.json files, the only new lines are: helvetica-upright-advances and face-cmap-advances each 'account has no independent checker review'. No review.json was written."
+    },
+    "clippy_minus_D_warnings_no_deps": {
+      "rustuml-render": "exit 101, 19 lints, none in text_render.rs",
+      "rustuml-parser": "exit 101, dead_code looks_like_description_bracket_command component.rs:74",
+      "rustuml-oracle": "exit 101, clippy::useless_format matrix/activity.rs",
+      "rustuml-layout": "exit 0",
+      "rustuml-math": "exit 0",
+      "rustuml": "exit 0"
+    }
+  },
+  "held_out_probes": "g2a predictions were registered before any Java run of those eight sources. Java has not returned. Local tip versus base: quote/W/% and bold k/z moved; Alice, Verdana, Arial and SansSerif stayed byte-identical; the bold-italic k/z probe stayed byte-identical because that style block does not apply bold."
+}

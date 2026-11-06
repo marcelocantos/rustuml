@@ -1,0 +1,23 @@
+{
+  "do_not_edit_bullseye": true,
+  "proposed": [
+    {
+      "existing": "T14.49",
+      "status": "not achieved",
+      "because": "Plain, italic and bold alphabet textLengths at 14 pt now equal the recorded Java strings, and c11a_of_comp_hv_b and c11a_of_part_hv_b became strict matches. The four c10a_ft_hv diagrams stay strict DIFF: the punctuation label is two text nodes (256.6758 and 25.2861) against Java's one node (240.0166 plain, 248.2881 bold), and the canvas is smaller. That split is present on the base binary."
+    },
+    {
+      "existing": "T14.55",
+      "status": "not achieved, blocked on the reference host",
+      "because": "No cmap advance TSV has been returned. m9a_vi_hebrew_italic is still DIFF and byte-identical to the base. The 1139-unit guillemet arm is retained on purpose."
+    },
+    {
+      "existing": "T14.46",
+      "note": "c10a_ft_hv_bolditalic still measures the italic face (ABCDEFGHIJKLM 117.4619, not Java's bold-italic 121.3311). Not edited. The style block sets FontStyle italic and FontWeight bold and the bold weight does not reach the advance table."
+    },
+    {
+      "new_assertion": "A Helvetica component label that contains a backtick is one SVG text node, with Java's textLength, on the c10a_ft_hv punctuation label.",
+      "why": "The advance correction cannot make those four diagrams match while the label is split before measurement."
+    }
+  ]
+}

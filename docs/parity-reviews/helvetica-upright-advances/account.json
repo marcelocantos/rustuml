@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "mechanism": "helvetica-upright-advances",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.FileFormat#getJavaDimension (220-237)",
+    "net.sourceforge.plantuml.FileFormat#getSvgStringBounder (240-249)",
+    "net.sourceforge.plantuml.klimt.font.UFontImpl#getUnderlayingFont (77-79)"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/text_render.rs HELVETICA_FACES and helvetica_text_width"
+  ],
+  "invariant": "A printable-ASCII character in a Helvetica style slot uses that slot's own glyph advance from Helvetica.ttc, scaled by point size / 2048.",
+  "causal_divergence": "The old upright tables collapsed five face advances onto shared constants: plain % 1820 against 1821, apostrophe 455 against 391, W 1934 against 1933, bold k 1251 against 1139, bold z 1251 against 1024.",
+  "planned_change": "Replace the upright Helvetica tables with the four extracted ASCII faces and select the slot the way Verdana and Arial do. Keep U+00AB and U+00BB at the previous 1139 units until a checked cmap extraction replaces them. Do not retarget Times, Courier, Menlo or Lucida.",
+  "perturbation_axes": [
+    "family Helvetica versus Verdana, Arial and SansSerif controls",
+    "style plain, bold, italic and bold-italic",
+    "the five code points whose stored units disagreed with the face"
+  ]
+}

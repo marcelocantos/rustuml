@@ -1,0 +1,28 @@
+{
+  "status": "blocked on the Monkey Man cmap extraction. No width table was added.",
+  "extractor": {
+    "script": "docs/parity-reviews/face-cmap-advances/maker-grok/mm-cmap/CmapAdvanceExtract.swift",
+    "script_sha256": "954cc456f4eaf527d383c4eb0f0fe3199eac35749f5237a5a0c7b50cf9cacc6c",
+    "run_sh_sha256": "d05f35e00dac5aa0c06e93525e4ce26a14f98fb50f633d381b55dc285f9b7844",
+    "readme_sha256": "4a74356eddbb3d9b63c42de8c4cc19f70d7d00f3f03353c4bd9d430f38d45321",
+    "staged_copy": "/Users/marcelo/Library/Caches/rustuml-grok-g2/mm-cmap/"
+  },
+  "not_run_locally": "The Swift extractor was not executed on this machine. Java was not run.",
+  "m9a_vi_hebrew_italic": {
+    "batch": "shared-svg-round9-m9a",
+    "valid_matches": "24 -> 24 of 50",
+    "invalid": 10,
+    "lost_match": 0,
+    "lost_rejection": 0,
+    "new_valid_input_error": 0,
+    "panic": 0,
+    "hebrew_italic": "base DIFF, tip DIFF, stdout bytes identical",
+    "hebrew_italic_ctrl": "base DIFF, tip DIFF, stdout bytes identical"
+  },
+  "acceptance_not_met": [
+    "«Ferrous gauge vista» was not re-measured from a face cmap",
+    "«marker» was not re-measured from a face cmap",
+    "m9a_vi_hebrew_italic still differs from Java"
+  ],
+  "no_pass_lost_on_the_measured_cohorts": "The Helvetica ASCII table change lost no strict match and no rejection on c10a, m10a, c11a, m11a, c9a or m9a. Goldens: 0 of 12550 CLI stdout bytes changed."
+}
