@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "mechanism": "helvetica-upright-advances",
+  "status": "maker causal account before draft; independent review required",
+  "obligation": "T14.49",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "jdk": "21.0.5 Homebrew, recorded on the BT reference host (shared-svg-round10-c10a reference-results environment: JAVA_VERSION 21.0.5, JAVA_VERSION_DATE 2024-10-15)",
+  "base": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "font_sources": [
+    "Face file /System/Library/Fonts/Helvetica.ttc sha256 658718d77497145281cb0ec45ff2fe7c6e18062b2a38f837d0d792d9be3a9ba3 (tools/font-chain-reference/monkeyman-round9/font-hashes.txt, identical in tools/font-chain-reference/ascii-advances-round11/font-hashes.txt).",
+    "Printable-ASCII advances: tools/font-chain-reference/ascii-advances-round11/Helvetica.plain.ascii.tsv, Helvetica-Bold.bold.ascii.tsv, Helvetica-Oblique.italic.ascii.tsv, Helvetica-BoldOblique.bolditalic.ascii.tsv. Extracted by tools/AsciiAdvanceExtract.swift (CTFontGetAdvancesForGlyphs at 2048 units per em) on the reference-host build macOS 27.2 (26B123). The Monkey Man relay copy is /Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round11-mm-ascii/out/ and is byte-identical for these four files.",
+    "Resolved faces (tsv #java_face): Helvetica style 0, Helvetica-Bold style 1, Helvetica-Oblique style 2, Helvetica-BoldOblique style 3, all from Helvetica.ttc. Oblique advances equal the upright face on all 95 code points; bold-oblique equals bold."
+  ],
+  "java_locations": [
+    "net.sourceforge.plantuml.FileFormat#getJavaDimension (220-237): FontMetrics.getStringBounds on UFontImpl.getUnderlayingFont.",
+    "net.sourceforge.plantuml.FileFormat#getSvgStringBounder (240-249): SVG StringBounder calls getJavaDimension.",
+    "net.sourceforge.plantuml.klimt.font.UFontImpl#getUnderlayingFont (77-79): the AWT Font for the requested family and UFontFace.",
+    "JDK 21 sun.font.CStrike#getGlyphAdvance via CGGlyphImages / CTFontGetAdvancesForGlyphs, the advance Font.getStringBounds sums for simple Latin text (the quantity AsciiAdvanceExtract records)."
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/text_render.rs helvetica_char_units / helvetica_bold_char_units: grouped constants, not the face tables. At 14 pt they give plain N–Z 129.1240234375 (W 1934) against the face's 129.1171875 (W 1933), plain % 1820 against 1821, plain apostrophe 455 against 391, bold k 1251 against 1139, bold z 1251 against 1024.",
+    "family_table_text_width already selects the (bold, italic) slot for Arial and Verdana and sums those font units. Helvetica does not use it."
+  ],
+  "invariant": "For a Helvetica style slot, a printable-ASCII character's advance is that slot's own glyph advance from Helvetica.ttc, scaled by point size / 2048.",
+  "causal_divergence": "The upright Helvetica match arms collapse distinct face advances onto shared constants. Five code points disagree with the extracted face. Italic already shares the upright numbers, which matches the extraction, so the bug is the upright tables themselves.",
+  "planned_change": [
+    "Replace helvetica_char_units and helvetica_bold_char_units with four [u16; 95] tables read from the four Helvetica ascii TSVs, selected by AsciiFaces::slot the way Verdana and Arial are.",
+    "Route MetricFamily::Helvetica through that slot plus the existing chain_text_width fallback.",
+    "The previous tables' only non-ASCII arms (U+00AB and U+00BB, 1139 units, both weights) stay until face-cmap-advances supplies the face's own advances. They are not re-fit.",
+    "Extend ascii_tables_are_the_extracted_faces so each Helvetica slot is pinned to its TSV and to the reference-host font hash. Add helvetica_faces_measure_java_widths for the four BT alphabet runs."
+  ],
+  "precommitted_measurement": {
+    "already_recorded_java": "BT c10a_ft_hv_{plain,italic,bold,bolditalic} in /Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-round10-c10a (Java 71806a23, -pipe -tsvg, GMT+11:00). At 14 pt the four labels ABCDEFGHIJKLM / NOPQRSTUVWXYZ / abcdefghijklm / nopqrstuvwxyz are 117.4619, 129.1172, 85.5996, 92.5928 upright and italic, and 121.3311, 129.1172, 94.1309, 101.9033 bold and bold-italic. Summing the Helvetica TSVs and formatting with plantuml_metrics::fmt_coord reproduces those eight strings before this draft is written.",
+    "this_run": [
+      "Private release binaries of cb550c0d6 and the tip, CARGO_TARGET_DIR under ~/Library/Caches/rustuml-grok-g2/target, deleted after the binary is saved.",
+      "Whole CLI stdout compared for all 12,550 goldens, test-diagrams/perturbations, and the stored cases of shared-svg-round10-c10a, round10-m10a, round11-c11a, round11-m11a, round9-c9a.",
+      "cargo test --release golden_no_oracle, golden_pairs, parity_perturbations, harness_guards, pipe_mode, doc_claims, workspace --lib, and clippy -D warnings per crate.",
+      "Held-out Helvetica probes (labels that contain %, apostrophe, W, k, z, and a Verdana control) are predicted from the tip binary and staged for a Java relay before any new Java run.",
+      "Baselines move only if the no-oracle pass count rises. A drop is reported and not written."
+    ],
+    "expect": [
+      "c10a_ft_hv_* textLengths move to the Java strings above.",
+      "Upright Arial, Verdana, Times, Courier New and SansSerif outputs stay byte-identical, because their tables and the chain fallback are untouched.",
+      "Helvetica output changes only where the five corrected advances are measured."
+    ]
+  },
+  "perturbation_axes": [
+    "family Helvetica versus Verdana control",
+    "style plain, bold, italic, bold-italic",
+    "the five code points whose stored units disagree with the face",
+    "a label that uses none of those five code points"
+  ]
+}
