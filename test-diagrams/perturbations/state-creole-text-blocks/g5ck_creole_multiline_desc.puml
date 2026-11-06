@@ -1,0 +1,7 @@
+@startuml
+skinparam stateFontName Verdana
+state g5ckQuern
+g5ckQuern : plain row
+g5ckQuern : **bold row**
+g5ckQuern : //italic row//
+@enduml

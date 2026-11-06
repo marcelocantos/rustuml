@@ -1,0 +1,6 @@
+@startuml
+state CONC2 {
+  state g5ckQuern
+}
+[*] --> g5ckQuern
+@enduml

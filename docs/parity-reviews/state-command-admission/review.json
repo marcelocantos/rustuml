@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "account_commit": "50bd185330c1f14aed7c6c2d422d76748b0c4e21",
+  "implementation_commit": "38ea6caff831a3f06962bbcb6a18a00d3e20fc2a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "task_id": "grok-g5-state-checker",
+    "model": "grok-4.7",
+    "tool": "Grok harness in T3 Code"
+  },
+  "base_commit": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "scored_tree": "da4c1733ef41cb40213bc3185964131b06bf7d96",
+  "reference_results_sha256": "38737f4f0526bee52cd04311c8787adb109c6eb0b41ba4a6bdae4de8f3cc8a05",
+  "predictions_sha256": "62233212612f17ae86578859974be95731a0b4b665f7b61cab00614e8a8d4a51",
+  "comparator": "rustuml_oracle::compare::compare_svg_strict",
+  "mechanism": "state-command-admission",
+  "verdict": "rejected",
+  "commands": [
+    "git switch -c review/grok-g5-state da4c1733ef41cb40213bc3185964131b06bf7d96",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-base cargo build --release -p rustuml  # archive of cb550c0d67cc729ce764895005b7e86310c9f313",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-tip cargo build --release -p rustuml  # 38ea6caff",
+    "~/Library/Caches/rustuml-grok-g5-checker/bin/rustuml-base -pipe -tsvg and rustuml-tip -pipe -tsvg on the 55 held-out sources, compared with svgcmp (compare_svg_strict) against the relay SVG",
+    "python3 /tmp/g5ck-score-cohort.py on grok-g5-state/reference-results.json (CF, 10) and shared-svg-checker-c1/reference-results.json (AU, 32)",
+    "git diff cb550c0d67cc729ce764895005b7e86310c9f313 38ea6caff831a3f06962bbcb6a18a00d3e20fc2a -- crates  # decimal scan and frozen-path stat",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-tip cargo test --release --workspace --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-tip cargo test --release -p rustuml --test pipe_mode -- --test-threads=8",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-tip cargo test --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test doc_claims -- --test-threads=8 --nocapture",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-tip cargo clippy --release -p rustuml-parser --all-targets -- -D warnings",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-tip cargo clippy --release -p rustuml-render --all-targets -- -D warnings",
+    "same five commands on a git archive of cb550c0d67cc729ce764895005b7e86310c9f313 with test-diagrams/golden symlinked to this worktree, CARGO_TARGET_DIR=target-base",
+    "cargo test --release -p rustuml-oracle --no-fail-fast --test parity_perturbations --test harness_guards on both trees after review.json existed"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/g5ck_conc_prefix_external.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/g5ck_conc_prefix_external.svg",
+      "result": "fail",
+      "axes": [
+        "user-composite-named-CONCEPT",
+        "external-link"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/g5ck_conc2_prefix_external.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/g5ck_conc2_prefix_external.svg",
+      "result": "fail",
+      "axes": [
+        "user-composite-named-CONC2",
+        "external-link"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/g5ck_reenter_short_name.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/g5ck_reenter_short_name.svg",
+      "result": "fail",
+      "axes": [
+        "reenter-short-name",
+        "later-region"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-command-admission/g5ck_field_from_outside.puml",
+      "golden": "test-diagrams/perturbations/state-command-admission/g5ck_field_from_outside.svg",
+      "result": "pass",
+      "axes": [
+        "unchecked-field",
+        "region-born-name"
+      ]
+    }
+  ],
+  "findings": [
+    "Reject. parent_is_concurrent (crates/rustuml-parser/src/parse/state.rs:55-59) treats a parent whose last id segment starts with \"CONC\" as a concurrent region. Java StateDiagram.checkConcurrentStateOkInternal (StateDiagram.java:75-90) compares GroupType.CONCURRENT_STATE on the current group and on the existing parent, not the name. CONCURRENT_PREFIX = \"CONC\" (StateDiagram.java:58) is only the argument to getUniqueSequence2 at concurrentState (StateDiagram.java:201-204), which then gotoGroup(..., GroupType.CONCURRENT_STATE). The prefix is a name-keyed stand-in for the group type. That violates the generative-model rule. It is not a fixture-label key: CONCEPT and CONC2 are ordinary user names, and the predicate is a prefix test, not a match on a probe id. Minimal fix: store the concurrent-region flag when the separator is created, and test that flag in check_concurrent_state_ok. User composites named CONCEPT, CONC2, or CONCOURSE must still link from outside. Synthetic CONC* regions must still reject crossings.",
+    "Held-out over-rejection, 2/55. g5ck_conc_prefix_external and g5ck_conc2_prefix_external: Java exit 0 with a real diagram (text nodes CONCEPT or CONC2, and g5ckQuern, empty stderr). Base exit 0. Tip exit 1, line 4, \"The state g5ckQuern cannot be used here.\" Base already misses Java by 16 compare_svg_strict differences; the packet loss is the new rejection of a diagram Java renders.",
+    "Held-out packet whole-output mismatch on this mechanism, 1/55: g5ck_reenter_short_name. Both exit 0. Java canvas height 278, tip 275; the g5ckLintel baseline moves from 195.6234 to 192.7434. Base had 22 differences, tip has 10. The short-circuit improved the picture and still is not a match. CommandLinkStateCommon.getEntity (CommandLinkStateCommon.java:189-190) returns the current group when its short name equals the token, before quarkInContext and checkConcurrentStateOk. The Rust short-circuit (parse/state.rs:548-553) does that only for StateNameUse::Link. It is right for the current group: g5ck_reenter_from_region2 is rejected by both, line 4, \"The state g5ckQuern cannot be used here.\", because the current group inside region 2 is the CONC group, not g5ckQuern.",
+    "Rejection agreements that support the claim but do not save the packet. Held-out 15/55 share Java's message body and stderr line, with base exit 0 and tip exit 1. Link message \"The state NAME cannot be used here.\" is CommandLinkStateCommon.java:91 and :96. Declaration message \"The state NAME has been created in a concurrent state : it cannot be used here.\" is CommandCreateState.java:133-135. \"No such color\" is CommandExecutionResult.java:76, thrown from HColorSet.getColor (HColorSet.java:66-73) when parseColor returns null. CF 5/10 and AU cluster_concurrent_crossing plus stroke_per_state_css4 (2/32) are the same agreement: holdout_crossing_stoke line 6 Flame, holdout_decl_flame line 5, holdout_region_sibling line 4 Ash, holdout_stroke_rebeccapurple and holdout_fill_unknown line 1, cluster_concurrent_crossing line 6 Blow, stroke_per_state_css4 line 1.",
+    "g5ck_color_note_rebeccapurple is a pre-existing under-rejection, not a packet loss. Java exit 200, line 2, \"No such color\". Base and tip both exit 0 with the same SVG: the state g5ckQuern and no note. try_note (parse/state.rs:1232-1236) only matches `note (left|right) of NAME [: text]` and does not read a colour. The line `note right of g5ckQuern #RebeccaPurple : midden note` never reaches the new declaration check at parse/state.rs:1016-1024. The packet did not change the output. T14.29 is not met for note colours. The maker should refuse getColor failures on the note command as well, and g5ck_color_note_rebeccapurple must then exit 1 with line 2 and \"No such color\".",
+    "Other pre-existing colour and name residue, unchanged by the packet (base stdout equals tip). g5ck_color_hex_forms: Java exit 200 line 1 \"Syntax Error?\" because ColorParser.COLOR_REGEXP (ColorParser.java:44) is \"#\\\\w+[-\\\\|/]?\\\\w+\" and `state g5ckQuern #F` has no second word; both Rust trees exit 0. g5ck_qualified_into_region2: Java exit 0, both Rust trees exit 0 with 21 differences, because a dotted token misses the concurrent quark and a second state is minted. g5ck_color_name_case: Java exit 0 on a crash page, UnsupportedOperationException at HColor.toColor (HColor.java:67) for HColorAutomagic; both Rust trees render. Do not require Rust to crash. g5ck_color_skinparam_rebeccapurple and g5ck_color_style_rebeccapurple: Java exit 0 and both Rust trees match the SVG. They are valid. g5ck_history_cross and g5ck_link_before_region: Java exit 200 line 1 \"Syntax Error?\" (the file never reaches the concurrent check) and the tip exit 1 with a concurrent message. Both fail; the messages differ. That is not an over-rejection of a diagram Java renders.",
+    "Gains on this mechanism: held-out g5ck_field_from_outside now matches Java (base had 5 differences). CF holdout_field_on_concurrent and holdout_valid_colors: the field is a gain, the valid colours were already a match. AU has no packet-caused mismatch and no over-rejection; 20/32 match, 9/32 pre-existing mismatch, 1/32 pre-existing under-rejection (raw_multi_blank_first_block, unrelated). Maker CF numbers for the five invalid cases and the two valid controls are reproduced. Zero-loss is not reproduced on the held-out batch.",
+    "Process. Account 50bd185330c1f14aed7c6c2d422d76748b0c4e21, then addendum f33cfbc68, then implementation 38ea6caff831a3f06962bbcb6a18a00d3e20fc2a. The crate diff is only parse/state.rs and render/state.rs. No new decimal literal with three or more fractional digits. no_oracle_baseline.txt, ulp_parked.txt, rustuml-oracle, and sequence.rs are absent from that diff. Next-round pairs the maker must pass: g5ck_conc_prefix_external, g5ck_conc2_prefix_external, and g5ck_reenter_short_name must exit 0 and match the preserved Java SVG; g5ck_field_from_outside must stay a match.",
+    "Gates, both trees, release. no-oracle 11181/11251 on each, state 897/901, creole 639/639, and the 70 failure names are identical. golden_pairs 12550 total, 10497 passed, 754 failed, 1299 skipped, 0 panics, on each; the 754 names are identical. The test asserts an empty failure list, so it is red on the base as well. pipe_mode exit 0 both. doc_claims 2/2 both. Workspace lib exit 0 both. Parser lib tests 672/672 tip against 665/665 base. Render lib tests 864 passed and 1 ignored tip against 862 passed and 1 ignored base. Clippy -D warnings fails both trees on the same pre-existing dead_code at crates/rustuml-parser/src/parse/component.rs:74; render clippy stops on that parser lib error. Not worse. decimal_literal_ratchet is red on both with the same four deltas, including state.rs 53 -> 62. The packet diff adds no 3-or-more-place decimal. Not worse. error_golden_census_is_frozen, comparator_constants_frozen, no_golden_data_embedded_in_shipping_crates, and parity_review_paths_reject_traversal pass on both. parity_review_records_are_complete is red on both. Tip has 197 \"latest checker review must be accepted\" lines against 195 on the base; the two extra are these rejected reviews. \"account has no independent checker review\" is 9 on both. The retained perturbation corpus is 6328 sources on the base and 6339 on the tip (the 11 fresh pairs). Failures are 2732 base and 2716 tip, with 2708 in common. The 24 base-only failures now match, including review3_concurrent_region_mixed_live_and_image_outcomes and 23 state Creole face cases under comment-state-consumers, tim-builtin-value-boundaries, and times-new-roman-face-metrics. The 8 tip-only failures are the fresh pairs recorded here as fail. No previously passing retained source became a failure."
+  ],
+  "minimal_fix": "Record GroupType.CONCURRENT_STATE (a flag on the scope created with the separator) and test that flag in check_concurrent_state_ok. Stop using a \"CONC\" name prefix as the type. Keep the current-group link short-circuit. Extend colour refusal to note commands that carry a colour getColor rejects. Do not treat the pre-existing #F syntax gap, qualified-name quark miss, or Automagic crash as part of this fix unless a separate target says so.",
+  "java_mechanisms": [
+    "StateDiagram.checkConcurrentStateOkInternal, src/main/java/net/sourceforge/plantuml/statediagram/StateDiagram.java:75-90",
+    "StateDiagram.CONCURRENT_PREFIX and concurrentState, StateDiagram.java:58 and :194-208",
+    "CommandLinkStateCommon.getEntity short-circuit and check, CommandLinkStateCommon.java:189-194; error strings at :91 and :96",
+    "CommandCreateState.executeArg concurrent refusal, CommandCreateState.java:133-135; fill ColorParser.simpleColor at :115; stroke HColorSet.getColor at :160-163",
+    "HColorSet.getColor and parseColor, HColorSet.java:66-116",
+    "CommandExecutionResult \"No such color\", CommandExecutionResult.java:76",
+    "ColorParser.COLOR_REGEXP, ColorParser.java:44",
+    "HColor.toColor Automagic crash, HColor.java:67"
+  ],
+  "heldout_counts": {
+    "total": 55,
+    "match": 16,
+    "both_reject_same_message": 15,
+    "over_rejection": 2,
+    "packet_mismatch": 6,
+    "both_reject_different_message": 2,
+    "preexisting_under_rejection": 2,
+    "preexisting_mismatch": 11,
+    "java_crash_exit_0": 1
+  },
+  "gates": {
+    "schema_version": 1,
+    "no_oracle": {
+      "tip": "11181/11251",
+      "base": "11181/11251",
+      "failure_names": "70 identical"
+    },
+    "no_oracle_families": {
+      "state": "897/901",
+      "creole": "639/639"
+    },
+    "golden_pairs": {
+      "total": 12550,
+      "passed": 10497,
+      "failed": 754,
+      "skipped": 1299,
+      "panics": 0,
+      "failure_names": "754 identical",
+      "assert_empty_failures": "red on base and tip"
+    },
+    "pipe_mode": {
+      "tip_exit": 0,
+      "base_exit": 0
+    },
+    "doc_claims": {
+      "tip": "2/2",
+      "base": "2/2"
+    },
+    "workspace_lib_exit": {
+      "tip": 0,
+      "base": 0
+    },
+    "parser_lib_tests": {
+      "tip": "672/672",
+      "base": "665/665"
+    },
+    "render_lib_tests": {
+      "tip": "864 passed, 1 ignored",
+      "base": "862 passed, 1 ignored"
+    },
+    "clippy_parser_and_render": "both trees exit 101 on dead_code component.rs:74; not worse",
+    "decimal_literal_ratchet": "same four violations on both, state.rs 53 -> 62; packet adds none",
+    "harness_passed_both": [
+      "comparator_constants_frozen",
+      "parity_review_paths_reject_traversal",
+      "no_golden_data_embedded_in_shipping_crates",
+      "error_golden_census_is_frozen"
+    ],
+    "parity_review_records_are_complete": {
+      "base_must_be_accepted": 195,
+      "tip_must_be_accepted": 197,
+      "no_review_both": 9,
+      "these_reviews": "rejected, so the guard stays red"
+    },
+    "perturbations": {
+      "base_sources": 6328,
+      "tip_sources": 6339,
+      "base_failures": 2732,
+      "tip_failures": 2716,
+      "shared_failures": 2708,
+      "recovered_matches": 24,
+      "new_failures": 8,
+      "lost_matches_in_retained_corpus": 0
+    }
+  }
+}

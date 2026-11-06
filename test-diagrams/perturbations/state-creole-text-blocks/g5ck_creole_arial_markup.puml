@@ -1,0 +1,6 @@
+@startuml
+skinparam stateFontName Arial
+state "**g5ckQuern**" as g5ckQuern
+g5ckQuern : <i>midden</i>
+g5ckQuern --> [*]
+@enduml

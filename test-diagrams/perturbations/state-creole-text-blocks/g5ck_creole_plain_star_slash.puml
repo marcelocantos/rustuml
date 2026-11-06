@@ -1,0 +1,9 @@
+@startuml
+skinparam stateFontName Verdana
+state "g5ckQuern * wood" as g5ckQuern
+state "I/O g5ckMidden" as g5ckMidden
+state "C++ g5ckSpelt" as g5ckSpelt
+g5ckQuern : a * b / c
+g5ckQuern --> g5ckMidden
+g5ckMidden --> g5ckSpelt
+@enduml

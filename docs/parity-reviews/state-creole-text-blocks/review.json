@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "account_commit": "50bd185330c1f14aed7c6c2d422d76748b0c4e21",
+  "implementation_commit": "38ea6caff831a3f06962bbcb6a18a00d3e20fc2a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "task_id": "grok-g5-state-checker",
+    "model": "grok-4.7",
+    "tool": "Grok harness in T3 Code"
+  },
+  "base_commit": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "scored_tree": "da4c1733ef41cb40213bc3185964131b06bf7d96",
+  "reference_results_sha256": "38737f4f0526bee52cd04311c8787adb109c6eb0b41ba4a6bdae4de8f3cc8a05",
+  "predictions_sha256": "62233212612f17ae86578859974be95731a0b4b665f7b61cab00614e8a8d4a51",
+  "comparator": "rustuml_oracle::compare::compare_svg_strict",
+  "mechanism": "state-creole-text-blocks",
+  "verdict": "rejected",
+  "commands": [
+    "git switch -c review/grok-g5-state da4c1733ef41cb40213bc3185964131b06bf7d96",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-base cargo build --release -p rustuml  # archive of cb550c0d67cc729ce764895005b7e86310c9f313",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-tip cargo build --release -p rustuml  # 38ea6caff",
+    "~/Library/Caches/rustuml-grok-g5-checker/bin/rustuml-base -pipe -tsvg and rustuml-tip -pipe -tsvg on the 55 held-out sources, compared with svgcmp (compare_svg_strict) against the relay SVG",
+    "python3 /tmp/g5ck-score-cohort.py on grok-g5-state/reference-results.json (CF, 10) and shared-svg-checker-c1/reference-results.json (AU, 32)",
+    "git diff cb550c0d67cc729ce764895005b7e86310c9f313 38ea6caff831a3f06962bbcb6a18a00d3e20fc2a -- crates  # decimal scan and frozen-path stat",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-tip cargo test --release --workspace --lib --no-fail-fast",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-tip cargo test --release -p rustuml --test pipe_mode -- --test-threads=8",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-tip cargo test --release -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test doc_claims -- --test-threads=8 --nocapture",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-tip cargo clippy --release -p rustuml-parser --all-targets -- -D warnings",
+    "CARGO_TARGET_DIR=~/Library/Caches/rustuml-grok-g5-checker/target-tip cargo clippy --release -p rustuml-render --all-targets -- -D warnings",
+    "same five commands on a git archive of cb550c0d67cc729ce764895005b7e86310c9f313 with test-diagrams/golden symlinked to this worktree, CARGO_TARGET_DIR=target-base",
+    "cargo test --release -p rustuml-oracle --no-fail-fast --test parity_perturbations --test harness_guards on both trees after review.json existed"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_arial_markup.puml",
+      "golden": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_arial_markup.svg",
+      "result": "fail",
+      "axes": [
+        "arial",
+        "creole-width"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_mixed_verdana.puml",
+      "golden": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_mixed_verdana.svg",
+      "result": "fail",
+      "axes": [
+        "verdana",
+        "size-and-color-baseline"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_multiline_desc.puml",
+      "golden": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_multiline_desc.svg",
+      "result": "fail",
+      "axes": [
+        "description-baseline",
+        "bold-italic"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_decorations_courier.puml",
+      "golden": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_decorations_courier.svg",
+      "result": "fail",
+      "axes": [
+        "courier",
+        "font-tag-baseline"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_escape_and_newline.puml",
+      "golden": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_escape_and_newline.svg",
+      "result": "fail",
+      "axes": [
+        "newline-in-name",
+        "tilde-escape"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_plain_star_slash.puml",
+      "golden": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_plain_star_slash.svg",
+      "result": "pass",
+      "axes": [
+        "plain-star",
+        "plain-slash"
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_composite_title.puml",
+      "golden": "test-diagrams/perturbations/state-creole-text-blocks/g5ck_creole_composite_title.svg",
+      "result": "pass",
+      "axes": [
+        "composite-title",
+        "verdana"
+      ]
+    }
+  ],
+  "findings": [
+    "Reject. Routing markup through text_render::emit_text is the right consumer (EntityImageStateCommon.java:74-75 builds the title with Display.create8 and CreoleMode.FULL; EntityImageState.java:82 does the same for fields), but the box is still measured from the raw source, and newlines are not split before that block.",
+    "g5ck_creole_arial_markup, packet mismatch. Java canvas width 115, rect width 93.1377. Tip canvas 121, rect 99.2695. The drawn run matches Java (textLength 73.1377, text \"g5ckQuern\", the stars stripped). state_text_width_with_family (render/state.rs:1656-1660) still calls arial_text_width on the raw label, so \"**\" is counted in the box and not in the text. The emit path is render/state.rs:8129-8200: custom family with markup leaves the single-<text> emitter and calls emit_text, but the width just above still uses the raw string. Minimal fix: when state_text_has_creole_markup is true, measure the stripped runs that emit_text draws. Arial skinparam plus Creole must use that width for the rect and the canvas.",
+    "g5ck_creole_escape_and_newline, packet mismatch, 12 differences. \"~**g5ckQuern**\" matches (textLength 111.8564, tilde consumed, stars kept). \"g5ckMidden\\nfold\" is one Rust <text> (textLength 124.6875, canvas height 181) and two Java lines (textLength 83.4873 and 25.9834, canvas height 185, three text nodes against two). Java applies Display.getWithNewlines before create8. The Creole path must split those newlines first. Element count is 14 against Java's 15.",
+    "Baselines of mixed runs are still short of Java, and the packet moved them. g5ck_creole_decorations_courier: one difference, the <font>-switched \"byre\" y 64.4941 against Java 64.3301 (0.164px, textLength 26.8477 matches). g5ck_creole_mixed_verdana: three differences, second description line \"spelt\" y 70.0732 against 70.5244 and size-16 \"kiln\" y 69.2344 against 69.6846; colours, sizes, and textLengths match. g5ck_creole_multiline_desc: bold row y 65.2119 against 65.6631, italic row 79.3447 against 80.2471; font-weight 700 and italic are present. Description lines use label_first_baseline_ascent_with_family plus a constant DESC_LINE_SPACING (render/state.rs:8228-8236) instead of each run's ascent inside the line the way the fields SheetBlock1 does. Minimal fix: take the baseline from the run that is drawn, per line, including a font change mid-line.",
+    "Controls the packet got right. g5ck_creole_plain_star_slash and g5ck_creole_composite_title match Java on both trees (plain \"*\" and \"/\" stay one run; a composite title in Verdana matches). CF creole_verdana_kiln, creole_courier_grate, and creole_verdana_field are gains: base mismatched, tip matches Java. That reproduces the maker's three Creole CF matches. It does not cover Arial markup width, newline splitting, or the sub-pixel description baselines above.",
+    "g5ck_creole_plain_courier is a pre-existing mismatch the packet promised not to touch and did not. One TextMismatch: Java draws \"g5ckQuern\\u00a0wood\" and Rust draws \"g5ckQuern wood\" on the single-<text> path (render/state.rs:8167-8196 uses escape_text_content without NBSP for the title). The description line is already NBSP. Base and tip SVGs are identical. Not a next-round pair for this packet. Do not switch the plain path onto emit_text.",
+    "Held-out Creole packet mismatches are 5 of the 6 packet_mismatch cases in the 55 (the sixth, g5ck_reenter_short_name, belongs to admission). Next-round pairs that must pass: g5ck_creole_arial_markup, g5ck_creole_mixed_verdana, g5ck_creole_multiline_desc, g5ck_creole_decorations_courier, g5ck_creole_escape_and_newline. g5ck_creole_plain_star_slash and g5ck_creole_composite_title must stay matches.",
+    "Gates, both trees, release. no-oracle 11181/11251 on each, state 897/901, creole 639/639, and the 70 failure names are identical. golden_pairs 12550 total, 10497 passed, 754 failed, 1299 skipped, 0 panics, on each; the 754 names are identical. The test asserts an empty failure list, so it is red on the base as well. pipe_mode exit 0 both. doc_claims 2/2 both. Workspace lib exit 0 both. Parser lib tests 672/672 tip against 665/665 base. Render lib tests 864 passed and 1 ignored tip against 862 passed and 1 ignored base. Clippy -D warnings fails both trees on the same pre-existing dead_code at crates/rustuml-parser/src/parse/component.rs:74; render clippy stops on that parser lib error. Not worse. decimal_literal_ratchet is red on both with the same four deltas, including state.rs 53 -> 62. The packet diff adds no 3-or-more-place decimal. Not worse. error_golden_census_is_frozen, comparator_constants_frozen, no_golden_data_embedded_in_shipping_crates, and parity_review_paths_reject_traversal pass on both. parity_review_records_are_complete is red on both. Tip has 197 \"latest checker review must be accepted\" lines against 195 on the base; the two extra are these rejected reviews. \"account has no independent checker review\" is 9 on both. The retained perturbation corpus is 6328 sources on the base and 6339 on the tip (the 11 fresh pairs). Failures are 2732 base and 2716 tip, with 2708 in common. The 24 base-only failures now match, including review3_concurrent_region_mixed_live_and_image_outcomes and 23 state Creole face cases under comment-state-consumers, tim-builtin-value-boundaries, and times-new-roman-face-metrics. The 8 tip-only failures are the fresh pairs recorded here as fail. No previously passing retained source became a failure."
+  ],
+  "minimal_fix": "Measure Creole state titles and fields as the runs that are drawn, including Arial. Split names and fields with the same newline rules as Display.getWithNewlines before create8. Place each description and mid-line font run on that run's ascent. Leave a plain single run on the existing single-<text> emitter.",
+  "java_mechanisms": [
+    "EntityImageStateCommon title create8 CreoleMode.FULL, src/main/java/net/sourceforge/plantuml/svek/image/EntityImageStateCommon.java:70-75",
+    "EntityImageState fields create8 CreoleMode.FULL, EntityImageState.java:76-82",
+    "Display.getWithNewlines before the state TextBlock, used by CommandCreateState.executeArg at CommandCreateState.java:139 and :148"
+  ],
+  "heldout_counts": {
+    "total": 55,
+    "match": 16,
+    "both_reject_same_message": 15,
+    "over_rejection": 2,
+    "packet_mismatch": 6,
+    "both_reject_different_message": 2,
+    "preexisting_under_rejection": 2,
+    "preexisting_mismatch": 11,
+    "java_crash_exit_0": 1
+  },
+  "gates": {
+    "schema_version": 1,
+    "no_oracle": {
+      "tip": "11181/11251",
+      "base": "11181/11251",
+      "failure_names": "70 identical"
+    },
+    "no_oracle_families": {
+      "state": "897/901",
+      "creole": "639/639"
+    },
+    "golden_pairs": {
+      "total": 12550,
+      "passed": 10497,
+      "failed": 754,
+      "skipped": 1299,
+      "panics": 0,
+      "failure_names": "754 identical",
+      "assert_empty_failures": "red on base and tip"
+    },
+    "pipe_mode": {
+      "tip_exit": 0,
+      "base_exit": 0
+    },
+    "doc_claims": {
+      "tip": "2/2",
+      "base": "2/2"
+    },
+    "workspace_lib_exit": {
+      "tip": 0,
+      "base": 0
+    },
+    "parser_lib_tests": {
+      "tip": "672/672",
+      "base": "665/665"
+    },
+    "render_lib_tests": {
+      "tip": "864 passed, 1 ignored",
+      "base": "862 passed, 1 ignored"
+    },
+    "clippy_parser_and_render": "both trees exit 101 on dead_code component.rs:74; not worse",
+    "decimal_literal_ratchet": "same four violations on both, state.rs 53 -> 62; packet adds none",
+    "harness_passed_both": [
+      "comparator_constants_frozen",
+      "parity_review_paths_reject_traversal",
+      "no_golden_data_embedded_in_shipping_crates",
+      "error_golden_census_is_frozen"
+    ],
+    "parity_review_records_are_complete": {
+      "base_must_be_accepted": 195,
+      "tip_must_be_accepted": 197,
+      "no_review_both": 9,
+      "these_reviews": "rejected, so the guard stays red"
+    },
+    "perturbations": {
+      "base_sources": 6328,
+      "tip_sources": 6339,
+      "base_failures": 2732,
+      "tip_failures": 2716,
+      "shared_failures": 2708,
+      "recovered_matches": 24,
+      "new_failures": 8,
+      "lost_matches_in_retained_corpus": 0
+    }
+  }
+}

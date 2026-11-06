@@ -1,0 +1,6 @@
+@startuml
+state CONCEPT {
+  state g5ckQuern
+}
+[*] --> g5ckQuern
+@enduml

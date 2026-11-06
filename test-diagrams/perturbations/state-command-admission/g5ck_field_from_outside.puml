@@ -1,0 +1,7 @@
+@startuml
+state g5ckQuern {
+  --
+  state g5ckMidden
+}
+g5ckMidden : spelt row
+@enduml

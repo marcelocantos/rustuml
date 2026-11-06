@@ -1,0 +1,6 @@
+@startuml
+skinparam stateFontName Verdana
+state "**g5ckQuern**" as g5ckQuern {
+  state g5ckMidden
+}
+@enduml

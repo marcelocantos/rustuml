@@ -1,0 +1,7 @@
+@startuml
+skinparam stateFontName Verdana
+state "**g5ckQuern** //wood//" as g5ckQuern
+g5ckQuern : <b>midden</b> <i>fold</i> <u>lintel</u>
+g5ckQuern : <color:#A52A2A>spelt</color> <size:16>kiln</size>
+g5ckQuern --> [*]
+@enduml

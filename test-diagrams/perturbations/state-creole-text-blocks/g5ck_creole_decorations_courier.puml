@@ -1,0 +1,7 @@
+@startuml
+skinparam stateFontName Courier
+state "<s>g5ckStook</s> --field--" as g5ckStook
+g5ckStook : ""mono"" <back:yellow>thatch</back>
+g5ckStook : <font:Verdana>byre</font>
+g5ckStook --> [*]
+@enduml

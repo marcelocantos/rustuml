@@ -1,0 +1,10 @@
+@startuml
+state g5ckQuern {
+  state g5ckMidden
+  --
+  state g5ckSpelt {
+    g5ckSpelt --> [*]
+    state g5ckLintel
+  }
+}
+@enduml

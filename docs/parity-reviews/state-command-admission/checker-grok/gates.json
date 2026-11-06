@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "no_oracle": {
+    "tip": "11181/11251",
+    "base": "11181/11251",
+    "failure_names": "70 identical"
+  },
+  "no_oracle_families": {
+    "state": "897/901",
+    "creole": "639/639"
+  },
+  "golden_pairs": {
+    "total": 12550,
+    "passed": 10497,
+    "failed": 754,
+    "skipped": 1299,
+    "panics": 0,
+    "failure_names": "754 identical",
+    "assert_empty_failures": "red on base and tip"
+  },
+  "pipe_mode": {
+    "tip_exit": 0,
+    "base_exit": 0
+  },
+  "doc_claims": {
+    "tip": "2/2",
+    "base": "2/2"
+  },
+  "workspace_lib_exit": {
+    "tip": 0,
+    "base": 0
+  },
+  "parser_lib_tests": {
+    "tip": "672/672",
+    "base": "665/665"
+  },
+  "render_lib_tests": {
+    "tip": "864 passed, 1 ignored",
+    "base": "862 passed, 1 ignored"
+  },
+  "clippy_parser_and_render": "both trees exit 101 on dead_code component.rs:74; not worse",
+  "decimal_literal_ratchet": "same four violations on both, state.rs 53 -> 62; packet adds none",
+  "harness_passed_both": [
+    "comparator_constants_frozen",
+    "parity_review_paths_reject_traversal",
+    "no_golden_data_embedded_in_shipping_crates",
+    "error_golden_census_is_frozen"
+  ],
+  "parity_review_records_are_complete": {
+    "base_must_be_accepted": 195,
+    "tip_must_be_accepted": 197,
+    "no_review_both": 9,
+    "these_reviews": "rejected, so the guard stays red"
+  },
+  "perturbations": {
+    "base_sources": 6328,
+    "tip_sources": 6339,
+    "base_failures": 2732,
+    "tip_failures": 2716,
+    "shared_failures": 2708,
+    "recovered_matches": 24,
+    "new_failures": 8,
+    "lost_matches_in_retained_corpus": 0
+  }
+}
