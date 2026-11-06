@@ -792,7 +792,15 @@ fn style_face(style: &Style, base: &TextBase<'_>) -> (MetricFamily, bool, bool) 
     if style.monospace && !explicit_monospace_font_uses_surrounding_metrics(style) {
         return (MetricFamily::Mono, bold, italic);
     }
-    let name = style.font_family.as_deref().unwrap_or(base.font_family);
+    // `<font:monospace>` and `<font:monospaced>` keep the surrounding face.
+    // The literal name is the SVG spelling, and resolving it would select
+    // Menlo. A caller that passes "monospace" as the base family (the logical
+    // font) still goes through [`resolve_modelled_face`].
+    let name = if explicit_monospace_font_uses_surrounding_metrics(style) {
+        base.font_family
+    } else {
+        style.font_family.as_deref().unwrap_or(base.font_family)
+    };
     resolve_modelled_face(name, bold, italic)
 }
 
@@ -2617,6 +2625,21 @@ mod tests {
         assert_eq!(
             measure_with_family("<font:Menlo>Wharf qr", 14.0, false, "sans-serif"),
             menlo
+        );
+        // Creole `<font:monospace>` keeps the surrounding face. The same
+        // spelling as a base family is the logical Monospaced font.
+        let creole_mono =
+            measure_with_family("<font:monospace>code here", 14.0, false, "sans-serif");
+        let surrounding = measure_with_family("code here", 14.0, false, "sans-serif");
+        assert!(
+            (creole_mono - surrounding).abs() < 1e-9,
+            "creole monospace {creole_mono} vs surrounding {surrounding}"
+        );
+        assert!(
+            (measure_with_family("code here", 14.0, false, "monospace")
+                - pm::mono_text_width("code here", 14.0))
+            .abs()
+                < 1e-9
         );
 
         assert_eq!(
