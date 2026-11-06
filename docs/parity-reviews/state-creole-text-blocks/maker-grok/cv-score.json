@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-creole-text-blocks",
+  "batch": "CV",
+  "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-cv/reference-results.json",
+  "reference_results_sha256": "f206e324c7cc70028daee62887afc231669fd66c1644dfe97b4863a88dde1957",
+  "predictions_sha256": "629ad96bb8920c76ddd2869bcdc93a63831f00471b74b38784def48be2397dda",
+  "predictions_edited": false,
+  "comparator": "rustuml_oracle::compare::compare_svg_strict via diff_one --no-oracle",
+  "tip": "52505aef02ea2ae140e22a18b1ebca877a3eec0c",
+  "base": "6eab153ea",
+  "cases": [
+    {
+      "name": "newline_bold_second_row",
+      "java_exit": 0,
+      "base": "mismatch",
+      "tip": "match"
+    },
+    {
+      "name": "newline_tilde_then_plain",
+      "java_exit": 0,
+      "base": "mismatch",
+      "tip": "match"
+    },
+    {
+      "name": "newline_right_aligned_row",
+      "java_exit": 0,
+      "base": "mismatch",
+      "tip": "match"
+    },
+    {
+      "name": "desc_newline_italic",
+      "java_exit": 0,
+      "base": "mismatch",
+      "tip": "match"
+    },
+    {
+      "name": "baseline_courier_three",
+      "java_exit": 0,
+      "base": "mismatch",
+      "tip": "match"
+    },
+    {
+      "name": "baseline_arial_size_mix",
+      "java_exit": 0,
+      "base": "match",
+      "tip": "match"
+    },
+    {
+      "name": "baseline_verdana_back_and_font",
+      "java_exit": 0,
+      "base": "mismatch",
+      "tip": "match"
+    },
+    {
+      "name": "baseline_sans_two_rows",
+      "java_exit": 0,
+      "base": "match",
+      "tip": "match"
+    }
+  ],
+  "note": "All eight Creole and baseline cases in batch CV match compare_svg_strict on the tip. Six were mismatches on the merge base. The admission cases in the same relay are scored in the state-command-admission record."
+}
