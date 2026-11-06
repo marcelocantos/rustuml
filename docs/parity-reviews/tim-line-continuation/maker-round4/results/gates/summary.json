@@ -1,0 +1,41 @@
+{
+ "tip": "9ed52f4357c7d5af2fac06b340170c73eaad7800 (code); gates run in the maker checkout with a private CARGO_TARGET_DIR",
+ "merged_base": "1f6ffa9f4 (git archive export, golden symlinked)",
+ "workspace_lib": {
+  "tip": "1,660 passed, 0 failed (release)"
+ },
+ "pipe_mode": {
+  "tip": "16 passed, 1 failed: help_agent_discloses_no_oracle_product_metric. crates/rustuml/src/main.rs:269 prints 11,175/11,251 while test-diagrams/no_oracle_baseline.txt locks 11,181; both files are byte-identical to parity-recovery-2026-11-03 f70f107b8, so the failure is inherited (merged base and parity-recovery alike), not caused by this round."
+ },
+ "golden_no_oracle": {
+  "merged_base": "11,181/11,251, test passes against the locked baseline",
+  "tip": "11,182/11,251; the test fails only because the +1 (edge-cases 759 -> 760: edge-cases/edge_pragma_useVerticalIf) is not locked. The baseline is frozen for this packet, so it is not regenerated here.",
+  "failure_name_diff": "tip = merged base minus edge-cases/edge_pragma_useVerticalIf; no name added (no_oracle_failure_names-base.txt / -tip.txt)"
+ },
+ "golden_pairs": {
+  "merged_base": "10,497 passed, 754 failed, 1,299 skipped",
+  "tip": "10,498 passed, 753 failed, 1,299 skipped",
+  "failure_name_diff": "only edge-cases/edge_pragma_useVerticalIf removed"
+ },
+ "parity_perturbations": {
+  "merged_base_failures": 3895,
+  "tip_failures": 3890,
+  "new": [],
+  "fixed": [
+   "tim-line-continuation/cr3_dir_pragma_end",
+   "tim-line-continuation/cr3_dir_pragma_middle",
+   "tim-line-continuation/cr3_dir_pragma_start",
+   "tim-line-continuation/cr3_dir_teoz_pragma_start",
+   "tim-line-continuation/cr3_end_us_before_bs_end"
+  ],
+  "note": "the class.rs:306 char-boundary panic (T14.59) appears 4 times at both builds"
+ },
+ "harness_guards": {
+  "comparator_constants_frozen": "pass (base, tip)",
+  "error_golden_census_is_frozen": "pass (base, tip)",
+  "no_golden_data_embedded_in_shipping_crates": "pass (base, tip)",
+  "parity_review_paths_reject_traversal": "pass (base, tip)",
+  "decimal_literal_ratchet": "FAIL at base, tip and parity-recovery f70f107b8 alike, same four render files and counts (class.rs 383 -> 578, deployment.rs 43 -> 44, plantuml_metrics.rs 1053 -> 1055, state.rs 53 -> 62); this round changes no render file",
+  "parity_review_records_are_complete": "FAIL at base and tip with identical normalised violation lists: 2,967 lines each, sha256 d20cbe4360ef4640203e19dcc2d7545e7b47c632c824cc483ab32d21bdf60b75 for both (list not committed: it names other mechanisms' records). Also failing at parity-recovery f70f107b8."
+ }
+}
