@@ -660,16 +660,17 @@ fn autonomous_layout_node_size(
 }
 
 /// The state font of the oracle-assisted / no-style layout path
-/// (`state_node_size`). It has no italic: a `stateFontStyle` skinparam always
-/// adds a style declaration (`legacy_mappings` "state" x fontstyle), so
-/// without an oracle an italic state font always takes the autonomous path
-/// (`AutonomousTextStyle`, which carries its own italic).
+/// (`state_node_size`). It has no bold and no italic. A `stateFontStyle`
+/// skinparam always adds a style declaration (`legacy_mappings` "state" x
+/// fontstyle; Java `FromSkinparamToStyle.addConFont` at 206 and 420-422), so
+/// without an oracle a styled state font takes the autonomous path
+/// (`AutonomousTextStyle`, which carries its own face). Forcing bold false
+/// was byte-identical on all 18,878 golden and perturbation CLI outputs.
 struct StateNodeFont<'a> {
     name_size: f64,
     desc_size: f64,
     name: Option<&'a str>,
     monospace: bool,
-    bold: bool,
 }
 
 fn layout_node_size_with_font(
@@ -697,7 +698,7 @@ fn layout_node_size_with_font(
     let title_width = state_text_width_with_family(
         label,
         font.name_size,
-        font.bold,
+        false,
         false,
         font.name,
         font.monospace,
@@ -708,7 +709,7 @@ fn layout_node_size_with_font(
             state_text_width_with_family(
                 description,
                 font.desc_size,
-                font.bold,
+                false,
                 false,
                 font.name,
                 font.monospace,
@@ -1624,14 +1625,11 @@ fn state_text_width_with_family(
     if monospace {
         crate::plantuml_metrics::mono_text_width_styled(text, font_size, bold, italic)
     } else if let Some(font_name) = font_name {
-        if font_name
-            .trim_matches(|c| c == '"' || c == '\'')
-            .eq_ignore_ascii_case("Arial")
-        {
-            arial_text_width(text, font_size, bold)
-        } else {
-            text_render::measure_with_family_and_face(text, font_size, bold, italic, font_name)
-        }
+        // The drawn face, including Arial. `text_render::measure_with_family_and_face`
+        // selects that family's advance table (`family_table_text_width` for
+        // Arial: `ARIAL_ASCII` and the bold / italic / bold-italic slots,
+        // 2048 units per em). A label match is not a measurement.
+        text_render::measure_with_family_and_face(text, font_size, bold, italic, font_name)
     } else {
         text_render::measure(text, font_size, bold)
     }
@@ -1652,16 +1650,6 @@ fn canonical_state_font_family(value: &str) -> String {
     } else {
         trimmed.to_string()
     }
-}
-
-fn arial_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
-    if !bold && (font_size - 14.0).abs() < f64::EPSILON {
-        match text {
-            "A" | "B" => return 9.3379,
-            _ => {}
-        }
-    }
-    text_render::measure(text, font_size, bold)
 }
 
 fn emit_handwritten_warning(svg: &mut String, warning: &OracleHandwrittenWarning) {
@@ -6382,11 +6370,9 @@ pub fn render_with_oracle(
     // Resolve the state-node label font name and style. PlantUML applies
     // `skinparam stateFontName` (or the global `defaultFontName`/`fontName`)
     // and `stateFontStyle` to the state name and description lines. A monospace font name
-    // (Courier et al.) also switches the width metric to the fixed-advance
-    // mono table — the emitted `font-family` then carries the user-supplied
-    // name. Non-monospace custom names are left to the default sans-serif
-    // metric (PlantUML only tabulates sans + mono advances), so we don't
-    // claim them here.
+    // (Courier et al.) switches the width metric to the fixed-advance mono
+    // table. Any other name, Arial included, is measured with that family's
+    // advance table (`state_text_width_with_family`).
     let state_font_name: Option<String> = diagram
         .meta
         .skinparams
@@ -6413,18 +6399,6 @@ pub fn render_with_oracle(
             )
         })
         .unwrap_or(false);
-    let state_font_style = diagram
-        .meta
-        .skinparams
-        .iter()
-        .rev()
-        .find(|sp| sp.key.eq_ignore_ascii_case("stateFontStyle"))
-        .map(|sp| sp.value.to_ascii_lowercase())
-        .unwrap_or_default();
-    // The face emission draws (`apply_resolved_state_text_style`):
-    // `Style.getUFont` -> `ValueImpl.asFontFace`.
-    let (state_font_bold, _) = crate::style_cascade::font_face(&state_font_style);
-
     let (has_start, _has_end) = classify_star_nodes(&diagram.transitions);
 
     // Check for `hide empty description` directive.
@@ -6438,7 +6412,6 @@ pub fn render_with_oracle(
         desc_size: state_desc_font_size,
         name: state_font_name.as_deref(),
         monospace: state_name_is_mono,
-        bold: state_font_bold,
     };
 
     // Collect ordered unique entity IDs in PlantUML's render order.

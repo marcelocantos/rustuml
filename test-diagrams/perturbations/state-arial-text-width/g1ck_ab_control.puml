@@ -1,0 +1,7 @@
+@startuml
+skinparam stateFontName Arial
+[*] --> A
+A --> B
+B --> G1ckAnchor
+state "G1ckAnchor" as G1ckAnchor
+@enduml

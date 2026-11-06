@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-arial-text-width",
+  "checker": "grok-g1-state-checker",
+  "base_commit": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "tip_commit": "97523161261c62c628477c915b79e36546755977",
+  "account_commit": "e576a9b943eeee6457750896244a6d6fdaaa8fc7",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "binaries": {
+    "base_sha256": "d15f01dacd9cd3d3f0e337537f0210d67c4321c33a9b47f6443721ab8eea1847",
+    "tip_sha256": "7030fbb0299395fd8b93f31d91ebf027993a0df5fe6c053c3915cfcb7a6e9503",
+    "note": "Rebuilt by this checker. Not the maker binary hashes."
+  },
+  "invocation": ["-pipe", "-tsvg"],
+  "env": {
+    "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100",
+    "TZ": "GMT+11:00"
+  },
+  "comparator": "rustuml_oracle::compare::compare_svg_strict",
+  "batch_cj": {
+    "reference_results_sha256": "037c982c50011c93e7ac031d6429d0e98f5809db51b38a06fc019a533b8933a6",
+    "predictions_sha256": "c1b4172216235a915fc86ea1c26efb8b0057289ca186422158e7d71839567d19",
+    "cases": 41,
+    "exit_0": 41,
+    "stderr_empty": 41,
+    "java_error_page": 0,
+    "raw_byte_match_java": {"base": 0, "tip": 0},
+    "compare_svg_strict": {
+      "tip_gain": 32,
+      "both_match": 5,
+      "both_diff": 4,
+      "loss": 0,
+      "denominator": 41
+    },
+    "both_diff_names": ["g1ck_creole_b", "g1ck_creole_wiki", "g1ck_fontweight", "g1ck_hash_bold"]
+  },
+  "cli_sweep": {
+    "sources": 18878,
+    "golden": {"sources": 12550, "stdout_changed": 0},
+    "perturbations": {"sources": 6328, "stdout_changed": 21},
+    "retained": {"sources": 173, "stdout_changed": 0, "status_changed": 0},
+    "status_changed": 0,
+    "timeouts": 0,
+    "panics_both": 4,
+    "panic_paths": [
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_01.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_03.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_06.puml",
+      "test-diagrams/perturbations/shared-svg-corrective/checker-independent-astra/dash_07.puml"
+    ],
+    "changed_vs_java": {"gains": 14, "still_diff": 7, "losses": 0, "denominator": 21}
+  },
+  "relay_c9a_c10a_c11a": {
+    "selection": "name or source contains state, _ar_, arial, sdsc, or _stat",
+    "cases": 261,
+    "by_batch": {"c9a": 45, "c10a": 51, "c11a": 165},
+    "java_invalid": 0,
+    "rust_panics": 0,
+    "stdout_changed": 21,
+    "compare_svg_strict": {
+      "both_match": 96,
+      "both_diff": 151,
+      "tip_gain": 14,
+      "loss": 0,
+      "denominator": 261
+    }
+  },
+  "gates": {
+    "golden_no_oracle": {
+      "baseline": "11181/11251",
+      "state_family": "897/901",
+      "tip": "passed, exact baseline",
+      "failure_names": "70/70 identical after stripping a symlink golden/ prefix from the base file",
+      "base_note": "The base archive's golden directory was a symlink, so every pair was counted as family golden (11181/11251). The per-family ratchet then reported every real family as 0. The failure-name set is the same 70 diagrams."
+    },
+    "golden_pairs": {
+      "both": "12550 total, 10497 passed, 754 failed, 1299 skipped, 0 panics, 754 xml diffs",
+      "failure_names": "754/754 identical"
+    },
+    "parity_perturbations": {
+      "base_failure_headers": 2713,
+      "tip_failure_headers": 2699,
+      "gains": 14,
+      "losses": 0,
+      "retained_failures_both": 98,
+      "retained_losses": 0,
+      "note": "Headers were taken from the complete assertion dump, which ends at the wbs error-page cases and then failures:. Maker measurement.json said 2727 and 2713. The 14 gain paths match. These counts do not include the 37 checker pairs added afterwards."
+    },
+    "harness_guards": {
+      "base": "4 passed, 2 failed, of 6",
+      "tip": "5 passed, 2 failed, of 7",
+      "no_label_keyed_width_constants": "pass on tip; absent on base",
+      "decimal_literal_ratchet": "fail both. state.rs 53 -> 62 base, 53 -> 61 tip. class.rs 383 -> 578, deployment.rs 43 -> 44, plantuml_metrics.rs 1053 -> 1055 unchanged.",
+      "records": "fail both. 2704 base violations, 2705 tip. The only added line is the missing mechanism-root account.json."
+    },
+    "doc_claims": "2/2 passed on both",
+    "pipe_mode": {"base": "17/17", "tip": "17/17"},
+    "workspace_lib": {
+      "base": "1609 passed, 0 failed, 1 ignored",
+      "tip": "1609 passed, 0 failed, 1 ignored",
+      "per_crate": {
+        "rustuml-layout": 41,
+        "rustuml-math": 10,
+        "rustuml-oracle": 31,
+        "rustuml-parser": 665,
+        "rustuml-render": "862 passed, 1 ignored"
+      }
+    },
+    "clippy": {
+      "base_exit": 0,
+      "tip_exit": 0,
+      "warnings": {"rustuml-parser": 1, "rustuml-render": 19, "rustuml-oracle": 1},
+      "same_warning_text": true,
+      "line_move": "state.rs chunks_exact 6203 on the base, 6191 on the tip"
+    }
+  },
+  "guard_scan": {
+    "original_branch_hit": true,
+    "evasions_not_hit": ["matches-macro", "if-chain", "lookup-table", "binding-then-return", "const-idents", "len-keyed"],
+    "live_tip_hits": 0
+  },
+  "verdict": "accepted",
+  "accept_ready": true,
+  "losses": []
+}
