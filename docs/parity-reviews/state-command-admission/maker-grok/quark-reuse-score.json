@@ -1,0 +1,1385 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-command-admission",
+  "tip": "ef5b89027f4c2b4dd6f3b472f8d6ec11a7cff2de",
+  "base_merge": "2e12228bd6c8a59ec5eaf7fd83e3909a17b2bbe4",
+  "base_note": "Measurement binaries rustuml-base and diff-one-base are the merge. Code-equivalent docs tip on that merge is 6eab153ea.",
+  "comparator": "rustuml_oracle::compare::compare_svg_strict via diff_one --no-oracle. Rejection class comes from the rustuml CLI stderr.",
+  "debug_env": "RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100",
+  "losses": 0,
+  "cohorts": {
+    "CL": {
+      "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-checker-heldout/reference-results.json",
+      "reference_results_sha256": "38737f4f0526bee52cd04311c8787adb109c6eb0b41ba4a6bdae4de8f3cc8a05",
+      "bundle": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-checker-heldout/reference-input-bundle.json.gz",
+      "bundle_sha256": "b3f7b775e434f95921cb7a807f34b2b5e25b3430d17272bea871896aac94793d",
+      "tip_counts": {
+        "both_reject_same_message": 15,
+        "match": 25,
+        "under_rejection": 2,
+        "mismatch": 11,
+        "both_reject_different_message": 2
+      },
+      "base_counts": {
+        "both_reject_same_message": 15,
+        "match": 18,
+        "under_rejection": 2,
+        "mismatch": 16,
+        "over_rejection": 2,
+        "both_reject_different_message": 2
+      },
+      "retained_safe": 33,
+      "losses": 0,
+      "pairs": [
+        {
+          "name": "g5ck_alias_cross",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "5",
+          "rust_line": "5",
+          "java_message": "The state g5ckSpelt cannot be used here.",
+          "rust_message": "The state g5ckSpelt cannot be used here."
+        },
+        {
+          "name": "g5ck_alias_same_region",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_choice_cross",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "5",
+          "rust_line": "5",
+          "java_message": "The state g5ckChoice cannot be used here.",
+          "rust_message": "The state g5ckChoice cannot be used here."
+        },
+        {
+          "name": "g5ck_color_bad_gradient",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "1",
+          "rust_line": "1",
+          "java_message": "No such color",
+          "rust_message": "No such color"
+        },
+        {
+          "name": "g5ck_color_bad_hex",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "1",
+          "rust_line": "1",
+          "java_message": "No such color",
+          "rust_message": "No such color"
+        },
+        {
+          "name": "g5ck_color_dashed_stroke",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_color_gradients",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_color_hex_forms",
+          "base": "under_rejection",
+          "tip": "under_rejection",
+          "java_exit": 200,
+          "rust_exit": 0,
+          "java_line": "1",
+          "rust_line": "",
+          "java_message": "Syntax Error?",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_color_line_text_sub",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_color_name_case",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_color_note_named",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_color_note_rebeccapurple",
+          "base": "under_rejection",
+          "tip": "under_rejection",
+          "java_exit": 200,
+          "rust_exit": 0,
+          "java_line": "2",
+          "rust_line": "",
+          "java_message": "No such color",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_color_rebeccapurple_fill",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "1",
+          "rust_line": "1",
+          "java_message": "No such color",
+          "rust_message": "No such color"
+        },
+        {
+          "name": "g5ck_color_rebeccapurple_stroke",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "1",
+          "rust_line": "1",
+          "java_message": "No such color",
+          "rust_message": "No such color"
+        },
+        {
+          "name": "g5ck_color_skinparam_rebeccapurple",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_color_style_rebeccapurple",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_color_unknown_name",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "1",
+          "rust_line": "1",
+          "java_message": "No such color",
+          "rust_message": "No such color"
+        },
+        {
+          "name": "g5ck_conc2_prefix_external",
+          "base": "over_rejection",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_conc_prefix_external",
+          "base": "over_rejection",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_conc_prefix_internal",
+          "base": "mismatch",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_creole_arial_markup",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_creole_composite_title",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_creole_decorations_courier",
+          "base": "mismatch",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_creole_escape_and_newline",
+          "base": "mismatch",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_creole_mixed_verdana",
+          "base": "mismatch",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_creole_multiline_desc",
+          "base": "mismatch",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_creole_plain_arial",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_creole_plain_courier",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_creole_plain_star_slash",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_cross_after_separator",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "6",
+          "rust_line": "6",
+          "java_message": "The state g5ckSpelt cannot be used here.",
+          "rust_message": "The state g5ckSpelt cannot be used here."
+        },
+        {
+          "name": "g5ck_cross_sibling_regions",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "5",
+          "rust_line": "5",
+          "java_message": "The state g5ckMidden cannot be used here.",
+          "rust_message": "The state g5ckMidden cannot be used here."
+        },
+        {
+          "name": "g5ck_dash_separator_intra",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_decl_again_outside",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "5",
+          "rust_line": "5",
+          "java_message": "The state g5ckMidden has been created in a concurrent state : it cannot be used here.",
+          "rust_message": "The state g5ckMidden has been created in a concurrent state : it cannot be used here."
+        },
+        {
+          "name": "g5ck_field_from_outside",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_fork_cross_region",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "6",
+          "rust_line": "6",
+          "java_message": "The state g5ckFork cannot be used here.",
+          "rust_message": "The state g5ckFork cannot be used here."
+        },
+        {
+          "name": "g5ck_fork_join_choice_inside",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_forward_decl_other_region",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "2",
+          "rust_line": "2",
+          "java_message": "The state g5ckMidden cannot be used here.",
+          "rust_message": "The state g5ckMidden cannot be used here."
+        },
+        {
+          "name": "g5ck_forward_same_region",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_history_cross",
+          "base": "both_reject_different_message",
+          "tip": "both_reject_different_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "1",
+          "rust_line": "5",
+          "java_message": "Syntax Error?",
+          "rust_message": "The state g5ckMidden cannot be used here."
+        },
+        {
+          "name": "g5ck_history_inside_region",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_link_after_region0",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_link_before_plain_composite",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_link_before_region",
+          "base": "both_reject_different_message",
+          "tip": "both_reject_different_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "1",
+          "rust_line": "1",
+          "java_message": "Syntax Error?",
+          "rust_message": "The state g5ckSpelt cannot be used here."
+        },
+        {
+          "name": "g5ck_nested_cross_to_deep",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "7",
+          "rust_line": "7",
+          "java_message": "The state g5ckDeep cannot be used here.",
+          "rust_message": "The state g5ckDeep cannot be used here."
+        },
+        {
+          "name": "g5ck_nested_inside_region",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_note_inside_region",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_pipe_cross",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "6",
+          "rust_line": "6",
+          "java_message": "The state g5ckSpelt cannot be used here.",
+          "rust_message": "The state g5ckSpelt cannot be used here."
+        },
+        {
+          "name": "g5ck_pipe_separator_intra",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_qualified_into_region2",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_qualified_region0",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_reenter_from_region2",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "4",
+          "rust_line": "4",
+          "java_message": "The state g5ckQuern cannot be used here.",
+          "rust_message": "The state g5ckQuern cannot be used here."
+        },
+        {
+          "name": "g5ck_reenter_region0_group",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_reenter_short_name",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_region0_from_outside",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "g5ck_star_both_regions",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        }
+      ]
+    },
+    "CV": {
+      "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-cv/reference-results.json",
+      "reference_results_sha256": "f206e324c7cc70028daee62887afc231669fd66c1644dfe97b4863a88dde1957",
+      "bundle": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-cv/reference-input-bundle.json.gz",
+      "bundle_sha256": "611cff793e04cb9330a2378668356f478f0159593b2336aed94980a37c377649",
+      "tip_counts": {
+        "match": 11,
+        "both_reject_same_message": 2
+      },
+      "base_counts": {
+        "over_rejection": 2,
+        "match": 3,
+        "both_reject_same_message": 2,
+        "mismatch": 6
+      },
+      "retained_safe": 5,
+      "losses": 0,
+      "pairs": [
+        {
+          "name": "region_user_concourse",
+          "base": "over_rejection",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "region_user_conc4",
+          "base": "over_rejection",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "region_user_concurrent_hall",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "region_synthetic_repeat",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "4",
+          "rust_line": "4",
+          "java_message": "The state Bolt has been created in a concurrent state : it cannot be used here.",
+          "rust_message": "The state Bolt has been created in a concurrent state : it cannot be used here."
+        },
+        {
+          "name": "region_user_conc_beside_separator",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "9",
+          "rust_line": "9",
+          "java_message": "The state Pier cannot be used here.",
+          "rust_message": "The state Pier cannot be used here."
+        },
+        {
+          "name": "newline_bold_second_row",
+          "base": "mismatch",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "newline_tilde_then_plain",
+          "base": "mismatch",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "newline_right_aligned_row",
+          "base": "mismatch",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "desc_newline_italic",
+          "base": "mismatch",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "baseline_courier_three",
+          "base": "mismatch",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "baseline_arial_size_mix",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "baseline_verdana_back_and_font",
+          "base": "mismatch",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "baseline_sans_two_rows",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        }
+      ]
+    },
+    "CW": {
+      "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-cw/reference-results.json",
+      "reference_results_sha256": "1fad4e1c1460cb2b14e052cf3f8ea7426862c02e94507eb8b1d4091e5e6d45d6",
+      "bundle": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-cw/reference-input-bundle.json.gz",
+      "bundle_sha256": "adf935a5a8a7469d10c08953b8f6463c140e39011567292ec34594140f467716",
+      "tip_counts": {
+        "match": 1
+      },
+      "base_counts": {
+        "over_rejection": 1
+      },
+      "retained_safe": 0,
+      "losses": 0,
+      "pairs": [
+        {
+          "name": "region0_child_named_conc2",
+          "base": "over_rejection",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        }
+      ]
+    },
+    "CF": {
+      "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-state/reference-results.json",
+      "reference_results_sha256": "972b23a6ac582160acb8d1e145739962ea8e27094c9558bc3fd25393366b2cfb",
+      "bundle": "/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g5-state/reference-input-bundle.json.gz",
+      "bundle_sha256": "f6b284203c1d7eb07532976aee1ddb5a8bcb7ef3dee9760faa341c3c94d7486e",
+      "tip_counts": {
+        "match": 5,
+        "both_reject_same_message": 5
+      },
+      "base_counts": {
+        "match": 5,
+        "both_reject_same_message": 5
+      },
+      "retained_safe": 10,
+      "losses": 0,
+      "pairs": [
+        {
+          "name": "creole_verdana_kiln",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "creole_courier_grate",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "creole_verdana_field",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "holdout_crossing_stoke",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "6",
+          "rust_line": "6",
+          "java_message": "The state Flame cannot be used here.",
+          "rust_message": "The state Flame cannot be used here."
+        },
+        {
+          "name": "holdout_decl_flame",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "5",
+          "rust_line": "5",
+          "java_message": "The state Flame has been created in a concurrent state : it cannot be used here.",
+          "rust_message": "The state Flame has been created in a concurrent state : it cannot be used here."
+        },
+        {
+          "name": "holdout_region_sibling",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "4",
+          "rust_line": "4",
+          "java_message": "The state Ash cannot be used here.",
+          "rust_message": "The state Ash cannot be used here."
+        },
+        {
+          "name": "holdout_stroke_rebeccapurple",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "1",
+          "rust_line": "1",
+          "java_message": "No such color",
+          "rust_message": "No such color"
+        },
+        {
+          "name": "holdout_fill_unknown",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "1",
+          "rust_line": "1",
+          "java_message": "No such color",
+          "rust_message": "No such color"
+        },
+        {
+          "name": "holdout_valid_colors",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "holdout_field_on_concurrent",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        }
+      ]
+    },
+    "AU": {
+      "relay": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-checker-c1/reference-results.json",
+      "reference_results_sha256": "44959f34ee5ecaa773827942b7e46fa98a66de7821a0abe946b66808f2a51c60",
+      "bundle": "/Users/marcelo/Library/Caches/rustuml-relay-parent/shared-svg-checker-c1/reference-input-bundle.json.gz",
+      "bundle_sha256": "cdb7bbc0b5a9b0eec973a6e96384badbe282f2c1ee96377b6a0d1cde59783602",
+      "tip_counts": {
+        "both_reject_same_message": 2,
+        "match": 20,
+        "mismatch": 9,
+        "under_rejection": 1
+      },
+      "base_counts": {
+        "both_reject_same_message": 2,
+        "match": 20,
+        "mismatch": 9,
+        "under_rejection": 1
+      },
+      "retained_safe": 22,
+      "losses": 0,
+      "pairs": [
+        {
+          "name": "cluster_concurrent_crossing",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "6",
+          "rust_line": "6",
+          "java_message": "The state Blow cannot be used here.",
+          "rust_message": "The state Blow cannot be used here."
+        },
+        {
+          "name": "cluster_entry_inside_autarkic",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "cluster_inputpin_mixed_case",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "cluster_root_note_on_inner",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "delay_legacy_empty",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "delay_legacy_lead1",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "delay_legacy_lead2_creole",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "delay_legacy_multiline",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "delay_legacy_plain0",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "delay_teoz_empty",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "delay_teoz_lead3",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "delay_teoz_lead3_multiline",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "deploy_alias_direction_matrix",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "deploy_nested_alias_reverse",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "history_external_suffix_form",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "raw_blank_before_start",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "raw_crlf_one_blank",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "raw_include_leading_blanks",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "raw_multi_blank_first_block",
+          "base": "under_rejection",
+          "tip": "under_rejection",
+          "java_exit": 200,
+          "rust_exit": 0,
+          "java_line": "1",
+          "rust_line": "",
+          "java_message": "Empty description",
+          "rust_message": ""
+        },
+        {
+          "name": "raw_sequence_two_blanks",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "raw_trailing_blanks",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "raw_unit_test_input",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "raw_whitespace_only_lines",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "stroke_arrow_skinparam_transparent",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "stroke_per_arrow_css4",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "stroke_per_state_css4",
+          "base": "both_reject_same_message",
+          "tip": "both_reject_same_message",
+          "java_exit": 200,
+          "rust_exit": 1,
+          "java_line": "1",
+          "rust_line": "1",
+          "java_message": "No such color",
+          "rust_message": "No such color"
+        },
+        {
+          "name": "stroke_stereo_skinparam_css4",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "stroke_stereo_style_css4",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "stroke_zero_alpha_nonblack",
+          "base": "match",
+          "tip": "match",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "theme_mono_class",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "theme_plain_class_note",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        },
+        {
+          "name": "theme_plain_sequence",
+          "base": "mismatch",
+          "tip": "mismatch",
+          "java_exit": 0,
+          "rust_exit": 0,
+          "java_line": "",
+          "rust_line": "",
+          "java_message": "",
+          "rust_message": ""
+        }
+      ]
+    }
+  },
+  "goldens": {
+    "no_oracle": "11181/11251 eligible pairs pass per family",
+    "no_oracle_exit": 0,
+    "golden_pairs": "12550 total, 10497 passed, 754 failed, 1299 skipped",
+    "golden_pairs_exit": 101,
+    "no_oracle_failure_names": {
+      "previous": 70,
+      "tip": 70,
+      "tip_only": 0,
+      "fixed": 0
+    },
+    "golden_pairs_failure_names": {
+      "previous": 754,
+      "tip": 754,
+      "tip_only": 0,
+      "fixed": 0
+    },
+    "baseline_bumped": false
+  },
+  "perturbations": {
+    "puml": 6365,
+    "both_match": 3703,
+    "both_nonmatch": 2624,
+    "losses": 0,
+    "gains": 38,
+    "gain_rounds": {
+      "checker-claude-round10": 10,
+      "checker-claude-round11": 28
+    },
+    "no_svg": 0,
+    "errors": 0,
+    "retained": "The whole perturbation tree was compared. Zero tip-only losses, so the retained corpus has zero losses."
+  },
+  "held_out_batch": {
+    "path": "/Users/marcelo/Library/Caches/rustuml-grok-g5/batch-g5e",
+    "manifest_sha256": "81c307e6c57e4de9dd98a94923c436a9fb4546997fbc38205713c0e9841b789c",
+    "bundle_sha256": "5fcac6383a33efe44caa639d9715361961bbaa3896781ac18e9de5e72abee09e",
+    "predictions_sha256": "decb0315685b0fe6aab8912e461f4a50dc69f0fc81f591401a7a5c8f660cecc8",
+    "tree": "ef5b89027f4c2b4dd6f3b472f8d6ec11a7cff2de",
+    "java": "not run",
+    "cases": 10
+  },
+  "residue": [
+    "g5ck_color_note_rebeccapurple under_rejection",
+    "g5ck_color_hex_forms under_rejection",
+    "g5ck_qualified_into_region2 mismatch",
+    "g5ck_history_cross and g5ck_link_before_region both_reject_different_message",
+    "g5ck_color_name_case HColorAutomagic crash on the Java side as recorded",
+    "g5ck_creole_plain_courier mismatch",
+    "g5ck_reenter_short_name canvas delta 2.88, not fitted"
+  ]
+}
