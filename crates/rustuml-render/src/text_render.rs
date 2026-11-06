@@ -43,7 +43,8 @@ pub struct TextBase<'a> {
     /// Whether the base text is italic.
     pub italic: bool,
     /// Whether the base text is underlined (e.g. static class members).
-    /// OR-merged with any creole-driven underline on the segment style.
+    /// OR-merged with creole underline, except an atom that owns its
+    /// `FontConfiguration` (`Style::owns_font_configuration`).
     pub underline: bool,
     /// When true, treat `__` as literal (class-entity labels).
     pub skip_underline: bool,
@@ -594,6 +595,30 @@ fn trim_segment_for_emit(seg: &Segment, base: &TextBase<'_>) -> (f64, String, f6
     trim_text_for_emit(&seg.text, &seg.style, base)
 }
 
+fn effective_bold(style: &Style, base: &TextBase<'_>) -> bool {
+    if style.owns_font_configuration {
+        style.bold
+    } else {
+        base.bold || style.bold
+    }
+}
+
+fn effective_italic(style: &Style, base: &TextBase<'_>) -> bool {
+    if style.owns_font_configuration {
+        style.italic
+    } else {
+        base.italic || style.italic
+    }
+}
+
+fn effective_underline(style: &Style, base: &TextBase<'_>) -> bool {
+    if style.owns_font_configuration {
+        style.underline
+    } else {
+        style.underline || base.underline
+    }
+}
+
 fn trim_text_for_emit(text: &str, style: &Style, base: &TextBase<'_>) -> (f64, String, f64) {
     // Monospace segments use NBSP instead of ASCII space; PlantUML does
     // not trim NBSP, so pass through unchanged.
@@ -626,8 +651,8 @@ fn trim_text_for_emit(text: &str, style: &Style, base: &TextBase<'_>) -> (f64, S
         return (0.0, text.to_string(), w);
     }
     let trimmed = &text[lead..text.len() - trail];
-    let bold = base.bold || style.bold;
-    let italic = base.italic || style.italic;
+    let bold = effective_bold(style, base);
+    let italic = effective_italic(style, base);
     let font_size = effective_font_size_for_style(style, base);
     let family = style_metric_family(style, base);
     let lead_w = family_text_width(&" ".repeat(lead), font_size, bold, italic, family);
@@ -650,8 +675,8 @@ fn segment_width(seg: &Segment, base: &TextBase<'_>) -> f64 {
 
 fn text_width_for_style(text: &str, style: &Style, base: &TextBase<'_>) -> f64 {
     let raw = unescape_for_metrics(text);
-    let bold = base.bold || style.bold;
-    let italic = base.italic || style.italic;
+    let bold = effective_bold(style, base);
+    let italic = effective_italic(style, base);
     let font_size = effective_font_size_for_style(style, base);
     family_text_width(
         &raw,
@@ -725,8 +750,8 @@ fn emit_tabbed_segment(
 
 fn tab_stop_width(style: &Style, base: &TextBase<'_>) -> f64 {
     let font_size = effective_font_size_for_style(style, base);
-    let bold = base.bold || style.bold;
-    let italic = base.italic || style.italic;
+    let bold = effective_bold(style, base);
+    let italic = effective_italic(style, base);
     family_text_width(
         &" ".repeat(TAB_STOP_SPACES),
         font_size,
@@ -1474,8 +1499,8 @@ fn write_text_element(
     width: f64,
     line_bottom_drop: f64,
 ) {
-    let bold = base.bold || style.bold;
-    let italic = base.italic || style.italic;
+    let bold = effective_bold(style, base);
+    let italic = effective_italic(style, base);
     // `<font:Courier>` sets both `style.font_family` AND `style.monospace`
     // (so widths use monospace metrics and spaces become NBSP), but the
     // emitted `font-family` attribute must carry the user-supplied name —
@@ -1539,7 +1564,7 @@ fn write_text_element(
         .unwrap_or_default();
 
     let mut decorations: Vec<&str> = Vec::new();
-    if style.underline || base.underline {
+    if effective_underline(style, base) {
         decorations.push("underline");
     }
     if style.line_through {
@@ -1699,6 +1724,30 @@ mod tests {
             assert_eq!(output.matches("<text ").count(), 2);
             assert!(!output.contains(">fir</text>"));
         }
+    }
+
+    #[test]
+    fn image_fallback_keeps_its_own_plain_configuration() {
+        let mut style = base(0.0, 20.0);
+        style.bold = true;
+        style.italic = true;
+        style.underline = true;
+        let mut buf = String::new();
+        emit_text(&mut buf, "a<img:absent.png>b", &style);
+        let fallback = buf
+            .split("<text ")
+            .find(|element| element.contains("Cannot"))
+            .expect("missing-image atom");
+        assert!(fallback.contains(r#"font-family="monospace""#));
+        assert!(fallback.contains(r#"font-size="14""#));
+        assert!(!fallback.contains(r#"font-weight="700""#));
+        assert!(!fallback.contains(r#"font-style="italic""#));
+        assert!(!fallback.contains("text-decoration"));
+        assert!(buf.contains(r#"font-weight="700""#));
+        assert!(buf.contains(r#"font-style="italic""#));
+        let mut plain = String::new();
+        emit_text(&mut plain, "<U+00E9>", &base(0.0, 20.0));
+        assert!(plain.contains(">\u{00e9}</text>"));
     }
 
     #[test]

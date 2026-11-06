@@ -1,0 +1,7 @@
+@startuml
+title G6R3 title 􏿿&#1114111;&#1112063;Q
+participant "G6R3 Part &#1114111;" as P
+actor "G6R3 Act 􏟿" as A
+P -> A : G6R3 msg [[https://example.com/g6r3{G6R3 tip &#1112064;􏿿} G6R3 lab &#1114111;]]
+note over P : G6R3 note 􏿽&#1114109;
+@enduml

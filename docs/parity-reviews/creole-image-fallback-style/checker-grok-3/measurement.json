@@ -1,0 +1,119 @@
+{
+  "images": [
+    {
+      "name": "checker-independent-ae47/image_activity_base_bold",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "checker-independent-ae47/image_activity_plain_base",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "checker-independent-ae47/image_class_base_bold",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "checker-independent-ae47/image_class_plain_base",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "checker-independent-ae47/image_note_base_bold",
+      "cmp": "DIFF",
+      "nd": "8"
+    },
+    {
+      "name": "checker-independent-ae47/image_note_plain_base",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "checker-independent-ae47/image_sequence_base_bold",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "checker-independent-ae47/image_sequence_base_italic",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "checker-independent-ae47/image_sequence_plain_base",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "checker-independent-ae47/image_state_base_bold",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "checker-independent-ae47/image_state_plain_base",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "checker-independent-ae47/image_title_default_bold",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "checker-independent-ae47/image_wbs_base_bold",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "checker-independent-ae47/image_wbs_plain_base",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "maker16/image_base_bold",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "maker16/image_markup_config",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "maker16/image_markup_faces",
+      "cmp": "MATCH",
+      "nd": "0"
+    },
+    {
+      "name": "maker16/image_plain_scale",
+      "cmp": "MATCH",
+      "nd": "0"
+    }
+  ],
+  "note_miss": "image_note_base_bold DIFF 8, identical stdout on both binaries",
+  "bin_base_sha256": "789d263012cd97cb85da8d8d3ab3c49f64d2af66fb7b32c9e7bd00887ffac16b",
+  "bin_tip_sha256": "25acb3fe25aafaf5fb3377f88b8aed598ddd6f7278fc9eccff251025878ab175",
+  "base_revision": "8d294442f4d88aed3f1c353a9766045fc90f2a7c",
+  "implementation_commit": "3f6bf7a7332da0ad85dbc514d4af665f82920632",
+  "gates": {
+    "lib": "exit 0",
+    "golden_no_oracle": "exit 0; family counts match test-diagrams/no_oracle_baseline.txt",
+    "golden_pairs": "exit 101; 10497 passed, 754 failed, 1299 skipped, of 12550; panics 0. Goldens are stdout-identical to merge base 8d294442f, so this failure set is the base set.",
+    "parity_perturbations": "exit 101 on the standing corpus. The seven checker-grok-3 pairs are absent from the failure list. cr_ent_dec_10fffd is listed for its one fill mismatch.",
+    "harness_guards": {
+      "comparator_constants_frozen": "pass",
+      "parity_review_paths_reject_traversal": "pass",
+      "no_golden_data_embedded_in_shipping_crates": "pass",
+      "no_label_keyed_width_constants": "pass",
+      "error_golden_census_is_frozen": "pass",
+      "decimal_literal_ratchet": "fail on class.rs 383->578, deployment.rs 43->44, plantuml_metrics.rs 1053->1055, state.rs 53->61. creole.rs is not listed. Those four files are unchanged from 8d294442f.",
+      "parity_review_records_are_complete": "fail on other mechanisms. Neither of these review-3 files is named."
+    },
+    "doc_claims": "exit 0; 2 passed",
+    "pipe_mode": "exit 0; 17 passed",
+    "clippy": "exit 0. No warning is in creole.rs. The warnings are the pre-existing parser dead_code, one layout test item, and 19 rustuml-render notes in other files."
+  },
+  "verdict": "accepted",
+  "accept_ready": true
+}

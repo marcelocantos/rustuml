@@ -1,0 +1,4 @@
+@startuml
+!$h=%substr("🚀",0,1)
+class "$h􏿿G6R3" as HighRaw
+@enduml
