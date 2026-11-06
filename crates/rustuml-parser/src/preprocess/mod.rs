@@ -1284,11 +1284,17 @@ impl PreprocessContext {
             // BlockUmlBuilder closes the block at the first line for which
             // StartUtils#isEndDirective holds ('@' or '\\' then `end`), so a
             // `\enduml` line is the block's end line and Pipe's appended
-            // `@enduml` lies outside the block. Procedure bodies (a local
-            // scope) are not block lines.
-            if trimmed.starts_with("@end")
-                || (self.in_diagram_block && self.local_vars.is_empty() && is_end_directive(line))
-            {
+            // `@enduml` lies outside the block. The test reads the line as
+            // BlockUmlBuilder does (before removeInnerComment) and skips
+            // only Character#isWhitespace, for '@' and '\\' alike.
+            // Procedure bodies (a local scope) are not block lines; outside
+            // the block and for their lines the trimmed `@end` test stays.
+            let ends_block = if self.in_diagram_block && self.local_vars.is_empty() {
+                is_end_directive(line)
+            } else {
+                trimmed.starts_with("@end")
+            };
+            if ends_block {
                 // An unterminated !procedure, !function or !definelong
                 // definition takes the end line as body text
                 // (CodeIteratorProcedure#peek, CodeIteratorReturnFunction#peek):
@@ -7207,6 +7213,20 @@ $record(SaffronArchive)\n\
         }
         assert!(is_end_directive("\u{1f}\\enduml"));
         assert!(!is_end_directive("\u{85}\\enduml"));
+        // The `@` form reads the block line too: no U+0085 or no-break space
+        // before it, and no inner comment.
+        for line in ["\u{85}@enduml", "\u{a0}@enduml", "/' c '/ @enduml"] {
+            let out = preprocess_full_for_parse(
+                &format!("@startuml\nKea -> Tui : one\n{line}\nTui -> Kea : two\n@enduml"),
+                None,
+            );
+            assert!(
+                strip_source_line_markers(out.lines)
+                    .iter()
+                    .any(|l| l == "Tui -> Kea : two"),
+                "{line:?}"
+            );
+        }
     }
 
     #[test]
