@@ -1,0 +1,11 @@
+@startuml
+skinparam defaultFontName Helvetica
+<style>
+component {
+  FontStyle italic
+  FontWeight bold
+}
+</style>
+component "buzz kink" as E0
+component "lazy quiz" as E1
+@enduml

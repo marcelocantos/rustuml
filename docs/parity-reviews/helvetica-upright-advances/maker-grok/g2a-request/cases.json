@@ -1,0 +1,12 @@
+{
+  "cases": [
+    {"name": "g2_hv_plain_quote_w", "intended_valid": true, "axes": ["helvetica", "plain", "apostrophe", "W", "percent"]},
+    {"name": "g2_hv_bold_kz", "intended_valid": true, "axes": ["helvetica", "bold", "k", "z"]},
+    {"name": "g2_hv_italic_quote_w", "intended_valid": true, "axes": ["helvetica", "italic", "apostrophe", "W", "percent"]},
+    {"name": "g2_hv_bolditalic_kz", "intended_valid": true, "axes": ["helvetica", "bolditalic", "k", "z"]},
+    {"name": "g2_hv_plain_alice", "intended_valid": true, "axes": ["helvetica", "plain", "unchanged-letters"]},
+    {"name": "g2_vd_quote_w", "intended_valid": true, "axes": ["verdana", "control"]},
+    {"name": "g2_ar_quote_w", "intended_valid": true, "axes": ["arial", "control"]},
+    {"name": "g2_ss_quote_w", "intended_valid": true, "axes": ["sans", "control"]}
+  ]
+}
