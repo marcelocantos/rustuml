@@ -1905,6 +1905,10 @@ pub(crate) fn advance(ch: char, font_size: f64) -> Option<f64> {
         .binary_search_by_key(&(ch as u32), |row| row.scalar)
         .ok()?;
     let row = &FALLBACK[idx];
+    // Every extracted row names the PostScript face. An empty name is not a row.
+    if row.face.is_empty() {
+        return None;
+    }
     Some(f64::from(row.units) * font_size / (f64::from(row.units_den) * f64::from(row.upem)))
 }
 
