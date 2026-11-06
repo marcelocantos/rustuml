@@ -1,0 +1,2912 @@
+{
+ "schema_version": 1,
+ "mechanism": "sprite-command-post-tim-ownership",
+ "account_commit": "9ee6c154c9582008f5c9bafefc7c4c2191681913",
+ "implementation_commit": "9ed52f4357c7d5af2fac06b340170c73eaad7800",
+ "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+ "reviewer": {
+  "task_id": "T3 thread t3-1ec8f45b, branch review/tim-continuation-round4-claude",
+  "model": "claude-opus-5-5"
+ },
+ "commands": [
+  "git switch -c review/tim-continuation-round4-claude fa3f95010; golden submodule hydrated with --reference at 9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "checker-claude-round4/support/build.sh and build_pr.sh: git archive 9ed52f435 / 1f6ffa9f4 / 93bf53e18 / 9834a7194 / cb550c0d6, one private CARGO_TARGET_DIR each, deleted after the binary was saved; compare_cli from unchanged source against 93bf53e18's rustuml_oracle (binaries.sha256)",
+  "pre-registration a01ab9853: gen_probes_cr4.py, stage_cr4.py, predict_rust_cr4.py (batch CR4, relayed as CC, reference-results 2f6b7b68...)",
+  "prepare.py (unchanged) for CB and CC; verify_fresh_r4.py (round-3 script plus the CB/CC reference dirs): 0 bad rows; brief rule applied: Java exit 100/50 invalid (cr4_cnt_pragma_continued_end)",
+  "run_all.sh: unchanged replay.py, 4 modes, each case from its recorded cwd, every cohort at 4 builds; cb550c0d6 replayed on CB, CC, CA..AT, the 915, retained and golden",
+  "summarize_r4.py (round-3 summarizer plus the T14.63 welcome-match overlay); merge3.py and merge3_outcomes.py (three-way merge fidelity: ancestor 9834a7194 = code of merge-base adf56ce53, sprite side d28dd64a9 from the round-3 checker runs, parity-recovery side cb550c0d6)",
+  "rejection_contract.py (unchanged) per cohort against 1f6ffa9f4, 93bf53e18, 9834a7194 and cb550c0d6",
+  "gates.sh: workspace lib, pipe_mode, golden_no_oracle, golden_pairs, parity_perturbations, harness_guards at the tip; the four oracle tests at 1f6ffa9f4; pipe_mode at cb550c0d6; parity_perturbations once more after registration"
+ ],
+ "findings": [
+  "WHOLE-LINE VERDICT: NOT MERGEABLE (round-4 addendum to review-7). The sprite/participant line carried by maker tip fa3f95010 (code 9ed52f435) still fails the merge-fidelity check of the parity-recovery merge 1f6ffa9f4. Two registered pairs of this mechanism, ck4_ebnf_trailing and ck4_tim_definelong_body, matched at the round-3 tip d28dd64a9 and fail at 1f6ffa9f4 and the tip: the merge kept parity-recovery's EBNF exemption from StringLocated#removeInnerComment, and buffers definelong bodies from the raw line, whereas Java's CodeIteratorInnerComment applies it to every line. A third merge loss, tc1_seq_theme_local_postjoin (a local theme body with a continuation), is a valid-input error although both parents render it. Details: ../tim-line-continuation/review-4.json and checker-claude-round4/.",
+  "Against pre-packet 93bf53e18 at the tip: no lost matches in any fresh or retained cohort. The golden lost matches act_skinparam2_shadowing_true, act_skinparam_shadowing and edge_whitespace_multiple_blank_lines are inherited from parity-recovery (cb550c0d6 mismatches all three). Lost rejections: ck3_svg_inline_quoted_apostrophe_seq (T14.32), mc1_seq_foreach_body (T14.52) and golden preproc_foreach_nested ('!endforeach'; rejected only by accident at 93bf53e18). Each is accepted at 9834a7194 and at cb550c0d6. The rejection contract also lists 5 reproduced Java Welcome pages (T14.63 matches): cr3_two_double_tail, cr3_two_activity_tail, mr3_seq_bad_tail_then_end, mr3_seq_tail_then_backslash_end_then_text, cr2_seq_tail_then_backslash_end. New valid-input errors: tc1_seq_theme_local_postjoin (merge) and r2_component_include_tail_then_variable (T14.21).",
+  "Against parity-recovery 9834a7194 and its head cb550c0d6: no lost rejections. Lost matches: cr4_inc_yaml_header_raw against cb550c0d6 only (an accidental match; ReadLineWithYamlHeader is unported in every tree). Lost Welcome match: cr4_cnt_exit_alone (!exit). New valid-input errors: the approved 13 retained (identical); 10 of the known 11 fresh (ck4_seq_divider_trailing now matches); CA cr3_end_tim_chr64_enduml, cr3_end_tim_chr92_enduml and cr3_wrap_first_is_mindmap; r2_component_include_tail_then_variable; cr2_seq_pre_start_backslash_text; tc1_seq_theme_local_postjoin; and 12 CC sources (cr4_exit_mid, cr4_ws_ideo_exit, cr4_main_bom_line2, cr4_main_bom_before_directive, cr4_main_endash_arrow, cr4_inc_cr_only_lines, cr4_inc_yaml_header_raw, cr4_sfx_include_many, cr4_hdr_u16_cyrillic_tje, cr4_hdr_u16_latin_a7cb, cr4_hdr_u17_latin_a7ce, cr4_hdr_u17_arabic_088f). Every one of these is an error at 93bf53e18 or at the merged base as well, so none comes from the round-4 code.",
+  "Resolved since round 3: T14.33 (mk4_tim_sprite_in_procedure, ck4_procedure_sprite_end_comment_two and the ck4 control match). The round-3 packet causes (pragma count, NEL, count-1 sources) are fixed; CA cr3_dir_pragma_* and cr3_end_us_before_bs_end now pass as registered pairs.",
+  "Panics: only the unchanged --yaml set (retained 63, golden 148) at the tip, 1f6ffa9f4 and 93bf53e18; 9834a7194 has 72/160. Timeouts: 0."
+ ],
+ "verdict": "rejected",
+ "record": "docs/parity-reviews/tim-line-continuation/checker-claude-round4/",
+ "perturbations": [
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity3_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity3_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity3_note_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity3_note_body.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity_legacy_long_link_arrow_label.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity_legacy_long_link_arrow_label.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity_legacy_note_on_link_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity_legacy_note_on_link_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity_legacy_partition_note.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_activity_legacy_partition_note.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_block_comment_inside_pixel_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_block_comment_inside_pixel_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_class_enum_upper_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_class_enum_upper_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_class_generic_extends_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_class_generic_extends_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_class_map_then_sprite_lookalike.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_class_map_then_sprite_lookalike.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_legend_nested_header_text.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_legend_nested_header_text.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_note_as_stereo_color.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_note_as_stereo_color.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_note_left_of_bracket_code.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_note_left_of_bracket_code.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_note_of_color_url.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_note_of_color_url.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_skinparam_block_sprite_line.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_skinparam_block_sprite_line.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_type1_stereo_color_url.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_component_type1_stereo_color_url.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_deployment_style_block_sprite_line.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_deployment_style_block_sprite_line.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_gantt_title_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_gantt_title_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_lookalike_leak_then_message_seq.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_lookalike_leak_then_message_seq.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_lookalike_leak_then_note_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_lookalike_leak_then_note_component.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_mindmap_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_mindmap_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_multi_diagram_header_then_sprite.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_multi_diagram_header_then_sprite.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_object_quoted_as_color_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_object_quoted_as_color_body.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_body_inner_comment_seq.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_body_inner_comment_seq.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_end_inner_comment_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_end_inner_comment_class.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_end_inner_comment_seq.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_end_inner_comment_seq.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_start_inner_comment_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_pixel_start_inner_comment_deployment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_seq_ref_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_seq_ref_body.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_activity3.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_activity3.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_class.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_endsub_in_false_if_seq.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_endsub_in_false_if_seq.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_gantt.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_gantt.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_in_procedure_seq.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_in_procedure_seq.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_in_uninvoked_procedure_seq.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_in_uninvoked_procedure_seq.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_in_while_seq.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_in_while_seq.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_mindmap.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_mindmap.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_salt.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_salt.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_timing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_startsub_timing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_state_header_embedded_end_lookalike.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_state_header_embedded_end_lookalike.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_state_note_bracket_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_state_note_bracket_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_state_note_left_of_color.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_state_note_left_of_color.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_body_inner_comment_seq.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_body_inner_comment_seq.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_nospace_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_nospace_component.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_state.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_state.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_usecase.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_end_inner_comment_usecase.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_inline_inner_comment_object.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_inline_inner_comment_object.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_start_inner_comment_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_svg_start_inner_comment_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_timing_legend_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_timing_legend_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_usecase_note_top_of_paren.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_usecase_note_top_of_paren.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_wbs_caption_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck3_wbs_caption_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_activity3_comment_then_backslash.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_activity3_comment_then_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_activity3_if_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_activity3_if_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_activity_legacy_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_activity_legacy_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_body_member_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_body_member_leading.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_comment_then_backslash.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_comment_then_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_continuation_next_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_continuation_next_leading.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_note_multiline.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_note_multiline.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_relation_label.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_relation_label.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_special_in_name.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_class_special_in_name.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_component_bracket_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_component_bracket_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_component_comment_then_backslash.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_component_comment_then_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_ctl_procedure_four_classes.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_ctl_procedure_four_classes.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_ctl_procedure_sprite_nocomment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_ctl_procedure_sprite_nocomment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_ebnf_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_ebnf_trailing.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_gantt_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_gantt_leading.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_json_leading_member.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_json_leading_member.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_mindmap_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_mindmap_leading.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_object_field_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_object_field_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_procedure_sprite_end_comment_two.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_procedure_sprite_end_comment_two.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_apostrophe_word_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_apostrophe_word_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_comment_only_then_msg.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_comment_only_then_msg.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_next_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_continuation_next_leading.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_creole_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_creole_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_crlf_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_crlf_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_divider_end_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_divider_end_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_divider_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_divider_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_double_trailing_top.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_double_trailing_top.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_leading_space_trailing_spaces.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_leading_space_trailing_spaces.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_note_inline_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_note_inline_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_note_multiline_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_note_multiline_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_quote_slash_no_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_quote_slash_no_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_quoted_then_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_quoted_then_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_skinparam_block.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_skinparam_block.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_title_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_title_leading.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_trailing_slash_quote_only.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_trailing_slash_quote_only.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_triple_in_quotes.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_triple_in_quotes.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_triple_name.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_triple_name.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_url_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_seq_url_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_state_body_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_state_body_leading.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_state_comment_then_backslash.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_state_comment_then_backslash.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_define_value_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_define_value_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_definelong_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_definelong_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_foreach_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_foreach_body.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_function_return_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_function_return_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_if_else_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_if_else_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_procedure_double_leading.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_procedure_double_leading.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_procedure_double_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_procedure_double_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_startsub_inplace_double.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_startsub_inplace_double.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_var_string_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_var_string_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_while_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_tim_while_body.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_timing_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_timing_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_usecase_leading_actor_line.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_usecase_leading_actor_line.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_wbs_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_wbs_trailing.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_yaml_trailing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck4_yaml_trailing.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_legend_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_legend_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_note_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_note_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_note_brace.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_activity_legacy_note_brace.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_floating_note_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_floating_note_body.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_header_body.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_legend_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_class_legend_body.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_bracket_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_bracket_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_bracket_lower.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_bracket_lower.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_footer_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_footer_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_component_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_bracket_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_bracket_upper.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_footer_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_footer_upper.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_node_bracket_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_deployment_node_bracket_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_ditaa_sprite_text.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_ditaa_sprite_text.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_nosub_sprite_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_nosub_sprite_deployment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_object_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_object_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_object_legend_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_object_legend_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_seq_header_body_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_seq_header_body_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_startsub_sprite_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_startsub_sprite_class.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_startsub_sprite_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_startsub_sprite_deployment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_legend_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_legend_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_title_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_state_title_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_class.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_component.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_end_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_mid_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_apos_mid_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_class.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_svg_body_trailing_after_end_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_usecase_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_usecase_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_usecase_rectangle_bracket_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_usecase_rectangle_bracket_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_yaml_block_sprite_text.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/ck_yaml_block_sprite_text.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_activity_note_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_activity_note_upper.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_aggregation_label.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_aggregation_label.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_bare_sprite.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_bare_sprite.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_dotted.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_dotted.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_link_lower.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_link_lower.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_link_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_link_upper.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_member_brace.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_member_brace.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_member_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_member_upper.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_note_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_class_note_upper.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_component_link_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_component_link_upper.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_component_note_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_component_note_upper.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_object_link_lower.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_object_link_lower.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_object_link_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_object_link_upper.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_dollar_sprite_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_dollar_sprite_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_dollar_sprite_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_dollar_sprite_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_sprite_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_sprite_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_sprite_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_bare_sprite_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_attr_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_attr_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_attr_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_attr_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_apostrophe_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_trailing_comment_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_trailing_comment_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_trailing_comment_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_inline_svg_trailing_comment_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_legend_upper_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_legend_upper_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_legend_upper_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_legend_upper_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_dashed_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_dashed_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_dashed_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_dashed_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_msg_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_msg_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_msg_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_lower_participant_msg_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_lower_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_lower_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_lower_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_lower_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_brace_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_caps_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_caps_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_caps_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_caps_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_lower_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_lower_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_lower_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_lower_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_upper_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_upper_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_upper_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_note_upper_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_ref_upper_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_ref_upper_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_ref_upper_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_seq_ref_upper_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_state_note_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_state_note_upper.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_usecase_link_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/cl_usecase_link_upper.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_activity_note_svg.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_activity_note_svg.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_class_member_svg.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_class_member_svg.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_class_top_level_text.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_class_top_level_text.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_component_legend_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_component_legend_upper.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_component_top_level_text.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_component_top_level_text.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_compressed_bad_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_compressed_bad_class.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_deployment_note_brace.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_deployment_note_brace.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_else_branch_pixel_seq_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_else_branch_pixel_seq_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_else_branch_pixel_seq_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_else_branch_pixel_seq_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_empty_pixel_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_empty_pixel_class.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_graylevel_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_graylevel_component.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_pixel_seq_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_pixel_seq_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_pixel_seq_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_pixel_seq_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_svg_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_false_svg_class.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_true_closed_pixel_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_true_closed_pixel_component.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_true_unclosed_pixel_state.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_if_true_unclosed_pixel_state.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_close_only_seq_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_close_only_seq_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_close_only_seq_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_close_only_seq_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_header_only_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_header_only_class.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_unclosed_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_include_unclosed_component.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_closed_pixel_seq_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_closed_pixel_seq_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_closed_pixel_seq_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_closed_pixel_seq_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_unclosed_svg_seq_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_unclosed_svg_seq_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_unclosed_svg_seq_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_invoked_unclosed_svg_seq_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_uninvoked_svg_usecase.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_proc_uninvoked_svg_usecase.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_note_svg_lookalike_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_note_svg_lookalike_legacy.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_note_svg_lookalike_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_note_svg_lookalike_teoz.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_top_level_text_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_top_level_text_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_top_level_text_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_seq_top_level_text_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_sprite_file_missing_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_sprite_file_missing_deployment.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_state_note_brace.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_state_note_brace.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_activity_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_activity_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_deployment.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_object.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_object.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_timing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_pixel_timing.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_activity_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_activity_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_deployment.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_mindmap.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_mindmap.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_object.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_object.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_timing.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_unclosed_svg_timing.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_usecase_note_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk2_usecase_note_upper.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_caption_svg_lookalike.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_caption_svg_lookalike.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_long_link_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_long_link_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_note_left_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_activity_legacy_note_left_upper.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_class_body_separate_bracket.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_class_body_separate_bracket.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_class_footer_svg_lookalike.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_class_footer_svg_lookalike.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_class_tip_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_class_tip_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_as_quote_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_as_quote_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_caption_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_caption_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_floating_note_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_floating_note_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_map_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_map_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_note_embedded_end_lookalike.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_note_embedded_end_lookalike.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_note_of_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_note_of_body.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_sprite_used_after_bodies.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_sprite_used_after_bodies.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_title_svg_lookalike.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_component_title_svg_lookalike.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_archimate_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_archimate_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_center_footer_pixel_lookalike.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_center_footer_pixel_lookalike.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_database_bracket_upper.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_database_bracket_upper.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_legend_top_left_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_legend_top_left_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_nested_package_header.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_nested_package_header.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_note_on_link_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_deployment_note_on_link_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_caption_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_caption_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_map_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_map_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_note_top_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_note_top_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_title_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_object_title_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_seq_caption_body_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_seq_caption_body_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_seq_caption_body_teoz.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_seq_caption_body_teoz.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_inside_false_if_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_inside_false_if_deployment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_pixel_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_pixel_component.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_pixel_seq_legacy.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_pixel_seq_legacy.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_pixel_state.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_pixel_state.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_svg_usecase.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_svg_usecase.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_two_blocks_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_startsub_two_blocks_component.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_caption_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_caption_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_composite_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_composite_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_floating_note_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_floating_note_body.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_json_then_sprite.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_json_then_sprite.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_left_footer_pixel_lookalike.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_left_footer_pixel_lookalike.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_note_on_link_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_state_note_on_link_body.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_end_apos_usecase.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_end_apos_usecase.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_inline_apos_object.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_inline_apos_object.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_mid_apos_state.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_mid_apos_state.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_start_trailing_apos_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_svg_start_trailing_apos_component.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_usecase_bracket_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_usecase_bracket_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_usecase_right_header_body.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk3_usecase_right_header_body.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_activity3_action_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_activity3_action_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_class_leading_comment_decl.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_class_leading_comment_decl.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_class_member_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_class_member_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_class_skinparam_leading_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_class_skinparam_leading_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_component_trailing_nospace.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_component_trailing_nospace.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_ctl_pixel_end_seq.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_ctl_pixel_end_seq.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_ctl_svg_end_state.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_ctl_svg_end_state.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_gantt_task_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_gantt_task_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_json_member_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_json_member_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_leading_comment_ends_with_open.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_leading_comment_ends_with_open.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_mindmap_node_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_mindmap_node_comment.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_object_triple_in_quotes.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_object_triple_in_quotes.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_end_leading_comment_object.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_end_leading_comment_object.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_end_triple_word_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_end_triple_word_deployment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_leading_start_ref_state.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_leading_start_ref_state.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_trailing_nospace_usecase.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_trailing_nospace_usecase.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_trailing_ref_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_trailing_ref_class.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_triple_spaced_trailing_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_triple_spaced_trailing_deployment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_triple_word_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_triple_word_class.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_triple_word_ref_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_row_triple_word_ref_component.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_start_nospace_comment_state.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_pixel_start_nospace_comment_state.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_salt_widget_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_salt_widget_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_apostrophe_not_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_apostrophe_not_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_message_leading_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_message_leading_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_message_trailing_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_message_trailing_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_note_body_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_note_body_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_participant_quote_then_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_participant_quote_then_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_quoted_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_seq_quoted_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_state_transition_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_state_transition_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_leading_comment_usecase.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_leading_comment_usecase.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_trailing_comment_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_trailing_comment_class.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_triple_spaced_state.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_triple_spaced_state.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_triple_word_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_triple_word_component.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_two_comments_object.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_body_two_comments_object.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_end_triple_word_seq.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_end_triple_word_seq.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_inline_leading_comment_deployment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_inline_leading_comment_deployment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_start_trailing_comment_activity3.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_start_trailing_comment_activity3.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_text_fill_apostrophe_seq.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_svg_text_fill_apostrophe_seq.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_define_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_define_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_if_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_if_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_procedure_body_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_procedure_body_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_sprite_in_procedure.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_sprite_in_procedure.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_startsub_comment.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_tim_startsub_comment.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_usecase_leading_comment_usecase.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4_usecase_leading_comment_usecase.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_block_comment_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_block_comment_class.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_comment_before_theme_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_comment_before_theme_class.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_leading_comment_component.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_leading_comment_component.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_pixel_sprite_end_comment_object.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_pixel_sprite_end_comment_object.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_trailing_comment_seq.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_trailing_comment_seq.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_trailing_comment_usecase.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_trailing_comment_usecase.svg",
+   "result": "fail",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_triple_word_state.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_triple_word_state.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  },
+  {
+   "source": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_whole_line_comment_class.puml",
+   "golden": "test-diagrams/perturbations/sprite-command-post-tim-ownership/mk4b_theme_whole_line_comment_class.svg",
+   "result": "pass",
+   "axes": [
+    "whole sprite line at 9ed52f435 (maker tip fa3f95010)",
+    "parity_perturbations at the review branch after registration"
+   ]
+  }
+ ]
+}

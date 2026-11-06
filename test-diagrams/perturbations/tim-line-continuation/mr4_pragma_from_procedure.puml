@@ -1,0 +1,7 @@
+@startuml
+!procedure $p()
+!pragma layout smetana
+!endprocedure
+$p()
+Kea -> Tui : x %chr(92)
+@enduml

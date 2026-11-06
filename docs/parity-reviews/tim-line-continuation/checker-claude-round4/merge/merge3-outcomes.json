@@ -1,0 +1,358 @@
+{
+ "ca": [
+  {
+   "case": "cr3_end_us_before_bs_end",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "cr3_end_tim_chr64_enduml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "cr3_end_tim_chr92_enduml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "cr3_wrap_first_is_mindmap",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "cr3_wrap_superscript_header",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "cr3_wrap_bom_hash_header",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "cr3_wrap_bom_inner_line",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "cr3_raw_bom_include",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  }
+ ],
+ "bz": [],
+ "by": [
+  {
+   "case": "cr2_seq_pre_start_backslash_text",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  }
+ ],
+ "bw": [
+  {
+   "case": "r2_component_include_tail_then_variable",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  }
+ ],
+ "bu": [
+  {
+   "case": "tc1_seq_theme_local_postjoin",
+   "vs": "A",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "mismatch",
+   "B": "mismatch"
+  },
+  {
+   "case": "tc1_seq_theme_local_postjoin",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "mismatch",
+   "B": "mismatch"
+  }
+ ],
+ "bd": [
+  {
+   "case": "mc1_usecase_continued",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  }
+ ],
+ "ba": [
+  {
+   "case": "ck4_usecase_leading_actor_line",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "ck4_ebnf_trailing",
+   "vs": "A",
+   "parent": "match",
+   "merged": "mismatch",
+   "A": "match",
+   "B": "mismatch"
+  },
+  {
+   "case": "ck4_tim_definelong_body",
+   "vs": "A",
+   "parent": "match",
+   "merged": "mismatch",
+   "A": "match",
+   "B": "mismatch"
+  }
+ ],
+ "ay": [],
+ "az": [
+  {
+   "case": "mk4b_theme_trailing_comment_usecase",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  }
+ ],
+ "ax": [
+  {
+   "case": "ck3_usecase_note_top_of_paren",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "ck3_class_enum_upper_body",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  }
+ ],
+ "av": [
+  {
+   "case": "mk3_usecase_right_header_body",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "mk3_deployment_archimate_body",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  }
+ ],
+ "at": [
+  {
+   "case": "ck_usecase_header_body",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  }
+ ],
+ "fresh": [
+  {
+   "case": "mk2_proc_uninvoked_svg_usecase",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "mk2_usecase_note_upper",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  }
+ ],
+ "retained": [
+  {
+   "case": "test-diagrams/perturbations/class-native-container-factory-precedence/case_tabs.puml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.puml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/perturbations/class-svek-node-paint-order/checker_lr_relationship_created_endpoints.puml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/perturbations/state-themed-pseudostate-paint/checker_plain_state_paint_control.puml",
+   "vs": "B",
+   "parent": "mismatch",
+   "merged": "valid-error",
+   "A": "valid-error",
+   "B": "mismatch"
+  }
+ ],
+ "golden": [
+  {
+   "case": "test-diagrams/golden/activity/act_skinparam2_shadowing_true.puml",
+   "vs": "A",
+   "parent": "match",
+   "merged": "mismatch",
+   "A": "match",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/golden/activity/act_skinparam_shadowing.puml",
+   "vs": "A",
+   "parent": "match",
+   "merged": "mismatch",
+   "A": "match",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/golden/edge-cases/edge_whitespace_multiple_blank_lines.puml",
+   "vs": "A",
+   "parent": "match",
+   "merged": "mismatch",
+   "A": "match",
+   "B": "mismatch"
+  },
+  {
+   "case": "test-diagrams/golden/preprocessing/preproc_foreach_nested.puml",
+   "vs": "A",
+   "parent": "nonpositive-rejected",
+   "merged": "nonpositive-accepted",
+   "A": "nonpositive-rejected",
+   "B": "nonpositive-accepted"
+  }
+ ]
+}

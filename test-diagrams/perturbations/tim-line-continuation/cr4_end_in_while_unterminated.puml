@@ -1,0 +1,5 @@
+@startuml
+Kea -> Tui : one
+!$i = 0
+!while $i < 1
+@enduml
