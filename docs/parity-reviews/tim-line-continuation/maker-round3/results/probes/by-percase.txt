@@ -1,0 +1,54 @@
+columns: 9834a7194 93bf53e18 b0fb43c3e a5720e095 d28dd64a9
+cr2_seq_named_start_col0_endother_swallow        jv=0 je=100   nonpositive-a   nonpositive-a   nonpositive-r   nonpositive-r   nonpositive-r  
+cr2_seq_exact_start_col0_endother_merged         jv=1 je=  0   mismatch        mismatch        valid-error     match           match          
+cr2_seq_trailing_space_start_endother_swallow    jv=0 je=100   nonpositive-a   nonpositive-a   nonpositive-r   nonpositive-r   nonpositive-r  
+cr2_seq_crlf_exact_start_endother_merged         jv=1 je=  0   mismatch        mismatch        valid-error     match           match          
+cr2_seq_endumlx_col0_swallow                     jv=0 je=100   nonpositive-a   nonpositive-a   nonpositive-r   nonpositive-r   nonpositive-r  
+cr2_seq_startUML_case_end_merged                 jv=1 je=  0   valid-error     valid-error     valid-error     valid-error     valid-error    
+cr2_seq_tab_end_plain_control                    jv=1 je=  0   match           match           match           match           match          
+cr2_seq_after_end_continued_tail                 jv=1 je=  0   match           match           match           match           match          
+cr2_seq_two_blocks_first_swallowed               jv=0 je=  0   nonpositive-a   nonpositive-a   nonpositive-r   nonpositive-r   nonpositive-r  
+cr2_seq_nested_start_in_continued_line           jv=1 je=  0   mismatch        mismatch        match           match           match          
+cr2_seq_nested_start_plain_control               jv=1 je=  0   mismatch        mismatch        mismatch        mismatch        mismatch       
+cr2_seq_start_line_continued                     jv=1 je=  0   mismatch        mismatch        match           match           match          
+cr2_seq_end_line_continued_then_text             jv=0 je=  0 J nonpositive-a   nonpositive-a   nonpositive-a   nonpositive-a   nonpositive-a+W
+cr2_seq_chained_continuation_indented_end        jv=1 je=  0   mismatch        valid-error     valid-error     match           match          
+cr2_seq_pre_start_backslash_text                 jv=1 je=  0   mismatch        valid-error     valid-error     valid-error     valid-error    
+cr2_seq_pre_start_blank_then_continued           jv=1 je=  0   mismatch        mismatch        valid-error     mismatch        mismatch       
+cr2_empty_zero_bytes                             jv=0 je= 50   nonpositive-a+W nonpositive-a+W nonpositive-a+W nonpositive-r   nonpositive-r  
+cr2_newlines_only                                jv=0 je= 50   nonpositive-a+W nonpositive-a+W nonpositive-a+W nonpositive-r   nonpositive-r  
+cr2_whitespace_only                              jv=0 je= 50   nonpositive-a+W nonpositive-a+W nonpositive-a+W nonpositive-r   nonpositive-r  
+cr2_crlf_blank_only                              jv=0 je= 50   nonpositive-a+W nonpositive-a+W nonpositive-a+W nonpositive-r   nonpositive-r  
+cr2_vt_ff_only                                   jv=0 je= 50   nonpositive-a+W nonpositive-a+W nonpositive-a+W nonpositive-r   nonpositive-r  
+cr2_nbsp_only                                    jv=1 je=  0   mismatch+W      mismatch+W      mismatch+W      mismatch+W      mismatch+W     
+cr2_no_start_plain                               jv=1 je=  0   match           match           match           match           match          
+cr2_no_start_continued                           jv=1 je=  0   mismatch        valid-error     match           match           match          
+cr2_seq_wrapped_include_tail_then_end            jv=1 je=  0   mismatch        mismatch        mismatch+W      mismatch        match          
+cr2_seq_wrapped_include_tail_then_msg            jv=1 je=  0   mismatch        mismatch        mismatch        mismatch        match          
+cr2_seq_depth2_tail_then_msg                     jv=1 je=  0   mismatch        mismatch        match           match           match          
+cr2_seq_depth2_tail_then_end                     jv=0 je=  0 J nonpositive-a   nonpositive-a   nonpositive-a+W nonpositive-a   nonpositive-a+W
+cr2_seq_depth2_tail_then_depth1_line             jv=1 je=  0   mismatch        mismatch        mismatch        mismatch        mismatch       
+cr2_seq_depth2_tail_no_end                       jv=1 je=  0   mismatch        mismatch        mismatch        match           match          
+cr2_seq_tail_then_backslash_end                  jv=0 je=  0 J nonpositive-a   nonpositive-r   nonpositive-a   nonpositive-a   nonpositive-a+W
+cr2_seq_tail_then_indented_end                   jv=0 je=  0 J nonpositive-a   nonpositive-a   nonpositive-a+W nonpositive-a   nonpositive-a+W
+cr2_seq_tail_then_theme                          jv=1 je=  0   mismatch        mismatch        mismatch        mismatch        mismatch       
+cr2_seq_tail_then_procedure                      jv=1 je=  0   mismatch        mismatch        match           match           match          
+cr2_seq_tail_then_comment_include                jv=1 je=  0   mismatch        mismatch        match           match           match          
+cr2_seq_tail_then_block_comment                  jv=1 je=  0   mismatch        mismatch        mismatch        match           match          
+cr2_seq_tail_crlf_include                        jv=1 je=  0   mismatch        mismatch        match           match           match          
+cr2_mindmap_include_tail_not_joined              jv=1 je=  0   match           match           match           match           match          
+cr2_component_include_tail_link                  jv=1 je=  0   mismatch        mismatch        match           match           match          
+cr2_activity_include_tail                        jv=1 je=  0   match           match           match           match           match          
+cr2_seq_chr92_tail_then_directive                jv=1 je=  0   mismatch        mismatch        mismatch        match           match          
+cr2_seq_chr92_tail_then_end                      jv=0 je=  0 J nonpositive-a   nonpositive-a   nonpositive-a+W nonpositive-a   nonpositive-a+W
+cr2_seq_procedure_emits_tail                     jv=1 je=  0   mismatch        mismatch        mismatch        mismatch        mismatch       
+cr2_seq_chr30_rsp_line                           jv=0 je=200   nonpositive-a   nonpositive-r   nonpositive-r   nonpositive-a   nonpositive-r  
+cr2_seq_raw_rs_rsp_line                          jv=0 je=200   nonpositive-a   nonpositive-r   nonpositive-r   nonpositive-a   nonpositive-r  
+cr2_seq_note_chr30_rsp                           jv=0 je=  0   nonpositive-a   nonpositive-a   nonpositive-a   nonpositive-a   nonpositive-a  
+cr2_seq_note_plain_rsp_control                   jv=1 je=  0   match           match           match           match           match          
+cr2_seq_theme_then_continued                     jv=1 je=  0   mismatch        valid-error     mismatch        mismatch        mismatch       
+cr2_seq_procedure_body_continued                 jv=1 je=  0   mismatch        valid-error     match           match           match          
+cr2_seq_procedure_call_continued                 jv=1 je=  0   mismatch+W      valid-error     match           match           match          
+cr2_ditaa_indented_end_continued_row             jv=1 je=  0   compare-101     compare-101     compare-101     compare-101     compare-101    
+cr2_ditaa_case_start_continued_row               jv=1 je=  0   valid-error     valid-error     valid-error     valid-error     valid-error    
+cr2_ditaa_continued_row_ref                      jv=1 je=  0   compare-101     compare-101     compare-101     compare-101     compare-101    
