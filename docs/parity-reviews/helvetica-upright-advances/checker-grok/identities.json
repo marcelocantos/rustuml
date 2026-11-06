@@ -1,0 +1,27 @@
+{
+  "tip_commit": "b8d4d3921a4b10a2ef3fd071d5b5446c51e38ade",
+  "base_commit": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "account_commit": "4784eddedde7e60198b199356d212ab2c81ca5fc",
+  "helvetica_commit": "794a50dac493d3947e1b51bd4e40ee960aca2fce",
+  "cmap_commit": "52bda70a6dc2040949f0567e87de992b7c9b74c5",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "tip_binary_sha256": "3ed312cd5c0ac389565024a98639d899b351115838fb0e3f3cd2df085d1d686c",
+  "base_binary_sha256": "89107fa9897bb9d863daabb35d3ccd7cfa18095e4087cd18794271c4319a7d82",
+  "comparator_sha256": "0dc81d6859df0a139423f7901008866b9f6be13a87c96dacd0325369136e9717",
+  "comparator": "rustuml_oracle::compare::compare_svg_strict via g2cmp",
+  "heldout_results_sha256": "58ad24e38951b645c0e926b35efb73200cf10194733e3c370a61cab2214068b4",
+  "heldout_results_gz_sha256": "6d4705100c9cdeafe1d82e7895af321306a8a432f9d0c37fb384384c5672fc09",
+  "heldout_transport_sha256": "6b0e5d04f643d158c40ea32d866469f38d308bf44a81ea8f032f8f85c1d3a8ff",
+  "heldout_manifest_sha256": "14e1b34ec42aced2c49a873b40999aa0f9500456598cd518cd0e0b407b4b691e",
+  "predictions_sha256": "5e5c3d8fdb3fd4f6b574ecce4a52acb2dbb1453b0842ef36bacbfd43f0818727",
+  "face_probe_stdout_sha256": "357d55bb15f79f5bebdcffecfc35420d3c0721c02643a143c3e3bb71ea330d36",
+  "face_probe_source_sha256": "771454d11adfda8e2e73b872ba2d0eb6f2f8be9899588da7bd372bfea4b78a59",
+  "cmap_sha256sums_sha256": "1b1e9a8eeca7aeb326e825c8c583129de2c4eb846aba3c62e15aacea8e4d20fe",
+  "worker": "worker.GkAO8gw7",
+  "cli": ["-pipe", "-tsvg"],
+  "env": {
+    "TZ": "GMT+11:00",
+    "RUSTUML_DEBUG": "date=1774210426000,tz=AEDT+1100"
+  }
+}

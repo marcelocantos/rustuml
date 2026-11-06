@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "mechanism": "helvetica-upright-advances",
+  "written_before": "the mechanism-root account.json that harness_guards reads",
+  "why": "Measurement did not change the renderer. harness_guards::parity_review_records_are_complete reads docs/parity-reviews/<mechanism>/account.json and does not read maker-grok/account.json. The pre-draft account stays where it was committed. The root file is the same claim, with planned_change as one string because that guard requires a string.",
+  "no_production_edit": "The four Helvetica ASCII tables are unchanged by this addendum. Whole-SVG ft_* cases stayed DIFF after the tables landed; that remainder is the punctuation label splitting into two text nodes and, for bold-italic, the style block still measuring the italic face. Neither is a new fitted constant and neither is edited here."
+}

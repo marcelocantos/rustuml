@@ -1,0 +1,177 @@
+{
+  "cmap": [
+    {
+      "table": "ARIAL_CMAP_PLAIN",
+      "tsv": "ArialMT.plain.cmap.tsv",
+      "rows": 2708,
+      "mismatches": 0,
+      "sample": []
+    },
+    {
+      "table": "ARIAL_CMAP_BOLD",
+      "tsv": "Arial-BoldMT.bold.cmap.tsv",
+      "rows": 2708,
+      "mismatches": 0,
+      "sample": []
+    },
+    {
+      "table": "ARIAL_CMAP_ITALIC",
+      "tsv": "Arial-ItalicMT.italic.cmap.tsv",
+      "rows": 2184,
+      "mismatches": 0,
+      "sample": []
+    },
+    {
+      "table": "ARIAL_CMAP_BOLD_ITALIC",
+      "tsv": "Arial-BoldItalicMT.bolditalic.cmap.tsv",
+      "rows": 2184,
+      "mismatches": 0,
+      "sample": []
+    },
+    {
+      "table": "VERDANA_CMAP_PLAIN",
+      "tsv": "Verdana.plain.cmap.tsv",
+      "rows": 651,
+      "mismatches": 0,
+      "sample": []
+    },
+    {
+      "table": "VERDANA_CMAP_BOLD",
+      "tsv": "Verdana-Bold.bold.cmap.tsv",
+      "rows": 651,
+      "mismatches": 0,
+      "sample": []
+    },
+    {
+      "table": "VERDANA_CMAP_ITALIC",
+      "tsv": "Verdana-Italic.italic.cmap.tsv",
+      "rows": 651,
+      "mismatches": 0,
+      "sample": []
+    },
+    {
+      "table": "VERDANA_CMAP_BOLD_ITALIC",
+      "tsv": "Verdana-BoldItalic.bolditalic.cmap.tsv",
+      "rows": 651,
+      "mismatches": 0,
+      "sample": []
+    },
+    {
+      "table": "HELVETICA_CMAP_PLAIN",
+      "tsv": "Helvetica.plain.cmap.tsv",
+      "rows": 1974,
+      "mismatches": 0,
+      "sample": []
+    },
+    {
+      "table": "HELVETICA_CMAP_BOLD",
+      "tsv": "Helvetica-Bold.bold.cmap.tsv",
+      "rows": 1974,
+      "mismatches": 0,
+      "sample": []
+    },
+    {
+      "table": "HELVETICA_CMAP_ITALIC",
+      "tsv": "Helvetica-Oblique.italic.cmap.tsv",
+      "rows": 1957,
+      "mismatches": 0,
+      "sample": []
+    },
+    {
+      "table": "HELVETICA_CMAP_BOLD_ITALIC",
+      "tsv": "Helvetica-BoldOblique.bolditalic.cmap.tsv",
+      "rows": 1957,
+      "mismatches": 0,
+      "sample": []
+    }
+  ],
+  "ascii": [
+    {
+      "family": "ARIAL",
+      "slot": "plain",
+      "cmap_ascii_matches_ascii_tsv": true
+    },
+    {
+      "family": "ARIAL",
+      "slot": "bold",
+      "cmap_ascii_matches_ascii_tsv": true
+    },
+    {
+      "family": "ARIAL",
+      "slot": "italic",
+      "cmap_ascii_matches_ascii_tsv": true
+    },
+    {
+      "family": "ARIAL",
+      "slot": "bold_italic",
+      "cmap_ascii_matches_ascii_tsv": true
+    },
+    {
+      "family": "VERDANA",
+      "slot": "plain",
+      "cmap_ascii_matches_ascii_tsv": true
+    },
+    {
+      "family": "VERDANA",
+      "slot": "bold",
+      "cmap_ascii_matches_ascii_tsv": true
+    },
+    {
+      "family": "VERDANA",
+      "slot": "italic",
+      "cmap_ascii_matches_ascii_tsv": true
+    },
+    {
+      "family": "VERDANA",
+      "slot": "bold_italic",
+      "cmap_ascii_matches_ascii_tsv": true
+    },
+    {
+      "const": "HELVETICA_ASCII",
+      "tsv": "Helvetica.plain.ascii.tsv",
+      "matches_ascii_tsv": true,
+      "matches_cmap_ascii_column": true,
+      "len": 95
+    },
+    {
+      "const": "HELVETICA_BOLD_ASCII",
+      "tsv": "Helvetica-Bold.bold.ascii.tsv",
+      "matches_ascii_tsv": true,
+      "matches_cmap_ascii_column": true,
+      "len": 95
+    },
+    {
+      "const": "HELVETICA_ITALIC_ASCII",
+      "tsv": "Helvetica-Oblique.italic.ascii.tsv",
+      "matches_ascii_tsv": true,
+      "matches_cmap_ascii_column": true,
+      "len": 95
+    },
+    {
+      "const": "HELVETICA_BOLD_ITALIC_ASCII",
+      "tsv": "Helvetica-BoldOblique.bolditalic.ascii.tsv",
+      "matches_ascii_tsv": true,
+      "matches_cmap_ascii_column": true,
+      "len": 95
+    }
+  ],
+  "relay_bad": [],
+  "literals": {
+    "base": 51,
+    "tip": 68,
+    "added": {
+      "7.4619": 2,
+      "9.1172": 4,
+      "5.5996": 2,
+      "2.5928": 2,
+      "1.3311": 2,
+      "4.1309": 2,
+      "1.9033": 2,
+      "7.2197": 1
+    },
+    "removed": {},
+    "tip_production": 6,
+    "tip_test": 62,
+    "base_production": 6
+  }
+}

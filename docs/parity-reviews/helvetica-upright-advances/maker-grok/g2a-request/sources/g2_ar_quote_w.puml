@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Arial
+component "Width of 'W'" as E0
+component "50% off" as E1
+@enduml

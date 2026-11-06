@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "mechanism": "face-cmap-advances",
+  "account_commit": "4784eddedde7e60198b199356d212ab2c81ca5fc",
+  "implementation_commit": "b8d4d3921a4b10a2ef3fd071d5b5446c51e38ade",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "CARGO_TARGET_DIR=$HOME/Library/Caches/rustuml-grok-g2-checker/target-tip cargo build --release -p rustuml",
+    "python3 $HOME/Library/Caches/rustuml-grok-g2-checker/regenerate_tables.py",
+    "bin/rustuml-tip and bin/rustuml-base -pipe -tsvg, cwd=source parent, TZ=GMT+11:00, RUSTUML_DEBUG=date=1774210426000,tz=AEDT+1100, then bin/g2cmp over rustuml_oracle::compare::compare_svg_strict"
+  ],
+  "findings": [
+    "Accepted as a partial step. All 12 cmap tables rebuild from tools/font-chain-reference/cmap-advances-g2 with zero row mismatches, and those TSVs byte-match the immutable relay grok-g2-mm-cmap (SHA256SUMS 1b1e9a8eeca7aeb326e825c8c583129de2c4eb846aba3c62e15aacea8e4d20fe). The extractor is CoreText CTFontGetGlyphsForCharacters plus CTFontGetAdvancesForGlyphs, not Java CharToGlyphMapper and not a format-14 cluster. Where every scalar of a probe item is in the table, Java getStringBounds at 14pt matches units/2048*14 within 0.02 (194/194). Zero table scalars have canDisplay false. 74 probe rows have canDisplay true and no table row: composite fallback, not an own glyph.",
+    "A mapped scalar uses that face's advance. An unmapped scalar still returns None from mapped_advance, so chain_text_width keeps the previous fallback. Helvetica bold does not map U+05D0 or U+2764. Those two held-out labels moved 0.7656px farther from Java, the same delta as the ASCII-prefix correction, while the unmapped tail was unchanged. The ASCII-only label g2chkN7 Wq now equals Java. Variation selector U+FE0F is a second scalar, not consumed as one emoji cluster. U+1D167 is unmapped on Helvetica (Java width 0) and on Verdana italic.",
+    "CLI strict compare: c9a 98 to 106 of 288, c10a 159 to 163 of 379, c11a 237 to 253 of 515, g2a 4 to 7 of 8. m9a 24/50, m10a 221/374 and m11a 79/100 did not move. Lost matches 0, lost rejections 0, new valid-input errors 0. c9a_sp_seqnote_mx_P, also copied under perturbations, went from ndiff 4 to 9. Its note textLength moved from 76.21 toward Java's 74.8071 and landed at 73.6011, and the sequence recentered (width 113 to 110 against Java 111, Ann x 39 to 38). The string mixes mapped Hebrew with unmapped U+2029 and U+1D167. «Ferrous gauge vista» on Verdana italic is 157.2197, matching Java. m9a_vi_hebrew_italic stays byte-identical to the base because Verdana italic does not map U+05D0, U+05D1 or U+1D167.",
+    "Not achieved for T14.55: Times, Menlo, Lucida Grande and Courier are not table families, so their held-out SVGs did not change. «marker» textLength is now Java's 61.2366 and the rest of custom_class still differs. The cmap is the face's own CoreText glyph, which is narrower than Font.canDisplay."
+  ],
+  "verdict": "accepted",
+  "reviewer": {
+    "task_id": "grok-g2-checker",
+    "model": "grok-4.7"
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/face-cmap-advances/c10a_st_usec_vd.puml",
+      "golden": "test-diagrams/perturbations/face-cmap-advances/c10a_st_usec_vd.svg",
+      "result": "pass",
+      "axes": ["mapped non-ASCII on Verdana", "guillemets"]
+    },
+    {
+      "source": "test-diagrams/perturbations/face-cmap-advances/c10a_st_usec_ar.puml",
+      "golden": "test-diagrams/perturbations/face-cmap-advances/c10a_st_usec_ar.svg",
+      "result": "pass",
+      "axes": ["mapped non-ASCII on Arial", "guillemets"]
+    },
+    {
+      "source": "test-diagrams/perturbations/face-cmap-advances/c11a_na_guil_vd_p.puml",
+      "golden": "test-diagrams/perturbations/face-cmap-advances/c11a_na_guil_vd_p.svg",
+      "result": "pass",
+      "axes": ["mapped non-ASCII on Verdana", "style plain"]
+    }
+  ]
+}

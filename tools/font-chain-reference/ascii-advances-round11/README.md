@@ -13,4 +13,4 @@ round-9 Monkey Man extraction hashed (`../monkeyman-round9/font-hashes.txt`) hav
 Man through the relay; the expectation registered before that run is that every `*.ascii.tsv` is byte-identical.
 
 `SHA256SUMS` (sha256 `1fa07b8c…`) lists the files byte for byte as `run.sh` wrote them; this README is not listed.
-`text_render`'s ASCII-table gate reads the Verdana and Arial files and pins that hash.
+`text_render`'s ASCII-table gate reads the Verdana, Arial and Helvetica files and pins that hash.

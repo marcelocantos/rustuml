@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "mechanism": "face-cmap-advances",
+  "status": "maker causal account before draft; independent review required",
+  "obligation": "T14.55",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "jar_sha256": "aa5262a23e7f1fa50bdf9f6492e8d9f8683b2f18e2f182776966e17bdb282053",
+  "jdk": "21.0.5. Own-cmap membership is the quantity tools/PrimaryFaceExtract.swift records (CTFontGetGlyphsForCharacters, glyph id > 0), which is JDK CCompositeGlyphMapper slot 0.",
+  "base": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "golden_submodule": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "font_sources": [
+    "Coverage already extracted on the reference host: tools/font-chain-reference/monkeyman-round9/*.own.tsv (P runs). Those files name the face and the cmap runs. They do not record advances.",
+    "Advances for U+0020..U+007E already live in tools/font-chain-reference/ascii-advances-round11. Everything outside that range still has no face advance.",
+    "The draft that follows this account adds tools/CmapAdvanceExtract.swift. It resolves the face the same way as tools/PrimaryFaceExtract.swift and prints CTFontGetAdvancesForGlyphs for every scalar that face's cmap maps. It does not invent widths. Monkey Man must run it; this machine does not.",
+    "Faces requested: the twelve (family, style) slots of Helvetica, Arial and Verdana. Font files are the ones named by the round-9 #file lines, whose sha256 is in tools/font-chain-reference/monkeyman-round9/font-hashes.txt."
+  ],
+  "java_locations": [
+    "net.sourceforge.plantuml.FileFormat#getJavaDimension (220-237): width is FontMetrics.getStringBounds of the font UFontImpl.getUnderlayingFont selected.",
+    "JDK CCompositeGlyphMapper.convertToGlyph: a character the face's own cmap maps is slot 0 and is advanced by that face, not by SansSerif.",
+    "A character the face does not map stays on the cascade already implemented in font_chain (mapped SansSerif advance, .notdef, or hidden). That path was reviewed and is not part of this change."
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/text_render.rs family_table_text_width: the own closure returns a width only for U+0020..U+007E. chain_text_width then measures ChainGlyph::Mapped with sans_text_width.",
+    "That is why Verdana italic «Ferrous gauge vista» is 153.8428 here and 157.2197 in Java, and why «marker» is 58.2214 here and 61.2366 in Java (maker-round11 proposed target, BT c10a_st_*_vd and class-current-spot-cascade).",
+    "m9a_vi_hebrew_italic is the Latin+Hebrew probe. Characters the Verdana italic cmap does not map must keep today's fallback."
+  ],
+  "invariant": "If a table-measured face (Verdana, Arial, Helvetica, each style slot) maps a character, that character's advance is the face's own advance. If it does not map the character, the existing chain result is unchanged.",
+  "causal_divergence": "Non-ASCII characters are measured as SansSerif even when the face's cmap contains them.",
+  "planned_change": [
+    "Stage a Monkey Man extraction. No Rust width table is written in the draft that adds the extractor, because the advances are not on this machine.",
+    "After the extraction is returned and checked against the round-9 cmap runs and font hashes, replace the ASCII-only own closure for these three families with the extracted advance of each mapped scalar, and delete the retained Helvetica U+00AB/U+00BB 1139-unit arm.",
+    "No fitted constant. Unmapped characters stay on chain_text_width's current arms."
+  ],
+  "precommitted_measurement": {
+    "blocked_on": "Reference-host cmap advances. Rust predictions of the corrected widths cannot be registered until those TSV bytes exist. This account does not claim the Java widths.",
+    "known_java_targets_not_yet_predicted": [
+      "«Ferrous gauge vista» Java textLength 157.2197 (Verdana italic stereotype cases c10a_st_{usec,actu,part,clss}_vd).",
+      "«marker» Java textLength 61.2366.",
+      "m9a_vi_hebrew_italic and m9a_vi_hebrew_italic_ctrl."
+    ],
+    "after_the_tables_land": [
+      "Re-measure the same cohorts as helvetica-upright-advances.",
+      "Held-out probes whose non-ASCII characters are inside the extracted cmap, plus a probe whose character is outside it (fallback unchanged).",
+      "No pass lost. Baselines lock only a rise."
+    ]
+  },
+  "perturbation_axes": [
+    "mapped non-ASCII (guillemets, Latin-1, Latin Extended) versus an unmapped scalar",
+    "Verdana, Arial, Helvetica",
+    "plain, bold, italic, bold-italic",
+    "Latin mixed with Hebrew, where only the mapped scalars may change"
+  ]
+}

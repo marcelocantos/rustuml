@@ -1,0 +1,227 @@
+{
+  "mapped_match": 194,
+  "mapped_mismatch": [],
+  "candisplay_true_but_unmapped": 74,
+  "candisplay_unmapped_sample": [
+    {
+      "family": "Arial",
+      "style": "plain",
+      "item": "cjk_yi",
+      "java": 14.0,
+      "ps": "ArialMT"
+    },
+    {
+      "family": "Arial",
+      "style": "plain",
+      "item": "emoji",
+      "java": 19.0,
+      "ps": "ArialMT"
+    },
+    {
+      "family": "Arial",
+      "style": "plain",
+      "item": "vs_heart",
+      "java": 12.7421875,
+      "ps": "ArialMT"
+    },
+    {
+      "family": "Arial",
+      "style": "plain",
+      "item": "vs_heart_fe0f",
+      "java": 23.2421875,
+      "ps": "ArialMT"
+    },
+    {
+      "family": "Arial",
+      "style": "bold",
+      "item": "cjk_yi",
+      "java": 14.0,
+      "ps": "Arial-BoldMT"
+    },
+    {
+      "family": "Arial",
+      "style": "bold",
+      "item": "emoji",
+      "java": 19.0,
+      "ps": "Arial-BoldMT"
+    },
+    {
+      "family": "Arial",
+      "style": "bold",
+      "item": "vs_heart",
+      "java": 12.7421875,
+      "ps": "Arial-BoldMT"
+    },
+    {
+      "family": "Arial",
+      "style": "bold",
+      "item": "vs_heart_fe0f",
+      "java": 23.2421875,
+      "ps": "Arial-BoldMT"
+    },
+    {
+      "family": "Arial",
+      "style": "italic",
+      "item": "ar_ain",
+      "java": 8.177215576171875,
+      "ps": "Arial-ItalicMT"
+    },
+    {
+      "family": "Arial",
+      "style": "italic",
+      "item": "cjk_yi",
+      "java": 14.0,
+      "ps": "Arial-ItalicMT"
+    },
+    {
+      "family": "Arial",
+      "style": "italic",
+      "item": "emoji",
+      "java": 19.0,
+      "ps": "Arial-ItalicMT"
+    },
+    {
+      "family": "Arial",
+      "style": "italic",
+      "item": "vs_heart",
+      "java": 12.7421875,
+      "ps": "Arial-ItalicMT"
+    },
+    {
+      "family": "Arial",
+      "style": "italic",
+      "item": "vs_heart_fe0f",
+      "java": 23.2421875,
+      "ps": "Arial-ItalicMT"
+    },
+    {
+      "family": "Arial",
+      "style": "bolditalic",
+      "item": "ar_ain",
+      "java": 8.354415893554688,
+      "ps": "Arial-BoldItalicMT"
+    },
+    {
+      "family": "Arial",
+      "style": "bolditalic",
+      "item": "cjk_yi",
+      "java": 14.0,
+      "ps": "Arial-BoldItalicMT"
+    },
+    {
+      "family": "Arial",
+      "style": "bolditalic",
+      "item": "emoji",
+      "java": 19.0,
+      "ps": "Arial-BoldItalicMT"
+    },
+    {
+      "family": "Arial",
+      "style": "bolditalic",
+      "item": "vs_heart",
+      "java": 12.7421875,
+      "ps": "Arial-BoldItalicMT"
+    },
+    {
+      "family": "Arial",
+      "style": "bolditalic",
+      "item": "vs_heart_fe0f",
+      "java": 23.2421875,
+      "ps": "Arial-BoldItalicMT"
+    },
+    {
+      "family": "Helvetica",
+      "style": "plain",
+      "item": "he_alef",
+      "java": 9.0302734375,
+      "ps": "Helvetica"
+    },
+    {
+      "family": "Helvetica",
+      "style": "plain",
+      "item": "ar_ain",
+      "java": 8.177215576171875,
+      "ps": "Helvetica"
+    }
+  ],
+  "mapped_but_candisplay_false": [],
+  "unmapped_rows": 106,
+  "special": {
+    "verdana_italic_marker_12_5": 61.236572265625,
+    "verdana_italic_marker_14": 68.5849609375,
+    "verdana_italic_marker_units": 10033,
+    "verdana_italic_ferrous_14": 157.2197265625
+  },
+  "helvetica_alphabet_14_rounded_4dp": {
+    "plain": [
+      117.4619,
+      129.1172,
+      85.5996,
+      92.5928
+    ],
+    "bold": [
+      121.3311,
+      129.1172,
+      94.1309,
+      101.9033
+    ],
+    "italic": [
+      117.4619,
+      129.1172,
+      85.5996,
+      92.5928
+    ],
+    "bolditalic": [
+      121.3311,
+      129.1172,
+      94.1309,
+      101.9033
+    ]
+  },
+  "ps_names": {
+    "Arial\tplain": "ArialMT",
+    "Arial\tbold": "Arial-BoldMT",
+    "Arial\titalic": "Arial-ItalicMT",
+    "Arial\tbolditalic": "Arial-BoldItalicMT",
+    "Helvetica\tplain": "Helvetica",
+    "Helvetica\tbold": "Helvetica-Bold",
+    "Helvetica\titalic": "Helvetica-Oblique",
+    "Helvetica\tbolditalic": "Helvetica-BoldOblique",
+    "Verdana\tplain": "Verdana",
+    "Verdana\tbold": "Verdana-Bold",
+    "Verdana\titalic": "Verdana-Italic",
+    "Verdana\tbolditalic": "Verdana-BoldItalic",
+    "Times\tplain": "Dialog",
+    "Times\tbold": "Dialog",
+    "Times\titalic": "Dialog",
+    "Times\tbolditalic": "Dialog",
+    "Courier\tplain": "Monospaced",
+    "Courier\tbold": "Monospaced",
+    "Courier\titalic": "Monospaced",
+    "Courier\tbolditalic": "Monospaced",
+    "Menlo\tplain": "Menlo-Regular",
+    "Menlo\tbold": "Menlo-Bold",
+    "Menlo\titalic": "Menlo-Italic",
+    "Menlo\tbolditalic": "Menlo-BoldItalic",
+    "Lucida Grande\tplain": "LucidaGrande",
+    "Lucida Grande\tbold": "LucidaGrande-Bold",
+    "Lucida Grande\titalic": "LucidaGrande-Italic-Derived",
+    "Lucida Grande\tbolditalic": "LucidaGrande-BoldItalic-Derived",
+    "Times New Roman\tplain": "TimesNewRomanPSMT",
+    "Times New Roman\tbold": "TimesNewRomanPS-BoldMT",
+    "Times New Roman\titalic": "TimesNewRomanPS-ItalicMT",
+    "Times New Roman\tbolditalic": "TimesNewRomanPS-BoldItalicMT",
+    "Courier New\tplain": "CourierNewPSMT",
+    "Courier New\tbold": "CourierNewPS-BoldMT",
+    "Courier New\titalic": "CourierNewPS-ItalicMT",
+    "Courier New\tbolditalic": "CourierNewPS-BoldItalicMT",
+    "Monospaced\tplain": "Monospaced",
+    "Monospaced\tbold": "Monospaced",
+    "Monospaced\titalic": "Monospaced",
+    "Monospaced\tbolditalic": "Monospaced",
+    "SansSerif\tplain": "SansSerif",
+    "SansSerif\tbold": "SansSerif",
+    "SansSerif\titalic": "SansSerif",
+    "SansSerif\tbolditalic": "SansSerif"
+  }
+}
