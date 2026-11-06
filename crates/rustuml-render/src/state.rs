@@ -2020,10 +2020,15 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
                 pass_one_counter += 1;
             }
             PassOneEvent::ConcurrentRegion(id) => {
-                if state_ids.iter().any(|state_id| state_id == id) {
-                    entity_ids.push((id.to_string(), format!("ent{pass_one_counter:04}")));
+                // `gotoGroup` creates an entity only when the quark has no
+                // data (CucaDiagram.java:350-356). A reused quark keeps the
+                // UID its declaration already took.
+                if !entity_ids.iter().any(|(seen, _)| seen == id) {
+                    if state_ids.iter().any(|state_id| state_id == id) {
+                        entity_ids.push((id.to_string(), format!("ent{pass_one_counter:04}")));
+                    }
+                    pass_one_counter += 1;
                 }
-                pass_one_counter += 1;
             }
             PassOneEvent::FloatingNote { index, alias } => {
                 let entity_id = format!("ent{pass_one_counter:04}");
@@ -2755,6 +2760,9 @@ struct AutonomousComposite<'a> {
     regions: Vec<AutonomousRegion<'a>>,
     children: Vec<AutonomousComposite<'a>>,
     separator: Option<char>,
+    /// `GroupType.CONCURRENT_STATE`: `GroupMakerState.getImage` returns the
+    /// inner leaf graph with no `InnerStateAutonom` title wrap.
+    untitled: bool,
     inner_width: f64,
     inner_height: f64,
     attribute_height: f64,
@@ -3720,10 +3728,17 @@ fn build_state_group_outcome<'a>(
         .states
         .iter()
         .filter(|state| {
-            state
-                .parent
-                .as_ref()
-                .is_some_and(|parent| region_scopes.contains(parent))
+            let Some(parent) = state.parent.as_deref() else {
+                return false;
+            };
+            if parent == composite.id {
+                return true;
+            }
+            // A synthetic region is not a state, so its members are leaves of
+            // this image. A reused quark is a state: its members belong to
+            // that quark's own image.
+            region_scopes.iter().any(|scope| scope == parent)
+                && !diagram.states.iter().any(|other| other.id == parent)
         })
         .collect();
     if direct_children.is_empty()
@@ -3756,7 +3771,19 @@ fn build_state_group_outcome<'a>(
     // CucaDiagramSimplifierState: only an autarkic group becomes a
     // GroupMakerState image; any other group stays for Cluster.drawU.
     if !java_state_group_is_autarkic(diagram, &composite.id) {
-        if composite.concurrent_separator.is_some() {
+        // A non-autarkic owner whose separator minted synthetic region ids
+        // still has no cluster image for those regions. A separator that
+        // reused existing quarks makes each quark a STATE_CONCURRENT leaf
+        // (`CucaDiagramSimplifierState`), and the owner stays a cluster.
+        let reused_region_quarks = composite.concurrent_separator.is_some()
+            && !composite.concurrent_regions.is_empty()
+            && composite.concurrent_regions.iter().all(|region| {
+                diagram
+                    .states
+                    .iter()
+                    .any(|state| state.id == region.id && state.composite)
+            });
+        if composite.concurrent_separator.is_some() && !reused_region_quarks {
             return None;
         }
         return Some(StateGroupOutcome::Cluster {
@@ -3971,19 +3998,33 @@ fn build_state_group_outcome<'a>(
         .map(|description| composite_style.attribute.width(description))
         .fold(0.0_f64, f64::max);
     let field_margin = if attribute_height > 0.0 { 5.0 } else { 0.0 };
-    let width = inner_width
-        .max(composite_style.title.width(&composite.label))
-        .max(attribute_width)
-        + STATE_DIMENSION_PADDING
-        + field_margin;
-    let height =
-        inner_height + title_height + attribute_height + STATE_DIMENSION_PADDING + field_margin;
+    // `CucaDiagramSimplifierState` overrides a CONCURRENT_STATE group with
+    // `LeafType.STATE_CONCURRENT`. Its image is the inner graph alone.
+    let untitled = diagram.states.iter().any(|state| {
+        state
+            .concurrent_regions
+            .iter()
+            .any(|region| region.id == composite.id)
+    });
+    let (width, height) = if untitled {
+        (inner_width, inner_height)
+    } else {
+        (
+            inner_width
+                .max(composite_style.title.width(&composite.label))
+                .max(attribute_width)
+                + STATE_DIMENSION_PADDING
+                + field_margin,
+            inner_height + title_height + attribute_height + STATE_DIMENSION_PADDING + field_margin,
+        )
+    };
 
     Some(StateGroupOutcome::Image(AutonomousComposite {
         state: composite,
         regions,
         children,
         separator,
+        untitled,
         inner_width,
         inner_height,
         attribute_height,
@@ -4890,31 +4931,34 @@ fn emit_autonomous_composite(
     let (composite_cx, composite_cy) = center;
     let box_x = composite_cx - composite.width / 2.0;
     let box_y = composite_cy - composite.height / 2.0;
-    let style = autonomous_state_style(context.diagram, context.skin, Some(composite.state));
-    let shadow_attr = autonomous_shadow_attr(context, style.shadow);
-    let title_divider_y = box_y + 5.0 + style.title.height(&composite.state.label) + 5.0;
-    let header_divider_y = title_divider_y + composite.attribute_height + composite.field_margin;
-    let right = box_x + composite.width;
-    let header_fill = composite
-        .state
-        .fill
-        .as_deref()
-        .map(resolve_state_fill_color)
-        .unwrap_or_else(|| style.fill.clone());
-    let stroke = composite
-        .state
-        .stroke
-        .as_deref()
-        .map(crate::sequence::resolve_color)
-        .unwrap_or_else(|| style.stroke.clone());
-    let stroke_style = match composite.state.stroke_style.as_deref() {
-        Some("bold") => format!("stroke:{stroke};stroke-width:2;"),
-        Some("dashed") => format!("stroke:{stroke};stroke-width:1;stroke-dasharray:7,7;"),
-        Some("dotted") => format!("stroke:{stroke};stroke-width:1;stroke-dasharray:1,3;"),
-        _ => format!("stroke:{stroke};stroke-width:{};", style.border_thickness),
-    };
-    if !shadow_attr.is_empty() {
-        write!(
+    let mut titled_content_y = box_y;
+    if !composite.untitled {
+        let style = autonomous_state_style(context.diagram, context.skin, Some(composite.state));
+        let shadow_attr = autonomous_shadow_attr(context, style.shadow);
+        let title_divider_y = box_y + 5.0 + style.title.height(&composite.state.label) + 5.0;
+        let header_divider_y =
+            title_divider_y + composite.attribute_height + composite.field_margin;
+        let right = box_x + composite.width;
+        let header_fill = composite
+            .state
+            .fill
+            .as_deref()
+            .map(resolve_state_fill_color)
+            .unwrap_or_else(|| style.fill.clone());
+        let stroke = composite
+            .state
+            .stroke
+            .as_deref()
+            .map(crate::sequence::resolve_color)
+            .unwrap_or_else(|| style.stroke.clone());
+        let stroke_style = match composite.state.stroke_style.as_deref() {
+            Some("bold") => format!("stroke:{stroke};stroke-width:2;"),
+            Some("dashed") => format!("stroke:{stroke};stroke-width:1;stroke-dasharray:7,7;"),
+            Some("dotted") => format!("stroke:{stroke};stroke-width:1;stroke-dasharray:1,3;"),
+            _ => format!("stroke:{stroke};stroke-width:{};", style.border_thickness),
+        };
+        if !shadow_attr.is_empty() {
+            write!(
             svg,
             r#"<rect fill="none"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
             fmt_f(composite.height),
@@ -4923,8 +4967,8 @@ fn emit_autonomous_composite(
             fmt_f(box_y), stroke_style = crate::svg::escape_attribute(&stroke_style),
 )
         .unwrap();
-    }
-    write!(
+        }
+        write!(
         svg,
         r#"<path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" {}/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/><line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         fmt_f(box_x + STATE_RX),
@@ -4953,44 +4997,51 @@ fn emit_autonomous_composite(
         stroke_style = crate::svg::escape_attribute(&stroke_style),
     )
     .unwrap();
-    if composite.attribute_height > 0.0 {
-        write!(
+        if composite.attribute_height > 0.0 {
+            write!(
+                svg,
+                r#"<line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                fmt_f(box_x),
+                fmt_f(right),
+                fmt_f(title_divider_y),
+                fmt_f(title_divider_y),
+                stroke_style = crate::svg::escape_attribute(&stroke_style),
+            )
+            .unwrap();
+        }
+        let title_width = style.title.width(&composite.state.label);
+        style.title.emit(
             svg,
-            r#"<line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            fmt_f(box_x),
-            fmt_f(right),
-            fmt_f(title_divider_y),
-            fmt_f(title_divider_y),
-            stroke_style = crate::svg::escape_attribute(&stroke_style),
-        )
-        .unwrap();
-    }
-    let title_width = style.title.width(&composite.state.label);
-    style.title.emit(
-        svg,
-        &composite.state.label,
-        composite_cx - title_width / 2.0,
-        box_y + 5.0 + style.title.ascent(&composite.state.label),
-    );
-    for (index, attribute) in composite.state.descriptions.iter().enumerate() {
-        style.attribute.emit(
-            svg,
-            attribute,
-            box_x + 5.0,
-            title_divider_y
-                + style.attribute.ascent(attribute)
-                + composite.state.descriptions[..index]
-                    .iter()
-                    .map(|previous| style.attribute.height(previous))
-                    .sum::<f64>(),
+            &composite.state.label,
+            composite_cx - title_width / 2.0,
+            box_y + 5.0 + style.title.ascent(&composite.state.label),
         );
+        for (index, attribute) in composite.state.descriptions.iter().enumerate() {
+            style.attribute.emit(
+                svg,
+                attribute,
+                box_x + 5.0,
+                title_divider_y
+                    + style.attribute.ascent(attribute)
+                    + composite.state.descriptions[..index]
+                        .iter()
+                        .map(|previous| style.attribute.height(previous))
+                        .sum::<f64>(),
+            );
+        }
+        titled_content_y = header_divider_y + 5.0;
     }
 
     // `GroupMakerState.getImage` renders child group images before the current
     // scope's ordinary entities. Each child's already-computed dimensions are
-    // the node dimensions used by this region's SVEK layout.
-    let inner_offset_x = box_x + 5.0;
-    let inner_offset_y = header_divider_y + 5.0;
+    // the node dimensions used by this region's SVEK layout. A concurrent
+    // group image is that graph itself, so its contents start at the node corner.
+    let inner_offset_x = box_x + if composite.untitled { 0.0 } else { 5.0 };
+    let inner_offset_y = if composite.untitled {
+        box_y
+    } else {
+        titled_content_y
+    };
     let mut region_offset_x = inner_offset_x;
     let mut region_offset_y = inner_offset_y;
     for (index, region) in composite.regions.iter().enumerate() {

@@ -754,28 +754,57 @@ impl StateParser {
     }
 
     fn advance_concurrent_region(&mut self, line: &str) {
-        if let Some(frame) = self.scope_stack.last_mut() {
-            // Java provenance: `StateDiagram.concurrentState` stores
-            // `direction` on both the owning state and each synthetic
-            // concurrent group. The renderer only needs the owner's value
-            // because all of its region images share one composition axis.
-            if let Some(state) = self.states.iter_mut().find(|state| state.id == frame.base) {
-                state.concurrent_separator = line.chars().next();
+        let Some(frame) = self.scope_stack.last() else {
+            return;
+        };
+        let base = frame.base.clone();
+        let current = frame.current.clone();
+        // `StateDiagram.concurrentState` (StateDiagram.java:201-204) names the
+        // new group with `getUniqueSequence2("CONC")` (CucaDiagram.java:816-818).
+        // The letters are only that sequence. The region type is the group flag
+        // `gotoGroup` applies with `muteToGroupType(CONCURRENT_STATE)`.
+        let separator = line.chars().next();
+        if let Some(state) = self.states.iter_mut().find(|state| state.id == base) {
+            state.concurrent_separator = separator;
+        }
+        self.conc_counter += 1;
+        let short_name = format!("CONC{}", self.conc_counter);
+        // `quarkInContext(true, shortName)` (CucaDiagram.java:266-272): one
+        // existing quark of that short name is reused, unless it is the
+        // current group. Otherwise the child is created under the owner.
+        let mut same_name = self
+            .states
+            .iter()
+            .filter(|state| state.id.rsplit('.').next() == Some(short_name.as_str()));
+        let reused = if let Some(sole) = same_name.next()
+            && same_name.next().is_none()
+            && sole.id != current
+        {
+            Some(sole.id.clone())
+        } else {
+            None
+        };
+        let region_id = if let Some(id) = reused {
+            if let Some(state) = self.states.iter_mut().find(|state| state.id == id) {
+                state.composite = true;
+                state.concurrent_separator = separator;
             }
-            self.conc_counter += 1;
-            let n = self.conc_counter;
-            frame.current = format!("{}.CONC{}", frame.base, n);
-            if !self.region_ids.iter().any(|id| id == &frame.current) {
-                self.region_ids.push(frame.current.clone());
-            }
-            if let Some(state) = self.states.iter_mut().find(|state| state.id == frame.base) {
-                state
-                    .concurrent_regions
-                    .push(crate::diagram::state::ConcurrentRegion {
-                        id: frame.current.clone(),
-                        source_line: self.current_line,
-                    });
-            }
+            id
+        } else {
+            format!("{base}.{short_name}")
+        };
+        let frame = self.scope_stack.last_mut().expect("scope frame");
+        frame.current = region_id.clone();
+        if !self.region_ids.iter().any(|id| id == &region_id) {
+            self.region_ids.push(region_id.clone());
+        }
+        if let Some(state) = self.states.iter_mut().find(|state| state.id == base) {
+            state
+                .concurrent_regions
+                .push(crate::diagram::state::ConcurrentRegion {
+                    id: region_id,
+                    source_line: self.current_line,
+                });
         }
     }
 
@@ -1642,6 +1671,73 @@ mod tests {
         assert!(diagram.transitions.iter().any(|transition| {
             transition.from == "[*]" && transition.to == "CONCEPT.g5ckQuern"
         }));
+    }
+
+    #[test]
+    fn separator_reuses_the_sole_quark_of_the_sequence_name() {
+        // CW `region0_child_named_conc2`: the separator's sequence name is
+        // CONC2, and that quark already exists inside House. Java reuses it
+        // and mutes it, so Wing is its child and the later link names it.
+        let diagram = parse(
+            "state House {\n\
+             state CONC2\n\
+             --\n\
+             state Wing\n\
+             }\n\
+             [*] --> CONC2\n",
+        );
+        let house = diagram
+            .states
+            .iter()
+            .find(|state| state.id == "House")
+            .unwrap();
+        assert_eq!(
+            house
+                .concurrent_regions
+                .iter()
+                .map(|region| region.id.as_str())
+                .collect::<Vec<_>>(),
+            vec!["House.CONC2"]
+        );
+        let conc = diagram
+            .states
+            .iter()
+            .find(|state| state.id == "House.CONC2")
+            .unwrap();
+        assert!(conc.composite);
+        assert_eq!(
+            diagram
+                .states
+                .iter()
+                .filter(|state| state.id == "House.CONC2")
+                .count(),
+            1
+        );
+        assert!(diagram.states.iter().any(|state| {
+            state.id == "House.CONC2.Wing" && state.parent.as_deref() == Some("House.CONC2")
+        }));
+        assert_eq!(diagram.transitions[0].to, "House.CONC2");
+    }
+
+    #[test]
+    fn separator_beside_an_existing_conc_quark_rejects_the_outside_link() {
+        // CV `region_user_conc_beside_separator`, body lines without @startuml.
+        // The separator reuses the root CONC2 quark. Pier's parent is then a
+        // concurrent group, and the root link is refused.
+        let error = parse_err(
+            "state CONC2 {\n\
+             state Pier\n\
+             }\n\
+             state House {\n\
+             state Porch\n\
+             --\n\
+             state Wing\n\
+             }\n\
+             [*] --> Pier\n\
+             [*] --> Porch\n",
+        );
+        assert_eq!(error.line, 9);
+        assert_eq!(error.message, "The state Pier cannot be used here.");
     }
 
     #[test]
