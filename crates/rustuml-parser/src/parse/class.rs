@@ -1961,7 +1961,43 @@ impl QueueDirection {
     }
 }
 
+/// `[[...]]` is a Creole link, including inside a relationship label. Arrow
+/// style brackets are a single `[...]` pair (`A -[#blue]-> B`). Mask links
+/// so that pair cannot swallow the URL.
+fn protect_creole_links(line: &str) -> (String, Vec<String>) {
+    let mut out = String::with_capacity(line.len());
+    let mut saved = Vec::new();
+    let mut rest = line;
+    while let Some(start) = rest.find("[[") {
+        out.push_str(&rest[..start]);
+        let after = &rest[start + 2..];
+        if let Some(end) = after.find("]]") {
+            let full = &rest[start..start + 2 + end + 2];
+            saved.push(full.to_string());
+            out.extend(std::iter::repeat('\u{E000}').take(full.len()));
+            rest = &after[end + 2..];
+        } else {
+            out.push_str(&rest[start..]);
+            break;
+        }
+    }
+    out.push_str(rest);
+    (out, saved)
+}
+
+fn restore_creole_links(mut line: String, saved: &[String]) -> String {
+    for token in saved {
+        let placeholder: String = std::iter::repeat('\u{E000}').take(token.len()).collect();
+        if let Some(pos) = line.find(&placeholder) {
+            line.replace_range(pos..pos + placeholder.len(), token);
+        }
+    }
+    line
+}
+
 fn strip_arrow_modifiers(line: &str) -> (String, RelationshipStyle, Option<QueueDirection>) {
+    let (masked, saved_links) = protect_creole_links(line);
+    let line = masked.as_str();
     static BRACKETED: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[[^\]]*\]").unwrap());
     // Direction keywords appearing between dash/dot runs on the arrow body.
     static DIRECTION: LazyLock<Regex> =
@@ -2019,7 +2055,11 @@ fn strip_arrow_modifiers(line: &str) -> (String, RelationshipStyle, Option<Queue
         }
     });
     let stripped = DIRECTION.replace_all(&s, "$1$3").into_owned();
-    (stripped, style, direction)
+    (
+        restore_creole_links(stripped, &saved_links),
+        style,
+        direction,
+    )
 }
 
 fn invert_relationship_end(end: RelationshipEnd) -> RelationshipEnd {
@@ -2906,6 +2946,21 @@ mod tests {
     fn relationship_label() {
         let d = parse("Parent -- Child : has");
         assert_eq!(d.relationships[0].label.as_deref(), Some("has"));
+    }
+
+    #[test]
+    fn relationship_label_keeps_a_creole_url() {
+        let d = parse("Kiln --> Glaze : pre\\n[[http://example.com/a\\nb]]\\npost");
+        assert_eq!(
+            d.relationships[0].label.as_deref(),
+            Some("pre\\n[[http://example.com/a\\nb]]\\npost")
+        );
+        let styled = parse("Kiln -[#blue]-> Glaze : plain");
+        assert_eq!(
+            styled.relationships[0].style.color.as_deref(),
+            Some("#blue")
+        );
+        assert_eq!(styled.relationships[0].label.as_deref(), Some("plain"));
     }
 
     #[test]
