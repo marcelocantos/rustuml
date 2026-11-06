@@ -13,7 +13,7 @@ use crate::diagram::state::*;
 
 pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
     let mut parser = StateParser::new();
-    parser.predeclare_state_structure(lines);
+    parser.predeclare_state_structure(lines)?;
     parser.reset_after_predeclaration();
     for (i, line) in lines.iter().enumerate() {
         let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
@@ -38,6 +38,245 @@ pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
 fn is_region_separator(line: &str) -> bool {
     (line.len() >= 2 && line.bytes().all(|b| b == b'-'))
         || (line.len() >= 2 && line.bytes().all(|b| b == b'|'))
+}
+
+/// How a command uses a state name.
+///
+/// Java provenance: `CommandLinkStateCommon.getEntity` and
+/// `CommandCreateState.executeArg` call `StateDiagram.checkConcurrentStateOk`.
+/// `CommandAddField.executeArg` only calls `quarkInContext` and does not.
+#[derive(Clone, Copy)]
+enum StateNameUse {
+    Link,
+    Declaration,
+    Unchecked,
+}
+
+fn parent_is_concurrent(parent: Option<&str>) -> bool {
+    parent
+        .and_then(|parent| parent.rsplit('.').next())
+        .is_some_and(|segment| segment.starts_with("CONC"))
+}
+
+/// `StateDiagram.checkConcurrentStateOkInternal` (StateDiagram.java:75-90).
+fn check_concurrent_state_ok(existing_parent: Option<&str>, scope: Option<&str>) -> bool {
+    if parent_is_concurrent(scope) && scope != existing_parent {
+        return false;
+    }
+    if parent_is_concurrent(existing_parent) && scope != existing_parent {
+        return false;
+    }
+    true
+}
+
+fn concurrent_state_error(line: usize, use_kind: &StateNameUse, name: &str) -> ParseError {
+    let message = match use_kind {
+        StateNameUse::Link => format!("The state {name} cannot be used here."),
+        StateNameUse::Declaration => format!(
+            "The state {name} has been created in a concurrent state : it cannot be used here."
+        ),
+        StateNameUse::Unchecked => unreachable!("unchecked state names are not rejected"),
+    };
+    ParseError { line, message }
+}
+
+/// `HColorSet.parseSimpleColor` plus the symbolic colors `parseColor` accepts
+/// before it. Names are the pinned `ColorTrieNode` registry already listed by
+/// `sequence::valid_return_color`. `sequence.rs` is not edited from this slice.
+fn state_hcolor_simple(raw: &str) -> bool {
+    let color = raw.strip_prefix('#').unwrap_or(raw);
+    if matches!(color.len(), 1 | 3 | 6 | 8) && color.bytes().all(|byte| byte.is_ascii_hexdigit()) {
+        return true;
+    }
+    matches!(
+        color.to_ascii_lowercase().as_str(),
+        "aliceblue"
+            | "antiquewhite"
+            | "application"
+            | "aqua"
+            | "aquamarine"
+            | "automatic"
+            | "azure"
+            | "background"
+            | "beige"
+            | "bisque"
+            | "black"
+            | "blanchedalmond"
+            | "blue"
+            | "blueviolet"
+            | "brown"
+            | "burlywood"
+            | "business"
+            | "cadetblue"
+            | "chartreuse"
+            | "chocolate"
+            | "coral"
+            | "cornflowerblue"
+            | "cornsilk"
+            | "crimson"
+            | "cyan"
+            | "darkblue"
+            | "darkcyan"
+            | "darkgoldenrod"
+            | "darkgray"
+            | "darkgreen"
+            | "darkgrey"
+            | "darkkhaki"
+            | "darkmagenta"
+            | "darkolivegreen"
+            | "darkorange"
+            | "darkorchid"
+            | "darkred"
+            | "darksalmon"
+            | "darkseagreen"
+            | "darkslateblue"
+            | "darkslategray"
+            | "darkslategrey"
+            | "darkturquoise"
+            | "darkviolet"
+            | "deeppink"
+            | "deepskyblue"
+            | "dimgray"
+            | "dimgrey"
+            | "dodgerblue"
+            | "firebrick"
+            | "floralwhite"
+            | "forestgreen"
+            | "fuchsia"
+            | "gainsboro"
+            | "ghostwhite"
+            | "gold"
+            | "goldenrod"
+            | "gray"
+            | "green"
+            | "greenyellow"
+            | "grey"
+            | "honeydew"
+            | "hotpink"
+            | "implementation"
+            | "indianred"
+            | "indigo"
+            | "ivory"
+            | "khaki"
+            | "lavender"
+            | "lavenderblush"
+            | "lawngreen"
+            | "lemonchiffon"
+            | "lightblue"
+            | "lightcoral"
+            | "lightcyan"
+            | "lightgoldenrodyellow"
+            | "lightgray"
+            | "lightgreen"
+            | "lightgrey"
+            | "lightpink"
+            | "lightsalmon"
+            | "lightseagreen"
+            | "lightskyblue"
+            | "lightslategray"
+            | "lightslategrey"
+            | "lightsteelblue"
+            | "lightyellow"
+            | "lime"
+            | "limegreen"
+            | "linen"
+            | "magenta"
+            | "maroon"
+            | "mediumaquamarine"
+            | "mediumblue"
+            | "mediumorchid"
+            | "mediumpurple"
+            | "mediumseagreen"
+            | "mediumslateblue"
+            | "mediumspringgreen"
+            | "mediumturquoise"
+            | "mediumvioletred"
+            | "midnightblue"
+            | "mintcream"
+            | "mistyrose"
+            | "moccasin"
+            | "motivation"
+            | "navajowhite"
+            | "navy"
+            | "oldlace"
+            | "olive"
+            | "olivedrab"
+            | "orange"
+            | "orangered"
+            | "orchid"
+            | "palegoldenrod"
+            | "palegreen"
+            | "paleturquoise"
+            | "palevioletred"
+            | "papayawhip"
+            | "peachpuff"
+            | "peru"
+            | "physical"
+            | "pink"
+            | "plum"
+            | "powderblue"
+            | "purple"
+            | "red"
+            | "rosybrown"
+            | "royalblue"
+            | "saddlebrown"
+            | "salmon"
+            | "sandybrown"
+            | "seagreen"
+            | "seashell"
+            | "sienna"
+            | "silver"
+            | "skyblue"
+            | "slateblue"
+            | "slategray"
+            | "slategrey"
+            | "snow"
+            | "springgreen"
+            | "steelblue"
+            | "strategy"
+            | "tan"
+            | "teal"
+            | "technology"
+            | "thistle"
+            | "tomato"
+            | "transparent"
+            | "turquoise"
+            | "violet"
+            | "wheat"
+            | "white"
+            | "whitesmoke"
+            | "yellow"
+            | "yellowgreen"
+    )
+}
+
+/// `HColorSet.parseColor` (HColorSet.java:75-116) for a token the state
+/// declaration regex has already captured: a simple color, or the first
+/// `-`, `\`, `|`, or `/` gradient whose two sides are simple colors.
+fn state_hcolor_accepted(token: &str) -> bool {
+    let color = token.strip_prefix('#').unwrap_or(token);
+    if state_hcolor_simple(color) {
+        return true;
+    }
+    let bytes = color.as_bytes();
+    for (index, byte) in bytes.iter().enumerate() {
+        if matches!(byte, b'-' | b'\\' | b'|' | b'/') {
+            let left = &color[..index];
+            let right = &color[index + 1..];
+            return !left.is_empty()
+                && !right.is_empty()
+                && state_hcolor_simple(left)
+                && state_hcolor_simple(right);
+        }
+    }
+    false
+}
+
+fn state_color_error(line: usize) -> ParseError {
+    ParseError {
+        line,
+        message: "No such color".to_string(),
+    }
 }
 
 /// Parse PlantUML's bracketed state-link style into typed transition metadata.
@@ -178,7 +417,7 @@ impl StateParser {
     /// source for each `ParserPass`. State declarations, composite scopes,
     /// descriptions, and concurrent separators run in pass one, while
     /// `CommandLinkStateCommon` runs only in pass two.
-    fn predeclare_state_structure(&mut self, lines: &[String]) {
+    fn predeclare_state_structure(&mut self, lines: &[String]) -> Result<(), ParseError> {
         let mut in_note = false;
         let mut in_skinparam_block = false;
 
@@ -223,10 +462,11 @@ impl StateParser {
                 self.scope_stack.pop();
                 continue;
             }
-            if !self.try_state_decl(trimmed) {
-                let _ = self.try_state_description(trimmed);
+            if !self.try_state_decl(trimmed)? {
+                let _ = self.try_state_description(trimmed)?;
             }
         }
+        Ok(())
     }
 
     fn reset_after_predeclaration(&mut self) {
@@ -286,27 +526,55 @@ impl StateParser {
     /// share an already-created `Inner` across later sibling composites.
     ///
     /// `StateDiagram.checkConcurrentStateOk` rejects that reuse across
-    /// concurrent-region boundaries, so those scopes retain independent
-    /// children.
-    fn resolve_state_id(&self, raw: &str) -> String {
-        self.resolve_state_id_in(raw, self.current_scope())
+    /// concurrent-region boundaries. Link and declaration commands report
+    /// the refusal. A field line does not. A second quark appears only when
+    /// more than one short name already exists.
+    fn resolve_state_id(&self, raw: &str, use_kind: StateNameUse) -> Result<String, ParseError> {
+        self.resolve_state_id_in(raw, self.current_scope(), use_kind)
     }
 
-    fn resolve_state_id_in(&self, raw: &str, scope: Option<&str>) -> String {
+    fn resolve_state_id_in(
+        &self,
+        raw: &str,
+        scope: Option<&str>,
+        use_kind: StateNameUse,
+    ) -> Result<String, ParseError> {
         let raw = raw.trim();
+        // `CommandLinkStateCommon.getEntity` returns the current group when
+        // its short name equals the token, before `quarkInContext` and
+        // `checkConcurrentStateOk`. A composite born in a concurrent region
+        // can still be the source of a link drawn inside itself.
+        // `CommandCreateState` has no such short-circuit.
+        if matches!(use_kind, StateNameUse::Link)
+            && let Some(scope) = scope
+            && scope.rsplit('.').next() == Some(raw)
+        {
+            return Ok(scope.to_string());
+        }
         if raw.starts_with('[') && raw.ends_with(']') || raw.contains('.') {
-            return self.qualify_in(raw, scope);
+            let id = self.qualify_in(raw, scope);
+            self.reject_resolved_state(&id, raw, scope, &use_kind)?;
+            return Ok(id);
+        }
+
+        // `CucaDiagram.quarkInContextSafe`: one existing short name is the
+        // quark, including one that lives in a concurrent region. The
+        // concurrent check then accepts or rejects that quark. Several
+        // short names stay scope-local.
+        let mut same_name = self
+            .states
+            .iter()
+            .filter(|state| state.id.rsplit('.').next() == Some(raw));
+        if let Some(sole) = same_name.next()
+            && same_name.next().is_none()
+        {
+            self.reject_parent(sole.parent.as_deref(), raw, scope, &use_kind)?;
+            return Ok(sole.id.clone());
         }
 
         let mut matches = self.states.iter().filter(|state| {
-            let existing_is_concurrent = state
-                .parent
-                .as_deref()
-                .and_then(|parent| parent.rsplit('.').next())
-                .is_some_and(|segment| segment.starts_with("CONC"));
-            let current_is_concurrent = scope
-                .and_then(|scope| scope.rsplit('.').next())
-                .is_some_and(|segment| segment.starts_with("CONC"));
+            let existing_is_concurrent = parent_is_concurrent(state.parent.as_deref());
+            let current_is_concurrent = parent_is_concurrent(scope);
             state.id.rsplit('.').next() == Some(raw)
                 && (!(existing_is_concurrent || current_is_concurrent)
                     || state.parent.as_deref() == scope)
@@ -314,10 +582,39 @@ impl StateParser {
         if let Some(sole) = matches.next()
             && matches.next().is_none()
         {
-            return sole.id.clone();
+            self.reject_parent(sole.parent.as_deref(), raw, scope, &use_kind)?;
+            return Ok(sole.id.clone());
         }
 
-        self.qualify_in(raw, scope)
+        Ok(self.qualify_in(raw, scope))
+    }
+
+    fn reject_resolved_state(
+        &self,
+        id: &str,
+        raw: &str,
+        scope: Option<&str>,
+        use_kind: &StateNameUse,
+    ) -> Result<(), ParseError> {
+        let Some(state) = self.states.iter().find(|state| state.id == id) else {
+            return Ok(());
+        };
+        self.reject_parent(state.parent.as_deref(), raw, scope, use_kind)
+    }
+
+    fn reject_parent(
+        &self,
+        existing_parent: Option<&str>,
+        raw: &str,
+        scope: Option<&str>,
+        use_kind: &StateNameUse,
+    ) -> Result<(), ParseError> {
+        if matches!(use_kind, StateNameUse::Unchecked)
+            || check_concurrent_state_ok(existing_parent, scope)
+        {
+            return Ok(());
+        }
+        Err(concurrent_state_error(self.current_line, use_kind, raw))
     }
 
     /// Record where Java creates the newest note entity and resolve its
@@ -333,7 +630,7 @@ impl StateParser {
             _ => None,
         });
         let anchor_id = anchor
-            .map(|anchor| self.resolve_state_id(&anchor))
+            .and_then(|anchor| self.resolve_state_id(&anchor, StateNameUse::Unchecked).ok())
             .filter(|id| self.states.iter().any(|state| state.id == *id));
         if let Some(note) = self.notes.last_mut() {
             note.parent = parent;
@@ -379,7 +676,11 @@ impl StateParser {
                 }
                 _ => continue,
             };
-            let id = self.resolve_state_id_in(anchor, note.parent.as_deref());
+            let Ok(id) =
+                self.resolve_state_id_in(anchor, note.parent.as_deref(), StateNameUse::Unchecked)
+            else {
+                continue;
+            };
             if self.states.iter().any(|state| state.id == id) {
                 self.notes[index].anchor_id = Some(id);
             }
@@ -393,14 +694,14 @@ impl StateParser {
         }
     }
 
-    fn ensure_state(&mut self, raw: &str) -> String {
+    fn ensure_state(&mut self, raw: &str, use_kind: StateNameUse) -> Result<String, ParseError> {
         let raw = raw.trim();
         // Pseudo-states ([*], [H], [H*]) are handled by the renderer directly
         // and do not need a corresponding State entry in the states list. They
         // are still scope-qualified so the renderer can map them to the right
         // composite's start/end pseudo-state.
         if raw.starts_with('[') && raw.ends_with(']') {
-            return self.qualify(raw);
+            return Ok(self.qualify(raw));
         }
         // CommandLinkStateCommon: `X[H]` / `X[H*]` call StateDiagram
         // getHistorical/getDeepHistory(location, X), which resolve X with
@@ -410,14 +711,14 @@ impl StateParser {
             if let Some(base) = raw.strip_suffix(marker)
                 && !base.is_empty()
             {
-                let group = self.ensure_state(base);
+                let group = self.ensure_state(base, use_kind)?;
                 if let Some(state) = self.states.iter_mut().find(|state| state.id == group) {
                     state.composite = true;
                 }
-                return format!("{marker}{group}");
+                return Ok(format!("{marker}{group}"));
             }
         }
-        let id = self.resolve_state_id(raw);
+        let id = self.resolve_state_id(raw, use_kind)?;
         let parent = self.current_scope().map(String::from);
         if let Some(state) = self.states.iter_mut().find(|state| state.id == id) {
             if state.source_line == 0 {
@@ -432,7 +733,7 @@ impl StateParser {
                 ..State::default()
             });
         }
-        id
+        Ok(id)
     }
 
     fn advance_concurrent_region(&mut self, line: &str) {
@@ -556,13 +857,13 @@ impl StateParser {
             return Ok(());
         }
 
-        if self.try_transition(line) {
+        if self.try_transition(line)? {
             return Ok(());
         }
-        if self.try_state_decl(line) {
+        if self.try_state_decl(line)? {
             return Ok(());
         }
-        if self.try_state_description(line) {
+        if self.try_state_description(line)? {
             return Ok(());
         }
         if self.try_hide(line) {
@@ -575,7 +876,7 @@ impl StateParser {
         Ok(())
     }
 
-    fn try_transition(&mut self, line: &str) -> bool {
+    fn try_transition(&mut self, line: &str) -> Result<bool, ParseError> {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             // State IDs may include dots for substate references (e.g. `S.H`).
             // Pseudo-states: [*] (initial/final), [H] (shallow history), [H*] (deep history).
@@ -595,8 +896,8 @@ impl StateParser {
         });
 
         if let Some(caps) = RE.captures(line) {
-            let from = self.ensure_state(&caps[1]);
-            let to = self.ensure_state(&caps[3]);
+            let from = self.ensure_state(&caps[1], StateNameUse::Link)?;
+            let to = self.ensure_state(&caps[3], StateNameUse::Link)?;
             let label = caps.get(4).map(|m| m.as_str().trim().to_string());
             let transition_style = parse_transition_style(&caps[2]);
             transition_style.record_in(&mut self.meta, self.transitions.len());
@@ -607,13 +908,13 @@ impl StateParser {
                 arrow: parse_transition_arrow(&caps[2]),
                 source_line: self.current_line,
             });
-            true
+            Ok(true)
         } else {
-            false
+            Ok(false)
         }
     }
 
-    fn try_state_decl(&mut self, line: &str) -> bool {
+    fn try_state_decl(&mut self, line: &str) -> Result<bool, ParseError> {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             // Trailing decoration accepted in any order:
             //   `#color`        — fill colour
@@ -661,7 +962,7 @@ impl StateParser {
                 .get(1)
                 .map_or_else(|| caps[2].to_string(), |m| m.as_str().to_string());
             let raw_id = caps[2].to_string();
-            let id = self.resolve_state_id(&raw_id);
+            let id = self.resolve_state_id(&raw_id, StateNameUse::Declaration)?;
             let parent = self.current_scope().map(String::from);
             let stereotype = caps.get(3).map(|m| m.as_str());
             // A trailing `{` opens a composite block; mark the state and push
@@ -711,6 +1012,16 @@ impl StateParser {
                     }
                     _ => {}
                 }
+            }
+            if let Some(fill) = fill.as_deref()
+                && !state_hcolor_accepted(fill)
+            {
+                return Err(state_color_error(self.current_line));
+            }
+            if let Some(stroke) = stroke.as_deref()
+                && !state_hcolor_accepted(stroke)
+            {
+                return Err(state_color_error(self.current_line));
             }
 
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
@@ -763,12 +1074,12 @@ impl StateParser {
                     current: id,
                 });
             }
-            true
+            Ok(true)
         } else if let Some(caps) = RE_DESC.captures(line) {
             let label = caps
                 .get(1)
                 .map_or_else(|| caps[2].to_string(), |m| m.as_str().to_string());
-            let id = self.resolve_state_id(&caps[2]);
+            let id = self.resolve_state_id(&caps[2], StateNameUse::Declaration)?;
             let parent = self.current_scope().map(String::from);
             let desc = caps[3].trim().to_string();
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
@@ -788,17 +1099,17 @@ impl StateParser {
                     ..State::default()
                 });
             }
-            true
+            Ok(true)
         } else {
-            false
+            Ok(false)
         }
     }
 
-    fn try_state_description(&mut self, line: &str) -> bool {
+    fn try_state_description(&mut self, line: &str) -> Result<bool, ParseError> {
         static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^(\w+)\s*:\s*(.+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let id = self.ensure_state(&caps[1]);
+            let id = self.ensure_state(&caps[1], StateNameUse::Unchecked)?;
             let desc = caps[2].trim().to_string();
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.descriptions.push(desc);
@@ -806,9 +1117,9 @@ impl StateParser {
                     state.decl_line = Some(self.current_line);
                 }
             }
-            true
+            Ok(true)
         } else {
-            false
+            Ok(false)
         }
     }
 
@@ -1273,25 +1584,21 @@ mod tests {
     }
 
     #[test]
-    fn concurrent_regions_keep_same_named_children_scope_local() {
-        let d = parse(
+    fn same_named_child_in_a_later_region_is_rejected() {
+        // The first `SharedRelay` is the sole quark, parented by the composite
+        // rather than by a concurrent group. The second link runs in
+        // `CONC2`, so `checkConcurrentStateOk` refuses it. A second quark is
+        // not created: `quarkInContextSafe` only mints a new child when
+        // `countByName` is not 1.
+        let error = parse_err(
             "state ParallelVault {\n\
              [*] --> SharedRelay\n\
              --\n\
              [*] --> SharedRelay\n\
              }",
         );
-
-        assert!(
-            d.states
-                .iter()
-                .any(|state| state.id == "ParallelVault.SharedRelay")
-        );
-        assert!(
-            d.states
-                .iter()
-                .any(|state| state.id == "ParallelVault.CONC2.SharedRelay")
-        );
+        assert_eq!(error.line, 4);
+        assert_eq!(error.message, "The state SharedRelay cannot be used here.");
     }
 
     #[test]
@@ -1560,6 +1867,145 @@ mod tests {
                 d.states.iter().any(|s| s.id == group && s.composite),
                 "{group}"
             );
+        }
+    }
+
+    fn parse_err(input: &str) -> ParseError {
+        let lines: Vec<String> = input.lines().map(str::to_string).collect();
+        parse_state(&lines).unwrap_err()
+    }
+
+    #[test]
+    fn renamed_link_into_a_concurrent_region_is_rejected() {
+        let error = parse_err(
+            "state Kiln {\n\
+             Ash --> Coal\n\
+             --\n\
+             Flame --> Glow\n\
+             }\n\
+             Stoke --> Flame",
+        );
+        assert_eq!(error.line, 6);
+        assert_eq!(error.message, "The state Flame cannot be used here.");
+    }
+
+    #[test]
+    fn renamed_link_from_a_region_to_a_region_zero_sibling_is_rejected() {
+        let error = parse_err(
+            "state Kiln {\n\
+             Ash --> Coal\n\
+             --\n\
+             Flame --> Ash\n\
+             }",
+        );
+        assert_eq!(error.line, 4);
+        assert_eq!(error.message, "The state Ash cannot be used here.");
+    }
+
+    #[test]
+    fn renamed_declaration_of_a_concurrent_state_is_rejected() {
+        let error = parse_err(
+            "state Kiln {\n\
+             --\n\
+             state Flame\n\
+             }\n\
+             state Flame",
+        );
+        assert_eq!(error.line, 5);
+        assert_eq!(
+            error.message,
+            "The state Flame has been created in a concurrent state : it cannot be used here."
+        );
+    }
+
+    #[test]
+    fn renamed_description_of_a_concurrent_state_stays_on_that_quark() {
+        let diagram = parse(
+            "state Kiln {\n\
+             --\n\
+             state Flame\n\
+             }\n\
+             Flame : bright",
+        );
+        let flame = diagram
+            .states
+            .iter()
+            .find(|state| state.label == "Flame")
+            .unwrap();
+        assert_eq!(flame.parent.as_deref(), Some("Kiln.CONC2"));
+        assert_eq!(flame.descriptions, ["bright"]);
+        assert_eq!(
+            diagram
+                .states
+                .iter()
+                .filter(|state| state.id.rsplit('.').next() == Some("Flame"))
+                .count(),
+            1
+        );
+    }
+
+    #[test]
+    fn renamed_link_to_the_current_composite_stays_legal() {
+        let diagram = parse(
+            "state Envelope {\n\
+             state Head\n\
+             --\n\
+             state Mixed {\n\
+             state Leaf\n\
+             [*] --> Leaf\n\
+             Mixed --> Leaf : keep\n\
+             }\n\
+             }",
+        );
+        assert!(diagram.transitions.iter().any(|transition| {
+            transition.from == "Envelope.CONC2.Mixed"
+                && transition.to == "Envelope.CONC2.Mixed.Leaf"
+        }));
+    }
+
+    #[test]
+    fn renamed_link_to_a_region_zero_child_stays_legal() {
+        let diagram = parse(
+            "state Kiln {\n\
+             Ash --> Coal\n\
+             --\n\
+             Flame --> Glow\n\
+             }\n\
+             Stoke --> Ash",
+        );
+        assert!(
+            diagram
+                .transitions
+                .iter()
+                .any(|transition| { transition.from == "Stoke" && transition.to == "Kiln.Ash" })
+        );
+    }
+
+    #[test]
+    fn renamed_state_colors_follow_hcolorset() {
+        let diagram = parse("state Boil #lightblue ##red\nstate Calm #red-blue\nBoil --> Calm");
+        let boil = diagram
+            .states
+            .iter()
+            .find(|state| state.id == "Boil")
+            .unwrap();
+        assert_eq!(boil.fill.as_deref(), Some("lightblue"));
+        assert_eq!(boil.stroke.as_deref(), Some("red"));
+        let calm = diagram
+            .states
+            .iter()
+            .find(|state| state.id == "Calm")
+            .unwrap();
+        assert_eq!(calm.fill.as_deref(), Some("red-blue"));
+
+        for (source, line) in [
+            ("state Boil ##RebeccaPurple", 1),
+            ("state Boil #NotAColor", 1),
+            ("state Boil #GGGGGG", 1),
+        ] {
+            let error = parse_err(source);
+            assert_eq!(error.line, line, "{source}");
+            assert_eq!(error.message, "No such color");
         }
     }
 }

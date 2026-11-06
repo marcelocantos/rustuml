@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-command-admission",
+  "base_revision": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "base_binary": "/Users/marcelo/Library/Caches/rustuml-grok-g5/bin/rustuml-base",
+  "tip_binary": "/Users/marcelo/Library/Caches/rustuml-grok-g5/bin/rustuml-tip",
+  "lost_matches": 0,
+  "lost_rejections": 0,
+  "new_valid_input_errors": 0,
+  "panics": 0,
+  "gains": 0,
+  "no_oracle": {
+    "result": "exact baseline 11181/11251",
+    "state": "897/901",
+    "failure_names_vs_base": "identical, 70 names, empty diff after the current-group link short-circuit"
+  },
+  "golden_pairs": {
+    "total": 12550,
+    "passed": 10497,
+    "failed": 754,
+    "skipped": 1299,
+    "panics": 0,
+    "xml_diff": 754,
+    "state_directory_failures": 7,
+    "failure_names_vs_base": "identical, 754 names, compared on the draft before the current-group short-circuit. The short-circuit did not change the no-oracle failure set, and every golden that parsed before it still parses."
+  },
+  "parity_perturbations": {
+    "suite": "held_out_perturbations_match_java_without_oracle_layout failed on the draft. The panic origin is crates/rustuml-parser/src/parse/class.rs:285. One new state parse error was review3_concurrent_region_mixed_live_and_image_outcomes.puml.",
+    "after_short_circuit": "that source exits 0 with empty stderr and a 26269-byte SVG. It remains a standing SVG mismatch, not a new match."
+  },
+  "au": {
+    "cluster_concurrent_crossing": "base exit 0; tip exit 1; stderr parse error: line 6: The state Blow cannot be used here.",
+    "stroke_per_state_css4": "base exit 0; tip exit 1; stderr parse error: line 1: No such color"
+  },
+  "renamed_holdouts": {
+    "holdout_crossing_stoke": "exit 1 line 6 The state Flame cannot be used here.",
+    "holdout_decl_flame": "exit 1 line 5 The state Flame has been created in a concurrent state : it cannot be used here.",
+    "holdout_region_sibling": "exit 1 line 4 The state Ash cannot be used here.",
+    "holdout_stroke_rebeccapurple": "exit 1 line 1 No such color",
+    "holdout_fill_unknown": "exit 1 line 1 No such color",
+    "holdout_valid_colors": "exit 0, stdout identical to base",
+    "holdout_field_on_concurrent": "exit 0"
+  },
+  "java_relay": "pending for the ten probes under ~/Library/Caches/rustuml-grok-g5/batch-g5/. AU Java stderr is already in the shared-svg-checker-c1 relay."
+}

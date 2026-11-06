@@ -1613,6 +1613,27 @@ fn stereotype_state_value(diagram: &StateDiagram, stereotype: &str, attr: &str) 
 /// title and field TextBlocks from the state styles' `FontConfiguration`
 /// (`Style.getUFont`: FontStyle italic and weight) and measure the blocks
 /// they draw, so `bold`/`italic` are the emitted face's.
+/// `CreoleMode.FULL` changes this string when it is not already one unstyled
+/// run. Plain labels stay on the single-element emitter so their existing
+/// `textLength` and monospace NBSP bytes are unchanged.
+fn state_text_has_creole_markup(text: &str) -> bool {
+    let segments = crate::creole::parse_segments(text);
+    if segments.len() != 1 {
+        return true;
+    }
+    let segment = &segments[0];
+    if segment.style != crate::creole::Style::default() {
+        return true;
+    }
+    let literal = segment
+        .text
+        .replace("&amp;", "&")
+        .replace("&lt;", "<")
+        .replace("&gt;", ">")
+        .replace("&#160;", "\u{00a0}");
+    literal != text
+}
+
 fn state_text_width_with_family(
     text: &str,
     font_size: f64,
@@ -1622,7 +1643,15 @@ fn state_text_width_with_family(
     monospace: bool,
 ) -> f64 {
     if monospace {
-        crate::plantuml_metrics::mono_text_width_styled(text, font_size, bold, italic)
+        // Measure the Creole runs. A plain string has one run, so this stays
+        // the monospaced cell advance.
+        text_render::measure_with_family_and_face(
+            text,
+            font_size,
+            bold,
+            italic,
+            font_name.unwrap_or("monospace"),
+        )
     } else if let Some(font_name) = font_name {
         if font_name
             .trim_matches(|c| c == '"' || c == '\'')
@@ -8124,10 +8153,25 @@ pub fn render_with_oracle(
                                         &title_style.family,
                                     )
                             });
-                        if title_style.family != "sans-serif" {
+                        let title_base = TextBase {
+                            x: text_x,
+                            y: text_y,
+                            font_size: title_style.size as u32,
+                            font_family: &title_style.family,
+                            fill: &title_style.color,
+                            bold: title_style.bold,
+                            italic: title_style.italic,
+                            underline: false,
+                            skip_underline: false,
+                        };
+                        if title_style.family != "sans-serif"
+                            && !state_text_has_creole_markup(label)
+                        {
                             // Custom font name (`skinparam stateFontName ...` /
                             // global `defaultFontName ...`): emit the
                             // user-supplied family and the matching width.
+                            // A plain run is one atom; Creole markup below uses
+                            // the shared TextBlock emitter.
                             let fam = crate::svg::font_family_attribute(&title_style.family);
                             let style_attr = if title_style.italic {
                                 r#" font-style="italic""#
@@ -8152,21 +8196,7 @@ pub fn render_with_oracle(
                             .unwrap();
                         } else {
                             let mut text_buf = String::new();
-                            text_render::emit_text(
-                                &mut text_buf,
-                                label,
-                                &TextBase {
-                                    x: text_x,
-                                    y: text_y,
-                                    font_size: title_style.size as u32,
-                                    font_family: "sans-serif",
-                                    fill: &title_style.color,
-                                    bold: title_style.bold,
-                                    italic: title_style.italic,
-                                    underline: false,
-                                    skip_underline: false,
-                                },
-                            );
+                            text_render::emit_text(&mut text_buf, label, &title_base);
                             svg.push_str(&text_buf);
                         }
 
@@ -8175,23 +8205,12 @@ pub fn render_with_oracle(
                         // label. Rich Creole names can emit more than one
                         // baseline (for example mixed font sizes), so `j + 1`
                         // would accidentally reuse the second name baseline.
-                        let mut oracle_text_y_index = if title_style.family != "sans-serif" {
+                        let mut oracle_text_y_index = if title_style.family != "sans-serif"
+                            && !state_text_has_creole_markup(label)
+                        {
                             1
                         } else {
-                            text_render::emitted_baseline_count(
-                                label,
-                                &TextBase {
-                                    x: text_x,
-                                    y: text_y,
-                                    font_size: title_style.size as u32,
-                                    font_family: "sans-serif",
-                                    fill: &title_style.color,
-                                    bold: title_style.bold,
-                                    italic: title_style.italic,
-                                    underline: false,
-                                    skip_underline: false,
-                                },
-                            )
+                            text_render::emitted_baseline_count(label, &title_base)
                         };
                         for (j, desc) in descriptions.iter().enumerate() {
                             let desc_x = box_x + 5.0 + global_padding;
@@ -8216,7 +8235,20 @@ pub fn render_with_oracle(
                                         )
                                         + j as f64 * DESC_LINE_SPACING
                                 });
-                            if attribute_style.family != "sans-serif" {
+                            let desc_base = TextBase {
+                                x: desc_x,
+                                y: desc_y,
+                                font_size: attribute_style.size as u32,
+                                font_family: &attribute_style.family,
+                                fill: &attribute_style.color,
+                                bold: attribute_style.bold,
+                                italic: attribute_style.italic,
+                                underline: false,
+                                skip_underline: false,
+                            };
+                            if attribute_style.family != "sans-serif"
+                                && !state_text_has_creole_markup(desc)
+                            {
                                 let fam =
                                     crate::svg::font_family_attribute(&attribute_style.family);
                                 let style_attr = if attribute_style.italic {
@@ -8257,36 +8289,10 @@ pub fn render_with_oracle(
                                 oracle_text_y_index += 1;
                             } else {
                                 let mut text_buf = String::new();
-                                text_render::emit_text(
-                                    &mut text_buf,
-                                    desc,
-                                    &TextBase {
-                                        x: desc_x,
-                                        y: desc_y,
-                                        font_size: attribute_style.size as u32,
-                                        font_family: "sans-serif",
-                                        fill: &attribute_style.color,
-                                        bold: attribute_style.bold,
-                                        italic: attribute_style.italic,
-                                        underline: false,
-                                        skip_underline: false,
-                                    },
-                                );
+                                text_render::emit_text(&mut text_buf, desc, &desc_base);
                                 svg.push_str(&text_buf);
-                                oracle_text_y_index += text_render::emitted_baseline_count(
-                                    desc,
-                                    &TextBase {
-                                        x: desc_x,
-                                        y: desc_y,
-                                        font_size: attribute_style.size as u32,
-                                        font_family: "sans-serif",
-                                        fill: &attribute_style.color,
-                                        bold: attribute_style.bold,
-                                        italic: attribute_style.italic,
-                                        underline: false,
-                                        skip_underline: false,
-                                    },
-                                );
+                                oracle_text_y_index +=
+                                    text_render::emitted_baseline_count(desc, &desc_base);
                             }
                         }
 
@@ -13479,5 +13485,54 @@ CobaltDecision --> [*]
         assert!(svg.contains(r##"fill="#F1F1F1""##)); // PlantUML state fill
         assert!(svg.contains(r##"style="stroke:#181818;stroke-width:0.5;""##)); // stroke as style attr
         assert!(svg.contains(r##"lengthAdjust="spacing""##)); // text attributes
+    }
+
+    #[test]
+    fn plain_monospace_state_width_matches_cell_advance() {
+        let text = "Harbor Gate";
+        let size = 14.0;
+        assert_eq!(
+            state_text_width_with_family(text, size, false, false, Some("Courier"), true),
+            crate::plantuml_metrics::mono_text_width_styled(text, size, false, false),
+        );
+        let marked = "**Harbor**";
+        let marked_width =
+            state_text_width_with_family(marked, size, false, false, Some("Courier"), true);
+        let run_width =
+            crate::plantuml_metrics::mono_text_width_styled("Harbor", size, true, false);
+        assert_eq!(marked_width, run_width);
+    }
+
+    #[test]
+    fn renamed_verdana_and_courier_states_draw_creole_runs() {
+        let verdana = r#"@startuml
+skinparam stateFontName Verdana
+state "**Ember**" as Kiln
+Kiln : <i>glow</i>
+Kiln --> [*]
+@enduml
+"#;
+        let svg = crate::render_svg(&rustuml_parser::parse::parse(verdana).unwrap());
+        assert!(!svg.contains("**Ember**"));
+        assert!(!svg.contains("&lt;i&gt;"));
+        assert!(svg.contains(">Ember</text>"));
+        assert!(svg.contains(">glow</text>"));
+        assert!(svg.contains(r#"font-weight="700""#));
+        assert!(svg.contains(r#"font-style="italic""#));
+        assert!(svg.contains(r#"font-family="Verdana""#));
+
+        let courier = r#"@startuml
+skinparam stateFontName Courier
+state "**Hot**" as Grate
+Grate : //steam//
+Grate --> [*]
+@enduml
+"#;
+        let svg = crate::render_svg(&rustuml_parser::parse::parse(courier).unwrap());
+        assert!(!svg.contains("**Hot**"));
+        assert!(!svg.contains("//steam//"));
+        assert!(svg.contains(">Hot</text>"));
+        assert!(svg.contains(">steam</text>"));
+        assert!(svg.contains(r#"font-family="Courier""#));
     }
 }
