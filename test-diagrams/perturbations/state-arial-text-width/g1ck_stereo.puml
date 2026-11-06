@@ -1,0 +1,6 @@
+@startuml
+skinparam stateFontName Arial
+skinparam state<<widget>>FontStyle bold
+state "G1ckcinder" as G1ckPlain
+state "G1ckwidget" as G1ckMark <<widget>>
+@enduml

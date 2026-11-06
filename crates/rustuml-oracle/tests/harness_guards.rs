@@ -237,6 +237,205 @@ fn count_high_precision_literals(text: &str) -> usize {
     count
 }
 
+/// Label-keyed width constants (🎯T14.47).
+///
+/// `state.rs` `arial_text_width` returned `9.3379` for the labels `"A"` and
+/// `"B"`. That is a conditional keyed to fixture label text. A match arm
+/// whose pattern is only string literals, and whose body returns a
+/// high-precision float, is that shape. Shipping sources must contain none.
+/// Comments are ignored, so a provenance note can still name the old branch.
+#[test]
+fn no_label_keyed_width_constants() {
+    const SHIPPING_CRATES: &[&str] = &[
+        "crates/rustuml",
+        "crates/rustuml-parser",
+        "crates/rustuml-render",
+        "crates/rustuml-layout",
+        "crates/rustuml-math",
+    ];
+
+    let root = repo_root();
+    let mut violations = Vec::new();
+    for krate in SHIPPING_CRATES {
+        let mut files = Vec::new();
+        rust_sources(&root.join(krate).join("src"), &mut files);
+        for file in files {
+            let Ok(text) = std::fs::read_to_string(&file) else {
+                continue;
+            };
+            let stripped = strip_rust_comments(&text);
+            let lines: Vec<&str> = stripped.lines().collect();
+            for (index, line) in lines.iter().enumerate() {
+                if !line.contains("=>") {
+                    continue;
+                }
+                let (pattern, after) = line.split_once("=>").unwrap();
+                let pattern = if pattern_is_only_string_literals(pattern) {
+                    pattern.to_string()
+                } else if index > 0 {
+                    let combined = format!("{} {}", lines[index - 1], pattern);
+                    if pattern_is_only_string_literals(&combined) {
+                        combined
+                    } else {
+                        String::new()
+                    }
+                } else {
+                    String::new()
+                };
+                if pattern.is_empty() {
+                    continue;
+                }
+                let body = if index + 1 < lines.len() {
+                    format!("{after} {}", lines[index + 1])
+                } else {
+                    after.to_string()
+                };
+                if float_return_body(&body) {
+                    let rel = file.strip_prefix(&root).unwrap().to_string_lossy();
+                    violations.push(format!("{rel}:{}", index + 1));
+                }
+            }
+        }
+    }
+    assert!(
+        violations.is_empty(),
+        "label-keyed width constant (string-literal match arm returning a \
+         3+ decimal float). Measure the face instead:\n  {}",
+        violations.join("\n  ")
+    );
+}
+
+fn pattern_is_only_string_literals(pattern: &str) -> bool {
+    let mut parts = Vec::new();
+    let mut buf = String::new();
+    let mut in_string = false;
+    let mut chars = pattern.chars().peekable();
+    while let Some(ch) = chars.next() {
+        if in_string {
+            buf.push(ch);
+            if ch == '\\' {
+                if let Some(escaped) = chars.next() {
+                    buf.push(escaped);
+                }
+                continue;
+            }
+            if ch == '"' {
+                in_string = false;
+            }
+            continue;
+        }
+        if ch == '"' {
+            in_string = true;
+            buf.push(ch);
+            continue;
+        }
+        if ch == '|' {
+            parts.push(std::mem::take(&mut buf));
+            continue;
+        }
+        if ch.is_whitespace() {
+            buf.push(ch);
+            continue;
+        }
+        return false;
+    }
+    if in_string {
+        return false;
+    }
+    parts.push(buf);
+    let parts: Vec<&str> = parts
+        .iter()
+        .map(|part| part.trim())
+        .filter(|part| !part.is_empty())
+        .collect();
+    !parts.is_empty()
+        && parts
+            .iter()
+            .all(|part| part.len() >= 2 && part.starts_with('"') && part.ends_with('"'))
+}
+
+/// The match body returns a high-precision float, either `=> 1.2345` or
+/// `=> return 1.2345` or `=> { return 1.2345`.
+fn float_return_body(body: &str) -> bool {
+    let mut rest = body.trim_start();
+    if let Some(stripped) = rest.strip_prefix('{') {
+        rest = stripped.trim_start();
+    }
+    if let Some(stripped) = rest.strip_prefix("return") {
+        let boundary = stripped.chars().next();
+        if boundary.is_some_and(|ch| ch.is_ascii_alphanumeric() || ch == '_') {
+            return false;
+        }
+        rest = stripped.trim_start();
+    }
+    let rest = rest.strip_prefix('-').unwrap_or(rest);
+    let mut digits = rest.chars();
+    if !digits.next().is_some_and(|ch| ch.is_ascii_digit()) {
+        return false;
+    }
+    let after_int: String = digits.collect();
+    let Some(fraction) = after_int.strip_prefix('.') else {
+        return false;
+    };
+    let mut places = 0;
+    for ch in fraction.chars() {
+        if ch.is_ascii_digit() {
+            places += 1;
+        } else {
+            break;
+        }
+    }
+    places >= 3
+}
+
+fn strip_rust_comments(src: &str) -> String {
+    let mut out = String::with_capacity(src.len());
+    let mut chars = src.chars().peekable();
+    while let Some(ch) = chars.next() {
+        if ch == '"' {
+            out.push(ch);
+            while let Some(inner) = chars.next() {
+                out.push(inner);
+                if inner == '\\' {
+                    if let Some(escaped) = chars.next() {
+                        out.push(escaped);
+                    }
+                    continue;
+                }
+                if inner == '"' {
+                    break;
+                }
+            }
+            continue;
+        }
+        if ch == '/' && chars.peek() == Some(&'/') {
+            chars.next();
+            for inner in chars.by_ref() {
+                if inner == '\n' {
+                    out.push('\n');
+                    break;
+                }
+            }
+            continue;
+        }
+        if ch == '/' && chars.peek() == Some(&'*') {
+            chars.next();
+            while let Some(inner) = chars.next() {
+                if inner == '\n' {
+                    out.push('\n');
+                }
+                if inner == '*' && chars.peek() == Some(&'/') {
+                    chars.next();
+                    break;
+                }
+            }
+            continue;
+        }
+        out.push(ch);
+    }
+    out
+}
+
 /// The comparator's slack and the park list are frozen. Changing either
 /// redefines what "parity" means — user sign-off territory.
 #[test]

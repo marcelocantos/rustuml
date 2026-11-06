@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Arial
+[*] --> G1ckZed : A
+state "G1ckZed" as G1ckZed
+@enduml
