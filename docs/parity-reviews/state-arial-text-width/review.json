@@ -1,0 +1,432 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-arial-text-width",
+  "reviewer": {
+    "task_id": "grok-g1-state-checker",
+    "identity": "independent checker",
+    "model": "Grok 4.7",
+    "tool": "checker CLI binaries, rustuml_oracle::compare::compare_svg_strict, sealed Java relay batch CJ"
+  },
+  "account_commit": "e576a9b943eeee6457750896244a6d6fdaaa8fc7",
+  "implementation_commit": "97523161261c62c628477c915b79e36546755977",
+  "addendum_commits": [
+    "8db49dfac790b4399adee8db87260fca21ce2e62",
+    "462f1a2a593741eb26f8a99c9fa783c45dc8492a"
+  ],
+  "base_commit": "cb550c0d67cc729ce764895005b7e86310c9f313",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git rev-parse HEAD",
+    "git merge-base --is-ancestor e576a9b943eeee6457750896244a6d6fdaaa8fc7 HEAD",
+    "shasum -a 256 reference-results.json rust-predictions.json reference-manifest.json reference-input-bundle.json.gz reference-results.json.gz reference-transport.json",
+    "CARGO_TARGET_DIR=$CACHE/target-cmp cargo build --release --manifest-path /tmp/g1ck-compare/Cargo.toml",
+    "g1ck-compare < cj-svg/cmp-base.tsv and cmp-tip.tsv  # compare_svg_strict, Java SVG expected",
+    "python3 /tmp/g1ck_sweep.py $CACHE/cli-sweep.jsonl 8",
+    "g1ck-compare on the 21 CLI-changed perturbation SVGs against their sibling Java SVGs",
+    "python3 /tmp/g1ck_relay.py  # c9a/c10a/c11a state and Arial names, both CLIs, cwd=source parent",
+    "cargo test --release --no-fail-fast -p rustuml-oracle --test golden_no_oracle --test golden_pairs --test parity_perturbations --test harness_guards --test doc_claims",
+    "cargo test --release -p rustuml --test pipe_mode",
+    "cargo test --release --workspace --lib",
+    "cargo clippy --release --workspace --message-format=short -- -W warnings",
+    "/tmp/g1ck-guard/scan"
+  ],
+  "artifact_hashes": {
+    "reference_results_json_sha256": "037c982c50011c93e7ac031d6429d0e98f5809db51b38a06fc019a533b8933a6",
+    "reference_results_gz_sha256": "288849ea3c772db9bd93c8f0dc41bdee722db221ce26c14851066d8f5b3715bf",
+    "reference_transport_sha256": "58aa54502b767d216644b4e4fb4159376073f196c011bfa1b15e74620d864f9e",
+    "reference_manifest_sha256": "9ffbafd9940b60ee506681e2eb4fac5682dd2b441e71ab3add4e9e1cdc991cda",
+    "reference_input_bundle_sha256": "574539e42493d75db313acddcd63fad8bcf1e9c00d04b070d0486436586cf0f9",
+    "rust_predictions_sha256": "c1b4172216235a915fc86ea1c26efb8b0057289ca186422158e7d71839567d19",
+    "worker": "worker.2vzkqgx3",
+    "checker_base_binary_sha256": "d15f01dacd9cd3d3f0e337537f0210d67c4321c33a9b47f6443721ab8eea1847",
+    "checker_tip_binary_sha256": "7030fbb0299395fd8b93f31d91ebf027993a0df5fe6c053c3915cfcb7a6e9503"
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_a_size18.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_a_size18.svg",
+      "axes": [
+        "arial",
+        "letter-A",
+        "size-18"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_ab_control.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_ab_control.svg",
+      "axes": [
+        "arial",
+        "plain-14",
+        "letters-A-and-B",
+        "control"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_ab_word.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_ab_word.svg",
+      "axes": [
+        "arial",
+        "letters-A-and-B-as-one-label"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_alias_a.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_alias_a.svg",
+      "axes": [
+        "arial",
+        "alias-A",
+        "display-name-not-A"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_arrow_a.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_arrow_a.svg",
+      "axes": [
+        "arial",
+        "defaultFontName",
+        "arrow-label-A"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_attr_vs_title.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_attr_vs_title.svg",
+      "axes": [
+        "arial",
+        "stateFontStyle-bold",
+        "stateAttributeFontStyle-italic"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_block_bold.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_block_bold.svg",
+      "axes": [
+        "arial",
+        "bold",
+        "skinparam-block",
+        "size-15"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_bold.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_bold.svg",
+      "axes": [
+        "arial",
+        "bold",
+        "stateFontStyle",
+        "no-style-block"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_bold_italic_keyword.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_bold_italic_keyword.svg",
+      "axes": [
+        "arial",
+        "bold-italic-keyword",
+        "asFontFace-normal"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_bold_pragma.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_bold_pragma.svg",
+      "axes": [
+        "arial",
+        "bold",
+        "pragma-teoz"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_composite.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_composite.svg",
+      "axes": [
+        "arial",
+        "italic",
+        "composite"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_concurrent.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_concurrent.svg",
+      "axes": [
+        "arial",
+        "bold",
+        "concurrent"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_creole_plain.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_creole_plain.svg",
+      "axes": [
+        "sans",
+        "creole-b",
+        "no-skinparam"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_default_fontname.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_default_fontname.svg",
+      "axes": [
+        "arial",
+        "defaultFontName"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_default_fontstyle.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_default_fontstyle.svg",
+      "axes": [
+        "arial",
+        "defaultFontStyle",
+        "bold",
+        "no-stateFontStyle"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_desc_is_a.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_desc_is_a.svg",
+      "axes": [
+        "arial",
+        "description-is-A"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_desc_note.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_desc_note.svg",
+      "axes": [
+        "arial",
+        "italic",
+        "description",
+        "note"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_fullwidth.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_fullwidth.svg",
+      "axes": [
+        "arial",
+        "fullwidth"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_italic.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_italic.svg",
+      "axes": [
+        "arial",
+        "italic",
+        "stateFontStyle"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_letter_c.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_letter_c.svg",
+      "axes": [
+        "arial",
+        "single-letter-not-ab",
+        "C"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_letter_m.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_letter_m.svg",
+      "axes": [
+        "arial",
+        "single-letter-not-ab",
+        "M"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_letter_q.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_letter_q.svg",
+      "axes": [
+        "arial",
+        "single-letter-not-ab",
+        "Q"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_lower_a.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_lower_a.svg",
+      "axes": [
+        "arial",
+        "lowercase-a"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_mixed_fontname.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_mixed_fontname.svg",
+      "axes": [
+        "arial",
+        "mixed-case-font-name",
+        "stateFontName"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_mixed_label.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_mixed_label.svg",
+      "axes": [
+        "arial",
+        "mixed-case-label"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_punct.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_punct.svg",
+      "axes": [
+        "arial",
+        "digits",
+        "punctuation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_quebec.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_quebec.svg",
+      "axes": [
+        "arial",
+        "non-ascii",
+        "latin-accent"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_quoted_font.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_quoted_font.svg",
+      "axes": [
+        "arial",
+        "quoted-font-name"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_sans_bold.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_sans_bold.svg",
+      "axes": [
+        "sans",
+        "bold",
+        "stateFontStyle",
+        "bold-flag-observability"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_size11.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_size11.svg",
+      "axes": [
+        "arial",
+        "plain",
+        "size-11"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_size23_italic.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_size23_italic.svg",
+      "axes": [
+        "arial",
+        "italic",
+        "size-23"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_size9_italic.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_size9_italic.svg",
+      "axes": [
+        "arial",
+        "italic",
+        "size-9"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_stereo.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_stereo.svg",
+      "axes": [
+        "arial",
+        "stereotype-fontstyle",
+        "bold"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_style_fontname.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_style_fontname.svg",
+      "axes": [
+        "arial",
+        "style-block",
+        "FontName"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_tokyo.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_tokyo.svg",
+      "axes": [
+        "arial",
+        "non-ascii",
+        "wide-cjk"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_word_apex.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_word_apex.svg",
+      "axes": [
+        "arial",
+        "letter-A-inside-word"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arial-text-width/g1ck_word_bramble.puml",
+      "golden": "test-diagrams/perturbations/state-arial-text-width/g1ck_word_bramble.svg",
+      "axes": [
+        "arial",
+        "letter-B-inside-word"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "The \"A\"/\"B\" -> 9.3379 branch is gone from shipping sources. Named state fonts, Arial included, are measured with text_render::measure_with_family_and_face. no_label_keyed_width_constants passes and has no allow-list. Reinserting the original match arm is caught. matches!, an if-chain, a lookup table, a binding-then-return, const idents, and a length key are not caught. A scan of the tip sources reports 0 hits, so those gaps are not a live violation.",
+    "Held-out batch CJ, 41/41 cases, all exit 0, empty stderr, no Java error page. compare_svg_strict against the sealed Java SVGs: tip gains 32/41, both trees match 5/41, both trees differ 4/41, losses 0/41. Raw SVG bytes match Java on 0/41 for either tree. The pairs under test-diagrams/perturbations/state-arial-text-width/ are the 37 tip matches, copied after the perturbation gate.",
+    "g1ck_hash_bold is a valid probe. Java draws a STATE diagram, viewBox 0 0 112 71, stroke-width 2, Arial textLength 70.8066, empty stderr. Both Rust trees emit the same empty 100x50 SVG. The state declaration regex requires a color after optional ##[style], so ##[bold] with no color is dropped. Pre-existing on both trees. Proposed target, not a packet loss.",
+    "g1ck_fontweight and c11a_fc_stat_ar_bi: Java draws italic plus font-weight 700 and the bold Arial advance. Both Rust trees draw italic and omit font-weight. The base sans advance sits closer to that bold width than the tip's plain-italic Arial advance, so those already-failing outputs move farther from Java. The base does not match either case. This is the FontWeight gap, not a lost match.",
+    "CLI sweep of 12550 goldens and 6328 perturbations: 21 perturbation stdout hashes change, 0 golden hashes change, 0 retained-path hashes change (173 paths), 0 status changes, 0 timeouts. The same 4 dash panics occur on both binaries. Of the 21, the unchanged comparator accepts 14 as whole-output matches and leaves 7 differing; 6 of those 7 have fewer differences. Losses 0.",
+    "Relay cohort c9a/c10a/c11a, names containing state, _ar_, arial, sdsc, or _stat: 261/261 sources present, Java exit 0, empty stderr, no error page. Comparator: 96 both match, 151 both differ, 14 tip-only matches, 0 losses.",
+    "golden_no_oracle on the tip passes the locked baseline 11181/11251, state 897/901. The 70 failure names match the base set. The base run printed the same 11181/11251 under family golden because its golden directory was a symlink, so its per-family ratchet fired; that is a measurement artifact. golden_pairs is 12550 total, 10497 passed, 754 failed, 1299 skipped, 0 panics on both trees, and the 754 failure names match. Perturbation assertion headers: base 2713, tip 2699, gains 14, losses 0. Retained failures inside that dump: 98 both, 0 only on the tip.",
+    "Decimal ratchet still fails on both trees. state.rs moves 62 on the base to 61 on the tip. class.rs 578, deployment.rs 44, and plantuml_metrics.rs 1055 are unchanged. The baseline file was not edited. Frozen comparator and census files are untouched.",
+    "parity_review_records_are_complete stays red. The tip adds one violation: docs/parity-reviews/state-arial-text-width/account.json is missing. The account lives under maker-grok/ and does not have the guard's schema. The parent's maker brief put it there. That is a packet defect of the records gate. It is not, by itself, grounds to reject. This review.json is the independent review at the mechanism root. The guard does not read it until an account.json exists beside it.",
+    "Account commit e576a9b943eeee6457750896244a6d6fdaaa8fc7 is an ancestor of implementation commit 97523161261c62c628477c915b79e36546755977. Checker binaries were rebuilt in this review. Their SHA256 values are not the maker's.",
+    "pipe_mode is 17/17 on both trees. Workspace lib tests are 1609 passed, 0 failed, 1 ignored on both. Clippy exits 0 on both with the same 21 warnings (parser 1, render 19, oracle 1). The state.rs chunks_exact warning moves from line 6203 to 6191."
+  ],
+  "verdict": "accepted",
+  "accept_ready": true,
+  "packet_defects": [
+    "account.json is only under maker-grok/. The records guard looks at the mechanism root and reports one new missing-file violation. Caused by the parent maker brief. Not a behavioral reject."
+  ],
+  "losses": []
+}

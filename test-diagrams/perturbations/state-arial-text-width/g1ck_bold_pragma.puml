@@ -1,0 +1,6 @@
+@startuml
+!pragma teoz true
+skinparam stateFontName Arial
+skinparam stateFontStyle bold
+state "G1ckcinder" as G1ckPragma
+@enduml

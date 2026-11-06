@@ -1,0 +1,5 @@
+@startuml
+skinparam defaultFontName Arial
+skinparam defaultFontStyle bold
+state "G1ckcinder" as G1ckDfs
+@enduml

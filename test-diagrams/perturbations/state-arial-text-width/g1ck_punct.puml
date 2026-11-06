@@ -1,0 +1,4 @@
+@startuml
+skinparam stateFontName Arial
+state "Q7: r-2." as G1ckPunct
+@enduml

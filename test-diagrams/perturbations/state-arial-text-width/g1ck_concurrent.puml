@@ -1,0 +1,11 @@
+@startuml
+skinparam stateFontName Arial
+skinparam stateFontStyle bold
+state G1ckFork {
+  state "G1ckleft" as G1ckLeft
+  [*] --> G1ckLeft
+  --
+  state "G1ckright" as G1ckRight
+  [*] --> G1ckRight
+}
+@enduml
