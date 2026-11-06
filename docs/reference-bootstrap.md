@@ -184,10 +184,13 @@ compatibility 27.0.0 / current 27.2.0. Relay batches captured before
 2026-10-28 were shaped by an older HarfBuzz and are not this oracle.
 
 The census is `tools/font-chain-reference/monkeyman-reference-env/census.txt`,
-sha256 `868a9072ecffd939c07e174b7c606679b5ac379a5ae7c1d48f2cf25336458ae6`.
-It is the 2026-11-06 live record from
-`/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census2/`,
-byte for byte. An earlier record the same day
+sha256 `3e5d4793194c9f385b9bd3500a06789614ab4d705d7656c774f32df57322b1b2`.
+It is the 2026-11-07 live record from
+`/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census3/`,
+byte for byte. It replaces the 2026-11-06 record
+`868a9072ecffd939c07e174b7c606679b5ac379a5ae7c1d48f2cf25336458ae6`
+from `grok-g7-census2`, whose Arial Unicode row was still lstat size
+plus `link`. An earlier record the same day
 (`5a60468e222a9ae22f7dc26ba906f0cf7817b8991123f6c3f79f0c4d88809cda`)
 listed catalog `.xml` and `Info.plist` files as asset fonts and left 59
 MobileAsset font-file hashes as `-`. An asset font is a `.ttf`, `.otf`,
@@ -199,9 +202,14 @@ blank or `-`, and that is a failed gate. A user-font symlink row pins
 the target file's size, the target file's SHA256, the link path and the
 resolved target path. `FONT_FILES` stays the modelled faces opened by
 absolute path. Other faces reached through a user-font symlink are pinned
-on that symlink row, not copied into `FONT_FILES`. The current census
-still has the old `link` marker for Arial Unicode; the next record
-replaces it. `scripts/reference_env_gate.py` is what `seq_capture.py`
+on that symlink row, not copied into `FONT_FILES`. The Arial Unicode
+row now pins target size 23278008, sha256
+`876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec`,
+the link path, and
+`/System/Library/Fonts/Supplemental/Arial Unicode.ttf`. Round-6
+`user-font-census.txt` still records that link's lstat size 52. It is
+not re-extracted: `ls` does not hash the target, and the census row is
+the fact the gate checks. `scripts/reference_env_gate.py` is what `seq_capture.py`
 calls immediately before `new-worker`. The parent installs it. This
 checkout does not edit the relay tools. The font-chain tests fail when
 this census and the stored per-face extractions disagree. The round-6, round-8, round-9 and round-11

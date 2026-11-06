@@ -250,6 +250,7 @@ user-font	2291160	5ef09bee0ef6fe5f14b112471a51eb8aecd3c153ca15bcd00bb06fd824be7a
 user-font	2291368	9a88ad320ce2264913dd1ca595d50a8504766cf688d1fc4b5b85c7e1674a63ff	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraBold.ttf
 user-font	2292644	a1013e4d8344f726f16396c583a4302b613d18f85c501e402bbd14e096fb6a16	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFontPropo-ExtraBoldItalic.ttf
 user-font	2292852	7cee9cda1bee952042e5eea168869bd55f8daa319b3e0ca296a3facb4ce1c11e	/Users/marcelo/Library/Fonts/JetBrainsMonoNerdFont-ExtraBoldItalic.ttf
+user-font	23278008	876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec	/Library/Fonts/Arial Unicode.ttf	/System/Library/Fonts/Supplemental/Arial Unicode.ttf
 user-font	2485020	1bc0bfbcf8cf1900df4956b6a5a0cbc6647ddc4dc863313e08881a4f217453d7	/Users/marcelo/Library/Fonts/MesloLGSNerdFontMono-Italic.ttf
 user-font	2485060	0eee9b06bf605f9d0e0dfdf39e364761789c9da2f111771b1e0cf8d42ac6cf87	/Users/marcelo/Library/Fonts/MesloLGSDZNerdFontMono-Italic.ttf
 user-font	2485172	11450113ef4c9c0fed5ad2720b09b143556a6b91004fa86ecd84d81db2f68002	/Users/marcelo/Library/Fonts/MesloLGMNerdFontMono-Italic.ttf
@@ -333,4 +334,3 @@ user-font	487108	83a7068a0270d95f4f815a8f1b8b730716b6d2c07cd9de256b4fd8c6a74e1e8
 user-font	487380	61bbb6bc1e215dae3b6c8e2eff6c7fa6fba7b9e9bc2a521f69840fde6bcfbe38	/Users/marcelo/Library/Fonts/Meslo LG M DZ Regular for Powerline.otf
 user-font	487380	db19d75a3be4b2efb92495c1b0edcce3754dc7949f1d1eb9eba8271c5ad04c38	/Users/marcelo/Library/Fonts/Meslo LG S DZ Regular for Powerline.otf
 user-font	487380	f03bd6fc9393572acc256d67f687077224f85b67c58d661fff2ad684eae347e2	/Users/marcelo/Library/Fonts/Meslo LG L DZ Regular for Powerline.otf
-user-font	52	link	/Library/Fonts/Arial Unicode.ttf

@@ -36,11 +36,12 @@ The following commit will:
 - add `scripts/reference_env_gate.py` for the parent to call from
   `seq_capture.py` immediately before `new-worker`.
 
-The committed `census.txt` (`868a9072…`, relay `grok-g7-census2`,
-2026-11-06) still has the old `link` marker. The symlink schema needs
-a new record. The request directory is staged for that relay. The hook
-must not be installed against this census: `check` will exit 1 on the
-Arial Unicode row until the returned record replaces it.
+The committed `census.txt` at the time of this note (`868a9072…`, relay
+`grok-g7-census2`, 2026-11-06) still had the old `link` marker. The
+2026-11-07 record from `grok-g7-census3`
+(`3e5d4793194c9f385b9bd3500a06789614ab4d705d7656c774f32df57322b1b2`)
+replaces it. The Arial Unicode row is the target file. The hook is
+still not installed from this checkout.
 
 PDF and the non-PDF outputs are not part of this fix. The checker
 already measured them as unchanged.

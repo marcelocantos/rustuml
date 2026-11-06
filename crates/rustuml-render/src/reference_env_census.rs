@@ -209,7 +209,7 @@ fn committed_census_matches_stored_face_extractions() {
         assert!(census.contains(needle), "{label} missing from the census");
     }
 
-    let users = ls_paths(&chain.join("monkeyman-round6/user-font-census.txt"));
+    let mut users = ls_paths(&chain.join("monkeyman-round6/user-font-census.txt"));
     let assets = ls_paths(&chain.join("monkeyman-round6/asset-font-census.txt"));
     let mut census_users = BTreeMap::new();
     let mut census_assets = BTreeMap::new();
@@ -221,8 +221,35 @@ fn committed_census_matches_stored_face_extractions() {
             census_assets.insert(fields[3].to_string(), fields[1].parse::<u64>().unwrap());
         }
     }
+    // Round-6 `ls` records the directory entry. The only symlink is Arial
+    // Unicode, and `ls` reports the link length 52. The census row is the
+    // target file from grok-g7-census3. Round-6 is not re-extracted: that
+    // listing has no target hash, and rewriting it would erase the link length.
+    let arial = "/Library/Fonts/Arial Unicode.ttf";
+    let arial_target = "/System/Library/Fonts/Supplemental/Arial Unicode.ttf";
+    assert_eq!(users.get(arial).copied(), Some(52));
+    let census_arial = census_users.remove(arial).expect("arial user-font row");
+    users.remove(arial);
     assert_eq!(census_users, users);
     assert_eq!(census_assets, assets);
+    let arial_line = census
+        .lines()
+        .find(|line| {
+            let fields: Vec<&str> = line.split('\t').collect();
+            fields.first() == Some(&"user-font") && fields.get(3) == Some(&arial)
+        })
+        .expect("arial user-font row");
+    let fields: Vec<&str> = arial_line.split('\t').collect();
+    assert_eq!(fields.len(), 5, "{arial_line}");
+    assert_eq!(fields[1].parse::<u64>().unwrap(), census_arial);
+    assert_eq!(census_arial, 23_278_008);
+    assert_eq!(
+        fields[2],
+        "876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec"
+    );
+    assert_eq!(fields[4], arial_target);
+    let round6 = read(&chain.join("monkeyman-round6/user-font-census.txt"));
+    assert!(round6.contains(&format!("Arial Unicode.ttf -> {arial_target}")));
 
     let sums = read(&chain.join("monkeyman-reference-env/SHA256SUMS"));
     for line in sums.lines() {

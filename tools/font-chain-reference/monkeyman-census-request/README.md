@@ -8,9 +8,9 @@ directories, install packages, change Homebrew, or write anywhere else.
 Copy this directory to Monkey Man unchanged. `reference_env_census.py` is
 the checkout's `scripts/reference_env_census.py`. `census.txt` is the
 committed census, sha256
-`868a9072ecffd939c07e174b7c606679b5ac379a5ae7c1d48f2cf25336458ae6`
-(relay `/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census2/`,
-2026-11-06). `reference_env_gate.py` is the hook. It is not part of the
+`3e5d4793194c9f385b9bd3500a06789614ab4d705d7656c774f32df57322b1b2`
+(relay `/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census3/`,
+2026-11-07). `reference_env_gate.py` is the hook. It is not part of the
 record command below.
 
 ```sh
@@ -27,22 +27,22 @@ absolute path, not every face Core Text can open. It also hashes
 asset font is a `.ttf`, `.otf`, `.ttc` or `.dfont`. Catalog `.xml` files and
 `Info.plist` files are not asset fonts and are not written.
 
-A user-font symlink is no longer stored as lstat size plus `link`. The row
-is the target file's size, the target file's SHA256, the link path, and
-the resolved target path. A dangling link is stored with sha256
-`dangling`. The committed census still has the old row
-`user-font  52  link  /Library/Fonts/Arial Unicode.ttf`, so this check
-exits 1 on that row and is expected to. Return `$OUT/census.txt`. Do not
-treat any other drift as part of the schema change. Do not `brew upgrade`.
+A user-font symlink is stored as the target file's size, the target
+file's SHA256, the link path, and the resolved target path. A dangling
+link is stored with sha256 `dangling`. The committed row for
+`/Library/Fonts/Arial Unicode.ttf` is target size 23278008, sha256
+`876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec`,
+and target `/System/Library/Fonts/Supplemental/Arial Unicode.ttf`.
+A check of an unchanged host against this census exits 0. Do not
+`brew upgrade`.
 
 Only exit 0 passes. Exit 1 means a pinned fact moved. Exit 2 means a hash
 is still unpinned. Both fail a capture.
 
-Do not install `reference_env_gate.py` into `seq_capture.py` until the
-returned census has replaced the committed file. Against this census the
-hook would abort every batch.
+Do not install these files on Monkey Man from this checkout. The parent
+installs them after the independent re-review accepts the packet.
 
-Install, after that replacement, on Monkey Man:
+Install, after that re-review, on Monkey Man:
 
 - `/Users/marcelo/rustuml-reference/reference-env/reference_env_census.py`
 - `/Users/marcelo/rustuml-reference/reference-env/reference_env_gate.py`

@@ -725,7 +725,16 @@ def mutation_matrix(text: str, root: Path) -> None:
         ("reordered-rows", reorder_rows(text), text, 0),
         ("comment-only", "# comment only\n" + text, text, 0),
         ("extra-live-scalar", text.rstrip("\n") + "\nextra.note=1\n", text, 0),
-        ("symlink-size-changed", replace_once(text, "user-font\t52\tlink\t/Library/Fonts/Arial Unicode.ttf", "user-font\t53\tlink\t/Library/Fonts/Arial Unicode.ttf"), text, 1),
+        (
+            "symlink-size-changed",
+            replace_once(
+                text,
+                "user-font\t23278008\t876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec\t/Library/Fonts/Arial Unicode.ttf\t/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
+                "user-font\t23278009\t876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec\t/Library/Fonts/Arial Unicode.ttf\t/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
+            ),
+            text,
+            1,
+        ),
         ("uuid-hash", replace_once(text, "c02979894bd1113a75b668101ed8751d9885066289e70a12aedbd2e1c1576adb", "33" * 32), text, 1),
         ("reordered-scalars", reorder_scalars(text), text, 0),
         ("live-missing-freetype-key", text.replace(freetype + "\n", "", 1), text, 1),
