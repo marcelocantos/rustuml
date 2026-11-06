@@ -62,12 +62,17 @@ Scored with `compare_svg_strict` on the whole SVG. Tip `5ca278f72` is
 misses are the same misses on the base:
 
 - `hn_creole_faces` — family `SansSerif` versus Java `sans-serif`
-  (`UFontImpl.getFamily`). Width matches. 🎯T29.
+  (`UFontImpl.getFamily`). Width matches. Proposal: the SVG family
+  applies that `(?i)sansserif` replacement.
 - `hn_skin_quoted_pad` — family `'Menlo'` versus `' Menlo '`. Widths
-  match. Already 🎯T14.94.
+  match. Already 🎯T14.94 on the parity-recovery ledger.
 - `hn_skin_quoted_single` — family `'Courier'` matches. Java measures
   the default face (viewBox `0 0 86 84`). Rust measures the Menlo cell
-  and a NBSP. 🎯T30.
+  and a NBSP. Proposal: a quoted name that is not a real face measures
+  as the default face.
+
+`bullseye.yaml` on this branch matches the merge base. 🎯T14.50.1, and
+🎯T14.50 as converging, were filed on the parity-recovery ledger.
 
 `reference-results.json` SHA256
 `b333ba69cb4b54d4c214da93b6ee4a81b322e216dfb8d5075c80ce5a64930c94`.
