@@ -36,8 +36,12 @@ The following commit will:
   installing the three files and calling `require_reference_env()`
   immediately before `new-worker`.
 
-The committed census (`3e5d4793…`, relay `grok-g7-census3`, 2026-11-07)
-does not yet contain the cascade rows. The request directory is staged
-for a new record. The hook must not be installed against this census:
-`check` exits 1 on the new font rows until the returned record replaces
-it. This checkout does not install anything on Monkey Man.
+At the time of this note the committed census (`3e5d4793…`, relay
+`grok-g7-census3`, 2026-11-07) did not contain the cascade rows.
+
+## Adopted
+
+The 2026-11-07 record from `grok-g7-census4`
+(`284d5ef4cf8a43abb92fab2436d7348b2ab00f64d05dbf5679f430c442575fe9`)
+replaces it and pins the 41 cascade faces. The hook is still not
+installed from this checkout.

@@ -11,8 +11,8 @@ packages, change Homebrew, or write anywhere else.
 Copy this directory to Monkey Man unchanged. `reference_env_census.py` is
 the checkout's `scripts/reference_env_census.py`. `census.txt` is the
 committed census, sha256
-`3e5d4793194c9f385b9bd3500a06789614ab4d705d7656c774f32df57322b1b2`
-(relay `/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census3/`,
+`284d5ef4cf8a43abb92fab2436d7348b2ab00f64d05dbf5679f430c442575fe9`
+(relay `/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census4/`,
 2026-11-07). `reference_env_gate.py` is the hook. It is not part of the
 record command below.
 
@@ -40,19 +40,17 @@ link is stored with sha256 `dangling`. The committed row for
 and target `/System/Library/Fonts/Supplemental/Arial Unicode.ttf`.
 Do not `brew upgrade`.
 
-This committed census has none of the cascade rows. `check` therefore
-exits 1, and the DRIFT lines should be `extra font` for those paths
-only. One of them is `/System/Library/Fonts/Apple Color Emoji.ttc`.
-Return `$OUT/census.txt`. Do not treat any other drift as part of this
-schema change.
+This census is the adopted `grok-g7-census4` record. It pins the 41
+cascade faces, including `/System/Library/Fonts/Apple Color Emoji.ttc`
+at sha256 `12bc8221a908c5bcf05f0fce940d3c3f6e9d09d8d806ffe31a969b4ac9be8f9e`.
+A check of an unchanged host against it exits 0. Do not run another
+record for this packet.
 
 Only exit 0 passes. Exit 1 means a pinned fact moved. Exit 2 means a
 hash or a scalar is still unpinned. Both fail a capture.
 
-Do not install these files on Monkey Man from this checkout. Against
-this census the hook would abort every batch. The parent installs them
-after the returned census is adopted and the independent re-review
-accepts the packet.
+Do not install these files on Monkey Man from this checkout. The parent
+installs them after the independent re-review accepts the packet.
 
 Install, after that re-review, on Monkey Man:
 

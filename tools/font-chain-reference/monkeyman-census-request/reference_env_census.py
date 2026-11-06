@@ -959,13 +959,16 @@ def cascade_slot_mutation(text: str, root: Path) -> None:
         raise SystemExit(f"round-9 cascade slots do not pin {face}: {len(round9)}")
     if face not in font_record_paths():
         raise SystemExit(f"record would not hash {face}")
-    if face in text:
-        raise SystemExit(f"{face} is already in the committed census")
-    pinned_hash = "ab" * 32
-    row = f"font\t{pinned_hash}\t{face}"
-    committed = text.rstrip("\n") + "\n" + row + "\n"
-    live = committed.replace(pinned_hash, "cd" * 32, 1)
-    code = check_texts(live, committed, root / "hash")
+    row = next(
+        line
+        for line in text.splitlines()
+        if line.startswith("font\t") and line.endswith("\t" + face)
+    )
+    pinned_hash = row.split("\t")[1]
+    if len(pinned_hash) != 64:
+        raise SystemExit(f"cascade face has no content hash: {row}")
+    live = replace_once(text, row, f"font\t{'cd' * 32}\t{face}")
+    code = check_texts(live, text, root / "hash")
     if code != 1 or gate_accepts(code):
         raise SystemExit(f"cascade-slot hash exited {code}, expected 1")
 

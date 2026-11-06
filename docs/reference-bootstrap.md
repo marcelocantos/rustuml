@@ -186,10 +186,13 @@ compatibility 27.0.0 / current 27.2.0. Relay batches captured before
 2026-10-28 were shaped by an older HarfBuzz and are not this oracle.
 
 The census is `tools/font-chain-reference/monkeyman-reference-env/census.txt`,
-sha256 `3e5d4793194c9f385b9bd3500a06789614ab4d705d7656c774f32df57322b1b2`.
+sha256 `284d5ef4cf8a43abb92fab2436d7348b2ab00f64d05dbf5679f430c442575fe9`.
 It is the 2026-11-07 live record from
-`/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census3/`,
-byte for byte. It replaces the 2026-11-06 record
+`/Users/marcelo/Library/Caches/rustuml-relay-parent/grok-g7-census4/`,
+byte for byte. It replaces
+`3e5d4793194c9f385b9bd3500a06789614ab4d705d7656c774f32df57322b1b2`
+from `grok-g7-census3`, which had no cascade `font` rows. That record
+replaced the 2026-11-06 record
 `868a9072ecffd939c07e174b7c606679b5ac379a5ae7c1d48f2cf25336458ae6`
 from `grok-g7-census2`, whose Arial Unicode row was still lstat size
 plus `link`. An earlier record the same day
@@ -207,10 +210,10 @@ link path and the resolved target path. `FONT_FILES` stays the modelled
 faces opened by absolute path. `CASCADE_FONT_FILES` is the other `#slot`
 paths, derived from the font-chain TSVs. Round-9 names 29 of them,
 including Apple Color Emoji. Round-6 names those and 12 more. A face
-with no `#slot` line stays outside the gate. The committed census does
-not yet contain these rows. A record made with this script exits 1
-against it, on those extra `font` rows, until the returned census
-replaces this file. The Arial Unicode row now pins target size 23278008,
+with no `#slot` line stays outside the gate. This census pins those
+41 faces, including Apple Color Emoji at sha256
+`12bc8221a908c5bcf05f0fce940d3c3f6e9d09d8d806ffe31a969b4ac9be8f9e`.
+The Arial Unicode row pins target size 23278008,
 sha256
 `876af2cd4854644e7f3e7feb2f688997fdb3343c6df6693611209c9dfb47ccec`,
 the link path, and
@@ -220,8 +223,8 @@ not re-extracted: `ls` does not hash the target, and the census row is
 the fact the gate checks.
 
 The gate is armed by the parent's relay install, not by merging this
-checkout. After the cascade record has been adopted, the parent copies
-these three files onto Monkey Man:
+checkout. This checkout does not install the files. After a re-review
+accepts the packet, the parent copies these three files onto Monkey Man:
 
 - `/Users/marcelo/rustuml-reference/reference-env/reference_env_census.py`
 - `/Users/marcelo/rustuml-reference/reference-env/reference_env_gate.py`

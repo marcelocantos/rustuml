@@ -196,7 +196,10 @@ fn committed_census_matches_stored_face_extractions() {
 
     let script = read(&root.join("scripts/reference_env_census.py"));
     for path in fonts.keys() {
-        assert!(script.contains(path), "record() would not hash {path}");
+        assert!(
+            script_records_font(&script, path),
+            "record() would not hash {path}"
+        );
     }
 
     for (label, needle) in [
@@ -270,6 +273,31 @@ fn committed_census_matches_stored_face_extractions() {
         .status()
         .expect("python3");
     assert!(status.success(), "census self-test failed");
+}
+
+/// A cascade path is in the script as text, or as ``\uXXXX`` escapes.
+/// The escapes keep the NFD file names stable in the source.
+fn script_records_font(script: &str, path: &str) -> bool {
+    if script.contains(path) {
+        return true;
+    }
+    let mut decoded = String::with_capacity(script.len());
+    let mut rest = script;
+    while let Some(start) = rest.find("\\u") {
+        decoded.push_str(&rest[..start]);
+        let after = &rest[start + 2..];
+        let hex = after.get(..4).unwrap_or("");
+        if hex.len() == 4 && hex.bytes().all(|byte| byte.is_ascii_hexdigit()) {
+            let code = u32::from_str_radix(hex, 16).unwrap();
+            decoded.push(char::from_u32(code).unwrap());
+            rest = &after[4..];
+            continue;
+        }
+        decoded.push_str("\\u");
+        rest = after;
+    }
+    decoded.push_str(rest);
+    decoded.contains(path)
 }
 
 fn sha256_hex(bytes: &[u8]) -> String {

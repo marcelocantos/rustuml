@@ -35,9 +35,9 @@ Call site, inserted in ``seq_capture.py`` immediately before ``new-worker``::
 
 When the census legitimately changes, replace ``census.txt`` at that path
 with the reviewed record. Replace the two scripts only when their source
-changes. Do not point this hook at the census from ``grok-g7-census3``:
-that file has no cascade ``font`` rows, so ``check`` exits 1 until the
-new record is the installed census.
+changes. The census to install is the adopted ``grok-g7-census4`` record.
+The earlier ``grok-g7-census3`` file has no cascade ``font`` rows, so
+``check`` exits 1 against it.
 """
 
 from __future__ import annotations
