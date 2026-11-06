@@ -1,0 +1,5 @@
+@startuml
+skinparam stateFontName Arial
+skinparam stateFontSize 11
+state "G1ckcinder" as G1ckS11
+@enduml

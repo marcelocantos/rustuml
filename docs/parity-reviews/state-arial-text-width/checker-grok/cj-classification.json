@@ -1,0 +1,572 @@
+[
+  {
+    "name": "g1ck_a_size18",
+    "axes": [
+      "arial",
+      "letter-A",
+      "size-18"
+    ],
+    "relation": "gain",
+    "base_ndiff": 1,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_ab_control",
+    "axes": [
+      "arial",
+      "plain-14",
+      "letters-A-and-B",
+      "control"
+    ],
+    "relation": "gain",
+    "base_ndiff": 17,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_ab_word",
+    "axes": [
+      "arial",
+      "letters-A-and-B-as-one-label"
+    ],
+    "relation": "gain",
+    "base_ndiff": 1,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_alias_a",
+    "axes": [
+      "arial",
+      "alias-A",
+      "display-name-not-A"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_arrow_a",
+    "axes": [
+      "arial",
+      "defaultFontName",
+      "arrow-label-A"
+    ],
+    "relation": "gain",
+    "base_ndiff": 8,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_attr_vs_title",
+    "axes": [
+      "arial",
+      "stateFontStyle-bold",
+      "stateAttributeFontStyle-italic"
+    ],
+    "relation": "gain",
+    "base_ndiff": 5,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_block_bold",
+    "axes": [
+      "arial",
+      "bold",
+      "skinparam-block",
+      "size-15"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_bold",
+    "axes": [
+      "arial",
+      "bold",
+      "stateFontStyle",
+      "no-style-block"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_bold_italic_keyword",
+    "axes": [
+      "arial",
+      "bold-italic-keyword",
+      "asFontFace-normal"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_bold_pragma",
+    "axes": [
+      "arial",
+      "bold",
+      "pragma-teoz"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_composite",
+    "axes": [
+      "arial",
+      "italic",
+      "composite"
+    ],
+    "relation": "gain",
+    "base_ndiff": 10,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_concurrent",
+    "axes": [
+      "arial",
+      "bold",
+      "concurrent"
+    ],
+    "relation": "gain",
+    "base_ndiff": 16,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_creole_b",
+    "axes": [
+      "arial",
+      "creole-b"
+    ],
+    "relation": "both_diff",
+    "base_ndiff": 5,
+    "tip_ndiff": 2,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_creole_plain",
+    "axes": [
+      "sans",
+      "creole-b",
+      "no-skinparam"
+    ],
+    "relation": "both_match",
+    "base_ndiff": 0,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": false
+  },
+  {
+    "name": "g1ck_creole_wiki",
+    "axes": [
+      "arial",
+      "creole-wiki-bold"
+    ],
+    "relation": "both_diff",
+    "base_ndiff": 6,
+    "tip_ndiff": 3,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_default_fontname",
+    "axes": [
+      "arial",
+      "defaultFontName"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_default_fontstyle",
+    "axes": [
+      "arial",
+      "defaultFontStyle",
+      "bold",
+      "no-stateFontStyle"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_desc_is_a",
+    "axes": [
+      "arial",
+      "description-is-A"
+    ],
+    "relation": "gain",
+    "base_ndiff": 5,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_desc_note",
+    "axes": [
+      "arial",
+      "italic",
+      "description",
+      "note"
+    ],
+    "relation": "gain",
+    "base_ndiff": 8,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_fontweight",
+    "axes": [
+      "arial",
+      "FontWeight",
+      "italic",
+      "style-block"
+    ],
+    "relation": "both_diff",
+    "base_ndiff": 3,
+    "tip_ndiff": 4,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_fullwidth",
+    "axes": [
+      "arial",
+      "fullwidth"
+    ],
+    "relation": "both_match",
+    "base_ndiff": 0,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": false
+  },
+  {
+    "name": "g1ck_hash_bold",
+    "axes": [
+      "arial",
+      "hash-bold",
+      "line-style"
+    ],
+    "relation": "both_diff",
+    "base_ndiff": 2,
+    "tip_ndiff": 2,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": false
+  },
+  {
+    "name": "g1ck_italic",
+    "axes": [
+      "arial",
+      "italic",
+      "stateFontStyle"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_letter_c",
+    "axes": [
+      "arial",
+      "single-letter-not-ab",
+      "C"
+    ],
+    "relation": "gain",
+    "base_ndiff": 9,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_letter_m",
+    "axes": [
+      "arial",
+      "single-letter-not-ab",
+      "M"
+    ],
+    "relation": "gain",
+    "base_ndiff": 1,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_letter_q",
+    "axes": [
+      "arial",
+      "single-letter-not-ab",
+      "Q"
+    ],
+    "relation": "both_match",
+    "base_ndiff": 0,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_lower_a",
+    "axes": [
+      "arial",
+      "lowercase-a"
+    ],
+    "relation": "gain",
+    "base_ndiff": 1,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_mixed_fontname",
+    "axes": [
+      "arial",
+      "mixed-case-font-name",
+      "stateFontName"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_mixed_label",
+    "axes": [
+      "arial",
+      "mixed-case-label"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_punct",
+    "axes": [
+      "arial",
+      "digits",
+      "punctuation"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_quebec",
+    "axes": [
+      "arial",
+      "non-ascii",
+      "latin-accent"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_quoted_font",
+    "axes": [
+      "arial",
+      "quoted-font-name"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_sans_bold",
+    "axes": [
+      "sans",
+      "bold",
+      "stateFontStyle",
+      "bold-flag-observability"
+    ],
+    "relation": "both_match",
+    "base_ndiff": 0,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": false
+  },
+  {
+    "name": "g1ck_size11",
+    "axes": [
+      "arial",
+      "plain",
+      "size-11"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_size23_italic",
+    "axes": [
+      "arial",
+      "italic",
+      "size-23"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_size9_italic",
+    "axes": [
+      "arial",
+      "italic",
+      "size-9"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_stereo",
+    "axes": [
+      "arial",
+      "stereotype-fontstyle",
+      "bold"
+    ],
+    "relation": "gain",
+    "base_ndiff": 7,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_style_fontname",
+    "axes": [
+      "arial",
+      "style-block",
+      "FontName"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_tokyo",
+    "axes": [
+      "arial",
+      "non-ascii",
+      "wide-cjk"
+    ],
+    "relation": "both_match",
+    "base_ndiff": 0,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": false
+  },
+  {
+    "name": "g1ck_word_apex",
+    "axes": [
+      "arial",
+      "letter-A-inside-word"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  },
+  {
+    "name": "g1ck_word_bramble",
+    "axes": [
+      "arial",
+      "letter-B-inside-word"
+    ],
+    "relation": "gain",
+    "base_ndiff": 4,
+    "tip_ndiff": 0,
+    "base_exit": 0,
+    "tip_exit": 0,
+    "stdout_changed": true
+  }
+]
