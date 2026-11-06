@@ -1,0 +1,4 @@
+@startuml
+skinparam stateFontName Arial
+state "M" as G1ckM
+@enduml
